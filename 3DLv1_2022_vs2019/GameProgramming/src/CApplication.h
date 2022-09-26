@@ -10,7 +10,6 @@
 #include "CMiss.h"
 #include <vector>
 #include "CCharacterManager.h"
-
 #include "CGame.h"
 #include "CSound.h"
 
