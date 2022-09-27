@@ -1,4 +1,17 @@
 #include"CVector.h"
+
+CVector::CVector()
+	:mX(0.0f)
+	, mY(0.0f)
+	, mZ(0.0f)
+{}
+
+CVector::CVector(float x, float y, float z)
+	: mX(x)
+	, mY(y)
+	, mZ(z)
+{}
+
 //Set(Xç¿ïW,Yç¿ïW,Zç¿ïW)
 void CVector::Set(float x, float y, float z)
 {
