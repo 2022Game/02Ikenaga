@@ -3,7 +3,7 @@
 #include "CPlayer2.h"
 
 //定数の定義
-#define TEXTURE "image.png" //テクスチャのファイル名
+#define TEXTURE "image.png" //テクスチャのファイル
 #define TIPSIZE 40.0f //マップ要素のサイズ
 /*
 * CGameクラス
