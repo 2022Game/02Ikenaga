@@ -13,10 +13,13 @@
 #include "CGame.h"
 #include "CSound.h"
 #include"CVector.h"
+#include"CModel.h"
 
 class CApplication
 {
 private:
+	//モデルクラスのインスタンス作成
+	CModel mModel;
 	CVector mEye;
 	CSound mSoundBgm;	//BGM
 	CSound mSoundOver;	//ゲームオーバー

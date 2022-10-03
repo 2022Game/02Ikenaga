@@ -3,6 +3,7 @@
 
 //クラスのstatic変数
 CTexture CApplication::mTexture;
+CTexture CApplication::mTexture1;
 CCharacterManager CApplication::mCharacterManager;
 
 #define SOUND_BGM "res\\mario.wav" //BGM音声ファイル
@@ -18,12 +19,16 @@ CTexture* CApplication::Texture()
 	return &mTexture;
 }
 
+CTexture* CApplication::Texture1()
+{
+	return &mTexture1;
+}
+
 void CApplication::Start()
 {
 	//Sound
 	mSoundBgm.Load(SOUND_BGM);
 	mSoundOver.Load(SOUND_OVER);
-
 	mFont.Load("FontWhite.png", 1, 64);
 	mState = EState::ESTART;
 	mpGame = new CGame();

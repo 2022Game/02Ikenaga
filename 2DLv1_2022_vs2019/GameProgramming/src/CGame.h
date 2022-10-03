@@ -4,6 +4,7 @@
 
 //定数の定義
 #define TEXTURE "image.png" //テクスチャのファイル
+#define HITO "ゲーム制作の素材03.jpg"
 #define TIPSIZE 40.0f //マップ要素のサイズ
 /*
 * CGameクラス

@@ -78,6 +78,7 @@ CGame::CGame()
 	mpUi = new CUi();
 	//テクスチャの入力
 	CApplication::Texture()->Load(TEXTURE);
+	CApplication::Texture1()->Load(HITO);
 
 	//定数の定義
 	const int ROWS = 15; //行数

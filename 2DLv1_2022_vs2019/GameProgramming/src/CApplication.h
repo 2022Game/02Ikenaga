@@ -10,7 +10,6 @@
 #include "CMiss.h"
 #include <vector>
 #include "CCharacterManager.h"
-
 #include "CGame.h"
 #include "CSound.h"
 
@@ -32,6 +31,7 @@ private:
 //	CCharacter mRectangle;
 	CPlayer* mpPlayer;
 	static CTexture mTexture;
+	static CTexture mTexture1;
 	CEnemy* mpEnemy;
 //	CBullet* mpBullet;
 	CInput mInput;
@@ -42,6 +42,7 @@ private:
 public:
 	static CCharacterManager* CharacterManager();
 	static CTexture* Texture();
+	static CTexture* Texture1();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム
