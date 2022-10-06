@@ -1,6 +1,6 @@
 #include "CBlock.h"
 
-#define TEXCOORD 0.0f, 48.0f, 128.0f, 80.0f //テクスチャ座標
+#define TEXCOORD 168.0f, 188.0f, 190.0f, 160.0f//テクスチャ座標
 
 CBlock::CBlock(float x, float y, float w, float h, CTexture* pt)
 {

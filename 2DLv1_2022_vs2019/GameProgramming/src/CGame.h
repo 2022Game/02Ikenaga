@@ -3,9 +3,10 @@
 #include "CPlayer2.h"
 
 //定数の定義
-#define TEXTURE "image.png" //テクスチャのファイル
-#define HITO "ゲーム制作の素材03.jpg"
-#define TIPSIZE 40.0f //マップ要素のサイズ
+#define TEXTURE "ゲーム制作の素材02.png" //テクスチャのファイル
+#define HITO "Image.png"
+#define SURAIMU "slime03_blue01_232.png"
+#define TIPSIZE 20.0f //マップ要素のサイズ
 /*
 * CGameクラス
 * ゲームクラス

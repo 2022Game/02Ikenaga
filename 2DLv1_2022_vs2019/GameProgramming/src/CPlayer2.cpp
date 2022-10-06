@@ -3,16 +3,13 @@
 
 #define TEXCOORD 168, 188, 158, 128	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
-#define GRAVITY (TIPSIZE / 20.0f)	//重力加速度
-#define JUMPV0 (TIPSIZE / 1.4f)		//ジャンプの初速
-
+#define GRAVITY (TIPSIZE / 16.0f)	//重力加速度
+#define JUMPV0 (TIPSIZE / 1.5f)		//ジャンプの初速
 #define TEXCOORD2 136,156,158,128	//右向き2
 #define TEXLEFT1 188,168,158,128	//左向き1
 #define TEXLEFT2 156,136,158,128	//左向き2
-#define VELOCITY 4.0f	//移動速度
-
+#define VELOCITY 2.0f	//移動速度
 #define HP 3 //HPの初期値は3
-
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
 
 int CPlayer2::sHp = 0;	//HP
@@ -51,21 +48,21 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				else
 				{	//ジャンプでなければ泣く
 					mState = EState::ECRY;
-					if (mInvincible == 0)
+					/*if (mInvincible == 0)
 					{
 						mInvincible = 60;
 						sHp--;
-					}
+					}*/
 				}
 			}
 			else
 			{	//ジャンプでなければ泣く
 				mState = EState::ECRY;
-				if (mInvincible == 0)
+				/*if (mInvincible == 0)
 				{
 					mInvincible = 60;
 					sHp--;
-				}
+				}*/
 			}
 		}
 		break;
@@ -92,7 +89,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 }
 
 CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
-	: mInvincible(0)
+	: mInvincible(0),mVy(0.0f)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXCOORD);
@@ -135,15 +132,19 @@ void CPlayer2::Update()
 	Y(Y() + mVy);
 	//Y軸速度に重力を減算する
 	mVy -= GRAVITY;
-
-	if (mInvincible > 0)
-	{
-		mState = EState::ECRY;
-	}
 	if (mState == EState::ECRY)
 	{
 		//泣く画像を設定
 		Texture(Texture(), TEXCRY);
+		if (mInvincible == 0)
+		{
+			mInvincible = 60;
+			sHp--;
+		}
+	}
+	if (mInvincible > 0)
+	{
+		mState = EState::ECRY;
 	}
 	else
 	{

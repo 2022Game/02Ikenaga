@@ -6,6 +6,7 @@
 
 CTexture::CTexture()
 	: mId(0)
+	,mHeader()
 	, mpName(nullptr)
 	, mRow(1)
 	, mCol(1)

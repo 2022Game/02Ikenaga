@@ -27,7 +27,7 @@ CCharacter::CCharacter()
 
 }
 
-void CCharacter::Texture(CTexture *pTexture, int left, int right, int bottom, int top)
+void CCharacter::Texture(CTexture* pTexture, int left, int right, int bottom, int top)
 {
 	mpTexture = pTexture;
 	mLeft = left;

@@ -1,9 +1,8 @@
 #include "CEnemy2.h"
 #include "CApplication.h"
 
-#define TEXCOORD 168, 188, 190, 160	//テクスチャマッピング
-#define TEXCRY 196, 216, 190, 160	//テクスチャマッピング
-
+#define TEXCOORD 21, 250, 240, 170	//テクスチャマッピング
+//#define TEXCRY 196, 216, 190, 160	//テクスチャマッピング
 #define TEXCOORD2 136,156,190,160	//右向き2
 #define TEXLEFT1 188,168,190,160	//左向き1
 #define TEXLEFT2 156,136,190,160	//左向き2
@@ -78,7 +77,7 @@ void CEnemy2::Update()
 	{
 	case EState::ECRY:
 		//泣く画像を設定
-		Texture(Texture(), TEXCRY);
+		//Texture(Texture(), TEXCRY);
 		break;
 	case EState::EMOVE:
 		//X軸速度分、X座標を更新する
@@ -89,7 +88,7 @@ void CEnemy2::Update()
 			if (mVx < 0.0f) //左へ移動
 			{
 				//左向き１を設定
-				Texture(Texture(), TEXLEFT1);
+				//Texture(Texture(), TEXLEFT1);
 			}
 			else
 			{
@@ -102,12 +101,12 @@ void CEnemy2::Update()
 			if (mVx < 0.0f) //左へ移動
 			{
 				//左向き2を設定
-				Texture(Texture(), TEXLEFT2);
+				//Texture(Texture(), TEXLEFT2);
 			}
 			else
 			{
 				//2番目の画像を設定
-				Texture(Texture(), TEXCOORD2);
+				//Texture(Texture(), TEXCOORD2);
 			}
 		}
 		break;

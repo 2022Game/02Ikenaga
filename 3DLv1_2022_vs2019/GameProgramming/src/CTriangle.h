@@ -16,6 +16,7 @@ public:
 		//描画
 		void Render();
 private:
+	//三角形の可変長配列
 	CVector mV[3];//頂点座標
 	CVector mN;   //法線
 };

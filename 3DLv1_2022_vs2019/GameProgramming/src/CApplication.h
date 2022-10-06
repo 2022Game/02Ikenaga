@@ -14,12 +14,14 @@
 #include "CSound.h"
 #include"CVector.h"
 #include"CModel.h"
+#include"CTriangle.h"
 
 class CApplication
 {
 private:
 	//モデルクラスのインスタンス作成
 	CModel mModel;
+	CTriangle* mTriangle;
 	CVector mEye;
 	CSound mSoundBgm;	//BGM
 	CSound mSoundOver;	//ゲームオーバー
