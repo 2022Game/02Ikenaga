@@ -10,8 +10,7 @@
 void CModel::Load(char* obj, char* mtl) {
 	//頂点データの保存(CVector型)
 	std::vector<CVector>vertex;
-//	std::vector<CTriangle> mTriangles;
-
+	std::vector<CVector>normal;
 	//ファイルポインタ変数の作成
 	FILE* fp;
 	//ファイルからデータを入力
@@ -37,7 +36,7 @@ void CModel::Load(char* obj, char* mtl) {
 		char str[4][64] = { "","","","" };
 		//文字列からデータを4つ変数へ代入する
 		//sscanf(文字列,変数指定子,変数)
-		sscanf(buf, "%s %s %s %s", str[0], str[1], str[2], str[3]);
+		(void)sscanf(buf, "%s %s %s %s", str[0], str[1], str[2], str[3]);
 		//文字列の比較
 		//strcmp(文字列1,文字列2)
 		//文字列1と文字列2が同じ時0、異なる時0以外を返す
@@ -53,8 +52,8 @@ void CModel::Load(char* obj, char* mtl) {
 			int v[3], n[3];
 			//頂点と法線の番号取得
 			(void)sscanf(str[1], "%d//%d", &v[0], &n[0]);
-			sscanf(str[2], "%d//%d", &v[1], &n[1]);
-			sscanf(str[3], "%d//%d", &v[2], &n[2]);
+			(void)sscanf(str[2], "%d//%d", &v[1], &n[1]);
+			(void)sscanf(str[3], "%d//%d", &v[2], &n[2]);
 			//三角形作成
 			CTriangle t;
 			t.Vertex(vertex[v[0] - 1], vertex[v[1] - 1], vertex[v[2] - 1]);
@@ -78,44 +77,51 @@ void CModel::Load(char* obj, char* mtl) {
 		printf("%s file open error\n", obj);
 		return;
 	}
-
-	//ファイルから1行入力
-	//fgets(入力エリア,エリアサイズ,ファイルポインタ)
-	//ファイルの最後になるとNULLを返す
-	while (fgets(buf, sizeof(buf), fp) != NULL) {
-		//データを分割する
-		char str[4][64] = { "","","","" };
-		//文字列からデータを4つ変数へ代入する
-		//sscanf(文字列,変数指定子,変数)
-		sscanf(buf, "%s %s %s %s", str[0], str[1], str[2], str[3]);
-		//文字列の比較
-		//strcmp(文字列1,文字列2)
-		//文字列1と文字列2が同じ時0、異なる時0以外を返す
-		//先頭がvの時、頂点をvertexに追加する
-		if (strcmp(str[0], "v") == 0) {
+		//ファイルから1行入力
+		//fgets(入力エリア,エリアサイズ,ファイルポインタ)
+		//ファイルの最後になるとNULLを返す
+		while (fgets(buf, sizeof(buf), fp) != NULL) {
+			//データを分割する
+			char str[4][64] = { "","","","" };
+			//文字列からデータを4つ変数へ代入する
+			//sscanf(文字列,変数指定子,変数)
+			(void)sscanf(buf, "%s %s %s %s", str[0], str[1], str[2], str[3]);
+			//文字列の比較
+			//strcmp(文字列1,文字列2)
+			//文字列1と文字列2が同じ時0、異なる時0以外を返す
+			//先頭がvの時、頂点をvertexに追加する
+			if (strcmp(str[0], "v") == 0) {
+				//可変長配列vertexに追加
+				//atof(文字列) 文字列からfloat型の値を返す
+				vertex.push_back(CVector(atof(str[1]), atof(str[2]), atof(str[3])));
+			}
+			if (strcmp(str[0], "vn") == 0) {
+				//可変長配列normalに追加
+				//atof(文字列) 文字列からfloat型の値を返す
 			//可変長配列vertexに追加
-			//atof(文字列) 文字列からfloat型の値を返す
-			vertex.push_back(CVector(atof(str[1]), atof(str[2]), atof(str[3])));
+				//atof(文字列) 文字列からfloat型の値を返す
+				normal.push_back(CVector(atof(str[1]), atof(str[2]), atof(str[3])));
+			}
+			//先頭がfの時、三角形を作成して追加する
+			else if (strcmp(str[0], "f") == 0) {
+				//頂点と法線の番号作成
+				int v[3], n[3];
+				//頂点と法線の番号取得
+				(void)sscanf(str[1], "%d//%d", &v[0], &n[0]);
+				(void)sscanf(str[2], "%d//%d", &v[1], &n[1]);
+				(void)sscanf(str[3], "%d//%d", &v[2], &n[2]);
+				//三角形作成
+				CTriangle t;
+				t.Vertex(vertex[v[0] - 1], vertex[v[1] - 1], vertex[v[2] - 1]);
+				t.Normal(normal[n[0] - 1], normal[n[1] - 1], normal[n[2] - 1]);
+				//可変長配列mTrianglesに三角形を追加
+				mTriangles.push_back(t);
+			}
+			//入力した値をコンソールに出力する
+			printf("%s", buf);
 		}
-		//先頭がfの時、三角形を作成して追加する
-		else if (strcmp(str[0], "f") == 0) {
-			//頂点と法線の番号作成
-			int v[3], n[3];
-			//頂点と法線の番号取得
-			sscanf(str[1], "%d//%d", &v[0], &n[0]);
-			sscanf(str[2], "%d//%d", &v[1], &n[1]);
-			sscanf(str[3], "%d//%d", &v[2], &n[2]);
-			//三角形作成
-			CTriangle t;
-			t.Vertex(vertex[v[0] - 1], vertex[v[1] - 1], vertex[v[2] - 1]);
-			//可変長配列mTrianglesに三角形を追加
-			mTriangles.push_back(t);
-		}
-		//入力した値をコンソールに出力する
-		printf("%s", buf);
-	}
-	//ファイルのクローズ
-	fclose(fp);
+		//ファイルのクローズ
+		fclose(fp);
 }
 
 //文字列s1と文字列s2の比較
