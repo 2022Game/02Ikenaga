@@ -3,7 +3,7 @@
 #include "CTexture.h"
 #include <stdio.h>
 
-#define VELOCITY 2.0f	//ˆÚ“®‘¬“x
+//#define VELOCITY 2.0f	//ˆÚ“®‘¬“x
 
 class CCharacter : public CRectangle
 {

@@ -70,6 +70,7 @@ void CGame::Clear()
 
 CGame::CGame()
 	: mpUi(nullptr)
+	, mpPlayer(0)
 	, mTime(0)
 	, mCdx(0)
 	, mCdy(0)

@@ -1,6 +1,16 @@
 #include"CTriangle.h"
 #include"glut.h"
 
+int CTriangle::MaterialIdx()
+{
+	return mMaterialIdx;
+}
+
+void CTriangle::MaterialIdx(int idx)
+{
+	mMaterialIdx = idx;
+}
+
 //Normal(法線ベクトル1,法線ベクトル2,法線ベクトル3)
 void CTriangle::Normal(const CVector& v0, const CVector& v1, const CVector& v2) {
 	mN[0] = v0;
