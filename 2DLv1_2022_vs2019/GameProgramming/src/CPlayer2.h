@@ -21,5 +21,5 @@ private:
 	static int sHp;	//HP
 	int mInvincible; //無敵カウンタ
 	CInput mInput;
-	float mVy; //Y軸速度
+	float mVy;//Y軸速度
 };

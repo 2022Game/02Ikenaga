@@ -1,13 +1,16 @@
 #include "CPlayer2.h"
 #include "CApplication.h"
 
-#define TEXCOORD 168, 188, 158, 128	//テクスチャマッピング
+#define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
-#define GRAVITY (TIPSIZE / 16.0f)	//重力加速度
-#define JUMPV0 (TIPSIZE / 1.5f)		//ジャンプの初速
-#define TEXCOORD2 136,156,158,128	//右向き2
-#define TEXLEFT1 188,168,158,128	//左向き1
-#define TEXLEFT2 156,136,158,128	//左向き2
+#define GRAVITY (TIPSIZE / 16.0f)	//重力加速度16
+#define JUMPV0 (TIPSIZE / 1.5f)//ジャンプの初速
+#define JUMPVO2 (TIPSIZE / 1.4f)
+#define TEXCOORD2 150,189,340,293 //右向き2
+#define TEXCOORD3 510,550,340,293
+#define TEXCOORD4 35,338,66,293
+#define TEXLEFT1 190,150,340,293	//左向き1
+#define TEXLEFT2 550,510,340,293	//左向き2
 #define VELOCITY 2.0f	//移動速度
 #define HP 3 //HPの初期値は3
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
@@ -149,7 +152,7 @@ void CPlayer2::Update()
 	else
 	{
 		const int PITCH = 32;//画像を切り替える間隔
-		if ((int)X() % PITCH < PITCH / 2)
+		if ((int)X() % PITCH < PITCH  / 2)
 		{
 			if (mVx < 0.0f) //左へ移動
 			{
@@ -159,7 +162,7 @@ void CPlayer2::Update()
 			else
 			{
 				//通常の画像を設定
-				Texture(Texture(), TEXCOORD);
+				Texture(Texture(), TEXCOORD3);
 			}
 		}
 		else
@@ -177,3 +180,4 @@ void CPlayer2::Update()
 		}
 	}
 }
+

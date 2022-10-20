@@ -16,6 +16,7 @@ void CUi::Over()
 void CUi::Start()
 {
 	mFont.Draw(36, 300, 18, 36, "START PUSH ENTER KEY!");
+	//mFont1.Draw(90,118,10,30,"A");
 }
 
 void CUi::Enemy(int enemy)
@@ -29,6 +30,7 @@ CUi::CUi()
 	, mEnemy(0)
 {
 	mFont.Load("FontWhite.png", 1, 64);
+	//mFont1.Load("image9-1-522x512.png", 1, 64);
 }
 
 void CUi::Hp(int hp)

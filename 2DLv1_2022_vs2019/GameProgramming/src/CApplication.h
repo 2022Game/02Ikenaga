@@ -33,10 +33,12 @@ private:
 	static CTexture mTexture;
 	static CTexture mTexture1;
 	static CTexture mTexture2;
+	static CTexture mTexture3;
 	CEnemy* mpEnemy;
 //	CBullet* mpBullet;
 	CInput mInput;
 	CFont mFont;
+	CFont mFont1;
 	CMiss* mpMiss;
 	//CCharacterのポインタの可変長配列
 //	std::vector<CCharacter*> mCharacters;
@@ -45,6 +47,7 @@ public:
 	static CTexture* Texture();
 	static CTexture* Texture1();
 	static CTexture* Texture2();
+	static CTexture* Texture3();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム

@@ -6,6 +6,7 @@
 #define TEXTURE "ゲーム制作の素材02.png" //テクスチャのファイル
 #define HITO "Image.png"
 #define SURAIMU "slime03_blue01_232.png"
+#define KODOMO "117545.png"
 #define TIPSIZE 20.0f //マップ要素のサイズ
 /*
 * CGameクラス

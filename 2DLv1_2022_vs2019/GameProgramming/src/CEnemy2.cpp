@@ -1,7 +1,7 @@
 #include "CEnemy2.h"
 #include "CApplication.h"
 
-#define TEXCOORD 21, 250, 240, 170	//テクスチャマッピング
+#define TEXCOORD  5, 132, 240, 170	//テクスチャマッピング
 //#define TEXCRY 196, 216, 190, 160	//テクスチャマッピング
 #define TEXCOORD2 136,156,190,160	//右向き2
 #define TEXLEFT1 188,168,190,160	//左向き1

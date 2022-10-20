@@ -25,4 +25,5 @@ private:
 	int mHp;
 	int mTime;	//Œo‰ßŽžŠÔ
 	CFont mFont;
+	CFont mFont1;
 };

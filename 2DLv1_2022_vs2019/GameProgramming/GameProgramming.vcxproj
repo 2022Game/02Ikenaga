@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="src\CApplication.cpp" />
     <ClCompile Include="src\CBlock.cpp" />
+    <ClCompile Include="src\CBlock2.cpp" />
     <ClCompile Include="src\CBullet.cpp" />
     <ClCompile Include="src\CCamera.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
@@ -34,6 +35,7 @@
   <ItemGroup>
     <ClInclude Include="src\CApplication.h" />
     <ClInclude Include="src\CBlock.h" />
+    <ClInclude Include="src\CBlock2.h" />
     <ClInclude Include="src\CBullet.h" />
     <ClInclude Include="src\CCamera.h" />
     <ClInclude Include="src\CCharacter.h" />
@@ -42,6 +44,7 @@
     <ClInclude Include="src\CEnemy2.h" />
     <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CGame.h" />
+    <ClInclude Include="src\CGoal.h" />
     <ClInclude Include="src\CMiss.h" />
     <ClInclude Include="src\CPlayer.h" />
     <ClInclude Include="src\CPlayer2.h" />
