@@ -8,10 +8,11 @@
 #define JUMPVO2 (TIPSIZE / 1.4f)
 #define TEXCOORD2 150,189,340,293 //右向き2
 #define TEXCOORD3 510,550,340,293
-#define TEXCOORD4 35,338,66,293
+#define TEXCOORD4 620,1105,340,293
 #define TEXLEFT1 190,150,340,293	//左向き1
 #define TEXLEFT2 550,510,340,293	//左向き2
 #define VELOCITY 2.0f	//移動速度
+#define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
 
@@ -149,10 +150,14 @@ void CPlayer2::Update()
 	{
 		mState = EState::ECRY;
 	}
+	if (mState == EState::EJUMP)
+	{
+		Texture(Texture(), TEXCOORD4);
+	}
 	else
 	{
 		const int PITCH = 32;//画像を切り替える間隔
-		if ((int)X() % PITCH < PITCH  / 2)
+		if ((int)X() % PITCH < PITCH / 2)
 		{
 			if (mVx < 0.0f) //左へ移動
 			{

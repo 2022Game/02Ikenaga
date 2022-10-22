@@ -41,7 +41,7 @@ void CApplication::Start()
 	mSoundBgm.Load(SOUND_BGM);
 	mSoundOver.Load(SOUND_OVER);
 	mFont.Load("FontWhite.png", 1, 64);
-	mFont1.Load("image9 - 1 - 522x512.png",1,81);
+	//mFont1.Load("image9 - 1 - 522x512.png",1,81);
 	mState = EState::ESTART;
 	mpGame = new CGame();
 }

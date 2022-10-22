@@ -7,6 +7,8 @@
 */
 class CTriangle {
 public:
+	//UV設定
+	void UV(const CVector& v0, const CVector& v1, const CVector& v2);
 	//マテリアル番号の取得
 	int MaterialIdx();
 	//マテリアル番号の設定
@@ -21,6 +23,7 @@ public:
 	//描画
 	void Render();
 private:
+	CVector mUv[3]; //テクスチャマッピング
 	int mMaterialIdx;  //マテリアル番号
 	//三角形の可変長配列
 	CVector mV[3];//頂点座標

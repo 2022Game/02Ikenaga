@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #define VELOCITY 2.0f	//ˆÚ“®‘¬“x
+#define SOKUDO   1.0f
 
 class CCharacter : public CRectangle
 {
