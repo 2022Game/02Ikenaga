@@ -160,7 +160,7 @@ return;
 			}
 		}
 			//入力した値をコンソールに出力する
-			printf("%s", buf);
+			//printf("%s", buf);
 		}
 		//ファイルのクローズ
 		fclose(fp);
