@@ -12,6 +12,7 @@
 #include "CCharacterManager.h"
 #include "CGame.h"
 #include "CSound.h"
+#include "CGoal.h"
 
 class CApplication
 {
@@ -34,6 +35,9 @@ private:
 	static CTexture mTexture1;
 	static CTexture mTexture2;
 	static CTexture mTexture3;
+	static CTexture mTexture4;
+	static CTexture mTexture5;
+	static CTexture mTexture6;
 	CEnemy* mpEnemy;
 //	CBullet* mpBullet;
 	CInput mInput;
@@ -48,6 +52,9 @@ public:
 	static CTexture* Texture1();
 	static CTexture* Texture2();
 	static CTexture* Texture3();
+	static CTexture* Texture4();
+	static CTexture* Texture5();
+	static CTexture* Texture6();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム

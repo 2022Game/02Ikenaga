@@ -27,6 +27,8 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
+	CMatrix matrix;
+	matrix.print();
 	mEye = CVector(1.0f, 2.0f, 3.0f);
 	//モデルファイルの入力
 	mModel.Load(MODEL_OBJ);

@@ -7,7 +7,12 @@
 #define HITO "Image.png"
 #define SURAIMU "slime03_blue01_232.png"
 #define KODOMO "117545.png"
+#define GOAL "890568442.png"
+#define UGOKUBLOCK "6fce1c1aa2540daee360283fa78defcd_t1.png"
+#define AITEM "_7814-459000.png"
+
 #define TIPSIZE 20.0f //マップ要素のサイズ
+
 /*
 * CGameクラス
 * ゲームクラス

@@ -17,14 +17,18 @@ public:
 		EPLAYER,	//プレイヤー
 		ETURN,		//折り返し
 		EBLOCK,	    //ブロック
-		EBLOCK2,
+		EBLOCK2,    //通れるブロック
+		EBLOCK3,    //動くブロック
+		EGOAL,      //ゴール
+		EITEM,      //アイテム
 	};
 	enum class EState	//状態
 	{
 		EMOVE,	//移動
 		ESTOP,	//停止
 		EJUMP,	//ジャンプ
-		ECRY,	//泣く
+		ECRY, //泣く
+		ENOTHIT, //あたらない
 	};
 protected:
 	float mVx;	//X軸速度

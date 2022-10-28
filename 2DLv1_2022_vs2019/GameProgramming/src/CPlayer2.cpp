@@ -6,13 +6,15 @@
 #define GRAVITY (TIPSIZE / 16.0f)	//重力加速度16
 #define JUMPV0 (TIPSIZE / 1.5f)//ジャンプの初速
 #define JUMPVO2 (TIPSIZE / 1.4f)
-#define TEXCOORD2 150,189,340,293 //右向き2
-#define TEXCOORD3 510,550,340,293
-#define TEXCOORD4 620,1105,340,293
-#define TEXLEFT1 190,150,340,293	//左向き1
+#define TEXCOORD2 150,189,340,293   //右向き2
+#define TEXCOORD3 510,550,340,293   //右向き
+#define TEXCOORD4 750,790,340,293   //右向きジャンプ
+#define TEXCOORD5 790,750,340,293    //左向きジャンプ
+#define TEXLEFT1 190,150,340,293	//右向き2
 #define TEXLEFT2 550,510,340,293	//左向き2
+#define TEXSLEEPY 860,960,225,180   //お休み
 #define VELOCITY 2.0f	//移動速度
-#define SOKUDO 1.0f
+//#define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
 
@@ -73,6 +75,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 	case ETag::EPLAYER:
 		break;
 	case ETag::EBLOCK:
+	case ETag::EBLOCK3:
 		if (CRectangle::Collision(o, &x, &y))
 		{
 			X(X() + x);
@@ -96,7 +99,7 @@ CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
 	: mInvincible(0),mVy(0.0f)
 {
 	Set(x, y, w, h);
-	Texture(pt, TEXCOORD);
+	Texture(pt, TEXSLEEPY);
 	mTag = ETag::EPLAYER;
 	sHp = HP;
 	//ジャンプ音ロード
@@ -139,7 +142,7 @@ void CPlayer2::Update()
 	if (mState == EState::ECRY)
 	{
 		//泣く画像を設定
-		Texture(Texture(), TEXCRY);
+		Texture(Texture(), TEXSLEEPY);
 		if (mInvincible == 0)
 		{
 			mInvincible = 60;
@@ -150,10 +153,10 @@ void CPlayer2::Update()
 	{
 		mState = EState::ECRY;
 	}
-	if (mState == EState::EJUMP)
+	/*if (mState == EState::EJUMP)
 	{
-		Texture(Texture(), TEXCOORD4);
-	}
+		Texture(Texture(), TEXLEFT3);
+	}*/
 	else
 	{
 		const int PITCH = 32;//画像を切り替える間隔
@@ -161,13 +164,21 @@ void CPlayer2::Update()
 		{
 			if (mVx < 0.0f) //左へ移動
 			{
-				//左向き１を設定
-				Texture(Texture(), TEXLEFT1);
+					//左向き１を設定
+					Texture(Texture(), TEXLEFT1);
+					if (mState == EState::EJUMP)
+					{
+						Texture(Texture(), TEXCOORD5);
+					}
 			}
 			else
 			{
 				//通常の画像を設定
 				Texture(Texture(), TEXCOORD3);
+		          if(mState == EState::EJUMP)
+				{
+					Texture(Texture(), TEXCOORD4);
+				}
 			}
 		}
 		else
@@ -176,13 +187,22 @@ void CPlayer2::Update()
 			{
 				//左向き2を設定
 				Texture(Texture(), TEXLEFT2);
+				if (mState == EState::EJUMP)
+				{
+					Texture(Texture(), TEXCOORD5);
+				}
 			}
 			else
 			{
 				//2番目の画像を設定
 				Texture(Texture(), TEXCOORD2);
+				if (mState == EState::EJUMP)
+				{
+					Texture(Texture(), TEXCOORD4);
+				}
 			}
 		}
+
 	}
 }
 

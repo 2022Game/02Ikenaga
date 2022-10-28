@@ -30,7 +30,7 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 	float x, y;
 	switch (o->Tag())
 	{
-	case ETag::ETURN:
+	case ETag::EBLOCK:
 		//Ü‚è•Ô‚µ‚É“–‚½‚Á‚½
 		if (CRectangle::Collision(o, &x, &y))
 		{

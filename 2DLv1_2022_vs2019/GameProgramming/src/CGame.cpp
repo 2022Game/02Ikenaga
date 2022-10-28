@@ -2,12 +2,15 @@
 #include "CApplication.h"
 #include "CBlock.h"
 #include"CBlock2.h"
+#include"CBlock3.h"
 #include "CPlayer2.h"
 #include "CEnemy2.h"
 #include "CPoint.h"
 #include "CCamera.h"
 #include "main.h"
 #include"CGoal.h"
+#include"CItem.h"
+#include"CItem2.h"
 
 void CGame::Start()
 {
@@ -84,6 +87,9 @@ CGame::CGame()
 	CApplication::Texture1()->Load(HITO);
 	CApplication::Texture2()->Load(SURAIMU);
 	CApplication::Texture3()->Load(KODOMO);
+	CApplication::Texture4()->Load(GOAL);
+	CApplication::Texture5()->Load(UGOKUBLOCK);
+	CApplication::Texture6()->Load(AITEM);
 
 	//定数の定義
 	const int ROWS = 20; //行数
@@ -92,7 +98,7 @@ CGame::CGame()
 	int map[ROWS][COLS] =
 	{ 
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{1,0,0,1,1,0,0,1,4,3,0,4,1,0,0,0,1,0,0,0,1,0,0,0,1},
+		{1,6,0,1,1,0,0,1,0,3,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1},
 		{1,1,0,0,0,1,0,0,1,1,1,0,0,0,1,1,0,0,1,5,0,0,1,0,1},
 		{1,1,1,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1},
 		{1,1,0,0,0,0,0,1,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,1},
@@ -100,14 +106,14 @@ CGame::CGame()
 		{1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,1},
 		{1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,5,1,0,1},
 		{1,0,0,4,0,3,0,0,4,0,1,1,1,0,0,0,0,1,1,1,0,0,0,1,1},
-		{1,0,1,1,0,0,0,0,1,1,1,2,0,0,0,1,0,0,0,0,1,1,0,5,1},
+		{1,0,1,1,0,0,0,0,1,1,1,2,0,8,0,1,0,0,0,0,1,1,0,5,1},
 		{1,1,0,0,1,0,0,1,1,0,5,0,1,0,1,0,0,1,1,1,1,0,1,0,1},
-		{1,0,0,1,0,1,0,1,0,0,1,0,0,1,0,1,0,4,0,3,0,4,0,0,1},
+		{1,0,0,1,0,1,0,1,0,0,1,9,0,1,0,1,0,4,0,3,0,4,0,0,1},
 		{1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,1,1,0,1,1,1},
 		{1,0,1,1,0,1,1,1,1,0,0,0,1,0,1,0,0,5,0,1,0,4,3,4,1},
-		{1,0,1,0,0,0,0,1,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1},
+		{1,0,1,0,0,0,0,1,0,0,1,1,0,7,0,1,1,1,0,0,0,0,0,1,1},
 		{1,1,0,0,1,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,1,0,0,1},
-		{1,0,0,1,1,0,0,0,1,0,0,0,1,1,0,1,0,0,0,0,0,0,0,1,1},
+		{1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1},
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	};
 
@@ -164,6 +170,38 @@ CGame::CGame()
 					new CBlock2(TIPSIZE + TIPSIZE * 2 * col,
 						TIPSIZE + TIPSIZE * 2 * row,
 						TIPSIZE, TIPSIZE, CApplication::Texture()));
+			}
+			if (map[row][col] == 6)
+			{
+				//ゴールを生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CGoal(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture4()));
+			}
+			if (map[row][col] == 7)
+			{
+				//ブロックを生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CBlock3(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture5()));
+			}
+			if (map[row][col] == 8)
+			{
+				//アイテムを生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CItem(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture6()));
+			}
+			if (map[row][col] == 9)
+			{
+				//アイテムを生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CItem2(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
 		}
 	}
