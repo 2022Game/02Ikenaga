@@ -19,9 +19,10 @@ public:
 		EBLOCK,	    //ブロック
 		EBLOCK2,    //通れるブロック
 		EBLOCK3,    //動くブロック
+		EBLOCK4,
 		EGOAL,      //ゴール
 		EITEM,      //アイテム
-		//EATTACK,    //攻撃
+		EATTACK,    //攻撃
 	};
 	enum class EState	//状態
 	{

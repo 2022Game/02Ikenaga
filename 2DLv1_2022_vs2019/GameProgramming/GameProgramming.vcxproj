@@ -16,6 +16,7 @@
     <ClCompile Include="src\CBlock.cpp" />
     <ClCompile Include="src\CBlock2.cpp" />
     <ClCompile Include="src\CBlock3.cpp" />
+    <ClCompile Include="src\CBlock4.cpp" />
     <ClCompile Include="src\CBullet.cpp" />
     <ClCompile Include="src\CCamera.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="src\CBlock.h" />
     <ClInclude Include="src\CBlock2.h" />
     <ClInclude Include="src\CBlock3.h" />
+    <ClInclude Include="src\CBlock4.h" />
     <ClInclude Include="src\CBullet.h" />
     <ClInclude Include="src\CCamera.h" />
     <ClInclude Include="src\CCharacter.h" />

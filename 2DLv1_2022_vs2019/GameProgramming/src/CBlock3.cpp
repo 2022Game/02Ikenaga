@@ -1,7 +1,7 @@
 #include "CBlock3.h"
 #include "CApplication.h"
 
-#define TEXCOORD 310.0f, 380.0f, 150.0f, 190.0f//テクスチャ座標
+#define TEXCOORD 315.0f, 290.0f, 289.0f, 319.0f//310.0f, 390.0f, 150.0f, 190.0f//テクスチャ座標
 
 void CBlock3::Collision()
 {
@@ -15,7 +15,7 @@ void CBlock3::Collision(CCharacter* m, CCharacter* o)
 	float x, y;
 	switch (o->Tag())
 	{
-	case ETag::EBLOCK:
+	case ETag::EBLOCK4:
 		//折り返しに当たった時
 		if (CRectangle::Collision(o, &x, &y))
 		{

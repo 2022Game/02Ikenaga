@@ -13,7 +13,7 @@
 #define TEXCOORD5 790,750,340,293    //左向きジャンプ
 #define TEXLEFT1 190,150,340,293	//右向き2
 #define TEXLEFT2 550,510,340,293	//左向き2
-#define TEXSLEEPY 860,925,226,190   //お休み
+#define TEXSLEEPY 370, 490, 460, 370//860,925,226,190   //お休み
 #define VELOCITY 2.0f	//移動速度
 #define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
@@ -78,6 +78,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 		break;
 	case ETag::EBLOCK:
 	case ETag::EBLOCK3:
+	case ETag::EBLOCK4:
 		if (CRectangle::Collision(o, &x, &y))
 		{
 			X(X() + x);
@@ -125,13 +126,12 @@ void CPlayer2::Update()
 			mState = EState::EJUMP;
 		}
 	}
-	/*if (mState != EState::EATTACK)
+	if(mInput.Key(VK_SPACE))
 	{
-		if (mInput.Key('K'))
-		{
-			mState = EState::EATTACK;
-		}
-	}*/
+		CApplication::CharacterManager()->Add(
+			new CAttack(X(), Y() + H() -20.0f
+				, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+	}
 	if (mInput.Key('A'))
 	{
 		mVx = -VELOCITY;
@@ -162,10 +162,6 @@ void CPlayer2::Update()
 	{
 		mState = EState::ECRY;
 	}
-	/*if (mState == EState::EJUMP)
-	{
-		Texture(Texture(), TEXLEFT3);
-	}*/
 	else
 	{
 		const int PITCH = 32;//画像を切り替える間隔
