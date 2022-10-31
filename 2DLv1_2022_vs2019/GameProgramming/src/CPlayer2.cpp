@@ -1,5 +1,6 @@
 #include "CPlayer2.h"
 #include "CApplication.h"
+#include"CAttack.h"
 
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
@@ -12,11 +13,12 @@
 #define TEXCOORD5 790,750,340,293    //左向きジャンプ
 #define TEXLEFT1 190,150,340,293	//右向き2
 #define TEXLEFT2 550,510,340,293	//左向き2
-#define TEXSLEEPY 860,960,225,180   //お休み
+#define TEXSLEEPY 860,925,226,190   //お休み
 #define VELOCITY 2.0f	//移動速度
-//#define SOKUDO 1.0f
+#define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
+#define ATTACK1  860,960,225,180   //攻撃のテクスチャ
 
 int CPlayer2::sHp = 0;	//HP
 
@@ -54,21 +56,21 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				else
 				{	//ジャンプでなければ泣く
 					mState = EState::ECRY;
-					/*if (mInvincible == 0)
+					if (mInvincible == 0)
 					{
 						mInvincible = 60;
 						sHp--;
-					}*/
+					}
 				}
 			}
 			else
 			{	//ジャンプでなければ泣く
 				mState = EState::ECRY;
-				/*if (mInvincible == 0)
+				if (mInvincible == 0)
 				{
 					mInvincible = 60;
 					sHp--;
-				}*/
+				}
 			}
 		}
 		break;
@@ -96,7 +98,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 }
 
 CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
-	: mInvincible(0),mVy(0.0f)
+	: mInvincible(0), mVy(0.0f),mVx(0.0f)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXSLEEPY);
@@ -123,6 +125,13 @@ void CPlayer2::Update()
 			mState = EState::EJUMP;
 		}
 	}
+	/*if (mState != EState::EATTACK)
+	{
+		if (mInput.Key('K'))
+		{
+			mState = EState::EATTACK;
+		}
+	}*/
 	if (mInput.Key('A'))
 	{
 		mVx = -VELOCITY;

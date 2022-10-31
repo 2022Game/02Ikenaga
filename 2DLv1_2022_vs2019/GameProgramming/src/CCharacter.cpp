@@ -10,6 +10,11 @@ bool CCharacter::Enabled()
 	return mEnabled;
 }
 
+bool CCharacter::Drop()
+{
+	return mDrop;
+}
+
 CCharacter::ETag CCharacter::Tag()
 {
 	return mTag;
@@ -21,6 +26,7 @@ CCharacter::CCharacter()
 	, mState(EState::EMOVE)
 	, mTag(ETag::EZERO)
 	, mEnabled(true)
+	,mDrop(true)
 	, mVy(0.0f)
 	, mVx(0.0f)
 {

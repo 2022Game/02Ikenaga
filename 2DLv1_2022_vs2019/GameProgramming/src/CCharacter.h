@@ -21,6 +21,7 @@ public:
 		EBLOCK3,    //動くブロック
 		EGOAL,      //ゴール
 		EITEM,      //アイテム
+		//EATTACK,    //攻撃
 	};
 	enum class EState	//状態
 	{
@@ -29,11 +30,14 @@ public:
 		EJUMP,	//ジャンプ
 		ECRY, //泣く
 		ENOTHIT, //あたらない
+		EATTACK, //攻撃
+		EANNIHILATION,  //消滅
 	};
 protected:
 	float mVx;	//X軸速度
 	float mVy;	//Y軸速度
-	bool mEnabled;
+	bool mEnabled;  //有効フラグ
+	bool mDrop; //ドロップ
 	ETag mTag;
 	EState mState;
 private:
@@ -42,6 +46,7 @@ private:
 public:
 	EState State();	//状態を取得する
 	bool Enabled();
+	bool Drop();
 	ETag Tag();
 	//衝突処理２
 	virtual void Collision() {};

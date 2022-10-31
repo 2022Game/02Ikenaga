@@ -2,10 +2,12 @@
 #include "CCharacter.h"
 #include "CInput.h"
 #include "CSound.h"
+#include "CAttack.h"
 
 class CPlayer2 : public CCharacter
 {
 public:
+	//CAttack mAttack;
 	//HPを取得
 	static int Hp();
 	//衝突処理2
@@ -22,4 +24,5 @@ private:
 	int mInvincible; //無敵カウンタ
 	CInput mInput;
 	float mVy;//Y軸速度
+	float mVx;
 };
