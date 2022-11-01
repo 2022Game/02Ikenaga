@@ -10,6 +10,15 @@
 
 class CMatrix {
 public:
+	//‰ñ“]s—ñ(X²)‚Ìì¬
+	//RotateX(Šp“x)
+	CMatrix RotateX(float degree);
+	//‰ñ“]s—ñ(Z²)‚Ìì¬
+	//RotateZ(Šp“x)
+	CMatrix RotateZ(float degree);
+	//‰ñ“]s”(Y²)‚Ìì¬
+	//RotateY(Šp“x)
+	CMatrix RotateY(float degree);
 	//Šg‘åk¬s—ñ‚Ìì¬
 	//Scale(”{—¦X,”{—¦Y,”{—¦Z)
 	CMatrix Scale(float sx, float sy, float sz);
