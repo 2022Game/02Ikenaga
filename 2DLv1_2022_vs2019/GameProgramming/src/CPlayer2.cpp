@@ -1,6 +1,7 @@
 #include "CPlayer2.h"
 #include "CApplication.h"
 #include"CAttack.h"
+#include"CAttack2.h"
 
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
@@ -13,7 +14,9 @@
 #define TEXCOORD5 790,750,340,293    //左向きジャンプ
 #define TEXLEFT1 190,150,340,293	//右向き2
 #define TEXLEFT2 550,510,340,293	//左向き2
-#define TEXSLEEPY 370, 490, 460, 370//860,925,226,190   //お休み
+#define TEXSLEEPY  640,710,100,55  //370, 490, 460, 370　//攻撃  //860,925,226,190   //お休み
+#define TEXATTACK 640,710,100,55   //攻撃モーション
+#define TEXATTACK2 710,640,100,55   //反対攻撃モーション
 #define VELOCITY 2.0f	//移動速度
 #define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
@@ -126,11 +129,14 @@ void CPlayer2::Update()
 			mState = EState::EJUMP;
 		}
 	}
-	if(mInput.Key(VK_SPACE))
+	if (mState == EState::EATTACK)
 	{
-		CApplication::CharacterManager()->Add(
-			new CAttack(X(), Y() + H() -20.0f
-				, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+		if (mInput.Key(VK_SPACE))
+		{
+			CApplication::CharacterManager()->Add(
+				new CAttack(X(), Y() + H() - 20.0f
+					, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+		}
 	}
 	if (mInput.Key('A'))
 	{
@@ -175,6 +181,13 @@ void CPlayer2::Update()
 					{
 						Texture(Texture(), TEXCOORD5);
 					}
+					if (mInput.Key(VK_SPACE))
+					{
+						CApplication::CharacterManager()->Add(
+							new CAttack2(X(), Y() + H() - 20.0f
+								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+						Texture(Texture(), TEXATTACK2);
+					}
 			}
 			else
 			{
@@ -184,6 +197,16 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD4);
 				}
+				  if (mState != EState::EATTACK)
+				  {
+					  if (mInput.Key(VK_SPACE))
+					  {
+						  CApplication::CharacterManager()->Add(
+							  new CAttack(X(), Y() + H() - 20.0f
+								  , 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+						  Texture(Texture(), TEXATTACK);
+					  }
+				  }
 			}
 		}
 		else
@@ -196,6 +219,13 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD5);
 				}
+				if (mInput.Key(VK_SPACE))
+				{
+					CApplication::CharacterManager()->Add(
+						new CAttack2(X(), Y() + H() - 20.0f
+							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+					Texture(Texture(), TEXATTACK2);
+				}
 			}
 			else
 			{
@@ -205,6 +235,13 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD4);
 				}
+					if (mInput.Key(VK_SPACE))
+					{
+						CApplication::CharacterManager()->Add(
+							new CAttack(X(), Y() + H() - 20.0f
+								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+						Texture(Texture(), TEXATTACK);
+					}
 			}
 		}
 

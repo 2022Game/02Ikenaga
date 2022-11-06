@@ -38,7 +38,7 @@ protected:
 	float mVx;	//X軸速度
 	float mVy;	//Y軸速度
 	bool mEnabled;  //有効フラグ
-	bool mDrop; //ドロップ
+	//bool mDrop; //ドロップ
 	ETag mTag;
 	EState mState;
 private:
@@ -47,7 +47,6 @@ private:
 public:
 	EState State();	//状態を取得する
 	bool Enabled();
-	bool Drop();
 	ETag Tag();
 	//衝突処理２
 	virtual void Collision() {};

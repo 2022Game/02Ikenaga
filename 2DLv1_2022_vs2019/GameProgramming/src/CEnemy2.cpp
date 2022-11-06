@@ -2,6 +2,7 @@
 #include"CItem.h"
 #include"CItem2.h"
 #include"CItem3.h"
+#include"CAttack.h"
 #include "CApplication.h"
 
 #define TEXCOORD  145, 192, 143, 101	//テクスチャマッピング
@@ -9,8 +10,6 @@
 #define TEXCOORD2 240,289,143,101	//右向き2
 #define TEXLEFT1 192, 145, 143, 101	//左向き1
 #define TEXLEFT2  289,240,143,101	//左向き2
-#define AITEM "_7814-459000.png"
-#define AITEM 40,90,263,220
 
 int CEnemy2::sNum = 0;
 
@@ -64,13 +63,30 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 					new CItem(X(),
 						Y(),
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
-				mState = EState::EANNIHILATION;
 			}
+			break;
+			//case ETag::EATTACK:
+			if (o->State()== EState::EATTACK)
+			{
+				//敵数1減算
+				if (mState != EState::EANNIHILATION)
+				{
+					sNum--;
+				}
+				//mEnabled = false;
+				CApplication::CharacterManager()->Add(
+					new CItem(X(),
+						Y(),
+						TIPSIZE, TIPSIZE, CApplication::Texture6()));
+			}
+			break;
 		}
-		break;
-		mDrop = false;
-		ETag::EITEM;
-		Texture(Texture(), AITEM);
+	default:
+		if (CRectangle::Collision(o))
+		{
+			//mState = EState::ESTOP;
+			mEnabled = false;
+		}
 	}
 }
 
