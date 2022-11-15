@@ -38,6 +38,7 @@ private:
 	static CTexture mTexture4;
 	static CTexture mTexture5;
 	static CTexture mTexture6;
+	static CTexture mTexture7;
 	CEnemy* mpEnemy;
 //	CBullet* mpBullet;
 	CInput mInput;
@@ -55,6 +56,7 @@ public:
 	static CTexture* Texture4();
 	static CTexture* Texture5();
 	static CTexture* Texture6();
+	static CTexture* Texture7();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム

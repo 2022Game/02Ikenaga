@@ -10,6 +10,7 @@
 #define GOAL "890568442.png"
 #define UGOKUBLOCK "6fce1c1aa2540daee360283fa78defcd_t1.png"
 #define AITEM "_7814-459000.png"
+#define TEKI "chara081234.png"
 
 #define TIPSIZE 20.0f //マップ要素のサイズ
 
@@ -42,4 +43,5 @@ private:
 	CPlayer2 *mpPlayer; //プレイヤーのポインタ
 	int mTime; //経過時間
 	CUi *mpUi; //UIクラスのポインタ
+	//CGoal *mpGoal;
 };

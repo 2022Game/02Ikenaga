@@ -22,6 +22,7 @@ CAttack::CAttack(float x, float y, float w, float h, float l, float r, float b, 
 	Texture(pt, KODOMO1);
 	//mState = EState::EMOVE;
 	mTag  = ETag::EATTACK;
+	//mState = EState::EATTACK;
 }
 
 //CAttack::CAttack(float x, float y, float w, float h, CTexture* pt)
@@ -90,6 +91,8 @@ void CAttack::Collision(CCharacter* m, CCharacter* o)
 	case ETag::EATTACK:
 		break;
 	case ETag::EPLAYER:
+		break;
+	case ETag::ETURN:
 		break;
 	default:
 		if (CRectangle::Collision(o))

@@ -1,9 +1,11 @@
 #pragma once
 #include"CCharacter.h"
+#include"CUi.h"
 
 class CItem : public CCharacter
 {
 public:
+	//static int Point();
 	//Õ“Ëˆ—1
 	void Collision();
 	//Õ“Ëˆ—3
@@ -12,4 +14,7 @@ public:
 	CItem(float x, float y, float w, float h, CTexture* pt);
 	//Update‚Å‚Í‰½‚à‚µ‚È‚¢
 	void Update();
+	CUi* mpUi;
+private:
+	int mTime;
 };

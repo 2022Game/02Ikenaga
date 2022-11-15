@@ -14,21 +14,37 @@ void CItem2::Collision(CCharacter* m, CCharacter* o)
 	float x, y;
 	switch (o->Tag())
 	{
-	case ETag::ETURN:
-		//折り返しに当たった時
-		if (CRectangle::Collision(o, &x, &y))
-		{
-			//めり込まない位置まで戻す
+			o->Collision(o, m);
 			X(X() + x);
 			Y(Y() + y);
-			//X軸速度を反転させる
-			mVx = -mVx;
-		}
-		break;
-	case ETag::EENEMY:
-		break;
-	case ETag::EPLAYER:
-		break;
+			if (x != 0.0f)
+			{
+				//X軸速度を0にする
+				mVx = 0.0f;
+				if (x > 0.0f)
+				{
+					mState = EState::EMOVE;
+				}
+				else
+				{	//ジャンプでなければ泣く
+					mState = EState::ECRY;
+				}
+			}
+		case ETag::EPLAYER:
+			if (CRectangle::Collision(o))
+			{
+				if (o->Tag() == ETag::EPLAYER)
+				{
+					mEnabled = false;
+				}
+			}
+			break;
+			//default:
+			//	if (CRectangle::Collision(o))
+			//	{
+			//		//mState = EState::ESTOP;
+			//		//mEnabled = false;
+			//	}
 	}
 }
 void CItem2::Update()
@@ -41,5 +57,5 @@ CItem2::CItem2(float x, float y, float w, float h, CTexture* pt)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXCOORD1);
-	mTag = ETag::EITEM;
+	mTag = ETag::EITEM2;
 }

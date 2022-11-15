@@ -16,10 +16,14 @@
 #include"CModel.h"
 #include"CTriangle.h"
 #include"CMatrix.h"
+#include"CTransform.h"
+#include"CCharacter3.h"
 
 class CApplication
 {
 private:
+	CCharacter3 mPlay;
+	CCharacter3 mCharacter;
 	CModel mBackGround;//背景モデル
 	//モデルクラスのインスタンス作成
 	CModel mModel;

@@ -6,6 +6,7 @@
 #include"CBlock4.h"
 #include "CPlayer2.h"
 #include "CEnemy2.h"
+#include "CEnemy3.h"
 #include "CPoint.h"
 #include "CCamera.h"
 #include "main.h"
@@ -22,14 +23,17 @@ void CGame::Start()
     CCamera::End();
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
+	mpUi->Point(CPlayer2::Point());
 	mpUi->Enemy(CEnemy2::Num());
+	mpUi->Enemy(CEnemy3::Num());
+	mpUi->Goal(CGoal::Goal());
 	mpUi->Render();
 	mpUi->Start();
 }
 
 bool CGame::IsOver()
 {	//HPが0以下か判定結果を戻す
-	return CPlayer2::Hp() <= 0;
+	return mTime>= 1001;
 }
 
 void CGame::Over()
@@ -40,6 +44,7 @@ void CGame::Over()
 	CCamera::End();
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
+	mpUi->Point(CPlayer2::Point());
 	//mpUi->Enemy(CEnemy2::Num());
 	mpUi->Render();
 	mpUi->Over();
@@ -59,7 +64,7 @@ CGame::~CGame()
 
 bool CGame::IsClear()
 {
-	return CEnemy2::Num() <= 0;
+	return CGoal::Goal() <=0;
 }
 
 void CGame::Clear()
@@ -70,7 +75,10 @@ void CGame::Clear()
 	CCamera::End();
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
+	mpUi->Point(CPlayer2::Point());
 	mpUi->Enemy(CEnemy2::Num());
+	mpUi->Enemy(CEnemy3::Num());
+	mpUi->Goal(CGoal::Goal());
 	mpUi->Render();
 	mpUi->Clear();
 }
@@ -78,11 +86,13 @@ void CGame::Clear()
 CGame::CGame()
 	: mpUi(nullptr)
 	,mpPlayer(0)
+	//,mpGoal(0)
 	, mTime(0)
 	, mCdx(0)
 	, mCdy(0)
 {
 	CEnemy2::Num(0);
+	CGoal::Goal(0);
 	mpUi = new CUi();
 	//テクスチャの入力
 	CApplication::Texture()->Load(TEXTURE);
@@ -92,6 +102,7 @@ CGame::CGame()
 	CApplication::Texture4()->Load(GOAL);
 	CApplication::Texture5()->Load(UGOKUBLOCK);
 	CApplication::Texture6()->Load(AITEM);
+	CApplication::Texture7()->Load(TEKI);
 
 	//定数の定義
 	const int ROWS = 20; //行数
@@ -100,22 +111,22 @@ CGame::CGame()
 	int map[ROWS][COLS] =
 	{ 
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{1,6,0,1,1,0,0,1,0,3,0,0,1,0,0,0,1,0,3,0,1,0,0,0,1},
+		{1,0,0,1,1,0,0,1,0,3,0,0,1,0,0,0,1,0,3,0,1,0,0,0,1},
 		{1,1,0,0,0,1,0,0,1,1,1,0,0,0,1,1,0,0,1,5,0,0,1,0,1},
 		{1,1,1,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1},
 		{1,1,0,0,0,0,0,1,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,1},
 		{1,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,0,1,0,0,1,1,0,1},
-		{1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,1},
-		{1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,5,1,0,1},
-		{1,0,0,0,0,3,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,1,1},
-		{1,0,1,1,0,0,0,0,1,1,1,2,0,10,0,1,0,0,0,0,1,1,0,5,1},
-		{1,1,0,0,1,0,0,1,1,0,5,0,1,11,1,0,0,1,1,1,1,0,1,0,1},
-		{1,0,0,1,0,1,0,1,0,0,1,9,0,1,0,1,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,1,0,8,0,0,0,0,1,0,1,1,1,0,1,1,1},
+		{1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,8,8,0,0,1,1,0,0,0,1},
+		{1,1,0,0,1,1,1,1,0,0,0,0,10,0,1,9,9,0,0,0,0,5,1,0,1},
+		{1,0,0,4,0,12,0,0,4,0,1,1,1,8,9,0,0,1,1,1,0,0,0,1,1},
+		{1,0,1,1,0,0,0,0,1,1,1,2,8,10,10,1,0,0,0,0,1,1,0,5,1},
+		{1,1,0,0,1,0,0,1,1,0,5,10,1,11,1,0,0,1,1,1,1,0,1,0,1},
+		{1,0,0,1,0,1,0,1,0,0,1,10,0,1,0,1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1,0,10,0,0,0,0,1,0,1,1,1,0,1,1,1},
 		{1,0,1,1,0,1,1,1,1,0,0,0,1,0,1,0,0,5,0,1,0,0,0,0,1},
 		{1,0,1,0,0,0,0,1,0,0,1,1,0,7,0,1,1,1,0,0,0,0,0,1,1},
 		{1,1,0,0,1,0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,1,0,0,1},
-		{1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1},
+		{1,6,0,1,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1},
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1},
 	};
 
@@ -222,6 +233,15 @@ CGame::CGame()
 						TIPSIZE + TIPSIZE * 2 * row,
 						TIPSIZE, TIPSIZE, CApplication::Texture()));
 			}
+			//12の時、敵生成
+			if (map[row][col] == 12)
+			{
+				//敵を生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CEnemy3(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture7()));
+			}
 		}
 	}
 }
@@ -237,8 +257,11 @@ void CGame::Update()
 	CCamera::End();
 	//UI
 	mpUi->Time(mTime++);
+	//mpUi->Goal(mTime);
 	mpUi->Hp(CPlayer2::Hp());
+	mpUi->Point(CPlayer2::Point());
 	mpUi->Enemy(CEnemy2::Num());
+	mpUi->Goal(CGoal::Goal());
 	mpUi->Render();
 }
 

@@ -53,7 +53,7 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 			if (o->State() == EState::EJUMP)
 			{
 				//敵数1減算
-				if (mState != EState::EANNIHILATION)
+				if (mState != EState::ECRY)
 				{
 					sNum--;
 				}
@@ -64,29 +64,33 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 						Y(),
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
+		}
 			break;
-			//case ETag::EATTACK:
-			if (o->State()== EState::EATTACK)
+	case ETag::EATTACK:
+		if (CRectangle::Collision(o))
+		{
+			if (o->State() != EState::EATTACK)
 			{
 				//敵数1減算
-				if (mState != EState::EANNIHILATION)
+				if (mState != EState::ECRY)
 				{
-					sNum--;
+					//sNum--;
 				}
-				//mEnabled = false;
+				mEnabled = false;
+				//アイテムの時計を生成して、キャラクタマネージャに追加
 				CApplication::CharacterManager()->Add(
 					new CItem(X(),
 						Y(),
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
-			break;
 		}
-	default:
-		if (CRectangle::Collision(o))
-		{
-			//mState = EState::ESTOP;
-			mEnabled = false;
-		}
+		break;
+	//default:
+	//	if (CRectangle::Collision(o))
+	//	{
+	//		//mState = EState::ESTOP;
+ //			mEnabled = false;
+	//	}
 	}
 }
 
@@ -105,7 +109,7 @@ void CEnemy2::Update()
 {
 	switch (mState)
 	{
-	case EState::EANNIHILATION:
+		case EState::ECRY:
 		//泣く画像を設定
 		//Texture(Texture(), TEXCRY);
 		break;

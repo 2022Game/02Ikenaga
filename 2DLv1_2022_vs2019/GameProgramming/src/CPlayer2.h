@@ -7,7 +7,7 @@
 class CPlayer2 : public CCharacter
 {
 public:
-	//CAttack mAttack;
+	static int Point();
 	//HPを取得
 	static int Hp();
 	//衝突処理2
@@ -21,7 +21,9 @@ public:
 private:
 	CSound mSoundJump;	//ジャンプSE
 	static int sHp;	//HP
+	static int sPoint;
 	int mInvincible; //無敵カウンタ
+	int mnothing; //なにもなし
 	CInput mInput;
 	float mVy;//Y軸速度
 	float mVx;

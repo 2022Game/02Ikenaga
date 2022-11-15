@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #define VELOCITY 2.0f	//移動速度
+//#define VELOCITY2  4.0f;
 #define SOKUDO   1.0f
 
 class CCharacter : public CRectangle
@@ -22,6 +23,8 @@ public:
 		EBLOCK4,
 		EGOAL,      //ゴール
 		EITEM,      //アイテム
+		EITEM2,
+		EITEM3,
 		EATTACK,    //攻撃
 	};
 	enum class EState	//状態
@@ -30,6 +33,7 @@ public:
 		ESTOP,	//停止
 		EJUMP,	//ジャンプ
 		ECRY, //泣く
+		EHIT, //当たってる
 		ENOTHIT, //あたらない
 		EATTACK, //攻撃
 		EANNIHILATION,  //消滅

@@ -5,11 +5,11 @@
 #include"CAttack.h"
 #include "CApplication.h"
 
-#define TEXCOORD  145, 192, 143, 101	//テクスチャマッピング
+#define TEXCOORD  1, 40, 53, 17	//テクスチャマッピング
 #define TEXCRY 196, 216, 190, 160	//テクスチャマッピング
-#define TEXCOORD2 240,289,143,101	//右向き2
-#define TEXLEFT1 192, 145, 143, 101	//左向き1
-#define TEXLEFT2  289,240,143,101	//左向き2
+#define TEXCOORD2  40,85,53,17	//右向き2
+#define TEXLEFT1  85, 40, 53, 17	//左向き1
+#define TEXLEFT2  40, 1, 53, 17	//左向き2
 
 int CEnemy3::sNum = 0;
 
@@ -34,7 +34,7 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 	float x, y;
 	switch (o->Tag())
 	{
-	case ETag::EBLOCK:
+	case ETag::ETURN:
 		//折り返しに当たった時
 		if (CRectangle::Collision(o, &x, &y))
 		{
@@ -64,29 +64,32 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 						Y(),
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
+		}
 			break;
-			//case ETag::EATTACK:
-			if (o->State() == EState::EATTACK)
+		case ETag::EATTACK:
+			if (CRectangle::Collision(o))
 			{
-				//敵数1減算
-				if (mState != EState::EANNIHILATION)
+				if (o->State() != EState::EATTACK)
 				{
-					sNum--;
+					//敵数1減算
+					if (mState != EState::EANNIHILATION)
+					{
+						//sNum--;
+					}
+					mEnabled = false;
+					CApplication::CharacterManager()->Add(
+						new CItem(X(),
+							Y(),
+							TIPSIZE, TIPSIZE, CApplication::Texture6()));
 				}
-				//mEnabled = false;
-				CApplication::CharacterManager()->Add(
-					new CItem(X(),
-						Y(),
-						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
 			break;
-		}
-	default:
-		if (CRectangle::Collision(o))
-		{
-			//mState = EState::ESTOP;
-			mEnabled = false;
-		}
+	//default:
+	//	if (CRectangle::Collision(o))
+	//	{
+	//		//mState = EState::ESTOP;
+	//		mEnabled = false;
+	//	}
 	}
 }
 

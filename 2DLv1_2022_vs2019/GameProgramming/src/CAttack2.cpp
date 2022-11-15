@@ -20,7 +20,7 @@ CAttack2::CAttack2(float x, float y, float w, float h, float l, float r, float b
 	Set(x, y, w, h);
 	Texture(pt, l, r, b, t);
 	Texture(pt, KODOMO1);
-	mState = EState::EMOVE;
+	//mState = EState::EMOVE;
 	mTag = ETag::EATTACK;
 }
 
@@ -28,7 +28,7 @@ CAttack2::CAttack2(float x, float y, float w, float h, CTexture* pt)
 {
 	Set(x, y, w, h);
 	Texture(pt, KODOMO1);
-	mTag = ETag::EATTACK;
+	//mTag = ETag::EATTACK;
 	//YŽ²‘¬“x‚Ì‰Šú’l‚ðˆÚ“®‘¬“x‚É‚·‚é
 	; mVx = SOKUDO;
 }
@@ -64,12 +64,15 @@ void CAttack2::Collision(CCharacter* m, CCharacter* o)
 	switch (o->Tag())
 	{
 	case ETag::EATTACK:
+		break;
 	case ETag::EPLAYER:
+		break;
+	case ETag::ETURN:
 		break;
 	default:
 		if (CRectangle::Collision(o))
 		{
-			mState = EState::ESTOP;
+			//mState = EState::ESTOP;
 			mEnabled = false;
 		}
 	}
