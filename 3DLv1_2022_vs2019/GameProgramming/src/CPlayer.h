@@ -1,4 +1,8 @@
 #pragma once
+//#ifndef CPLAYER_H
+//#define CPLAYER_H
+
+//#endif
 
 #include "CCharacter.h"
 #include "CInput.h"

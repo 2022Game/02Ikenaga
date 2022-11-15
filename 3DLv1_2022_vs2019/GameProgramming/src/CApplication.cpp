@@ -90,8 +90,8 @@ void CApplication::Update()
 	trans.Update(); //行列の更新
 	mCharacter.Update();
 	mCharacter.Render();
-	mPlayer.Render();
 	mPlayer.Update();
+	mPlayer.Render();
 	//mModel.Render(trans.Matrix());
 	//CMatrix matrix, position, rotation, scale;
 	//rotation.RotateY(180.0f);  //回転行列設定
