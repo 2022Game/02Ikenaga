@@ -1,4 +1,5 @@
 #pragma once
+
 #include "CCharacter.h"
 #include "CInput.h"
 

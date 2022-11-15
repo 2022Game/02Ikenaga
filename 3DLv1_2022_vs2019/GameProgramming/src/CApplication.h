@@ -22,7 +22,7 @@
 class CApplication
 {
 private:
-	CCharacter3 mPlay;
+	CCharacter3 mPlayer;
 	CCharacter3 mCharacter;
 	CModel mBackGround;//背景モデル
 	//モデルクラスのインスタンス作成

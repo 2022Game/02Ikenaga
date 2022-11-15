@@ -29,8 +29,8 @@ void CApplication::Start()
 {
 	mCharacter.Model(&mModel);
 	mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
-	mPlay.Model(&mModel);
-	mPlay.Scale(CVector(0.1f, 0.1f, 0.1f));
+	mPlayer.Model(&mModel);
+	mPlayer.Scale(CVector(0.1f, 0.1f, 0.1f));
 	CMatrix matrix;
 	matrix.print();
 	mEye = CVector(1.0f, 2.0f, 3.0f);
@@ -84,14 +84,14 @@ void CApplication::Update()
 	trans.Rotation(CVector(-10.0f, -20.0f, -30.0f));  //âÒì]ÇÃê›íË
 	trans.Scale(CVector(0.1f, 0.1f, 0.1f));//ägëÂèkè¨ÇÃê›íË
 	
-	mPlay.Position(CVector(0.0f, 0.0f, -3.0f));
-	mPlay.Rotation(CVector(0.0f, 180.0f, 0.0f));
-	mPlay.Scale(CVector(0.1f, 0.1f, 0.1f));
+	mPlayer.Position(CVector(0.0f, 0.0f, -3.0f));
+	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
+	mPlayer.Scale(CVector(0.1f, 0.1f, 0.1f));
 	trans.Update(); //çsóÒÇÃçXêV
 	mCharacter.Update();
 	mCharacter.Render();
-	mPlay.Render();
-	mPlay.Update();
+	mPlayer.Render();
+	mPlayer.Update();
 	//mModel.Render(trans.Matrix());
 	//CMatrix matrix, position, rotation, scale;
 	//rotation.RotateY(180.0f);  //âÒì]çsóÒê›íË
