@@ -5,7 +5,6 @@
 #include "CTransform.h"
 //モデルクラスのインクルード
 #include"CModel.h"
-#include"CPlayer.h"
 
 /*
 キャラクタークラス
