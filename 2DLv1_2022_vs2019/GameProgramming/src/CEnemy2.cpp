@@ -58,9 +58,9 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 					sNum--;
 				}
 				mEnabled = false;
-				//アイテムの時計を生成して、キャラクタマネージャに追加
+				//アイテムのポイントを生成して、キャラクタマネージャに追加
 				CApplication::CharacterManager()->Add(
-					new CItem(X(),
+					new CItem3(X(),
 						Y(),
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
@@ -77,9 +77,9 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 					//sNum--;
 				}
 				mEnabled = false;
-				//アイテムの時計を生成して、キャラクタマネージャに追加
+				//アイテムのポイントを生成して、キャラクタマネージャに追加
 				CApplication::CharacterManager()->Add(
-					new CItem(X(),
+					new CItem3(X(),
 						Y(),
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}

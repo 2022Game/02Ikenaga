@@ -15,16 +15,24 @@
 #define TEXLEFT1 190,150,340,293	//右向き2
 #define TEXLEFT2 550,510,340,293	//左向き2
 #define TEXSLEEPY  860,925,226,190   //お休み
-#define TEXPOINT 150,200,100,55
+#define TEXPOINT 200,200,100,55
 #define TEXATTACK 640,710,100,55   //攻撃モーション
 #define TEXATTACK2 710,640,100,55   //反対攻撃モーション
 #define VELOCITY 2.0f	//移動速度
-//#define VELOCITY2 4.0f
+#define VELOCITY2 4.0f
 #define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
 #define POINT 0
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
 #define ATTACK1  860,960,225,180   //攻撃のテクスチャ
+
+int CPlayer2::mPulltime=0;
+
+int  CPlayer2::Pulltime()
+{
+	return mPulltime;
+}
+
 
 int CPlayer2::sPoint = 0;	//POINT
 
@@ -71,8 +79,9 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::ECRY;
 					if (mInvincible == 0)
 					{
-						mInvincible = 60;
-						sHp--;
+						mInvincible = 100;
+						mState = EState::ESTOP;
+						//sHp--;
 					}
 				}
 			}
@@ -81,12 +90,68 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				mState = EState::ECRY;
 				if (mInvincible == 0)
 				{
-					mInvincible = 60;
+					mInvincible = 100;
+					mState = EState::ESTOP;
 					//sHp--;
 				}
 			}
 		}
 		break;
+	case ETag::EITEM:
+		if (CRectangle::Collision(o, &x, &y))
+		{
+			//時計の衝突判定を実行
+			o->Collision(o, m);
+			X(X() + x);
+			Y(Y() + y);
+			//着地した時
+			if (y != 0.0f)
+			{
+				//Y軸速度を0にする
+				mVy = 0.0f;
+				if (y > 0.0f)
+				{
+					mState = EState::EMOVE;
+				}
+				else
+				{	//ジャンプでなければ泣く
+					mState = EState::EDOWN;
+					if (mdown == 0)
+					{
+						mdown = 1;
+						mPulltime=mPulltime-100;
+					}
+				}
+			}
+			if (x != 0.0f)
+			{
+				//X軸速度を0にする
+				mVx = 0.0f;
+				if (x > 0.0f)
+				{
+					mState = EState::EMOVE;
+				}
+				else
+				{	//ジャンプでなければ泣く
+					mState = EState::EDOWN;
+					if (mdown == 0)
+					{
+						mdown = 1;
+						mPulltime = mPulltime - 100;
+					}
+				}
+			}
+			else
+			{	//ジャンプでなければ泣く
+				mState = EState::EDOWN;
+				if (mdown == 0)
+				{
+					mdown = 1;
+					mPulltime = mPulltime - 100;
+				}
+			}
+		}
+				break;
 	case ETag::EITEM2:
 		if (CRectangle::Collision(o, &x, &y))
 		{
@@ -105,13 +170,21 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				}
 				else
 				{	//ジャンプでなければ泣く
-					mState = EState::EHIT;
-					if (mnothing == 0)
+					mState = EState::EUP;
+					if (mUp == 0)
 					{
-						mnothing == 100;
+						mUp = 100;
 					}
 				}
 			}
+			else
+				{	//ジャンプでなければ泣く
+					mState = EState::EUP;
+					if (mUp == 0)
+					{
+						mUp = 100;
+					}
+				}
 			if (x != 0.0f)
 			{
 				//X軸速度を0にする
@@ -122,19 +195,21 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				}
 				else
 				{	//ジャンプでなければ泣く
-					mState = EState::EHIT;
-					if (mnothing == 0)
+					mState = EState::EUP;
+					if (mUp == 0)
 					{
-						mnothing == 100;
+						mUp = 100;
+						//mVx = VELOCITY2;
 					}
 				}
 			}
 			else
 			{	//ジャンプでなければ泣く
-				mState = EState::EHIT;
-				if (mnothing == 0)
+				mState = EState::EUP;
+				if (mUp == 0)
 				{
-					mnothing = 1;
+					mUp = 100;
+					//mVx = VELOCITY2;
 					//sHp--;
 				}
 			}
@@ -160,9 +235,19 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 						mState = EState::EHIT;
 						if (mnothing == 0)
 						{
-							mnothing == 1;
+							mnothing = 1;
 							sPoint++;
 						}
+					}
+				}
+				else
+				{	//ジャンプでなければ泣く
+					mState = EState::EHIT;
+					if (mnothing == 0)
+					{
+						mnothing = 1;
+						sPoint++;
+						//sHp--;
 					}
 				}
 				if (x != 0.0f)
@@ -178,7 +263,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 						mState = EState::EHIT;
 						if (mnothing == 0)
 						{
-							mnothing == 1;
+							mnothing = 1;
 							sPoint++;
 						}
 					}
@@ -189,6 +274,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mnothing == 0)
 					{
 						mnothing = 1;
+						sPoint++;
 						//sHp--;
 					}
 				}
@@ -251,7 +337,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 
 CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
 	: mInvincible(0), mVy(0.0f),mVx(0.0f)
-	,mnothing(0)
+	,mnothing(0),mUp(0),mdown(0)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXSLEEPY);
@@ -268,11 +354,19 @@ void CPlayer2::Update()
 	if (mInvincible > 0)
 	{
 		mInvincible--;
-	}
-	if (mnothing > 0)
+	}	
+		if (mnothing > 0)
 	{
 		mnothing--;
 	}
+		if (mUp > 0)
+		{
+			mUp--;
+		}
+		if (mdown > 0)
+		{
+			mdown--;
+		}
 	if (mState != EState::EJUMP)
 	{
 		if (mInput.Key('J'))
@@ -285,7 +379,7 @@ void CPlayer2::Update()
 	}
 	if (mState == EState::EATTACK)
 	{
-		if (mInput.Key(VK_SPACE))
+		if (mInput.Key(VK_SHIFT))
 		{
 			CApplication::CharacterManager()->Add(
 				new CAttack(X(), Y() + H() - 20.0f
@@ -297,12 +391,22 @@ void CPlayer2::Update()
 		mVx = -VELOCITY;
 		//		float x = X() - 4.0f;
 		X(X() + mVx);
+		if (mState == EState::EUP)
+		{
+			mVx = -VELOCITY2;
+			X(X() + mVx);
+		}
 	}
 	if (mInput.Key('D'))
 	{
 		mVx = VELOCITY;
 		//		float x = X() - 4.0f;
 		X(X() + mVx);
+		if (mState == EState::EUP)
+		{
+			mVx = VELOCITY2;
+			X(X() + mVx);
+		}
 	}
 	//Y座標にY軸速度を加える
 	Y(Y() + mVy);
@@ -310,7 +414,6 @@ void CPlayer2::Update()
 	mVy -= GRAVITY;
 	if (mState == EState::EHIT)
 	{
-		Texture(Texture(), TEXPOINT);
 		if (mnothing == 0)
 		{
 			mnothing = 1;
@@ -319,21 +422,51 @@ void CPlayer2::Update()
 	}
 	if (mnothing > 0)
 	{
-		mState = EState::EHIT;
+		//mState = EState::EHIT;
+		Texture(Texture(), TEXPOINT);
 	}
-	if (mState == EState::ECRY)
+		if (mState == EState::EUP)
+		{
+			Texture(Texture(), TEXPOINT);
+			if (mUp == 0)
+			{
+				mUp = 100;
+			}
+		}
+		if (mUp > 0)
+		{
+			mState = EState::EUP;
+			Texture(Texture(), TEXPOINT);
+		}
+
+		if (mState == EState::EDOWN)
+		{
+			Texture(Texture(), TEXPOINT);
+			if (mdown == 0)
+			{
+				mdown = 1;
+				//mPulltime = mPulltime - 100;
+			}
+		}
+		if (mUp > 0)
+		{
+			mState = EState::EUP;
+			Texture(Texture(), TEXPOINT);
+		}
+		if (mState == EState::ECRY)
 	{
 		//泣く画像を設定
 		Texture(Texture(), TEXSLEEPY);
 		if (mInvincible == 0)
 		{
-			mInvincible = 60;
-			sHp--;
+			mInvincible = 100;
+			mState = EState::ESTOP;
+			//sHp--;
 		}
 	}
 	if (mInvincible > 0)
 	{
-		mState = EState::ECRY;
+		Texture(Texture(), TEXSLEEPY);
 	}
 	else
 	{
@@ -348,7 +481,7 @@ void CPlayer2::Update()
 					{
 						Texture(Texture(), TEXCOORD5);
 					}
-					if (mInput.Key(VK_SPACE))
+					if (mInput.Key(VK_SHIFT))
 					{
 						CApplication::CharacterManager()->Add(
 							new CAttack2(X(), Y() + H() - 20.0f
@@ -364,7 +497,7 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD4);
 				}
-				  if (mInput.Key(VK_SPACE))
+				  if (mInput.Key(VK_SHIFT))
 				  {
 					  CApplication::CharacterManager()->Add(
 						  new CAttack(X(), Y() + H() - 20.0f
@@ -383,7 +516,7 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD5);
 				}
-				if (mInput.Key(VK_SPACE))
+				if (mInput.Key(VK_SHIFT))
 				{
 					CApplication::CharacterManager()->Add(
 						new CAttack2(X(), Y() + H() - 20.0f
@@ -399,7 +532,7 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD4);
 				}
-					if (mInput.Key(VK_SPACE))
+					if (mInput.Key(VK_SHIFT))
 					{
 						CApplication::CharacterManager()->Add(
 							new CAttack(X(), Y() + H() - 20.0f

@@ -3,10 +3,12 @@
 #include "CInput.h"
 #include "CSound.h"
 #include "CAttack.h"
+#include"CUi.h"
 
 class CPlayer2 : public CCharacter
 {
 public:
+	static int Pulltime();
 	static int Point();
 	//HPを取得
 	static int Hp();
@@ -22,9 +24,13 @@ private:
 	CSound mSoundJump;	//ジャンプSE
 	static int sHp;	//HP
 	static int sPoint;
-	int mInvincible; //無敵カウンタ
 	int mnothing; //なにもなし
+	int mUp;//上がる
+	int mdown;
+	int mInvincible; //無敵カウンタ
 	CInput mInput;
+	//CUi *mpUi;
+	static int mPulltime;
 	float mVy;//Y軸速度
 	float mVx;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "CUi.h"
 #include "CPlayer2.h"
+#include"CItem.h"
 
 //定数の定義
 #define TEXTURE "ゲーム制作の素材02.png" //テクスチャのファイル
@@ -11,6 +12,7 @@
 #define UGOKUBLOCK "6fce1c1aa2540daee360283fa78defcd_t1.png"
 #define AITEM "_7814-459000.png"
 #define TEKI "chara081234.png"
+#define TEKI2 "DqWQjAXWsAI-YEO1.png"
 
 #define TIPSIZE 20.0f //マップ要素のサイズ
 
@@ -20,9 +22,11 @@
 * ゲームのマップを作成し、
 * キャラクタを配置する
 */
-class CGame
+class CGame 
 {
 public:
+	//void Collision(CCharacter* m, CCharacter* o);
+	//static int Time(); //経過時間
 	//デストラクタ
 	~CGame();
 	//ゲームクリア判定
@@ -41,7 +45,9 @@ private:
 	int mCdx, mCdy; //カメラとプレイヤーの座標の差分
 	void CameraSet(); //カメラ設定
 	CPlayer2 *mpPlayer; //プレイヤーのポインタ
-	int mTime; //経過時間
+	CItem *mpItem;
 	CUi *mpUi; //UIクラスのポインタ
+    int mTime;
+	//CItem* mpItem;
 	//CGoal *mpGoal;
 };

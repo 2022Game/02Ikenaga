@@ -36,6 +36,7 @@ void CItem2::Collision(CCharacter* m, CCharacter* o)
 				if (o->Tag() == ETag::EPLAYER)
 				{
 					mEnabled = false;
+					//mState = EState::ESTOP;
 				}
 			}
 			break;

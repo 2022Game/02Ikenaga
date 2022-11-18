@@ -22,7 +22,9 @@ char* strncpy(char* str1, const char* str2, int len)
 }
 
 //デフォルトコンストラクタ
-CMaterial::CMaterial() {
+CMaterial::CMaterial() 
+: mVertexNum(0)
+{
 	//名前を0で埋め
 	memset(mName, 0, sizeof(mName));
 	//0で埋める

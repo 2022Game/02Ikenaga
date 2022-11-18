@@ -21,6 +21,7 @@ public:
 	void Point(int point);
 	//Time(時間)
 	void Time(int time);
+	void PullTime(int pulltime);
 	void Render();
 private:
 	int mGoal;
@@ -28,6 +29,7 @@ private:
 	int mHp;
 	int mPoint;  //ポイント
 	int mTime;	//経過時間
+	int mPullTime;
 	CFont mFont;
 	//CFont mFont1;
 };

@@ -14,7 +14,8 @@ public:
 	CItem(float x, float y, float w, float h, CTexture* pt);
 	//Update‚Å‚Í‰½‚à‚µ‚È‚¢
 	void Update();
-	CUi* mpUi;
+	//CUi* mpUi;
 private:
-	int mTime;
+	//static int mTime;
+	//int mTime;
 };

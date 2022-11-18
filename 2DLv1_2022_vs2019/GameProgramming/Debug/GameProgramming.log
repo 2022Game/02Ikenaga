@@ -1,3 +1,4 @@
-﻿  CItem.cpp
-C:\Users\ikenaga0605\Desktop\Git\02Ikenaga\2DLv1_2022_vs2019\GameProgramming\src\CItem.cpp(50,11): warning C4552: '>=': 式の結果が使用されていません
+﻿  CPlayer2.cpp
+C:\Users\ikenaga0605\Desktop\Git\02Ikenaga\2DLv1_2022_vs2019\GameProgramming\src\CPlayer2.cpp(22,1): warning C4005: 'VELOCITY2': マクロが再定義されました。
+C:\Users\ikenaga0605\Desktop\Git\02Ikenaga\2DLv1_2022_vs2019\GameProgramming\src\CCharacter.h(7): message : 'VELOCITY2' の以前の定義を確認してください
   GameProgramming.vcxproj -> C:\Users\ikenaga0605\Desktop\Git\02Ikenaga\2DLv1_2022_vs2019\Debug\GameProgramming.exe
