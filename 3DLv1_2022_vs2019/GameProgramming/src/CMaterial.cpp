@@ -3,6 +3,16 @@
 #include<string.h>
 #include"glut.h"
 
+void CMaterial::VertexNum(int num)
+{
+	mVertexNum = num;
+}
+
+int CMaterial::VertexNum()
+{
+	return mVertexNum;
+}
+
 /*
 * strncpy(char* str1,const char* str2,int len)
 * コピー先str1にコピー元str2の文字をlen文字までコピーする

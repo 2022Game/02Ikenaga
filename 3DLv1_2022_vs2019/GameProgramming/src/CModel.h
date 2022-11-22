@@ -23,7 +23,7 @@ public:
 	//描画
 	void Render();
 private:
-	//頂点んｐ配列
+	//頂点の配列
 	CVertex* mpVertexes;
 	void CreateVertexBuffer();
 	//マテリアルポインタの可変長配列

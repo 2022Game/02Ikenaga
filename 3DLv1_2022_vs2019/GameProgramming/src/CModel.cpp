@@ -5,20 +5,20 @@
 #include"CVector.h"
 #include"CTriangle.h"
 
-//描画
-	//Render(行列)
-void CModel::Render(const CMatrix& m) 
-{
-     //可変長配列の要素数だけ繰り返し
-	for (int i = 0; i < mTriangles.size(); i++) {
-		//マテリアルの適用
-		mpMaterials[mTriangles[i].MaterialIdx()]->Enabled();
-		//可変長配列に添え字でアクセスする
-		mTriangles[i].Render(m);
-		//マテリアルを無効
-		mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
-	}
-}
+////描画
+//	//Render(行列)
+//void CModel::Render(const CMatrix& m) 
+//{
+//     //可変長配列の要素数だけ繰り返し
+//	for (int i = 0; i < mTriangles.size(); i++) {
+//		//マテリアルの適用
+//		mpMaterials[mTriangles[i].MaterialIdx()]->Enabled();
+//		//可変長配列に添え字でアクセスする
+//		mTriangles[i].Render(m);
+//		//マテリアルを無効
+//		mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
+//	}
+//}
 
 //モデルファイルの入力
 //Load(モデルファイル名,マテリアルファイル名)
@@ -182,6 +182,19 @@ return;
 		CreateVertexBuffer();
 }
 
+void CModel::Render()
+{
+	//可変長配列の要素数だけ繰り返し
+	for (int i = 0; i < mTriangles.size(); i++) {
+		//マテリアルの適用
+		mpMaterials[mTriangles[i].MaterialIdx()]->Enabled();
+		//可変長配列に添え字でアクセスする
+		mTriangles[i].Render();
+		//マテリアルを無効
+		mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
+	}
+}
+
 //文字列s1と文字列s2の比較
 //s1とs2が等しければ0を
 //等しくなければ0以外を返す
@@ -231,16 +244,21 @@ void CModel::Render(const CMatrix& m)
 	glPopMatrix();
 
 	//頂点座標の配列を無効にする
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//法線の配列を無効にする
+	glDisableClientState(GL_NORMAL_ARRAY);
+	//テクスチャマッピングの配列を無効にする
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	//可変長配列の要素数だけ繰り返し
-	for (int i = 0; i < mTriangles.size(); i++) {
-		//マテリアルの適用
-		mpMaterials[mTriangles[i].MaterialIdx()]->Enabled();
-		//可変長配列に添え字でアクセスする
-		mTriangles[i].Render();
-		//マテリアルを無効
-		mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
-	}
+	////可変長配列の要素数だけ繰り返し
+	//for (int i = 0; i < mTriangles.size(); i++) {
+	//	//マテリアルの適用
+	//	mpMaterials[mTriangles[i].MaterialIdx()]->Enabled();
+	//	//可変長配列に添え字でアクセスする
+	//	mTriangles[i].Render();
+	//	//マテリアルを無効
+	//	mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
+	//}
 }
 
 CModel::~CModel()
@@ -266,7 +284,7 @@ void CModel::CreateVertexBuffer()
 				mpVertexes[idx].mPosition = mTriangles[j].V0();
 				mpVertexes[idx].mNormal = mTriangles[j].N0();
 				mpVertexes[idx++].mTextureCoords = mTriangles[j].U0();
-				mpVertexes[idx].mPosition = mTriangles[j].V1();
+			    mpVertexes[idx].mPosition = mTriangles[j].V1();
 				mpVertexes[idx].mNormal = mTriangles[j].N1();
 				mpVertexes[idx++].mTextureCoords = mTriangles[j].U1();
 				mpVertexes[idx].mPosition = mTriangles[j].V2();

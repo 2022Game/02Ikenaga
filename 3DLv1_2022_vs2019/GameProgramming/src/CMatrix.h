@@ -10,6 +10,8 @@
 
 class CMatrix {
 public:
+	//行列の取得
+	float* M() const;
 	//*演算子のオーバーロード
 	//CMatrix*CMatrix の演算結果を返す
 	const CMatrix operator*(const CMatrix& m)const;
