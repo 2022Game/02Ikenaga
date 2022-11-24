@@ -27,8 +27,8 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
-	mCharacter.Model(&mModel);
-	mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
+	//mCharacter.Model(&mModel);
+	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mPlayer.Model(&mModel);
 	mPlayer.Position(CVector(0.0f, 0.0f, -3.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
@@ -79,7 +79,7 @@ void CApplication::Update()
 	}
 	//視点の設定
 	//gluLookAt(視点X,視点Y,視点Z,中心X,中心Y,中心Z,上向X,上向Y,上向Z)
-	gluLookAt(mEye.X(), mEye.Y(), mEye.Z(), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	//gluLookAt(mEye.X(), mEye.Y(), mEye.Z(), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	CTransform trans;  //変換行列インスタンスの作成
 	trans.Position(CVector(0.5f, 1.8f, 0.5f));//位置の設定
 	trans.Rotation(CVector(-10.0f, -20.0f, -30.0f));  //回転の設定
@@ -87,9 +87,19 @@ void CApplication::Update()
 
 	trans.Update(); //行列の更新
 	mPlayer.Update();
+	//カメラのパラメータを作成する
+	CVector e, c, u;  //視点、注視点、上向き
+	//視点を求める
+	e = mPlayer.Position() + CVector(0.0f, 1.0f, -3.0f) * mPlayer.MatrixRotate();
+		//注視点を求める
+		c = mPlayer.Position();
+	//上向きを求める
+		u = CVector(0.0f, 1.0f, 0.0f) * mPlayer.MatrixRotate();
+		//カメラの設定
+		gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
 	mPlayer.Render();
-	mCharacter.Update();
-	mCharacter.Render();
+	//mCharacter.Update();
+	//mCharacter.Render();
 	//mModel.Render(trans.Matrix());
 	//CMatrix matrix, position, rotation, scale;
 	//rotation.RotateY(180.0f);  //回転行列設定
