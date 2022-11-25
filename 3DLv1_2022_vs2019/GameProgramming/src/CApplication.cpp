@@ -98,13 +98,15 @@ void CApplication::Update()
 		//カメラの設定
 		gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
 	mPlayer.Render();
+	mBackGround.Render();
+	mPlayer.bullet.Update();
+	mPlayer.bullet.Render();
 	//mCharacter.Update();
 	//mCharacter.Render();
 	//mModel.Render(trans.Matrix());
 	//CMatrix matrix, position, rotation, scale;
 	//rotation.RotateY(180.0f);  //回転行列設定
 	//mModel.Render(matrix);  //モデルの描画
-	mBackGround.Render();
 	//描画開始
 	//glBegin(形)
 	//GL_TRIANGLES:三角形
