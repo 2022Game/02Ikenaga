@@ -119,8 +119,17 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mdown == 0)
 					{
 						mdown = 1;
-						mPulltime=mPulltime-100;
+						mPulltime=mPulltime+100;
 					}
+				}
+			}
+			else
+			{	//ジャンプでなければ泣く
+				mState = EState::EDOWN;
+				if (mdown == 0)
+				{
+					mdown = 1;
+					mPulltime =mPulltime + 100;
 				}
 			}
 			if (x != 0.0f)
@@ -137,7 +146,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mdown == 0)
 					{
 						mdown = 1;
-						mPulltime = mPulltime - 100;
+						mPulltime = mPulltime + 100;
 					}
 				}
 			}
@@ -147,7 +156,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				if (mdown == 0)
 				{
 					mdown = 1;
-					mPulltime = mPulltime - 100;
+					mPulltime = mPulltime + 100;
 				}
 			}
 		}
@@ -332,6 +341,16 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 			}
 		}
 		break;
+		if (x != 0.0f)
+		{
+			//Y軸速度を0にする
+			mVx = 0.0f;
+			if (x > 0.0f)
+			{
+				mState = EState::EMOVE;
+			}
+		}
+		break;
 	}
 }
 
@@ -367,16 +386,19 @@ void CPlayer2::Update()
 		{
 			mdown--;
 		}
-	if (mState != EState::EJUMP)
-	{
-		if (mInput.Key('J'))
+		if (mState != EState::EUP)
 		{
-			//ジャンプ音
-			mSoundJump.Play(0.1f);
-			mVy = JUMPV0;
-			mState = EState::EJUMP;
+			if (mState != EState::EJUMP)
+			{
+				if (mInput.Key('J'))
+				{
+					//ジャンプ音
+					mSoundJump.Play(0.1f);
+					mVy = JUMPV0;
+					mState = EState::EJUMP;
+				}
+			}
 		}
-	}
 	if (mState == EState::EATTACK)
 	{
 		if (mInput.Key(VK_SHIFT))
@@ -417,7 +439,6 @@ void CPlayer2::Update()
 		if (mnothing == 0)
 		{
 			mnothing = 1;
-			//sPoint++;
 		}
 	}
 	if (mnothing > 0)
@@ -437,6 +458,7 @@ void CPlayer2::Update()
 		{
 			mState = EState::EUP;
 			Texture(Texture(), TEXPOINT);
+			return;
 		}
 
 		if (mState == EState::EDOWN)
@@ -445,7 +467,6 @@ void CPlayer2::Update()
 			if (mdown == 0)
 			{
 				mdown = 1;
-				//mPulltime = mPulltime - 100;
 			}
 		}
 		if (mUp > 0)

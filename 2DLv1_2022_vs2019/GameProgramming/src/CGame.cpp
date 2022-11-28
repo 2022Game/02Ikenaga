@@ -26,6 +26,7 @@ void CGame::Start()
 	//UIˆ—
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
+	mpUi->Pulltime(CPlayer2::Pulltime());
 	mpUi->Enemy(CEnemy2::Num());
 	mpUi->Enemy(CEnemy3::Num());
 	mpUi->Goal(CGoal::Goal());
@@ -47,6 +48,7 @@ void CGame::Over()
 	//UIˆ—
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
+	mpUi->Pulltime(CPlayer2::Pulltime());
 	//mpUi->Enemy(CEnemy2::Num());
 	mpUi->Render();
 	mpUi->Over();
@@ -78,6 +80,7 @@ void CGame::Clear()
 	//UIˆ—
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
+	mpUi->Pulltime(CPlayer2::Pulltime());
 	mpUi->Enemy(CEnemy2::Num());
 	mpUi->Enemy(CEnemy3::Num());
 	mpUi->Goal(CGoal::Goal());
@@ -107,6 +110,7 @@ CGame::CGame()
 	CApplication::Texture6()->Load(AITEM);
 	CApplication::Texture7()->Load(TEKI);
 	CApplication::Texture8()->Load(TEKI2);
+	CApplication::Texture9()->Load(UPUP);
 
 	//’è”‚Ì’è‹`
 	const int ROWS = 20; //s”
@@ -123,7 +127,7 @@ CGame::CGame()
 		{1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,1},
 		{1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,0,1,0,0,0,0,5,1,0,1},
 		{1,0,0,4,0,12,0,0,4,0,1,1,1,0,0,0,0,1,1,1,0,0,0,11,1},
-		{1,1,1,11,0,0,1,0,1,1,1,2,0,0,0,1,4,0,12,0,4,11,0,0,1},
+		{1,1,1,11,0,0,1,0,1,1,1,2,9,0,0,1,4,0,12,0,4,11,0,0,1},
 		{1,0,0,0,1,0,0,1,1,0,5,0,1,11,1,0,0,1,1,1,1,0,1,1,1},
 		{1,10,1,7,0,1,0,0,0,0,1,0,0,1,0,1,4,0,0,12,0,4,0,0,1},
 		{1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,1,1,0,11,1,1},
@@ -278,9 +282,9 @@ void CGame::Update()
 	CCamera::End();
 	//UI
 	mpUi->Time(mTime++);
-	mpUi->PullTime(CPlayer2::Pulltime());
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
+	mpUi->Pulltime(CPlayer2::Pulltime());
 	mpUi->Enemy(CEnemy2::Num());
 	mpUi->Goal(CGoal::Goal());
 	mpUi->Render();

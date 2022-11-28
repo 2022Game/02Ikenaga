@@ -32,7 +32,7 @@ void CUi::Enemy(int enemy)
 CUi::CUi()
 	: mHp(0)
 	, mTime(0)
-	,mPullTime(0)
+	,mPulltime(0)
 	, mEnemy(0)
 	,mGoal(0)
 	,mPoint(0)
@@ -56,9 +56,9 @@ void CUi::Time(int time)
 	mTime = time;
 }
 
-void CUi::PullTime(int pulltime)
+void CUi::Pulltime(int pulltime)
 {
-	mPullTime = pulltime;
+	mPulltime = pulltime;
 }
 
 void CUi::Render()
@@ -66,7 +66,7 @@ void CUi::Render()
 	char str[16];
 	sprintf(str, "TIME:%01d", mTime);
 	mFont.Draw(20, 580, 10, 20, str);
-	sprintf(str, "PULLTIME:%01d", mPullTime);
+	sprintf(str, "PULLTIME:%d", mPulltime);
 	mFont.Draw(20, 550, 10, 20, str);
 	/*sprintf(str, "HP:%d", mHp);
 	mFont.Draw(20, 550, 10, 20, str);*/

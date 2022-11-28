@@ -15,6 +15,12 @@ CCharacterManager CApplication::mCharacterManager;
 //背景モデルデータの指定
 #define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"
 
+CTaskManager CApplication::mTaskManager;
+CTaskManager*CApplication::TaskManager()
+{
+	return &mTaskManager;
+}
+
 CCharacterManager* CApplication::CharacterManager()
 {
 	return &mCharacterManager;
@@ -99,8 +105,12 @@ void CApplication::Update()
 		gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
 	mPlayer.Render();
 	mBackGround.Render();
-	mPlayer.bullet.Update();
-	mPlayer.bullet.Render();
+	//タスクマネージャの更新
+	mTaskManager.Update();
+	//タスクマネージャの描画
+	mTaskManager.Render();
+	//mPlayer.bullet.Update();
+	//mPlayer.bullet.Render();
 	//mCharacter.Update();
 	//mCharacter.Render();
 	//mModel.Render(trans.Matrix());

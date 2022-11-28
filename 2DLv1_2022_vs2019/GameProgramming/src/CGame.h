@@ -13,6 +13,7 @@
 #define AITEM "_7814-459000.png"
 #define TEKI "chara081234.png"
 #define TEKI2 "DqWQjAXWsAI-YEO1.png"
+#define UPUP "117545011.png"
 
 #define TIPSIZE 20.0f //マップ要素のサイズ
 
