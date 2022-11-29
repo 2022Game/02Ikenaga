@@ -119,7 +119,7 @@ void CPlayer2::Update()
 			mState = EState::EJUMP;
 		}
 	}
-	if (mInput.Key('A'))
+	if (mInput.Key('Z'))
 	{
 		mVx = -VELOCITY;
 		//		float x = X() - 4.0f;
