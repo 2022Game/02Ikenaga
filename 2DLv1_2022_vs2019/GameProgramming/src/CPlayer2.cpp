@@ -6,8 +6,9 @@
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
 #define GRAVITY (TIPSIZE / 16.0f)	//重力加速度16
-#define JUMPV0 (TIPSIZE / 1.5f)//ジャンプの初速
-#define JUMPVO2 (TIPSIZE / 1.4f)
+#define GRAVITY10 (TIPSIZE / 13.5f)
+#define JUMPV0 (TIPSIZE / 1.8f)//ジャンプの初速
+#define JUMPVO2 (TIPSIZE / 1.0f)
 #define TEXCOORD2 150,189,340,293   //右向き2
 #define TEXCOORD3 510,550,340,293   //右向き
 #define TEXCOORD4 750,790,340,293   //右向きジャンプ
@@ -15,11 +16,18 @@
 #define TEXLEFT1 190,150,340,293	//右向き2
 #define TEXLEFT2 550,510,340,293	//左向き2
 #define TEXSLEEPY  860,925,226,190   //お休み
+#define TEXSUPIDO 210,250,405,360 //スピードアップ
+#define TEXSUOIDOUP 250,210,405,360//反対のスピードアップ
+#define SUPIDOTEX  570,610,408,361 //スピードアップ2
+#define SUOIDOUPTEX 610,570,408,361 //反対スピードアップ2
+#define TEXJUMP 680,715,270,220  //スピードアップ中のジャンプ
+#define JUMPTEX 715,680,270,220  //反対スピードアップ中のジャンプ
+
 #define TEXPOINT 200,200,100,55
 #define TEXATTACK 640,710,100,55   //攻撃モーション
 #define TEXATTACK2 710,640,100,55   //反対攻撃モーション
 #define VELOCITY 2.0f	//移動速度
-#define VELOCITY2 4.0f
+#define VELOCITY2 2.5f
 #define SOKUDO 1.0f
 #define HP 3 //HPの初期値は3
 #define POINT 0
@@ -182,7 +190,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::EUP;
 					if (mUp == 0)
 					{
-						mUp = 100;
+						mUp = 1000;
 					}
 				}
 			}
@@ -191,7 +199,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::EUP;
 					if (mUp == 0)
 					{
-						mUp = 100;
+						mUp = 1000;
 					}
 				}
 			if (x != 0.0f)
@@ -207,7 +215,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::EUP;
 					if (mUp == 0)
 					{
-						mUp = 100;
+						mUp = 1000;
 						//mVx = VELOCITY2;
 					}
 				}
@@ -217,7 +225,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				mState = EState::EUP;
 				if (mUp == 0)
 				{
-					mUp = 100;
+					mUp = 1000;
 					//mVx = VELOCITY2;
 					//sHp--;
 				}
@@ -359,7 +367,7 @@ CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
 	,mnothing(0),mUp(0),mdown(0)
 {
 	Set(x, y, w, h);
-	Texture(pt, TEXSLEEPY);
+	Texture(pt, TEXJUMP);
 	mTag = ETag::EPLAYER;
 	sHp = HP;
 	sPoint = POINT;
@@ -386,9 +394,9 @@ void CPlayer2::Update()
 		{
 			mdown--;
 		}
-		if (mState != EState::EUP)
+		if (mState != EState::EJUMP)
 		{
-			if (mState != EState::EJUMP)
+			if (mState != EState::EUP)
 			{
 				if (mInput.Key('J'))
 				{
@@ -399,15 +407,15 @@ void CPlayer2::Update()
 				}
 			}
 		}
-	if (mState == EState::EATTACK)
-	{
-		if (mInput.Key(VK_SHIFT))
+		if (mState == EState::EATTACK)
 		{
-			CApplication::CharacterManager()->Add(
-				new CAttack(X(), Y() + H() - 20.0f
-					, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+			if (mInput.Key(VK_SHIFT))
+			{
+				CApplication::CharacterManager()->Add(
+					new CAttack(X(), Y() + H() - 20.0f
+						, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+			}
 		}
-	}
 	if (mInput.Key('A'))
 	{
 		mVx = -VELOCITY;
@@ -443,7 +451,7 @@ void CPlayer2::Update()
 	}
 	if (mnothing > 0)
 	{
-		//mState = EState::EHIT;
+		mState = EState::EHIT;
 		Texture(Texture(), TEXPOINT);
 	}
 		if (mState == EState::EUP)
@@ -451,14 +459,12 @@ void CPlayer2::Update()
 			Texture(Texture(), TEXPOINT);
 			if (mUp == 0)
 			{
-				mUp = 100;
+				mUp = 1000;
 			}
 		}
 		if (mUp > 0)
 		{
 			mState = EState::EUP;
-			Texture(Texture(), TEXPOINT);
-			return;
 		}
 
 		if (mState == EState::EDOWN)
@@ -469,20 +475,17 @@ void CPlayer2::Update()
 				mdown = 1;
 			}
 		}
-		if (mUp > 0)
+		if (mdown > 0)
 		{
-			mState = EState::EUP;
-			Texture(Texture(), TEXPOINT);
+			mState = EState::EDOWN;
 		}
 		if (mState == EState::ECRY)
 	{
-		//泣く画像を設定
 		Texture(Texture(), TEXSLEEPY);
 		if (mInvincible == 0)
 		{
 			mInvincible = 100;
 			mState = EState::ESTOP;
-			//sHp--;
 		}
 	}
 	if (mInvincible > 0)
@@ -496,35 +499,59 @@ void CPlayer2::Update()
 		{
 			if (mVx < 0.0f) //左へ移動
 			{
-					//左向き１を設定
-					Texture(Texture(), TEXLEFT1);
-					if (mState == EState::EJUMP)
+				//左向き１を設定
+				Texture(Texture(), TEXLEFT1);
+				if (mState == EState::EJUMP)
+				{
+					Texture(Texture(), TEXCOORD5);
+				}
+				if (mState != EState::EJUMP)
+				{
+					if (mInput.Key('J'))
 					{
-						Texture(Texture(), TEXCOORD5);
+						mState = EState::EJUMP;
+						Texture(Texture(), JUMPTEX);
 					}
-					if (mInput.Key(VK_SHIFT))
-					{
-						CApplication::CharacterManager()->Add(
-							new CAttack2(X(), Y() + H() - 20.0f
-								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
-						Texture(Texture(), TEXATTACK2);
-					}
+				}
+				if (mState == EState::EUP)
+				{
+					Texture(Texture(), TEXSUOIDOUP);
+				}
+				if (mInput.Key(VK_SHIFT))
+				{
+					CApplication::CharacterManager()->Add(
+						new CAttack2(X(), Y() + H() - 20.0f
+							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+					Texture(Texture(), TEXATTACK2);
+				}
 			}
 			else
 			{
 				//通常の画像を設定
 				Texture(Texture(), TEXCOORD3);
-		          if(mState == EState::EJUMP)
+				if (mState == EState::EJUMP)
 				{
 					Texture(Texture(), TEXCOORD4);
 				}
-				  if (mInput.Key(VK_SHIFT))
-				  {
-					  CApplication::CharacterManager()->Add(
-						  new CAttack(X(), Y() + H() - 20.0f
-							  , 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
-					  Texture(Texture(), TEXATTACK);
-				  }
+				if (mState != EState::EJUMP)
+				{
+					if (mInput.Key('J'))
+					{
+						mState = EState::EJUMP;
+						Texture(Texture(), TEXJUMP);
+					}
+				}
+				if (mState == EState::EUP)
+				{
+					Texture(Texture(), TEXSUPIDO);
+				}
+				if (mInput.Key(VK_SHIFT))
+				{
+					CApplication::CharacterManager()->Add(
+						new CAttack(X(), Y() + H() - 20.0f
+							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+					Texture(Texture(), TEXATTACK);
+				}
 			}
 		}
 		else
@@ -536,6 +563,18 @@ void CPlayer2::Update()
 				if (mState == EState::EJUMP)
 				{
 					Texture(Texture(), TEXCOORD5);
+				}
+				if (mState != EState::EJUMP)
+				{
+					if (mInput.Key('J'))
+					{
+						mState = EState::EJUMP;
+						Texture(Texture(), JUMPTEX);
+					}
+				}
+				if (mState == EState::EUP)
+				{
+					Texture(Texture(), SUOIDOUPTEX);
 				}
 				if (mInput.Key(VK_SHIFT))
 				{
@@ -553,16 +592,27 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXCOORD4);
 				}
-					if (mInput.Key(VK_SHIFT))
+				if (mState != EState::EJUMP)
+				{
+					if (mInput.Key('J'))
 					{
-						CApplication::CharacterManager()->Add(
-							new CAttack(X(), Y() + H() - 20.0f
-								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
-						Texture(Texture(), TEXATTACK);
+						mState = EState::EJUMP;
+						Texture(Texture(), TEXJUMP);
 					}
+				}
+				if (mState == EState::EUP)
+				{
+					Texture(Texture(), SUPIDOTEX);
+				}
+				if (mInput.Key(VK_SHIFT))
+				{
+					CApplication::CharacterManager()->Add(
+						new CAttack(X(), Y() + H() - 20.0f
+							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+					Texture(Texture(), TEXATTACK);
+				}
 			}
 		}
-
 	}
 }
 

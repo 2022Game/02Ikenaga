@@ -1,7 +1,7 @@
 #include "CAttack.h"
 #include"CPlayer2.h"
 #include "CApplication.h"
-#define KODOMO "117545.png"
+#define KODOMO "1175450110.png"
 #define KODOMO1 370, 490, 460, 370//テクスチャ座標
 
 void CAttack::Collision()

@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define VELOCITY 2.0f	//à⁄ìÆë¨ìx
-#define VELOCITY2  4.0f;
+#define VELOCITY2  2.5f;
 #define SOKUDO   1.0f
 
 class CCharacter : public CRectangle
@@ -39,6 +39,7 @@ public:
 		EANNIHILATION,  //è¡ñ≈
 		EUP,
 		EDOWN,
+		EJUMPUP,
 	};
 protected:
 	float mVx;	//Xé≤ë¨ìx

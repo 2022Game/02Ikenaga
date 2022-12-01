@@ -22,7 +22,7 @@ void CPlayer::Update()
 			new CBullet(X(), Y() + H() + 10.0f
 				, 3.0f, 10.0f, 1396, 1420, 750, 592, CApplication::Texture()));
 	}
-	if (mInput.Key('A'))
+	if (mInput.Key('Z'))
 	{
 		float x = X() - 4.0f;
 		X(x);

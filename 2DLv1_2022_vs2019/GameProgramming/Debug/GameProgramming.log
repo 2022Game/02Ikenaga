@@ -1,5 +1,4 @@
-﻿  CGame.cpp
-  CItem.cpp
-  main.cpp
-  コードを生成中...
+﻿  CPlayer2.cpp
+C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\2DLv1_2022_vs2019\GameProgramming\src\CPlayer2.cpp(30,1): warning C4005: 'VELOCITY2': マクロが再定義されました。
+C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\2DLv1_2022_vs2019\GameProgramming\src\CCharacter.h(7): message : 'VELOCITY2' の以前の定義を確認してください
   GameProgramming.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\2DLv1_2022_vs2019\Debug\GameProgramming.exe

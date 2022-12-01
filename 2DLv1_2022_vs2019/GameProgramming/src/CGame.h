@@ -7,7 +7,7 @@
 #define TEXTURE "ゲーム制作の素材02.png" //テクスチャのファイル
 #define HITO "Image.png"
 #define SURAIMU "Monster2.png"
-#define KODOMO "117545.png"
+#define KODOMO "1175450110.png"
 #define GOAL "890568442.png"
 #define UGOKUBLOCK "6fce1c1aa2540daee360283fa78defcd_t1.png"
 #define AITEM "_7814-459000.png"
