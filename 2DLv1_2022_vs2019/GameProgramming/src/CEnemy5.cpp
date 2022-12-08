@@ -1,40 +1,34 @@
-#include "CEnemy4.h"
-#include"CItem.h"
-#include"CItem2.h"
-#include"CItem3.h"
+#include"CEnemy5.h"
 #include"CAttack.h"
 #include "CApplication.h"
 
-#define TEXCOORD  120, 70, 370, 320	//テクスチャマッピング
-#define TEXCRY 196, 216, 190, 160	//テクスチャマッピング
-#define TEXCOORD2  40,85,53,17	//右向き2
-#define TEXLEFT1  85, 40, 53, 17	//左向き1
-#define TEXLEFT2  40, 1, 53, 17	//左向き2
+#define TEXCOORD 245, 345, 310, 220	//テクスチャマッピング
+#define TEXCOORDEX 345, 245, 310, 220
 
-int CEnemy4::sNum = 0;
+int CEnemy5::sNum = 0;
 
-void CEnemy4::Num(int num)
+void CEnemy5::Num(int num)
 {
 	sNum = num;
 }
 
-int CEnemy4::Num()
+int CEnemy5::Num()
 {
 	return sNum;
 }
 
-void CEnemy4::Collision()
+void CEnemy5::Collision()
 {
 	CApplication::CharacterManager()->Collision(this);
 }
 
-void CEnemy4::Collision(CCharacter* m, CCharacter* o)
+void CEnemy5::Collision(CCharacter* m, CCharacter* o)
 {
 	//めり込み調整変数を宣言する
 	float x, y;
 	switch (o->Tag())
 	{
-	case ETag::ETURN:
+	case ETag::EBLOCK:
 		//折り返しに当たった時
 		if (CRectangle::Collision(o, &x, &y))
 		{
@@ -58,11 +52,6 @@ void CEnemy4::Collision(CCharacter* m, CCharacter* o)
 					sNum--;
 				}
 				mEnabled = false;
-				//アイテムの時計を生成して、キャラクタマネージャに追加
-				CApplication::CharacterManager()->Add(
-					new CItem(X(),
-						Y(),
-						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
 		}
 		break;
@@ -76,10 +65,6 @@ void CEnemy4::Collision(CCharacter* m, CCharacter* o)
 					sNum--;
 				}
 				mEnabled = false;
-				CApplication::CharacterManager()->Add(
-					new CItem(X(),
-						Y(),
-						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
 		}
 		break;
@@ -94,10 +79,6 @@ void CEnemy4::Collision(CCharacter* m, CCharacter* o)
 					//sNum--;
 				}
 				mEnabled = false;
-				CApplication::CharacterManager()->Add(
-					new CItem(X(),
-						Y(),
-						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
 		}
 		break;
@@ -110,7 +91,7 @@ void CEnemy4::Collision(CCharacter* m, CCharacter* o)
 	}
 }
 
-CEnemy4::CEnemy4(float x, float y, float w, float h, CTexture* pt)
+CEnemy5::CEnemy5(float x, float y, float w, float h, CTexture* pt)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXCOORD);
@@ -121,6 +102,44 @@ CEnemy4::CEnemy4(float x, float y, float w, float h, CTexture* pt)
 	sNum++;
 }
 
-void CEnemy4::Update()
+void CEnemy5::Update()
 {
+	switch(mState)
+	{
+	case EState::ECRY:
+		//泣く画像を設定
+		//Texture(Texture(), TEXCRY);
+		break;
+	case EState::EMOVE:
+		//X軸速度分、X座標を更新する
+		X(X() + mVx);
+		const int PITCH = 32;//画像を切り替える間隔
+		if ((int)X() % PITCH < PITCH / 2)
+		{
+			if (mVx < 0.0f) //左へ移動
+			{
+				//左向き１を設定
+				Texture(Texture(), TEXCOORDEX);
+			}
+			else
+			{
+				//通常の画像を設定
+				Texture(Texture(), TEXCOORD);
+			}
+		}
+		/*else
+		{*/
+			//if (mVx < 0.0f) //左へ移動
+			//{
+			//	//左向き2を設定
+			//	Texture(Texture(), TEXCOORD);
+			//}
+			//else
+			//{
+			//	//2番目の画像を設定
+			//	Texture(Texture(), TEXCOORDEX);
+			//}
+		//}
+		break;
+	}
 }

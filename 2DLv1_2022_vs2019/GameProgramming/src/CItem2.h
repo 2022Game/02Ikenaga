@@ -4,6 +4,7 @@
 class CItem2 : public CCharacter
 {
 public:
+	//void srand(unsigned int seed);
 	//Õ“Ëˆ—1
 	void Collision();
 	//Õ“Ëˆ—3
@@ -12,4 +13,8 @@ public:
 	CItem2(float x, float y, float w, float h, CTexture* pt);
 	//Update‚Å‚Í‰½‚à‚µ‚È‚¢
 	void Update();
+	//void Render();
+	static int mItem2;
+private:
+	//int main(void);
 };

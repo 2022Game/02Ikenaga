@@ -1,5 +1,10 @@
 #include "CItem2.h"
 #include "CApplication.h"
+#include"stdio.h"
+#include "stdlib.h"
+#include"time.h"
+
+//#define RAND_MAX 0x7fff
 
 #define TEXCOORD1  151,190,262,225       //靴、足(スピードアップ)//ポイント(コイン)
 
@@ -50,13 +55,37 @@ void CItem2::Collision(CCharacter* m, CCharacter* o)
 }
 void CItem2::Update()
 {
-	//通常の画像を設定
+
 	Texture(Texture(), TEXCOORD1);
 }
+
+//void CItem2::Render()
+//{
+//	//Texture(Texture(), TEXCOORD1);
+//	//char str[2];
+//	int main(void);
+//	{
+//		int i;
+//
+//		//srand(10);
+//		srand((unsigned int)time(nullptr));
+//
+//		for (i = 0; i < 10; i++)
+//		{
+//			//乱数値の表示
+//			printf("%d\n", 0 + rand() % 10);
+//			//printf("%lf\n", rand() / (double)RAND_MAX);
+//			//return ;
+//		}
+//
+//		return ;
+//	}
+//}
 
 CItem2::CItem2(float x, float y, float w, float h, CTexture* pt)
 {
 	Set(x, y, w, h);
-	Texture(pt, TEXCOORD1);
+	 Texture(pt, TEXCOORD1);
 	mTag = ETag::EITEM2;
+	srand((unsigned int)time(NULL));
 }

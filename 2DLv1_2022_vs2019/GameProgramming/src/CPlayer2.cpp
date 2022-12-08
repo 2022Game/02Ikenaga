@@ -2,6 +2,7 @@
 #include "CApplication.h"
 #include"CAttack.h"
 #include"CAttack2.h"
+//#include"CGame.h"
 
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
@@ -22,6 +23,8 @@
 #define SUOIDOUPTEX 610,570,408,361 //反対スピードアップ2
 #define TEXJUMP 680,715,270,220  //スピードアップ中のジャンプ
 #define JUMPTEX 715,680,270,220  //反対スピードアップ中のジャンプ
+#define TYAKUTI 748,790,220,180 //着地
+#define TEXTYAKUTI 790,748,220,180 //反対の着地
 
 #define TEXPOINT 200,200,100,55
 #define TEXATTACK 640,710,100,55   //攻撃モーション
@@ -128,6 +131,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					{
 						mdown = 1;
 						mPulltime=mPulltime+100;
+					   // mpUi->Time(mTime);
 					}
 				}
 			}
@@ -138,6 +142,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				{
 					mdown = 1;
 					mPulltime =mPulltime + 100;
+					//mpUi->Time(mTime);
 				}
 			}
 			if (x != 0.0f)
@@ -155,6 +160,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					{
 						mdown = 1;
 						mPulltime = mPulltime + 100;
+						//mpUi->Time(mTime);
 					}
 				}
 			}
@@ -165,6 +171,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				{
 					mdown = 1;
 					mPulltime = mPulltime + 100;
+					//mpUi->Time(mTime);
 				}
 			}
 		}
@@ -216,7 +223,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mUp == 0)
 					{
 						mUp = 1000;
-						//mVx = VELOCITY2;
 					}
 				}
 			}
@@ -226,8 +232,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				if (mUp == 0)
 				{
 					mUp = 1000;
-					//mVx = VELOCITY2;
-					//sHp--;
 				}
 			}
 		}
@@ -364,10 +368,10 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 
 CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
 	: mInvincible(0), mVy(0.0f),mVx(0.0f)
-	,mnothing(0),mUp(0),mdown(0)
+	,mnothing(0),mUp(0),mdown(0),mpUi(nullptr),mTime(0)
 {
 	Set(x, y, w, h);
-	Texture(pt, TEXJUMP);
+	Texture(pt, TYAKUTI);
 	mTag = ETag::EPLAYER;
 	sHp = HP;
 	sPoint = POINT;
@@ -503,7 +507,12 @@ void CPlayer2::Update()
 				Texture(Texture(), TEXLEFT1);
 				if (mState == EState::EJUMP)
 				{
-					Texture(Texture(), TEXCOORD5);
+					Texture(Texture(), TEXTYAKUTI);
+					if (mInput.Key('J'))
+					{
+						mState = EState::EJUMP;
+						Texture(Texture(), TEXCOORD5);
+					}
 				}
 				if (mState != EState::EJUMP)
 				{
@@ -531,7 +540,12 @@ void CPlayer2::Update()
 				Texture(Texture(), TEXCOORD3);
 				if (mState == EState::EJUMP)
 				{
-					Texture(Texture(), TEXCOORD4);
+					Texture(Texture(), TYAKUTI);
+					if (mInput.Key('J'))
+					{
+						mState = EState::EJUMP;
+						Texture(Texture(), TEXCOORD4);
+					}
 				}
 				if (mState != EState::EJUMP)
 				{
@@ -562,7 +576,12 @@ void CPlayer2::Update()
 				Texture(Texture(), TEXLEFT2);
 				if (mState == EState::EJUMP)
 				{
-					Texture(Texture(), TEXCOORD5);
+					Texture(Texture(), TEXTYAKUTI);
+					if (mInput.Key('J'))
+					{
+						mState = EState::EJUMP;
+						Texture(Texture(), TEXCOORD5);
+					}
 				}
 				if (mState != EState::EJUMP)
 				{
@@ -590,7 +609,12 @@ void CPlayer2::Update()
 				Texture(Texture(), TEXCOORD2);
 				if (mState == EState::EJUMP)
 				{
-					Texture(Texture(), TEXCOORD4);
+					Texture(Texture(), TYAKUTI);
+					if (mInput.Key('J'))
+					{
+						mState = EState::EJUMP;
+						Texture(Texture(), TEXCOORD4);
+					}
 				}
 				if (mState != EState::EJUMP)
 				{

@@ -8,6 +8,7 @@
 #include "CEnemy2.h"
 #include "CEnemy3.h"
 #include"CEnemy4.h"
+#include"CEnemy5.h"
 #include "CPoint.h"
 #include "CCamera.h"
 #include "main.h"
@@ -111,6 +112,7 @@ CGame::CGame()
 	CApplication::Texture7()->Load(TEKI);
 	CApplication::Texture8()->Load(TEKI2);
 	CApplication::Texture9()->Load(UPUP);
+	CApplication::Texture10()->Load(HAZURE);
 
 	//定数の定義
 	const int ROWS = 20; //行数
@@ -127,8 +129,8 @@ CGame::CGame()
 		{1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,1},
 		{1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,0,1,0,0,0,0,5,1,0,1},
 		{1,0,0,4,0,12,0,0,4,0,1,1,1,0,0,0,0,1,1,1,0,0,0,11,1},
-		{1,1,1,11,0,0,1,0,1,1,1,2,9,0,0,1,4,0,12,0,4,11,0,0,1},
-		{1,0,0,0,1,0,0,1,1,0,5,0,1,11,1,0,0,1,1,1,1,0,1,1,1},
+		{1,1,1,11,0,0,1,0,1,1,1,2,8,0,0,1,4,0,12,0,4,11,0,0,1},
+		{1,0,0,0,1,0,0,1,1,0,5,9,1,11,1,0,0,1,1,1,1,0,1,1,1},
 		{1,10,1,7,0,1,0,0,0,0,1,0,0,1,0,1,4,0,0,12,0,4,0,0,1},
 		{1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,1,1,0,11,1,1},
 		{1,0,0,11,1,1,1,1,1,0,0,0,1,0,1,0,0,5,0,1,0,7,0,0,1},
@@ -266,6 +268,15 @@ CGame::CGame()
 					new CEnemy4(TIPSIZE + TIPSIZE * 2 * col,
 						TIPSIZE + TIPSIZE * 2 * row,
 						TIPSIZE, TIPSIZE, CApplication::Texture8()));
+			}
+			//15の時、敵生成
+			if (map[row][col] == 15)
+			{
+				//敵を生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CEnemy5(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture10()));
 			}
 		}
 	}

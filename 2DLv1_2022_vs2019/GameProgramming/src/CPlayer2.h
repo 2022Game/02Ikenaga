@@ -4,6 +4,7 @@
 #include "CSound.h"
 #include "CAttack.h"
 #include"CUi.h"
+//#include"CGame.h"
 
 class CPlayer2 : public CCharacter
 {
@@ -29,7 +30,9 @@ private:
 	int mdown;
 	int mInvincible; //無敵カウンタ
 	CInput mInput;
-	//CUi *mpUi;
+	//CGame *mGame;
+	CUi *mpUi;
+	int mTime;
 	static int mPulltime;
 	float mVy;//Y軸速度
 	float mVx;

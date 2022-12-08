@@ -1,9 +1,24 @@
 #pragma once
 #include "CCharacter.h"
-
+#include"CItem.h"
+#include"CItem2.h"
+#include"CItem3.h"
 class CEnemy2 : public CCharacter
 {
 public:
+	/*CItem* mItem3;
+	 CItem2* mItem2;
+	CItem* mItem;*/
+	//char ch;
+	//char item[3][]{
+	//"CItem"; //アイテム名
+	//"CItem2"; //アイテム名
+	//"CItem3"; //アイテム名
+	//};
+	//int i;
+	static int mItem3;
+	static int mItem2;
+	static int mItem;
 	//敵の数を設定
 	static void Num(int num);
 	//敵の数を取得

@@ -66,6 +66,23 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 			}
 		}
 			break;
+			if (CRectangle::Collision(o))
+			{
+				if (o->State() == EState::EUP)
+				{
+					//“G”1Œ¸ŽZ
+					if (mState != EState::ECRY)
+					{
+						sNum--;
+					}
+					mEnabled = false;
+					CApplication::CharacterManager()->Add(
+						new CItem(X(),
+							Y(),
+							TIPSIZE, TIPSIZE, CApplication::Texture6()));
+				}
+			}
+			break;
 		case ETag::EATTACK:
 			if (CRectangle::Collision(o))
 			{

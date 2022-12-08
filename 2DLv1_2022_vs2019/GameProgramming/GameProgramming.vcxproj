@@ -26,6 +26,7 @@
     <ClCompile Include="src\CEnemy2.cpp" />
     <ClCompile Include="src\CEnemy3.cpp" />
     <ClCompile Include="src\CEnemy4.cpp" />
+    <ClCompile Include="src\CEnemy5.cpp" />
     <ClCompile Include="src\CFont.cpp" />
     <ClCompile Include="src\CGame.cpp" />
     <ClCompile Include="src\CGoal.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="src\CEnemy2.h" />
     <ClInclude Include="src\CEnemy3.h" />
     <ClInclude Include="src\CEnemy4.h" />
+    <ClInclude Include="src\CEnemy5.h" />
     <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CGame.h" />
     <ClInclude Include="src\CGoal.h" />

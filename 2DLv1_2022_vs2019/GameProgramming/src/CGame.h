@@ -14,6 +14,7 @@
 #define TEKI "chara081234.png"
 #define TEKI2 "DqWQjAXWsAI-YEO1.png"
 #define UPUP "117545011.png"
+#define HAZURE "4127255i17.png"
 
 #define TIPSIZE 20.0f //マップ要素のサイズ
 
@@ -42,6 +43,7 @@ public:
 	void Start();
 	CGame(); //デフォルトコンストラクタ（初期処理）
 	void Update(); //更新処理
+	//CUi* mpUi; //UIクラスのポインタ
 private:
 	int mCdx, mCdy; //カメラとプレイヤーの座標の差分
 	void CameraSet(); //カメラ設定
