@@ -1,5 +1,9 @@
 #include "CBullet.h"
-#define VELOCITY CVector(0.0f,0.0f,1.0f)//移動速度
+//#define VELOCITY CVector(0.0f,0.0f,1.0f)//移動速度
+
+CBullet::CBullet()
+	:mLife(50)
+{}
 
 //幅と奥行きの設定
 //Set(幅,奥行)
@@ -14,9 +18,15 @@ void CBullet::Set(float w, float d) {
 
 //更新
 void CBullet::Update() {
-	CTransform::Update();
-	//位置更新
-	mPosition = mPosition + VELOCITY * mMatrixRotate;
+	//生存時間の判定
+	if (mLife-- > 0) {
+		CTransform::Update();
+		mPosition = mPosition + CVector(0.0f, 0.0f, 1.0f) * mMatrixRotate;;
+	}
+	else {
+		//無効にする
+		mEnabled = false;
+	}
 }
 
 //描画
