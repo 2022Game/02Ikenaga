@@ -3,6 +3,7 @@
 
 CBullet::CBullet()
 	:mLife(50)
+	,mCollider(this,&mMatrix,CVector(0.0f,0.0f,0.0f),0.1)
 {}
 
 //•‚Æ‰œs‚«‚Ìİ’è
@@ -36,4 +37,6 @@ void CBullet::Render() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
 	//OŠpŒ`‚Ì•`‰æ
 	mT.Render(mMatrix);
+	//CCharacter3::Render();
+	mCollider.Render();
 }

@@ -3,6 +3,7 @@
 #define CBULLET_H
 //キャラクタクラスのインクルード
 #include "CCharacter3.h"
+#include"CCollider.h"
 
 /*
 弾クラス
@@ -12,6 +13,10 @@
 class CBullet : public CCharacter3
 {
 public:
+	/*void CBullet::Render() {
+		CCharacter3::Render();
+		mCollider.Render();
+	}*/
 	CBullet();
 	//幅と奥行きの設定
 	//Set(幅,奥行)
@@ -20,6 +25,7 @@ public:
 	void Update();
 	void Render();
 private:
+	CCollider mCollider;
 	//生存時間
 	int mLife;
 	//三角形
