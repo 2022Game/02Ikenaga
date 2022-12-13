@@ -20,7 +20,7 @@ public:
 	void Hp(int hp);
 	void Point(int point);
 	//Time(時間)
-	void Time(int time);
+    void Time(int time);
 	void Pulltime(int pulltime);
 	void Render();
 private:
@@ -28,7 +28,7 @@ private:
 	int mEnemy;	//敵の数
 	int mHp;
 	int mPoint;  //ポイント
-	int mTime;	//経過時間
+    int mTime;	//経過時間
 	int mPulltime;
 	CFont mFont;
 	//CFont mFont1;

@@ -29,6 +29,7 @@
 #define TEXPOINT 200,200,100,55
 #define TEXATTACK 640,710,100,55   //攻撃モーション
 #define TEXATTACK2 710,640,100,55   //反対攻撃モーション
+#define MOSYONN 500,550,100,39
 #define VELOCITY 2.0f	//移動速度
 #define VELOCITY2 2.5f
 #define SOKUDO 1.0f
@@ -36,6 +37,13 @@
 #define POINT 0
 #define SE_JUMP "res\\jump.wav" //ジャンプの音声ファイル
 #define ATTACK1  860,960,225,180   //攻撃のテクスチャ
+
+//int CUi::mTime = 0;
+//void CUi::Time(int time)
+//{
+//	 mTime=time;
+//}
+
 
 int CPlayer2::mPulltime=0;
 
@@ -161,6 +169,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 						mdown = 1;
 						mPulltime = mPulltime + 100;
 						//mpUi->Time(mTime);
+						//mTime--;
 					}
 				}
 			}
@@ -184,7 +193,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 			X(X() + x);
 			Y(Y() + y);
 			//着地した時
-			if (y != 0.0f)
+			if (y == 0.0f)
 			{
 				//Y軸速度を0にする
 				mVy = 0.0f;
@@ -197,7 +206,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::EUP;
 					if (mUp == 0)
 					{
-						mUp = 1000;
+						mUp = 100;
 					}
 				}
 			}
@@ -206,7 +215,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::EUP;
 					if (mUp == 0)
 					{
-						mUp = 1000;
+						mUp = 100;
 					}
 				}
 			if (x != 0.0f)
@@ -222,7 +231,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::EUP;
 					if (mUp == 0)
 					{
-						mUp = 1000;
+						mUp = 100;
 					}
 				}
 			}
@@ -231,7 +240,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				mState = EState::EUP;
 				if (mUp == 0)
 				{
-					mUp = 1000;
+					mUp = 100;
 				}
 			}
 		}
@@ -368,7 +377,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 
 CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
 	: mInvincible(0), mVy(0.0f),mVx(0.0f)
-	,mnothing(0),mUp(0),mdown(0),mpUi(nullptr),mTime(0)
+	,mnothing(0),mUp(0),mdown(0),mpUi(nullptr)//,mTime(0)
 {
 	Set(x, y, w, h);
 	Texture(pt, TYAKUTI);
@@ -411,13 +420,14 @@ void CPlayer2::Update()
 				}
 			}
 		}
-		if (mState == EState::EATTACK)
+		if (mState== EState::EATTACK)
 		{
 			if (mInput.Key(VK_SHIFT))
 			{
 				CApplication::CharacterManager()->Add(
 					new CAttack(X(), Y() + H() - 20.0f
 						, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+				//Texture(Texture(), TEXATTACK2);
 			}
 		}
 	if (mInput.Key('A'))
@@ -463,7 +473,7 @@ void CPlayer2::Update()
 			Texture(Texture(), TEXPOINT);
 			if (mUp == 0)
 			{
-				mUp = 1000;
+				mUp = 100;
 			}
 		}
 		if (mUp > 0)
@@ -526,13 +536,17 @@ void CPlayer2::Update()
 				{
 					Texture(Texture(), TEXSUOIDOUP);
 				}
-				if (mInput.Key(VK_SHIFT))
-				{
-					CApplication::CharacterManager()->Add(
-						new CAttack2(X(), Y() + H() - 20.0f
-							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
-					Texture(Texture(), TEXATTACK2);
-				}
+					if (mInput.Key(VK_SHIFT))
+					{
+						CApplication::CharacterManager()->Add(
+							new CAttack2(X(), Y() + H() - 20.0f
+								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+						Texture(Texture(), TEXATTACK2);
+						/*if (mState == EState::EATTACK)
+						{
+							Texture(Texture(), MOSYONN);
+						}*/
+					}
 			}
 			else
 			{

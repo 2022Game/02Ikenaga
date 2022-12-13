@@ -13,6 +13,7 @@ public:
 	static int Point();
 	//HP‚ğæ“¾
 	static int Hp();
+	//static int Time();
 	//Õ“Ëˆ—2
 	void Collision();
 	//Õ“Ëˆ—4
@@ -25,6 +26,8 @@ private:
 	CSound mSoundJump;	//ƒWƒƒƒ“ƒvSE
 	static int sHp;	//HP
 	static int sPoint;
+	//static int sPulltime;
+  // static int sTime;
 	int mnothing; //‚È‚É‚à‚È‚µ
 	int mUp;//ã‚ª‚é
 	int mdown;
@@ -32,7 +35,7 @@ private:
 	CInput mInput;
 	//CGame *mGame;
 	CUi *mpUi;
-	int mTime;
+	//int mTime;
 	static int mPulltime;
 	float mVy;//Y²‘¬“x
 	float mVx;

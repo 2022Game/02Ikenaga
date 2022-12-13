@@ -79,7 +79,6 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 						TIPSIZE, TIPSIZE, CApplication::Texture6()));
 			}
 		}
-		//break;
 			if (CRectangle::Collision(o))
 			{
 				if (o->State() == EState::EUP)
@@ -135,10 +134,9 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 				//	}
 				//	else {
 						//printf(item[4]);
-				        mItem3  = (rand() % 100) + 1;
-						mItem2 = (rand() % 100) + 1;
+				     if   (mItem3  = (rand() % 100) + 1)
 						{
-							mItem3 = 0 + rand() % 20;
+						 mItem3 = 0 + rand() % 10;
 							{
 								//アイテムのポイントを生成して、キャラクタマネージャに追加
 								CApplication::CharacterManager()->Add(
@@ -146,15 +144,18 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 										Y(),
 										TIPSIZE, TIPSIZE, CApplication::Texture6()));
 							}
-							mItem2 = 0 + rand() % 30;
-							{
-								//アイテムのポイントを生成して、キャラクタマネージャに追加
-								CApplication::CharacterManager()->Add(
-									new CItem2(X(),
-										Y(),
-										TIPSIZE, TIPSIZE, CApplication::Texture6()));
-							}
 						}
+						if(	mItem2 = (rand()% 100)+1)
+							{
+								mItem2 = 0 + rand() % 30;
+								{
+									//アイテムのポイントを生成して、キャラクタマネージャに追加
+									CApplication::CharacterManager()->Add(
+										new CItem2(X(),
+											Y(),
+											TIPSIZE, TIPSIZE, CApplication::Texture6()));
+								}
+							}
 					//}
 			}
 		}
@@ -205,7 +206,7 @@ void CEnemy2::Update()
 				Y(),
 				TIPSIZE, TIPSIZE, CApplication::Texture6()));
 	}
-	if (CEnemy2::mItem2 > 40)
+	if (CEnemy2::mItem2 > 30)
 	{
 		mEnabled = false;
 	}
