@@ -19,13 +19,14 @@
 #include"CTransform.h"
 #include"CCharacter3.h"
 #include"CTaskManager.h"
+#include"CCollisionManager.h"
 
 class CApplication
 {
 private:
 	//C5モデル
 	CModel mModelC5;
-	static CTaskManager mTaskManager;
+	//static CTaskManager mTaskManager;
 	CPlayer mPlayer;
 	//CCharacter3 mCharacter;
 	CModel mBackGround;//背景モデル
@@ -56,7 +57,7 @@ private:
 	//CCharacterのポインタの可変長配列
 //	std::vector<CCharacter*> mCharacters;
 public:
-	static CTaskManager* TaskManager();
+	//static CTaskManager* TaskManager();
 	static CCharacterManager* CharacterManager();
 	static CTexture* Texture();
 	//最初に一度だけ実行するプログラム

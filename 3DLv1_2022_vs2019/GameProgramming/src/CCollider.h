@@ -9,8 +9,9 @@
 衝突判定データ
 */
 
-class CCollider :public CTransform {
+class CCollider :public CTransform,public CTask {
 public:
+	~CCollider();
 	//コンストラクタ
 	//CCollider(親,新行列,位置,半径)
 	CCollider(CCharacter3* parent, CMatrix* matrix, const CVector& position, float radius);

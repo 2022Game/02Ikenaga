@@ -38,5 +38,5 @@ void CBullet::Render() {
 	//OŠpŒ`‚Ì•`‰æ
 	mT.Render(mMatrix);
 	//CCharacter3::Render();
-	mCollider.Render();
+	//mCollider.Render();
 }
