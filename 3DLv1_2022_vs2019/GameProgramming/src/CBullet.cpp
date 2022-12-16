@@ -1,6 +1,16 @@
 #include "CBullet.h"
 //#define VELOCITY CVector(0.0f,0.0f,1.0f)//移動速度
 
+//衝突処理
+//Collision(コライダ1,コライダ2)
+void CBullet::Collision(CCollider* m, CCollider* o) {
+	//コライダもmとoが衝突しているか判定
+	if (CCollider::CCollision(m, o)) {
+		//衝突している時は無効にする
+		mEnabled = false;
+	}
+}
+
 CBullet::CBullet()
 	:mLife(50)
 	,mCollider(this,&mMatrix,CVector(0.0f,0.0f,0.0f),0.1)

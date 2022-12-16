@@ -9,8 +9,14 @@
 衝突判定データ
 */
 
+class CCollisionManager;
 class CCollider :public CTransform,public CTask {
+	friend CCollisionManager;
 public:
+	//衝突処理
+	//CCollision(コライダ1,コライダ2)
+	//retrun:true(衝突している)false(衝突していない)
+	static bool CCollision(CCollider* m, CCollider* o);
 	~CCollider();
 	//コンストラクタ
 	//CCollider(親,新行列,位置,半径)
