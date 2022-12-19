@@ -57,6 +57,7 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 			Y(Y() + y);
 			//X軸速度を反転させる
 			mVx = -mVx;
+			//-mVx <=mVx;
 		}
 		break;
 	case ETag::EENEMY:
@@ -147,7 +148,7 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 						}
 						if(	mItem2 = (rand()% 100)+1)
 							{
-								mItem2 = 0 + rand() % 30;
+							mItem2 = 0 + rand() % 30;
 								{
 									//アイテムのポイントを生成して、キャラクタマネージャに追加
 									CApplication::CharacterManager()->Add(

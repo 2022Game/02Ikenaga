@@ -18,6 +18,8 @@
 #include"CItem2.h"
 #include"CItem3.h"
 
+int CGame::mTime;
+
 void CGame::Start()
 {
 	CameraSet();
@@ -27,7 +29,7 @@ void CGame::Start()
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
-	mpUi->Pulltime(CPlayer2::Pulltime());
+	//mpUi->Pulltime(CPlayer2::Pulltime());
 	mpUi->Enemy(CEnemy2::Num());
 	mpUi->Enemy(CEnemy3::Num());
 	mpUi->Goal(CGoal::Goal());
@@ -49,7 +51,7 @@ void CGame::Over()
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
-	mpUi->Pulltime(CPlayer2::Pulltime());
+	//mpUi->Pulltime(CPlayer2::Pulltime());
 	//mpUi->Enemy(CEnemy2::Num());
 	mpUi->Render();
 	mpUi->Over();
@@ -81,7 +83,7 @@ void CGame::Clear()
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
-	mpUi->Pulltime(CPlayer2::Pulltime());
+	//mpUi->Pulltime(CPlayer2::Pulltime());
 	mpUi->Enemy(CEnemy2::Num());
 	mpUi->Enemy(CEnemy3::Num());
 	mpUi->Goal(CGoal::Goal());
@@ -93,11 +95,12 @@ CGame::CGame()
 	: mpUi(nullptr)
 	,mpPlayer(0)
 	//,mpGoal(0)
-     , mTime(0)
+	//,mTime(0)
 	,mpItem(0)
 	, mCdx(0)
 	, mCdy(0)
 {
+	mTime = 0;
 	CEnemy2::Num(0);
 	CGoal::Goal(0);
 	mpUi = new CUi();
@@ -121,8 +124,8 @@ CGame::CGame()
 	int map[ROWS][COLS] =
 	{ 
 		{1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{1,13,0,1,1,0,0,1,0,3,0,0,1,0,0,13,1,0,3,0,1,0,9,13,1},
-		{1,0,0,0,0,5,0,0,1,1,1,0,0,0,1,1,0,0,1,5,0,0,1,11,1},
+		{1,13,0,1,1,0,0,1,3,0,0,0,1,0,0,13,1,0,3,0,1,0,9,13,1},
+		{1,0,0,0,0,1,0,0,5,1,1,0,0,0,1,1,0,0,1,5,0,0,1,11,1},
 		{1,0,1,1,7,1,1,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1},
 		{1,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,1},
 		{1,0,0,1,11,0,0,0,1,1,0,0,10,0,0,1,1,0,1,0,0,1,1,7,1},
@@ -252,6 +255,7 @@ CGame::CGame()
 						TIPSIZE + TIPSIZE * 2 * row,
 						TIPSIZE, TIPSIZE, CApplication::Texture7()));
 			}
+			//13の時、ゴール生成
 			if (map[row][col] == 13)
 			{
 				//ゴールを生成して、キャラクタマネージャに追加
@@ -295,7 +299,7 @@ void CGame::Update()
 	mpUi->Time(mTime++);
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
-	mpUi->Pulltime(CPlayer2::Pulltime());
+	//mpUi->Pulltime(CPlayer2::Pulltime());
 	mpUi->Enemy(CEnemy2::Num());
 	mpUi->Goal(CGoal::Goal());
 	mpUi->Render();

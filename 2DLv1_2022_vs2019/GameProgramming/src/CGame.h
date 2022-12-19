@@ -44,7 +44,7 @@ public:
 	CGame(); //デフォルトコンストラクタ（初期処理）
 	void Update(); //更新処理
 	//CUi* mpUi; //UIクラスのポインタ
-	 int mTime;
+	static int mTime;
 private:
 	int mCdx, mCdy; //カメラとプレイヤーの座標の差分
 	void CameraSet(); //カメラ設定

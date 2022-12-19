@@ -44,13 +44,14 @@
 //	 mTime=time;
 //}
 
+int CPlayer2::sTime=+100;
 
-int CPlayer2::mPulltime=0;
-
-int  CPlayer2::Pulltime()
-{
-	return mPulltime;
-}
+//int CPlayer2::mPulltime=0;
+//
+//int  CPlayer2::Pulltime()
+//{
+//	return mPulltime;
+//}
 
 
 int CPlayer2::sPoint = 0;	//POINT
@@ -84,6 +85,8 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 			o->Collision(o, m);
 			X(X() + x);
 			Y(Y() + y);
+			/*X(X() + x);
+			Y(Y() + y);*/
 			//’…’n‚µ‚½Žž
 			if (y != 0.0f)
 			{
@@ -98,8 +101,8 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mState = EState::ECRY;
 					if (mInvincible == 0)
 					{
-						mInvincible = 100;
-						mState = EState::ESTOP;
+						mInvincible = 300;
+						//mTag = ETag::ETURN;
 						//sHp--;
 					}
 				}
@@ -109,8 +112,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				mState = EState::ECRY;
 				if (mInvincible == 0)
 				{
-					mInvincible = 100;
-					mState = EState::ESTOP;
+					mInvincible = 300;
 					//sHp--;
 				}
 			}
@@ -138,7 +140,9 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mdown == 0)
 					{
 						mdown = 1;
-						mPulltime=mPulltime+100;
+						int mTime = CGame::mTime;
+						CGame::mTime = mTime - sTime;
+						//mPulltime=mPulltime+100;
 					   // mpUi->Time(mTime);
 					}
 				}
@@ -149,7 +153,10 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				if (mdown == 0)
 				{
 					mdown = 1;
-					mPulltime =mPulltime + 100;
+					int mTime = CGame::mTime;
+					CGame::mTime = mTime-sTime;
+					//mpUi->Time(mTime--);
+					//mPulltime =mPulltime + 100;
 					//mpUi->Time(mTime);
 				}
 			}
@@ -167,7 +174,10 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mdown == 0)
 					{
 						mdown = 1;
-						mPulltime = mPulltime + 100;
+						int mTime = CGame::mTime;
+						CGame::mTime = mTime - sTime;
+						mpUi->Time(mTime--);
+						//mPulltime = mPulltime + 100;
 						//mpUi->Time(mTime);
 						//mTime--;
 					}
@@ -179,7 +189,10 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				if (mdown == 0)
 				{
 					mdown = 1;
-					mPulltime = mPulltime + 100;
+					int mTime = CGame::mTime;
+					CGame::mTime = mTime - sTime;
+					mpUi->Time(mTime--);
+					//mPulltime = mPulltime + 100;
 					//mpUi->Time(mTime);
 				}
 			}
@@ -345,7 +358,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 	case ETag::EBLOCK:
 	case ETag::EBLOCK3:
 	case ETag::EBLOCK4:
-	//jcase ETag::EITEM:
 		if (CRectangle::Collision(o, &x, &y))
 		{
 			X(X() + x);
@@ -377,7 +389,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 
 CPlayer2::CPlayer2(float x, float y, float w, float h, CTexture* pt)
 	: mInvincible(0), mVy(0.0f),mVx(0.0f)
-	,mnothing(0),mUp(0),mdown(0),mpUi(nullptr)//,mTime(0)
+	,mnothing(0),mUp(0),mdown(0),mpUi(nullptr)
 {
 	Set(x, y, w, h);
 	Texture(pt, TYAKUTI);
@@ -498,7 +510,7 @@ void CPlayer2::Update()
 		Texture(Texture(), TEXSLEEPY);
 		if (mInvincible == 0)
 		{
-			mInvincible = 100;
+			mInvincible = 300;
 			mState = EState::ESTOP;
 		}
 	}

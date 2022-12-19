@@ -9,11 +9,11 @@
 class CPlayer2 : public CCharacter
 {
 public:
-	static int Pulltime();
+	//static int Pulltime();
 	static int Point();
 	//HP‚ğæ“¾
 	static int Hp();
-	//static int Time();
+	static int mTime;
 	//Õ“Ëˆ—2
 	void Collision();
 	//Õ“Ëˆ—4
@@ -27,7 +27,7 @@ private:
 	static int sHp;	//HP
 	static int sPoint;
 	//static int sPulltime;
-  // static int sTime;
+    static int sTime;
 	int mnothing; //‚È‚É‚à‚È‚µ
 	int mUp;//ã‚ª‚é
 	int mdown;
@@ -36,7 +36,7 @@ private:
 	//CGame *mGame;
 	CUi *mpUi;
 	//int mTime;
-	static int mPulltime;
+	//static int mPulltime;
 	float mVy;//Y²‘¬“x
 	float mVx;
 };

@@ -12,4 +12,5 @@ public:
 	CItem3(float x, float y, float w, float h, CTexture* pt);
 	//Update‚Å‚Í‰½‚à‚µ‚È‚¢
 	void Update();
+	static int mItem3;
 };
