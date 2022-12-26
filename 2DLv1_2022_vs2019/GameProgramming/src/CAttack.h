@@ -11,8 +11,8 @@ public:
 	//CAttack(X座標,Y座標,幅,高さ,テクスチャのポインタ)
 	//CAttack(float x, float y, float w, float h, CTexture* pt);
 	CAttack(float x, float y, float w, float h, float l, float r, float b, float t, CTexture* pt);
-	//CAttack();
+	CAttack();
 	//Updateでは何もしない
 	void Update();
-	//bool Collision(CRectangle* rect);
+	bool Collision(CRectangle* rect);
 };

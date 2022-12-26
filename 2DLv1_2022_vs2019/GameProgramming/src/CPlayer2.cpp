@@ -2,7 +2,6 @@
 #include "CApplication.h"
 #include"CAttack.h"
 #include"CAttack2.h"
-//#include"CGame.h"
 
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
@@ -44,15 +43,7 @@
 //	 mTime=time;
 //}
 
-int CPlayer2::sTime=+100;
-
-//int CPlayer2::mPulltime=0;
-//
-//int  CPlayer2::Pulltime()
-//{
-//	return mPulltime;
-//}
-
+int CPlayer2::sTime = +100;
 
 int CPlayer2::sPoint = 0;	//POINT
 
@@ -102,8 +93,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					if (mInvincible == 0)
 					{
 						mInvincible = 300;
-						//mTag = ETag::ETURN;
-						//sHp--;
+						sPoint--;
 					}
 				}
 			}
@@ -113,7 +103,7 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 				if (mInvincible == 0)
 				{
 					mInvincible = 300;
-					//sHp--;
+					sPoint--;
 				}
 			}
 		}
@@ -142,8 +132,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 						mdown = 1;
 						int mTime = CGame::mTime;
 						CGame::mTime = mTime - sTime;
-						//mPulltime=mPulltime+100;
-					   // mpUi->Time(mTime);
 					}
 				}
 			}
@@ -155,9 +143,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mdown = 1;
 					int mTime = CGame::mTime;
 					CGame::mTime = mTime-sTime;
-					//mpUi->Time(mTime--);
-					//mPulltime =mPulltime + 100;
-					//mpUi->Time(mTime);
 				}
 			}
 			if (x != 0.0f)
@@ -176,10 +161,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 						mdown = 1;
 						int mTime = CGame::mTime;
 						CGame::mTime = mTime - sTime;
-						mpUi->Time(mTime--);
-						//mPulltime = mPulltime + 100;
-						//mpUi->Time(mTime);
-						//mTime--;
 					}
 				}
 			}
@@ -191,9 +172,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					mdown = 1;
 					int mTime = CGame::mTime;
 					CGame::mTime = mTime - sTime;
-					mpUi->Time(mTime--);
-					//mPulltime = mPulltime + 100;
-					//mpUi->Time(mTime);
 				}
 			}
 		}
@@ -318,7 +296,6 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 					{
 						mnothing = 1;
 						sPoint++;
-						//sHp--;
 					}
 				}
 			}
@@ -354,6 +331,45 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 		}
 			break;
 	case ETag::EPLAYER:
+		break;
+	case ETag::EBLOCK5:
+		if (CRectangle::Collision(o, &x, &y))
+		{
+			//敵の衝突判定を実行
+			o->Collision(o, m);
+			X(X() + x);
+			Y(Y() + y);
+			/*X(X() + x);
+			Y(Y() + y);*/
+			//着地した時
+			if (y != 0.0f)
+			{
+				//Y軸速度を0にする
+				mVy = 0.0f;
+				if (y > 0.0f)
+				{
+					mState = EState::EMOVE;
+				}
+				else
+				{	//ジャンプでなければ泣く
+					//mState = EState::ECRY;
+					//if (mInvincible == 0)
+					//{
+					//	mInvincible = 300;
+					//	//sPoint--;
+					//}
+				}
+			}
+			else
+			{	//ジャンプでなければ泣く
+				//mState = EState::ECRY;
+				//if (mInvincible == 0)
+				//{
+				//	mInvincible = 300;
+				//	//sPoint--;
+				//}
+			}
+		}
 		break;
 	case ETag::EBLOCK:
 	case ETag::EBLOCK3:
@@ -439,7 +455,6 @@ void CPlayer2::Update()
 				CApplication::CharacterManager()->Add(
 					new CAttack(X(), Y() + H() - 20.0f
 						, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
-				//Texture(Texture(), TEXATTACK2);
 			}
 		}
 	if (mInput.Key('A'))
@@ -554,10 +569,6 @@ void CPlayer2::Update()
 							new CAttack2(X(), Y() + H() - 20.0f
 								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
 						Texture(Texture(), TEXATTACK2);
-						/*if (mState == EState::EATTACK)
-						{
-							Texture(Texture(), MOSYONN);
-						}*/
 					}
 			}
 			else

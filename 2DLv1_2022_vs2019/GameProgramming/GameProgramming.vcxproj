@@ -18,6 +18,7 @@
     <ClCompile Include="src\CBlock2.cpp" />
     <ClCompile Include="src\CBlock3.cpp" />
     <ClCompile Include="src\CBlock4.cpp" />
+    <ClCompile Include="src\CBlock5.cpp" />
     <ClCompile Include="src\CBullet.cpp" />
     <ClCompile Include="src\CCamera.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
@@ -27,10 +28,13 @@
     <ClCompile Include="src\CEnemy3.cpp" />
     <ClCompile Include="src\CEnemy4.cpp" />
     <ClCompile Include="src\CEnemy5.cpp" />
+    <ClCompile Include="src\CEnemy6.cpp" />
+    <ClCompile Include="src\CEnemy7.cpp" />
     <ClCompile Include="src\CFont.cpp" />
     <ClCompile Include="src\CGame.cpp" />
     <ClCompile Include="src\CGoal.cpp" />
     <ClCompile Include="src\CGoal2.cpp" />
+    <ClCompile Include="src\CGoal3.cpp" />
     <ClCompile Include="src\CItem.cpp" />
     <ClCompile Include="src\CItem2.cpp" />
     <ClCompile Include="src\CItem3.cpp" />
@@ -52,6 +56,7 @@
     <ClInclude Include="src\CBlock2.h" />
     <ClInclude Include="src\CBlock3.h" />
     <ClInclude Include="src\CBlock4.h" />
+    <ClInclude Include="src\CBlock5.h" />
     <ClInclude Include="src\CBullet.h" />
     <ClInclude Include="src\CCamera.h" />
     <ClInclude Include="src\CCharacter.h" />
@@ -61,10 +66,13 @@
     <ClInclude Include="src\CEnemy3.h" />
     <ClInclude Include="src\CEnemy4.h" />
     <ClInclude Include="src\CEnemy5.h" />
+    <ClInclude Include="src\CEnemy6.h" />
+    <ClInclude Include="src\CEnemy7.h" />
     <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CGame.h" />
     <ClInclude Include="src\CGoal.h" />
     <ClInclude Include="src\CGoal2.h" />
+    <ClInclude Include="src\CGoal3.h" />
     <ClInclude Include="src\CItem.h" />
     <ClInclude Include="src\CItem2.h" />
     <ClInclude Include="src\CItem3.h" />

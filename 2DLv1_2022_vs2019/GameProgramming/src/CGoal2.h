@@ -1,12 +1,11 @@
 #pragma once
-#pragma once
 #include "CCharacter.h"
 
 class CGoal2 : public CCharacter
 {
 public:
-	static void Goal(int goal);
-	static int Goal();
+	/*static void Goal(int goal);
+	static int Goal();*/
 	//Õ“Ëˆ—4
 	void Collision(CCharacter* m, CCharacter* o);
 	//static int Goal();

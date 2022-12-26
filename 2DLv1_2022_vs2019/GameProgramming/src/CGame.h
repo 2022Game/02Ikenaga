@@ -14,7 +14,8 @@
 #define TEKI "chara081234.png"
 #define TEKI2 "DqWQjAXWsAI-YEO1.png"
 #define UPUP "117545011.png"
-#define HAZURE "4127255i17.png"
+#define TEKI3 "4617e1511.png"
+#define TEKI4 "monster41.png"
 
 #define TIPSIZE 20.0f //マップ要素のサイズ
 
@@ -49,6 +50,7 @@ private:
 	int mCdx, mCdy; //カメラとプレイヤーの座標の差分
 	void CameraSet(); //カメラ設定
 	CPlayer2 *mpPlayer; //プレイヤーのポインタ
+	//CBlock *mBlock;
 	CItem *mpItem;
 	CUi *mpUi; //UIクラスのポインタ
 	//int mTime;

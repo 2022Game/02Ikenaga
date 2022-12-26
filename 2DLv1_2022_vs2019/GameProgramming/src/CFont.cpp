@@ -1,4 +1,5 @@
 #include "CFont.h"
+#include "CRectangle.h"
 
 void CFont::Load(const char* file, int row, int col)
 {
@@ -21,3 +22,10 @@ void CFont::Draw(float x, float y, float w, float h, char c[])
 	}
 	return;
 }
+
+//void CFont::Render()
+//{
+//	glColor3f(1.0f, 1.0f, 1.0f);
+//	CRectangle::Render();
+//	glColor3f(1.0f, 1.0f, 1.0f);
+//}

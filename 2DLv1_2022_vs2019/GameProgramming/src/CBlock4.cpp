@@ -8,3 +8,35 @@ CBlock4::CBlock4(float x, float y, float w, float h, CTexture* pt)
 	Texture(pt, TEXCOORD);
 	mTag = ETag::EBLOCK4;
 }
+
+void CBlock4::Collision(CCharacter* m, CCharacter* o)
+{
+	//ÇﬂÇËçûÇ›í≤êÆïœêîÇêÈåæÇ∑ÇÈ
+	float x, y;
+	switch (o->Tag())
+	{
+	case ETag::EBLOCK:
+		//ê‹ÇËï‘ÇµÇ…ìñÇΩÇ¡ÇΩéû
+		if (CRectangle::Collision(o, &x, &y))
+		{
+			//ÇﬂÇËçûÇ‹Ç»Ç¢à íuÇ‹Ç≈ñﬂÇ∑
+			X(X() + x);
+			Y(Y() + y);
+			//Xé≤ë¨ìxÇîΩì]Ç≥ÇπÇÈ
+			mVx = -mVx;
+			//-mVx <=mVx;
+		}
+		break;
+	case ETag::EBLOCK4:
+		break;
+	case ETag::EPLAYER:
+		if (CRectangle::Collision(o))
+		{
+			if (o->State() == EState::EJUMP)
+			{
+				mState = EState::EMOVE;
+			}
+		}
+		break;
+	}
+}

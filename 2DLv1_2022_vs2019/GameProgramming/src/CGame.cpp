@@ -4,16 +4,20 @@
 #include"CBlock2.h"
 #include"CBlock3.h"
 #include"CBlock4.h"
+#include"CBlock5.h"
 #include "CPlayer2.h"
 #include "CEnemy2.h"
 #include "CEnemy3.h"
 #include"CEnemy4.h"
 #include"CEnemy5.h"
+#include"CEnemy6.h"
+#include"CEnemy7.h"
 #include "CPoint.h"
 #include "CCamera.h"
 #include "main.h"
 #include"CGoal.h"
 #include"CGoal2.h"
+#include"CGoal3.h"
 //#include"CItem.h"
 #include"CItem2.h"
 #include"CItem3.h"
@@ -94,6 +98,7 @@ void CGame::Clear()
 CGame::CGame()
 	: mpUi(nullptr)
 	,mpPlayer(0)
+	//,mpBlock(0)
 	//,mpGoal(0)
 	//,mTime(0)
 	,mpItem(0)
@@ -115,7 +120,8 @@ CGame::CGame()
 	CApplication::Texture7()->Load(TEKI);
 	CApplication::Texture8()->Load(TEKI2);
 	CApplication::Texture9()->Load(UPUP);
-	CApplication::Texture10()->Load(HAZURE);
+	CApplication::Texture10()->Load(TEKI3);
+	CApplication::Texture11()->Load(TEKI4);
 
 	//定数の定義
 	const int ROWS = 20; //行数
@@ -124,22 +130,22 @@ CGame::CGame()
 	int map[ROWS][COLS] =
 	{ 
 		{1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{1,13,0,1,1,0,0,1,3,0,0,0,1,0,0,13,1,0,3,0,1,0,9,13,1},
-		{1,0,0,0,0,1,0,0,5,1,1,0,0,0,1,1,0,0,1,5,0,0,1,11,1},
-		{1,0,1,1,7,1,1,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1},
-		{1,1,0,0,0,0,1,1,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,1},
-		{1,0,0,1,11,0,0,0,1,1,0,0,10,0,0,1,1,0,1,0,0,1,1,7,1},
-		{1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,1},
+		{1,13,0,0,1,0,0,1,3,0,0,0,1,0,0,13,1,0,3,0,1,0,9,13,1},
+		{1,0,0,0,0,1,0,0,5,1,11,0,0,0,1,1,0,0,1,5,0,0,1,11,1},
+		{1,8,1,1,7,1,1,0,0,1,15,0,0,0,0,0,0,0,0,1,1,0,0,1,1},
+		{1,1,0,0,0,0,1,1,0,0,0,1,1,11,0,0,1,1,0,0,1,0,0,0,1},
+		{1,18,0,1,11,0,0,0,1,1,0,0,10,0,0,1,1,0,1,0,0,1,1,7,1},
+		{1,0,1,0,0,0,0,0,1,0,0,1,1,16,0,0,0,0,0,1,1,0,0,0,1},
 		{1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,0,1,0,0,0,0,5,1,0,1},
-		{1,0,0,4,0,12,0,0,4,0,1,1,1,0,0,0,0,1,1,1,0,0,0,11,1},
-		{1,1,1,11,0,0,1,0,1,1,1,2,8,0,0,1,4,0,12,0,4,11,0,0,1},
-		{1,0,0,0,1,0,0,1,1,0,5,9,1,11,1,0,0,1,1,1,1,0,1,1,1},
-		{1,10,1,7,0,1,0,0,0,0,1,0,0,1,0,1,4,0,0,12,0,4,0,0,1},
+		{1,0,0,4,0,12,0,0,4,0,11,1,1,0,0,0,0,1,1,1,0,0,0,11,1},
+		{1,1,1,11,0,0,1,0,1,1,1,2,9,0,0,1,4,0,12,0,4,11,0,13,1},
+		{1,13,0,0,1,0,0,1,1,0,5,0,1,11,1,0,0,1,1,1,1,0,1,1,1},
+		{1,10,1,7,0,1,0,0,0,0,1,0,0,1,0,1,4,0,0,12,0,4,0,13,1},
 		{1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,1,1,0,11,1,1},
 		{1,0,0,11,1,1,1,1,1,0,0,0,1,0,1,0,0,5,0,1,0,7,0,0,1},
 		{1,0,0,7,14,0,0,1,0,0,1,1,0,7,0,1,1,1,0,0,0,0,0,0,1},
-		{1,1,1,0,0,0,1,0,0,1,0,0,0,0,0,0,1,14,0,1,1,11,7,1,1},
-		{1,13,0,0,1,5,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,6,1},
+		{1,1,1,0,0,0,1,0,0,1,17,0,0,0,0,13,1,0,0,1,1,11,7,1,1},
+		{1,18,0,0,1,5,0,0,1,18,0,0,1,0,0,1,0,0,0,0,0,0,0,6,1},
 		{1,1,1,11,1,1,1,1,1,1,1,1,1,11,1,1,1,1,1,1,1,1,11,1,1},
 	};
 
@@ -282,6 +288,42 @@ CGame::CGame()
 						TIPSIZE + TIPSIZE * 2 * row,
 						TIPSIZE, TIPSIZE, CApplication::Texture10()));
 			}
+			//16の時、敵生成
+			if (map[row][col] == 16)
+			{
+				//敵を生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CEnemy6(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture10()));
+			}
+			//17の時、敵生成
+			if (map[row][col] == 17)
+			{
+				//ブロックを生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CBlock5(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture()));
+			}
+			//18の時、ゴール生成
+			if (map[row][col] == 18)
+			{
+				//ゴールを生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CGoal3(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture4()));
+			}
+			//19の時、敵生成
+			if (map[row][col] == 19)
+			{
+				//敵を生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CEnemy7(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture11()));
+			}
 		}
 	}
 }
@@ -310,7 +352,7 @@ void CGame::CameraSet()
 	float x = mpPlayer->X() + mCdx;
 	float y = mpPlayer->Y() + mCdy;
 	CCamera::Start(x - WINDOW_WIDTH / 2
-		, x + WINDOW_WIDTH / 2
+		, x+ WINDOW_WIDTH / 2
 		, y - WINDOW_HEIGHT / 2
 		, y + WINDOW_HEIGHT / 2
 	);

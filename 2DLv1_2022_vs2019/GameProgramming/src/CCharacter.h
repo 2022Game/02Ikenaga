@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define VELOCITY 2.0f	//移動速度
-#define VELOCITY2  2.5f;
+//#define VELOCITY2  2.5f;
 #define SOKUDO   1.0f
 
 class CCharacter : public CRectangle
@@ -21,6 +21,7 @@ public:
 		EBLOCK2,    //通れるブロック
 		EBLOCK3,    //動くブロック
 		EBLOCK4,
+		EBLOCK5,
 		EGOAL,      //ゴール
 		EITEM,      //アイテム
 		EITEM2,

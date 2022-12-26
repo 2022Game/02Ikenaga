@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "CUi.h"
+//#include "CCharacter.h"
 
 //int CUi::mTime;
 
@@ -7,6 +8,9 @@ void CUi::Clear()
 {
 	mFont.Draw(36, 300, 18, 36, "GAME CLEAR!!");
 	mFont.Draw(36, 200, 18, 36, "PUSH ENTER KEY!");
+	char str[16];
+	sprintf(str, "TIME:%01d", mTime);
+	mFont.Draw(20, 580, 10, 23, str);
 }
 
 void CUi::Over()
@@ -17,9 +21,15 @@ void CUi::Over()
 
 void CUi::Start()
 {
-	mFont.Draw(36, 300, 18, 36, "START PUSH ENTER KEY!");
+	mFont.Draw(30, 300, 15, 20, "START PUSH ENTER KEY!");
+	mFont.Draw(36, 355, 20, 36, "RACE FOR TIME");
+	mFont.Draw(20, 70, 8, 10, "PUSH J KEY TO JUMP");
+	mFont.Draw(20, 50, 8, 10, "PUSH A KEY TO MOVE LEFT");
+	mFont.Draw(20, 30, 8, 10, "PUSH D KEY TO MOVE RIGHT");
+	mFont.Draw(20, 10, 8, 10, "PUSH SHIFT KEY TO ATTACK");
 	//mFont1.Draw(90,118,10,30,"A");
 }
+//void CFont::Render()
 
 void CUi::Goal(int goal)
 {
@@ -68,7 +78,8 @@ void CUi::Render()
 {
 	char str[16];
 	sprintf(str, "TIME:%01d", mTime);
-	mFont.Draw(20, 580, 10, 20, str);
+	mFont.Draw(20, 580, 10, 23, str);
+		//mTime = mEnabled = false;
 	//sprintf(str, "PULLTIME:%d", mPulltime);
 	//mFont.Draw(20, 550, 10, 20, str);
 	/*sprintf(str, "HP:%d", mHp);

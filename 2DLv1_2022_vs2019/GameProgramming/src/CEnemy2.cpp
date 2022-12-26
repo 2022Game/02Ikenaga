@@ -5,22 +5,35 @@
 #include "stdlib.h"
 #include"time.h"
 
-
 #define TEXCOORD  145, 192, 143, 101	//テクスチャマッピング
-#define TEXCRY 196, 216, 190, 160	//テクスチャマッピング
+#define TEXCRY 50, 75, 143, 101	//テクスチャマッピング
 #define TEXCOORD2 240,289,143,101	//右向き2
 #define TEXLEFT1 192, 145, 143, 101	//左向き1
 #define TEXLEFT2  289,240,143,101	//左向き2
 
+//int mItem(void)
+//{
+//	int i;
+//
+//	//  time関数を使った乱数の種の設定
+//	srand((unsigned int)time(NULL));
+//
+//	for (i = 0; i < 10; i++)
+//	{
+//		printf("%d\n", rand());
+//	}
+//
+//	return 0;
+//}
 //int main(void)
 //{ 
 //	char ch;
 //	char item;
-//	int i;
+//    int  i;
 //	srand((unsigned int)time(nullptr));
 //	while (ch != 'Q') {
 //		i = (rand() % 5) + 1;
-//		printf(item[i]);
+//		printf(item[]);
 //		ch = getchar();
 //	}
 //}
@@ -65,6 +78,26 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 	case ETag::EPLAYER:
 		if (CRectangle::Collision(o))
 		{
+			if (o->State() == EState::ECRY)
+			{
+				mState = EState::EMOVE;
+				int mTime = CGame::mTime;
+				if (mTime % 30 == 0)
+				{
+					mState = EState::ESTOP;
+					return;
+				}
+				else if (mTime % 30 == 0)
+				{
+					mState = EState::ESTOP;
+					return;
+				}
+				//if (mTime % 30 == 0)
+				//{
+				//	mState = EState::EMOVE;
+				//	//return ;
+				//}
+			}
 			if (o->State() == EState::EJUMP)
 			{
 				//敵数1減算
@@ -73,31 +106,95 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 					sNum--;
 				}
 				mEnabled = false;
-				//アイテムのポイントを生成して、キャラクタマネージャに追加
-				CApplication::CharacterManager()->Add(
-					new CItem3(X(),
-						Y(),
-						TIPSIZE, TIPSIZE, CApplication::Texture6()));
-			}
-		}
-			if (CRectangle::Collision(o))
-			{
-				if (o->State() == EState::EUP)
-				{
-					//敵数1減算
-					if (mState != EState::ECRY)
-					{
-						sNum--;
+				int i{};
+				int item[3]{ 0,0,0 };
+				srand((unsigned)time(NULL)); // 乱数の初期化
+				i = (rand() % 100) + 1;
+				//srand((unsigned)time(NULL)); // 乱数の初期化
+				if (i <= 0 || i >= 10) {
+					double probability = 0.50; // 確率（50%）
+					if ((double)rand() / RAND_MAX < probability) {
+						//アイテムのポイントを生成して、キャラクタマネージャに追加
+						item[0], CApplication::CharacterManager()->Add(
+							new CItem3(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
-					mEnabled = false;
-					//アイテムのポイントを生成して、キャラクタマネージャに追加
-					CApplication::CharacterManager()->Add(
-						new CItem3(X(),
-							Y(),
-							TIPSIZE, TIPSIZE, CApplication::Texture6()));
+				}
+				if (i <= 10 || i >= 20) {
+					double probability1 = 0.10; // 確率（10%）
+					//srand((unsigned)time(NULL)); // 乱数の初期化
+					if ((double)rand() / RAND_MAX < probability1) {
+						//アイテムのポイントを生成して、キャラクタマネージャに追加
+						item[1], CApplication::CharacterManager()->Add(
+							new CItem2(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
+				if (i <= 20 || i >= 30) {
+					double probability2 = 0.10; // 確率（10%）
+					//srand((unsigned)time(NULL)); // 乱数の初期化
+					if ((double)rand() / RAND_MAX < probability2) {
+						//アイテムの時計を生成して、キャラクタマネージャに追加
+						item[2], CApplication::CharacterManager()->Add(
+							new CItem(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
 				}
 			}
-			break;
+		}
+		if (CRectangle::Collision(o))
+		{
+			if (o->State() == EState::EUP)
+			{
+				//敵数1減算
+				if (mState != EState::ECRY)
+				{
+					sNum--;
+				}
+				mEnabled = false;
+				int i{};
+				int item[3]{ 0,0,0 };
+				srand((unsigned)time(NULL)); // 乱数の初期化
+				i = (rand() % 100) + 1;
+				//srand((unsigned)time(NULL)); // 乱数の初期化
+				if (i <= 0 || i >= 10) {
+					double probability = 0.50; // 確率（50%）
+					if ((double)rand() / RAND_MAX < probability) {
+						//アイテムのポイントを生成して、キャラクタマネージャに追加
+						item[0], CApplication::CharacterManager()->Add(
+							new CItem3(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
+				if (i <= 10 || i >= 20) {
+					double probability1 = 0.10; // 確率（10%）
+					//srand((unsigned)time(NULL)); // 乱数の初期化
+					if ((double)rand() / RAND_MAX < probability1) {
+						//アイテムのポイントを生成して、キャラクタマネージャに追加
+						item[1], CApplication::CharacterManager()->Add(
+							new CItem2(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
+				if (i <= 20 || i >= 30) {
+					double probability2 = 0.10; // 確率（10%）
+					//srand((unsigned)time(NULL)); // 乱数の初期化
+					if ((double)rand() / RAND_MAX < probability2) {
+						//アイテムの時計を生成して、キャラクタマネージャに追加
+						item[2], CApplication::CharacterManager()->Add(
+							new CItem(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
+			}
+		}
+		break;
 	case ETag::EATTACK:
 		if (CRectangle::Collision(o))
 		{
@@ -109,71 +206,54 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 					//sNum--;
 				}
 				mEnabled = false;
-				//char ch;
-				//char item;
-				//int  i;
-				//while (ch != 'Q') {
-				//	i = (rand() % 5) + 1;
-				//	//itemを表示
-				//	printf(item[i]);
-				//	//chにQが入ったら終わるループ
-				//	ch = getchar();
-				//}
-				//i= (rand() % 100) + 1;
-				//	if (i <= 20) {
-				//		printf(item[0]);
-				//	}
-				//	if (i >= 20) printf(item[0]);
-				//	if (i >= 20 || i <= 40) {
-				//		printf(item[1]);
-				//	}
-				//	else(i <= 40 || i >= 50) {
-				//		printf(item[2]);
-				//	}
-				//	else(i <= 60 || i >= 65) {
-				//		printf(item[3]);
-				//	}
-				//	else {
-						//printf(item[4]);
-				     if   (mItem3  = (rand() % 100) + 1)
-						{
-						 mItem3 = 0 + rand() % 10;
-							{
-								//アイテムのポイントを生成して、キャラクタマネージャに追加
-								CApplication::CharacterManager()->Add(
-									new CItem3(X(),
-										Y(),
-										TIPSIZE, TIPSIZE, CApplication::Texture6()));
-							}
-						}
-						if(	mItem2 = (rand()% 100)+1)
-							{
-							mItem2 = 0 + rand() % 30;
-								{
-									//アイテムのポイントを生成して、キャラクタマネージャに追加
-									CApplication::CharacterManager()->Add(
-										new CItem2(X(),
-											Y(),
-											TIPSIZE, TIPSIZE, CApplication::Texture6()));
-								}
-							}
-					//}
+				int i{};
+				int item[3]{ 0,0,0 };
+				srand((unsigned)time(NULL)); // 乱数の初期化
+				i = (rand() % 100) + 1;
+				//srand((unsigned)time(NULL)); // 乱数の初期化
+				if (i <= 0 || i >= 10) {
+					double probability = 0.50; // 確率（50%）
+					if ((double)rand() / RAND_MAX < probability) {
+						//アイテムのポイントを生成して、キャラクタマネージャに追加
+						item[0], CApplication::CharacterManager()->Add(
+							new CItem3(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
+				if (i <= 10 || i >= 20) {
+					double probability1 = 0.10; // 確率（10%）
+					//srand((unsigned)time(NULL)); // 乱数の初期化
+					if ((double)rand() / RAND_MAX < probability1) {
+						//アイテムのポイントを生成して、キャラクタマネージャに追加
+						item[1], CApplication::CharacterManager()->Add(
+							new CItem2(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
+				if (i <= 20 || i >= 30) {
+					double probability2 = 0.10; // 確率（10%）
+					//srand((unsigned)time(NULL)); // 乱数の初期化
+					if ((double)rand() / RAND_MAX < probability2) {
+						//アイテムの時計を生成して、キャラクタマネージャに追加
+						item[2], CApplication::CharacterManager()->Add(
+							new CItem(X(),
+								Y(),
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
+				}
 			}
 		}
-		break;
-	//default:
-	//	if (CRectangle::Collision(o))
-	//	{
-	//		//mState = EState::ESTOP;
- //			mEnabled = false;
-	//	}
 	}
 }
 
-int CEnemy2::mItem3 = 0;
-int CEnemy2::mItem2 = 0;
+int CItem3::mItem3 = 0;
+int CItem2::mItem2 = 0;
+int CItem::mItem = 0;
 
 CEnemy2::CEnemy2(float x, float y, float w, float h, CTexture* pt)
+:mItem3(0),mItem2(0),mItem(0)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXCOORD);
@@ -182,41 +262,26 @@ CEnemy2::CEnemy2(float x, float y, float w, float h, CTexture* pt)
 	mVx = VELOCITY;
 	//敵数に1加算する
 	sNum++;
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));
 }
 
 void CEnemy2::Update()
 {
-	if (CEnemy2::mItem3 >10)
+	if (CItem3::mItem3 >= 10)
 	{
 		mEnabled = false;
 	}
-	//if (CEnemy2::mItem3 > 10)
-	//{
-	//	//アイテムのポイントを生成して、キャラクタマネージャに追加
-	//	CApplication::CharacterManager()->Add(
-	//		new CItem3(X(),
-	//			Y(),
-	//			TIPSIZE, TIPSIZE, CApplication::Texture6()));
-	//}
-	if (CEnemy2::mItem2 > 30)
-	{
-		//アイテムのポイントを生成して、キャラクタマネージャに追加
-		CApplication::CharacterManager()->Add(
-			new CItem2(X(),
-				Y(),
-				TIPSIZE, TIPSIZE, CApplication::Texture6()));
-	}
-	if (CEnemy2::mItem2 > 30)
+	if (CItem2::mItem2 >= 20)
 	{
 		mEnabled = false;
 	}
-
+	if (CItem::mItem >= 30)
+	{
+		mEnabled = false;
+	}
 	switch (mState)
 	{
 		case EState::ECRY:
-		//泣く画像を設定
-		//Texture(Texture(), TEXCRY);
 		break;
 	case EState::EMOVE:
 		//X軸速度分、X座標を更新する

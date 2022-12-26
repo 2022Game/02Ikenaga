@@ -1,10 +1,11 @@
 #pragma once
 #include "CFont.h"
+//#include"CCharacter.h"
 /*
 * CUi
 * ユーザーインタフェースクラス
 */
-class CUi
+class CUi // public CCharacter
 {
 public:
 	//ゲームクリア表示
@@ -24,6 +25,8 @@ public:
 	//void Pulltime(int pulltime);
 	void Render();
     int mTime;	//経過時間
+protected:
+	bool mEnabled;
 private:
 	int mGoal;
 	int mEnemy;	//敵の数

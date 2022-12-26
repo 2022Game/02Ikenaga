@@ -6,7 +6,7 @@
 
 //#define RAND_MAX 0x7fff
 
-#define TEXCOORD1  151,190,262,225       //靴、足(スピードアップ)//ポイント(コイン)
+#define TEXCOORD1  151,190,262,225       //靴、足(スピードアップ)
 
 void CItem2::Collision()
 {
@@ -87,5 +87,5 @@ CItem2::CItem2(float x, float y, float w, float h, CTexture* pt)
 	Set(x, y, w, h);
 	 Texture(pt, TEXCOORD1);
 	mTag = ETag::EITEM2;
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));
 }

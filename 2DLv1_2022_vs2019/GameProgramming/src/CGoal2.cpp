@@ -1,5 +1,5 @@
 #include "CGoal2.h"
-#include"CEnemy5.h"
+#include"CEnemy7.h"
 #include"CApplication.h"
 
 #define TEXCOORD 195, 280, 418, 330//テクスチャ座標
@@ -46,9 +46,9 @@ void CGoal2::Collision(CCharacter* m, CCharacter* o)
 				mEnabled = false;
 				//敵を生成して、キャラクタマネージャに追加
 				CApplication::CharacterManager()->Add(
-					new CEnemy5(X(),
+					new CEnemy7(X(),
 						Y(),
-						TIPSIZE, TIPSIZE, CApplication::Texture10()));
+						TIPSIZE, TIPSIZE, CApplication::Texture11()));
 				//sGoal--;
 			}
 		}

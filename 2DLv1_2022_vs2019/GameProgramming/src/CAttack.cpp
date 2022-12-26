@@ -1,7 +1,7 @@
 #include "CAttack.h"
 #include"CPlayer2.h"
 #include "CApplication.h"
-#define KODOMO "1175450110.png"
+//#define KODOMO "1175450110.png"
 #define KODOMO1 370, 490, 460, 370//テクスチャ座標
 
 void CAttack::Collision()
@@ -9,20 +9,18 @@ void CAttack::Collision()
 	CApplication::CharacterManager()->Collision(this);
 }
 
-//CAttack::CAttack()
-//{
-//	mState = EState::ESTOP;
-//	mTag = ETag::EATTACK;
-//}
+CAttack::CAttack()
+{
+	mState = EState::ESTOP;
+	mTag = ETag::EATTACK;
+}
 
 CAttack::CAttack(float x, float y, float w, float h, float l, float r, float b, float t, CTexture* pt)
 {
 	Set(x, y, w, h);
 	Texture(pt, l, r, b, t);
 	Texture(pt, KODOMO1);
-	//mState = EState::EMOVE;
 	mTag  = ETag::EATTACK;
-	//mState = EState::EATTACK;
 }
 
 //CAttack::CAttack(float x, float y, float w, float h, CTexture* pt)
@@ -59,6 +57,16 @@ void CAttack::Update()
 //	}
 //	return false;
 //}
+
+bool CAttack::Collision(CRectangle* rect)
+{
+	if (CRectangle::Collision(rect))
+	{
+		mState = EState::ESTOP;
+		return true;
+	}
+	return false;
+}
 
 void CAttack::Collision(CCharacter* m, CCharacter* o)
 {

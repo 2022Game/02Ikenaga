@@ -1,5 +1,9 @@
 #pragma once
 #include "CCharacter.h"
+#include"CItem.h"
+#include"CItem2.h"
+#include"CItem3.h"
+#include"CPlayer2.h"
 
 class CEnemy3 : public CCharacter
 {
@@ -17,5 +21,8 @@ public:
 	//XVˆ—
 	void Update();
 private:
+	/*CItem3 *mItem3;
+	CItem2 *mItem2;
+	CItem *mItem;*/
 	static int sNum;	//“G‚Ì”
 };

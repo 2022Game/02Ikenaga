@@ -5,6 +5,7 @@
 class CItem : public CCharacter
 {
 public:
+	static int mItem;
 	//static int Point();
 	//Õ“Ëˆ—1
 	void Collision();

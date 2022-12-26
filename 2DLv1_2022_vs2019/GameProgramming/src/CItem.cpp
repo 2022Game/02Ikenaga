@@ -1,16 +1,7 @@
 #include "CItem.h"
 #include "CApplication.h"
 
-#define TEXCOORD 40,90,263,220      //ŽžŒv
-//#define POINT 0
-//#define AITEM1                     
-
-//int CItem::sPoint = 0;	//POINT
-//
-//int  CItem::Point()
-//{
-//	return sPoint;
-//}
+#define TEXCOORD 36,83,263,221     //ŽžŒv
 
 void CItem::Collision()
 {
@@ -72,5 +63,4 @@ CItem::CItem(float x, float y, float w, float h, CTexture* pt)
 	Set(x, y, w, h);
 	Texture(pt, TEXCOORD);
 	mTag = ETag::EITEM;
-	//sPoint = POINT;
 }

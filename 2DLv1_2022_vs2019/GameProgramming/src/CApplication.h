@@ -42,6 +42,7 @@ private:
 	static CTexture mTexture8;
 	static CTexture mTexture9;
 	static CTexture mTexture10;
+	static CTexture mTexture11;
 	CEnemy* mpEnemy;
 //	CBullet* mpBullet;
 	CInput mInput;
@@ -51,6 +52,7 @@ private:
 	//CCharacterのポインタの可変長配列
 //	std::vector<CCharacter*> mCharacters;
 public:
+	//static int mTime;
 	static CCharacterManager* CharacterManager();
 	static CTexture* Texture();
 	static CTexture* Texture1();
@@ -63,6 +65,7 @@ public:
 	static CTexture* Texture8();
 	static CTexture* Texture9();
 	static CTexture* Texture10();
+	static CTexture* Texture11();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム
