@@ -5,6 +5,51 @@
 #define _USE_MATH_DEFINES
 //数学関数のインクルード
 #include <math.h>
+//#define M 4
+//#define N 4
+
+CMatrix CMatrix::Transpose()const
+{
+	CMatrix tmp;
+	/*int mat[M][N];
+	int t_mat[N][M];*/
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			tmp.mM[i][j] = mM[j][i];
+		}
+	}
+	return tmp;
+}
+
+//CMatrix CMatrix::Transpose()const
+//{
+//	return*this;
+//}
+
+//CMatrix CMatrix::Transpose()const
+//{
+//	CMatrix tmp; //返却用ののCMatrixインスタンスを作成
+//
+//	//tmpの2次元配列に、インスタンスの2次元配列を代入
+//	tmp.mM[0][0] = 1;  mM[0][0];
+//	tmp.mM[0][1] =  mM[0][1];
+//	tmp.mM[0][2] = mM[0][2];
+//	tmp.mM[0][3] = mM[0][3];
+//	tmp.mM[1][0] = mM[1][0];
+//	tmp.mM[1][1] = mM[1][1];
+//	tmp.mM[1][2] = mM[1][2];
+//	tmp.mM[1][3] = mM[1][3];
+//	tmp.mM[2][0] = mM[2][0];
+//	tmp.mM[2][1] = mM[2][1];
+//	tmp.mM[2][2] = mM[2][2];
+//	tmp.mM[2][3] = mM[2][3];
+//	tmp.mM[3][0] = mM[3][3];
+//	tmp.mM[3][1] = mM[3][1];
+//	tmp.mM[3][2] = mM[3][2];
+//	tmp.mM[3][3] = mM[3][3];
+//
+//	return tmp; //代入されたtmpを返す
+//}
 
 float* CMatrix::M()const
 {
