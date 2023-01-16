@@ -7,6 +7,28 @@
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//移動速度
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //回転速度
 
+
+
+void CPlayer::Collision(CCollider* m, CCollider* o) {
+	//自身のコライダタイプの判定
+	switch (m->Type()) {
+	case CCollider::ELINE://線分コライダ
+		//相手のコライダが三角コライダの時
+		if (o->Type() == CCollider::ETRIANGLE) {
+			CVector adjust;//調整用ベクトル
+			//三角形と線分の衝突判定
+			if (CCollider::CollisionTriangleLine(o, m, &adjust))
+			{
+				//位置の更新(mPosition+adjust)
+				mPosition = mPosition + adjust;
+				//行列の更新
+				CTransform::Update();
+			}
+		}
+		break;
+	}
+}
+
 CPlayer::CPlayer()
 	:mLine(this, &mMatrix, CVector(0.0f, 0.0f, -14.0f), CVector(0.0f, 0.0f, 17.0f))
 	,mLine2(this, &mMatrix, CVector(0.0f, 5.0f, -8.0f), CVector(0.0f, -3.0f, -8.0f))
