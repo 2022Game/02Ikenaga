@@ -7,8 +7,9 @@
 class CEnemy2 : public CCharacter
 {
 public:
+	//int arr();
 	static int mTime;
-	CItem3 *mItem3;
+    CItem3 *mItem3;
 	CItem2 *mItem2;
 	CItem *mItem;
 	//“G‚Ì”‚ğİ’è

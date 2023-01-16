@@ -61,25 +61,25 @@ void CItem2::Update()
 
 //void CItem2::Render()
 //{
-//	//Texture(Texture(), TEXCOORD1);
-//	//char str[2];
-//	int main(void);
-//	{
-//		int i;
-//
-//		//srand(10);
-//		srand((unsigned int)time(nullptr));
-//
-//		for (i = 0; i < 10; i++)
-//		{
-//			//乱数値の表示
-//			printf("%d\n", 0 + rand() % 10);
-//			//printf("%lf\n", rand() / (double)RAND_MAX);
-//			//return ;
-//		}
-//
-//		return ;
-//	}
+	//Texture(Texture(), TEXCOORD1);
+	////char str[2];
+	//int main(void);
+	//{
+	//	int i;
+
+	//	//srand(10);
+	//	srand((unsigned int)time(nullptr));
+
+	//	for (i = 0; i < 10; i++)
+	//	{
+	//		//乱数値の表示
+	//		printf("%d\n", 0 + rand() % 10);
+	//		printf("%lf\n", rand() / (double)RAND_MAX);
+	//		return ;
+	//	}
+
+	//	return ;
+	//}
 //}
 
 CItem2::CItem2(float x, float y, float w, float h, CTexture* pt)

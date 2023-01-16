@@ -109,52 +109,45 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 				}
 				mEnabled = false;
 				int i{};
-				int item[3][3]//{ 0,0,0 };
-				{
-					item[0][0] = 0 > 10,
-					item[1][1] = 10 > 20,
-					item[2][2] = 20 > 30
-				};
+				int item[3]{ 0,0,0 };
+				srand((unsigned)time(NULL)); // 乱数の初期化
 				i = (rand() % 100) + 1;
+				//srand((unsigned)time(NULL)); // 乱数の初期化
 				if (i <= 0 || i >= 10) {
-					double probability = 0.70; // 確率（70%）
-					srand((unsigned)time(NULL)); // 乱数の初期化
+					double probability = 0.50; // 確率（50%）
 					if ((double)rand() / RAND_MAX < probability) {
 						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[0][0], CApplication::CharacterManager()->Add(
+						item[0], CApplication::CharacterManager()->Add(
 							new CItem3(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
-					return;
 				}
 				if (i <= 10 || i >= 20) {
 					double probability1 = 0.10; // 確率（10%）
-					srand((unsigned)time(NULL)); // 乱数の初期化
+					//srand((unsigned)time(NULL)); // 乱数の初期化
 					if ((double)rand() / RAND_MAX < probability1) {
 						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[1][1], CApplication::CharacterManager()->Add(
+						item[1], CApplication::CharacterManager()->Add(
 							new CItem2(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
-					return;
 				}
 				if (i <= 20 || i >= 30) {
 					double probability2 = 0.10; // 確率（10%）
-					srand((unsigned)time(NULL)); // 乱数の初期化
+					//srand((unsigned)time(NULL)); // 乱数の初期化
 					if ((double)rand() / RAND_MAX < probability2) {
 						//アイテムの時計を生成して、キャラクタマネージャに追加
-						item[2][2], CApplication::CharacterManager()->Add(
+						item[2], CApplication::CharacterManager()->Add(
 							new CItem(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
-					return;
 				}
 			}
 		}
-		break;
+				break;
 	case ETag::EATTACK:
 		if (CRectangle::Collision(o))
 		{
@@ -165,7 +158,7 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 				{
 					//sNum--;
 				}
-			    mEnabled = false;
+				mEnabled = false;
 				int i{};
 				int item[3]{ 0,0,0 };
 				srand((unsigned)time(NULL)); // 乱数の初期化

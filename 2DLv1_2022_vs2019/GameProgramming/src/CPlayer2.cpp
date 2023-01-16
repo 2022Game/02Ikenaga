@@ -6,7 +6,7 @@
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
 #define GRAVITY (TIPSIZE / 16.0f)	//重力加速度16
-#define GRAVITY10 (TIPSIZE / 13.5f)
+#define GRAVITY10 (TIPSIZE / 60.0f)
 #define JUMPV0 (TIPSIZE / 1.8f)//ジャンプの初速
 #define JUMPVO2 (TIPSIZE / 1.0f)
 #define TEXCOORD2 150,189,340,293   //右向き2
@@ -466,18 +466,22 @@ void CPlayer2::Update()
 		{
 			mVx = -VELOCITY2;
 			X(X() + mVx);
+			Y(Y() + mVy);
+			//mVy -= GRAVITY10;
 		}
 	}
 	if (mInput.Key('D'))
 	{
 		mVx = VELOCITY;
-		//		float x = X() - 4.0f;
+		//float x = X() - 4.0f;
 		X(X() + mVx);
-		if (mState == EState::EUP)
-		{
-			mVx = VELOCITY2;
-			X(X() + mVx);
-		}
+			if (mState == EState::EUP)
+			{
+				mVx = VELOCITY2;
+				X(X() + mVx);
+				Y(Y() + mVy);
+				//mVy -= GRAVITY10;
+			}
 	}
 	//Y座標にY軸速度を加える
 	Y(Y() + mVy);

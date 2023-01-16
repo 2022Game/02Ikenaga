@@ -21,7 +21,7 @@
 //#include"CItem.h"
 #include"CItem2.h"
 #include"CItem3.h"
-
+ 
 int CGame::mTime;
 
 void CGame::Start()
