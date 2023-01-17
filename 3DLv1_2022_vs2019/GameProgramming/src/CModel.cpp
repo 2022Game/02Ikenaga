@@ -5,6 +5,11 @@
 #include"CVector.h"
 #include"CTriangle.h"
 
+std::vector<CTriangle> CModel::Triangles() const
+{
+	return mTriangles;
+}
+
 ////ï`âÊ
 //	//Render(çsóÒ)
 //void CModel::Render(const CMatrix& m) 
