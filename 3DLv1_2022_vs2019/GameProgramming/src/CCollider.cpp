@@ -1,5 +1,26 @@
 #include"CCollider.h"
 #include"CCollisionManager.h"
+#include"CColliderLine.h"
+
+//CollisionTriangleSphere(三角コライダ,球コライダ,調整値)
+//retryn:true(衝突している)false(衝突していない)
+//調整値:衝突しない位置まで戻す値
+bool CCollider::CollisionTriangleSphere(CCollider* t, CCollider* s, CVector* a)
+{
+	CVector v[3], sv, ev;
+	//各コライダの頂点をワールド座標へ変換
+	v[0] = t->mV[0] * *t->mpMatrix;
+	v[1] = t->mV[1] * *t->mpMatrix;
+	v[2] = t->mV[2] * *t->mpMatrix;
+	//面の法線を、外積を正規化して求める
+	CVector normal = (v[1] - v[0]).Cross(v[2] - v[0]).Normalize();
+	//線コライダをワールド座標で生成
+	sv = s->mPosition * *s->mpMatrix + normal * s->mRadius;
+	ev = s->mPosition * *s->mpMatrix - normal * s->mRadius;
+	CColliderLine line(nullptr, nullptr, sv, ev);
+	//三角コライダと線コライダの衝突処理
+	return CollisionTriangleLine(t, &line, a);
+}
 
 bool CCollider::CollisionTriangleLine(CCollider* t, CCollider* l, CVector* a) {
 	CVector v[3], sv, ev;
