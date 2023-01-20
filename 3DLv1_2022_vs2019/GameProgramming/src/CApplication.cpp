@@ -24,6 +24,18 @@ CCharacterManager CApplication::mCharacterManager;
 //	return mpInstance;
 //}
 
+CApplication::~CApplication()
+{
+	delete spUi;  //インスタンスUiの削除
+}
+
+CUi* CApplication::spUi = nullptr;
+
+CUi* CApplication::Ui() 
+{
+	return spUi;  //インスタンスのポインタを返す
+}
+
 CMatrix  CApplication::mModelViewInverse;
 
 const CMatrix& CApplication::ModelViewInverse()
@@ -43,6 +55,7 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
+	spUi = new CUi();  //UIクラスの生成
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列はなし
 	//mColliderMesh.Set(nullptr, nullptr,&mBackGround);
@@ -149,6 +162,7 @@ void CApplication::Update()
 	//タスクマネージャの描画
 	CTaskManager::Instance()->Render();
 	CCollisionManager::Instance()->Render();
+	spUi->Render();  //UIの描画
 	//mPlayer.bullet.Update();
 	//mPlayer.bullet.Render();
 	//mCharacter.Update();
