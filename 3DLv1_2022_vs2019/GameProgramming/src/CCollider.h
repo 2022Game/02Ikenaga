@@ -13,6 +13,12 @@ class CCollisionManager;
 class CCollider :public CTransform,public CTask {
 	friend CCollisionManager;
 public:
+	//優先度の変更
+	//void ChangePriority();
+	//優先度の変更
+	virtual void ChangePriority();
+	//優先度の変更
+	void ChangePriority(int priority);
 	//CollisionTriangleSphere
 	//retryn:true(衝突している)false(衝突していない)
 	//調整値:衝突しない位置まで戻す値

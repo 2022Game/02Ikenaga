@@ -1,5 +1,20 @@
 #include "CBullet.h"
+#include "CEnemy.h"
+#include "CCollisionManager.h"
+
 //#define VELOCITY CVector(0.0f,0.0f,1.0f)//移動速度
+
+void CBullet::Collision()
+{
+	//コライダの優先度変更
+	mCollider .ChangePriority();
+	mCollider.ChangePriority();
+	mCollider.ChangePriority();
+	//衝突処理を実行
+	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+}
 
 //衝突処理
 //Collision(コライダ1,コライダ2)

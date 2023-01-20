@@ -11,6 +11,7 @@ class CColliderLine :public CCollider
 {
 public:
 	CColliderLine(){}
+	void ChangePriority();
 	//コンストラクタ(線分コライダ)
 	//CColliderLine(親,親行列,頂点1,頂点2)
 	CColliderLine(CCharacter3* parent, CMatrix* matrix, const CVector& v0, const CVector& v1);

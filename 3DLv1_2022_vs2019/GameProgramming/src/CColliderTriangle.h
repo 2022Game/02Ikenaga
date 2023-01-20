@@ -11,6 +11,7 @@ class CColliderTriangle :public CCollider
 {
 public:
 	CColliderTriangle(){}
+	void ChangePriority();
 	//コンストラクタ(三角コライダ)
 	//CColliderTriangle(親,新行列,頂点1,頂点2,頂点3)
 	CColliderTriangle(CCharacter3* parent, CMatrix* matrix, const CVector& v0, const CVector& v1, const CVector& v2);
