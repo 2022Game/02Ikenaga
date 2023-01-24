@@ -41,7 +41,7 @@ void CEnemy3::Update()
 			//YŽ²‚ÌƒYƒŒ‚ª2.0ˆÈ‰º
 			if (-2.0f < dy && dy < 2.0f)
 			{
-				if (0.0f < dy && 0.0f < dz && dz < 30.0f)
+				if (30.0f > dz && dz >= 0.0f)
 				{
 					//’e‚ð”­ŽË‚µ‚Ü‚·
 					CBullet* bullet = new CBullet();
