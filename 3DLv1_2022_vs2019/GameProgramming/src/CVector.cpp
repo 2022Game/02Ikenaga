@@ -1,5 +1,6 @@
 #include"CVector.h"
 #include <xstring>
+#include"CMatrix.h"
 
 CVector CVector::Cross(const CVector& v)const {
 	return  CVector(

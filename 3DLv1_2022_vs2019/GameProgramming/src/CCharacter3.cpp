@@ -1,6 +1,11 @@
 #include"CCharacter3.h"
 #include"CApplication.h"
 
+CCharacter3::ETag CCharacter3::Tag()
+{
+	return mTag;
+}
+
 CCharacter3::CCharacter3(int priority)
 	:mpModel(nullptr)
 {
@@ -10,6 +15,7 @@ CCharacter3::CCharacter3(int priority)
 
 CCharacter3::CCharacter3()
 	:mpModel(nullptr)
+	,mTag(EZERO)
 {
 	//タスクリストに追加
 	CTaskManager::Instance()->Add(this);

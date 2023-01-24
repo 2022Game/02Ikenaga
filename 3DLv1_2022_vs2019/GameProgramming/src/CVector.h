@@ -1,6 +1,9 @@
 #ifndef CVECTOR_H
 #define CVECTOR_H
-#include"CMatrix.h"
+//#include"CMatrix.h"
+
+class CMatrix;
+
 /*
 ベクトルクラス
 ベクトルデータを扱います

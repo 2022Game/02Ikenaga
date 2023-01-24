@@ -1,5 +1,6 @@
 #include"CTriangle.h"
 #include"glut.h"
+#include "CMatrix.h"
 
 //•`‰æ
 //Render(s—ñ)

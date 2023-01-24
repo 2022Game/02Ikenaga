@@ -4,6 +4,7 @@
 //CVectorのインクルード
 #include"CVector.h"
 #include"CTriangle.h"
+#include "CMatrix.h"
 
 std::vector<CTriangle> CModel::Triangles() const
 {

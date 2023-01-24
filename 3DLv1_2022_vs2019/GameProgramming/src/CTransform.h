@@ -2,6 +2,7 @@
 #ifndef CTRANSFORM_H
 #define CTRANSFORM_H
 #include "CVector.h"
+#include "CMatrix.h"
 
 /*
 トランスフォームクラス

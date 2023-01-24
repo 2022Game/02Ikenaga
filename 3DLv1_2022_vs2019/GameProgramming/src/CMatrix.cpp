@@ -8,6 +8,21 @@
 //#define M 4
 //#define N 4
 
+CVector CMatrix::VectorZ() const
+{
+	return CVector(mM[2][0], mM[2][1], mM[2][2]);
+}
+
+CVector CMatrix::VectorX() const
+{
+	return CVector(mM[0][0], mM[0][1], mM[0][2]);
+}
+
+CVector CMatrix::VectorY() const
+{
+	return CVector(mM[1][0], mM[1][1], mM[1][2]);
+}
+
 CMatrix CMatrix::Transpose()const
 {
 	CMatrix tmp;
