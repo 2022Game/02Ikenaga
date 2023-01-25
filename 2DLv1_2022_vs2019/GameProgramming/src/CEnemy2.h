@@ -3,6 +3,7 @@
 #include"CItem.h"
 #include"CItem2.h"
 #include"CItem3.h"
+#include"CItem11.h"
 #include"CPlayer2.h"
 class CEnemy2 : public CCharacter
 {
@@ -12,6 +13,7 @@ public:
     CItem3 *mItem3;
 	CItem2 *mItem2;
 	CItem *mItem;
+	CItem11* mItem11;
 	//“G‚Ì”‚ğİ’è
 	static void Num(int num);
 	//“G‚Ì”‚ğæ“¾

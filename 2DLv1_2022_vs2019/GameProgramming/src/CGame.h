@@ -51,7 +51,7 @@ private:
 	void CameraSet(); //カメラ設定
 	CPlayer2 *mpPlayer; //プレイヤーのポインタ
 	//CBlock *mBlock;
-	CItem *mpItem;
+	CItem *mItem;
 	CUi *mpUi; //UIクラスのポインタ
 	//int mTime;
 	//CItem* mpItem;

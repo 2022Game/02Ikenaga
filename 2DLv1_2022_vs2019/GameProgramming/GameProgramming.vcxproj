@@ -36,6 +36,7 @@
     <ClCompile Include="src\CGoal2.cpp" />
     <ClCompile Include="src\CGoal3.cpp" />
     <ClCompile Include="src\CItem.cpp" />
+    <ClCompile Include="src\CItem11.cpp" />
     <ClCompile Include="src\CItem2.cpp" />
     <ClCompile Include="src\CItem3.cpp" />
     <ClCompile Include="src\CPlayer.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="src\CGoal2.h" />
     <ClInclude Include="src\CGoal3.h" />
     <ClInclude Include="src\CItem.h" />
+    <ClInclude Include="src\CItem11.h" />
     <ClInclude Include="src\CItem2.h" />
     <ClInclude Include="src\CItem3.h" />
     <ClInclude Include="src\CMiss.h" />

@@ -58,43 +58,44 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 					sNum--;
 				}
 				mEnabled = false;
-				int i{};
-				int item[3]{ 0,0,0 };
-				srand((unsigned)time(NULL)); // 乱数の初期化
-				i = (rand() % 100) + 1;
-				//srand((unsigned)time(NULL)); // 乱数の初期化
-				if (i <= 0 || i >= 10) {
-					double probability = 0.50; // 確率（50%）
-					if ((double)rand() / RAND_MAX < probability) {
-						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[0], CApplication::CharacterManager()->Add(
+				srand((unsigned int)time(nullptr));
+				bool d_flag = false;
+				int num_pro_d = rand() % 100 + 1;
+				int num_pro_m = 100 - num_pro_d;
+				//int num_pro_h = 100 - num_pro_d;
+				//int num_pro_v = 100 - num_pro_d;
+				double tmp_random = (double)rand() / RAND_MAX;
+				if (tmp_random < (double)num_pro_d / 100)
+				{
+					d_flag = true;
+				}
+				else if ((rand() % 100) < 50) {
+					{
+						CApplication::CharacterManager()->Add(
 							new CItem3(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
-				if (i <= 10 || i >= 20) {
-					double probability1 = 0.10; // 確率（10%）
-					//srand((unsigned)time(NULL)); // 乱数の初期化
-					if ((double)rand() / RAND_MAX < probability1) {
-						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[1], CApplication::CharacterManager()->Add(
+				else if ((rand() % 100) < 25) {
+					{
+						CApplication::CharacterManager()->Add(
 							new CItem2(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
-				if (i <= 20 || i >= 30) {
-					double probability2 = 0.10; // 確率（10%）
-					//srand((unsigned)time(NULL)); // 乱数の初期化
-					if ((double)rand() / RAND_MAX < probability2) {
-						//アイテムの時計を生成して、キャラクタマネージャに追加
-						item[2], CApplication::CharacterManager()->Add(
-							new CItem(X(),
+				else
+				{
+					if ((rand() % 100) < 25)
+					{
+						CApplication::CharacterManager()->Add(
+							new CItem11(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
+				return;
 			}
 		}
 		break;
@@ -108,46 +109,48 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 					sNum--;
 				}
 				mEnabled = false;
-				int i{};
-				int item[3]{ 0,0,0 };
-				srand((unsigned)time(NULL)); // 乱数の初期化
-				i = (rand() % 100) + 1;
-				//srand((unsigned)time(NULL)); // 乱数の初期化
-				if (i <= 0 || i >= 10) {
-					double probability = 0.50; // 確率（50%）
-					if ((double)rand() / RAND_MAX < probability) {
-						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[0], CApplication::CharacterManager()->Add(
+				mEnabled = false;
+				srand((unsigned int)time(nullptr));
+				bool d_flag = false;
+				int num_pro_d = rand() % 100 + 1;
+				int num_pro_m = 100 - num_pro_d;
+				//int num_pro_h = 100 - num_pro_d;
+				//int num_pro_v = 100 - num_pro_d;
+				double tmp_random = (double)rand() / RAND_MAX;
+				if (tmp_random < (double)num_pro_d / 100)
+				{
+					d_flag = true;
+				}
+				else if ((rand() % 100) < 50) {
+					{
+						CApplication::CharacterManager()->Add(
 							new CItem3(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
-				if (i <= 10 || i >= 20) {
-					double probability1 = 0.10; // 確率（10%）
-					//srand((unsigned)time(NULL)); // 乱数の初期化
-					if ((double)rand() / RAND_MAX < probability1) {
-						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[1], CApplication::CharacterManager()->Add(
+				else if ((rand() % 100) < 25) {
+					{
+						CApplication::CharacterManager()->Add(
 							new CItem2(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
-				if (i <= 20 || i >= 30) {
-					double probability2 = 0.10; // 確率（10%）
-					//srand((unsigned)time(NULL)); // 乱数の初期化
-					if ((double)rand() / RAND_MAX < probability2) {
-						//アイテムの時計を生成して、キャラクタマネージャに追加
-						item[2], CApplication::CharacterManager()->Add(
-							new CItem(X(),
+				else
+				{
+					if ((rand() % 100) < 25)
+					{
+						CApplication::CharacterManager()->Add(
+							new CItem11(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
+				return;
 			}
 		}
-				break;
+		break;
 	case ETag::EATTACK:
 		if (CRectangle::Collision(o))
 		{
@@ -159,60 +162,52 @@ void CEnemy3::Collision(CCharacter* m, CCharacter* o)
 					//sNum--;
 				}
 				mEnabled = false;
-				int i{};
-				int item[3]{ 0,0,0 };
-				srand((unsigned)time(NULL)); // 乱数の初期化
-				i = (rand() % 100) + 1;
-				//srand((unsigned)time(NULL)); // 乱数の初期化
-				if (i <= 0 || i >= 10) {
-					double probability = 0.50; // 確率（50%）
-					if ((double)rand() / RAND_MAX < probability) {
-						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[0], CApplication::CharacterManager()->Add(
+				mEnabled = false;
+				srand((unsigned int)time(nullptr));
+				bool d_flag = false;
+				int num_pro_d = rand() % 100 + 1;
+				int num_pro_m = 100 - num_pro_d;
+				//int num_pro_h = 100 - num_pro_d;
+				//int num_pro_v = 100 - num_pro_d;
+				double tmp_random = (double)rand() / RAND_MAX;
+				if (tmp_random < (double)num_pro_d / 100)
+				{
+					d_flag = true;
+				}
+				else if ((rand() % 100) < 50) {
+					{
+						CApplication::CharacterManager()->Add(
 							new CItem3(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
-				if (i <= 10 || i >= 20) {
-					double probability1 = 0.10; // 確率（10%）
-					//srand((unsigned)time(NULL)); // 乱数の初期化
-					if ((double)rand() / RAND_MAX < probability1) {
-						//アイテムのポイントを生成して、キャラクタマネージャに追加
-						item[1], CApplication::CharacterManager()->Add(
+				else if ((rand() % 100) < 25) {
+					{
+						CApplication::CharacterManager()->Add(
 							new CItem2(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
-				if (i <= 20 || i >= 30) {
-					double probability2 = 0.10; // 確率（10%）
-					//srand((unsigned)time(NULL)); // 乱数の初期化
-					if ((double)rand() / RAND_MAX < probability2) {
-						//アイテムの時計を生成して、キャラクタマネージャに追加
-						item[2], CApplication::CharacterManager()->Add(
-							new CItem(X(),
+				else
+				{
+					if ((rand() % 100) < 25)
+					{
+						CApplication::CharacterManager()->Add(
+							new CItem11(X(),
 								Y(),
 								TIPSIZE, TIPSIZE, CApplication::Texture6()));
 					}
 				}
+				return;
 			}
 		}
-		//break;
-		//default:
-		//	if (CRectangle::Collision(o))
-		//	{
-		//		//mState = EState::ESTOP;
-		//		mEnabled = false;
-		//	}
 	}
 }
 
-//int CItem3::mItem3 = 0;
-//int CItem2::mItem2 = 0;
-//int CItem::mItem = 0;
-
 CEnemy3::CEnemy3(float x, float y, float w, float h, CTexture* pt)
+	:mItem(),mItem11(0),mItem2(),mItem3(0)
 {
 	Set(x, y, w, h);
 	Texture(pt, TEXCOORD);
@@ -224,16 +219,20 @@ CEnemy3::CEnemy3(float x, float y, float w, float h, CTexture* pt)
 }
 
 void CEnemy3::Update()
-{
-	if (CItem3::mItem3 >= 10)
+{ 
+	if (CItem3::mItem3 > (rand() % 100))
 	{
 		mEnabled = false;
 	}
-	if (CItem2::mItem2 >= 20)
+	if (CItem2::mItem2 > (rand() % 100))
 	{
 		mEnabled = false;
 	}
-	if (CItem::mItem >= 30)
+	if (CItem::mItem > (rand() % 100))
+	{
+		mEnabled = false;
+	}
+	if (CItem11::mItem11 > (rand() % 100))
 	{
 		mEnabled = false;
 	}
@@ -241,7 +240,6 @@ void CEnemy3::Update()
 	{
 	case EState::EANNIHILATION:
 		//泣く画像を設定
-		//Texture(Texture(), TEXCRY);
 		break;
 	case EState::EMOVE:
 		//X軸速度分、X座標を更新する

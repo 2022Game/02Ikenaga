@@ -18,10 +18,15 @@
 #include"CGoal.h"
 #include"CGoal2.h"
 #include"CGoal3.h"
-//#include"CItem.h"
+#include"CItem.h"
 #include"CItem2.h"
 #include"CItem3.h"
+#include"CItem11.h"
  
+#include <iostream>
+#include <thread>
+#include <chrono>
+
 int CGame::mTime;
 
 void CGame::Start()
@@ -43,7 +48,7 @@ void CGame::Start()
 
 bool CGame::IsOver()
 {	//HPが0以下か判定結果を戻す
-	return mTime>= 6001;
+	return mTime>= 10001;
 }
 
 void CGame::Over()
@@ -101,7 +106,7 @@ CGame::CGame()
 	//,mpBlock(0)
 	//,mpGoal(0)
 	//,mTime(0)
-	,mpItem(0)
+	,mItem(0)
 	, mCdx(0)
 	, mCdy(0)
 {
@@ -130,7 +135,7 @@ CGame::CGame()
 	int map[ROWS][COLS] =
 	{ 
 		{1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{1,13,0,0,1,0,0,1,3,0,0,0,1,0,0,13,1,0,3,0,1,0,9,13,1},
+		{1,13,0,0,1,0,0,1,3,0,0,0,1,0,0,0,1,0,3,0,1,0,9,13,1},
 		{1,0,0,0,0,1,0,0,5,1,11,0,0,0,1,1,0,0,1,5,0,0,1,11,1},
 		{1,8,1,1,7,1,1,0,0,1,15,0,0,0,0,0,0,0,0,1,1,0,0,1,1},
 		{1,1,0,0,0,0,1,1,0,0,0,1,1,11,0,0,1,1,0,0,1,0,0,0,1},
@@ -145,7 +150,7 @@ CGame::CGame()
 		{1,0,0,11,1,1,1,1,1,0,0,0,1,0,1,0,0,5,0,1,0,7,0,0,1},
 		{1,0,0,7,14,0,0,1,0,0,1,1,0,7,0,1,1,1,0,0,0,0,0,0,1},
 		{1,1,1,0,0,0,1,0,0,1,17,0,0,0,0,13,1,0,0,1,1,11,7,1,1},
-		{1,18,0,0,1,5,0,0,1,18,0,0,1,0,0,1,0,0,0,0,0,0,0,6,1},
+		{1,18,0,0,1,5,8,0,1,18,0,0,1,0,0,1,0,0,0,0,0,0,0,6,1},
 		{1,1,1,11,1,1,1,1,1,1,1,1,1,11,1,1,1,1,1,1,1,1,11,1,1},
 	};
 
@@ -221,11 +226,18 @@ CGame::CGame()
 			}
 			if (map[row][col] == 8)
 			{
-				//アイテムの時計を生成して、キャラクタマネージャに追加
-				CApplication::CharacterManager()->Add(
-					new CItem(TIPSIZE + TIPSIZE * 2 * col,
-						TIPSIZE + TIPSIZE * 2 * row,
-						TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					//アイテムの時計を生成して、キャラクタマネージャに追加
+					CApplication::CharacterManager()->Add(
+						new CItem(TIPSIZE + TIPSIZE * 2 * col,
+							TIPSIZE + TIPSIZE * 2 * row,
+							TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					if (mTime >700)
+					{
+						CApplication::CharacterManager()->Add(
+							new CItem11(TIPSIZE + TIPSIZE * 2 * col,
+								TIPSIZE + TIPSIZE * 2 * row,
+								TIPSIZE, TIPSIZE, CApplication::Texture6()));
+					}
 			}
 			if (map[row][col] == 9)
 			{
@@ -324,6 +336,15 @@ CGame::CGame()
 						TIPSIZE + TIPSIZE * 2 * row,
 						TIPSIZE, TIPSIZE, CApplication::Texture11()));
 			}
+			//20の時、敵生成
+			if (map[row][col] == 20)
+			{
+				//敵を生成して、キャラクタマネージャに追加
+				CApplication::CharacterManager()->Add(
+					new CItem11(TIPSIZE + TIPSIZE * 2 * col,
+						TIPSIZE + TIPSIZE * 2 * row,
+						TIPSIZE, TIPSIZE, CApplication::Texture6()));
+			}
 		}
 	}
 }
@@ -338,7 +359,7 @@ void CGame::Update()
 	CApplication::CharacterManager()->Render();
 	CCamera::End();
 	//UI
-	mpUi->Time(mTime++);
+	mpUi->Time(mTime++/10);
 	mpUi->Hp(CPlayer2::Hp());
 	mpUi->Point(CPlayer2::Point());
 	//mpUi->Pulltime(CPlayer2::Pulltime());
