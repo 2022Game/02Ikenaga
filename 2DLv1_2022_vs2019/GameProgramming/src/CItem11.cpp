@@ -45,86 +45,12 @@ void CItem11::Collision(CCharacter* m, CCharacter* o)
 			}
 		}
 		break;
-		//default:
-		//	if (CRectangle::Collision(o))
-		//	{
-		//		//mState = EState::ESTOP;
-		//		mEnabled = false;
-		//	}
 	}
 }
 void CItem11::Update()
 {
 	//通常の画像を設定
 	Texture(Texture(), TEXCOORD);
-	//Texture(Texture(), AITEM);
-	//mTime--;
-	//int ime_t ;
-	//int last;
-	//ime_t; last = time(0);
-	//time_t next;
-	//int pastSec = 0;
-	//int a = 1;
-	//while (a)
-	//{
-	//	if (time(&next) != last)
-	//	{
-	//		last = next;
-	//		pastSec++;
-	//		printf("%d 秒経過\n", pastSec);
-	//		if (pastSec == 10) break; /*** 追加 */
-	//	}
-	//}
-	//return ;
-	/*if (CGame::mTime > 700)
-	{
-		CApplication::CharacterManager()->Add(
-			new CItem(X(),
-				Y(),
-				TIPSIZE, TIPSIZE, CApplication::Texture6()));
-	}*/
-	//int mTime = CGame::mTime;
-	//int cout =500;
-	////int endl;
-	////cout <<500 << endl;
-	//while (CGame::mTime > cout)
-	//{
-	//	 mEnabled = false;
-	//	 return;
-	//}
-	//int mTime = CGame::mTime;
-	//int mItem11 = false;
-	//while (mTime > 100) {
-	//	if (mItem11 == false) {
-	//		//1回だけ行う処理
-	//		mItem11 = true;
-	//		mEnabled = false;
-	//	}
-		//return ;
-		//毎回行う処理
-		/*CApplication::CharacterManager()->Add(
-			new CItem11(X(),
-				Y(),
-				TIPSIZE, TIPSIZE, CApplication::Texture6()));*/
-				//}
-				/*int mTime = CGame::mTime;
-				if (mTime > 300)
-				{
-					mEnabled = false;
-					return;
-				}*/
-				//int mTime = CGame::mTime;
-				////int  mEnabled = false;
-				//while (mTime == CGame::mTime) {
-				//	//if (mEnabled == false) {
-				//		//1回だけ行う処理
-				//		if (mTime > 100)
-				//		{
-				//			mEnabled = false;
-				//		}
-					//}
-					//毎回行う処理
-				//}
 }
 
 CItem11::CItem11(float x, float y, float w, float h, CTexture* pt)
