@@ -57,7 +57,7 @@ CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, 
 	: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
 	, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
     , mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)
-	{
+{
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定
@@ -66,10 +66,10 @@ CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, 
 }
 
 //更新処理
-void  CEnemy::Update() {
+void  CEnemy::Update() 
+{
 	//行列を更新
 	CTransform::Update();
 	//位置を移動
 	mPosition = mPosition + VELOCITY * mMatrixRotate;
-	
 }
