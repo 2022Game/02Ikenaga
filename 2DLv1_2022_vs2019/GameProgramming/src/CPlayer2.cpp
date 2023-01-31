@@ -6,9 +6,9 @@
 #define TEXCOORD 30, 66, 100, 50	//テクスチャマッピング
 #define TEXCRY 196, 216, 158, 128	//テクスチャマッピング
 #define GRAVITY (TIPSIZE / 16.0f)	//重力加速度16
-#define GRAVITY10 (TIPSIZE / 60.0f)
+#define GRAVITY10 (TIPSIZE / 0.2f)
 #define JUMPV0 (TIPSIZE / 1.8f)//ジャンプの初速
-#define JUMPVO2 (TIPSIZE / 1.0f)
+#define JUMPVO2 (TIPSIZE / -1.8f)
 #define TEXCOORD2 150,189,340,293   //右向き2
 #define TEXCOORD3 510,550,340,293   //右向き
 #define TEXCOORD4 750,790,340,293   //右向きジャンプ
@@ -372,8 +372,23 @@ void CPlayer2::Collision(CCharacter* m, CCharacter* o)
 		}
 		break;
 	case ETag::EBLOCK:
-	case ETag::EBLOCK3:
 	case ETag::EBLOCK4:
+	case ETag::EBLOCK3:
+		//default:
+				//float x, y;
+				//switch (o->Tag())
+				//{
+				//if (mTag == ETag::EBLOCK3)
+				//{
+				//	if (mInput.Key('S'))
+				//	{
+				//			//Y座標にY軸速度を加える
+				//			Y(Y() + mVy);
+				//			mVy = 0.18f;
+				//			//Y軸速度に重力を減算する
+				//			mVy = -mVy;  //GRAVITY10;
+				//	}
+				//}
 		if (CRectangle::Collision(o, &x, &y))
 		{
 			X(X() + x);
@@ -454,7 +469,7 @@ void CPlayer2::Update()
 			{
 				CApplication::CharacterManager()->Add(
 					new CAttack(X(), Y() + H() - 20.0f
-						, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+						, 20.0f, 16.0f, 106, 20, 50, 92, CApplication::Texture3()));
 			}
 		}
 	if (mInput.Key('A'))
@@ -571,7 +586,7 @@ void CPlayer2::Update()
 					{
 						CApplication::CharacterManager()->Add(
 							new CAttack2(X(), Y() + H() - 20.0f
-								, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+								, 20.0f, 16.0f, 106, 20, 50, 92, CApplication::Texture3()));
 						Texture(Texture(), TEXATTACK2);
 					}
 			}
@@ -604,7 +619,7 @@ void CPlayer2::Update()
 				{
 					CApplication::CharacterManager()->Add(
 						new CAttack(X(), Y() + H() - 20.0f
-							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+							, 20.0f, 16.0f, 106, 20, 50, 92, CApplication::Texture3()));
 					Texture(Texture(), TEXATTACK);
 				}
 			}
@@ -640,7 +655,7 @@ void CPlayer2::Update()
 				{
 					CApplication::CharacterManager()->Add(
 						new CAttack2(X(), Y() + H() - 20.0f
-							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+							, 20.0f, 16.0f, 106, 20, 50, 92, CApplication::Texture3()));
 					Texture(Texture(), TEXATTACK2);
 				}
 			}
@@ -673,7 +688,7 @@ void CPlayer2::Update()
 				{
 					CApplication::CharacterManager()->Add(
 						new CAttack(X(), Y() + H() - 20.0f
-							, 30.0f, 20.0f, 106, 20, 50, 92, CApplication::Texture3()));
+							, 20.0f, 16.0f, 106, 20, 50, 92, CApplication::Texture3()));
 					Texture(Texture(), TEXATTACK);
 				}
 			}

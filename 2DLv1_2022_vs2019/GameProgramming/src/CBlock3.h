@@ -16,4 +16,6 @@ public:
 	CBlock3(float x, float y, float w, float h, CTexture* pt);
 	//Update‚Å‚Í‰½‚à‚µ‚È‚¢
 	void Update();
+private:
+	//static int sNum;
 };

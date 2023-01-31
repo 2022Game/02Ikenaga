@@ -37,7 +37,7 @@ void CAttack::Update()
 		if (mState == EState::EMOVE)
 		{
 			float x = X() + W();
-			if (x > 800.0f)
+			if (x > 1600.0f)
 			{
 				x = 0.0f;
 			}

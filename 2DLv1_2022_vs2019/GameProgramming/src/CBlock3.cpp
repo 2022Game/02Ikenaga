@@ -3,6 +3,8 @@
 
 #define TEXCOORD 315.0f, 290.0f, 289.0f, 319.0f//310.0f, 390.0f, 150.0f, 190.0f//テクスチャ座標
 
+//int CBlock3::sNum = 0;
+
 void CBlock3::Collision()
 {
 	CApplication::CharacterManager()->Collision(this);
@@ -26,13 +28,20 @@ void CBlock3::Collision(CCharacter* m, CCharacter* o)
 		    mVy = -mVy;
 		}
 		break;
+	case ETag::EBLOCK3:
+		break;
 	case ETag::EPLAYER:
 		if (CRectangle::Collision(o))
 		{
 			if (o->State() == EState::EJUMP)
 			{
 				mState = EState::EMOVE;
+				//mEnabled = false;
 			}
+			/*else
+			{
+				mTag = ETag::EBLOCK3;
+			}*/
 		}
 		break;
 	//case ETag::EBLOCK:
