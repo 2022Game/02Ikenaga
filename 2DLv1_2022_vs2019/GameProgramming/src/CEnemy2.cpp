@@ -80,8 +80,6 @@ void CEnemy2::Collision(CCharacter* m, CCharacter* o)
 				bool d_flag = false;
 				int num_pro_d = rand() % 100 + 1;
 				int num_pro_m = 100 - num_pro_d;
-				//int num_pro_h = 100 - num_pro_d;
-				//int num_pro_v = 100 - num_pro_d;
 				double tmp_random = (double)rand() / RAND_MAX;
 				if (tmp_random < (double)num_pro_d / 100)
 				{
