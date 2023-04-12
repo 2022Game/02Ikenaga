@@ -28,11 +28,11 @@
     <Filter Include="ソース ファイル\Model">
       <UniqueIdentifier>{0004b745-a9e7-4b0e-9a76-cf1c10387821}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Math">
-      <UniqueIdentifier>{e2cbffef-dae3-458f-998e-53df346d96c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Task">
       <UniqueIdentifier>{585fb0c7-7f64-4201-b84a-3a1a5c0a6356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Math">
+      <UniqueIdentifier>{e2cbffef-dae3-458f-998e-53df346d96c4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="src\CCollisionManager.cpp">
       <Filter>ソース ファイル\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CModelX.cpp">
+      <Filter>ソース ファイル\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="src\CCollisionManager.h">
       <Filter>ソース ファイル\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CModelX.h">
+      <Filter>ソース ファイル\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
