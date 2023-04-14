@@ -157,7 +157,6 @@ void CModel::Load(char* obj, char* mtl) {
 		printf("%s file open error￥n", mtl);
 		return;
 	}
-
 	//ファイルから1行入力
 	//fgets(入力エリア,エリアサイズ,ファイルポインタ)
 	//ファイルの最後になるとNULLを返す
