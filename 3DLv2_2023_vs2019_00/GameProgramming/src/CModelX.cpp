@@ -60,7 +60,7 @@ char* CModelX::GetToken()
 	文字列1と文字列2が等しくない場合、0以外を返します。
 	*/
 
-	if (!strcmp("\\", mToken))
+	if (!strcmp("//", mToken))
 	{
 		//改行まで読み飛ばす
 		while (*p != '\0' && !strchr("\r\n", *p))p++;
