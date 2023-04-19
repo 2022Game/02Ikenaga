@@ -1,4 +1,8 @@
 #pragma once
+#include <vector>  //vectorクラスのインクルード(動的配列)
+#include "CMatrix.h"  //マトリクスクラスのインクルード
+class CModelX;  //CModelXクラスの宣言
+class CModelXFrame;  //CModelXFrameクラスの宣言
 #ifndef CMODELX_H //インクルードガード
 #define CMODELX_H
 
@@ -6,16 +10,37 @@
 
 //領域解放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
+
+//CModelXFrameクラスの定義
+class CModelXFrame {
+	friend CModelX;
+public:
+	//コンストラクタ
+	CModelXFrame(CModelX* model);
+	//デストラクタ
+	~CModelXFrame();
+private:
+	std::vector<CModelXFrame*> mChild;   //子フレームの配列
+	CMatrix mTransformMatrix;  //変数行列
+	char* mpName;  //フレーム名前
+	int mIndex;  //フレーム番号
+};
+
 /*
  CModelX
  Xファイル形式の3Dモデルデータをプログラムで認識する
 */
 class CModelX {
+	friend CModelXFrame;
 public:
+	~CModelX();
+	//ノードの読み飛ばし
+	void SkipNode();
 	CModelX();
 	//ファイル読み込み
 	void Load(char* file);
 private:
+	std::vector<CModelXFrame*> mFrame;  //フレームの配列
 	//単語の取り出し
 	char* GetToken();
 	//cが区切り文字ならtrueを返す
