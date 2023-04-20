@@ -7,7 +7,7 @@
 CModelXFrame::~CModelXFrame()
 {
 
-}
+}//
 
 /*
 CModelXFrame
