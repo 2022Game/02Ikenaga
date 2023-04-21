@@ -8,6 +8,11 @@
 
 #include "CVector.h"
 
+int CMatrix::Size()
+{
+	return sizeof(mM) / sizeof(float);
+}
+
 //回転行列（Y軸）の作成
 //RotateY(角度)
 CMatrix CMatrix::RotateY(float degree) {
