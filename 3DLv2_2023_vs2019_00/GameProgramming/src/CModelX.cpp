@@ -65,22 +65,22 @@ CModelXFrame::CModelXFrame(CModelX* model)
 	//デバックバージョンのみ有効
 #ifdef _DEBUG
 	printf("%s\n", mpName);
-	printf("%f\t", mTransformMatrix.M()[0]);
-	printf("%f\t", mTransformMatrix.M()[1]);
-	printf("%f\t", mTransformMatrix.M()[2]);
-	printf("%f\n", mTransformMatrix.M()[3]);
-	printf("%f\t", mTransformMatrix.M()[4]);
-	printf("%f\t", mTransformMatrix.M()[5]);
-	printf("%f\t", mTransformMatrix.M()[6]);
-	printf("%f\n", mTransformMatrix.M()[7]);
-	printf("%f\t", mTransformMatrix.M()[8]);
-	printf("%f\t", mTransformMatrix.M()[9]);
-	printf("%f\t", mTransformMatrix.M()[10]);
-	printf("%f\n", mTransformMatrix.M()[11]);
-	printf("%f\t", mTransformMatrix.M()[12]);
-	printf("%f\t", mTransformMatrix.M()[13]);
-	printf("%f\t", mTransformMatrix.M()[14]);
-	printf("%f\n", mTransformMatrix.M()[15]);
+	printf(" %f\t", mTransformMatrix.M()[0]);
+	printf(" %f\t", mTransformMatrix.M()[1]);
+	printf(" %f\t", mTransformMatrix.M()[2]);
+	printf(" %f\n", mTransformMatrix.M()[3]);
+	printf(" %f\t", mTransformMatrix.M()[4]);
+	printf(" %f\t", mTransformMatrix.M()[5]);
+	printf(" %f\t", mTransformMatrix.M()[6]);
+	printf(" %f\n", mTransformMatrix.M()[7]);
+	printf(" %f\t", mTransformMatrix.M()[8]);
+	printf(" %f\t", mTransformMatrix.M()[9]);
+	printf(" %f\t", mTransformMatrix.M()[10]);
+	printf(" %f\n", mTransformMatrix.M()[11]);
+	printf(" %f\t", mTransformMatrix.M()[12]);
+	printf(" %f\t", mTransformMatrix.M()[13]);
+	printf(" %f\t", mTransformMatrix.M()[14]);
+	printf(" %f\n", mTransformMatrix.M()[15]);
 #endif
 }
 
