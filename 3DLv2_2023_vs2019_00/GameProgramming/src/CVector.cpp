@@ -1,6 +1,21 @@
 #include "CVector.h"
 #include <math.h>
 
+void CVector::X(float f)
+{
+	mX = f;
+}
+
+void CVector::Y(float f)
+{
+	mY = f;
+}
+
+void CVector::Z(float f)
+{
+	mZ = f;
+}
+
 float CVector::Dot(const CVector& v) const
 {
 	return mX * v.mX + mY * v.mY + mZ * v.mZ;

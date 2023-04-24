@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>  //vectorクラスのインクルード(動的配列)
+#include "CVector.h"
+#include <vector>//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"  //マトリクスクラスのインクルード
 class CModelX;  //CModelXクラスの宣言
 class CModelXFrame;  //CModelXFrameクラスの宣言
@@ -11,6 +12,20 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 //領域解放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
 
+class CMesh;  //CMeshクラスの宣言
+class CMesh {
+public:
+	//コンストラクタ
+	CMesh();
+	//デストラクタ
+	~CMesh();
+	//読み込み処理
+	void Init(CModelX* model);
+private:
+	int mVertexNum;  //頂点数
+	CVector* mpVertex;  //頂点データ
+};
+
 //CModelXFrameクラスの定義
 class CModelXFrame {
 	friend CModelX;
@@ -20,6 +35,7 @@ public:
 	//デストラクタ
 	~CModelXFrame();
 private:
+	CMesh* mpMesh;  //Meshデータ
 	std::vector<CModelXFrame*> mChild;   //子フレームの配列
 	CMatrix mTransformMatrix;  //変数行列
 	char* mpName;  //フレーム名前
@@ -33,6 +49,9 @@ private:
 class CModelX {
 	friend CModelXFrame;
 public:
+	//単語の取り出し
+	char* GetToken();
+	char* Token();
 	~CModelX();
 	//ノードの読み飛ばし
 	void SkipNode();
@@ -42,7 +61,7 @@ public:
 private:
 	std::vector<CModelXFrame*> mFrame;  //フレームの配列
 	//単語の取り出し
-	char* GetToken();
+	//char* GetToken();
 	//cが区切り文字ならtrueを返す
 	bool IsDelimiter(char c);
 	char* mpPointer;     //読み込み位置
