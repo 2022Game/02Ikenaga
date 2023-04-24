@@ -42,7 +42,7 @@ void CMesh::Init(CModelX* model)
 	}
 #ifdef _DEBUG
 	printf("%s\b", "FaceNum: ");
-	printf("%d\f", mFaceNum);
+	printf("%d\n", mFaceNum);
 	for (int i = 0; i < mFaceNum*3; i += 3)
 	{
 		printf(" %d\t", mpVertexIndex[i]);
@@ -58,6 +58,8 @@ CMesh::CMesh()
 	,mpVertex(nullptr)
 	,mFaceNum(0)
 	,mpVertexIndex(nullptr)
+	/*,mNormalNum(0)
+	,mpNormal(nullptr)*/
 {}
 
 //デストラクタ
