@@ -15,6 +15,7 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 class CMesh;  //CMeshクラスの宣言
 class CMesh {
 public:
+	void Render();
 	//コンストラクタ
 	CMesh();
 	//デストラクタ
@@ -34,6 +35,7 @@ private:
 class CModelXFrame {
 	friend CModelX;
 public:
+	void Render();
 	//コンストラクタ
 	CModelXFrame(CModelX* model);
 	//デストラクタ
@@ -53,6 +55,7 @@ private:
 class CModelX {
 	friend CModelXFrame;
 public:
+	void Render();
 	//単語の取り出し
 	char* GetToken();
 	char* Token();
