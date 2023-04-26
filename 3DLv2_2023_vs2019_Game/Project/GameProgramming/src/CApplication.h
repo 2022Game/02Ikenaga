@@ -60,6 +60,7 @@ private:
 //	CCharacter mRectangle;
 	//CPlayer* mpPlayer;
 	static CTexture mTexture;
+	//static CTexture mTexture1;
 	CEnemy* mpEnemy;
 //	CBullet* mpBullet;
 	CInput mInput;
@@ -75,6 +76,7 @@ public:
 	//static CTaskManager* TaskManager();
 	static CCharacterManager* CharacterManager();
 	static CTexture* Texture();
+	//static CTexture* Texture1();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム

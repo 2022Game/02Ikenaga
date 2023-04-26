@@ -4,7 +4,7 @@
 #include"CApplication.h"
 
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //‰ñ“]‘¬“x
-#define VELOCITY CVector(0.0f,0.0f,2.0f)//ˆÚ“®‘¬“x
+#define VELOCITY CVector(0.0f,0.0f,0.5f)//ˆÚ“®‘¬“x
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //‰ñ“]‘¬“x
 
 CPlayer* CPlayer::Instance()
@@ -48,7 +48,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 }
 
 CPlayer::CPlayer()
-	:mLine(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
+	:mLine(this, &mMatrix, CVector(0.1f, 0.0f,0.0f), CVector(-0.1f, 0.0f, 0.0f))
 	,mLine2(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 	,mLine3(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 {

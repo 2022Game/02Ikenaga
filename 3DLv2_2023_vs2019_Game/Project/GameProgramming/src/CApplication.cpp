@@ -8,12 +8,14 @@
 
 //クラスのstatic変数
 CTexture CApplication::mTexture;
+//CTexture CApplication::mTexture1;
 CCharacterManager CApplication::mCharacterManager;
 
 #define SOUND_BGM "res\\mario.wav" //BGM音声ファイル
 #define SOUND_OVER "res\\mdai.wav" //ゲームオーバー音声ファイル
 #define MODEL_OBJ "res\\f14.obj" ,"res\\f14.mtl"//モデルデータの指定
 #define MODEL_1 "res\\Smartphone.obj", "res\\Smartphone.mtl"
+#define MODEL_2 "res\\obama1.obj","res\\obama1.mtl"
 //背景モデルデータの指定
 #define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"
 //敵輸送機モデル
@@ -54,6 +56,11 @@ CTexture* CApplication::Texture()
 	return &mTexture;
 }
 
+//CTexture* CApplication::Texture1()
+//{
+//	return &mTexture1;
+//}
+
 void CApplication::Start()
 {
 	spUi = new CUi();  //UIクラスの生成
@@ -76,13 +83,13 @@ void CApplication::Start()
 	mPlayer.Model(&mModel);
 	mPlayer.Position(CVector(10.0f, 0.0f, -3.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
-	mPlayer.Scale(CVector(10.0f, 10.0f, 10.0f));
+	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;
 	matrix.print();
 	mEye = CVector(1.0f, 2.0f, 3.0f);
 	//モデルファイルの入力
 	//mModel.Load(MODEL_OBJ);
-	mModel.Load(MODEL_1);
+	mModel.Load(MODEL_2);
 	mBackGround.Load(MODEL_BACKGROUND);
 	//ビルボードの作成
 	new CBillBoard(CVector(-6.0f, 3.0f, -10.0f), 1.0f, 1.0f);
