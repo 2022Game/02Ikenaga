@@ -61,7 +61,7 @@ private:
 class CModelX {
 	friend CModelXFrame;
 public:
-	bool EOT();  //トークンがなくなったtrue
+	bool EOT();  //トークンがなくなったらtrue
 	void Render();
 	//単語の取り出し
 	char* GetToken();

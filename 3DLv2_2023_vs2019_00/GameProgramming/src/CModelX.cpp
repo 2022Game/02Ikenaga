@@ -70,13 +70,13 @@ void CMesh::Init(CModelX* model)
 	mFaceNum = atoi(model->GetToken());
 	//頂点数は1面に3頂点
 	mpVertexIndex = new int[mFaceNum * 3];
-	//for (int i = 0; i < mFaceNum * 3; i += 3)
-	//{
-	//	model->GetToken();  //頂点数読み飛ばし
-	//	mpVertexIndex[i] = atoi(model->GetToken());
-	//	mpVertexIndex[i + 1] = atoi(model->GetToken());
-	//	mpVertexIndex[i + 2] = atoi(model->GetToken());
-	//}
+	for (int i = 0; i < mFaceNum * 3; i += 3)
+	{
+		model->GetToken();  //頂点数読み飛ばし
+		mpVertexIndex[i] = atoi(model->GetToken());
+		mpVertexIndex[i + 1] = atoi(model->GetToken());
+		mpVertexIndex[i + 2] = atoi(model->GetToken());
+	}
 	//model->GetToken();  //MeshNormals
 	//単語がある間繰り返し
 	while (!model->EOT())
@@ -156,7 +156,7 @@ void CMesh::Init(CModelX* model)
 		}
 #endif
 	}
-}
+};
 
 //コンストラクタ
 CMesh::CMesh()

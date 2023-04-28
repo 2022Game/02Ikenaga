@@ -8,7 +8,7 @@
 Materialƒf[ƒ^‚Ì“Ç‚Ýž‚Ý‚ÆÝ’è
 */
 CMaterial::CMaterial(CModelX* model)
-	:mpTextureFilename(nullptr),mName(),mVertexNum(0)
+	:mpTextureFilename(nullptr),mName(),mVertexNum()
 {
 	model->GetToken();  // {?Name
 	if (strcmp(model->Token(), "{") != 0)
