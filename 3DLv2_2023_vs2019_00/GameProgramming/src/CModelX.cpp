@@ -3,7 +3,16 @@
 #include "CModelX.h"
 #include "glut.h"
 #include <ctype.h>  //isspace関数の宣言
-//#include <stdlib.h>
+#include "CMaterial.h"
+
+bool CModelX::EOT()
+{
+	if(*mpPointer == '\0')
+	{
+		return true;
+	}
+	return false;
+}
 
 /*
 Render
@@ -19,9 +28,14 @@ void CMesh::Render()
 	glVertexPointer(3, GL_FLOAT, 0,mpVertex);
 	glNormalPointer(GL_FLOAT, 0, mpNormal);
 
-	/*頂点のインデックスの場所を指定して図形を描画する*/
-	glDrawElements(GL_TRIANGLES, 3 * mFaceNum,
-		GL_UNSIGNED_INT, mpVertexIndex);
+	/*頂点のインデックスの場合を指定して図形を描画する*/
+	for (int i = 0; i < mFaceNum; i++)
+	{
+		//マテリアルを適用する
+		mMaterial[mpMaterialIndex[i]]->Enabled();
+		glDrawElements(GL_TRIANGLES, 3, //* mFaceNum,
+			GL_UNSIGNED_INT, (mpVertexIndex + i * 3)); //mpVertexIndex
+	}
 
 	/*頂点データ、法線データの配列を無効にする*/
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -56,58 +70,92 @@ void CMesh::Init(CModelX* model)
 	mFaceNum = atoi(model->GetToken());
 	//頂点数は1面に3頂点
 	mpVertexIndex = new int[mFaceNum * 3];
-	for (int i = 0; i < mFaceNum * 3; i += 3)
+	//for (int i = 0; i < mFaceNum * 3; i += 3)
+	//{
+	//	model->GetToken();  //頂点数読み飛ばし
+	//	mpVertexIndex[i] = atoi(model->GetToken());
+	//	mpVertexIndex[i + 1] = atoi(model->GetToken());
+	//	mpVertexIndex[i + 2] = atoi(model->GetToken());
+	//}
+	//model->GetToken();  //MeshNormals
+	//単語がある間繰り返し
+	while (!model->EOT())
 	{
-		model->GetToken();  //頂点数読み飛ばし
-		mpVertexIndex[i] = atoi(model->GetToken());
-		mpVertexIndex[i + 1] = atoi(model->GetToken());
-		mpVertexIndex[i + 2] = atoi(model->GetToken());
-	}
-	model->GetToken();  //MeshNormals
-	if (strcmp(model->Token(), "MeshNormals") == 0)
-	{
-		model->GetToken();  //{
-		//法線データ数を取得
-		mNormalNum = atoi(model->GetToken());
-		//法線のデータを配列に取り込む
-		CVector* pNormal = new CVector[mNormalNum];
-		for (int i = 0; i < mNormalNum; i++)
+		model->GetToken();  //MeshNormals
+		//}かっこの場合は終了
+		if (strchr(model->Token(), '}'))
+			break;
+		if (strcmp(model->Token(), "MeshNormals") == 0)
 		{
-			pNormal[i].X(atof(model->GetToken()));
-			pNormal[i].Y(atof(model->GetToken()));
-			pNormal[i].Z(atof(model->GetToken()));
-		}
-		//法線数=面数×3
-		mNormalNum = atoi(model->GetToken()) * 3;  //FaceNum
-		int ni;
-		//頂点毎に法線データを設定する
-		mpNormal = new CVector[mNormalNum];
-		for (int i = 0; i < mNormalNum; i += 3)
+			model->GetToken();  //{
+			//法線データ数を取得
+			mNormalNum = atoi(model->GetToken());
+			//法線のデータを配列に取り込む
+			CVector* pNormal = new CVector[mNormalNum];
+			for (int i = 0; i < mNormalNum; i++)
+			{
+				pNormal[i].X(atof(model->GetToken()));
+				pNormal[i].Y(atof(model->GetToken()));
+				pNormal[i].Z(atof(model->GetToken()));
+			}
+			//法線数=面数×3
+			mNormalNum = atoi(model->GetToken()) * 3;  //FaceNum
+			int ni;
+			//頂点毎に法線データを設定する
+			mpNormal = new CVector[mNormalNum];
+			for (int i = 0; i < mNormalNum; i += 3)
+			{
+				model->GetToken();  //3
+				ni = atoi(model->GetToken());
+				mpNormal[i] = pNormal[ni];
+
+				ni = atoi(model->GetToken());
+				mpNormal[i + 1] = pNormal[ni];
+
+				ni = atoi(model->GetToken());
+				mpNormal[i + 2] = pNormal[ni];
+			}
+			delete[] pNormal;
+			model->GetToken();  //}
+		}  //End of MeshNomals
+
+		//MeshMaterialListのとき
+		else if (strcmp(model->Token(), "MeshMaterialList") == 0)
 		{
-			model->GetToken();  //3
-			ni = atoi(model->GetToken());
-			mpNormal[i] = pNormal[ni];
-
-			ni = atoi(model->GetToken());
-			mpNormal[i + 1] = pNormal[ni];
-
-			ni = atoi(model->GetToken());
-			mpNormal[i + 2] = pNormal[ni];
-		}
-		delete[] pNormal;
-		model->GetToken();  //}
-	}  //End of MeshNomals
+			model->GetToken();  //{
+			//Materialの数
+			mMaterialNum = atoi(model->GetToken());
+			//FaceNum
+			mMaterialIndexNum = atoi(model->GetToken());
+			//マテリアルインデックスの作成
+			mpMaterialIndex = new int[mMaterialIndexNum];
+			for (int i = 0; i < mMaterialIndexNum; i++)
+			{
+				mpMaterialIndex[i] = atoi(model->GetToken());
+			}
+			//マテリアルデータの作成
+			for (int i = 0; i < mMaterialNum; i++)
+			{
+				model->GetToken();  //Material
+				if (strcmp(model->Token(), "Material") == 0)
+				{
+					mMaterial.push_back(new CMaterial(model));
+				}
+			}
+			model->GetToken();  //} //End of MeshMaterialList
+		}  //End of MashMaterialList
 
 #ifdef _DEBUG
-	printf("%s\b", "NormalNum: ");
-	printf("%d\n", mNormalNum);
-	for (int i = 0; i < mNormalNum; i++)
-	{
-		printf(" %f	", mpNormal[i].X());
-		printf("%f	", mpNormal[i].Y());
-		printf("%f\n", mpNormal[i].Z());
-	}
+		printf("%s\b", "NormalNum: ");
+		printf("%d\n", mNormalNum);
+		for (int i = 0; i < mNormalNum; i++)
+		{
+			printf(" %f	", mpNormal[i].X());
+			printf("%f	", mpNormal[i].Y());
+			printf("%f\n", mpNormal[i].Z());
+		}
 #endif
+	}
 }
 
 //コンストラクタ
@@ -118,6 +166,9 @@ CMesh::CMesh()
 	,mpVertexIndex(nullptr)
 	,mNormalNum(0)
 	,mpNormal(nullptr)
+	,mMaterialNum(0)
+	,mMaterialIndexNum(0)
+	,mpMaterialIndex(nullptr)
 {}
 
 //デストラクタ
@@ -126,6 +177,7 @@ CMesh::~CMesh()
 	SAFE_DELETE_ARRAY(mpVertex);
 	SAFE_DELETE_ARRAY(mpVertexIndex);
 	SAFE_DELETE_ARRAY(mpNormal);
+	SAFE_DELETE_ARRAY(mpMaterialIndex);
 }
 
 char* CModelX::Token()
@@ -135,6 +187,13 @@ char* CModelX::Token()
 
 CModelXFrame::~CModelXFrame()
 {
+	// 子フレームを全て解放する
+	std::vector<CModelXFrame*>::iterator itr;
+	for (itr = mChild.begin(); itr != mChild.end(); itr++) {
+		delete* itr;
+	}
+	//名前のエリアを解放する
+	SAFE_DELETE_ARRAY(mpName);
 	if (mpMesh !=NULL)
 	{
 		delete mpMesh;

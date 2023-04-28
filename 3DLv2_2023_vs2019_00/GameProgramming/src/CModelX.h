@@ -12,6 +12,8 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 //領域解放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
 
+class CMaterial;  //マテリアルの宣言
+
 class CMesh;  //CMeshクラスの宣言
 class CMesh {
 public:
@@ -23,6 +25,10 @@ public:
 	//読み込み処理
 	void Init(CModelX* model);
 private:
+	int mMaterialNum;  //マテリアル数
+	int mMaterialIndexNum;  //マテリアル番号数(面数)
+	int* mpMaterialIndex;  //マテリアル番号
+	std::vector<CMaterial*>mMaterial;  //マテリアルデータ
 	int mNormalNum;  //法線数
 	CVector* mpNormal;  //法線ベクトル
 	int mFaceNum;  //面数
@@ -55,6 +61,7 @@ private:
 class CModelX {
 	friend CModelXFrame;
 public:
+	bool EOT();  //トークンがなくなったtrue
 	void Render();
 	//単語の取り出し
 	char* GetToken();
