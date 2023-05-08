@@ -5,6 +5,89 @@
 #include <ctype.h>  //isspace関数の宣言
 #include "CMaterial.h"
 
+/*
+CSkinWeights
+スキンウェイトの読み込み
+*/
+CSkinWeights::CSkinWeights(CModelX* model)
+	:mpFrameName(0)
+	, mFrameIndex(0)
+	, mIndexNum(0)
+	, mpIndex(nullptr)
+	, mpWeight(nullptr)
+{
+	model->GetToken();  //{
+	model->GetToken();  //FrameName
+	//フレーム名エリア確保、設定
+	mpFrameName = new char[strlen(model->Token()) + 1];
+	strcpy(mpFrameName, model->Token());
+
+	//頂点番号数取得
+	mIndexNum = atoi(model->GetToken());
+	//頂点番号数が0を超える
+	if (mIndexNum > 0)
+	{
+		//頂点番号と頂点ウェイトのエリア確保
+		mpIndex = new int[mIndexNum];
+		mpWeight = new float[mIndexNum];
+		//頂点番号取得
+		for (int i = 0; i < mIndexNum; i++)
+			mpIndex[i] = atoi(model->GetToken());
+		//頂点ウェイト取得
+		for (int i = 0; i < mIndexNum; i++)
+			mpWeight[i] = atof(model->GetToken());
+	}
+	//オフセット行列取得
+	for (int i = 0; i < 16; i++)
+	{
+		mOffset.M()[i] = atof(model->GetToken());
+	}
+	model->GetToken();  //}
+#ifdef _DEBUG
+	printf("\n%s", "SkinWeights");
+	printf(" %s\n", mpFrameName);
+	for (int i = 0; i < mIndexNum; i++)
+	{
+		printf("%d ", mpIndex[i]);
+		printf("%f\n", mpWeight[i]);
+	}
+	for (int i= 0;i < 1;i++)
+	{
+		printf("%f ", mOffset.M()[i]);
+	}
+	int i = 1;
+	while (i < 16)
+	{
+		if (i % 4 == 0)printf("\n");
+		{
+			printf("%f ", mOffset.M()[i]);
+			i++;
+		}
+	}
+	/*for (int i= 0;i < 16;i++)
+	{
+		printf("%f\t\t\t ", mOffset.M()[i]);
+	}*/
+#endif
+};
+
+CSkinWeights::~CSkinWeights()
+{
+	SAFE_DELETE_ARRAY(mpFrameName);
+	SAFE_DELETE_ARRAY(mpIndex);
+	SAFE_DELETE_ARRAY(mpWeight);
+}
+
+//const int& CSkinWeights::FrameIndex()
+//{
+//	// TODO: return ステートメントをここに挿入します
+//}
+//
+//const CMatrix& CSkinWeights::Offset()
+//{
+//	// TODO: return ステートメントをここに挿入します
+//}
+
 bool CModelX::EOT()
 {
 	if(*mpPointer == '\0')
@@ -145,15 +228,27 @@ void CMesh::Init(CModelX* model)
 			model->GetToken();  //} //End of MeshMaterialList
 		}  //End of MashMaterialList
 
-#ifdef _DEBUG
-		printf("%s\b", "NormalNum: ");
-		printf("%d\n", mNormalNum);
-		for (int i = 0; i < mNormalNum; i++)
+		//SkinWeightsのとき
+		else if (strcmp(model->Token(), "SkinWeights") == 0)
 		{
-			printf(" %f	", mpNormal[i].X());
-			printf("%f	", mpNormal[i].Y());
-			printf("%f\n", mpNormal[i].Z());
+			//CSkinWeightsクラスのインスタンスを作成し、配列に追加
+			mSkinWeights.push_back(new CSkinWeights(model));
 		}
+		else
+		{
+			//以外のノードは読み飛ばし
+			model->SkipNode();
+		}
+
+#ifdef _DEBUG
+		//printf("%s\b", "SkinWeights ");
+		////printf("%p\n", );
+		//for (int i = 0; i < mNormalNum; i++)
+		//{
+		//	printf(" %f	", mpNormal[i].X());
+		//	printf("%f	", mpNormal[i].Y());
+		//	printf("%f\n", mpNormal[i].Z());
+		//}
 #endif
 	}
 };
@@ -178,6 +273,11 @@ CMesh::~CMesh()
 	SAFE_DELETE_ARRAY(mpVertexIndex);
 	SAFE_DELETE_ARRAY(mpNormal);
 	SAFE_DELETE_ARRAY(mpMaterialIndex);
+	//スキンウェイトの削除
+	for (size_t i = 0; i < mSkinWeights.size(); i++)
+	{
+		delete mSkinWeights[i];
+	}
 }
 
 char* CModelX::Token()
