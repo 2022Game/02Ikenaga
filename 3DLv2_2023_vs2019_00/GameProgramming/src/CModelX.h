@@ -2,6 +2,7 @@
 #include "CVector.h"
 #include <vector>//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"  //マトリクスクラスのインクルード
+class CAnimationSet;  //アニメーションセットクラス
 class CSkinWeights;  //スキンウェイトクラス
 class CMaterial;  //マテリアルの宣言
 class CMesh;  //CMeshクラスの宣言
@@ -14,6 +15,20 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 
 //領域解放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
+
+/*
+CAnimationSet
+アニメーションセット
+*/
+class CAnimationSet
+{
+public:
+	CAnimationSet(CModelX* model);
+	~CAnimationSet();
+private:
+	//アニメーションセット名
+	char* mpName;
+};
 
 /*
 CSkinWeights
@@ -83,6 +98,7 @@ private:
  Xファイル形式の3Dモデルデータをプログラムで認識する
 */
 class CModelX {
+	friend CAnimationSet;
 	friend CModelXFrame;
 public:
 	bool EOT();  //トークンがなくなったらtrue
@@ -97,6 +113,8 @@ public:
 	//ファイル読み込み
 	void Load(char* file);
 private:
+	//アニメーションセットの配列
+	std::vector<CAnimationSet*> mAnimationSet;
 	std::vector<CModelXFrame*> mFrame;  //フレームの配列
 	//単語の取り出し
 	//char* GetToken();
