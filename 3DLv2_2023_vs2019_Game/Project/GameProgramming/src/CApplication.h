@@ -23,6 +23,7 @@
 #include"CColliderTriangle.h"
 #include"CColliderMesh.h"
 #include"CEnemy3.h"
+#include"CStage.h"
 
 class CApplication
 {
@@ -35,6 +36,7 @@ private:
 	//CColliderTriangle mColliderTriangle2;
 	//モデルビューの逆行列
 	static CMatrix mModelViewInverse;
+	CModel mStage;
 	//C5モデル
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;

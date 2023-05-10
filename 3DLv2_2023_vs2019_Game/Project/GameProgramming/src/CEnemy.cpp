@@ -3,7 +3,7 @@
 #include "CCollisionManager.h"
 
 //ˆÚ“®‘¬“x
-#define VELOCITY CVector(0.0f,0.0f,0.09f)
+#define VELOCITY CVector(0.0f,0.0f,0.9f)//9
 
 void CEnemy::Collision()
 {

@@ -15,12 +15,13 @@ CCharacterManager CApplication::mCharacterManager;
 #define SOUND_OVER "res\\mdai.wav" //ゲームオーバー音声ファイル
 #define MODEL_OBJ "res\\f14.obj" ,"res\\f14.mtl"//モデルデータの指定
 #define MODEL_1 "res\\Smartphone.obj", "res\\Smartphone.mtl"
-#define MODEL_2 "res\\obama1.obj","res\\obama1.mtl"
+#define MODEL_2 "res\\obama.obj","res\\obama.mtl"
 //背景モデルデータの指定
 #define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"
 //敵輸送機モデル
 #define MODEL_C5 "res\\c5.obj","res\\c5.mtl"
 
+#define MODEL3 "res\\体育館.obj","res\\体育館.mtl"
 //CTaskManager CApplication::mTaskManager;
 //CTaskManager* CTaskManager::Instance()
 //{
@@ -63,6 +64,7 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
+	mColliderMesh.Set(nullptr, nullptr, &mStage);
 	spUi = new CUi();  //UIクラスの生成
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列はなし
@@ -70,20 +72,22 @@ void CApplication::Start()
 	//三角コライダの確認
 	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, -50.0f));
 	//mColliderTriangle2.Set(nullptr, nullptr, CVector(50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f));
-	new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
-	new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	mStage.Load(MODEL3);
+	new CStage(&mStage, CVector(30.0f, 10.0f, -130.0f), CVector(), CVector(10.0f, 10.0f, 10.0f));
 	//敵機のインスタンス作成
-	new CEnemy(&mModelC5, CVector(30.0f, 10.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	//new CEnemy(&mModelC5, CVector(30.0f, 10.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//敵機のインスタンス作成
-	new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み
 	mModelC5.Load(MODEL_C5);
 	//mCharacter.Model(&mModel);
 	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mPlayer.Model(&mModel);
-	mPlayer.Position(CVector(10.0f, 0.0f, -3.0f));
+	mPlayer.Position(CVector(0.0f, 0.0f, 0.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
-	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
+	mPlayer.Scale(CVector(0.5f, 0.5f, 0.5f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;
 	matrix.print();
 	mEye = CVector(1.0f, 2.0f, 3.0f);
@@ -95,7 +99,9 @@ void CApplication::Start()
 	new CBillBoard(CVector(-6.0f, 3.0f, -10.0f), 1.0f, 1.0f);
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列はなし
+	mStage.Render();
 	mColliderMesh.Set(nullptr, nullptr, &mBackGround);
+
 }
 
 void CApplication::Update()
@@ -115,10 +121,10 @@ void CApplication::Update()
 	v1.Set(1.0f, 0.0f, 0.0f);
 	//頂点3の座標を設定する
 	v2.Set(0.0f, 0.0f, -0.5f);
-	if (mInput.Key('J'))
+	/*if (mInput.Key('J'))
 	{
 		mEye = mEye - CVector(0.1f, 0.0f, 0.0f);
-	}
+	}*/
 	if (mInput.Key('L'))
 	{
 		mEye = mEye + CVector(0.1f, 0.0f, 0.0f);

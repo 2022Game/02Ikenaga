@@ -2,10 +2,14 @@
 #include "CPlayer.h"
 #include"CTaskManager.h"
 #include"CApplication.h"
-
+#include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
-#define VELOCITY CVector(0.0f,0.0f,0.5f)//移動速度
+#define ROTATION_YY CVector(0.0f,0.7f,0.0f) //回転速度
+#define ROTATION_Y CVector(0.0f,-0.5f,0.0f) //回転速度
+#define VELOCITY CVector(0.0f,0.0f,0.1f)//移動速度
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //回転速度
+#define ZYUURYOKU (TIPSIZE/20.0f)
+#define JANPU (TIPSIZE /3.0f)
 
 CPlayer* CPlayer::Instance()
 {
@@ -48,7 +52,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 }
 
 CPlayer::CPlayer()
-	:mLine(this, &mMatrix, CVector(0.1f, 0.0f,0.0f), CVector(-0.1f, 0.0f, 0.0f))
+	:mLine(this, &mMatrix, CVector(10.0f, 10.0f,10.0f), CVector(-0.1f, 0.0f, 0.0f))
 	,mLine2(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 	,mLine3(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 {
@@ -92,13 +96,21 @@ void CPlayer::Update()
 	//Sキー入力で上向き
 	if (mInput.Key('S')) {
 		//X軸の回転値を減算
-		mRotation = mRotation - ROTATION_XV;
+		//mRotation = mRotation - ROTATION_XV;
+		mPosition = mPosition - VELOCITY * mMatrixRotate;
 	}
 	//Wキー入力で上向き
 	if (mInput.Key('W')) {
 		//X軸の回転値を加算
-		mRotation = mRotation + ROTATION_XV;
+		//mRotation = mRotation + ROTATION_XV;
+		mPosition = mPosition + VELOCITY * mMatrixRotate;
 	}
+	if (mInput.Key('J'))
+	{
+		mState = EState::EJUMP;
+		mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+	}
+	mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 	//変換行列の更新
 	CTransform::Update();
 

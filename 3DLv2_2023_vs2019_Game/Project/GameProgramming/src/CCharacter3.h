@@ -25,6 +25,13 @@ public:
 		EBULLETPLAYER,  //プレイヤー弾
 		EBULLETENEMY,  //敵弾
 	};
+	enum class EState	//状態
+	{
+		EMOVE,	//移動
+		ESTOP,	//停止
+		EJUMP,	//ジャンプ
+		ECRY,	//泣く
+	};
 	//タグの取得
 	ETag Tag();
 	//コンストラクタ
@@ -41,6 +48,11 @@ public:
 	//描画処理
 	void Render();
 protected:
+protected:
+	float mVx;	//X軸速度
+	float mVy;	//Y軸速度
+	bool mEnabled;
+	EState mState;
 	ETag mTag;  //タグ
 	CModel* mpModel;//モデルのポインタ
 };
