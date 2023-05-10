@@ -1,8 +1,17 @@
 #include"CStage.h"
+#include "CCollisionManager.h"
+
 
 void CStage::Collision()
 {
-
+	////コライダの優先度変更
+	mCollider1.ChangePriority();
+	mCollider2.ChangePriority();
+	mCollider3.ChangePriority();
+	////衝突処理を実行
+	CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);
 }
 
 CStage::CStage(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
@@ -20,5 +29,6 @@ CStage::CStage(CModel* model, const CVector& position, const CVector& rotation, 
 //更新処理
 void CStage::Update()
 {
-
+	// 行列を更新
+		CTransform::Update();
 }

@@ -6,7 +6,7 @@
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
 #define ROTATION_YY CVector(0.0f,0.7f,0.0f) //回転速度
 #define ROTATION_Y CVector(0.0f,-0.5f,0.0f) //回転速度
-#define VELOCITY CVector(0.0f,0.0f,0.1f)//移動速度
+#define VELOCITY CVector(0.0f,0.0f,0.09f)//移動速度
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //回転速度
 #define ZYUURYOKU (TIPSIZE/20.0f)
 #define JANPU (TIPSIZE /3.0f)
@@ -21,6 +21,7 @@ CPlayer* CPlayer::spInstance = nullptr;
 //衝突処理
 void CPlayer::Collision()
 {
+	
 	//コライダの優先度変更
 	mLine.ChangePriority();
 	mLine2.ChangePriority();

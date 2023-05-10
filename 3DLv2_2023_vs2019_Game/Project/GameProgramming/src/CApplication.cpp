@@ -64,7 +64,7 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
-	mColliderMesh.Set(nullptr, nullptr, &mStage);
+	//mColliderMesh.Set(nullptr, nullptr, &mStage);
 	spUi = new CUi();  //UIクラスの生成
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列はなし
@@ -75,9 +75,9 @@ void CApplication::Start()
 	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	mStage.Load(MODEL3);
-	new CStage(&mStage, CVector(30.0f, 10.0f, -130.0f), CVector(), CVector(10.0f, 10.0f, 10.0f));
+	new CStage(&mStage, CVector(0.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	//敵機のインスタンス作成
-	//new CEnemy(&mModelC5, CVector(30.0f, 10.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み
@@ -87,7 +87,7 @@ void CApplication::Start()
 	mPlayer.Model(&mModel);
 	mPlayer.Position(CVector(0.0f, 0.0f, 0.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
-	mPlayer.Scale(CVector(0.5f, 0.5f, 0.5f));//10.0f, 10.0f, 10.0f
+	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;
 	matrix.print();
 	mEye = CVector(1.0f, 2.0f, 3.0f);
@@ -99,7 +99,7 @@ void CApplication::Start()
 	new CBillBoard(CVector(-6.0f, 3.0f, -10.0f), 1.0f, 1.0f);
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列はなし
-	mStage.Render();
+	//mStage.Render();
 	mColliderMesh.Set(nullptr, nullptr, &mBackGround);
 
 }
@@ -149,16 +149,16 @@ void CApplication::Update()
 	//gluLookAt(視点X,視点Y,視点Z,中心X,中心Y,中心Z,上向X,上向Y,上向Z)
 	//gluLookAt(mEye.X(), mEye.Y(), mEye.Z(), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	CTransform trans;  //変換行列インスタンスの作成
-	trans.Position(CVector(0.5f, 1.8f, 0.5f));//位置の設定
+	trans.Position(CVector(1.0f, 4.0f, 2.0f));//位置の設定
 	trans.Rotation(CVector(-10.0f, -20.0f, -30.0f));  //回転の設定
-	trans.Scale(CVector(0.1f, 0.1f, 0.1f));//拡大縮小の設定
+	trans.Scale(CVector(1.0f, 1.0f, 1.0f));//拡大縮小の設定
 
 	trans.Update(); //行列の更新
 	//mPlayer.Update();
 	//カメラのパラメータを作成する
 	CVector e, c, u;  //視点、注視点、上向き
 	//視点を求める
-	e = mPlayer.Position() + CVector(-0.2f, 1.0f, -3.0f) * mPlayer.MatrixRotate();
+	e = mPlayer.Position() + CVector(-0.2f, 3.0f, -5.0f) * mPlayer.MatrixRotate();
 		//注視点を求める
 		c = mPlayer.Position();
 	//上向きを求める

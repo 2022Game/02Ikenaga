@@ -6,6 +6,7 @@
 #include "CInput.h"
 #include"CBullet.h"
 #include"CColliderLine.h"
+#include"CStage.h"
 
 /*
 プレイヤークラス
