@@ -498,7 +498,6 @@ void CPlayer2::Update()
 				//mVy -= GRAVITY10;
 			}
 	}
-	//Y座標にY軸速度を加える
 	Y(Y() + mVy);
 	//Y軸速度に重力を減算する
 	mVy -= GRAVITY;
