@@ -2,6 +2,7 @@
 #include "CVector.h"
 #include <vector>//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"  //マトリクスクラスのインクルード
+class CAnimation;  //アニメーションクラス
 class CAnimationSet;  //アニメーションセットクラス
 class CSkinWeights;  //スキンウェイトクラス
 class CMaterial;  //マテリアルの宣言
@@ -17,6 +18,21 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
 
 /*
+CAnimation
+アニメーションクラス
+*/
+class CAnimation
+{
+	friend CAnimationSet;
+public:
+	CAnimation(CModelX* model);
+	~CAnimation();
+private:
+	char* mpFrameName;  //フレーム名
+	int mFrameIndex;  //フレーム番号
+};
+
+/*
 CAnimationSet
 アニメーションセット
 */
@@ -26,6 +42,8 @@ public:
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
 private:
+	//アニメーション
+	std::vector<CAnimation*> mAnimation;
 	//アニメーションセット名
 	char* mpName;
 };
@@ -78,8 +96,10 @@ private:
 
 //CModelXFrameクラスの定義
 class CModelXFrame {
+	friend CAnimation;
 	friend CModelX;
 public:
+	bool Index();
 	void Render();
 	//コンストラクタ
 	CModelXFrame(CModelX* model);
@@ -98,9 +118,12 @@ private:
  Xファイル形式の3Dモデルデータをプログラムで認識する
 */
 class CModelX {
+	friend CAnimation;
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
+	//フレーム名に該当するフレームのアドレスを返す
+	CModelXFrame* FindFrame(char* name);
 	bool EOT();  //トークンがなくなったらtrue
 	void Render();
 	//単語の取り出し
