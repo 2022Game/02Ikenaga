@@ -2,6 +2,7 @@
 #include "CVector.h"
 #include <vector>//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"  //マトリクスクラスのインクルード
+class CAnimationKey;  //アニメーションキークラス
 class CAnimation;  //アニメーションクラス
 class CAnimationSet;  //アニメーションセットクラス
 class CSkinWeights;  //スキンウェイトクラス
@@ -16,6 +17,24 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 
 //領域解放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
+// 配列のサイズ取得をマクロ化
+#define ARRAY_SIZE(a)(sizeof(a)/sizeof(a[0]))
+
+/*
+CAnimationKey
+アニメーションキークラス
+*/
+class CAnimationKey
+{
+	friend CAnimation;
+	friend CAnimationSet;
+	//friend CModelX;
+private:
+	//時間
+	float mTime;
+	//行列
+	CMatrix mMatrix;
+};
 
 /*
 CAnimation
@@ -28,6 +47,8 @@ public:
 	CAnimation(CModelX* model);
 	~CAnimation();
 private:
+	int mKeyNum;  //キー数(時間数)
+	CAnimationKey* mpKey;  //キーの配列
 	char* mpFrameName;  //フレーム名
 	int mFrameIndex;  //フレーム番号
 };
@@ -39,9 +60,14 @@ CAnimationSet
 class CAnimationSet
 {
 public:
+	//void Time(float time);  //時間の設定
+	//void Weight(float)
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
 private:
+	//float mTime;  //現在時間
+	//float mWeight;  //重み
+	//float mMaxTime;  //最大時間
 	//アニメーション
 	std::vector<CAnimation*> mAnimation;
 	//アニメーションセット名
