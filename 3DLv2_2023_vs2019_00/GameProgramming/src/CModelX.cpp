@@ -141,7 +141,7 @@ CAnimation::CAnimation(CModelX* model)
 	{
 		for (int j = 0; j < 4; j++) 
 		{
-			printf(" %f ", mpKey[i].mMatrix.M(i,j));
+			printf(" %f ", mpKey[0].mMatrix.M(i,j));
 		}
 		printf("\n");
 	}
@@ -185,11 +185,30 @@ CAnimation::~CAnimation()
 	SAFE_DELETE_ARRAY(mpKey);
 }
 
+//void CAnimationSet::AnimateMatrix(CModelX* model)
+//{
+//	//d‚Ý‚ª0‚Í”ò‚Î‚·
+//
+//}
+
+//void CAnimationSet::Time(float time)
+//{
+//	mTime = time;
+//}
+//
+//void CAnimationSet::Weight(float weight)
+//{
+//	mWeight = weight;
+//}
+
 /*
 CAnimationSet
 */
 CAnimationSet::CAnimationSet(CModelX* model)
 	:mpName(nullptr)
+	//,mTime(0)
+	//,mWeight(0)
+	//,mMaxTime(0)
 {
 	model->mAnimationSet.push_back(this);
 	model->GetToken();  //Animation Name
@@ -615,6 +634,11 @@ CModelXFrame::CModelXFrame(CModelX* model)
 	printf(" %f\n", mTransformMatrix.M()[15]);*/
 #endif
 }
+
+//std::vector<CAnimationSet*>& CModelX::AnimationSet()
+//{
+//	return mAnimationSet;
+//}
 
 /*
 Render
