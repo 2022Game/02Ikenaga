@@ -12,11 +12,13 @@ CTexture CApplication::mTexture;
 //CTexture CApplication::mTexture1;
 CCharacterManager CApplication::mCharacterManager;
 
+//#define TEXTYA "AvatarHeadMale_Color_2K.jpeg"
+
 #define SOUND_BGM "res\\mario.wav" //BGM音声ファイル
 #define SOUND_OVER "res\\mdai.wav" //ゲームオーバー音声ファイル
 #define MODEL_OBJ "res\\f14.obj" ,"res\\f14.mtl"//モデルデータの指定
 #define MODEL_1 "res\\Smartphone.obj", "res\\Smartphone.mtl"
-#define MODEL_2 "res\\obama.obj","res\\obama.mtl"
+#define MODEL_2 "res\\obama4.obj","res\\obama4.mtl"
 //背景モデルデータの指定
 #define MODEL_BACKGROUND "res\\sky.obj","res\\sky.mtl"
 //敵輸送機モデル
@@ -75,8 +77,8 @@ void CApplication::Start()
 	//mColliderTriangle2.Set(nullptr, nullptr, CVector(50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f));
 	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
-	mStage.Load(MODEL3);
-	new CStage(&mStage, CVector(0.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
+	//mStage.Load(MODEL3);
+	//new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//敵機のインスタンス作成
@@ -86,7 +88,7 @@ void CApplication::Start()
 	//mCharacter.Model(&mModel);
 	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mPlayer.Model(&mModel);
-	mPlayer.Position(CVector(0.0f, 0.0f, 0.0f));
+	mPlayer.Position(CVector(20.0f, 0.0f, 0.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
 	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;

@@ -1,0 +1,109 @@
+# Blender 3.5.1 MTL File: 'None'
+# www.blender.org
+
+newmtl AvatarBody
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarBodyMale_Color_2K.jpeg
+map_Bump -bm 1.000000 C:/AvatarBodyMale_Normal1_2K.jpg
+
+newmtl AvatarEyelashes
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/ARARAT_Color_2K.jpeg
+
+newmtl AvatarHead
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarHeadMale_Color_2K.jpeg
+map_Bump -bm 1.000000 C:/AvatarHeadMale_Normal1_2K.jpg
+
+newmtl AvatarLeftCornea
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarRightCornea_Color_512.jpeg
+
+newmtl AvatarLeftEyeball
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/AvatarEyes_Color_512.jpg
+map_Bump -bm 1.000000 C:/AvatarEyes_Normal_512.jpg
+
+newmtl AvatarRightCornea
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarLeftCornea_Color_512.jpeg
+
+newmtl AvatarRightEyeball
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/AvatarEyes_Color_512.jpg
+map_Bump -bm 1.000000 C:/AvatarEyes_Normal_512.jpg
+
+newmtl AvatarTeethLower
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/AvatarTeeth_Color_1K.jpg
+map_Bump -bm 1.000000 C:/AvatarTeeth_Normal1_1K.jpg
+
+newmtl AvatarTeethUpper
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/AvatarTeeth_Color_1K.jpg
+map_Bump -bm 1.000000 C:/AvatarTeeth_Normal1_1K.jpg
+
+newmtl outfit
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/ARARAT_Color_2K.jpeg
+map_Bump -bm 1.000000 C:/ARARAT_Normal_2K.jpg
