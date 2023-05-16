@@ -53,9 +53,9 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 }
 
 CPlayer::CPlayer()
-	:mLine(this, &mMatrix, CVector(10.0f, 10.0f,10.0f), CVector(-0.1f, 0.0f, 0.0f))
-	,mLine2(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
-	,mLine3(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
+	:mLine(this, &mMatrix, CVector(5.0f, 1.0f,0.0f), CVector(0.0f, 0.0f, 0.0f))
+	,mLine2(this, &mMatrix, CVector(2.0f, 1.0f, 1.0f), CVector(-2.0f, 1.0f, 1.0f))
+	,mLine3(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 {
 	//インスタンスの設定
 	spInstance = this;

@@ -4,6 +4,7 @@
 #include "CRectangle.h"
 #include"CVector.h"
 #include"CBillBoard.h"
+
 //#include"CTriangle.h"
 
 //クラスのstatic変数
@@ -77,7 +78,7 @@ void CApplication::Start()
 	mStage.Load(MODEL3);
 	new CStage(&mStage, CVector(0.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	//敵機のインスタンス作成
-	new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	//new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み

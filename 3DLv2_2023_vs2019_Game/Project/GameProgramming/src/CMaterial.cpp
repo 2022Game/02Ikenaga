@@ -1,67 +1,33 @@
-#include"CMaterial.h"
+#include "CMaterial.h"
 //memset,strncpyのインクルード
-#include<string.h>
-#include"glut.h"
-
-void CMaterial::VertexNum(int num)
-{
-	mVertexNum = num;
-}
-
-int CMaterial::VertexNum()
-{
-	return mVertexNum;
-}
-
+#include <string.h>
+#include "glut.h"
 /*
-* strncpy(char* str1,const char* str2,int len)
-* コピー先str1にコピー元str2の文字をlen文字までコピーする
+* strncpy(char* str1, const char* str2, int len)
+* コピー先str1にコピー元str2の文字をlen文字数までコピーする
 */
-char* strncpy(char* str1, const char* str2, int len) 
+char* strncpy(char* str1, const char* str2, int len)
 {
-    int i = 0;
-    //iがlenより小さく、かつ、コピー元が終わりでない間繰り返し
-	while (i <len && *str2 != '\0')
+	int i = 0;
+	//iがlenより小さく、かつ、コピー元が終わりでない間繰り返し
+	while (i < len && *str2 != '\0')
 	{
 		*(str1 + i) = *str2; //コピー先にコピー元を代入
-		str2++;  //コピー元を次へ
+		str2++; //コピー元を次へ
 		i++;
 	}
-	str1[i] = '\0';  //コピー先の文字列に終わり
-	return str1;     //コピー先の先頭アドレスを返却
+	str1[i] = '\0'; //コピー先の文字列に終わり
+	return str1; //コピー先の先頭アドレスを返却
 }
 
-//デフォルトコンストラクタ
-CMaterial::CMaterial() 
-: mVertexNum(0)
+CTexture* CMaterial::Texture()
 {
-	//名前を0で埋め
-	memset(mName, 0, sizeof(mName));
-	//0で埋める
-	memset(mDiffuse, 0, sizeof(mDiffuse));
+	return &mTexture;
 }
 
-//マテリアルを有効にする
-void CMaterial::Enabled() {
-	//拡散光の設定
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mDiffuse);
+void CMaterial::Disabled()
+{
 	//テクスチャ有り
-	if (mTexture.Id())
-	{
-		//テクスチャを使用可能にする
-		glEnable(GL_TEXTURE_2D);
-		//テクスチャをバインドする
-		glBindTexture(GL_TEXTURE_2D, mTexture.Id());
-		//アルファブレンド有効にする
-		glEnable(GL_BLEND);
-		//ブレンド方法を指定
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-}
-
-//マテリアルを無効にする
-void CMaterial::Disabled() {
-	//テクスチャあり
 	if (mTexture.Id())
 	{
 		//アルファブレンドを無効
@@ -73,13 +39,44 @@ void CMaterial::Disabled() {
 	}
 }
 
+//デフォルトコンストラクタ
+CMaterial::CMaterial()
+	:mVertexNum(0)
+{
+	//名前を0で埋め
+	memset(mName, 0, sizeof(mName));
+
+	//拡散光の初期値は(1, 1, 1, 1)
+	int count = sizeof(mDiffuse) / sizeof(mDiffuse[0]);
+	for (int i = 0; i < count; i++)
+	{
+		mDiffuse[i] = 1.0f;
+	}
+}
+//マテリアルを有効にする
+void CMaterial::Enabled() {
+	//拡散光の設定
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mDiffuse);
+	//テクスチャ有り
+	if (mTexture.Id())
+	{
+		//テクスチャを使用可能にする
+		glEnable(GL_TEXTURE_2D);
+		//テクスチャをバインドする
+		glBindTexture(GL_TEXTURE_2D, mTexture.Id());
+		//アルファブレンドを有効にする
+		glEnable(GL_BLEND);
+		//ブレンド方法を指定
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+}
 //マテリアルの名前の取得
 char* CMaterial::Name()
 {
 	return mName;
 }
-//マテリアルの名前の取得
-//Name(マテリアルの名前)
+// マテリアルの名前を設定する
+// Name(マテリアルの名前)
 void CMaterial::Name(char* name)
 {
 	strncpy(mName, name, MATERIAL_NAME_LEN);
@@ -90,7 +87,12 @@ float* CMaterial::Diffuse()
 	return mDiffuse;
 }
 
-CTexture* CMaterial::Texture()
+void CMaterial::VertexNum(int num)
 {
-	return &mTexture;
+	mVertexNum = num;
+}
+
+int CMaterial::VertexNum()
+{
+	return mVertexNum;
 }
