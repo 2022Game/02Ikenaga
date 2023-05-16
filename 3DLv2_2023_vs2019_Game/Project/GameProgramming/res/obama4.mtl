@@ -9,7 +9,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarBodyMale_Color_2K.jpeg
+map_Kd AvatarBodyMale_Color_2K.jpeg
 map_Bump -bm 1.000000 C:/AvatarBodyMale_Normal1_2K.jpg
 
 newmtl AvatarEyelashes
@@ -20,7 +20,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/ARARAT_Color_2K.jpeg
+map_Kd ARARAT_Color_2K.jpeg
 
 newmtl AvatarHead
 Ns 0.000000
@@ -30,7 +30,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarHeadMale_Color_2K.jpeg
+map_Kd AvatarHeadMale_Color_2K.jpeg
 map_Bump -bm 1.000000 C:/AvatarHeadMale_Normal1_2K.jpg
 
 newmtl AvatarLeftCornea
@@ -41,7 +41,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarRightCornea_Color_512.jpeg
+map_Kd AvatarRightCornea_Color_512.jpeg
 
 newmtl AvatarLeftEyeball
 Ns 0.000000
@@ -51,7 +51,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/AvatarEyes_Color_512.jpg
+map_Kd AvatarEyes_Color_512.jpeg
 map_Bump -bm 1.000000 C:/AvatarEyes_Normal_512.jpg
 
 newmtl AvatarRightCornea
@@ -62,7 +62,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/AvatarLeftCornea_Color_512.jpeg
+map_Kd AvatarLeftCornea_Color_512.jpeg
 
 newmtl AvatarRightEyeball
 Ns 0.000000
@@ -72,7 +72,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/AvatarEyes_Color_512.jpg
+map_Kd AvatarEyes_Color_512.jpeg
 map_Bump -bm 1.000000 C:/AvatarEyes_Normal_512.jpg
 
 newmtl AvatarTeethLower
@@ -83,7 +83,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/AvatarTeeth_Color_1K.jpg
+map_Kd AvatarTeeth_Color_1K.jpeg
 map_Bump -bm 1.000000 C:/AvatarTeeth_Normal1_1K.jpg
 
 newmtl AvatarTeethUpper
@@ -94,7 +94,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/AvatarTeeth_Color_1K.jpg
+map_Kd AvatarTeeth_Color_1K.jpeg
 map_Bump -bm 1.000000 C:/AvatarTeeth_Normal1_1K.jpg
 
 newmtl outfit
@@ -105,5 +105,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd C:/Users/ikenaga0605/Downloads/obama/textures/ARARAT_Color_2K.jpeg
+map_Kd ARARAT_Color_2K.jpeg
 map_Bump -bm 1.000000 C:/ARARAT_Normal_2K.jpg
