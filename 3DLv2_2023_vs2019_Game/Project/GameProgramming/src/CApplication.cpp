@@ -73,12 +73,12 @@ void CApplication::Start()
 	//親インスタンスと親行列はなし
 	//mColliderMesh.Set(nullptr, nullptr,&mBackGround);
 	//三角コライダの確認
-	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, -50.0f));
-	//mColliderTriangle2.Set(nullptr, nullptr, CVector(50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f));
+	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 5.0f, -50.0f));
+	mColliderTriangle2.Set(nullptr, nullptr, CVector(-100.0f, 10.0f, -100.0f), CVector(-50.0f, -4.0f, 50.0f), CVector(50.0f, -4.0f, 50.0f));
 	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
-	//mStage.Load(MODEL3);
-	//new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
+	mStage.Load(MODEL3);
+	new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//敵機のインスタンス作成

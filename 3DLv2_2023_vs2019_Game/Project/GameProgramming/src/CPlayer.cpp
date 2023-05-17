@@ -6,6 +6,7 @@
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_YY CVector(0.0f,0.7f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_Y CVector(0.0f,-0.5f,0.0f) //‰ñ“]‘¬“x
+#define ROTATION_X CVector(0.0f,-0.1f,0.0f) //‰ñ“]‘¬“x
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//ˆÚ“®‘¬“x
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //‰ñ“]‘¬“x
 #define ZYUURYOKU (TIPSIZE/20.0f)
@@ -105,11 +106,26 @@ void CPlayer::Update()
 		//XŽ²‚Ì‰ñ“]’l‚ð‰ÁŽZ
 		//mRotation = mRotation + ROTATION_XV;
 		mPosition = mPosition + VELOCITY * mMatrixRotate;
+		//mPosition = mPosition + ROTATION_X * mMatrixRotate;
 	}
-	if (mInput.Key('J'))
+	if (mState != EState::EJUMP)
 	{
-		mState = EState::EJUMP;
-		mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+		if (mInput.Key('J'))
+		{
+			//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+		}
+	}
+	int jump = 0;
+	if (jump < 0)
+	{
+		jump--;
+	}
+	if (jump < 1)
+	{
+		if (mInput.Key('J'))
+		{
+			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+		}
 	}
 	mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 	//•ÏŠ·s—ñ‚ÌXV

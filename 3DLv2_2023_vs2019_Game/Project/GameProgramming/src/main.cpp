@@ -19,6 +19,7 @@ void display() {
 	//モデルビューの行列を単位行列にする
 	glLoadIdentity();
 
+	CInput::Update();
 	gApplication.Update();
 
 }
