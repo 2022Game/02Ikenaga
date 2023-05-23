@@ -32,5 +32,19 @@ private:
 	std::vector<CTriangle> mTriangles;
 };
 
+
+#include "CVertex.h"
+#include <vector>
+
+class CModelTest
+{
+public:
+	CModelTest();
+	void Render();
+
+	CVertex mVertex[6];
+	std::vector<CVertex> mVector;
+
+};
 #endif 
 

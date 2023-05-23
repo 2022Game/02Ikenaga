@@ -5,6 +5,7 @@
 #define _USE_MATH_DEFINES
 //数学関数のインクルード
 #include <math.h>
+#include "CVector.h"
 //#define M 4
 //#define N 4
 

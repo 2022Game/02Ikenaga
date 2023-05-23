@@ -24,6 +24,7 @@
 #include"CColliderMesh.h"
 #include"CEnemy3.h"
 #include"CStage.h"
+#include"CKokki.h"
 
 class CApplication
 {
@@ -37,6 +38,7 @@ private:
 	//モデルビューの逆行列
 	static CMatrix mModelViewInverse;
 	CModel mStage;
+	CModel mKokki;
 	//C5モデル
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;
@@ -45,6 +47,7 @@ private:
 	CModel mBackGround;//背景モデル
 	//モデルクラスのインスタンス作成
 	CModel mModel;
+	//CModel mModel2;
 	CTriangle* mTriangle;
 	CVector mEye;
 	CSound mSoundBgm;	//BGM

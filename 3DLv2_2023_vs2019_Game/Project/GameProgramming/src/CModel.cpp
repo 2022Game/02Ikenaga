@@ -6,6 +6,47 @@
 #include"CTriangle.h"
 #include "CMatrix.h"
 
+CModelTest::CModelTest()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		mVector.push_back(mVertex[i]);
+	}
+}
+
+void CModelTest::Render()
+{
+	//頂点座標の位置を設定
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, sizeof(CVertex), (void*)&mVector[0].mPosition);
+	//法線ベクトルの位置を設定
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glNormalPointer(GL_FLOAT, sizeof(CVertex), (void*)&mVector[0].mNormal);
+	//テクスチャマッピングの位置を設定
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glTexCoordPointer(3, GL_FLOAT, sizeof(CVertex), (void*)&mVector[0].mTextureCoords);
+
+	//描画位置からのデータで三角形を描画します
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	//頂点座標の配列を無効にする
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//法線の配列を無効にする
+	glDisableClientState(GL_NORMAL_ARRAY);
+	//テクスチャマッピングの配列を無効にする
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+	//描画位置からのデータで三角形を描画します
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	//頂点座標の配列を無効にする
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//法線の配列を無効にする
+	glDisableClientState(GL_NORMAL_ARRAY);
+	//テクスチャマッピングの配列を無効にする
+	glDisableClientState(GL_NORMAL_ARRAY);
+}
+
 std::vector<CTriangle> CModel::Triangles() const
 {
 	return mTriangles;
@@ -232,7 +273,7 @@ void CModel::Render(const CMatrix& m)
 	glNormalPointer(GL_FLOAT, sizeof(CVertex), (void*)&mpVertexes[0].mNormal);
 	//テクスチャマッピングの位置を設定
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(CVector), (void*)&mpVertexes[0].mTextureCoords);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex), (void*)&mpVertexes[0].mTextureCoords);
 
 	int first = 0; //描画位置
 	//マテリアル毎に描画する
