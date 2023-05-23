@@ -9,7 +9,16 @@ class CVector;
 */
 class CMatrix {
 public:
+	//+=演算子のオーバーロード
+	//CMatrix1+=CMatrix2の演算を行う
+	void operator+=(const CMatrix& m);
+	//+演算子のオーバーロード
+	//CMatrix1 + CMatrix2の演算結果を返す
+	CMatrix operator+(const CMatrix& m);
+	//*演算子のオーバーロード
+	// CMatriX *floatの演算結果を返す
 	//クオータニオンで回転行列を設定する
+	CMatrix operator*(const float &x);
 	CMatrix Quaternion(float x, float y, float z, float w);
 	//要素数の取得
 	int Size();

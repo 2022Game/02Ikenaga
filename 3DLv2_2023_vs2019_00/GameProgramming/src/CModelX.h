@@ -62,15 +62,16 @@ class CAnimationSet
 {
 	friend CModelX;
 public:
-	//void AnimateMatrix(CModelX* model);
-	//void Time(float time);  //時間の設定
-	//void Weight(float weight);  //重みの設定
+	std::vector<CAnimation*>& Animation();
+	void AnimateMatrix(CModelX* model);
+	void Time(float time);  //時間の設定
+	void Weight(float weight);  //重みの設定
 	CAnimationSet(CModelX* model);
 	~CAnimationSet();
 private:
-	//float mTime;  //現在時間
-	//float mWeight;  //重み
-	//float mMaxTime;  //最大時間
+	float mTime;  //現在時間
+	float mWeight;  //重み
+	float mMaxTime;  //最大時間
 	//アニメーション
 	std::vector<CAnimation*> mAnimation;
 	//アニメーションセット名
@@ -152,7 +153,9 @@ class CModelX {
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
-	//std::vector<CAnimationSet*>& CModelX::AnimationSet();
+	//std::vector<CAnimationSet*>& CModelX::Animation();
+	void AnimateFrame();
+	std::vector<CAnimationSet*>& CModelX::AnimationSet();
 	//フレーム名に該当するフレームのアドレスを返す
 	CModelXFrame* FindFrame(char* name);
 	bool EOT();  //トークンがなくなったらtrue
