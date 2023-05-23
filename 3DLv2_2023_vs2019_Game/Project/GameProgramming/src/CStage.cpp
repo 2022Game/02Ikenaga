@@ -58,7 +58,7 @@ CStage::CStage(CModel* model, const CVector& position, const CVector& rotation, 
 	mPosition = position;  //ˆÊ’u‚Ìİ’è
 	mRotation = rotation;  //‰ñ“]‚Ìİ’è
 	mScale = scale;  //Šgk‚Ìİ’è
-	mColliderMesh1.Set(this, &mMatrix, &mStage);
+	//mColliderMesh1.Set(this, &mMatrix, &mStage);
 	//CTransform::Update();
 }
 
