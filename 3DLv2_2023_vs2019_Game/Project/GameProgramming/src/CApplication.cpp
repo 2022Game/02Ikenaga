@@ -69,9 +69,6 @@ void CApplication::Start()
 {
 	//mColliderMesh.Set(nullptr, nullptr, &mStage);
 	spUi = new CUi();  //UIクラスの生成
-	//背景モデルから三角コライダを生成
-	//親インスタンスと親行列はなし
-	//mColliderMesh.Set(nullptr, nullptr,&mBackGround);
 	//三角コライダの確認
 	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 5.0f, -50.0f));
 	mColliderTriangle2.Set(nullptr, nullptr, CVector(-100.0f, 10.0f, -100.0f), CVector(-50.0f, -4.0f, 50.0f), CVector(50.0f, -4.0f, 50.0f));
@@ -88,7 +85,7 @@ void CApplication::Start()
 	//mCharacter.Model(&mModel);
 	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mPlayer.Model(&mModel);
-	mPlayer.Position(CVector(20.0f, 0.0f, 0.0f));
+	mPlayer.Position(CVector(100.0f, 0.0f, 0.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
 	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;
@@ -102,9 +99,7 @@ void CApplication::Start()
 	new CBillBoard(CVector(-6.0f, 3.0f, -10.0f), 1.0f, 1.0f);
 	//背景モデルから三角コライダを生成
 	//親インスタンスと親行列はなし
-	//mStage.Render();
 	mColliderMesh.Set(nullptr, nullptr, &mBackGround);
-
 }
 
 void CApplication::Update()
