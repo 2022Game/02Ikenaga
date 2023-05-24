@@ -35,7 +35,7 @@ void CKokki::Collision(CCollider* m, CCollider* o) {
 		{
 			new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
 			//è’ìÀÇµÇ»Ç¢à íuÇ‹Ç≈ñﬂÇ∑
-			mPosition = mPosition + adjust;
+			//mPosition = mPosition + adjust;
 		}
 		break;
 	}

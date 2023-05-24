@@ -25,6 +25,7 @@
 #include"CEnemy3.h"
 #include"CStage.h"
 #include"CKokki.h"
+#include"CHATA.h"
 
 class CApplication
 {
@@ -39,6 +40,7 @@ private:
 	static CMatrix mModelViewInverse;
 	CModel mStage;
 	CModel mKokki;
+	CModel mHata;
 	//C5ƒ‚ƒfƒ‹
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;

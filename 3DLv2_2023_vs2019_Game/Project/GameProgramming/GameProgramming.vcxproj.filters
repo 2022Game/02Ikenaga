@@ -129,6 +129,9 @@
     <ClCompile Include="src\CKokki.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\CHATA.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CSound.h">
@@ -249,6 +252,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\CKokki.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CHATA.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

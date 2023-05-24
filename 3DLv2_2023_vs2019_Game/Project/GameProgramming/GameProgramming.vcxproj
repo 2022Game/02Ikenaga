@@ -30,6 +30,7 @@
     <ClCompile Include="src\CEnemy3.cpp" />
     <ClCompile Include="src\CFont.cpp" />
     <ClCompile Include="src\CGame.cpp" />
+    <ClCompile Include="src\CHATA.cpp" />
     <ClCompile Include="src\CKokki.cpp" />
     <ClCompile Include="src\CMaterial.cpp" />
     <ClCompile Include="src\CMatrix.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="src\CEnemy3.h" />
     <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CGame.h" />
+    <ClInclude Include="src\CHATA.h" />
     <ClInclude Include="src\CKokki.h" />
     <ClInclude Include="src\CMaterial.h" />
     <ClInclude Include="src\CMatrix.h" />

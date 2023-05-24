@@ -26,6 +26,7 @@ CCharacterManager CApplication::mCharacterManager;
 
 #define MODEL3 "res\\体育館.obj","res\\体育館.mtl"
 #define MODEL4 "res\\国旗.obj","res\\国旗.mtl"
+#define MODEL5 "res\\新旗.obj","res\\新旗.mtl"
 //CTaskManager CApplication::mTaskManager;
 //CTaskManager* CTaskManager::Instance()
 //{
@@ -72,14 +73,16 @@ void CApplication::Start()
 	spUi = new CUi();  //UIクラスの生成
 	//三角コライダの確認
 	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 5.0f, -50.0f));
-	mColliderTriangle2.Set(nullptr, nullptr, CVector(-100.0f, 10.0f, -100.0f), CVector(-50.0f, -4.0f, 50.0f), CVector(50.0f, -4.0f, 50.0f));
+	//mColliderTriangle2.Set(nullptr, nullptr, CVector(-100.0f, 10.0f, -100.0f), CVector(-50.0f, -4.0f, 50.0f), CVector(50.0f, -4.0f, 50.0f));
 	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	mStage.Load(MODEL3);
-	new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
+	//new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	mKokki.Load(MODEL4);
 	new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
 	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
+	mHata.Load(MODEL5);
+	new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//敵機のインスタンス作成
