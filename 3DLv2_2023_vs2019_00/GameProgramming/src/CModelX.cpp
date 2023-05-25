@@ -578,7 +578,12 @@ char* CModelX::Token()
 	return mToken;
 }
 
-bool CModelXFrame::Index()
+//std::vector<CAnimation*>& CModelXFrame::Index()
+//{
+//	return mIndex;
+//}
+
+int CModelXFrame::Index()
 {
 	return mIndex;
 }
@@ -728,11 +733,9 @@ void CModelX::AnimateFrame()
 			printf("%s\n", mFrame[n]->mpName);
 			for (int i = 0; i < 4; i++)
 			{
-				//CAnimationSet* animSet = mAnimationSet[0];
-				//CAnimation* animation = animSet->Animation()[0];
 				for (int j = 0; j < 4; j++)
 				{
-					printf(" %f ", mFrame[n]->mTransformMatrix.M(i,j));
+					printf(" %f ", mFrame[n]->mTransformMatrix.M(i, j));
 				}
 				printf("\n");
 			}

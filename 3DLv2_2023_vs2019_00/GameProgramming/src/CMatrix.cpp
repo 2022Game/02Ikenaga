@@ -8,13 +8,12 @@
 #include "CVector.h"
 void CMatrix::operator+=(const CMatrix& m)
 {
-	CMatrix t;
 	for (int i = 0; i < 4; i++)
 	{
-		t.mM[i][0] += m.mM[i][0];
-		t.mM[i][1] += m.mM[i][1];
-		t.mM[i][2] += m.mM[i][2];
-		t.mM[i][3] += m.mM[i][3];
+		mM[i][0]+=m.mM[i][0];
+		mM[i][1]+=m.mM[i][1];
+		mM[i][2]+=m.mM[i][2];
+		mM[i][3]+=m.mM[i][3];
 	}
 }
 
@@ -25,15 +24,18 @@ CMatrix CMatrix::operator+(const CMatrix& m)
 	t.mM[0][1] = mM[0][1] + m.mM[0][1];
 	t.mM[0][2] = mM[0][2] + m.mM[0][2];
 	t.mM[0][3] = mM[0][3] + m.mM[0][3];
+
 	t.mM[1][0] = mM[1][0] + m.mM[1][0];
 	t.mM[1][1] = mM[1][1] + m.mM[1][1];
 	t.mM[1][2] = mM[1][2] + m.mM[1][2];
 	t.mM[1][3] = mM[1][3] + m.mM[1][3];
+
 	t.mM[2][0] = mM[2][0] + m.mM[2][0];
 	t.mM[2][1] = mM[2][1] + m.mM[2][1];
 	t.mM[2][2] = mM[2][2] + m.mM[2][2];
 	t.mM[2][3] = mM[2][3] + m.mM[2][3];
-	t,mM[3][0] = mM[3][0] + m.mM[3][0];
+
+	t.mM[3][0] = mM[3][0] + m.mM[3][0];
 	t.mM[3][1] = mM[3][1] + m.mM[3][1];
 	t.mM[3][2] = mM[3][2] + m.mM[3][2];
 	t.mM[3][3] = mM[3][3] + m.mM[3][3];
@@ -43,22 +45,13 @@ CMatrix CMatrix::operator+(const CMatrix& m)
 CMatrix CMatrix::operator*(const float& x)
 {
 	CMatrix t;
-	t.mM[0][0] = mM[0][0] * x; 
-	t.mM[0][1] = mM[0][1] * x;
-	t.mM[0][2] = mM[0][2] * x;
-	t.mM[0][3] = mM[0][3] * x;
-	t.mM[1][0] = mM[1][0] * x;
-	t.mM[1][1] = mM[1][1] * x;
-	t.mM[1][2] = mM[1][2] * x;
-	t.mM[1][3] = mM[1][3] * x;
-	t.mM[2][0] = mM[2][0] * x;
-	t.mM[2][1] = mM[2][1] * x;
-	t.mM[2][2] = mM[2][2] * x;
-	t.mM[2][3] = mM[2][3] * x;
-	t.mM[3][0] = mM[3][0] * x;
-	t.mM[3][1] = mM[3][1] * x;
-	t.mM[3][2] = mM[3][2] * x;
-	t.mM[3][3] = mM[3][3] * x;
+	for (int i = 0; i < 4; i++)
+	{
+		t.mM[i][0] = mM[i][0] * x;
+		t.mM[i][1] = mM[i][1] * x;
+		t.mM[i][2] = mM[i][2] * x;
+		t.mM[i][3] = mM[i][3] * x;
+	}
 	return t;
 }
 

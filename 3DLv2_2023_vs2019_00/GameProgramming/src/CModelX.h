@@ -130,7 +130,8 @@ class CModelXFrame {
 	friend CAnimation;
 	friend CModelX;
 public:
-	bool Index();
+	int Index();
+	//std::vector<CAnimation*>& Index();
 	void Render();
 	//コンストラクタ
 	CModelXFrame(CModelX* model);
