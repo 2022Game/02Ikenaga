@@ -130,6 +130,8 @@ class CModelXFrame {
 	friend CAnimation;
 	friend CModelX;
 public:
+	//合成行列の作成
+	void AnimateCombined(CMatrix* parent);
 	int Index();
 	//std::vector<CAnimation*>& Index();
 	void Render();
@@ -138,6 +140,8 @@ public:
 	//デストラクタ
 	~CModelXFrame();
 private:
+	//std::vector<CModelX*> mFrame;
+	CMatrix mCombinedMatrix;  //合成行列
 	CMesh* mpMesh;  //Meshデータ
 	std::vector<CModelXFrame*> mChild;   //子フレームの配列
 	CMatrix mTransformMatrix;  //変数行列
@@ -154,6 +158,7 @@ class CModelX {
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
+	std::vector<CModelXFrame*>& Frames();
 	//std::vector<CAnimationSet*>& CModelX::Animation();
 	void AnimateFrame();
 	std::vector<CAnimationSet*>& CModelX::AnimationSet();

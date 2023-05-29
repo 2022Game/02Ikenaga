@@ -583,6 +583,33 @@ char* CModelX::Token()
 //	return mIndex;
 //}
 
+/*
+AnimateCombuned
+合成行列の作成
+*/
+void CModelXFrame::AnimateCombined(CMatrix* parent)
+{
+	//自分の変換行列に、親からの変換行列を掛ける
+	mCombinedMatrix = mTransformMatrix * (*parent);
+	//子フレームの合成行列を作成する
+	for (size_t i = 0; i < mChild.size(); i++)
+	{
+		mChild[i]->AnimateCombined(&mCombinedMatrix);
+	}
+#ifdef _DEBUG
+	printf("%s", "Frame:");
+	printf("%s\n", mpName);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				printf(" %f ", mCombinedMatrix.M(i, j));
+			}
+			printf("\n");
+		}
+#endif
+}
+
 int CModelXFrame::Index()
 {
 	return mIndex;
@@ -674,7 +701,6 @@ CModelXFrame::CModelXFrame(CModelX* model)
 	}
 	//デバックバージョンのみ有効
 #ifdef _DEBUG
-	//printf("%s\n", mpName);
 	/*printf(" %f\t", mTransformMatrix.M()[0]);
 	printf(" %f\t", mTransformMatrix.M()[1]);
 	printf(" %f\t", mTransformMatrix.M()[2]);
@@ -694,6 +720,11 @@ CModelXFrame::CModelXFrame(CModelX* model)
 #endif
 }
 
+std::vector<CModelXFrame*>& CModelX::Frames()
+{
+	return  mFrame;
+}
+
 /*
 AnimateFrame
 フレームの変換行列をアニメーションデータで更新
@@ -703,7 +734,7 @@ void CModelX::AnimateFrame()
 	//アニメーションで適用されるフレームの
 	//変換行列をゼロクリア
 	for (size_t i = 0; i < mAnimationSet.size(); i++)
-	{
+	{						  
 		CAnimationSet* animSet = mAnimationSet[i];
 		//重みが0は読み飛ばす
 		if (animSet->mWeight == 0) continue;
@@ -725,7 +756,7 @@ void CModelX::AnimateFrame()
 		animSet->AnimateMatrix(this);
 	}
 #ifdef _DEBUG
-	for (size_t n = 1; n < mFrame.size(); n++)
+	/*for (size_t n = 1; n < mFrame.size(); n++)
 	{
 		if (n < 5)
 		{
@@ -740,7 +771,7 @@ void CModelX::AnimateFrame()
 				printf("\n");
 			}
 		}
-	}
+	}*/
 #endif
 }
 
