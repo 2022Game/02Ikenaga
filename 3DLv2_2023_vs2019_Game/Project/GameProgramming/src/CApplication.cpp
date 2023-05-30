@@ -26,7 +26,8 @@ CCharacterManager CApplication::mCharacterManager;
 
 #define MODEL3 "res\\体育館.obj","res\\体育館.mtl"
 #define MODEL4 "res\\国旗.obj","res\\国旗.mtl"
-#define MODEL5 "res\\新旗.obj","res\\新旗.mtl"
+//#define MODEL5 "res\\新旗.obj","res\\新旗.mtl"
+#define MODEL6  "res\\敵1.obj","res\\敵1.mtl"
 //CTaskManager CApplication::mTaskManager;
 //CTaskManager* CTaskManager::Instance()
 //{
@@ -79,12 +80,13 @@ void CApplication::Start()
 	mStage.Load(MODEL3);
 	//new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	mKokki.Load(MODEL4);
-	new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
+	//new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
 	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
-	mHata.Load(MODEL5);
-	new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
+	//mHata.Load(MODEL5);
+	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
+	mEnemy1.Load(MODEL6);
 	//敵機のインスタンス作成
-	//new CEnemy(&mModelC5, CVector(30.0f, 0.0f, -130.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
+	new CEnemy(&mEnemy1, CVector(0.0f, -1.0f, 10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み
@@ -93,13 +95,9 @@ void CApplication::Start()
 	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mModel.Load(MODEL_2);
 	mPlayer.Model(&mModel);
-	mPlayer.Position(CVector(100.0f, 0.0f, 0.0f));
+	mPlayer.Position(CVector(0.0f, 0.0f, 20.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
 	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
-	/*mKokki.Model(&mModel2);
-	mKokki.Position(CVector(20.0f, 0.0f, 0.0f));
-	mKokki.Rotation(CVector(0.0f, -180.0f, 0.0f));
-	mKokki.Scale(CVector(1.0f, 1.0f, 1.0f));*/
 	CMatrix matrix;
 	matrix.print();
 	mEye = CVector(1.0f, 2.0f, 3.0f);

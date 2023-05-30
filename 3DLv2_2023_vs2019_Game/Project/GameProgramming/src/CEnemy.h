@@ -4,6 +4,7 @@
 //キャラクタクラスのインクルード
 #include"CCharacter3.h"
 #include"CCollider.h"
+#include "CColliderMesh.h"
 
 /*
 エネミークラス
@@ -12,7 +13,13 @@
 
 class CEnemy : public CCharacter3{
 public:
+	//コンストラクタ
+	CEnemy();
 	void Collision();
+	//CEnemy3(位置,回転,拡縮)
+	CEnemy(const CVector& position, const CVector& rotation, const CVector& scale);
+	//更新処理
+	void Update();
 	//衝突処理
 	//Collision(コライダ1,コライダ2)
 	void Collision(CCollider* m, CCollider* o);
@@ -26,9 +33,12 @@ public:
 	//コンストラクタ
 	//CEnemy(モデル,位置,回転,拡縮)
 	CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
-	//更新処理
-	void Update();
 private:
+	CVector mPoint;  //目標地点
+	//モデルデータ
+	static CModel sModel;
+	CCollider mCollider;
+	CColliderMesh mColliderMesh1;
 	//コライダ
 	CCollider mCollider1;
 	CCollider mCollider2;

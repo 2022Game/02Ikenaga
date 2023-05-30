@@ -41,6 +41,7 @@ private:
 	CModel mStage;
 	CModel mKokki;
 	CModel mHata;
+	CModel mEnemy1;
 	//C5ƒ‚ƒfƒ‹
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;

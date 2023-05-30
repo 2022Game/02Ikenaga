@@ -7,6 +7,7 @@
 #include"CBullet.h"
 #include"CColliderLine.h"
 #include"CStage.h"
+#include "CColliderMesh.h"
 
 /*
 プレイヤークラス
@@ -15,6 +16,7 @@
 
 class CPlayer : public CCharacter3 {
 public:
+	//CModel* model;
 	//インスタンスのポインタの取得
 	static CPlayer* Instance();
 	void Collision();
@@ -27,6 +29,7 @@ public:
 	//更新処理
 	void Update();
 private:
+	//CColliderMesh mColliderMesh1;
 	//プレイヤーのインスタンス
 	static CPlayer* spInstance;
 	CColliderLine mLine3; //線分コライダ
