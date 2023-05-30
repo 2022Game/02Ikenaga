@@ -8,6 +8,9 @@
 */
 class CVector {
 public:
+	//+=演算子のオーバーロード
+	//CVector1 += CVector2の演算を行う
+	void operator+=(const CVector& v);
 	void X(float f);
 	void Y(float f);
 	void Z(float f);
