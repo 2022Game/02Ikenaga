@@ -1,6 +1,7 @@
 #pragma once
-#ifndef CENEMY_H
-#define CENEMY_H
+#pragma once
+#ifndef CEXCLAMATIONMARK_H
+#define CEXCLAMATIONMARK_H
 //キャラクタクラスのインクルード
 #include"CCharacter3.h"
 #include"CCollider.h"
@@ -11,14 +12,14 @@
 キャラクタクラスを継承
 */
 
-class CEnemy : public CCharacter3{
+class CExclamationMark : public CCharacter3 {
 public:
-	static CEnemy* Instance();
+	void Set(float w, float d);
 	//コンストラクタ
-	CEnemy();
+	CExclamationMark();
 	void Collision();
 	//CEnemy3(位置,回転,拡縮)
-	CEnemy(const CVector& position, const CVector& rotation, const CVector& scale);
+	CExclamationMark(const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
 	//衝突処理
@@ -33,11 +34,9 @@ public:
 	//}
 	//コンストラクタ
 	//CEnemy(モデル,位置,回転,拡縮)
-	CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
+	CExclamationMark(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
-	static CEnemy* spInstance;
 	int mark;
-	int mark2;
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;

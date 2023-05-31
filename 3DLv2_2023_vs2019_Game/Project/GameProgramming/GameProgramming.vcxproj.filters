@@ -132,6 +132,9 @@
     <ClCompile Include="src\CHATA.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\CExclamationMark.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CSound.h">
@@ -255,6 +258,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\CHATA.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CExclamationMark.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

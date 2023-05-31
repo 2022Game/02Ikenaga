@@ -90,12 +90,12 @@ void CApplication::Start()
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み
-	mModelC5.Load(MODEL_C5);
+	//mModelC5.Load(MODEL_C5);
 	//mCharacter.Model(&mModel);
 	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mModel.Load(MODEL_2);
 	mPlayer.Model(&mModel);
-	mPlayer.Position(CVector(0.0f, 0.0f, 20.0f));
+	mPlayer.Position(CVector(0.0f, 0.0f, 100.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
 	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;

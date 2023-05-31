@@ -1,42 +1,46 @@
-#include "CEnemy.h"
+#include "CExclamationMark.h"
 #include"CEffect.h"
 #include "CCollisionManager.h"
 #include"CPlayer.h"
-#include "CExclamationMark.h"
+#include "CEnemy.h"
 
-CModel CEnemy::sModel;
-//
-CEnemy* CEnemy::Instance()
-{
-	return spInstance;
-}
+#define OBJ1 "res\\!.obj"
+#define MTL1 "res\\!.mtl"
 
-CEnemy* CEnemy::spInstance = nullptr;
+CModel CExclamationMark::sModel;
 
 //移動速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
-#define VELOCITY2 0.00f
+#define VELOCITY2 0.11f
 
-CEnemy::CEnemy()
+void CExclamationMark::Set(float w, float d)
+{
+	//スケール設定
+	mScale = CVector(0.2f, 0.2f,0.2f);
+	//三角形の頂点設定
+	//mT.Vertex(CVector(w, 0.0f, 0.0f), CVector(0.0f, 0.0f, -d), CVector(-w, 0.0f, 0.0f));
+	//三角形の法線設定
+	//mT.Normal(CVector(0.0f, 1.0f, 0.0f));
+}
+
+CExclamationMark::CExclamationMark()
 	:CCharacter3(1)
-	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
 	,mark(0)
-	,mark2(0)
+	//, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
 {
 	//モデルが無いときは読み込む
 	if (sModel.Triangles().size() == 0)
 	{
-		//sModel.Load(OBJ, MTL);
+		sModel.Load(OBJ1, MTL1);
 	}
 	//モデルのポインタ
 	mpModel = &sModel;
-	spInstance = this;
 }
 
 //コンストラクタ
-//CEnemy(位置,回転,拡縮)
-CEnemy::CEnemy(const CVector& position, const CVector& rotation, const CVector& scale)
-	:CEnemy()  //デフォルトコンストラクタを実行する
+//CExclamationMark(位置,回転,拡縮)
+CExclamationMark::CExclamationMark(const CVector& position, const CVector& rotation, const CVector& scale)
+	:CExclamationMark()  //デフォルトコンストラクタを実行する
 {
 	//位置、回転、拡縮を設定する
 	mPosition = position;  //位置の設定
@@ -48,22 +52,37 @@ CEnemy::CEnemy(const CVector& position, const CVector& rotation, const CVector& 
 }
 
 // 更新処理
-void CEnemy::Update()
+void CExclamationMark::Update()
 {
-	//プレイヤーのポインタが0以外の時
-	CPlayer* player = CPlayer::Instance();
-	if (player != nullptr)
+	/*mark++;
+	if (mark > 1)
 	{
-		//プレイヤーまでのベクトルを求める
-		CVector vp = player->Position() - mPosition;
+		mEnabled = false;
+		mark = 0;
+	}*/
+		//プレイヤーのポインタが0以外の時
+		//CPlayer* player = CPlayer::Instance();
+		//if (player != nullptr)
+		//{
+		//	//プレイヤーまでのベクトルを求める
+		//	CVector vp = player->Position() - mPosition;
+		//	//左ベクトルとの内積を求める
+		//	float dx = vp.Dot(mMatrixRotate.VectorX());
+		//	//上ベクトルとの内積を求める
+		//	float dy = vp.Dot(mMatrixRotate.VectorY());
+		//	float dz = vp.Dot(mMatrixRotate.VectorZ());
+	CEnemy* enemy = CEnemy::Instance();
+	if (enemy != nullptr)
+	{
+		CVector vp = enemy->Position() - mPosition;
 		//左ベクトルとの内積を求める
 		float dx = vp.Dot(mMatrixRotate.VectorX());
 		//上ベクトルとの内積を求める
 		float dy = vp.Dot(mMatrixRotate.VectorY());
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
-		//X軸のズレが2.0以下
-		if (-1.0f < dx && dx <1.0f)
+			//X軸のズレが2.0以下
+		if (-1.0f < dx && dx < 1.0f)
 		{
 			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 			//Y軸のズレが2.0以下
@@ -72,17 +91,6 @@ void CEnemy::Update()
 				//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 				if (30.0f > dz && dz >= 0.0f)
 				{
-					mark++;
-					if (mark > 100)
-					{
-						CExclamationMark* exclamationmark = new CExclamationMark();
-						exclamationmark->Set(0.0f, 0.0f);
-						exclamationmark->Position(
-							CVector(0.8f, 5.0f, 0.0f) * mMatrix);
-						exclamationmark->Rotation(mRotation);
-						exclamationmark->Update();
-						mark = 0;
-					}
 					//弾を発射します
 					/*CBullet* bullet = new CBullet();
 					bullet->Set(0.1f, 1.5f);
@@ -137,15 +145,27 @@ void CEnemy::Update()
 	{
 		//課題
 		//mRotation = mRotation + CVector(1.0f, 0.0f, 0.0f);  //下へ回転
-		mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+	  mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	//機体前方へ移動する
 	//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	CTransform::Update(); //行列更新
 	//およそ3秒毎に目標地点を更新
-	int r = rand() % 120; //rand()は整数の乱数を返す
+	int r = rand() % 180; //rand()は整数の乱数を返す
 						  //% 180は180で割った余りを求める
 	if (r == 0)
+	{
+		if (enemy == nullptr)
+		{
+			mPoint = enemy->Position();
+		}
+		else
+		{
+			mPoint = mPoint * CMatrix().RotateY(45);
+		}
+	}
+
+	/*if (r == 0)
 	{
 		if (player != nullptr)
 		{
@@ -155,14 +175,14 @@ void CEnemy::Update()
 		{
 			mPoint = mPoint * CMatrix().RotateY(45);
 		}
-	}
-	////行列を更新
+	}*/
+	//行列を更新
 	//CTransform::Update();
-	////位置を移動
+	//位置を移動
 	//mPosition = mPosition + VELOCITY * mMatrixRotate;
 }
 
-void CEnemy::Collision()
+void CExclamationMark::Collision()
 {
 	//コライダの優先度変更
 	mCollider1.ChangePriority();
@@ -176,7 +196,7 @@ void CEnemy::Collision()
 
 //衝突処理
 //Collision(コライダ1,コライダ2)
-void CEnemy::Collision(CCollider * m, CCollider * o) {
+void CExclamationMark::Collision(CCollider* m, CCollider* o) {
 	//相手のコライダタイプの判定
 	switch (o->Type())
 	{
@@ -196,11 +216,10 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 		{
 			//衝突しない位置まで戻す
 			//mPosition = mPosition + adjust;
-			//CTransform::Update();
 		}
 		break;
 	}
-	
+
 	////コライダもmとoが衝突しているか判定
 	//if (CCollider::CCollision(m, o)) {
 	//	//エフェクト生成
@@ -210,19 +229,17 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 }
 
 //コンストラクタ
-//CEnemy(モデル,位置,回転,拡縮)
-CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
-: mark(0)
-,mark2(0)
-	/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-	, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
-    , mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
+//CExclamationMark(モデル,位置,回転,拡縮)
+CExclamationMark::CExclamationMark(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
+	:mark(0)
+/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
+, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
+, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
 {
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
-	spInstance = this;
-	mColliderMesh1.Set(this, &mMatrix, mpModel);
+	//mColliderMesh1.Set(this, &mMatrix, mpModel);
 }
