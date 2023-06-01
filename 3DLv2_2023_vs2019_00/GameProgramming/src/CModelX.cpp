@@ -575,6 +575,14 @@ void CMesh::Init(CModelX* model)
 				{
 					mMaterial.push_back(new CMaterial(model));
 				}
+				else
+				{
+					//{　既出
+					model->GetToken();  //MaterialName
+					mMaterial.push_back(
+						model->FindMaterial(model->Token()));
+					model->GetToken();  //}
+				}
 			}
 			model->GetToken();  //} //End of MeshMaterialList
 		}  //End of MashMaterialList
@@ -787,6 +795,28 @@ CModelXFrame::CModelXFrame(CModelX* model)
 #endif
 }
 
+std::vector<CMaterial*>& CModelX::Material()
+{
+	return mMaterial;
+}
+
+CMaterial* CModelX::FindMaterial(char* name)
+{
+	//マテリアル配列のイテレータ作成
+	std::vector<CMaterial*>::iterator itr;
+	//マテリアル配列を先頭から順に検索
+	for (itr = mMaterial.begin(); itr != mMaterial.end(); itr++)
+	{
+		//名前が一致すればマテリアルのポインタを返却
+		if (strcmp(name, (*itr)->Name()) == 0)
+		{
+			return *itr;
+		}
+	}
+	//無い時はnullptrを返却
+	return nullptr;
+}
+
 /*
 AnimateVertex
 頂点にアニメーションを適用する
@@ -917,6 +947,11 @@ CModelX::~CModelX()
 	{
 		delete mAnimationSet[i];
 	}
+	//マテリアルの解放
+	for (size_t i = 0; i < mMaterial.size(); i++)
+	{
+		delete mMaterial[i];
+	}
 }
 
 /*
@@ -927,6 +962,10 @@ IsDelimiter(c)
 */
 bool CModelX::IsDelimiter(char c)
 {
+	if (c < 0)
+	{
+		return false;
+	}
 	//isspace(c)
 	//cが空白文字なら0以外を返す
 	if (isspace(c) != 0)
@@ -1026,8 +1065,18 @@ void CModelX::Load(char* file)
 	while (*mpPointer != '\0')
 	{
 		GetToken();  //単語の取得
+		//template 読み飛ばし
+		if (strcmp(mToken, "template") == 0)
+		{
+			SkipNode();
+		}
+		//Materialの時
+		else if(strcmp(mToken, "Material")==0)
+		{
+			new CMaterial(this);
+		}
 		//単語Frameの場合
-		if (strcmp(mToken, "Frame") == 0)
+		else if (strcmp(mToken, "Frame") == 0)
 		{
 			//フレームを作成する
 			new CModelXFrame(this);

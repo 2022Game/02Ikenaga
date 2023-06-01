@@ -13,7 +13,8 @@ class CModelXFrame;  //CModelXFrameクラスの宣言
 #ifndef CMODELX_H //インクルードガード
 #define CMODELX_H
 
-#define MODEL_FILE "res\\sample.blend.x"  //入力ファイル名
+//#define MODEL_FILE "res\\sample.blend.x"  //入力ファイル名
+#define MODEL_FILE "res\\ラグナ.x"  //入力ファイル名
 
 //領域解放をマクロ化
 #define SAFE_DELETE_ARRAY(a){if(a) delete[] a; a=nullptr;}
@@ -166,6 +167,10 @@ class CModelX {
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
+	//マテリアル配列の取得
+	std::vector<CMaterial*>& Material();
+	//マテリアルの検索
+	CMaterial* FindMaterial(char* name);
 	//頂点にアニメーションを適用
 	void AnimateVertex();
 	//スキンウェイトのフレーム番号設定
@@ -188,6 +193,7 @@ public:
 	//ファイル読み込み
 	void Load(char* file);
 private:
+	std::vector<CMaterial*> mMaterial;  //マテリアル配列
 	//アニメーションセットの配列
 	std::vector<CAnimationSet*> mAnimationSet;
 	std::vector<CModelXFrame*> mFrame;  //フレームの配列
