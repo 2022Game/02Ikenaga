@@ -67,6 +67,7 @@ CTexture* CApplication::Texture()
 //{
 //	return &mTexture1;
 //}
+//
 
 void CApplication::Start()
 {
