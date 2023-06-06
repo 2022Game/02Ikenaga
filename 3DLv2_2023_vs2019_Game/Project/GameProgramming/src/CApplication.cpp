@@ -82,12 +82,12 @@ void CApplication::Start()
 	mKokki.Load(MODEL4);
 	//new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
 	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
-	new CKokki(&mKokki, CVector(30.0f, 1.0f, -17.0f), CVector(0.0f, 0.0f, 0.0f), CVector(5.0f, 0.8f, 10.0f));
+	new CKokki(&mKokki, CVector(30.0f, -1.2f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(47.5f, 0.84f, 0.95f));
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 	mEnemy1.Load(MODEL6);
 	//敵機のインスタンス作成
-	new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
+	//new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み

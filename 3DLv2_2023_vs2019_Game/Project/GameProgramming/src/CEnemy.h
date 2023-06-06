@@ -44,9 +44,9 @@ private:
 	CCollider mCollider;
 	CColliderMesh mColliderMesh1;
 	//ƒRƒ‰ƒCƒ_
-	CCollider mCollider1;
+	/*CCollider mCollider1;
 	CCollider mCollider2;
-	CCollider mCollider3;
+	CCollider mCollider3;*/
 };
 
 #endif

@@ -5,6 +5,7 @@
 
 void CKokki::Collision()
 {
+	mColliderMesh1.ChangePriority();
 	////コライダの優先度変更
 	/*mCollider1.ChangePriority();
 	mCollider2.ChangePriority();
