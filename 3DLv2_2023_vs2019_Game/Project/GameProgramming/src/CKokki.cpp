@@ -6,13 +6,13 @@
 void CKokki::Collision()
 {
 	////コライダの優先度変更
-	//mCollider1.ChangePriority();
-	//mCollider2.ChangePriority();
-	//mCollider3.ChangePriority();
-	////衝突処理を実行
-	//CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);
+	/*mCollider1.ChangePriority();
+	mCollider2.ChangePriority();
+	mCollider3.ChangePriority();*/
+	//衝突処理を実行
+	/*CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);*/
 }
 
 void CKokki::Collision(CCollider* m, CCollider* o) {
@@ -23,7 +23,7 @@ void CKokki::Collision(CCollider* m, CCollider* o) {
 		//コライダのmとyが衝突しているか判定
 		if (CCollider::CCollision(m, o)) {
 			//エフェクト生成
-			new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
+			//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
 			//衝突している時は無効にする
 			//mEnabled=false;
 		}
@@ -33,9 +33,9 @@ void CKokki::Collision(CCollider* m, CCollider* o) {
 		//三角コライダと球コライダの衝突判定
 		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 		{
-			new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
+			//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
 			//衝突しない位置まで戻す
-			//mPosition = mPosition + adjust;
+			mPosition = mPosition + adjust;
 		}
 		break;
 	}

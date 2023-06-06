@@ -70,7 +70,6 @@ CTexture* CApplication::Texture()
 
 void CApplication::Start()
 {
-	//mColliderMesh.Set(nullptr, nullptr, &mStage);
 	spUi = new CUi();  //UIクラスの生成
 	//三角コライダの確認
 	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 5.0f, -50.0f));
@@ -78,15 +77,16 @@ void CApplication::Start()
 	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	mStage.Load(MODEL3);
-	//new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
+	new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	mKokki.Load(MODEL4);
 	//new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
 	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
+	new CKokki(&mKokki, CVector(30.0f, 1.0f, -17.0f), CVector(0.0f, 0.0f, 0.0f), CVector(5.0f, 0.8f, 10.0f));
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 	mEnemy1.Load(MODEL6);
 	//敵機のインスタンス作成
-	new CEnemy(&mEnemy1, CVector(0.0f, -1.0f, 10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
+	new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み
@@ -95,7 +95,7 @@ void CApplication::Start()
 	//mCharacter.Scale(CVector(0.1f, 0.1f, 0.1f));
 	mModel.Load(MODEL_2);
 	mPlayer.Model(&mModel);
-	mPlayer.Position(CVector(0.0f, 0.0f, 100.0f));
+	mPlayer.Position(CVector(30.0f, 3.0f, 1.0f));
 	mPlayer.Rotation(CVector(0.0f, 180.0f, 0.0f));
 	mPlayer.Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
 	CMatrix matrix;
@@ -129,10 +129,10 @@ void CApplication::Update()
 	v1.Set(1.0f, 0.0f, 0.0f);
 	//頂点3の座標を設定する
 	v2.Set(0.0f, 0.0f, -0.5f);
-	/*if (mInput.Key('J'))
+	if (mInput.Key('J'))
 	{
 		mEye = mEye - CVector(0.1f, 0.0f, 0.0f);
-	}*/
+	}
 	if (mInput.Key('L'))
 	{
 		mEye = mEye + CVector(0.1f, 0.0f, 0.0f);

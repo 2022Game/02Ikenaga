@@ -12,6 +12,7 @@ CModel CExclamationMark::sModel;
 //ˆÚ“®‘¬“x
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
 #define VELOCITY2 0.11f
+#define VELOCITY3 -0.11f
 
 void CExclamationMark::Set(float w, float d)
 {
@@ -82,7 +83,7 @@ void CExclamationMark::Update()
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
 			//X²‚ÌƒYƒŒ‚ª2.0ˆÈ‰º
-		if (-1.0f < dx && dx < 1.0f)
+		if  (-100.0f < dx && dx < 100.0f)
 		{
 			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 			//Y²‚ÌƒYƒŒ‚ª2.0ˆÈ‰º
@@ -128,12 +129,12 @@ void CExclamationMark::Update()
 	//¶‰E•ûŒü‚Ö‰ñ“]
 	if (dx > margin)
 	{
-		mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //¶‚Ö‰ñ“]
+		//mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //¶‚Ö‰ñ“]
 	}
 	else if (dx < -margin)
 	{
 		//‰Û‘è
-		mRotation = mRotation + CVector(0.0f, -1.0f, 0.0f);  //‰E‚Ö‰ñ“]
+		//mRotation = mRotation + CVector(0.0f, -1.0f, 0.0f);  //‰E‚Ö‰ñ“]
 	}
 	//ã‰º•ûŒü‚Ö‰ñ“]
 	if (dy > margin)

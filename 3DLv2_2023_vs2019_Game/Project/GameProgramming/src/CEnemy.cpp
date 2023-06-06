@@ -15,7 +15,7 @@ CEnemy* CEnemy::spInstance = nullptr;
 
 //ˆÚ“®‘¬“x
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
-#define VELOCITY2 0.00f
+#define VELOCITY2 0.11f
 
 CEnemy::CEnemy()
 	:CCharacter3(1)

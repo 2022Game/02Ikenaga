@@ -5,12 +5,12 @@
 #include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_YY CVector(0.0f,0.7f,0.0f) //‰ñ“]‘¬“x
-#define ROTATION_Y CVector(0.0f,-0.5f,0.0f) //‰ñ“]‘¬“x
+#define ROTATION_Y CVector(0.0f,-0.3f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_X CVector(0.0f,-0.1f,0.0f) //‰ñ“]‘¬“x
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//ˆÚ“®‘¬“x
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //‰ñ“]‘¬“x
-#define ZYUURYOKU (TIPSIZE/20.0f)
-#define JANPU (TIPSIZE /3.0f)
+//#define ZYUURYOKU (TIPSIZE/20.0f)
+//#define JANPU (TIPSIZE /3.0f)
 
 CPlayer* CPlayer::Instance()
 {
