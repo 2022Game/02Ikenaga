@@ -55,7 +55,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 
 CPlayer::CPlayer()
 	:mLine(this, &mMatrix, CVector(0.0f, 1.0f,0.0f), CVector(0.0f, 0.0f, 0.0f))
-	,mLine2(this, &mMatrix, CVector(0.5f, 1.0f, 1.0f), CVector(-0.5f, 1.0f, 1.0f))
+	,mLine2(this, &mMatrix, CVector(1.0f, 1.0f, 1.0f), CVector(-1.0f, 1.0f, 1.0f))
 	,mLine3(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 {
 	//インスタンスの設定
@@ -109,13 +109,13 @@ void CPlayer::Update()
 		mPosition = mPosition + VELOCITY * mMatrixRotate;
 		//mPosition = mPosition + ROTATION_X * mMatrixRotate;
 	}
-	if (mState != EState::EJUMP)
-	{
-		if (mInput.Key('J'))
-		{
-			//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
-		}
-	}
+	//if (mState != EState::EJUMP)
+	//{
+	//	if (mInput.Key('J'))
+	//	{
+	//		//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+	//	}
+	//}
 	int jump = 0;
 	if (jump < 0)
 	{
@@ -125,6 +125,7 @@ void CPlayer::Update()
 	{
 		if (mInput.Key('J'))
 		{
+			//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
 		}
 	}

@@ -26,6 +26,7 @@
 #include"CStage.h"
 #include"CKokki.h"
 #include"CHATA.h"
+#include"CPolice.h"
 
 class CApplication
 {
@@ -42,6 +43,7 @@ private:
 	CModel mKokki;
 	CModel mHata;
 	CModel mEnemy1;
+	CModel mPolice;
 	//C5ƒ‚ƒfƒ‹
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;

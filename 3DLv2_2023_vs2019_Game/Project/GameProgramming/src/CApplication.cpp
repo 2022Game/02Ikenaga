@@ -28,6 +28,7 @@ CCharacterManager CApplication::mCharacterManager;
 #define MODEL4 "res\\国旗.obj","res\\国旗.mtl"
 //#define MODEL5 "res\\新旗.obj","res\\新旗.mtl"
 #define MODEL6  "res\\敵1.obj","res\\敵1.mtl"
+#define MODEL7  "res\\サボるポリス.obj","res\\サボるポリス.mtl"
 //CTaskManager CApplication::mTaskManager;
 //CTaskManager* CTaskManager::Instance()
 //{
@@ -82,12 +83,25 @@ void CApplication::Start()
 	mKokki.Load(MODEL4);
 	//new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
 	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
-	new CKokki(&mKokki, CVector(30.0f, -1.2f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(47.5f, 0.84f, 0.95f));
+	new CKokki(&mKokki, CVector(30.0f, -1.2f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(48.4f, 0.84f, 0.95f));
+	new CKokki(&mKokki, CVector(23.55f, -0.81f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));//左のステージ袖の階段
+	new CKokki(&mKokki, CVector(23.25f, -0.99f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(22.95f, -1.14f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(22.65f, -1.31f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(22.35f, -1.48f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+
+	new CKokki(&mKokki, CVector(36.45f, -0.81f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(36.75f, -0.99f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(37.05f, -1.14f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(37.35f, -1.31f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(37.65f, -1.48f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 	mEnemy1.Load(MODEL6);
 	//敵機のインスタンス作成
 	//new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
+	mPolice.Load(MODEL7);
+	//new CPolice(&mPolice, CVector(20.0f, 2.5f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	//敵機のインスタンス作成
 	//new CEnemy(&mModelC5, CVector(0.0f, 10.0f, -100.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//C5モデルの読み込み
