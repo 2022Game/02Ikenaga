@@ -29,6 +29,7 @@ CCharacterManager CApplication::mCharacterManager;
 //#define MODEL5 "res\\新旗.obj","res\\新旗.mtl"
 #define MODEL6  "res\\敵1.obj","res\\敵1.mtl"
 #define MODEL7  "res\\サボるポリス.obj","res\\サボるポリス.mtl"
+#define MODEL8 "res\\透明壁さん.obj","res\\透明壁さん.mtl"
 //CTaskManager CApplication::mTaskManager;
 //CTaskManager* CTaskManager::Instance()
 //{
@@ -90,11 +91,17 @@ void CApplication::Start()
 	new CKokki(&mKokki, CVector(22.65f, -1.31f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 	new CKokki(&mKokki, CVector(22.35f, -1.48f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 
-	new CKokki(&mKokki, CVector(36.45f, -0.81f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+	new CKokki(&mKokki, CVector(36.45f, -0.81f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));//右のステージ袖の階段
 	new CKokki(&mKokki, CVector(36.75f, -0.99f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 	new CKokki(&mKokki, CVector(37.05f, -1.14f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 	new CKokki(&mKokki, CVector(37.35f, -1.31f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 	new CKokki(&mKokki, CVector(37.65f, -1.48f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
+
+	//new CKokki(&mKokki, CVector(42.725f, 0.65f, -9.9f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.015f, 0.4f));//0.015
+
+	mTransparent.Load(MODEL8);
+	new CTransparent(&mTransparent, CVector(43.17f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.3f, 7.0f));
+	//new CTransparent(&mTransparent, CVector(42.725f, 0.65f, -11.5f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.02f, 0.4f));//0.015
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 	mEnemy1.Load(MODEL6);

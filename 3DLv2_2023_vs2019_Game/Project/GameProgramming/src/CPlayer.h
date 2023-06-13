@@ -32,6 +32,7 @@ private:
 	//CColliderMesh mColliderMesh1;
 	//プレイヤーのインスタンス
 	static CPlayer* spInstance;
+	//CColliderLine mLine4; //線分コライダ
 	CColliderLine mLine3; //線分コライダ
 	CColliderLine mLine2; //線分コライダ
 	CColliderLine mLine; //線分コライダ

@@ -27,6 +27,7 @@
 #include"CKokki.h"
 #include"CHATA.h"
 #include"CPolice.h"
+#include"CTransparent.h"
 
 class CApplication
 {
@@ -39,6 +40,7 @@ private:
 	CColliderTriangle mColliderTriangle2;
 	//モデルビューの逆行列
 	static CMatrix mModelViewInverse;
+	CModel mTransparent;//透明の壁
 	CModel mStage;
 	CModel mKokki;
 	CModel mHata;
