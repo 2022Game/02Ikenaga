@@ -71,7 +71,8 @@ void CApplication::Start()
 {
 	//3Dモデルファイルの読み込み
 	mModelX.Load(MODEL_FILE);
-	mCharacter.Init(&mModelX);
+	mXPlayer.Init(&mModelX);
+	//mCharacter.Init(&mModelX);
 	mFont.Load("FontG.png", 1, 4096 / 64);
 	//spUi = new CUi();	//UIクラスの生成
 	////モデルファイルの入力
@@ -119,31 +120,26 @@ void CApplication::Start()
 
 void CApplication::Update()
 {
-	if (mCharacter.IsAnimationFinished())
+	/*if (mCharacter.IsAnimationFinished())
 	{
 		if (mModelX.AnimationSet().size()>mCharacter.AnimationIndex())
 		{
 			mCharacter.ChangeAnimation(1 + mCharacter.AnimationIndex(), false, 60);
 		}
-	}
-	/*for (size_t i = 0; i < mCharacter.IsAnimationFinished();i++)
-	{
-		switch (i)
-		{
-		case 0:
-			mCharacter.ChangeAnimation(1, true, 60);
-			break;
-		case 1:
-			mCharacter.ChangeAnimation(2, true, 60);
-			break;
-		case 2:
-			mCharacter.ChangeAnimation(3, true, 60);
-			break;
-		}
 	}*/
+	//mXPlayer.ChangeAnimation(0, true, 60);
 	//mModelX.AnimateFrame();
 	//キャラクタクラスの更新
-	mCharacter.Update(CMatrix());
+	mXPlayer.Update();
+	/*if (mXPlayer.IsAnimationFinished())
+	{
+		if (mInput.Key('W'))
+		{
+			mXPlayer.ChangeAnimation(1, true, 60);
+		}
+	}*/
+	//mXPlayer.ChangeAnimation(0, false, 60);
+	//mCharacter.Update(CMatrix());
 	/*mModelX.AnimationSet()[0]->Time(mModelX.AnimationSet()[0]->Time() + 1.0f);
 	mModelX.AnimationSet()[0]->Time((int)mModelX.AnimationSet()[0]->Time() %
 		(int)(mModelX.AnimationSet()[0]->MaxTime() + 1));*/
@@ -199,7 +195,7 @@ void CApplication::Update()
 	mModelX.AnimateVertex();
 	//モデル描画
 	//mModelX.Render();
-	mCharacter.Render();
+	mXPlayer.Render();
 
 	//2D描画開始
 	CCamera::Start(0, 800, 0, 600);

@@ -1,5 +1,23 @@
 #include "CXCharacter.h"
 
+CXCharacter::CXCharacter()
+	/*:mAnimationFrame(0)
+	,mAnimationFrameSize(0)
+	,mAnimationIndex(0)
+	,mAnimationLoopFlg(0)
+	,mpModel(0)*/
+{
+	mScale = CVector(1.0f, 1.0f, 1.0f);
+}
+
+void CXCharacter::Update()
+{
+	//変数行列の更新
+	CTransform::Update();
+	//アニメーションを更新する
+	Update(mMatrix);
+}
+
 /*
 Init
 初期化処理
