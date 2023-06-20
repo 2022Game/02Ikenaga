@@ -1,38 +1,33 @@
-#include "CExclamationMark.h"
-#include"CEffect.h"
+#include "CFrame.h"
 #include "CCollisionManager.h"
 #include"CPlayer.h"
-#include "CEnemy.h"
 
-#define OBJ1 "res\\!.obj"
-#define MTL1 "res\\!.mtl"
-
-CModel CExclamationMark::sModel;
+CModel CFrame::sModel;
 
 //移動速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
 #define VELOCITY2 0.11f
 #define VELOCITY3 -0.11f
 
-void CExclamationMark::Set(float w, float d)
+void CFrame::Set(float w, float d)
 {
 	//スケール設定
-	mScale = CVector(0.2f, 0.2f,0.2f);
+	mScale = CVector(0.2f, 0.2f, 0.2f);
 	//三角形の頂点設定
 	//mT.Vertex(CVector(w, 0.0f, 0.0f), CVector(0.0f, 0.0f, -d), CVector(-w, 0.0f, 0.0f));
 	//三角形の法線設定
 	//mT.Normal(CVector(0.0f, 1.0f, 0.0f));
 }
 
-CExclamationMark::CExclamationMark()
+CFrame::CFrame()
 	:CCharacter3(1)
-	,mark(0)
+	, mark(0)
 	//, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
 {
 	//モデルが無いときは読み込む
 	if (sModel.Triangles().size() == 0)
 	{
-		sModel.Load(OBJ1, MTL1);
+		//sModel.Load(OBJ1, MTL1);
 	}
 	//モデルのポインタ
 	mpModel = &sModel;
@@ -40,8 +35,8 @@ CExclamationMark::CExclamationMark()
 
 //コンストラクタ
 //CExclamationMark(位置,回転,拡縮)
-CExclamationMark::CExclamationMark(const CVector& position, const CVector& rotation, const CVector& scale)
-	:CExclamationMark()  //デフォルトコンストラクタを実行する
+CFrame::CFrame(const CVector& position, const CVector& rotation, const CVector& scale)
+	:CFrame()  //デフォルトコンストラクタを実行する
 {
 	//位置、回転、拡縮を設定する
 	mPosition = position;  //位置の設定
@@ -53,7 +48,7 @@ CExclamationMark::CExclamationMark(const CVector& position, const CVector& rotat
 }
 
 // 更新処理
-void CExclamationMark::Update()
+void CFrame::Update()
 {
 	/*mark++;
 	if (mark > 1)
@@ -61,48 +56,17 @@ void CExclamationMark::Update()
 		mEnabled = false;
 		mark = 0;
 	}*/
-		//プレイヤーのポインタが0以外の時
-		//CPlayer* player = CPlayer::Instance();
-		//if (player != nullptr)
-		//{
-		//	//プレイヤーまでのベクトルを求める
-		//	CVector vp = player->Position() - mPosition;
-		//	//左ベクトルとの内積を求める
-		//	float dx = vp.Dot(mMatrixRotate.VectorX());
-		//	//上ベクトルとの内積を求める
-		//	float dy = vp.Dot(mMatrixRotate.VectorY());
-		//	float dz = vp.Dot(mMatrixRotate.VectorZ());
-	CEnemy* enemy = CEnemy::Instance();
-	if (enemy != nullptr)
-	{
-		CVector vp = enemy->Position() - mPosition;
-		//左ベクトルとの内積を求める
-		float dx = vp.Dot(mMatrixRotate.VectorX());
-		//上ベクトルとの内積を求める
-		float dy = vp.Dot(mMatrixRotate.VectorY());
-		float dz = vp.Dot(mMatrixRotate.VectorZ());
-
-			//X軸のズレが2.0以下
-		if  (-100.0f < dx && dx < 100.0f)
-		{
-			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
-			//Y軸のズレが2.0以下
-			if (-1.0f < dy && dy < 1.0f)
-			{
-				//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
-				if (30.0f > dz && dz >= 0.0f)
-				{
-					//弾を発射します
-					/*CBullet* bullet = new CBullet();
-					bullet->Set(0.1f, 1.5f);
-					bullet->Position(
-						CVector(0.0f, 0.0f, 10.0f) * mMatrix);
-					bullet->Rotation(mRotation);
-					bullet->Update();*/
-				}
-			}
-		}
-	}
+	//プレイヤーのポインタが0以外の時
+	//CPlayer* player = CPlayer::Instance();
+	//if (player != nullptr)
+	//{
+	//	//プレイヤーまでのベクトルを求める
+	//	CVector vp = player->Position() - mPosition;
+	//	//左ベクトルとの内積を求める
+	//	float dx = vp.Dot(mMatrixRotate.VectorX());
+	//	//上ベクトルとの内積を求める
+	//	float dy = vp.Dot(mMatrixRotate.VectorY());
+	//	float dz = vp.Dot(mMatrixRotate.VectorZ());
 	//HPが0以下の時 撃破
 	//if (mHp <= 0)
 	//{
@@ -140,13 +104,13 @@ void CExclamationMark::Update()
 	if (dy > margin)
 	{
 		//mRotation = mRotation + CVector(-1.0f, 0.0f, 0.0f);  //上へ回転
-		mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	else if (dy < -margin)
 	{
 		//課題
 		//mRotation = mRotation + CVector(1.0f, 0.0f, 0.0f);  //下へ回転
-	  mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	//機体前方へ移動する
 	//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
@@ -154,17 +118,6 @@ void CExclamationMark::Update()
 	//およそ3秒毎に目標地点を更新
 	int r = rand() % 180; //rand()は整数の乱数を返す
 						  //% 180は180で割った余りを求める
-	if (r == 0)
-	{
-		if (enemy == nullptr)
-		{
-			mPoint = enemy->Position();
-		}
-		else
-		{
-			mPoint = mPoint * CMatrix().RotateY(45);
-		}
-	}
 
 	/*if (r == 0)
 	{
@@ -183,7 +136,7 @@ void CExclamationMark::Update()
 	//mPosition = mPosition + VELOCITY * mMatrixRotate;
 }
 
-void CExclamationMark::Collision()
+void CFrame::Collision()
 {
 	//コライダの優先度変更
 	//mCollider1.ChangePriority();
@@ -197,7 +150,7 @@ void CExclamationMark::Collision()
 
 //衝突処理
 //Collision(コライダ1,コライダ2)
-void CExclamationMark::Collision(CCollider* m, CCollider* o) {
+void CFrame::Collision(CCollider* m, CCollider* o) {
 	//相手のコライダタイプの判定
 	switch (o->Type())
 	{
@@ -205,7 +158,7 @@ void CExclamationMark::Collision(CCollider* m, CCollider* o) {
 		//コライダのmとyが衝突しているか判定
 		if (CCollider::CCollision(m, o)) {
 			//エフェクト生成
-			new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
+			//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
 			//衝突している時は無効にする
 			//mEnabled=false;
 		}
@@ -231,11 +184,11 @@ void CExclamationMark::Collision(CCollider* m, CCollider* o) {
 
 //コンストラクタ
 //CExclamationMark(モデル,位置,回転,拡縮)
-CExclamationMark::CExclamationMark(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
+CFrame::CFrame(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
 	:mark(0)
-/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
-, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
+	/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
+	, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
+	, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
 {
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定

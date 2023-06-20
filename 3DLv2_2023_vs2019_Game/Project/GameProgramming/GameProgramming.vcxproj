@@ -30,6 +30,7 @@
     <ClCompile Include="src\CEnemy3.cpp" />
     <ClCompile Include="src\CExclamationMark.cpp" />
     <ClCompile Include="src\CFont.cpp" />
+    <ClCompile Include="src\CFrame.cpp" />
     <ClCompile Include="src\CGame.cpp" />
     <ClCompile Include="src\CHATA.cpp" />
     <ClCompile Include="src\CKokki.cpp" />
@@ -73,6 +74,7 @@
     <ClInclude Include="src\CEnemy3.h" />
     <ClInclude Include="src\CExclamationMark.h" />
     <ClInclude Include="src\CFont.h" />
+    <ClInclude Include="src\CFrame.h" />
     <ClInclude Include="src\CGame.h" />
     <ClInclude Include="src\CHATA.h" />
     <ClInclude Include="src\CKokki.h" />

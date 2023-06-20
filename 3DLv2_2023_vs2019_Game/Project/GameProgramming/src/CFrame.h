@@ -1,6 +1,6 @@
 #pragma once
-#ifndef CEXCLAMATIONMARK_H
-#define CEXCLAMATIONMARK_H
+#ifndef CFRAME_H
+#define CFRAME_H
 //キャラクタクラスのインクルード
 #include"CCharacter3.h"
 #include"CCollider.h"
@@ -11,14 +11,14 @@
 キャラクタクラスを継承
 */
 
-class CExclamationMark : public CCharacter3 {
+class CFrame : public CCharacter3 {
 public:
 	void Set(float w, float d);
 	//コンストラクタ
-	CExclamationMark();
+	CFrame();
 	void Collision();
-	//CEnemy3(位置,回転,拡縮)
-	CExclamationMark(const CVector& position, const CVector& rotation, const CVector& scale);
+	//CFrame(位置,回転,拡縮)
+	CFrame(const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
 	//衝突処理
@@ -33,14 +33,14 @@ public:
 	//}
 	//コンストラクタ
 	//CEnemy(モデル,位置,回転,拡縮)
-	CExclamationMark(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
+	CFrame(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
 	int mark;
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;
-	CCollider mCollider;
-	CColliderMesh mColliderMesh1;
+	//CCollider mCollider;
+	//CColliderMesh mColliderMesh1;
 	//コライダ
 	//CCollider mCollider1;
 	//CCollider mCollider2;

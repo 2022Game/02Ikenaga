@@ -30,6 +30,7 @@ CCharacterManager CApplication::mCharacterManager;
 #define MODEL6  "res\\敵1.obj","res\\敵1.mtl"
 #define MODEL7  "res\\サボるポリス.obj","res\\サボるポリス.mtl"
 #define MODEL8 "res\\透明の壁.obj","res\\透明の壁.mtl"
+#define MODEL9 "res\\枠緑色.obj","res\\枠緑色.mtl"
 //CTaskManager CApplication::mTaskManager;
 //CTaskManager* CTaskManager::Instance()
 //{
@@ -75,7 +76,7 @@ void CApplication::Start()
 {
 	spUi = new CUi();  //UIクラスの生成
 	//三角コライダの確認
-	//mColliderTriangle.Set(nullptr, nullptr, CVector(-50.0f, 0.0f, -50.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 5.0f, -50.0f));
+	mColliderTriangle.Set(nullptr, nullptr, CVector(10.0f, 10.0f, -10.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, 50.0f));
 	//mColliderTriangle2.Set(nullptr, nullptr, CVector(-100.0f, 10.0f, -100.0f), CVector(-50.0f, -4.0f, 50.0f), CVector(50.0f, -4.0f, 50.0f));
 	//new CEnemy3(CVector(-5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
 	//new CEnemy3(CVector(5.0f, 1.0f, -10.0f), CVector(), CVector(0.1f, 0.1f, 0.1f));
@@ -112,6 +113,8 @@ void CApplication::Start()
 	new CKokki(&mKokki, CVector(22.0f, 6.0f, 16.6f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 0.3f, 3.0f));//入口の横の壁(左)
 	new CKokki(&mKokki, CVector(16.86f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.3f, 7.0f)); //左の壁
 	
+	mFrame.Load(MODEL9);
+	new CFrame(&mFrame, CVector(30.0f, -0.9f, 1.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 

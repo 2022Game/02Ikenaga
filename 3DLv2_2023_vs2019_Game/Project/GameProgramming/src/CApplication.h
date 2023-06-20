@@ -28,6 +28,7 @@
 #include"CHATA.h"
 #include"CPolice.h"
 #include"CTransparent.h"
+#include"CFrame.h"
 
 class CApplication
 {
@@ -46,6 +47,7 @@ private:
 	CModel mHata;
 	CModel mEnemy1;
 	CModel mPolice;
+	CModel mFrame;
 	//C5ƒ‚ƒfƒ‹
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;

@@ -1,8 +1,2 @@
 ﻿  CApplication.cpp
-CVector.obj : warning LNK4099: PDB 'vc142.pdb' が 'CVector.obj' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-CUi.obj : warning LNK4099: PDB 'vc142.pdb' が 'CUi.obj' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-CTexture.obj : warning LNK4099: PDB 'vc142.pdb' が 'CTexture.obj' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-CMaterial.obj : warning LNK4099: PDB 'vc142.pdb' が 'CMaterial.obj' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-CFont.obj : warning LNK4099: PDB 'vc142.pdb' が 'CFont.obj' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-CCamera.obj : warning LNK4099: PDB 'vc142.pdb' が 'CCamera.obj' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
   GameProgramming.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\GameProgramming.exe
