@@ -100,8 +100,12 @@ void CTaskManager::Render() {
 	CTask* task = mTail.mpPrev;
 	while (task->mpPrev != nullptr)
 	{
-		//•`‰æˆ—‚ğŒÄ‚Ô
-		task->Render();
+		//”ñ•\¦ó‘Ô‚Å‚È‚¯‚ê‚Î
+		if (!task->IsHidden())
+		{
+			//•`‰æˆ—‚ğŒÄ‚Ô
+			task->Render();
+		}
 		//‘O‚Ö
 		task = task->mpPrev;
 		//return;

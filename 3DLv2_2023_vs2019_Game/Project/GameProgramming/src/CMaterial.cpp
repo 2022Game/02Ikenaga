@@ -27,11 +27,11 @@ CTexture* CMaterial::Texture()
 
 void CMaterial::Disabled()
 {
+	//アルファブレンドを無効
+	glDisable(GL_BLEND);
 	//テクスチャ有り
 	if (mTexture.Id())
 	{
-		//アルファブレンドを無効
-		glDisable(GL_BLEND);
 		//テクスチャのバインドを解く
 		glBindTexture(GL_TEXTURE_2D, 0);
 		//テクスチャを無効にする
@@ -64,11 +64,11 @@ void CMaterial::Enabled() {
 		glEnable(GL_TEXTURE_2D);
 		//テクスチャをバインドする
 		glBindTexture(GL_TEXTURE_2D, mTexture.Id());
-		//アルファブレンドを有効にする
-		glEnable(GL_BLEND);
-		//ブレンド方法を指定
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+	//アルファブレンドを有効にする
+	glEnable(GL_BLEND);
+	//ブレンド方法を指定
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 //マテリアルの名前の取得
 char* CMaterial::Name()

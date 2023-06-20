@@ -44,3 +44,11 @@ void CColliderMesh::Set(CCharacter3* parent, CMatrix* matrix, CModel* model)
 		mpColliderTriangles[i].ChangePriority();
 	}
 }
+
+void CColliderMesh::SetHidden(bool isHidden)
+{
+	for (int i = 0; i < mTrianglesCount; i++)
+	{
+		mpColliderTriangles[i].SetHidden(isHidden);
+	}
+}

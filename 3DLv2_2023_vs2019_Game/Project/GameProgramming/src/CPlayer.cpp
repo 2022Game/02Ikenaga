@@ -4,8 +4,8 @@
 #include"CApplication.h"
 #include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
-#define ROTATION_YY CVector(0.0f,0.7f,0.0f) //回転速度
-#define ROTATION_Y CVector(0.0f,-0.3f,0.0f) //回転速度
+#define ROTATION_YY CVector(0.0f,3.0f,0.0f) //回転速度
+#define ROTATION_Y CVector(0.0f,-0.2f,0.0f) //回転速度
 #define ROTATION_X CVector(0.0f,-0.1f,0.0f) //回転速度
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//移動速度
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //回転速度
@@ -22,7 +22,6 @@ CPlayer* CPlayer::spInstance = nullptr;
 //衝突処理
 void CPlayer::Collision()
 {
-	
 	//コライダの優先度変更
 	mLine.ChangePriority();
 	mLine2.ChangePriority();
@@ -57,6 +56,7 @@ CPlayer::CPlayer()
 	:mLine(this, &mMatrix, CVector(0.0f, 1.0f,0.0f), CVector(0.0f, 0.0f, 0.0f))
 	,mLine2(this, &mMatrix, CVector(0.5f, 1.0f, 1.0f), CVector(-0.5f, 1.0f, 1.0f))
 	,mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.5f), CVector(0.0f, 1.0f, -0.5f))
+	,jump(0)
 	//, mLine4(this, &mMatrix, CVector(0.0f, 1.0f, 2.5f), CVector(0.0f, 1.0f, -0.5f))
 {
 	//インスタンスの設定
@@ -66,6 +66,7 @@ CPlayer::CPlayer()
 
 //CPayer(位置,回転,スケール)
 CPlayer::CPlayer(const CVector& pos, const CVector& rot, const CVector& scale)
+	:jump(0)
 {
 	CTransform::Update(pos, rot, scale); //行列の更新
 }
@@ -73,6 +74,11 @@ CPlayer::CPlayer(const CVector& pos, const CVector& rot, const CVector& scale)
 //更新処理
 void CPlayer::Update()
 {
+	SetHidden(false);
+	if (mInput.Key('Y')) 
+	{
+		SetHidden(true);
+	}
 	//スペースキー入力で弾発射
 	if (mInput.Key(VK_SPACE)) {
 		CBullet* bullet = new CBullet();
@@ -117,17 +123,14 @@ void CPlayer::Update()
 	//		//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
 	//	}
 	//}
-	int jump = 0;
-	if (jump < 0)
-	{
-		jump--;
-	}
-	if (jump < 1)
+	jump++;
+	if (jump > 50)
 	{
 		if (mInput.Key('J'))
 		{
 			//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+			jump = 0;
 		}
 	}
 	mPosition = mPosition + ROTATION_Y * mMatrixRotate;

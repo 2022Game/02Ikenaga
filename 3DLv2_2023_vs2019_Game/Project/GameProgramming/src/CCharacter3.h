@@ -46,7 +46,7 @@ public:
 	//Model(モデルクラスのポインタ)
 	void Model(CModel* m);
 	//描画処理
-	void Render();
+	virtual void Render();
 protected:
 protected:
 	float mVx;	//X軸速度

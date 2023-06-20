@@ -29,6 +29,7 @@ public:
 	//更新処理
 	void Update();
 private:
+	int jump;
 	//CColliderMesh mColliderMesh1;
 	//プレイヤーのインスタンス
 	static CPlayer* spInstance;

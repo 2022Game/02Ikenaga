@@ -7,7 +7,7 @@
 #include "CColliderMesh.h"
 
 /*
-エネミークラス
+緑枠クラス
 キャラクタクラスを継承
 */
 

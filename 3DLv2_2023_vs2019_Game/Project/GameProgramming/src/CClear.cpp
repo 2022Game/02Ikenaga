@@ -1,9 +1,8 @@
-#include "CTransparent.h"
-#include"CEffect.h"
+#include "CClear.h"
 #include "CCollisionManager.h"
+#include"CPlayer.h"
 
-
-void CTransparent::Collision()
+void CClear::Collision()
 {
 	mColliderMesh1.ChangePriority();
 	////コライダの優先度変更
@@ -16,7 +15,7 @@ void CTransparent::Collision()
 	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);*/
 }
 
-void CTransparent::Collision(CCollider* m, CCollider* o) {
+void CClear::Collision(CCollider* m, CCollider* o) {
 	//相手のコライダタイプの判定
 	switch (o->Type())
 	{
@@ -49,7 +48,7 @@ void CTransparent::Collision(CCollider* m, CCollider* o) {
 	//}
 }
 
-CTransparent::CTransparent(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
+CClear::CClear(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
 /*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
 , mCollider2(this, &mMatrix, CVector(0.0f, 5.0f, 20.0f), 0.8f)
 , mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
@@ -60,20 +59,12 @@ CTransparent::CTransparent(CModel* model, const CVector& position, const CVector
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
 	mColliderMesh1.Set(this, &mMatrix, mpModel);
-	//コライダを表示しない
-	mColliderMesh1.SetHidden(false);
 	//CTransform::Update();
 }
 
 //更新処理
-void CTransparent::Update()
+void CClear::Update()
 {
 	// 行列を更新
 	CTransform::Update();
-}
-
-//描画
-void CTransparent::Render()
-{
-
 }

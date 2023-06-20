@@ -19,6 +19,7 @@
     <ClCompile Include="src\CCharacter.cpp" />
     <ClCompile Include="src\CCharacter3.cpp" />
     <ClCompile Include="src\CCharacterManager.cpp" />
+    <ClCompile Include="src\CClear.cpp" />
     <ClCompile Include="src\CCollider.cpp" />
     <ClCompile Include="src\CColliderLine.cpp" />
     <ClCompile Include="src\CColliderMesh.cpp" />
@@ -44,6 +45,7 @@
     <ClCompile Include="src\CRectangle.cpp" />
     <ClCompile Include="src\CSound.cpp" />
     <ClCompile Include="src\CStage.cpp" />
+    <ClCompile Include="src\CTask.cpp" />
     <ClCompile Include="src\CTaskManager.cpp" />
     <ClCompile Include="src\CTexture.cpp" />
     <ClCompile Include="src\CInput.cpp" />
@@ -63,6 +65,7 @@
     <ClInclude Include="src\CCharacter.h" />
     <ClInclude Include="src\CCharacter3.h" />
     <ClInclude Include="src\CCharacterManager.h" />
+    <ClInclude Include="src\CClear.h" />
     <ClInclude Include="src\CCollider.h" />
     <ClInclude Include="src\CColliderLine.h" />
     <ClInclude Include="src\CColliderMesh.h" />

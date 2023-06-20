@@ -29,6 +29,7 @@
 #include"CPolice.h"
 #include"CTransparent.h"
 #include"CFrame.h"
+#include"CClear.h"
 
 class CApplication
 {
@@ -48,6 +49,7 @@ private:
 	CModel mEnemy1;
 	CModel mPolice;
 	CModel mFrame;
+	CModel mClear;
 	//C5ƒ‚ƒfƒ‹
 	CModel mModelC5;
 	//static CTaskManager mTaskManager;

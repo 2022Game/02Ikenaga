@@ -15,6 +15,7 @@ public:
 	void Collision(CCollider* m, CCollider* o);
 	CTransparent(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 	void Update();
+	void Render();
 private:
 	CModel mStage;
 	CColliderMesh mColliderMesh1;
