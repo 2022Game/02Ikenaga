@@ -131,13 +131,6 @@ void CApplication::Update()
 	//mModelX.AnimateFrame();
 	//キャラクタクラスの更新
 	mXPlayer.Update();
-	/*if (mXPlayer.IsAnimationFinished())
-	{
-		if (mInput.Key('W'))
-		{
-			mXPlayer.ChangeAnimation(1, true, 60);
-		}
-	}*/
 	//mXPlayer.ChangeAnimation(0, false, 60);
 	//mCharacter.Update(CMatrix());
 	/*mModelX.AnimationSet()[0]->Time(mModelX.AnimationSet()[0]->Time() + 1.0f);
