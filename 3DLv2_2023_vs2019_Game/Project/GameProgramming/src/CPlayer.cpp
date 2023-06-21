@@ -5,6 +5,7 @@
 #include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
 #define ROTATION_YY CVector(0.0f,3.0f,0.0f) //回転速度
+#define ROTATION_YO CVector(0.0f,0.3f,0.0f) 
 #define ROTATION_Y CVector(0.0f,-0.2f,0.0f) //回転速度
 #define ROTATION_X CVector(0.0f,-0.1f,0.0f) //回転速度
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//移動速度
@@ -53,9 +54,9 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 }
 
 CPlayer::CPlayer()
-	:mLine(this, &mMatrix, CVector(0.0f, 1.0f,0.0f), CVector(0.0f, 0.0f, 0.0f))
-	,mLine2(this, &mMatrix, CVector(0.5f, 1.0f, 1.0f), CVector(-0.5f, 1.0f, 1.0f))
-	,mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.5f), CVector(0.0f, 1.0f, -0.5f))
+	:mLine(this, &mMatrix, CVector(0.0f, 1.9f,0.0f), CVector(0.0f, 0.0f, 0.0f))
+	,mLine2(this, &mMatrix, CVector(0.3f, 1.0f, 1.0f), CVector(-0.3f, 1.0f, 1.0f))
+	,mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.8f), CVector(0.0f, 1.0f, -0.2f))
 	,jump(0)
 	//, mLine4(this, &mMatrix, CVector(0.0f, 1.0f, 2.5f), CVector(0.0f, 1.0f, -0.5f))
 {
@@ -123,15 +124,20 @@ void CPlayer::Update()
 	//		//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
 	//	}
 	//}
-	jump++;
-	if (jump > 50)
+	//jump++;
+	//if (jump > 50)
+	//{
+	//	if (mInput.Key('J'))
+	//	{
+	//		//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
+	//		mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+	//		jump = 0;
+	//	}
+	//}
+	if (mInput.Key('J'))
 	{
-		if (mInput.Key('J'))
-		{
-			//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
-			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
-			jump = 0;
-		}
+		//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
+		mPosition = mPosition + ROTATION_YO * mMatrixRotate;
 	}
 	mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 	//変換行列の更新

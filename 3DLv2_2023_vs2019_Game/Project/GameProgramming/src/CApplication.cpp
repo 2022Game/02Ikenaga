@@ -86,7 +86,7 @@ void CApplication::Start()
 	mKokki.Load(MODEL4);
 	//new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
 	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
-	new CKokki(&mKokki, CVector(30.0f, -1.2f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(48.4f, 0.84f, 0.95f));
+	//new CKokki(&mKokki, CVector(30.0f, -1.2f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(48.4f, 0.84f, 0.95f));
 	new CKokki(&mKokki, CVector(23.55f, -0.81f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));//透明の入口から見て左のステージ袖の階段
 	new CKokki(&mKokki, CVector(23.25f, -0.99f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
 	new CKokki(&mKokki, CVector(22.95f, -1.14f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
@@ -108,12 +108,18 @@ void CApplication::Start()
 	//new CPolice(&mPolice, CVector(20.0f, 2.5f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
 	mTransparent.Load(MODEL8);
-	new CKokki(&mKokki, CVector(43.17f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.3f, 7.0f));//右の壁
-	//new CTransparent(&mTransparent, CVector(23.17f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.3f, 7.0f));//透明の壁(右)43.17
-	new CKokki(&mKokki, CVector(37.1f, 0.65f, 16.6f), CVector(90.0f, 0.0f, 0.0f), CVector(42.7f, 0.3f, 5.0f));//入口の横の壁(右)
-	new CKokki(&mKokki, CVector(22.0f, 6.0f, 16.6f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 0.3f, 3.0f));//入口の横の壁(左)
-	new CKokki(&mKokki, CVector(16.86f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(12.0f, 0.3f, 7.0f)); //左の壁
+	new CTransparent(&mTransparent, CVector(30.0f, -2.648f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(48.4f, 0.84f, 0.95f));//-2.649
+	new CTransparent(&mTransparent, CVector(22.15f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(18.0f, 0.84f, 0.8f));
+	new CTransparent(&mTransparent, CVector(18.0f, -2.648f, -18.5f), CVector(0.0f, 0.0f, 0.0f), CVector(19.0f, 0.84f, 0.6f));//入口から見て左のステージ左のドア付近上側
+
+	new CTransparent(&mTransparent, CVector(43.64f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(16.0f, 0.3f, 7.0f));//透明の壁(右)
+	new CTransparent(&mTransparent, CVector(17.39f, 0.65f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(16.0f, 0.3f, 7.0f)); //左の壁
+	new CTransparent(&mTransparent, CVector(38.1f, 6.0f, 15.83f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 1.27f, 3.0f));//入口の横の壁(右)
+	new CTransparent(&mTransparent, CVector(21.9f, 6.0f, 15.83f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 1.27f, 3.0f));//入口の横の壁(左)
+	new CTransparent(&mTransparent, CVector(30.0f, 7.9f, 15.8f), CVector(90.0f, 0.0f, 0.0f), CVector(15.0f, 1.27f, 3.0f));//入口の横の壁(真ん中)
 	
+	new CTransparent(&mTransparent, CVector(26.0f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f,4.0f, 0.04));//入口から見て左のステージ左のドア付近
+
 	mFrame.Load(MODEL9);
 	new CFrame(&mFrame, CVector(30.0f, -0.9f, 30.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 
