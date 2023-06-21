@@ -8,34 +8,62 @@ void CXPlayer::Update()
 {
 	if (mInput.Key(VK_SPACE))
 	{
-		if (CXCharacter::mAnimationIndex != 3)
+		int mTime = 0;
+		if (mTime < 30)
 		{
-			CXCharacter::ChangeAnimation(3, false, 30);
+			mTime++;
+			if (CXCharacter::mAnimationIndex != 3)
+			{
+				if (mAnimationLoopFlg == true)
+				{
+					CXCharacter::ChangeAnimation(3, false, 30);
+					if (CXCharacter::IsAnimationFinished() && mAnimationIndex)
+					{
+						if (mAnimationLoopFlg != true)
+						{
+							CXCharacter::ChangeAnimation(4, false, 30);
+						}
+						if (CXCharacter::IsAnimationFinished() && mAnimationIndex)
+						{
+							CXCharacter::ChangeAnimation(0, true, 60);
+						}
+					}
+				}
+			}
+			mTime = 0;
 		}
 	}
-	else if (mInput.Key('W'))
+	if (CXCharacter::IsAnimationFinished() && mAnimationIndex)
 	{
-		if (mAnimationLoopFlg)
+		if (mAnimationLoopFlg != true)
 		{
-
-			mPosition = mPosition + VELOCITY * mMatrixRotate;
-			CXCharacter::ChangeAnimation(1, true, 60);
+			CXCharacter::ChangeAnimation(4, false, 30);
 		}
-	}
-	else if (mInput.Key('A'))
-	{
-		mRotation = mRotation + ROTATION_YV;
-	}
-	else if (mInput.Key('D'))
-	{
-		mRotation = mRotation - ROTATION_YV;
-	}
-	else if (CXCharacter::IsAnimationFinished() && mAnimationIndex)
-	{
-		CXCharacter::ChangeAnimation(4, false, 30);
 		if (CXCharacter::IsAnimationFinished() && mAnimationIndex)
 		{
 			CXCharacter::ChangeAnimation(0, true, 60);
+		}
+	}
+	if (mInput.Key('A'))
+	{
+		if (mAnimationLoopFlg)
+		{
+			mRotation = mRotation + ROTATION_YV;
+		}
+	}
+	if (mInput.Key('D'))
+	{
+		if (mAnimationLoopFlg)
+		{
+			mRotation = mRotation - ROTATION_YV;
+		}
+	}
+	if (mInput.Key('W'))
+	{
+		if (mAnimationLoopFlg)
+		{
+			mPosition = mPosition + VELOCITY * mMatrixRotate;
+			CXCharacter::ChangeAnimation(1, true, 60);
 		}
 	}
 	else if (mAnimationLoopFlg)
