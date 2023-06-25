@@ -56,7 +56,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 CPlayer::CPlayer()
 	:mLine(this, &mMatrix, CVector(0.0f, 1.9f,0.0f), CVector(0.0f, 0.0f, 0.0f))
 	,mLine2(this, &mMatrix, CVector(0.3f, 1.0f, 1.0f), CVector(-0.3f, 1.0f, 1.0f))
-	,mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.8f), CVector(0.0f, 1.0f, -0.2f))
+	,mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.5f), CVector(0.0f, 1.0f, -0.5f))
 	,jump(0)
 	//, mLine4(this, &mMatrix, CVector(0.0f, 1.0f, 2.5f), CVector(0.0f, 1.0f, -0.5f))
 {
