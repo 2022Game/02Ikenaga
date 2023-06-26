@@ -4,6 +4,18 @@
 #define VELOCITY CVector(0.0f, 0.0f, 0.1f) //ˆÚ“®‘¬“x
 #define ROTATION_XV	CVector(1.0f, 0.0f, 0.0f) //‰ñ“]‘¬“x
 
+void CXPlayer::Init(CModelX* model)
+{
+	CXCharacter::Init(model);
+	//‡¬s—ñ‚Ìİ’è
+	//“ª
+	mColSphereHead.Matrix(&mpCombinedMatrix[11]);
+	//Œ•
+	mColSphereSword.Matrix(&mpCombinedMatrix[21]);
+	//‘Ì
+	mColSphereBody.Matrix(&mpCombinedMatrix[8]);
+}
+
 void CXPlayer::Update()
 {
 	if (mInput.Key(VK_SPACE))
