@@ -392,6 +392,37 @@ CSkinWeights::~CSkinWeights()
 //	// TODO: return ステートメントをここに挿入します
 //}
 
+void CMesh::AnimateVertex(CMatrix*mat)
+{
+	//アニメーション用の頂点エリアクリア
+	memset(mpAnimateVertex, 0, sizeof(CVector) * mVertexNum);
+	memset(mpAnimateNormal, 0, sizeof(CVector) * mNormalNum);
+	//スキンウェイト分繰り返し
+	for (size_t i = 0; i < mSkinWeights.size(); i++)
+	{
+		//フレーム番号取得
+		int frameIndex = mSkinWeights[i]->mFrameIndex;
+		//オフセット行列とフレーム合成行列を合成
+		CMatrix mSkinningMatrix = mSkinWeights[i]->mOffset * mat[frameIndex];
+		//頂点数分繰り返し
+		for (int j = 0; j < mSkinWeights[i]->mIndexNum; j++)
+		{
+			//頂点番号取得
+			int index = mSkinWeights[i]->mpIndex[j];
+			//重み取得
+			float weight = mSkinWeights[i]->mpWeight[j];
+			//頂点と法線を更新する
+			mpAnimateVertex[index] += mpVertex[index] * mSkinningMatrix * weight;
+			mpAnimateNormal[index] += mpNormal[index] * mSkinningMatrix * weight;
+		}
+	}
+	//法線を正規化する
+	for (int i = 0; i < mNormalNum; i++)
+	{
+		mpAnimateNormal[i] = mpAnimateNormal[i].Normalize();
+	}
+}
+
 void CMesh::AnimateVertex(CModelX* model)
 {
 	//アニメーション用の頂点エリアクリア
@@ -813,6 +844,20 @@ CModelXFrame::CModelXFrame(CModelX* model)
 	printf(" %f\t", mTransformMatrix.M()[14]);
 	printf(" %f\n", mTransformMatrix.M()[15]);*/
 #endif
+}
+
+void CModelX::AnimateVertex(CMatrix* mat)
+{
+	//フレーム数繰り返し
+	for (size_t i = 0; i < mFrame.size(); i++)
+	{
+		//メッシュがあれば
+		if (mFrame[i]->mpMesh)
+		{
+			//頂点をアニメーションで更新する
+			mFrame[i]->mpMesh->AnimateVertex(mat);
+		}
+	}
 }
 
 std::vector<CMaterial*>& CModelX::Material()

@@ -72,6 +72,10 @@ void CApplication::Start()
 	//3Dモデルファイルの読み込み
 	mModelX.Load(MODEL_FILE);
 	mXPlayer.Init(&mModelX);
+	//敵の初期設定
+	mXEnemy.Init(&mModelX);
+	//敵の配置
+	mXEnemy.Position(CVector(7.0f, 0.0f, 0.0f));
 	//mCharacter.Init(&mModelX);
 	mFont.Load("FontG.png", 1, 4096 / 64);
 	//spUi = new CUi();	//UIクラスの生成
@@ -129,8 +133,12 @@ void CApplication::Update()
 	}*/
 	//mXPlayer.ChangeAnimation(0, true, 60);
 	//mModelX.AnimateFrame();
+	
 	//キャラクタクラスの更新
 	mXPlayer.Update();
+	//敵の更新
+	mXEnemy.Update();
+
 	//mXPlayer.ChangeAnimation(0, false, 60);
 	//mCharacter.Update(CMatrix());
 	/*mModelX.AnimationSet()[0]->Time(mModelX.AnimationSet()[0]->Time() + 1.0f);
@@ -189,6 +197,8 @@ void CApplication::Update()
 	//モデル描画
 	//mModelX.Render();
 	mXPlayer.Render();
+	//敵描画
+	mXEnemy.Render();
 
 	//2D描画開始
 	CCamera::Start(0, 800, 0, 600);

@@ -10,8 +10,6 @@ class CXPlayer :public CXCharacter
 public:
 	void Update();
 private:
-	//int mTime;
-	//CXCharacter mCharacter;
 	CInput mInput;
 };
 
