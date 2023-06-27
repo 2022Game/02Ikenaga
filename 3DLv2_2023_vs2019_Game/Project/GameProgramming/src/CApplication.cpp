@@ -119,7 +119,7 @@ void CApplication::Start()
 	new CTransparent(&mTransparent, CVector(44.75f, 2.4f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(5.5f, 0.8f, 7.0f));//二階の床(右)
 	new CTransparent(&mTransparent, CVector(15.7f, 5.0f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(26.0f, 0.5f, 7.0f));//二階の床の壁(左)
 	new CTransparent(&mTransparent, CVector(18.0f, 2.4f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(5.5f, 0.8f, 7.0f));//二階の床(左)
-	new CTransparent(&mTransparent, CVector(47.75f, 10.0f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(10.0f, 10.0f, 9.0f));//屋根
+	new CTransparent(&mTransparent, CVector(46.75f, 10.0f, 0.0f), CVector(0.0f, 0.0f, 90.0f), CVector(20.0f, 10.0f, 9.0f));//屋根
 	new CTransparent(&mTransparent, CVector(21.9f, 6.0f, 15.83f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 1.27f, 3.0f));//入口の横の壁(左)
 	new CTransparent(&mTransparent, CVector(30.0f, 7.9f, 15.8f), CVector(90.0f, 0.0f, 0.0f), CVector(15.0f, 1.27f, 3.0f));//入口の横の壁(真ん中)	
 	new CTransparent(&mTransparent, CVector(30.0f, 6.0f, -21.3f), CVector(90.0f, 0.0f, 0.0f), CVector(80.0f, 0.5f, 3.0f));//ステージ裏
@@ -165,7 +165,6 @@ void CApplication::Start()
 
 void CApplication::Update()
 {
-
 	//タスクマネージャの更新
 	CTaskManager::Instance()->Update();
 	CTaskManager::Instance()->Collision();

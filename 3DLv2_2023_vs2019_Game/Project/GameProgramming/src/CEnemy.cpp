@@ -75,13 +75,13 @@ void CEnemy::Update()
 					mark++;
 					if (mark > 100)
 					{
-						CExclamationMark* exclamationmark = new CExclamationMark();
+						/*CExclamationMark* exclamationmark = new CExclamationMark();
 						exclamationmark->Set(0.0f, 0.0f);
 						exclamationmark->Position(
 							CVector(0.8f, 5.0f, 0.0f) * mMatrix);
 						exclamationmark->Rotation(mRotation);
 						exclamationmark->Update();
-						mark = 0;
+						mark = 0;*/
 					}
 					//’e‚ð”­ŽË‚µ‚Ü‚·
 					/*CBullet* bullet = new CBullet();
