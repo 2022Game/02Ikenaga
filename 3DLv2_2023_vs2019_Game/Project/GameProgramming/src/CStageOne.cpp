@@ -1,4 +1,4 @@
-#include "CApplication.h"
+#include "CStageOne.h"
 //OpenGL
 #include"glut.h"
 #include "CRectangle.h"
@@ -8,9 +8,9 @@
 //#include"CTriangle.h"
 
 //クラスのstatic変数
-CTexture CApplication::mTexture;
+CTexture CStageOne::mTexture;
 //CTexture CApplication::mTexture1;
-CCharacterManager CApplication::mCharacterManager;
+CCharacterManager CStageOne::mCharacterManager;
 
 //#define TEXTYA "AvatarHeadMale_Color_2K.jpeg"
 
@@ -39,31 +39,31 @@ CCharacterManager CApplication::mCharacterManager;
 //	return mpInstance;
 //}
 
-CApplication::~CApplication()
+CStageOne::~CStageOne()
 {
 	delete spUi;  //インスタンスUiの削除
 }
 
-CUi* CApplication::spUi = nullptr;
+CUi* CStageOne::spUi = nullptr;
 
-CUi* CApplication::Ui() 
+CUi* CStageOne::Ui()
 {
 	return spUi;  //インスタンスのポインタを返す
 }
 
-CMatrix  CApplication::mModelViewInverse;
+CMatrix  CStageOne::mModelViewInverse;
 
-const CMatrix& CApplication::ModelViewInverse()
+const CMatrix& CStageOne::ModelViewInverse()
 {
 	return mModelViewInverse;
 }
 
-CCharacterManager* CApplication::CharacterManager()
+CCharacterManager* CStageOne::CharacterManager()
 {
 	return &mCharacterManager;
 }
 
-CTexture* CApplication::Texture()
+CTexture* CStageOne::Texture()
 {
 	return &mTexture;
 }
@@ -74,7 +74,7 @@ CTexture* CApplication::Texture()
 //}
 //
 
-void CApplication::Start()
+void CStageOne::Start()
 {
 	spUi = new CUi();  //UIクラスの生成
 	//三角コライダの確認
@@ -86,7 +86,7 @@ void CApplication::Start()
 	new CStage(&mStage, CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	mKokki.Load(MODEL4);
 	//new CKokki(&mKokki, CVector(-10.0f, 1.0f, 0.0f), CVector(0.0f, -90.0f, 0.0f), CVector(5.5f, 5.5f,0.5f));
-	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f,0.5f));
+	new CKokki(&mKokki, CVector(30.0f, 4.0f, -19.65f), CVector(0.0f, -90.0f, 0.0f), CVector(0.5f, 0.5f, 0.5f));
 	//new CKokki(&mKokki, CVector(30.0f, -1.2f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(48.4f, 0.84f, 0.95f));
 	new CKokki(&mKokki, CVector(23.55f, -0.81f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));//透明の入口から見て左のステージ袖の階段
 	new CKokki(&mKokki, CVector(23.25f, -0.99f, -15.8f), CVector(0.0f, 0.0f, 90.0f), CVector(5.0f, 0.1f, 0.2f));
@@ -123,13 +123,13 @@ void CApplication::Start()
 	new CTransparent(&mTransparent, CVector(21.9f, 6.0f, 15.83f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 1.27f, 3.0f));//入口の横の壁(左)
 	new CTransparent(&mTransparent, CVector(30.0f, 7.9f, 15.8f), CVector(90.0f, 0.0f, 0.0f), CVector(15.0f, 1.27f, 3.0f));//入口の横の壁(真ん中)	
 	new CTransparent(&mTransparent, CVector(30.0f, 6.0f, -21.3f), CVector(90.0f, 0.0f, 0.0f), CVector(80.0f, 0.5f, 3.0f));//ステージ裏
-	new CTransparent(&mTransparent, CVector(25.75f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f,3.3f, 0.04));//入口から見て左のステージ左のドア付近
+	new CTransparent(&mTransparent, CVector(25.75f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f, 3.3f, 0.04));//入口から見て左のステージ左のドア付近
 	new CTransparent(&mTransparent, CVector(45.65f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f, 3.3f, 0.04));//入口から見て右のステージ右のドア付近
 	new CTransparent(&mTransparent, CVector(37.85f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(18.0f, 0.84f, 0.8f));
 	new CTransparent(&mTransparent, CVector(42.0f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(19.0f, 5.0f, 0.8f));//入口から見て左のステージ左のドア付近上側
 	new CTransparent(&mTransparent, CVector(18.0f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(19.0f, 5.0f, 0.8f));//入口から見て右のステージ右のドア付近上側
 	new CTransparent(&mTransparent, CVector(37.0f, 10.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(33.0f, 4.0f, 0.04));//入口から見て真ん中のステージ
-	new CTransparent(&mTransparent, CVector(30.0f, 0.4f, -17.1f), CVector(90.0f, 0.0f, 0.0f), CVector(11.3f,0.26f, 0.3f));//演説台	
+	new CTransparent(&mTransparent, CVector(30.0f, 0.4f, -17.1f), CVector(90.0f, 0.0f, 0.0f), CVector(11.3f, 0.26f, 0.3f));//演説台	
 	mFrame.Load(MODEL9);
 	new CFrame(&mFrame, CVector(30.0f, -0.9f, 30.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	mClear.Load(MODEL10);
@@ -163,9 +163,8 @@ void CApplication::Start()
 	mColliderMesh.Set(nullptr, nullptr, &mBackGround);
 }
 
-void CApplication::Update()
+void CStageOne::Update()
 {
-
 	//タスクマネージャの更新
 	CTaskManager::Instance()->Update();
 	CTaskManager::Instance()->Collision();
@@ -220,19 +219,19 @@ void CApplication::Update()
 	CVector e, c, u;  //視点、注視点、上向き
 	//視点を求める
 	e = mPlayer.Position() + CVector(-0.2f, 3.0f, -5.0f) * mPlayer.MatrixRotate();
-		//注視点を求める
-		c = mPlayer.Position();
+	//注視点を求める
+	c = mPlayer.Position();
 	//上向きを求める
-		u = CVector(0.0f, 1.0f, 0.0f) * mPlayer.MatrixRotate();
-		//カメラの設定
-		gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
-		//モデルビュー行列の取得
-		glGetFloatv(GL_MODELVIEW_MATRIX, mModelViewInverse.M());
-		//逆行列の取得dd
-		mModelViewInverse = mModelViewInverse.Transpose();
-		mModelViewInverse.M(0, 3, 0);
-		mModelViewInverse.M(1, 3, 0);
-		mModelViewInverse.M(2, 3, 0);
+	u = CVector(0.0f, 1.0f, 0.0f) * mPlayer.MatrixRotate();
+	//カメラの設定
+	gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
+	//モデルビュー行列の取得
+	glGetFloatv(GL_MODELVIEW_MATRIX, mModelViewInverse.M());
+	//逆行列の取得dd
+	mModelViewInverse = mModelViewInverse.Transpose();
+	mModelViewInverse.M(0, 3, 0);
+	mModelViewInverse.M(1, 3, 0);
+	mModelViewInverse.M(2, 3, 0);
 	//mPlayer.Render();
 	mBackGround.Render();
 	//タスクリストの削除
@@ -241,83 +240,4 @@ void CApplication::Update()
 	CTaskManager::Instance()->Render();
 	CCollisionManager::Instance()->Render();
 	spUi->Render();  //UIの描画
-	//mPlayer.bullet.Update();
-	//mPlayer.bullet.Render();
-	//mCharacter.Update();
-	//mCharacter.Render();
-	//mModel.Render(trans.Matrix());
-	//CMatrix matrix, position, rotation, scale;
-	//rotation.RotateY(180.0f);  //回転行列設定
-	//mModel.Render(matrix);  //モデルの描画
-	//描画開始
-	//glBegin(形)
-	//GL_TRIANGLES:三角形
-//	glBegin(GL_TRIANGLES);
-//
-//	//法線(面の向き)の設定
-//	glNormal3f(n.X(), n.Y(), n.Z());
-//	//頂点座標の設定
-//	glVertex3f(v0.X(),v0.Y(),v0.Z());
-//	glVertex3f(v1.X(),v1.Y(),v1.Z());
-//	glVertex3f(v2.X(), v2.Y(), v2.Z());
-//
-//	//法線と頂点の設定
-//	n.Set(0.0f, 0.0f, 1.0f);
-//	v0.Set(0.5f, 0.0f, 0.0f);
-//	v1.Set(0.0f, 1.0f, 0.0f);
-//	v2.Set(-0.5f, 0.0f, 0.0f);
-//	//三角形2の描画
-//	glNormal3f(n.X(), n.Y(), n.Z());
-//	glVertex3f(v0.X(), v0.Y(), v0.Z());
-//	glVertex3f(v1.X(), v1.Y(), v1.Z());
-//	glVertex3f(v2.X(), v2.Y(), v2.Z());
-//
-//	//法線と頂点の設定
-//	n.Set(1.0f, 0.0f, 0.0f);
-//	v0.Set(0.0f, 0.5f, 0.0f);
-//	v1.Set(0.0f, 0.0f, 1.0f);
-//	v2.Set(0.0f, -0.5f, 0.0f);
-//	//三角形2の描画
-//	glNormal3f(n.X(), n.Y(), n.Z());
-//	glVertex3f(v0.X(), v0.Y(), v0.Z());
-//	glVertex3f(v1.X(), v1.Y(), v1.Z());
-//	glVertex3f(v2.X(), v2.Y(), v2.Z());
-//
-//	//面の向きはZ軸方向
-//	//glNormal3f(0.0f, 0.0f, 1.0f);
-//	//glVertex3f(0.0f, 0.0f, 0.0f);
-//	//glVertex3f(0.0f, 1.0f, 0.0f);
-//	//glVertex3f(-0.5f, 0.0f, 0.0f);
-//
-//	//glNormal3f(1.0f, 0.0f, 0.0f);
-//	//glVertex3f(0.0f, -0.5f, 0.0f);
-//	//glVertex3f(0.0f, 0.0f, 0.0f);
-//	//glVertex3f(0.0f, 0.0f, 1.0f);
-//
-//	//三角形クラスのインスタンス作成
-//	CTriangle t0;
-//	//法線と頂点の設定
-//	t0.Vertex(CVector(1.0f, 0.0f, 0.5f), CVector(2.0f, 0.0f, 0.0f), CVector(1.0f, 0.0f, -0.5f));
-//	t0.Normal(CVector(0.0f, 1.0f, 0.0f));
-//	//三角形の描画
-//	t0.Render();
-//
-//	//三角形クラスのインスタンス作成
-//	CTriangle t1;
-//	//法線と頂点の設定
-//	t1.Vertex(CVector(0.5f, 1.0f, 0.0f), CVector(0.0f, 2.0f, 0.0f), CVector(-0.5f, 1.0f, 0.0f));
-//	t1.Normal(CVector(1.0f, 0.0f, 0.0f));
-//	//三角形の描画
-//	t1.Render();
-//
-//	//三角形クラスのインスタンス作成
-//	CTriangle t2;
-//	//法線と頂点の設定
-//	t2.Vertex(CVector(0.0f, 0.0f, 2.0f), CVector(0.0f, -0.5f, 1.0f), CVector(0.0f, 0.5f, 1.0f));
-//	t2.Normal(CVector(1.0f, 0.0f, 0.0f));
-//	//三角形の描画
-//	t2.Render();
-//
-//	//描画終了
-//	//glEnd();
 }

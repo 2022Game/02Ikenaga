@@ -1,21 +1,39 @@
 #pragma once
-#include "CCharacter.h"
+#ifndef CENEMY2_H
+#define CENEMY2_H
+//キャラクタクラスのインクルード
+#include"CCharacter3.h"
+#include"CCollider.h"
+#include "CColliderMesh.h"
 
-class CEnemy2 : public CCharacter
-{
+/*
+エネミークラス
+キャラクタクラスを継承
+*/
+
+class CEnemy2 : public CCharacter3 {
 public:
-	//敵の数を設定
-	static void Num(int num);
-	//敵の数を取得
-	static int Num();
-	//衝突処理2
+	static CEnemy2* Instance();
+	//コンストラクタ
+	CEnemy2();
 	void Collision();
-	//衝突処理4
-	void Collision(CCharacter* m, CCharacter* o);
-	//CEnemy2(X座標,Y座標,幅,高さ,テクスチャのポインタ)
-	CEnemy2(float x, float y, float w, float h, CTexture* pt);
+	//CEnemy2(位置,回転,拡縮)
+	CEnemy2(const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
+	//衝突処理
+	//Collision(コライダ1,コライダ2)
+	void Collision(CCollider* m, CCollider* o);
+	//コンストラクタ
+	//CEnemy2(モデル,位置,回転,拡縮)
+	CEnemy2(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
-	static int sNum;	//敵の数
+	static CEnemy2* spInstance;
+	int mark;
+	int mark2;
+	CVector mPoint;  //目標地点
+	//モデルデータ
+	static CModel sModel;
 };
+
+#endif

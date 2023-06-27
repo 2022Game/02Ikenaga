@@ -17,7 +17,7 @@ public:
 	//デストラクタ
 	~CGame();
 	//ゲームクリア判定
-	bool IsClear();
+	//bool IsClear();
 	//ゲームクリア処理
 	void Clear();
 	//ゲームオーバー判定

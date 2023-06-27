@@ -31,12 +31,10 @@
 #include"CTransparent.h"
 #include"CFrame.h"
 #include"CClear.h"
-#include"CStageOne.h"
 
-class CApplication
+class CStageOne
 {
 private:
-	CStageOne* mpStageOne;
 	static CUi* spUi; //UIクラスのポインタ
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
@@ -77,19 +75,19 @@ private:
 		EOVER,	//ゲームオーバー
 	};
 	EState mState;
-//	CCharacter mRectangle;
-	//CPlayer* mpPlayer;
+	//	CCharacter mRectangle;
+		//CPlayer* mpPlayer;
 	static CTexture mTexture;
 	//static CTexture mTexture1;
 	CEnemy* mpEnemy;
-//	CBullet* mpBullet;
+	//	CBullet* mpBullet;
 	CInput mInput;
 	CFont mFont;
 	CMiss* mpMiss;
 	//CCharacterのポインタの可変長配列
 //	std::vector<CCharacter*> mCharacters;
 public:
-	~CApplication();
+	~CStageOne();
 	static CUi* Ui();  //UIクラスのインスタンスを取得
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();

@@ -15,7 +15,7 @@ void CGame::Start()
 //	CCamera::End();
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
-	mpUi->Enemy(CEnemy2::Num());
+	//mpUi->Enemy(CEnemy2::Num());
 	mpUi->Render();
 	mpUi->Start();
 }
@@ -33,7 +33,7 @@ void CGame::Over()
 	CCamera::End();
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
-	mpUi->Enemy(CEnemy2::Num());
+	//mpUi->Enemy(CEnemy2::Num());
 	mpUi->Render();
 	mpUi->Over();
 }
@@ -50,10 +50,10 @@ CGame::~CGame()
 	}
 }
 
-bool CGame::IsClear()
-{
-	return CEnemy2::Num() <= 0;
-}
+//bool CGame::IsClear()
+//{
+//	return;//CEnemy2::Num() <= 0;
+//}
 
 void CGame::Clear()
 {
@@ -63,7 +63,7 @@ void CGame::Clear()
 	CCamera::End();
 	//UI処理
 	mpUi->Hp(CPlayer2::Hp());
-	mpUi->Enemy(CEnemy2::Num());
+	//mpUi->Enemy(CEnemy2::Num());
 	mpUi->Render();
 	mpUi->Clear();
 }
@@ -75,7 +75,7 @@ CGame::CGame()
 	, mCdx(0)
 	, mCdy(0)
 {
-	CEnemy2::Num(0);
+	//CEnemy2::Num(0);
 	mpUi = new CUi();
 	//テクスチャの入力
 	CApplication::Texture()->Load(TEXTURE);
@@ -132,14 +132,14 @@ CGame::CGame()
 						TIPSIZE, TIPSIZE, CApplication::Texture()));
 			}
 			//3の時、敵生成
-			if (map[row][col] == 3)
-			{
-				//敵を生成して、キャラクタマネージャに追加
-				CApplication::CharacterManager()->Add(
-					new CEnemy2(TIPSIZE + TIPSIZE * 2 * col,
-						TIPSIZE + TIPSIZE * 2 * row,
-						TIPSIZE, TIPSIZE, CApplication::Texture()));
-			}
+			//if (map[row][col] == 3)
+			//{
+			//	//敵を生成して、キャラクタマネージャに追加
+			//	CApplication::CharacterManager()->Add(
+			//		new CEnemy2(TIPSIZE + TIPSIZE * 2 * col,
+			//			TIPSIZE + TIPSIZE * 2 * row,
+			//			TIPSIZE, TIPSIZE, CApplication::Texture()));
+			//}
 			//4の時、折り返しポイント作成
 			if (map[row][col] == 4)
 			{
@@ -159,23 +159,23 @@ void CGame::Update()
 	CApplication::CharacterManager()->Update();
 	CApplication::CharacterManager()->Collision();
 	CApplication::CharacterManager()->Delete();
-	CameraSet();
+	//CameraSet();
 	CApplication::CharacterManager()->Render();
 	CCamera::End();
 	//UI
-	mpUi->Time(mTime++);
-	mpUi->Hp(CPlayer2::Hp());
-	mpUi->Enemy(CEnemy2::Num());
-	mpUi->Render();
+	//mpUi->Time(mTime++);
+	//mpUi->Hp(CPlayer2::Hp());
+	//mpUi->Enemy(CEnemy2::Num());
+	//mpUi->Render();
 }
 
 void CGame::CameraSet()
 {
-	float x = mpPlayer->X() + mCdx;
+	/*float x = mpPlayer->X() + mCdx;
 	float y = mpPlayer->Y() + mCdy;
 	CCamera::Start(x - WINDOW_WIDTH / 2
 		, x + WINDOW_WIDTH / 2
 		, y - WINDOW_HEIGHT / 2
 		, y + WINDOW_HEIGHT / 2
-	);
+	);*/
 }

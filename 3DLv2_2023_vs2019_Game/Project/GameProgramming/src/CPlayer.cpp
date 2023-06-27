@@ -147,4 +147,7 @@ void CPlayer::Update()
 	CApplication::Ui()->PosY(mPosition.Y());
 	CApplication::Ui()->RotX(mRotation.X());
 	CApplication::Ui()->RotY(mRotation.Y());
+	/*CStageOne::Ui()->PosY(mPosition.Y());
+	CStageOne::Ui()->RotX(mRotation.X());
+	CStageOne::Ui()->RotY(mRotation.Y());*/
 }

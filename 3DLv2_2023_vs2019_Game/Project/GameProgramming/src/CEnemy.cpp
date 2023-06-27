@@ -19,7 +19,7 @@ CEnemy* CEnemy::spInstance = nullptr;
 
 CEnemy::CEnemy()
 	:CCharacter3(1)
-	, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
+	//, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
 	,mark(0)
 	,mark2(0)
 {
@@ -65,7 +65,7 @@ void CEnemy::Update()
 		//Xé≤ÇÃÉYÉåÇ™2.0à»â∫
 		if (-1.0f < dx && dx <1.0f)
 		{
-			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+			//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 			//Yé≤ÇÃÉYÉåÇ™2.0à»â∫
 			if (-1.0f < dy && dy < 1.0f)
 			{
@@ -131,13 +131,13 @@ void CEnemy::Update()
 	if (dy > margin)
 	{
 		//mRotation = mRotation + CVector(-1.0f, 0.0f, 0.0f);  //è„Ç÷âÒì]
-		mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	else if (dy < -margin)
 	{
 		//â€ëË
 		//mRotation = mRotation + CVector(1.0f, 0.0f, 0.0f);  //â∫Ç÷âÒì]
-		mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	//ã@ëÃëOï˚Ç÷à⁄ìÆÇ∑ÇÈ
 	//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
@@ -225,5 +225,5 @@ CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, 
 	mRotation = rotation;  //âÒì]ÇÃê›íË
 	mScale = scale;  //ägèkÇÃê›íË
 	spInstance = this;
-	mColliderMesh1.Set(this, &mMatrix, mpModel);
+	//mColliderMesh1.Set(this, &mMatrix, mpModel);
 }
