@@ -106,7 +106,7 @@ void CApplication::Start()
 	//new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	mPolice.Load(MODEL7);
 	//new CPolice(&mPolice, CVector(20.0f, 2.5f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
-
+	new CPolice(&mPolice, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	mTransparent.Load(MODEL8);
 	new CTransparent(&mTransparent, CVector(30.0f, -2.648f, -17.6f), CVector(0.0f, 0.0f, 0.0f), CVector(48.4f, 0.84f, 0.95f));//-2.649
 	new CTransparent(&mTransparent, CVector(22.15f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(18.0f, 0.84f, 0.8f));
@@ -162,6 +162,7 @@ void CApplication::Start()
 
 void CApplication::Update()
 {
+
 	//タスクマネージャの更新
 	CTaskManager::Instance()->Update();
 	CTaskManager::Instance()->Collision();
