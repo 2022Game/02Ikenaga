@@ -4,6 +4,10 @@
 #include"CPlayer.h"
 #include "CExclamationMark.h"
 
+//移動速度
+#define VELOCITY CVector(0.0f,0.0f,0.1f)//9
+#define VELOCITY2 0.11f
+
 CModel CEnemy::sModel;
 //
 CEnemy* CEnemy::Instance()
@@ -12,10 +16,6 @@ CEnemy* CEnemy::Instance()
 }
 
 CEnemy* CEnemy::spInstance = nullptr;
-
-//移動速度
-#define VELOCITY CVector(0.0f,0.0f,0.1f)//9
-#define VELOCITY2 0.11f
 
 CEnemy::CEnemy()
 	:CCharacter3(1)
@@ -140,7 +140,7 @@ void CEnemy::Update()
 		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	//機体前方へ移動する
-	//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+	mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	CTransform::Update(); //行列更新
 	//およそ3秒毎に目標地点を更新
 	int r = rand() % 120; //rand()は整数の乱数を返す
@@ -166,13 +166,20 @@ void CEnemy::Collision()
 {
 	//mColliderMesh1.ChangePriority();
 	//コライダの優先度変更
-	//mCollider1.ChangePriority();
-	//mCollider2.ChangePriority();
-	//mCollider3.ChangePriority();
+	mCollider.ChangePriority();
+	/*mCollider2.ChangePriority();
+	mCollider3.ChangePriority();*/
+	mLine.ChangePriority();
+	mLine2.ChangePriority();
+	mLine3.ChangePriority();
+	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mLine, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mLine2, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mLine3, COLLISIONRANGE);
 	////衝突処理を実行
-	//CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);
+	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+	/*CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);*/
 }
 
 //衝突処理
@@ -181,27 +188,29 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 	//相手のコライダタイプの判定
 	switch (o->Type())
 	{
-	case CCollider::ESPHERE: //球コライダの時
-		//コライダのmとyが衝突しているか判定
-		if (CCollider::CCollision(m, o)) {
-			//エフェクト生成
-			new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-			//衝突している時は無効にする
-			//mEnabled=false;
-		}
-		break;
-	case CCollider::ETRIANGLE: //三角コライダの時
-		CVector adjust; //調整値
+	//case CCollider::ESPHERE: //球コライダの時
+	//	//コライダのmとyが衝突しているか判定
+	//	if (CCollider::CCollision(m, o)) {
+	//		//エフェクト生成
+	//		new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
+	//		//衝突している時は無効にする
+	//		//mEnabled=false;
+	//	}
+	//	break;
+	case CCollider::ELINE: //三角コライダの時
 		//三角コライダと球コライダの衝突判定
-		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+		if (o->Type() == CCollider::ETRIANGLE)
 		{
-			//衝突しない位置まで戻す
-			//mPosition = mPosition + adjust;
-			//CTransform::Update();
+			CVector adjust;//調整用ベクトル
+			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+			{
+				//衝突しない位置まで戻す
+				mPosition = mPosition + adjust;
+				//CTransform::Update();
+			}
 		}
 		break;
 	}
-	
 	////コライダもmとoが衝突しているか判定
 	//if (CCollider::CCollision(m, o)) {
 	//	//エフェクト生成
@@ -215,10 +224,14 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
 : mark(0)
 ,mark2(0)
-	/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-	, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
-    , mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
+,mCollider(this, &mMatrix, CVector(0.0f, 2.5f, 0.0f), 1.0f)
+,mLine(this, &mMatrix, CVector(0.0f, 4.9f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
+, mLine2(this, &mMatrix, CVector(1.0f, 2.5f, -0.5f), CVector(-1.0f, 2.5f, -0.5f))
+, mLine3(this, &mMatrix, CVector(0.0f, 2.5f, 0.5f), CVector(0.0f, 2.5f, -0.5f))
+	//, mCollider2(this, &mMatrix, CVector(0.0f,1.0f,5.0f),0.8f)
+   // , mCollider3(this, &mMatrix, CVector(0.0f, 1.0f, -5.0f), 0.8f)
 {
+	CTransform::Update(position, rotation, scale);
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定

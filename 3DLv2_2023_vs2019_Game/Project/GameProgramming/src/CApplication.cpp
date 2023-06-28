@@ -77,6 +77,7 @@ CTexture* CApplication::Texture()
 void CApplication::Start()
 {
 	spUi = new CUi();  //UIクラスの生成
+	spUi->Hp(CPlayer::Hp());
 	//三角コライダの確認
 	//mColliderTriangle.Set(nullptr, nullptr, CVector(10.0f, 10.0f, -10.0f), CVector(-50.0f, 0.0f, 50.0f), CVector(50.0f, 0.0f, 50.0f));
 	//mColliderTriangle2.Set(nullptr, nullptr, CVector(-100.0f, 10.0f, -100.0f), CVector(-50.0f, -4.0f, 50.0f), CVector(50.0f, -4.0f, 50.0f));
@@ -104,7 +105,7 @@ void CApplication::Start()
 
 	mEnemy1.Load(MODEL6);
 	//敵機のインスタンス作成
-	new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
+	new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, -5.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	mPolice.Load(MODEL7);
 	//new CPolice(&mPolice, CVector(20.0f, 2.5f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	new CPolice(&mPolice, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
@@ -135,7 +136,7 @@ void CApplication::Start()
 	mClear.Load(MODEL10);
 	new CClear(&mClear, CVector(30.0f, -0.9f, 30.0f), CVector(0.0f, 180.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	mEnemy2.Load(MODEL11);
-	new CEnemy2(&mEnemy2, CVector(-10.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
+	//new CEnemy2(&mEnemy2, CVector(-10.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 
@@ -165,6 +166,7 @@ void CApplication::Start()
 
 void CApplication::Update()
 {
+	spUi->Hp(CPlayer::Hp());
 	//タスクマネージャの更新
 	CTaskManager::Instance()->Update();
 	CTaskManager::Instance()->Collision();

@@ -16,6 +16,7 @@
 
 class CPlayer : public CCharacter3 {
 public:
+	static int Hp();
 	//CModel* model;
 	//インスタンスのポインタの取得
 	static CPlayer* Instance();
@@ -29,7 +30,9 @@ public:
 	//更新処理
 	void Update();
 private:
+	static int sHp;	//HP
 	int jump;
+	CCollider mCollider;
 	//CColliderMesh mColliderMesh1;
 	//プレイヤーのインスタンス
 	static CPlayer* spInstance;

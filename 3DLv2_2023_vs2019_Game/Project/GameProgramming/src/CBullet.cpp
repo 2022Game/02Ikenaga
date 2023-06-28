@@ -8,12 +8,12 @@ void CBullet::Collision()
 {
 	//コライダの優先度変更
 	mCollider .ChangePriority();
-	mCollider.ChangePriority();
-	mCollider.ChangePriority();
+	//mCollider.ChangePriority();
+	//mCollider.ChangePriority();
 	//衝突処理を実行
 	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
 }
 
 //衝突処理
@@ -27,7 +27,7 @@ void CBullet::Collision(CCollider* m, CCollider* o) {
 }
 
 CBullet::CBullet()
-	:mLife(50)
+	:mLife(10)
 	,mCollider(this,&mMatrix,CVector(0.0f,0.0f,0.0f),0.1)
 {}
 
@@ -47,7 +47,7 @@ void CBullet::Update() {
 	//生存時間の判定
 	if (mLife-- > 0) {
 		CTransform::Update();
-		mPosition = mPosition + CVector(0.0f, 0.0f, 1.0f) * mMatrixRotate;;
+		mPosition = mPosition + CVector(0.0f, 0.0f, 1.0f) * mMatrixRotate;
 	}
 	else {
 		//無効にする

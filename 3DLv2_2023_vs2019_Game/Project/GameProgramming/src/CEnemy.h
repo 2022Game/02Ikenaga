@@ -5,6 +5,7 @@
 #include"CCharacter3.h"
 #include"CCollider.h"
 #include "CColliderMesh.h"
+#include "CColliderLine.h"
 
 /*
 エネミークラス
@@ -28,6 +29,12 @@ public:
 	//CEnemy(モデル,位置,回転,拡縮)
 	CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
+	CCollider mCollider;
+	CCollider mCollider2;
+	CCollider mCollider3;
+	CColliderLine mLine3; //線分コライダ
+	CColliderLine mLine2; //線分コライダ
+	CColliderLine mLine; //線分コライダ
 	static CEnemy* spInstance;
 	int mark;
 	int mark2;
