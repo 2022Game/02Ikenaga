@@ -192,6 +192,7 @@ void CApplication::Update()
 	//行列設定
 	glMultMatrixf(mMatrix.M());
 
+	CCollisionManager::Instance()->Collision();
 	//頂点にアニメーションを適用する
 	mModelX.AnimateVertex();
 	//モデル描画

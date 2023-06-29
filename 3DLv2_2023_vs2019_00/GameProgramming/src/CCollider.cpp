@@ -2,6 +2,11 @@
 #include "CCollisionManager.h"
 #include "CColliderLine.h"
 
+CCollider::ETag CCollider::Tag()
+{
+	return mTag;
+}
+
 void CCollider::Matrix(CMatrix* m)
 {
 	mpMatrix = m;
@@ -66,9 +71,10 @@ CCollider::~CCollider() {
 }
 
 CCollider::CCollider(CCharacter3* parent, CMatrix* matrix,
-	const CVector& position, float radius) 
+	const CVector& position, float radius,ETag tag) 
 	: CCollider() 
 {
+	mTag = tag;
 	//eİ’è
 	mpParent = parent;
 	//es—ñİ’è

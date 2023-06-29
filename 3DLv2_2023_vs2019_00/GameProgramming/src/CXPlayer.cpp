@@ -16,6 +16,14 @@ void CXPlayer::Init(CModelX* model)
 	mColSphereBody.Matrix(&mpCombinedMatrix[8]);
 }
 
+CXPlayer::CXPlayer()
+	:mColSphereBody(this, nullptr, CVector(), 0.5f,CCollider::ETag::EBODY)
+	, mColSphereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
+	, mColSphereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f, CCollider::ETag::ESWORD)
+{
+	mTag = EPLAYER;
+}
+
 void CXPlayer::Update()
 {
 	if (mInput.Key(VK_SPACE))

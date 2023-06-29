@@ -4,19 +4,18 @@
 
 #include"CXCharacter.h"
 #include "CCollider.h"
+#include "CXPlayer.h"
 
 class CXEnemy :public CXCharacter
 {
 public:
+	//衝突処理
+	void Collision(CCollider* m, CCollider* o);
 	void Init(CModelX* model);
 	//コライダの初期化
-	CXEnemy()
-		:mColSphereBody(this, nullptr, CVector(), 0.5f)
-		, mColSphereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
-		, mColSphereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
-	{
-	}
+	CXEnemy();
 private:
+	//CXPlayer mXPlayer;
 	CCollider mColSphereHead;  //頭
 	CCollider mColSphereSword;  //剣
 	//コライダの宣言
