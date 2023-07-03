@@ -37,6 +37,7 @@ private:
 	//CXCharacter mCharacter;
 	CMatrix mMatrix;
 	CModelX mModelX;
+	CModelX mKnight;
 	static CUi* spUi;	//UIクラスのポインタ
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;

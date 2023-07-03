@@ -36,7 +36,7 @@ CUi* CApplication::Ui()
 
 //背景モデルデータの指定
 #define MODEL_BACKGROUND  "res\\sky.obj", "res\\sky.mtl"
-
+#define MODEL_FILE2 "res\\knight\\knight_low.X"
 
 //CTaskManager CApplication::mTaskManager;
 
@@ -73,7 +73,8 @@ void CApplication::Start()
 	mModelX.Load(MODEL_FILE);
 	mXPlayer.Init(&mModelX);
 	//敵の初期設定
-	mXEnemy.Init(&mModelX);
+	mKnight.Load(MODEL_FILE2);
+	mXEnemy.Init(&mKnight);
 	//敵の配置
 	mXEnemy.Position(CVector(7.0f, 0.0f, 0.0f));
 	//mCharacter.Init(&mModelX);

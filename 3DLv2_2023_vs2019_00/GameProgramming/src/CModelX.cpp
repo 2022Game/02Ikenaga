@@ -709,6 +709,12 @@ const CMatrix& CModelXFrame::CombinedMatrix()
 	return mCombinedMatrix;
 }
 
+CModelXFrame::CModelXFrame()
+	:mpMesh(nullptr)
+	, mpName(nullptr)
+	, mIndex(0)
+{}
+
 /*
 AnimateCombuned
 合成行列の作成
@@ -785,7 +791,7 @@ CModelXFrame::CModelXFrame(CModelX* model)
 	//変数行列を単位行列にする
 	mTransformMatrix.Identity();
 	//次の単語(フレーム名の予定)を取得する
-	model->GetToken();  //frame name
+	//model->GetToken();  //frame name
 	//フレーム名分エリアを確保する
 	mpName = new char[strlen(model->mToken) + 1];
 	//フレーム名をコピーする
@@ -799,12 +805,27 @@ CModelXFrame::CModelXFrame(CModelX* model)
 		model->GetToken();  //Frame
 		//}かっこの場合は終了
 		if (strchr(model->mToken, '}')) break;
-		//新なフレームの場合は、子フレームに追加
+		//新たなフレームの場合は、子フレームに追加
 		if (strcmp(model->mToken, "Frame") == 0)
 		{
-			//フレームを作成し、子フレームの配列に追加
-			mChild.push_back(
-				new CModelXFrame(model));
+			//フレーム名取得
+			model->GetToken();
+			if (strchr(model->mToken, '{'))
+			{
+				//フレーム名なし:スキップ
+				model->SkipNode();
+				model->GetToken();  //}
+			}
+			else
+			{
+				//フレームが無ければ
+				if (model->FindFrame(model->mToken) == 0)
+				{
+					//フレームを作戦し、子フレームの配列に追加
+					mChild.push_back(
+						new CModelXFrame(model));
+				}
+			}
 		}
 		else if (strcmp(model->mToken, "FrameTransformMatrix") == 0)
 		{
@@ -1125,6 +1146,14 @@ void CModelX::Load(char* file)
 	//最後に\0を設定する(文字列の終端)
 	buf[size] = '\0';
 
+	//ダミールートフレームの作成
+	CModelXFrame* p = new CModelXFrame();
+	//名前なし
+	p->mpName = new char[1];
+	p->mpName[0] = '\0';
+	//フレーム配列に追加
+	mFrame.push_back(p);
+
 	//printf("%s",buf);
 	//文字列の最後まで繰り返し
 	while (*mpPointer != '\0')
@@ -1143,8 +1172,25 @@ void CModelX::Load(char* file)
 		//単語Frameの場合
 		else if (strcmp(mToken, "Frame") == 0)
 		{
+			//フレーム名取得
+			GetToken();
+			if (strchr(mToken, '{'))
+			{
+				//フレーム名なし:スキップ
+				SkipNode();
+				GetToken();  //}
+			}
+			else
+			{
+				//フレームがなければ
+				if (FindFrame(mToken) == 0)
+				{
+					//フレームを作成する
+					p->mChild.push_back(new CModelXFrame(this));
+				}
+			}
 			//フレームを作成する
-			new CModelXFrame(this);
+			//new CModelXFrame(this);//
 			//printf("%s", mToken);  //Frame出力
 			//GetToken();  //Frame名を取得
 			//printf("%s\n", mToken);  //Frame名を出力
@@ -1161,6 +1207,7 @@ void CModelX::Load(char* file)
 		//	printf(" %s\n", mToken);  //AnimationSet名を出力
 		//}
 	}
+
 	fclose(fp);  //ファイルをクローズする
 
 	//スキンウェイトのフレーム番号設定
