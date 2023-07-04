@@ -8,8 +8,8 @@ class CAnimationSet;  //アニメーションセットクラス
 class CSkinWeights;  //スキンウェイトクラス
 class CMaterial;  //マテリアルの宣言
 class CMesh;  //CMeshクラスの宣言
-class CModelX;  //CModelXクラスの宣言
 class CModelXFrame;  //CModelXFrameクラスの宣言
+class CModelX;  //CModelXクラスの宣言
 #ifndef CMODELX_H //インクルードガード
 #define CMODELX_H
 
@@ -29,7 +29,10 @@ class CAnimationKey
 {
 	friend CAnimation;
 	friend CAnimationSet;
+	friend CModelX;
 	//friend CModelX;
+public:
+	CAnimationKey();
 private:
 	//時間
 	float mTime;
@@ -46,6 +49,7 @@ class CAnimation
 	friend CModelX;
 	friend CAnimationSet;
 public:
+	CAnimation();
 	CAnimation(CModelX* model);
 	~CAnimation();
 private:
@@ -63,6 +67,7 @@ class CAnimationSet
 {
 	friend CModelX;
 public:
+	CAnimationSet();
 	float Time();
 	float MaxTime();
 	std::vector<CAnimation*>& Animation();
@@ -167,10 +172,19 @@ private:
  Xファイル形式の3Dモデルデータをプログラムで認識する
 */
 class CModelX {
+	//friend CAnimationKey;
 	friend CAnimation;
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
+	/*
+アニメーションを抜き出す
+idx:分割したいアニメーションの番号
+start:分割したいアニメーションの開始時間
+end:分割したいアニメーションの終了時間
+name:追加するアニメーションの名前
+*/
+	void CModelX::SeparateAnimationSet(int idx,int start,int end,char*name);
 	void AnimateVertex(CMatrix*);
 	//マテリアル配列の取得
 	std::vector<CMaterial*>& Material();

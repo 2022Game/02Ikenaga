@@ -15,9 +15,12 @@ public:
 	//コライダの初期化
 	CXEnemy();
 private:
+	CCollider mColSphereSword0;  //剣
+	CCollider mColSphereSword1;  //剣
+	CCollider mColSphereSword2;  //剣
 	//CXPlayer mXPlayer;
 	CCollider mColSphereHead;  //頭
-	CCollider mColSphereSword;  //剣
+	//CCollider mColSphereSword;  //剣
 	//コライダの宣言
 	CCollider mColSphereBody;  //体
 };
