@@ -3,7 +3,6 @@
 #define CENEMY_H
 //キャラクタクラスのインクルード
 #include"CCharacter3.h"
-#include"CCollider.h"
 #include "CColliderMesh.h"
 #include "CColliderLine.h"
 

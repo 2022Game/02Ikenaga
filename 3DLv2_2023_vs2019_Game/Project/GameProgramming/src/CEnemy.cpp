@@ -3,10 +3,15 @@
 #include "CCollisionManager.h"
 #include"CPlayer.h"
 #include "CExclamationMark.h"
+#include"CCharacter3.h"
+#include"CCollider.h"
+#include"CTaskManager.h"
 
 //移動速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
-#define VELOCITY2 0.11f
+#define VELOCITY2 0.09f
+#define VELOCITY3 0.02f
+#define ROTATION_Y CVector(0.0f,-0.1f,0.0f) //回転速度
 
 CModel CEnemy::sModel;
 //
@@ -63,26 +68,29 @@ void CEnemy::Update()
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
 		//X軸のズレが2.0以下
-		if (-1.0f < dx && dx <1.0f)
+		if (-10.0f < dx && dx < 10.0f)
 		{
-			//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+		    mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
+			//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY3;
 			//Y軸のズレが2.0以下
-			if (-1.0f < dy && dy < 1.0f)
+			if (-10.0f < dy && dy < 10.0f)
 			{
 				//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
-				if (30.0f > dz && dz >= 0.0f)
+				if (20.0f > dz  && dz > -5.0f)
 				{
-					mark++;
-					if (mark > 100)
+					mState = EState::EMOVE;
+					if (mState == EState::EMOVE)
 					{
-						/*CExclamationMark* exclamationmark = new CExclamationMark();
-						exclamationmark->Set(0.0f, 0.0f);
-						exclamationmark->Position(
-							CVector(0.8f, 5.0f, 0.0f) * mMatrix);
-						exclamationmark->Rotation(mRotation);
-						exclamationmark->Update();
-						mark = 0;*/
+						mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 					}
+					/*CExclamationMark* exclamationmark = new CExclamationMark();
+					exclamationmark->Set(0.0f, 0.0f);
+					exclamationmark->Position(
+						CVector(0.8f, 5.0f, 0.0f) * mMatrix);
+					exclamationmark->Rotation(mRotation);
+					exclamationmark->Update();
+					mark = 0;*/
+
 					//弾を発射します
 					/*CBullet* bullet = new CBullet();
 					bullet->Set(0.1f, 1.5f);
@@ -90,6 +98,12 @@ void CEnemy::Update()
 						CVector(0.0f, 0.0f, 10.0f) * mMatrix);
 					bullet->Rotation(mRotation);
 					bullet->Update();*/
+				}
+				else //if (5.0f == dz || dz == -1.0f)
+				{
+					mState = EState::ESTOP;
+					mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
+					mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 				}
 			}
 		}
@@ -121,11 +135,14 @@ void CEnemy::Update()
 	if (dx > margin)
 	{
 		mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //左へ回転
+		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY3;
 	}
 	else if (dx < -margin)
 	{
 		//課題
 		mRotation = mRotation + CVector(0.0f, -1.0f, 0.0f);  //右へ回転
+		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY3;
+		//mPosition = mPosition + mMatrixRotate.VectorX() * VELOCITY2;
 	}
 	//上下方向へ回転
 	if (dy > margin)
@@ -133,17 +150,17 @@ void CEnemy::Update()
 		//mRotation = mRotation + CVector(-1.0f, 0.0f, 0.0f);  //上へ回転
 		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
-	else if (dy < -margin)
+	else if (dx < -margin)
 	{
 		//課題
 		//mRotation = mRotation + CVector(1.0f, 0.0f, 0.0f);  //下へ回転
 		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	}
 	//機体前方へ移動する
-	mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+	//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	CTransform::Update(); //行列更新
 	//およそ3秒毎に目標地点を更新
-	int r = rand() % 120; //rand()は整数の乱数を返す
+	int r = rand() % 60; //rand()は整数の乱数を返す
 						  //% 180は180で割った余りを求める
 	if (r == 0)
 	{
@@ -157,7 +174,7 @@ void CEnemy::Update()
 		}
 	}
 	////行列を更新
-	//CTransform::Update();
+	CTransform::Update();
 	////位置を移動
 	//mPosition = mPosition + VELOCITY * mMatrixRotate;
 }
@@ -167,15 +184,13 @@ void CEnemy::Collision()
 	//mColliderMesh1.ChangePriority();
 	//コライダの優先度変更
 	mCollider.ChangePriority();
-	/*mCollider2.ChangePriority();
-	mCollider3.ChangePriority();*/
 	mLine.ChangePriority();
 	mLine2.ChangePriority();
 	mLine3.ChangePriority();
 	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mLine, COLLISIONRANGE);
+	/*CCollisionManager::Instance()->Collision(&mLine, COLLISIONRANGE);
 	CCollisionManager::Instance()->Collision(&mLine2, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mLine3, COLLISIONRANGE);
+	CCollisionManager::Instance()->Collision(&mLine3, COLLISIONRANGE);*/
 	////衝突処理を実行
 	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
 	/*CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
@@ -186,13 +201,17 @@ void CEnemy::Collision()
 //Collision(コライダ1,コライダ2)
 void CEnemy::Collision(CCollider * m, CCollider * o) {
 	//相手のコライダタイプの判定
-	switch (o->Type())
+	switch (m->ELINE)
 	{
 	//case CCollider::ESPHERE: //球コライダの時
+	//	CVector adjust;//調整用ベクトル
 	//	//コライダのmとyが衝突しているか判定
-	//	if (CCollider::CCollision(m, o)) {
+	//	if (CCollider::CCollision(m, o)) 
+	//	{
+	//		mPosition = mPosition + adjust;
+	//		//CTransform::Update();
 	//		//エフェクト生成
-	//		new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
+	//		//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
 	//		//衝突している時は無効にする
 	//		//mEnabled=false;
 	//	}
@@ -204,9 +223,19 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 			CVector adjust;//調整用ベクトル
 			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 			{
+				mState = EState::ESTOP;
+				//mState = EState::ESTOP;
 				//衝突しない位置まで戻す
 				mPosition = mPosition + adjust;
-				//CTransform::Update();
+				if (rand() % 60)
+				{
+					mState = EState::ESTOP;
+				}
+				else
+				{
+					mState = EState::ESTOP;
+				}
+				CTransform::Update();
 			}
 		}
 		break;

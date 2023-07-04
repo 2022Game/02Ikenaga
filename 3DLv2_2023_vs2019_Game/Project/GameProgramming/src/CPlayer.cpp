@@ -4,9 +4,9 @@
 #include"CApplication.h"
 #include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //âÒì]ë¨ìx
-#define ROTATION_YY CVector(0.0f,3.0f,0.0f) //âÒì]ë¨ìx
+#define ROTATION_YY CVector(0.0f,1.5f,0.0f) //âÒì]ë¨ìx
 #define ROTATION_YO CVector(0.0f,0.3f,0.0f) 
-#define ROTATION_Y CVector(0.0f,-0.2f,0.0f) //âÒì]ë¨ìx
+#define ROTATION_Y CVector(0.0f,-0.1f,0.0f) //âÒì]ë¨ìx
 #define ROTATION_X CVector(0.0f,-0.1f,0.0f) //âÒì]ë¨ìx
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//à⁄ìÆë¨ìx
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //âÒì]ë¨ìx
@@ -152,21 +152,21 @@ void CPlayer::Update()
 	//		//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
 	//	}
 	//}
-	//jump++;
-	//if (jump > 50)
-	//{
-	//	if (mInput.Key('J'))
-	//	{
-	//		//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
-	//		mPosition = mPosition + ROTATION_YY * mMatrixRotate;
-	//		jump = 0;
-	//	}
-	//}
-	if (mInput.Key('J'))
+	jump++;
+	if (jump > 50)
 	{
-		//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
-		mPosition = mPosition + ROTATION_YO * mMatrixRotate;
+		if (mInput.Key('J'))
+		{
+			//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
+			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
+			jump = 0;
+		}
 	}
+	//if (mInput.Key('J'))
+	//{
+	//	//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
+	//	mPosition = mPosition + ROTATION_YO * mMatrixRotate;
+	//}
 	mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 	//ïœä∑çsóÒÇÃçXêV
 	CTransform::Update();

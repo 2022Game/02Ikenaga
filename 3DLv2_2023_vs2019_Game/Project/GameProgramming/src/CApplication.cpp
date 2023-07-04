@@ -105,7 +105,7 @@ void CApplication::Start()
 
 	mEnemy1.Load(MODEL6);
 	//敵機のインスタンス作成
-	new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, -5.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
+	new CEnemy(&mEnemy1, CVector(30.0f, -1.0f, -10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	mPolice.Load(MODEL7);
 	//new CPolice(&mPolice, CVector(20.0f, 2.5f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	new CPolice(&mPolice, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
@@ -124,8 +124,8 @@ void CApplication::Start()
 	new CTransparent(&mTransparent, CVector(21.9f, 6.0f, 15.83f), CVector(90.0f, 0.0f, 0.0f), CVector(49.0f, 1.27f, 3.0f));//入口の横の壁(左)
 	new CTransparent(&mTransparent, CVector(30.0f, 7.9f, 15.8f), CVector(90.0f, 0.0f, 0.0f), CVector(15.0f, 1.27f, 3.0f));//入口の横の壁(真ん中)	
 	new CTransparent(&mTransparent, CVector(30.0f, 6.0f, -21.3f), CVector(90.0f, 0.0f, 0.0f), CVector(80.0f, 0.5f, 3.0f));//ステージ裏
-	new CTransparent(&mTransparent, CVector(25.75f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f,3.3f, 0.04));//入口から見て左のステージ左のドア付近
-	new CTransparent(&mTransparent, CVector(45.65f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f, 3.3f, 0.04));//入口から見て右のステージ右のドア付近
+	new CTransparent(&mTransparent, CVector(25.75f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f,3.3f, 0.06));//入口から見て左のステージ左のドア付近
+	//new CTransparent(&mTransparent, CVector(45.65f, 6.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(53.0f, 3.3f, 0.04));//入口から見て右のステージ右のドア付近
 	new CTransparent(&mTransparent, CVector(37.85f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(18.0f, 0.84f, 0.8f));
 	new CTransparent(&mTransparent, CVector(42.0f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(19.0f, 5.0f, 0.8f));//入口から見て左のステージ左のドア付近上側
 	new CTransparent(&mTransparent, CVector(18.0f, -2.648f, -18.1f), CVector(0.0f, 0.0f, 0.0f), CVector(19.0f, 5.0f, 0.8f));//入口から見て右のステージ右のドア付近上側
