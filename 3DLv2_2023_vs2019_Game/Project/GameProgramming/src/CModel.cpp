@@ -69,7 +69,7 @@ std::vector<CTriangle> CModel::Triangles() const
 
 //モデルファイルの入力
 //Load(モデルファイル名,マテリアルファイル名)
-void CModel::Load(char* obj, char* mtl) {
+bool CModel::Load(const char* obj, const char* mtl) {
 	//頂点データの保存(CVector型)
 	std::vector<CVector>vertex;
 	std::vector<CVector>normal;
@@ -89,8 +89,8 @@ void CModel::Load(char* obj, char* mtl) {
 	//fpがNULLの時はエラー
 	if (fp == NULL) {
 		//コンソールにエラー出力して戻る
-printf("%s file open error\n", mtl);
-return;
+		printf("%s file open error\n", mtl);
+		return false;
 	}
 	//マテリアルインデックス
 	int idx = 0;
@@ -140,7 +140,7 @@ return;
 	if (fp == NULL) {
 		//コンソールにエラー出力して戻る
 		printf("%s file open error\n", obj);
-		return;
+		return false;
 	}
 	//ファイルから1行入力
 	//fgets(入力エリア,エリアサイズ,ファイルポインタ)
@@ -223,10 +223,11 @@ return;
 		}
 			//入力した値をコンソールに出力する
 			//printf("%s", buf);
-		}
-		//ファイルのクローズ
-		fclose(fp);
-		CreateVertexBuffer();
+	}
+	//ファイルのクローズ
+	fclose(fp);
+	CreateVertexBuffer();
+	return true;
 }
 
 void CModel::Render()
@@ -306,6 +307,11 @@ void CModel::Render(const CMatrix& m)
 	//	//マテリアルを無効
 	//	mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
 	//}
+}
+
+CModel::CModel()
+	: mpVertexes(nullptr)
+{
 }
 
 CModel::~CModel()

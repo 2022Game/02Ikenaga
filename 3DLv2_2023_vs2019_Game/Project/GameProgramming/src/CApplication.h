@@ -11,7 +11,6 @@
 #include "CMiss.h"
 #include <vector>
 #include "CCharacterManager.h"
-#include "CGame.h"
 #include "CSound.h"
 #include"CVector.h"
 #include"CModel.h"
@@ -31,44 +30,24 @@
 #include"CTransparent.h"
 #include"CFrame.h"
 #include"CClear.h"
-#include"CStageOne.h"
+#include"CUi.h"
+#include"CStage1.h"
 
 class CApplication
 {
 private:
-	CStageOne* mpStageOne;
+	CStage1* mpStage1;
 	static CUi* spUi; //UIクラスのポインタ
 	//モデルからコライダを生成
 	CColliderMesh mColliderMesh;
-	//三角コライダの作成
-	CColliderTriangle mColliderTriangle;
-	//CColliderTriangle mColliderTriangle2;
 	//モデルビューの逆行列
 	static CMatrix mModelViewInverse;
-	CModel mTransparent;//透明の壁
-	CModel mStage;
-	CModel mKokki;
-	CModel mHata;
-	CModel mEnemy1;
-	CModel mEnemy2;
-	CModel mPolice;
-	CModel mFrame;
-	CModel mClear;
-	//C5モデル
-	CModel mModelC5;
-	//static CTaskManager mTaskManager;
 	CPlayer mPlayer;
 	//CCharacter3 mCharacter;
-	CModel mBackGround;//背景モデル
-	//モデルクラスのインスタンス作成
-	CModel mModel;
-	//CModel mModel2;
-	CTriangle* mTriangle;
+	CModel* mpBackGround;//背景モデル
 	CVector mEye;
 	CSound mSoundBgm;	//BGM
 	CSound mSoundOver;	//ゲームオーバー
-	CGame* mpGame;
-	static CCharacterManager mCharacterManager;
 	enum class EState
 	{
 		ESTART,	//ゲーム開始
@@ -77,26 +56,13 @@ private:
 		EOVER,	//ゲームオーバー
 	};
 	EState mState;
-//	CCharacter mRectangle;
-	//CPlayer* mpPlayer;
 	static CTexture mTexture;
-	//static CTexture mTexture1;
-	CEnemy* mpEnemy;
-//	CBullet* mpBullet;
 	CInput mInput;
-	CFont mFont;
-	CMiss* mpMiss;
-	//CCharacterのポインタの可変長配列
-//	std::vector<CCharacter*> mCharacters;
 public:
 	~CApplication();
 	static CUi* Ui();  //UIクラスのインスタンスを取得
 	//モデルビュー行列の取得
 	static const CMatrix& ModelViewInverse();
-	//static CTaskManager* TaskManager();
-	static CCharacterManager* CharacterManager();
-	static CTexture* Texture();
-	//static CTexture* Texture1();
 	//最初に一度だけ実行するプログラム
 	void Start();
 	//繰り返し実行するプログラム

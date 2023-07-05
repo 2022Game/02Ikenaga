@@ -17,10 +17,11 @@ public:
 	//描画
 	//Render(行列)
 	void Render(const CMatrix& m);
+	CModel();
 	~CModel();
 	//モデルファイルの入力
 	//Load(モデルファイル名,マテリアルファイル名
-	void Load(char* obj,char* mtl);
+	bool Load(const char* obj,const char* mtl);
 	//描画
 	void Render();
 private:

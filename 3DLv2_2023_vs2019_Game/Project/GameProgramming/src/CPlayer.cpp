@@ -4,7 +4,7 @@
 #include"CApplication.h"
 #include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //‰ñ“]‘¬“x
-#define ROTATION_YY CVector(0.0f,1.5f,0.0f) //‰ñ“]‘¬“x
+#define ROTATION_YY CVector(0.0f,2.0f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_YO CVector(0.0f,0.3f,0.0f) 
 #define ROTATION_Y CVector(0.0f,-0.1f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_X CVector(0.0f,-0.1f,0.0f) //‰ñ“]‘¬“x

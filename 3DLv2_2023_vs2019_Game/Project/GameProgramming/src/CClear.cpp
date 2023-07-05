@@ -2,6 +2,19 @@
 #include "CCollisionManager.h"
 #include"CPlayer.h"
 
+#define HP 1
+
+int CClear::sHp = 0;
+
+int CClear::Hp()
+{
+	return sHp;
+}
+
+CClear::CClear()
+{
+}
+
 void CClear::Collision()
 {
 	mColliderMesh1.ChangePriority();
@@ -17,7 +30,7 @@ void CClear::Collision()
 
 void CClear::Collision(CCollider* m, CCollider* o) {
 	//相手のコライダタイプの判定
-	switch (o->Type())
+	switch (o->ELINE)
 	{
 	case CCollider::ESPHERE: //球コライダの時
 		//コライダのmとyが衝突しているか判定
@@ -28,11 +41,12 @@ void CClear::Collision(CCollider* m, CCollider* o) {
 			//mEnabled=false;
 		}
 		break;
-	case CCollider::ETRIANGLE: //三角コライダの時
+	case CCollider::ELINE: //三角コライダの時
 		CVector adjust; //調整値
 		//三角コライダと球コライダの衝突判定
 		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 		{
+			sHp = 0;
 			//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
 			//衝突しない位置まで戻す
 			//mPosition = mPosition + adjust;
@@ -53,6 +67,7 @@ CClear::CClear(CModel* model, const CVector& position, const CVector& rotation, 
 , mCollider2(this, &mMatrix, CVector(0.0f, 5.0f, 20.0f), 0.8f)
 , mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
 {
+	sHp = HP;
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定
