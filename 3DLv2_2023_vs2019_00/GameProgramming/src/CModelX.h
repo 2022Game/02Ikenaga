@@ -177,6 +177,9 @@ class CModelX {
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
+	//アニメーションセットの追加
+	void AddAnimationSet(const char* file);
+	bool IsLoaded();
 	/*
 アニメーションを抜き出す
 idx:分割したいアニメーションの番号
@@ -184,7 +187,7 @@ start:分割したいアニメーションの開始時間
 end:分割したいアニメーションの終了時間
 name:追加するアニメーションの名前
 */
-	void CModelX::SeparateAnimationSet(int idx,int start,int end,char*name);
+	void SeparateAnimationSet(int idx,int start,int end,char*name);
 	void AnimateVertex(CMatrix*);
 	//マテリアル配列の取得
 	std::vector<CMaterial*>& Material();
@@ -212,6 +215,7 @@ name:追加するアニメーションの名前
 	//ファイル読み込み
 	void Load(char* file);
 private:
+	bool mLoaded;
 	std::vector<CMaterial*> mMaterial;  //マテリアル配列
 	//アニメーションセットの配列
 	std::vector<CAnimationSet*> mAnimationSet;

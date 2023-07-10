@@ -25,6 +25,7 @@
 #include "CXCharacter.h"
 #include "CXPlayer.h"
 #include "CXEnemy.h"
+#include "CPaladin.h"
 
 
 class CApplication
@@ -34,6 +35,7 @@ private:
 	CXPlayer mXPlayer;
 	//敵のインスタンス
 	CXEnemy mXEnemy;
+	CPaladin* mpPaladin;
 	//CXCharacter mCharacter;
 	CMatrix mMatrix;
 	CModelX mModelX;

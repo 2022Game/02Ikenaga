@@ -89,6 +89,9 @@ void CApplication::Start()
 	mXEnemy.ChangeAnimation(2, true, 200);
 	//敵の配置
 	mXEnemy.Position(CVector(7.0f, 0.0f, 0.0f));
+	mpPaladin = new CPaladin();
+	mpPaladin->Position(CVector(-1.0f, 0.0f, 5.0f));
+	mpPaladin->ChangeAnimation(1, true, 60);
 	//mCharacter.Init(&mModelX);
 	mFont.Load("FontG.png", 1, 4096 / 64);
 	//spUi = new CUi();	//UIクラスの生成
@@ -146,11 +149,12 @@ void CApplication::Update()
 	}*/
 	//mXPlayer.ChangeAnimation(0, true, 60);
 	//mModelX.AnimateFrame();
-	
+
 	//キャラクタクラスの更新
 	mXPlayer.Update();
 	//敵の更新
 	mXEnemy.Update();
+	mpPaladin->Update();
 
 	//mXPlayer.ChangeAnimation(0, false, 60);
 	//mCharacter.Update(CMatrix());
@@ -210,11 +214,13 @@ void CApplication::Update()
 	mModelX.AnimateVertex();
 	//モデル描画
 	//mModelX.Render();
+
 	mXPlayer.Render();
 	//コライダの描画
 	CCollisionManager::Instance()->Render();
 	//敵描画
 	mXEnemy.Render();
+	mpPaladin->Render();
 
 	//2D描画開始
 	CCamera::Start(0, 800, 0, 600);

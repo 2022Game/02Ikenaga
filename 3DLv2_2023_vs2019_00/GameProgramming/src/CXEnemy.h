@@ -18,9 +18,7 @@ private:
 	CCollider mColSphereSword0;  //Œ•
 	CCollider mColSphereSword1;  //Œ•
 	CCollider mColSphereSword2;  //Œ•
-	//CXPlayer mXPlayer;
 	CCollider mColSphereHead;  //“ª
-	//CCollider mColSphereSword;  //Œ•
 	//ƒRƒ‰ƒCƒ_‚ÌéŒ¾
 	CCollider mColSphereBody;  //‘Ì
 };
