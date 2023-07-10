@@ -129,8 +129,6 @@ void CApplication::Update()
 		if (mInput.Key(VK_RETURN))
 		{	//状態をプレイ中にする
 			mState = EState::EPLAY;
-			//BGMリピート再生
-			mSoundBgm.Repeat();
 		}
 		break;
 	//case EState::EPLAY:
