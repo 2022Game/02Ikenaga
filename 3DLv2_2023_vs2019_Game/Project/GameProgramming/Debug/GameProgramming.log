@@ -1,8 +1,2 @@
-﻿  CApplication.cpp
-  CBillBoard.cpp
-  CCharacter3.cpp
-  CPlayer.cpp
-  CStage1.cpp
-  main.cpp
-  コードを生成中...
+﻿  CClear.cpp
   GameProgramming.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\GameProgramming.exe

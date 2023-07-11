@@ -108,24 +108,8 @@ void CEnemy::Update()
 			}
 		}
 	}
-	//HPが0以下の時 撃破
-	//if (mHp <= 0)
-	//{
-	//	mHp--;
-	//	//15フレーム毎にエフェクト
-	//	if (mHp % 15 == 0)
-	//	{
-	//		//エフェクト生成
-	//		new CEffect(mPosition, 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	}
-	//	//下降させる
-	//	mPosition = mPosition - CVector(0.0f, 0.03f, 0.0f);
-	//	CTransform::Update();
-	//	return;
-	//}
 	//目標地点までのベクトルを求める
 	CVector vp = mPoint - mPosition;
-	//課題
 	//左ベクトルとの内積を求める
 	float dx = vp.Dot(mMatrixRotate.VectorX());
 	//上ベクトルとの内積を求める
@@ -188,13 +172,6 @@ void CEnemy::Collision()
 	mLine2.ChangePriority();
 	mLine3.ChangePriority();
 	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	/*CCollisionManager::Instance()->Collision(&mLine, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mLine2, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mLine3, COLLISIONRANGE);*/
-	////衝突処理を実行
-	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	/*CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);*/
 }
 
 //衝突処理
@@ -203,19 +180,6 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 	//相手のコライダタイプの判定
 	switch (m->ELINE)
 	{
-	//case CCollider::ESPHERE: //球コライダの時
-	//	CVector adjust;//調整用ベクトル
-	//	//コライダのmとyが衝突しているか判定
-	//	if (CCollider::CCollision(m, o)) 
-	//	{
-	//		mPosition = mPosition + adjust;
-	//		//CTransform::Update();
-	//		//エフェクト生成
-	//		//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//		//衝突している時は無効にする
-	//		//mEnabled=false;
-	//	}
-	//	break;
 	case CCollider::ELINE: //三角コライダの時
 		//三角コライダと球コライダの衝突判定
 		if (o->Type() == CCollider::ETRIANGLE)
@@ -240,12 +204,6 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 		}
 		break;
 	}
-	////コライダもmとoが衝突しているか判定
-	//if (CCollider::CCollision(m, o)) {
-	//	//エフェクト生成
-	//	new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	//mEnabled = false;
-	//}
 }
 
 //コンストラクタ
@@ -267,5 +225,4 @@ CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, 
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
 	spInstance = this;
-	//mColliderMesh1.Set(this, &mMatrix, mpModel);
 }

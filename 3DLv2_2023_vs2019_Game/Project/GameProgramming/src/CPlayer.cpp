@@ -85,16 +85,15 @@ CPlayer::CPlayer()
 	, mCollider(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 0.5f)
 	//, mLine4(this, &mMatrix, CVector(0.0f, 1.0f, 2.5f), CVector(0.0f, 1.0f, -0.5f))
 {
+	ETag::EPLAYER;
 	sHp = HP;
 	//インスタンスの設定
 	spInstance = this;
-	//mColliderMesh1.Set(this, &mMatrix, mpModel);
 }
 
 //CPayer(位置,回転,スケール)
 CPlayer::CPlayer(const CVector& pos, const CVector& rot, const CVector& scale)
 	:jump(0)
-	//,mCollider(this, &mMatrix, CVector(0.0f, 2.0f, 0.0f), 0.5f)
 {
 	CTransform::Update(pos, rot, scale); //行列の更新
 }

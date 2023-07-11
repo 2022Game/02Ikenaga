@@ -45,6 +45,7 @@ void CApplication::Start()
 	LOAD_MODEL("BG", "res\\sky.obj", "res\\sky.mtl");
 
 	spUi = new CUi();  //UIクラスの生成
+	spUi->Hp2(CClear::Hp());
 	spUi->Hp(CPlayer::Hp());
 
 	new CStage(GET_MODEL("Stage"), CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
@@ -156,16 +157,16 @@ void CApplication::Update()
 	//		mState = EState::ESTART;
 	//	}
 	//	break;
-	//case EState::ECLEAR:
-	//	//ゲームクリア処理
-	//	mpStage1->Clear();
-	//	if (mInput.Key(VK_RETURN))
-	//	{
-	//		delete mpStage1;
-	//		mpStage1 = new CStage1();
-	//		mState = EState::ESTART;
-	//	}
-	//	break;
+	case EState::ECLEAR:
+		//ゲームクリア処理
+		mpStage1->Clear();
+		if (mInput.Key(VK_RETURN))
+		{
+			delete mpStage1;
+			mpStage1 = new CStage1();
+			mState = EState::ESTART;
+		}
+		break;
 	}
 	if (mInput.PullKey('1'))
 	{
@@ -175,6 +176,7 @@ void CApplication::Update()
 	{
 		CStageManager::Instance()->LoadStage(1);
 	}
+	spUi->Hp2(CClear::Hp());
 	spUi->Hp(CPlayer::Hp());
 	//タスクマネージャの更新
 	CTaskManager::Instance()->Update();

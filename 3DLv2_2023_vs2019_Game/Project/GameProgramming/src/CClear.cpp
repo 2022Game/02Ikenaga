@@ -1,6 +1,7 @@
 #include "CClear.h"
 #include "CCollisionManager.h"
 #include"CPlayer.h"
+#include"CStageManager.h"
 
 #define HP 1
 
@@ -11,70 +12,66 @@ int CClear::Hp()
 	return sHp;
 }
 
+CClear* CClear::Instance()
+{
+	return spInstance;
+}
+
+CClear* CClear::spInstance = nullptr;
+
 CClear::CClear()
 {
+
 }
 
 void CClear::Collision()
 {
 	mColliderMesh1.ChangePriority();
-	////コライダの優先度変更
-	/*mCollider1.ChangePriority();
-	mCollider2.ChangePriority();
-	mCollider3.ChangePriority();*/
-	//衝突処理を実行
-	/*CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);*/
+	mCollider.ChangePriority();
+	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
+}
+
+CClear::CClear(const CVector& position, const CVector& rotation, const CVector& scale)
+{
+	//位置、回転、拡縮を設定する
+	mPosition = position;  //位置の設定
+	mRotation = rotation;  //回転の設定
+	mScale = scale;  //拡縮の設定
+	//CTransform::Update();  //行列の更新
 }
 
 void CClear::Collision(CCollider* m, CCollider* o) {
 	//相手のコライダタイプの判定
-	switch (o->ELINE)
+	switch (o->Type())
 	{
 	case CCollider::ESPHERE: //球コライダの時
-		//コライダのmとyが衝突しているか判定
-		if (CCollider::CCollision(m, o)) {
-			//エフェクト生成
-			//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-			//衝突している時は無効にする
-			//mEnabled=false;
+		//コライダのmとoが衝突しているか判定
+		if (CCollider::CCollision(m, o))
+		{
+			sHp = 0;
+			CStageManager::Instance()->LoadStage(1);
 		}
 		break;
 	case CCollider::ELINE: //三角コライダの時
-		CVector adjust; //調整値
-		//三角コライダと球コライダの衝突判定
-		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+		if (CCollider::CCollision(m, o)) 
 		{
 			sHp = 0;
-			//new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-			//衝突しない位置まで戻す
-			//mPosition = mPosition + adjust;
 		}
 		break;
 	}
-
-	//コライダもmとoが衝突しているか判定
-	//if (CCollider::CCollision(m, o)) {
-	//	//エフェクト生成
-	//	new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	//mEnabled = false;
-	//}
 }
 
 CClear::CClear(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
-/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-, mCollider2(this, &mMatrix, CVector(0.0f, 5.0f, 20.0f), 0.8f)
-, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
+	:mCollider(this, &mMatrix, CVector(0.0f, 0.5f, 0.0f), 1.6f)
 {
 	sHp = HP;
+	spInstance = this;
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
 	mColliderMesh1.Set(this, &mMatrix, mpModel);
-	//CTransform::Update();
 }
 
 //更新処理

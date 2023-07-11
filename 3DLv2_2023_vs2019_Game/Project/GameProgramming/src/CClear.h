@@ -14,12 +14,12 @@
 class CClear : public CCharacter3 {
 public:
 	static int Hp();
-	//void Set(float w, float d);
+	static CClear* Instance();
 	//コンストラクタ
 	CClear();
 	void Collision();
 	//CClear(位置,回転,拡縮)
-	//CClear(const CVector& position, const CVector& rotation, const CVector& scale);
+	CClear(const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
 	//衝突処理
@@ -29,7 +29,9 @@ public:
 	//CClear(モデル,位置,回転,拡縮)
 	CClear(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
+	CCollider mCollider;
 	static int sHp;	//HP
+	static CClear* spInstance;
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;

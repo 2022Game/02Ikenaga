@@ -7,12 +7,13 @@
 
 bool CStage1::IsClear()
 {
-	return  CClear::Hp() <= 0;
+	return CClear::Hp() <= 0;
 }
 
 void CStage1::Clear()
 {
 	mpUi->Clear();
+	mpUi->Hp(CPlayer::Hp());
 }
 
 bool CStage1::IsOver()
@@ -29,12 +30,12 @@ void CStage1::Over()
 void CStage1::Start()
 {
 	//mpUi->Render();
-	//mpUi->Start();
 }
 
 void CStage1::Update()
 {
 	mpUi->Hp(CPlayer::Hp());
+	//mpUi->Start();
 }
 
 //コンストラクタ

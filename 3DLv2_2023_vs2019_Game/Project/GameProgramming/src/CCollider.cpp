@@ -170,7 +170,7 @@ void CCollider::Render() {
 	//’†SÀ•W‚ÖˆÚ“®
 	glMultMatrixf(CMatrix().Translate(pos.X(), pos.Y(), pos.Z()).M());
 	//DIFFUSEÔFİ’è
-	float c[] = { 1.0f,0.0f,0.0f,1.0f };
+	float c[] = { 0.0f,2.0f,0.0f,1.0f };
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
 	//‹…•`‰æ
 	glutWireSphere(mRadius, 16, 16);
