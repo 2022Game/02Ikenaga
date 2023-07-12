@@ -44,7 +44,7 @@ public:
 	Load(ファイル名)
 	画像ファイルの読み込み（テクスチャファイルの読み込み）
 	*/
-	void Load(const char* file);
+	bool Load(const char* file);
 	/*
 	DrawImage(四角形左座標, 四角形右座標, 四角形下座標, 四角形上座標,
 	    画像左座標, 画像右座標, 画像下座標, 画像上座標)

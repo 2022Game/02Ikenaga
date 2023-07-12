@@ -29,7 +29,8 @@ public:
 protected:
 	int mPriority; //優先度
 	bool mEnabled; //有効フラグ
-	bool mIsHidden;
+
+	bool mIsHidden;//これ追加した
 private:
 	CTask* mpNext;//次のポインタ
 	CTask* mpPrev;//前のポインタ

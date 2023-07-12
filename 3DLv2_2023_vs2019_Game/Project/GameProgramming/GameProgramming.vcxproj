@@ -109,6 +109,8 @@
     <ClInclude Include="src\CVector.h" />
     <ClInclude Include="src\CVertex.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\TaskPauseType.h" />
+    <ClInclude Include="src\TaskPriority.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8802AF2F-2920-4700-89F2-CA6778727283}</ProjectGuid>
