@@ -1,6 +1,6 @@
 #ifndef CVECTOR_H
 #define CVECTOR_H
-#include "CMatrix.h"
+class CMatrix;
 
 /*
  ベクトルクラス

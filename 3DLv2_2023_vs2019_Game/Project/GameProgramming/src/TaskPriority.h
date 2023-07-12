@@ -5,6 +5,7 @@ enum class TaskPriority
 {
 	eNone = -1,
 
+	eBackground,  //背景
 	eDefault,	//デフォルト
 	ePlayer,	//プレイヤー
 

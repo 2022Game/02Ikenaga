@@ -8,6 +8,7 @@
 #include"CColliderLine.h"
 #include"CStage.h"
 #include "CColliderMesh.h"
+#include "CCollisionManager.h"
 
 /*
 プレイヤークラス

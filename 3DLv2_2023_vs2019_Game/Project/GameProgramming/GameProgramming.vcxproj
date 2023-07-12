@@ -30,9 +30,12 @@
     <ClCompile Include="src\CEnemy2.cpp" />
     <ClCompile Include="src\CEnemy3.cpp" />
     <ClCompile Include="src\CExclamationMark.cpp" />
+    <ClCompile Include="src\CField.cpp" />
     <ClCompile Include="src\CFont.cpp" />
     <ClCompile Include="src\CFrame.cpp" />
+    <ClCompile Include="src\CGameScene.cpp" />
     <ClCompile Include="src\CHATA.cpp" />
+    <ClCompile Include="src\CImage.cpp" />
     <ClCompile Include="src\CKokki.cpp" />
     <ClCompile Include="src\CMaterial.cpp" />
     <ClCompile Include="src\CMatrix.cpp" />
@@ -42,6 +45,8 @@
     <ClCompile Include="src\CPolice.cpp" />
     <ClCompile Include="src\CRectangle.cpp" />
     <ClCompile Include="src\CResourceManager.cpp" />
+    <ClCompile Include="src\CSceneBase.cpp" />
+    <ClCompile Include="src\CSceneManager.cpp" />
     <ClCompile Include="src\CSound.cpp" />
     <ClCompile Include="src\CStage.cpp" />
     <ClCompile Include="src\CStage1.cpp" />
@@ -52,6 +57,7 @@
     <ClCompile Include="src\CTaskManager.cpp" />
     <ClCompile Include="src\CTexture.cpp" />
     <ClCompile Include="src\CInput.cpp" />
+    <ClCompile Include="src\CTitleScene.cpp" />
     <ClCompile Include="src\CTransform.cpp" />
     <ClCompile Include="src\CTransparent.cpp" />
     <ClCompile Include="src\CTriangle.cpp" />
@@ -79,9 +85,12 @@
     <ClInclude Include="src\CEnemy2.h" />
     <ClInclude Include="src\CEnemy3.h" />
     <ClInclude Include="src\CExclamationMark.h" />
+    <ClInclude Include="src\CField.h" />
     <ClInclude Include="src\CFont.h" />
     <ClInclude Include="src\CFrame.h" />
+    <ClInclude Include="src\CGameScene.h" />
     <ClInclude Include="src\CHATA.h" />
+    <ClInclude Include="src\CImage.h" />
     <ClInclude Include="src\CKokki.h" />
     <ClInclude Include="src\CMaterial.h" />
     <ClInclude Include="src\CMatrix.h" />
@@ -92,6 +101,8 @@
     <ClInclude Include="src\CPolice.h" />
     <ClInclude Include="src\CRectangle.h" />
     <ClInclude Include="src\CResourceManager.h" />
+    <ClInclude Include="src\CSceneBase.h" />
+    <ClInclude Include="src\CSceneManager.h" />
     <ClInclude Include="src\CSound.h" />
     <ClInclude Include="src\CStage.h" />
     <ClInclude Include="src\CStage1.h" />
@@ -102,6 +113,7 @@
     <ClInclude Include="src\CTaskManager.h" />
     <ClInclude Include="src\CTexture.h" />
     <ClInclude Include="src\CInput.h" />
+    <ClInclude Include="src\CTitleScene.h" />
     <ClInclude Include="src\CTransform.h" />
     <ClInclude Include="src\CTransparent.h" />
     <ClInclude Include="src\CTriangle.h" />
@@ -109,6 +121,7 @@
     <ClInclude Include="src\CVector.h" />
     <ClInclude Include="src\CVertex.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\CSceneType.h" />
     <ClInclude Include="src\TaskPauseType.h" />
     <ClInclude Include="src\TaskPriority.h" />
   </ItemGroup>

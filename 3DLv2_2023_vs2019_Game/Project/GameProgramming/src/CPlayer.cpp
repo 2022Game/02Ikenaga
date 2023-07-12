@@ -87,6 +87,9 @@ CPlayer::CPlayer()
 {
 	ETag::EPLAYER;
 	sHp = HP;
+
+	mpModel = new CModel();
+	mpModel->Load("res\\obama4.obj", "res\\obama4.mtl");
 	//インスタンスの設定
 	spInstance = this;
 }

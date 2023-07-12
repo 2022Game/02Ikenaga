@@ -5,6 +5,7 @@
 #include "main.h"
 #include "CApplication.h"
 #include "CInput.h"
+#include "CSceneManager.h"
 
 CApplication gApplication;
 
@@ -65,6 +66,11 @@ void idle() {
 
 	//•`‰æ‚·‚éŠÖ”‚ğŒÄ‚Ô
 	display();
+}
+
+void release()
+{
+	CSceneManager::ClearInstance();
 }
 
 int main(void)
@@ -143,6 +149,9 @@ int main(void)
 			break;
 		}
 	}
+
+	//ƒQ[ƒ€’†‚É¶¬‚µ‚½‚à‚Ì‚ğ”jŠü
+	release();
 
 	glfwTerminate();
 	return 0;
