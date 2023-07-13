@@ -1,3 +1,4 @@
+#include "glew.h"
 #include <stdio.h>
 #include <string.h>
 #include "CModelX.h"
@@ -410,6 +411,88 @@ CSkinWeights::~CSkinWeights()
 //	// TODO: return ステートメントをここに挿入します
 //}
 
+void CMesh::CreateVertexBuffer()
+{
+	//メッシュ毎に一回作成すればよい
+	if (mMyVertexBufferId > 0)
+		return;
+	if (mVertexNum > 0)
+	{
+		//頂点インデックスを使わず、全ての面データを作成
+		CVertex* pmyVertex, * vec;  //
+		//頂点数計算
+		int myVertexNum = mFaceNum * 3;
+		//頂点数分頂点配列作成
+		pmyVertex = new CVertex[myVertexNum];
+		vec = new CVertex[mVertexNum];
+		for (int j = 0; j < mVertexNum; j++)
+		{
+			//頂点座標設定
+			vec[j].mPosition = mpVertex[j];
+			//テクスチャマッピング設定
+			if (mpTextureCoords != NULL)
+			{
+				vec[j].mTextureCoords.X(mpTextureCoords[j * 2]);
+				vec[j].mTextureCoords.Y(mpTextureCoords[j * 2 + 1]);
+			}
+			vec[j].mBoneWeight[0] = 1.0f;
+		}
+		int wi = 0;
+		//スキンウェイト設定
+		for (size_t k = 0; k < mSkinWeights.size(); k++)
+		{
+			for (int l = 0; l < mSkinWeights[k]->mIndexNum; l++)
+			{
+				int idx = mSkinWeights[k]->mpIndex[l];
+				for (int m = 0; m < 4; m++)
+				{
+					if (vec[idx].mBoneIndex[m] == 0)
+					{
+						vec[idx].mBoneIndex[m] =
+							mSkinWeights[k]->mFrameIndex;
+						vec[idx].mBoneWeight[m] =
+							mSkinWeights[k]->mpWeight[l];
+						break;
+					}
+				}
+			}
+		}
+		int k = 0;
+		//マテリアル番号の昇順に面の頂点を設定
+		for (size_t i = 0; i < mMaterial.size(); i++)
+		{
+			int w = k;
+			for (int j = 0; j < mMaterialIndexNum; j++)
+			{
+				if (mpMaterialIndex[j] == i)
+				{
+					//頂点配列に設定し、法線を設定する
+					pmyVertex[k] = vec[mpVertexIndex[j * 3]];
+					pmyVertex[k++].mNormal = mpNormal[j * 3];
+					pmyVertex[k] = vec[mpVertexIndex[j * 3 + 1]];
+					pmyVertex[k++].mNormal = mpNormal[j * 3 + 1];
+					pmyVertex[k] = vec[mpVertexIndex[j * 3 + 2]];
+					pmyVertex[k++].mNormal = mpNormal[j * 3 + 2];
+				}
+			}
+			//マテリアル毎の頂点数を追加する
+			mMaterialVertexCount.push_back(k - w);
+		}
+		//頂点バッファの作成
+		glGenBuffers(1, &mMyVertexBufferId);
+		//頂点バッファをバインド
+		glBindBuffer(GL_ARRAY_BUFFER, mMyVertexBufferId);
+		//バインドしたバッファにデータを転送
+		glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * myVertexNum, pmyVertex, GL_STATIC_DRAW);
+		//バインド解除
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//配列解放
+		delete[] pmyVertex;
+		delete[] vec;
+		pmyVertex = nullptr;
+	}
+}
+
 void CMesh::AnimateVertex(CMatrix*mat)
 {
 	//アニメーション用の頂点エリアクリア
@@ -693,6 +776,7 @@ CMesh::CMesh()
 	,mpAnimateVertex(nullptr)
 	,mpAnimateNormal(nullptr)
 	,mpTextureCoords(nullptr)
+	,mMyVertexBufferId(0)
 {}
 
 //デストラクタ
@@ -883,6 +967,11 @@ CModelXFrame::CModelXFrame(CModelX* model)
 	printf(" %f\t", mTransformMatrix.M()[14]);
 	printf(" %f\n", mTransformMatrix.M()[15]);*/
 #endif
+}
+
+void CModelX::RenderShader(CMatrix* pCombinedMatrix)
+{
+	mShader.Render(this, pCombinedMatrix);
 }
 
 void CModelX::AddAnimationSet(const char* file)
@@ -1131,6 +1220,7 @@ void CModelX::SkipNode() {
 
 CModelX::~CModelX()
 {
+	SAFE_DELETE_ARRAY(mpSkinningMatrix);
 	if (mFrame.size() > 0)
 	{
 		delete mFrame[0];
@@ -1221,6 +1311,7 @@ char* CModelX::GetToken()
 CModelX::CModelX()
 	:mpPointer(nullptr)
 	,mLoaded(false)
+	,mpSkinningMatrix(nullptr)
 {
 	//mTokenを初期化
 	memset(mToken, 0, sizeof(mToken));
@@ -1323,4 +1414,17 @@ void CModelX::Load(char* file)
 	SAFE_DELETE_ARRAY(buf); //確保した領域を解放する
 
 	mLoaded = true;  //読み込み済
+
+	//頂点バッファの作成
+	for (size_t i = 0; i < mFrame.size(); i++)
+	{
+		if (mFrame[i]->mpMesh != nullptr)
+		{
+			mFrame[i]->mpMesh->CreateVertexBuffer();
+		}
+	}
+	//スキンマトリックスのエリア作成
+	mpSkinningMatrix = new CMatrix[mFrame.size()];
+	//シェーダー読み込み
+	mShader.Load("res\\skinmesh.vert", "res\\skinmesh.flag");
 }

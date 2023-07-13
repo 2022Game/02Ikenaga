@@ -2,6 +2,8 @@
 #include "CVector.h"
 #include <vector>//vectorクラスのインクルード(動的配列)
 #include "CMatrix.h"  //マトリクスクラスのインクルード
+#include "CMyShader.h"  //シェーダーのインクルード
+#include "CVertex.h"
 class CAnimationKey;  //アニメーションキークラス
 class CAnimation;  //アニメーションクラス
 class CAnimationSet;  //アニメーションセットクラス
@@ -92,6 +94,7 @@ CSkinWeights
 */
 class CSkinWeights
 {
+	friend CMyShader;
 	friend CModelX;
 	friend CMesh;
 public:
@@ -109,7 +112,10 @@ private:
 };
 
 class CMesh {
+	friend CMyShader;
 public:
+	//頂点バッファの作成
+	void CreateVertexBuffer();
 	void AnimateVertex(CMatrix*);
 	//頂点にアニメーション適用
 	void AnimateVertex(CModelX* model);
@@ -123,6 +129,10 @@ public:
 	//読み込み処理
 	void Init(CModelX* model);
 private:
+	//マテリアル毎の面数
+	std::vector<int> mMaterialVertexCount;
+	//頂点バッファ識別
+	GLuint mMyVertexBufferId;
 	//テクスチャ座標データ
 	float* mpTextureCoords;
 	CVector* mpAnimateVertex;  //アニメーション用頂点
@@ -143,6 +153,7 @@ private:
 
 //CModelXFrameクラスの定義
 class CModelXFrame {
+	friend CMyShader;
 	friend CAnimationSet;
 	friend CAnimation;
 	friend CModelX;
@@ -172,11 +183,13 @@ private:
  Xファイル形式の3Dモデルデータをプログラムで認識する
 */
 class CModelX {
-	//friend CAnimationKey;
+	friend CMyShader;
 	friend CAnimation;
 	friend CAnimationSet;
 	friend CModelXFrame;
 public:
+	//シェーダーを使った描画
+	void RenderShader(CMatrix* m);
 	//アニメーションセットの追加
 	void AddAnimationSet(const char* file);
 	bool IsLoaded();
@@ -215,6 +228,9 @@ name:追加するアニメーションの名前
 	//ファイル読み込み
 	void Load(char* file);
 private:
+	//シェーダー用スキンマトリックス
+	CMatrix* mpSkinningMatrix;
+	CMyShader mShader;  //シェーダーのインスタンス
 	bool mLoaded;
 	std::vector<CMaterial*> mMaterial;  //マテリアル配列
 	//アニメーションセットの配列
