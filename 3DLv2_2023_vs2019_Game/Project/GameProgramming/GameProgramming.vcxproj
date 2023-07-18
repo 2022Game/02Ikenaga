@@ -51,6 +51,7 @@
     <ClCompile Include="src\CStage.cpp" />
     <ClCompile Include="src\CStage1.cpp" />
     <ClCompile Include="src\CStage2.cpp" />
+    <ClCompile Include="src\CStage3.cpp" />
     <ClCompile Include="src\CStageBase.cpp" />
     <ClCompile Include="src\CStageManager.cpp" />
     <ClCompile Include="src\CTask.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="src\CStage.h" />
     <ClInclude Include="src\CStage1.h" />
     <ClInclude Include="src\CStage2.h" />
+    <ClInclude Include="src\CStage3.h" />
     <ClInclude Include="src\CStageBase.h" />
     <ClInclude Include="src\CStageManager.h" />
     <ClInclude Include="src\CTask.h" />

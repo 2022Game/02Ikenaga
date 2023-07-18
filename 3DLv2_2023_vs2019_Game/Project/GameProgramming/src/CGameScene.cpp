@@ -8,6 +8,7 @@
 #include "CTransparent.h"
 #include "CFrame.h"
 #include "CClear.h"
+#include "CSceneManager.h"
 //#include "CStageManager.h"
 
 //コンストラクタ
@@ -81,22 +82,11 @@ void CGameScene::Load()
 	new CTransparent(tp, CVector(37.0f, 10.0, -16.25f), CVector(0.0f, 0.0f, 90.0f), CVector(33.0f, 4.0f, 0.04));//入口から見て真ん中のステージ
 	new CTransparent(tp, CVector(30.0f, 0.4f, -17.1f), CVector(90.0f, 0.0f, 0.0f), CVector(11.3f, 0.26f, 0.3f));//演説台	
 
-	CModel* frameModel = GET_MODEL("Frame");
-	new CFrame(frameModel, CVector(30.0f, -0.9f, 30.0f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
-	CModel* clearModel = GET_MODEL("Clear");
-	new CClear(clearModel, CVector(30.0f, -0.9f, 30.0f), CVector(0.0f, 180.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f));
 	//mEnemy2.Load(MODEL11);
 	//new CEnemy2(&mEnemy2, CVector(-10.0f, -1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f));
 	//mHata.Load(MODEL5);
 	//new CHATA(&mHata, CVector(30.0f, 100.0f, -19.65f), CVector(), CVector(5.5f, 5.5f, 0.5f));
 
-	CModel* playerMode = GET_MODEL("Player");
-	CPlayer* player = new CPlayer();
-	//mPlayer.Model(playerMode);
-	player->Position(CVector(30.0f, 3.0f, 1.0f));
-	player->Rotation(CVector(0.0f, 180.0f, 0.0f));
-	player->Scale(CVector(1.0f, 1.0f, 1.0f));//10.0f, 10.0f, 10.0f
-	AddTask(player);
 
 	//mpBackGround = GET_MODEL("BG");
 	//ビルボードの作成
@@ -122,4 +112,9 @@ void CGameScene::Update()
 	u = CVector(0.0f, 1.0f, 0.0f) * player->MatrixRotate();
 	//カメラの設定
 	gluLookAt(e.X(), e.Y(), e.Z(), c.X(), c.Y(), c.Z(), u.X(), u.Y(), u.Z());
+
+	if (player->IsDeath())
+	{
+		//CSceneManager::Instance()->LoadScene(EScene::eTitle);
+	}
 }

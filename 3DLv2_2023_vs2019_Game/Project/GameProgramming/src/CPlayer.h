@@ -6,7 +6,6 @@
 #include "CInput.h"
 #include"CBullet.h"
 #include"CColliderLine.h"
-#include"CStage.h"
 #include "CColliderMesh.h"
 #include "CCollisionManager.h"
 
@@ -28,6 +27,7 @@ public:
 	CPlayer();
 	//CPayer(位置,回転,スケール)
 	CPlayer(const CVector& pos, const CVector& rot, const CVector& scale);
+	CPlayer(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
 private:

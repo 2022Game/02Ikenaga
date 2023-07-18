@@ -211,7 +211,7 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
 : mark(0)
 ,mark2(0)
-,mCollider(this, &mMatrix, CVector(0.0f, 2.5f, 0.0f), 1.0f)
+,mCollider(this, &mMatrix, CVector(0.0f, 2.5f, 0.0f), 0.5f)
 ,mLine(this, &mMatrix, CVector(0.0f, 4.9f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 , mLine2(this, &mMatrix, CVector(1.0f, 2.5f, -0.5f), CVector(-1.0f, 2.5f, -0.5f))
 , mLine3(this, &mMatrix, CVector(0.0f, 2.5f, 0.5f), CVector(0.0f, 2.5f, -0.5f))

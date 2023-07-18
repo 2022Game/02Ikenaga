@@ -17,6 +17,7 @@
 class CCollider;
 class CCharacter3 :public CTransform,public CTask{
 public:
+	bool IsDeath() const;
 	enum ETag
 	{
 		EZERO,    //初期値
@@ -48,9 +49,9 @@ public:
 	//描画処理
 	virtual void Render();
 protected:
-protected:
-	float mVx;	//X軸速度
-	float mVy;	//Y軸速度
+    int mHp;
+	//float mVx;	//X軸速度
+	//float mVy;	//Y軸速度
 	bool mEnabled;
 	EState mState;
 	ETag mTag;  //タグ

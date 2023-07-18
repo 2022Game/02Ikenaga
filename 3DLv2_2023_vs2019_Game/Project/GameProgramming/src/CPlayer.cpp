@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include"CTaskManager.h"
 #include"CApplication.h"
+#include"CCollider.h"
 #include"CCharacter3.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
 #define ROTATION_YY CVector(0.0f,2.0f,0.0f) //回転速度
@@ -99,6 +100,23 @@ CPlayer::CPlayer(const CVector& pos, const CVector& rot, const CVector& scale)
 	:jump(0)
 {
 	CTransform::Update(pos, rot, scale); //行列の更新
+}
+
+CPlayer::CPlayer(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
+	: mLine(this, &mMatrix, CVector(0.0f, 1.9f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
+	, mLine2(this, &mMatrix, CVector(0.3f, 1.0f, 1.0f), CVector(-0.3f, 1.0f, 1.0f))
+	, mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.5f), CVector(0.0f, 1.0f, -0.5f))
+	, jump(0)
+	, mCollider(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 0.5f)
+{
+	CTransform::Update(position, rotation, scale);
+	//モデル,位置,回転,拡縮を設定する
+	mpModel = model;  //モデルの設定
+	mPosition = position;  //位置の設定
+	mRotation = rotation;  //回転の設定
+	mScale = scale;  //拡縮の設定
+	sHp = HP;
+	spInstance = this;
 }
 
 //更新処理

@@ -4,6 +4,9 @@
 CCharacter3::CCharacter3()
 	:mpModel(nullptr)
 	, mTag(EZERO)
+	,mHp(0)
+	,mEnabled(true)
+	,mState(EState::EMOVE)
 {
 	SetPauseType(TaskPauseType::eGame);
 
@@ -15,6 +18,9 @@ CCharacter3::CCharacter3()
 CCharacter3::CCharacter3(int priority)
 	:mpModel(nullptr)
 	, mTag(EZERO)
+	,mHp(0)
+	, mEnabled(true)
+	, mState(EState::EMOVE)
 {
 	SetPauseType(TaskPauseType::eGame);
 
@@ -43,4 +49,9 @@ void CCharacter3::Model(CModel* m)
 void CCharacter3::Render()
 {
 	mpModel->Render(mMatrix);
+}
+
+bool CCharacter3::IsDeath() const
+{
+	return mHp <= 0;
 }

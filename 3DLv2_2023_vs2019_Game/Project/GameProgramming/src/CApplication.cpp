@@ -130,6 +130,10 @@ void CApplication::Update()
 	{
 		CStageManager::Instance()->LoadStage(1);
 	}
+	else if (mInput.PullKey('3'))
+	{
+		CStageManager::Instance()->LoadStage(2);
+	}
 	spUi->Hp2(CClear::Hp());
 	spUi->Hp(CPlayer::Hp());
 	//タスクマネージャの更新
@@ -142,7 +146,6 @@ void CApplication::Update()
 	trans.Position(CVector(1.0f, 4.0f, 2.0f));//位置の設定
 	trans.Rotation(CVector(-10.0f, -20.0f, -30.0f));  //回転の設定
 	trans.Scale(CVector(1.0f, 1.0f, 1.0f));//拡大縮小の設定
-
 	trans.Update(); //行列の更新
 	//mPlayer.Update();
 	CSceneManager::Instance()->Update();

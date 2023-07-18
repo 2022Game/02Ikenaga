@@ -1,11 +1,11 @@
 #pragma once
 #include "CStageBase.h"
 
-class CStage1:public CStageBase
+class CStage3 :public CStageBase
 {
 public:
 	//コンストラクタ
-	CStage1();
+	CStage3();
 	//デストラクタ
-	~CStage1();
+	~CStage3();
 };
