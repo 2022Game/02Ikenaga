@@ -4,12 +4,17 @@
 #include "CVector.h"
 #include "CTransform.h"
 #include "CMatrix.h"
+#include "CXPlayer.h"
 #include "CInput.h"
 /*
 カメラクラス
 */
 class CActionCamera : public CTransform {
 public:
+	//カメラのX軸取得
+	CVector VectorX();
+	//カメラのZ軸取得
+	CVector VectorZ();
 	CActionCamera();
 	//インスタンス䛾取得
 	static CActionCamera* Instance();
@@ -20,6 +25,7 @@ public:
 	//カメラ適用
 	void Render();
 private:
+	//CXPlayer mPlayer;
 	//インスタンス
 	static CActionCamera* spInstance;
 	//視点

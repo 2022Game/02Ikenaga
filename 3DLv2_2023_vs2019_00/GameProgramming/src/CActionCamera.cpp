@@ -1,7 +1,19 @@
 ﻿#include "CActionCamera.h"
 #include "glut.h"
+#include "CXCharacter.h"
 #define TURN_V 1.0f //回転gal度
 CActionCamera* CActionCamera::spInstance = nullptr;
+
+CVector CActionCamera::VectorX()
+{
+	return CVector(-mModelView.M(0, 0), -mModelView.M(1, 0), -mModelView.M(2, 0));
+}
+
+CVector CActionCamera::VectorZ()
+{
+	return CVector(-mModelView.M(0, 2), -mModelView.M(1, 2), -mModelView.M(2, 2));
+}
+
 CActionCamera::CActionCamera()
 {
 	spInstance = this;
