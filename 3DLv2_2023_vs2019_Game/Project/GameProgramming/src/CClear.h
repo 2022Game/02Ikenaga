@@ -13,7 +13,7 @@
 
 class CClear : public CCharacter3 {
 public:
-	static int Hp();
+	static int STcount(); //ステージカウント
 	static CClear* Instance();
 	//コンストラクタ
 	CClear();
@@ -30,7 +30,7 @@ public:
 	CClear(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
 	CCollider mCollider;
-	static int sHp;	//HP
+	static int mSTcount; //ステージカウント
 	static CClear* spInstance;
 	CVector mPoint;  //目標地点
 	//モデルデータ

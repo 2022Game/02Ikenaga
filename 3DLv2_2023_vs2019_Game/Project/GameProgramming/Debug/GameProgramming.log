@@ -1,2 +1,7 @@
 ﻿  CClear.cpp
+  CStage4.cpp
+  CStageManager.cpp
+  コードを生成中...
+LINK : warning LNK4098: defaultlib 'MSVCRT' は他のライブラリの使用と競合しています。/NODEFAULTLIB:library を使用してください。
+LINK : warning LNK4098: defaultlib 'LIBCMT' は他のライブラリの使用と競合しています。/NODEFAULTLIB:library を使用してください。
   GameProgramming.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv2_2023_vs2019_Game\Project\Debug\GameProgramming.exe

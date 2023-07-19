@@ -7,7 +7,6 @@
 #include"CBullet.h"
 #include"CColliderLine.h"
 #include "CColliderMesh.h"
-#include "CCollisionManager.h"
 
 /*
 プレイヤークラス
@@ -16,6 +15,7 @@
 
 class CPlayer : public CCharacter3 {
 public:
+	bool IsDeath() const;
 	static int Hp();
 	//CModel* model;
 	//インスタンスのポインタの取得

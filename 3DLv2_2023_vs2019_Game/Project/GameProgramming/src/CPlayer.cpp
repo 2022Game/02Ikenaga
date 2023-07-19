@@ -4,6 +4,7 @@
 #include"CApplication.h"
 #include"CCollider.h"
 #include"CCharacter3.h"
+#include "CCollisionManager.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_YY CVector(0.0f,2.0f,0.0f) //‰ñ“]‘¬“x
 #define ROTATION_YO CVector(0.0f,0.3f,0.0f) 
@@ -15,7 +16,12 @@
 //#define ZYUURYOKU (TIPSIZE/20.0f)
 //#define JANPU (TIPSIZE /3.0f)
 
-int CPlayer::sHp = 0;
+bool CPlayer::IsDeath() const
+{
+	return sHp <= 0;
+}
+
+int CPlayer::sHp = 1;
 
 int CPlayer::Hp()
 {
@@ -195,7 +201,4 @@ void CPlayer::Update()
 	CApplication::Ui()->PosY(mPosition.Y());
 	CApplication::Ui()->RotX(mRotation.X());
 	CApplication::Ui()->RotY(mRotation.Y());
-	/*CStageOne::Ui()->PosY(mPosition.Y());
-	CStageOne::Ui()->RotX(mRotation.X());
-	CStageOne::Ui()->RotY(mRotation.Y());*/
 }

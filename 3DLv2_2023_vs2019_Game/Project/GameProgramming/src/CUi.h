@@ -21,7 +21,7 @@ public:
 	void Enemy(int enemy);
 	CUi();
 	void Hp(int hp);
-	void Hp2(int hp2);
+	void STCOUNT(int stcount);
 	//Time(時間)
 	void Time(int time);
 	void Render();
@@ -31,7 +31,7 @@ private:
 	float mRotX;  //ピッチ　X回転値
 	int mEnemy;	//敵の数
 	int mHp;
-	int mHp2;
+	int mSTcount;
 	int mTime;	//経過時間
 	CFont mFont;
 };

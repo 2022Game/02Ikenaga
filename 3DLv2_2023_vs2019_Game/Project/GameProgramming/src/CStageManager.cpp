@@ -2,6 +2,7 @@
 #include "CStage1.h"
 #include "CStage2.h"
 #include "CStage3.h"
+#include "CStage4.h"
 
 CStageManager* CStageManager::mpInstance = nullptr;
 
@@ -39,6 +40,7 @@ void CStageManager::LoadStage(int no)
 	case 0:mpStage = new CStage1(); break;
 	case 1:mpStage = new CStage2(); break;
 	case 2:mpStage = new CStage3(); break;
+	case 3:mpStage = new CStage4(); break;
 	}
 }
 

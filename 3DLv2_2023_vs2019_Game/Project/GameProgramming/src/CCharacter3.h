@@ -17,7 +17,7 @@
 class CCollider;
 class CCharacter3 :public CTransform,public CTask{
 public:
-	bool IsDeath() const;
+	//bool IsDeath() const;
 	enum ETag
 	{
 		EZERO,    //‰Šú’l

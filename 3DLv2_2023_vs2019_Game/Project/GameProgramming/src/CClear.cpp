@@ -1,15 +1,15 @@
 #include "CClear.h"
-#include "CCollisionManager.h"
-#include"CPlayer.h"
 #include"CStageManager.h"
+#include "CTask.h"
+#include "CCollisionManager.h"
 
-#define HP 1
+#define STCOUNT 1
 
-int CClear::sHp = 0;
+int CClear::mSTcount = 1;
 
-int CClear::Hp()
+int CClear::STcount()
 {
-	return sHp;
+	return mSTcount;
 }
 
 CClear* CClear::Instance()
@@ -21,7 +21,7 @@ CClear* CClear::spInstance = nullptr;
 
 CClear::CClear()
 {
-
+	spInstance = this;
 }
 
 void CClear::Collision()
@@ -45,17 +45,36 @@ void CClear::Collision(CCollider* m, CCollider* o) {
 	switch (o->Type())
 	{
 	case CCollider::ESPHERE: //球コライダの時
-		//コライダのmとoが衝突しているか判定
 		if (CCollider::CCollision(m, o))
 		{
-			sHp = 0;
-			CStageManager::Instance()->LoadStage(1);
+			if (mSTcount == 2)
+			{
+				//CStageManager::Instance()->LoadStage(1);
+			}
+			if (mSTcount == 3)
+			{
+				//CStageManager::Instance()->LoadStage(2);
+			}
+			mSTcount = mSTcount += 1;
+			if (mSTcount == 100)
+			{
+				CStageManager::Instance()->LoadStage(1);
+				mSTcount = mSTcount + 101;
+			}
+			else if (mSTcount == 200)
+			{
+				CStageManager::Instance()->LoadStage(2);
+				mSTcount = mSTcount + 201;
+			}
+			else if (mSTcount == 300)
+			{
+				CStageManager::Instance()->LoadStage(3);
+			}
 		}
 		break;
 	case CCollider::ELINE: //三角コライダの時
 		if (CCollider::CCollision(m, o)) 
 		{
-			sHp = 0;
 		}
 		break;
 	}
@@ -64,7 +83,7 @@ void CClear::Collision(CCollider* m, CCollider* o) {
 CClear::CClear(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
 	:mCollider(this, &mMatrix, CVector(0.0f, 0.5f, 0.0f), 1.6f)
 {
-	sHp = HP;
+	mSTcount = STCOUNT;
 	spInstance = this;
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定

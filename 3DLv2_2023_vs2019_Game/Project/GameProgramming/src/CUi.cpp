@@ -40,7 +40,7 @@ void CUi::Enemy(int enemy)
 
 CUi::CUi()
 	: mHp(0)
-	,mHp2(0)
+	,mSTcount(0)
 	, mTime(0)
 	, mEnemy(0)
 	,mPosY(0.0f)
@@ -55,9 +55,9 @@ void CUi::Hp(int hp)
 	mHp = hp;
 }
 
-void CUi::Hp2(int hp2)
+void CUi::STCOUNT(int stcount)
 {
-	mHp2 = hp2;
+	mSTcount = stcount;
 }
 
 void CUi::Time(int time)
@@ -89,7 +89,7 @@ void CUi::Render()
 	glColor4f(255.0f, 0.0f, 0.0f, 5.0f);
 	sprintf(str, "HP:%d", mHp);
 	mFont.Draw(20, 20, 10, 20, str);
-	sprintf(str, "HP:%d", mHp2);
+	sprintf(str, "STAGE:%d", mSTcount);
 	mFont.Draw(20, 200, 10, 20, str);
 	CCamera::End();  //2Dï`âÊèIóπ
 

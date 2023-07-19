@@ -34,6 +34,7 @@ void CGameScene::Load()
 	LOAD_MODEL("Transparent", "res\\透明の壁.obj", "res\\透明の壁.mtl");
 	LOAD_MODEL("Frame", "res\\枠緑色.obj", "res\\枠緑色.mtl");
 	LOAD_MODEL("Clear", "res\\クリア枠.obj", "res\\クリア枠.mtl");
+	LOAD_MODEL("Clear2", "res\\クリア枠.obj", "res\\クリア枠.mtl");
 	LOAD_MODEL("Enemy2", "res\\銃持ち敵.obj", "res\\銃持ち敵.mtl");
 	LOAD_MODEL("Player", "res\\obama4.obj", "res\\obama4.mtl");
 	//LOAD_MODEL("BG", "res\\sky.obj", "res\\sky.mtl");
@@ -101,6 +102,7 @@ void CGameScene::Load()
 void CGameScene::Update()
 {
 	CPlayer* player = CPlayer::Instance();
+
 	if (player == nullptr) return;
 	//カメラのパラメータを作成する
 	CVector e, c, u;  //視点、注視点、上向き

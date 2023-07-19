@@ -9,7 +9,7 @@
 class CApplication
 {
 private:
-	//CStage1* mpStage1;
+	//int mSTcount;
 	static CUi* spUi; //UIクラスのポインタ
 	//モデルからコライダを生成
 	//CColliderMesh mColliderMesh;

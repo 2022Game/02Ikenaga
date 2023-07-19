@@ -51,7 +51,7 @@ void CCharacter3::Render()
 	mpModel->Render(mMatrix);
 }
 
-bool CCharacter3::IsDeath() const
-{
-	return mHp <= 0;
-}
+//bool CCharacter3::IsDeath() const
+//{
+//	return mHp <= 0;
+//}

@@ -49,7 +49,7 @@ void CApplication::Start()
 
 	CSceneManager::Instance()->LoadScene(EScene::eTitle);
 	spUi = new CUi();  //UIクラスの生成
-	spUi->Hp2(CClear::Hp());
+	spUi->STCOUNT(CClear::STcount());
 	spUi->Hp(CPlayer::Hp());
 
 	//new CStage(GET_MODEL("Stage"), CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
@@ -134,7 +134,7 @@ void CApplication::Update()
 	{
 		CStageManager::Instance()->LoadStage(2);
 	}
-	spUi->Hp2(CClear::Hp());
+	spUi->STCOUNT(CClear::STcount());
 	spUi->Hp(CPlayer::Hp());
 	//タスクマネージャの更新
 	CTaskManager::Instance()->Update();
