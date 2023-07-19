@@ -10,7 +10,8 @@ CStageBase::~CStageBase()
 {
 	for (CCharacter3* chara : mCharaList)
 	{
-		delete chara;
+		chara->Kill();
+		// delete chara;
 	}
 	mCharaList.clear();
 }

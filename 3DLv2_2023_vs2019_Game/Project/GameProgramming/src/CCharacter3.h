@@ -48,6 +48,7 @@ public:
 	void Model(CModel* m);
 	//•`‰æˆ—
 	virtual void Render();
+	void Kill();
 protected:
     int mHp;
 	//float mVx;	//X²‘¬“x
