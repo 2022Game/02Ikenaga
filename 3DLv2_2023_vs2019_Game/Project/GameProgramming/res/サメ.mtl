@@ -1,0 +1,52 @@
+# Blender 3.5.1 MTL File: '新サメ.blend'
+# www.blender.org
+
+newmtl Bruce1
+Ns 119.999992
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd Great_White.jpg
+
+newmtl Bruce:___Defaultfdsfds1
+Ns 119.999992
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd Great_White_Mouth_3.jpg
+
+newmtl Bruce:___Defaultfdsfsd1
+Ns 119.999992
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd Great_White_Mouth_2.jpg
+
+newmtl Bruce:___Defaultsdfsdf1
+Ns 119.999992
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd Gereat_White_Eyes.jpg
+
+newmtl Bruce:___Defaultsdfsdffdsfsd1
+Ns 119.999992
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd Great_white_Mouth_1.jpg

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef CFRAME_H
-#define CFRAME_H
+#ifndef CWATER_H
+#define CWATER_H
 //キャラクタクラスのインクルード
 #include"CCharacter3.h"
 #include"CCollider.h"
@@ -11,29 +11,29 @@
 キャラクタクラスを継承
 */
 
-class CFrame : public CCharacter3 {
+class CWater : public CCharacter3 {
 public:
 	void Set(float w, float d);
 	//コンストラクタ
-	CFrame();
+	CWater();
 	void Collision();
-	//CFrame(位置,回転,拡縮)
-	CFrame(const CVector& position, const CVector& rotation, const CVector& scale);
+	//CWater(位置,回転,拡縮)
+	CWater(const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
 	//衝突処理
 	//Collision(コライダ1,コライダ2)
 	void Collision(CCollider* m, CCollider* o);
 	//コンストラクタ
-	//CFrame(モデル,位置,回転,拡縮)
-	CFrame(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
+	//CWater(モデル,位置,回転,拡縮)
+	CWater(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
 	int mark;
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;
 	//CCollider mCollider;
-	//CColliderMesh mColliderMesh1;
+	CColliderMesh mColliderMesh1;
 	//コライダ
 	//CCollider mCollider1;
 	//CCollider mCollider2;
@@ -41,3 +41,4 @@ private:
 };
 
 #endif
+

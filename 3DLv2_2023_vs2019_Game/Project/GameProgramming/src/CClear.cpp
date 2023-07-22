@@ -45,36 +45,30 @@ void CClear::Collision(CCollider* m, CCollider* o) {
 	switch (o->Type())
 	{
 	case CCollider::ESPHERE: //球コライダの時
-		if (CCollider::CCollision(m, o))
+		if (CCollider::CCollision(o, m))
 		{
-			if (mSTcount == 2)
-			{
-				//CStageManager::Instance()->LoadStage(1);
-			}
-			if (mSTcount == 3)
-			{
-				//CStageManager::Instance()->LoadStage(2);
-			}
+			CStageManager::Instance()->LoadStage(0);
 			mSTcount = mSTcount += 1;
 			if (mSTcount == 100)
 			{
-				CStageManager::Instance()->LoadStage(1);
+				//CStageManager::Instance()->LoadStage(1);
 				mSTcount = mSTcount + 101;
 			}
 			else if (mSTcount == 200)
 			{
-				CStageManager::Instance()->LoadStage(2);
+				//CStageManager::Instance()->LoadStage(2);
 				mSTcount = mSTcount + 201;
 			}
 			else if (mSTcount == 300)
 			{
-				CStageManager::Instance()->LoadStage(3);
+				//CStageManager::Instance()->LoadStage(3);
 			}
 		}
 		break;
 	case CCollider::ELINE: //三角コライダの時
 		if (CCollider::CCollision(m, o)) 
 		{
+			//CStageManager::Instance()->LoadStage(0);
 		}
 		break;
 	}

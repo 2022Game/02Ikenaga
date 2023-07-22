@@ -37,6 +37,8 @@ void CGameScene::Load()
 	LOAD_MODEL("Clear2", "res\\ƒNƒŠƒA˜g.obj", "res\\ƒNƒŠƒA˜g.mtl");
 	LOAD_MODEL("Enemy2", "res\\e‚¿“G.obj", "res\\e‚¿“G.mtl");
 	LOAD_MODEL("Player", "res\\obama4.obj", "res\\obama4.mtl");
+	LOAD_MODEL("Water", "res\\….obj", "res\\….mtl");
+	LOAD_MODEL("Shark", "res\\ƒTƒ.obj", "res\\ƒTƒ.mtl");
 	//LOAD_MODEL("BG", "res\\sky.obj", "res\\sky.mtl");
 
 	AddTask(new CField());

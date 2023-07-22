@@ -47,6 +47,7 @@
     <ClCompile Include="src\CResourceManager.cpp" />
     <ClCompile Include="src\CSceneBase.cpp" />
     <ClCompile Include="src\CSceneManager.cpp" />
+    <ClCompile Include="src\CShark.cpp" />
     <ClCompile Include="src\CSound.cpp" />
     <ClCompile Include="src\CStage.cpp" />
     <ClCompile Include="src\CStage1.cpp" />
@@ -65,6 +66,7 @@
     <ClCompile Include="src\CTriangle.cpp" />
     <ClCompile Include="src\CUi.cpp" />
     <ClCompile Include="src\CVector.cpp" />
+    <ClCompile Include="src\CWater.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +107,7 @@
     <ClInclude Include="src\CResourceManager.h" />
     <ClInclude Include="src\CSceneBase.h" />
     <ClInclude Include="src\CSceneManager.h" />
+    <ClInclude Include="src\CShark.h" />
     <ClInclude Include="src\CSound.h" />
     <ClInclude Include="src\CStage.h" />
     <ClInclude Include="src\CStage1.h" />
@@ -124,6 +127,7 @@
     <ClInclude Include="src\CUi.h" />
     <ClInclude Include="src\CVector.h" />
     <ClInclude Include="src\CVertex.h" />
+    <ClInclude Include="src\CWater.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\CSceneType.h" />
     <ClInclude Include="src\TaskPauseType.h" />

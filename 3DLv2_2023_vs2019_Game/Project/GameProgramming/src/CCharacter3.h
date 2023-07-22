@@ -51,8 +51,6 @@ public:
 	void Kill();
 protected:
     int mHp;
-	//float mVx;	//X軸速度
-	//float mVy;	//Y軸速度
 	bool mEnabled;
 	EState mState;
 	ETag mTag;  //タグ

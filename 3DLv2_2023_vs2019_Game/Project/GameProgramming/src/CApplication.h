@@ -5,6 +5,7 @@
 #include"CVector.h"
 #include"CTaskManager.h"
 #include"CUi.h"
+#include "CCharacter3.h"
 
 class CApplication
 {
