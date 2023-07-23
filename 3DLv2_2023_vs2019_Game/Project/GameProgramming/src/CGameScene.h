@@ -5,6 +5,7 @@
 class CGameScene :public CSceneBase
 {
 public:
+
 	//コンストラクタ
 	CGameScene();
 	//デストラクタ

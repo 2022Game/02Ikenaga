@@ -50,7 +50,7 @@ void CApplication::Start()
 	CSceneManager::Instance()->LoadScene(EScene::eTitle);
 	spUi = new CUi();  //UIクラスの生成
 	spUi->STCOUNT(CClear::STcount());
-	spUi->Hp(CPlayer::Hp());
+	//spUi->Hp(CPlayer::Hp());
 
 	//new CStage(GET_MODEL("Stage"), CVector(30.0f, -0.99f, 0.0f), CVector(), CVector(1.0f, 1.0f, 1.0f));
 	//CModel* kokki = GET_MODEL("Kokki");
@@ -153,14 +153,14 @@ void CApplication::Update()
 	trans.Update(); //行列の更新
 	//mPlayer.Update();
 	CSceneManager::Instance()->Update();
-
-		//モデルビュー行列の取得
-		glGetFloatv(GL_MODELVIEW_MATRIX, mModelViewInverse.M());
-		//逆行列の取得dd
-		mModelViewInverse = mModelViewInverse.Transpose();
-		mModelViewInverse.M(0, 3, 0);
-		mModelViewInverse.M(1, 3, 0);
-		mModelViewInverse.M(2, 3, 0);
+	
+	//モデルビュー行列の取得
+	glGetFloatv(GL_MODELVIEW_MATRIX, mModelViewInverse.M());
+	//逆行列の取得dd
+	mModelViewInverse = mModelViewInverse.Transpose();
+	mModelViewInverse.M(0, 3, 0);
+	mModelViewInverse.M(1, 3, 0);
+	mModelViewInverse.M(2, 3, 0);
 	//タスクリストの削除
 	CTaskManager::Instance()->Delete();
 	//タスクマネージャの描画

@@ -17,15 +17,15 @@ void CTitleScene::Load()
 {
 	//ここでタイトル画面に必要な
 	//リソースの読み込みやクラスの生成を行う
-	mBgImage = new CImage("white.png");
-	mBgImage->SetColor(1.0f, 0.0f, 0.0f, 1.0f);
+	mBgImage = new CImage("taitoru.png");
+	mBgImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	mBgImage->SetPos(0.0f, 0.0f);
 	mBgImage->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 void CTitleScene::Update()
 {
-	if (mInput.PushKey(VK_SPACE))
+	if (mInput.PushKey(VK_RETURN))
 	{
 		CSceneManager::Instance()->LoadScene(EScene::eGame);
 	}
