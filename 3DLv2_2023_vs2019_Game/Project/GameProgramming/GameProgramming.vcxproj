@@ -49,6 +49,7 @@
     <ClCompile Include="src\CSceneManager.cpp" />
     <ClCompile Include="src\CShark.cpp" />
     <ClCompile Include="src\CSound.cpp" />
+    <ClCompile Include="src\CSp.cpp" />
     <ClCompile Include="src\CStage.cpp" />
     <ClCompile Include="src\CStage1.cpp" />
     <ClCompile Include="src\CStage2.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="src\CSceneManager.h" />
     <ClInclude Include="src\CShark.h" />
     <ClInclude Include="src\CSound.h" />
+    <ClInclude Include="src\CSp.h" />
     <ClInclude Include="src\CStage.h" />
     <ClInclude Include="src\CStage1.h" />
     <ClInclude Include="src\CStage2.h" />

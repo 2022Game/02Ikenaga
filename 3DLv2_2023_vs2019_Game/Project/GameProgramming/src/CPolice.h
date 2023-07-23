@@ -15,13 +15,12 @@ public:
 	void Update();
 private:
 	CModel mStage;
-	CColliderMesh mColliderMesh1;
+	//CColliderMesh mColliderMesh1;
 	//CPlayer *mpPlayer;
 	//ƒRƒ‰ƒCƒ_
 	/*CCollider mCollider1;
 	CCollider mCollider2;
 	CCollider mCollider3;*/
-	//CMatrix *mMatrix;
 };
 
 #endif

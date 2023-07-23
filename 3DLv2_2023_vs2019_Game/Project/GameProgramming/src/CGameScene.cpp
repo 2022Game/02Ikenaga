@@ -9,7 +9,6 @@
 #include "CFrame.h"
 #include "CClear.h"
 #include "CSceneManager.h"
-//#include "CStageManager.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -31,6 +30,7 @@ void CGameScene::Load()
 	LOAD_MODEL("Kokki", "res\\国旗.obj", "res\\国旗.mtl");
 	LOAD_MODEL("Enemy1", "res\\敵1.obj", "res\\敵1.mtl");
 	LOAD_MODEL("Police", "res\\サボるポリス.obj", "res\\サボるポリス.mtl");
+	LOAD_MODEL("SP", "res\\SP.obj", "res\\SP.mtl");
 	LOAD_MODEL("Transparent", "res\\透明の壁.obj", "res\\透明の壁.mtl");
 	LOAD_MODEL("Frame", "res\\枠緑色.obj", "res\\枠緑色.mtl");
 	LOAD_MODEL("Clear", "res\\クリア枠.obj", "res\\クリア枠.mtl");
