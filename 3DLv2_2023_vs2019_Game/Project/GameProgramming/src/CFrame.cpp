@@ -29,20 +29,6 @@ CFrame::CFrame()
 	mpModel = &sModel;
 }
 
-//コンストラクタ
-//CFrame(位置,回転,拡縮)
-CFrame::CFrame(const CVector& position, const CVector& rotation, const CVector& scale)
-	:CFrame()  //デフォルトコンストラクタを実行する
-{
-	//位置、回転、拡縮を設定する
-	mPosition = position;  //位置の設定
-	mRotation = rotation;  //回転の設定
-	mScale = scale;  //拡縮の設定
-	CTransform::Update();  //行列の更新
-	//目標地点の設定
-	mPoint = mPosition + CVector(0.0f, 0.0f, 10.0f) * mMatrixRotate;
-}
-
 // 更新処理
 void CFrame::Update()
 {
@@ -122,4 +108,5 @@ CFrame::CFrame(CModel* model, const CVector& position, const CVector& rotation, 
 	mPosition = position;  //位置の設定
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
+	mPoint = mPosition + CVector(0.0f, 0.0f, 10.0f) * mMatrixRotate;
 }

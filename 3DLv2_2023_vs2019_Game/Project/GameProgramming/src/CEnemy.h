@@ -17,8 +17,6 @@ public:
 	//コンストラクタ
 	CEnemy();
 	void Collision();
-	//CEnemy3(位置,回転,拡縮)
-	CEnemy(const CVector& position, const CVector& rotation, const CVector& scale);
 	//更新処理
 	void Update();
 	//衝突処理

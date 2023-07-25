@@ -4,7 +4,7 @@
 //キャラクタクラスのインクルード
 #include"CCharacter3.h"
 #include"CCollider.h"
-#include "CColliderMesh.h"
+#include"CColliderLine.h"
 
 /*
 緑枠クラス
@@ -28,16 +28,13 @@ public:
 	//CShark(モデル,位置,回転,拡縮)
 	CShark(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
-	int mark;
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;
-	//CCollider mCollider;
-	//CColliderMesh mColliderMesh1;
-	//コライダ
-	//CCollider mCollider1;
-	//CCollider mCollider2;
-	//CCollider mCollider3;
+	CCollider mCollider;
+	CColliderLine mLine3; //線分コライダ
+	CColliderLine mLine2; //線分コライダ
+	CColliderLine mLine; //線分コライダ
 };
 
 #endif

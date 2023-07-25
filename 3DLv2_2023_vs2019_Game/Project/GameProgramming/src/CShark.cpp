@@ -7,22 +7,16 @@ CModel CShark::sModel;
 //移動速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
 #define VELOCITY2 0.15f
-#define VELOCITY3 -0.11f
+#define VELOCITY3 -0.15f
 
 void CShark::Set(float w, float d)
 {
 	//スケール設定
 	mScale = CVector(0.01f, 0.01f, 0.01f);
-	//三角形の頂点設定
-	//mT.Vertex(CVector(w, 0.0f, 0.0f), CVector(0.0f, 0.0f, -d), CVector(-w, 0.0f, 0.0f));
-	//三角形の法線設定
-	//mT.Normal(CVector(0.0f, 1.0f, 0.0f));
 }
 
 CShark::CShark()
 	:CCharacter3(1)
-	, mark(0)
-	//, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
 {
 	//モデルが無いときは読み込む
 	if (sModel.Triangles().size() == 0)
@@ -50,12 +44,6 @@ CShark::CShark(const CVector& position, const CVector& rotation, const CVector& 
 // 更新処理
 void CShark::Update()
 {
-	/*mark++;
-	if (mark > 1)
-	{
-		mEnabled = false;
-		mark = 0;
-	}*/
 	//プレイヤーのポインタが0以外の時
 	CPlayer* player = CPlayer::Instance();
 	if (player != nullptr)
@@ -69,8 +57,10 @@ void CShark::Update()
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
 		//X軸のズレが2.0以下
-		if (-20.0f < dx && dx < 20.0f)
+		if (-10.0f < dx && dx < 10.0f)
 		{
+			mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //左へ回転
+			//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 			//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY3;
 			//Y軸のズレが2.0以下
 			if (-10.0f < dy && dy < 10.0f)
@@ -86,26 +76,12 @@ void CShark::Update()
 				}
 			}
 		}
-		else if (dx < 30.0f)
+		else //if (5.0f == dz || dz == -1.0f)
 		{
+			mState = EState::ESTOP;
 			mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
 		}
 	}
-	//HPが0以下の時 撃破
-	//if (mHp <= 0)
-	//{
-	//	mHp--;
-	//	//15フレーム毎にエフェクト
-	//	if (mHp % 15 == 0)
-	//	{
-	//		//エフェクト生成
-	//		new CEffect(mPosition, 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	}
-	//	//下降させる
-	//	mPosition = mPosition - CVector(0.0f, 0.03f, 0.0f);
-	//	CTransform::Update();
-	//	return;
-	//}
 	//目標地点までのベクトルを求める
 	CVector vp = mPoint - mPosition;
 	//課題
@@ -140,10 +116,9 @@ void CShark::Update()
 	//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 	CTransform::Update(); //行列更新
 	//およそ3秒毎に目標地点を更新
-	int r = rand() % 180; //rand()は整数の乱数を返す
+	int r = rand() % 60; //rand()は整数の乱数を返す
 						  //% 180は180で割った余りを求める
-
-	/*if (r == 0)
+	if (r == 0)
 	{
 		if (player != nullptr)
 		{
@@ -153,9 +128,9 @@ void CShark::Update()
 		{
 			mPoint = mPoint * CMatrix().RotateY(45);
 		}
-	}*/
+	}
 	//行列を更新
-	//CTransform::Update();
+	CTransform::Update();
 	//位置を移動
 	//mPosition = mPosition + VELOCITY * mMatrixRotate;
 }
@@ -163,11 +138,11 @@ void CShark::Update()
 void CShark::Collision()
 {
 	//コライダの優先度変更
-	//mCollider1.ChangePriority();
+	mCollider.ChangePriority();
 	//mCollider2.ChangePriority();
 	//mCollider3.ChangePriority();
 	//衝突処理を実行
-	//CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
+    CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
 	//CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
 	//CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);
 }
@@ -192,8 +167,18 @@ void CShark::Collision(CCollider* m, CCollider* o) {
 		//三角コライダと球コライダの衝突判定
 		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 		{
+			mState = EState::ESTOP;
 			//衝突しない位置まで戻す
-			//mPosition = mPosition + adjust;
+			mPosition = mPosition + adjust;
+			if (rand() % 60)
+			{
+				mState = EState::ESTOP;
+			}
+			else
+			{
+				mState = EState::ESTOP;
+			}
+			CTransform::Update();
 		}
 		break;
 	}
@@ -202,10 +187,10 @@ void CShark::Collision(CCollider* m, CCollider* o) {
 //コンストラクタ
 //CExclamationMark(モデル,位置,回転,拡縮)
 CShark::CShark(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
-	:mark(0)
-	/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-	, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
-	, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
+	:mCollider(this, &mMatrix, CVector(0.0f, 0.8f, 2.0f), 0.8f)
+	,mLine(this, &mMatrix, CVector(0.0f, 1.9f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
+	, mLine2(this, &mMatrix, CVector(0.3f, 1.0f, 1.0f), CVector(-0.3f, 1.0f, 1.0f))
+	, mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.5f), CVector(0.0f, 1.0f, -0.5f))
 {
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定

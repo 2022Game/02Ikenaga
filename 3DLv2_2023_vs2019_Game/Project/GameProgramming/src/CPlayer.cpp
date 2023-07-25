@@ -85,12 +85,7 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 }
 
 CPlayer::CPlayer()
-	:mLine(this, &mMatrix, CVector(0.0f, 1.9f,0.0f), CVector(0.0f, 0.0f, 0.0f))
-	,mLine2(this, &mMatrix, CVector(0.3f, 1.0f, 1.0f), CVector(-0.3f, 1.0f, 1.0f))
-	,mLine3(this, &mMatrix, CVector(0.0f, 1.0f, 0.5f), CVector(0.0f, 1.0f, -0.5f))
-	,jump(0)
-	, mCollider(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), 0.5f)
-	//, mLine4(this, &mMatrix, CVector(0.0f, 1.0f, 2.5f), CVector(0.0f, 1.0f, -0.5f))
+	:jump(0)
 {
 	ETag::EPLAYER;
 	sHp = HP;
@@ -167,17 +162,9 @@ void CPlayer::Update()
 	//WƒL[“ü—Í‚ÅãŒü‚«
 	if (mInput.Key('W')) {
 		//XŽ²‚Ì‰ñ“]’l‚ð‰ÁŽZ
-		//mRotation = mRotation + ROTATION_XV;
 		mPosition = mPosition + VELOCITY * mMatrixRotate;
 		//mPosition = mPosition + ROTATION_X * mMatrixRotate;
 	}
-	//if (mState != EState::EJUMP)
-	//{
-	//	if (mInput.Key('J'))
-	//	{
-	//		//mPosition = mPosition + ROTATION_YY * mMatrixRotate;
-	//	}
-	//}
 	jump++;
 	if (jump > 50)
 	{

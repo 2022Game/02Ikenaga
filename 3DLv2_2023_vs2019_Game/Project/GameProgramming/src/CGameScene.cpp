@@ -119,6 +119,6 @@ void CGameScene::Update()
 
 	if (player->IsDeath())
 	{
-		//CSceneManager::Instance()->LoadScene(EScene::eTitle);
+		CSceneManager::Instance()->LoadScene(EScene::eTitle);
 	}
 }

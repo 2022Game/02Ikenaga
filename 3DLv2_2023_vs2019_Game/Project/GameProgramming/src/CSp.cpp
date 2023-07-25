@@ -35,13 +35,6 @@ void CSp::Collision(CCollider* m, CCollider* o) {
 		}
 		break;
 	}
-
-	//コライダもmとoが衝突しているか判定
-	//if (CCollider::CCollision(m, o)) {
-	//	//エフェクト生成
-	//	new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	//mEnabled = false;
-	//}
 }
 
 CSp::CSp(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
@@ -54,8 +47,6 @@ CSp::CSp(CModel* model, const CVector& position, const CVector& rotation, const 
 	mPosition = position;  //位置の設定
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
-	//mColliderMesh1.Set(this, &mMatrix, mpModel);
-	//CTransform::Update();
 }
 
 //更新処理

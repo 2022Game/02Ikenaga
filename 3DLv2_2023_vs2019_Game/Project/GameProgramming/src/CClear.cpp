@@ -31,15 +31,6 @@ void CClear::Collision()
 	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
 }
 
-CClear::CClear(const CVector& position, const CVector& rotation, const CVector& scale)
-{
-	//ˆÊ’uA‰ñ“]AŠgk‚ðÝ’è‚·‚é
-	mPosition = position;  //ˆÊ’u‚ÌÝ’è
-	mRotation = rotation;  //‰ñ“]‚ÌÝ’è
-	mScale = scale;  //Šgk‚ÌÝ’è
-	//CTransform::Update();  //s—ñ‚ÌXV
-}
-
 void CClear::Collision(CCollider* m, CCollider* o) {
 	//‘ŠŽè‚ÌƒRƒ‰ƒCƒ_ƒ^ƒCƒv‚Ì”»’è
 	switch (o->Type())
