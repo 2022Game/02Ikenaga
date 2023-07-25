@@ -138,6 +138,10 @@ void CApplication::Update()
 	{
 		CStageManager::Instance()->LoadStage(3);
 	}
+	else if (mInput.PullKey('5'))
+	{
+		CStageManager::Instance()->LoadStage(4);
+	}
 	spUi->STCOUNT(CClear::STcount());
 	spUi->Hp(CPlayer::Hp());
 	//タスクマネージャの更新

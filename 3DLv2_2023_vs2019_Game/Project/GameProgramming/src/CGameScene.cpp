@@ -26,12 +26,9 @@ void CGameScene::Load()
 {
 	//ここでタイトル画面に必要な
 	//リソースの読み込みやクラスの生成を行う
-	LOAD_MODEL("Stage", "res\\体育館.obj", "res\\体育館.mtl");
+	//LOAD_MODEL("Stage", "res\\体育館.obj", "res\\体育館.mtl");
 	LOAD_MODEL("Kokki", "res\\国旗.obj", "res\\国旗.mtl");
-	LOAD_MODEL("Enemy1", "res\\敵1.obj", "res\\敵1.mtl");
-	LOAD_MODEL("Police", "res\\サボるポリス.obj", "res\\サボるポリス.mtl");
 	LOAD_MODEL("SP", "res\\SP.obj", "res\\SP.mtl");
-	LOAD_MODEL("Transparent", "res\\透明の壁.obj", "res\\透明の壁.mtl");
 	LOAD_MODEL("Frame", "res\\枠緑色.obj", "res\\枠緑色.mtl");
 	LOAD_MODEL("Clear", "res\\クリア枠.obj", "res\\クリア枠.mtl");
 	LOAD_MODEL("Clear2", "res\\クリア枠.obj", "res\\クリア枠.mtl");
@@ -39,6 +36,9 @@ void CGameScene::Load()
 	LOAD_MODEL("Player", "res\\obama4.obj", "res\\obama4.mtl");
 	LOAD_MODEL("Water", "res\\水.obj", "res\\水.mtl");
 	LOAD_MODEL("Shark", "res\\サメ.obj", "res\\サメ.mtl");
+	LOAD_MODEL("Tiger", "res\\tiger.obj", "res\\tiger.mtl");
+	LOAD_MODEL("Meat", "res\\meat.obj", "res\\meat.mtl");
+
 	//LOAD_MODEL("BG", "res\\sky.obj", "res\\sky.mtl");
 
 	AddTask(new CField());

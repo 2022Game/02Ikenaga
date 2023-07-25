@@ -39,6 +39,7 @@
     <ClCompile Include="src\CKokki.cpp" />
     <ClCompile Include="src\CMaterial.cpp" />
     <ClCompile Include="src\CMatrix.cpp" />
+    <ClCompile Include="src\CMeat.cpp" />
     <ClCompile Include="src\CModel.cpp" />
     <ClCompile Include="src\CPlayer.cpp" />
     <ClCompile Include="src\CPoint.cpp" />
@@ -55,12 +56,14 @@
     <ClCompile Include="src\CStage2.cpp" />
     <ClCompile Include="src\CStage3.cpp" />
     <ClCompile Include="src\CStage4.cpp" />
+    <ClCompile Include="src\CStage5.cpp" />
     <ClCompile Include="src\CStageBase.cpp" />
     <ClCompile Include="src\CStageManager.cpp" />
     <ClCompile Include="src\CTask.cpp" />
     <ClCompile Include="src\CTaskManager.cpp" />
     <ClCompile Include="src\CTexture.cpp" />
     <ClCompile Include="src\CInput.cpp" />
+    <ClCompile Include="src\CTiger.cpp" />
     <ClCompile Include="src\CTitleScene.cpp" />
     <ClCompile Include="src\CTransform.cpp" />
     <ClCompile Include="src\CTransparent.cpp" />
@@ -99,6 +102,7 @@
     <ClInclude Include="src\CKokki.h" />
     <ClInclude Include="src\CMaterial.h" />
     <ClInclude Include="src\CMatrix.h" />
+    <ClInclude Include="src\CMeat.h" />
     <ClInclude Include="src\CMiss.h" />
     <ClInclude Include="src\CModel.h" />
     <ClInclude Include="src\CPlayer.h" />
@@ -116,12 +120,14 @@
     <ClInclude Include="src\CStage2.h" />
     <ClInclude Include="src\CStage3.h" />
     <ClInclude Include="src\CStage4.h" />
+    <ClInclude Include="src\CStage5.h" />
     <ClInclude Include="src\CStageBase.h" />
     <ClInclude Include="src\CStageManager.h" />
     <ClInclude Include="src\CTask.h" />
     <ClInclude Include="src\CTaskManager.h" />
     <ClInclude Include="src\CTexture.h" />
     <ClInclude Include="src\CInput.h" />
+    <ClInclude Include="src\CTiger.h" />
     <ClInclude Include="src\CTitleScene.h" />
     <ClInclude Include="src\CTransform.h" />
     <ClInclude Include="src\CTransparent.h" />

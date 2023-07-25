@@ -188,11 +188,11 @@ void CPlayer::Update()
 			jump = 0;
 		}
 	}
-	//if (mInput.Key('J'))
-	//{
-	//	//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
-	//	mPosition = mPosition + ROTATION_YO * mMatrixRotate;
-	//}
+	if (mInput.Key('K'))
+	{
+		//mPosition = mPosition + ROTATION_Y * mMatrixRotate;
+		mPosition = mPosition + ROTATION_YO * mMatrixRotate;
+	}
 	mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 	//ïœä∑çsóÒÇÃçXêV
 	CTransform::Update();
