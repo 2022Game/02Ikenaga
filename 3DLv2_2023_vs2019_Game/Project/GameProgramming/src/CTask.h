@@ -38,6 +38,8 @@ public:
 	void SetSceneType(EScene scene);
 	//所属するシーンを取得
 	EScene GetSceneType() const;
+	void Kill();
+	bool IsKill();
 protected:
 	int mPriority;	//優先度
 	bool mEnabled;	//有効フラグ

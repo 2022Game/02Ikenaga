@@ -25,8 +25,15 @@ void CCollisionManager::Collision(CCollider* c, int range) {
 			break;
 		}
 		//親の衝突処理を呼び出す
+		if (c->mpParent != nullptr)
+		{
+			if (CanCollision(c, task))
+			{
+				c->mpParent->Collision(c, task);
+			}
+		}
 		//自分の衝突処理
-		if (c->mpParent && c != task)c->mpParent->Collision(c, task);
+		//if (c->mpParent && c != task)c->mpParent->Collision(c, task);
 		//現在位置を次にする
 		task = (CCollider*)task->mpNext;
 	}
@@ -43,10 +50,21 @@ void CCollisionManager::Collision() {
 		//次が0になったら終了
 		while (next->mpNext){
 			//親の衝突処理を呼び出す
+			if (CanCollision(task, next))
+			{
+				if (task->mpParent != nullptr)
+				{
+					task->mpParent->Collision(task, next);
+				}
+				if (next->mpParent !=nullptr)
+				{
+					next->mpParent->Collision(next, task);
+				}
+			}
 			//自分の衝突処理
-			if (task->mpParent)task->mpParent->Collision(task, next);
+			//if (task->mpParent)task->mpParent->Collision(task, next);
 			//相手の衝突処理
-			if (next->mpParent)next->mpParent->Collision(next, task);
+			//if (next->mpParent)next->mpParent->Collision(next, task);
 			//次を求める
 			next = (CCollider*)next->mpNext;
 		}
@@ -65,4 +83,17 @@ CCollisionManager* CCollisionManager::Instance()
 		mpInstance = new CCollisionManager();
 	}
 	return mpInstance;
+}
+
+bool CCollisionManager::CanCollision(CCollider* c1, CCollider* c2) const
+{
+	if (c1 == nullptr || c2 == nullptr) return false;
+
+	if (c1 == c2) return false;
+
+	if (c1->mpParent != nullptr && c1->mpParent->IsKill()) return false;
+
+	if (c2->mpParent != nullptr && c2->mpParent->IsKill()) return false;
+
+	return true;
 }

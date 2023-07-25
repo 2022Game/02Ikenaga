@@ -55,8 +55,3 @@ void CCharacter3::Render()
 //{
 //	return mHp <= 0;
 //}
-
-void CCharacter3::Kill()
-{
-	mEnabled = false;
-}

@@ -38,21 +38,26 @@ void CClear::Collision(CCollider* m, CCollider* o) {
 	case CCollider::ESPHERE: //‹…ƒRƒ‰ƒCƒ_‚ÌŽž
 		if (CCollider::CCollision(o, m))
 		{
-			CStageManager::Instance()->LoadStage(0);
 			mSTcount = mSTcount += 1;
-			if (mSTcount == 100)
+			if (mSTcount == 2)
 			{
-				//CStageManager::Instance()->LoadStage(1);
-				mSTcount = mSTcount + 101;
+				CStageManager::Instance()->LoadStage(1);
+				mSTcount = 2;
 			}
-			else if (mSTcount == 200)
+			if (mSTcount == 3)
 			{
-				//CStageManager::Instance()->LoadStage(2);
-				mSTcount = mSTcount + 201;
+				CStageManager::Instance()->LoadStage(2);
+				mSTcount = 3;
 			}
-			else if (mSTcount == 300)
+			if (mSTcount == 4)
 			{
-				//CStageManager::Instance()->LoadStage(3);
+				CStageManager::Instance()->LoadStage(3);
+				mSTcount = 4;
+			}
+			if (mSTcount == 5)
+			{
+				CStageManager::Instance()->LoadStage(4);
+				mSTcount = 5;
 			}
 		}
 		break;

@@ -60,3 +60,13 @@ EScene CTask::GetSceneType() const
 {
 	return mSceneType;
 }
+
+void CTask::Kill()
+{
+	mEnabled = false;
+}
+
+bool CTask::IsKill()
+{
+	return !mEnabled;
+}

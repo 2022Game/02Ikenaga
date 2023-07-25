@@ -5,6 +5,7 @@
 #include"CCharacter3.h"
 #include"CCollider.h"
 #include "CColliderMesh.h"
+#include "CInput.h"
 
 /*
 クリアクラス
@@ -35,6 +36,7 @@ private:
 	static CModel sModel;
 	//CCollider mCollider;
 	CColliderMesh mColliderMesh1;
+	CInput mInput;
 };
 
 #endif

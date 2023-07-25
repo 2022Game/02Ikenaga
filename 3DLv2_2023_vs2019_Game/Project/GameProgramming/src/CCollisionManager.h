@@ -20,6 +20,8 @@ private:
 	//マネージャのインスタンス
 	static CCollisionManager* mpInstance;
 	//void Collision(CCollider* c, int range);
+
+	bool CanCollision(CCollider* c1, CCollider* c2) const;
 };
 
 #endif

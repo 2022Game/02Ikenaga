@@ -127,8 +127,11 @@ void CTaskManager::Collision()
 	//æ“ª‚©‚çÅŒã‚Ü‚ÅŒJ‚è•Ô‚µ
 	CTask* task = mHead.mpNext;
 	while (task->mpNext) {
-		//Õ“Ëˆ—‚ðŒÄ‚Ô
-		task->Collision();
+		if (!task->IsKill())
+		{
+			//Õ“Ëˆ—‚ðŒÄ‚Ô
+			task->Collision();
+		}
 		//ŽŸ‚Ö
 		task = task->mpNext;
 	}

@@ -74,12 +74,13 @@ void CShark::Update()
 						mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 					}
 				}
+				else //if (5.0f == dz || dz == -1.0f)
+				{
+					mState = EState::ESTOP;
+					mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
+					mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+				}
 			}
-		}
-		else //if (5.0f == dz || dz == -1.0f)
-		{
-			mState = EState::ESTOP;
-			mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
 		}
 	}
 	//目標地点までのベクトルを求める
@@ -172,11 +173,11 @@ void CShark::Collision(CCollider* m, CCollider* o) {
 			mPosition = mPosition + adjust;
 			if (rand() % 60)
 			{
-				mState = EState::ESTOP;
+				//mState = EState::ESTOP;
 			}
 			else
 			{
-				mState = EState::ESTOP;
+				//mState = EState::ESTOP;
 			}
 			CTransform::Update();
 		}
