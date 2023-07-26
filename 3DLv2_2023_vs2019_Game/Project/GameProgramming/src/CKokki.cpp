@@ -6,14 +6,6 @@
 void CKokki::Collision()
 {
 	mColliderMesh1.ChangePriority();
-	////コライダの優先度変更
-	/*mCollider1.ChangePriority();
-	mCollider2.ChangePriority();
-	mCollider3.ChangePriority();*/
-	//衝突処理を実行
-	/*CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
-	CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);*/
 }
 
 void CKokki::Collision(CCollider* m, CCollider* o) {
@@ -40,19 +32,9 @@ void CKokki::Collision(CCollider* m, CCollider* o) {
 		}
 		break;
 	}
-
-	//コライダもmとoが衝突しているか判定
-	//if (CCollider::CCollision(m, o)) {
-	//	//エフェクト生成
-	//	new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	//mEnabled = false;
-	//}
 }
 
 CKokki::CKokki(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
-/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-, mCollider2(this, &mMatrix, CVector(0.0f, 5.0f, 20.0f), 0.8f)
-, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
 {
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
@@ -60,7 +42,6 @@ CKokki::CKokki(CModel* model, const CVector& position, const CVector& rotation, 
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
 	mColliderMesh1.Set(this, &mMatrix, mpModel);
-	//CTransform::Update();
 }
 
 //更新処理

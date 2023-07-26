@@ -60,8 +60,6 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 		if (CCollider::CCollision(m, o))
 		{
 			sHp = 0;
-			//衝突している時は無効にする
-			//mEnabled=false;
 			CTransform::Update();
 		}
 		//break;
@@ -75,7 +73,6 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 			{
 				//位置の更新(mPosition+adjust)
 				mPosition = mPosition + adjust;
-				//sHp=0;
 				//行列の更新
 				CTransform::Update();
 			}
@@ -185,7 +182,7 @@ void CPlayer::Update()
 	CTransform::Update();
 
 	//UI設定
-	CApplication::Ui()->PosY(mPosition.Y());
+	/*CApplication::Ui()->PosY(mPosition.Y());
 	CApplication::Ui()->RotX(mRotation.X());
-	CApplication::Ui()->RotY(mRotation.Y());
+	CApplication::Ui()->RotY(mRotation.Y());*/
 }

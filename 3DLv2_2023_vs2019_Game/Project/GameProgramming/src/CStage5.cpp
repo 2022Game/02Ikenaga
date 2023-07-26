@@ -11,6 +11,7 @@
 #include "CShark.h"
 #include "CTiger.h"
 #include "CMeat.h"
+#include "CButton.h"
 
 //コンストラクタ
 CStage5::CStage5()
@@ -20,13 +21,13 @@ CStage5::CStage5()
 
 	//敵機のインスタンス作成
 	CModel* enemyModel = GET_MODEL("Enemy1");
-	AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, -10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
+	//AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, -10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
 	//AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, 10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
 	//AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, -11.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
 	//AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, 1.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
 
-	CModel* policeModel = GET_MODEL("Police");
-	AddChara(new CPolice(policeModel, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));
+	//CModel* policeModel = GET_MODEL("Police");
+	//AddChara(new CPolice(policeModel, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));
 
 	CModel* clearModel = GET_MODEL("Clear");
 	AddChara(new CClear(clearModel, CVector(30.0f, -0.9f, 50.0f), CVector(0.0f, 180.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));
@@ -48,6 +49,10 @@ CStage5::CStage5()
 
 	CModel* meatModel = GET_MODEL("Meat");
 	AddChara(new CMeat(meatModel, CVector(30.0f, 0.0f, 10.0f), CVector(0.0f, 180.0f, 0.0f), CVector(0.1f, 0.1f, 0.1f)));
+
+	CModel* buttonModel = GET_MODEL("Button");
+	AddChara(new CButton(buttonModel, CVector(19.0f, 0.5f, -14.0f), CVector(0.0f, 0.0f, 0.0f), CVector(3.0f, 30.0f, 3.0f)));
+	AddChara(new CButton(buttonModel, CVector(30.0f, 5.0f, -15.0f), CVector(0.0f, 0.0f, 0.0f), CVector(3.0f, 10.0f, 3.0f)));
 }
 
 //デストラクタ
