@@ -27,14 +27,10 @@ public:
 	CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 private:
 	CCollider mCollider;
-	CCollider mCollider2;
-	CCollider mCollider3;
 	CColliderLine mLine3; //線分コライダ
 	CColliderLine mLine2; //線分コライダ
 	CColliderLine mLine; //線分コライダ
 	static CEnemy* spInstance;
-	int mark;
-	int mark2;
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;

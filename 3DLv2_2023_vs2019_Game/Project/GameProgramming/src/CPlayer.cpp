@@ -13,8 +13,6 @@
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//移動速度
 #define  ROTATION_XV CVector(1.0f,0.0f,0.f) //回転速度
 #define HP 1 //HP
-//#define ZYUURYOKU (TIPSIZE/20.0f)
-//#define JANPU (TIPSIZE /3.0f)
 
 bool CPlayer::IsDeath() const
 {
@@ -53,17 +51,9 @@ void CPlayer::Collision()
 
 void CPlayer::Collision(CCollider* m, CCollider* o) {
 	//自身のコライダタイプの判定
-	switch (m->Parent()->Tag())
+	switch (o->Type())
 	{
-	case CCollider::ESPHERE: //球コライダの時
-			//コライダのmとoが衝突しているか判定
-		if (CCollider::CCollision(m, o))
-		{
-			sHp = 0;
-			CTransform::Update();
-		}
-		//break;
-	case CCollider::ELINE://線分コライダ
+	case CCollider::ETRIANGLE://線分コライダ
 		//相手のコライダが三角コライダの時
 		if (o->Type() == CCollider::ETRIANGLE)
 		{
@@ -76,6 +66,14 @@ void CPlayer::Collision(CCollider* m, CCollider* o) {
 				//行列の更新
 				CTransform::Update();
 			}
+		}
+		break;
+	case CCollider::ESPHERE: //球コライダの時
+		//コライダのmとoが衝突しているか判定
+		if (CCollider::CCollision(m, o))
+		{
+			sHp = 0;
+			CTransform::Update();
 		}
 		break;
 	}

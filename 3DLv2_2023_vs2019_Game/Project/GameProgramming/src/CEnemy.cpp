@@ -1,11 +1,7 @@
 #include "CEnemy.h"
-#include"CEffect.h"
 #include "CCollisionManager.h"
 #include"CPlayer.h"
-#include "CExclamationMark.h"
-#include"CCharacter3.h"
 #include"CCollider.h"
-#include"CTaskManager.h"
 
 //移動速度
 #define VELOCITY CVector(0.0f,0.0f,0.1f)//9
@@ -24,9 +20,6 @@ CEnemy* CEnemy::spInstance = nullptr;
 
 CEnemy::CEnemy()
 	:CCharacter3(1)
-	//, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
-	,mark(0)
-	,mark2(0)
 {
 	//モデルが無いときは読み込む
 	if (sModel.Triangles().size() == 0)
@@ -151,7 +144,6 @@ void CEnemy::Update()
 
 void CEnemy::Collision()
 {
-	//mColliderMesh1.ChangePriority();
 	//コライダの優先度変更
 	mCollider.ChangePriority();
 	mLine.ChangePriority();
@@ -195,14 +187,10 @@ void CEnemy::Collision(CCollider * m, CCollider * o) {
 //コンストラクタ
 //CEnemy(モデル,位置,回転,拡縮)
 CEnemy::CEnemy(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
-: mark(0)
-,mark2(0)
-,mCollider(this, &mMatrix, CVector(0.0f, 2.5f, 0.0f), 0.5f)
+:mCollider(this, &mMatrix, CVector(0.0f, 2.5f, 0.0f), 0.5f)
 ,mLine(this, &mMatrix, CVector(0.0f, 4.9f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
 , mLine2(this, &mMatrix, CVector(1.0f, 2.5f, -0.5f), CVector(-1.0f, 2.5f, -0.5f))
 , mLine3(this, &mMatrix, CVector(0.0f, 2.5f, 0.5f), CVector(0.0f, 2.5f, -0.5f))
-	//, mCollider2(this, &mMatrix, CVector(0.0f,1.0f,5.0f),0.8f)
-   // , mCollider3(this, &mMatrix, CVector(0.0f, 1.0f, -5.0f), 0.8f)
 {
 	CTransform::Update(position, rotation, scale);
 	//モデル,位置,回転,拡縮を設定する

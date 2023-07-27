@@ -1,10 +1,14 @@
 #include "CButton.h"
 #include"CStageManager.h"
-#include "CTask.h"
 #include "CCollisionManager.h"
 #include "CPlayer.h"
+#include "CResourceManager.h"
+#include "CSceneBase.h"
+#include "CMeat.h"
 
 #define VELOCITYX -0.02
+#define ROTATION_YY CVector(0.0f,0.02f,0.0f)
+#define ROTATION_YZ CVector(0.0f,-0.02f,0.0f)
 
 CButton* CButton::Instance()
 {
@@ -21,27 +25,25 @@ CButton::CButton()
 void CButton::Collision()
 {
 	mColliderMesh1.ChangePriority();
-	mLine2.ChangePriority();
-	mLine3.ChangePriority();
-	mLine.ChangePriority();
 }
 
 void CButton::Collision(CCollider* m, CCollider* o) {
 	//相手のコライダタイプの判定
-	switch (o->ETRIANGLE)
+	switch (o->Type())
 	{
 	//case CCollider::ESPHERE: //球コライダの時
 	//	if (CCollider::CCollision(o, m))
 	//	{
 	//	}
 	//	break;
-	case CCollider::ETRIANGLE:
+	case CCollider::ELINE:
 		//三角コライダと球コライダの衝突判定
-		if (o->Type() == CCollider::ETRIANGLE)
+		if (o->Type() == CCollider::ELINE)
 		{
 			CVector adjust;//調整用ベクトル
 			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 			{
+				SetHidden(true);
 				//衝突しない位置まで戻す
 				mPosition = mPosition + adjust;
 				CTransform::Update();
@@ -53,9 +55,6 @@ void CButton::Collision(CCollider* m, CCollider* o) {
 
 CButton::CButton(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
 	//:mCollider(this, &mMatrix, CVector(0.0f, 0.5f, 0.0f), 0.5f)
-	/*:mLine(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), CVector(0.0f, 0.0f, 0.0f))
-	, mLine2(this, &mMatrix, CVector(0.5f, 0.5f, 0.0f), CVector(-0.5f, 0.5f, 0.0f))
-	, mLine3(this, &mMatrix, CVector(0.0f, 0.5f, 0.5f), CVector(0.0f, 0.5f, -0.5f))*/
 {
 	spInstance = this;
 	//モデル,位置,回転,拡縮を設定する
@@ -81,19 +80,15 @@ void CButton::Update()
 		float dy = vp.Dot(mMatrixRotate.VectorY());
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
-		if (dx < 0.1f && dy < 10.0f && dz < 0.5f && dz>-0.5f)
+		if (dx < 0.1f && dy < 1.0f && dz < 0.5f && dz>-0.5f)
 		{
-			SetHidden(true);
-			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITYX;
+			CTransform::Update();
+			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
 		}
-		//if  (dy < 0.1f && dz < -0.5f)//(dx < 0.5f && dy < 0.1f && dz == 10.1f)
-		//{
-		//	SetHidden(true);
-		//	mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY;
-		//}
-		else
+		else if (dy > 6.0f)
 		{
-			//SetHidden(false);
+			CTransform::Update();
+			mPosition = mPosition + ROTATION_YZ * mMatrixRotate;
 		}
 	}
 	// 行列を更新

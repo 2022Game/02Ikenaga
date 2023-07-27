@@ -16,6 +16,7 @@
     <ClCompile Include="src\CBlock.cpp" />
     <ClCompile Include="src\CBullet.cpp" />
     <ClCompile Include="src\CButton.cpp" />
+    <ClCompile Include="src\CButton2.cpp" />
     <ClCompile Include="src\CCamera.cpp" />
     <ClCompile Include="src\CCharacter.cpp" />
     <ClCompile Include="src\CCharacter3.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="src\CBlock.h" />
     <ClInclude Include="src\CBullet.h" />
     <ClInclude Include="src\CButton.h" />
+    <ClInclude Include="src\CButton2.h" />
     <ClInclude Include="src\CCamera.h" />
     <ClInclude Include="src\CCharacter.h" />
     <ClInclude Include="src\CCharacter3.h" />

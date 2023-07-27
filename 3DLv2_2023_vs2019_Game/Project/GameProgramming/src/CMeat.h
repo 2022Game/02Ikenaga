@@ -5,6 +5,7 @@
 #include"CCharacter3.h"
 #include"CCollider.h"
 #include "CColliderMesh.h"
+#include "CColliderLine.h"
 
 /*
 緑枠クラス
@@ -31,12 +32,9 @@ private:
 	CVector mPoint;  //目標地点
 	//モデルデータ
 	static CModel sModel;
-	//CCollider mCollider;
+	CColliderLine mLine; //線分コライダ
+	CCollider mCollider;
 	//CColliderMesh mColliderMesh1;
-	//コライダ
-	//CCollider mCollider1;
-	//CCollider mCollider2;
-	//CCollider mCollider3;
 };
 
 #endif

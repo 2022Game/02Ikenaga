@@ -4,7 +4,6 @@
 #include "CPolice.h"
 #include "CResourceManager.h"
 #include "CClear.h"
-#include "CApplication.h"
 #include "CSceneBase.h"
 #include "CFrame.h"
 #include "CWater.h"
@@ -12,6 +11,7 @@
 #include "CTiger.h"
 #include "CMeat.h"
 #include "CButton.h"
+#include "CButton2.h"
 
 //コンストラクタ
 CStage5::CStage5()
@@ -48,11 +48,11 @@ CStage5::CStage5()
 	AddChara(new CTiger(tigerModel, CVector(29.1f, -1.0f, 17.0f), CVector(0.0f, 180.0f, 0.0f), CVector(3.0f, 1.5f, 3.0f)));
 
 	CModel* meatModel = GET_MODEL("Meat");
-	AddChara(new CMeat(meatModel, CVector(30.0f, 0.0f, 10.0f), CVector(0.0f, 180.0f, 0.0f), CVector(0.1f, 0.1f, 0.1f)));
+	AddChara(new CMeat(meatModel, CVector(30.0f, 11.0f, -13.0f), CVector(0.0f, 180.0f, 0.0f), CVector(0.05f, 0.05f, 0.05f)));
 
 	CModel* buttonModel = GET_MODEL("Button");
-	AddChara(new CButton(buttonModel, CVector(19.0f, 0.5f, -14.0f), CVector(0.0f, 0.0f, 0.0f), CVector(3.0f, 30.0f, 3.0f)));
-	AddChara(new CButton(buttonModel, CVector(30.0f, 5.0f, -15.0f), CVector(0.0f, 0.0f, 0.0f), CVector(3.0f, 10.0f, 3.0f)));
+	AddChara(new CButton(buttonModel, CVector(19.0f, -1.0f, -14.0f), CVector(0.0f, 0.0f, 0.0f), CVector(3.0f, 10.0f, 3.0f)));
+	AddChara(new CButton2(buttonModel, CVector(30.0f, 4.5f, -13.0f), CVector(0.0f, 0.0f, 0.0f), CVector(5.0f, 20.0f, 5.0f)));
 }
 
 //デストラクタ
