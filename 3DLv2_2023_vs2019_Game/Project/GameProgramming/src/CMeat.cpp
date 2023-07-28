@@ -10,6 +10,13 @@ CModel CMeat::sModel;
 #define VELOCITY2 0.02f
 #define ROTATION_Y CVector(0.0f,-0.3f,0.0f)
 
+CMeat* CMeat::Instance()
+{
+	return spInstance;
+}
+
+CMeat* CMeat::spInstance = nullptr;
+
 void CMeat::Set(float w, float d)
 {
 	//スケール設定
@@ -39,6 +46,7 @@ CMeat::CMeat(const CVector& position, const CVector& rotation, const CVector& sc
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
 	CTransform::Update();  //行列の更新
+	spInstance = this;
 	//目標地点の設定
 	mPoint = mPosition + CVector(0.0f, 0.0f, 10.0f) * mMatrixRotate;
 }
@@ -120,6 +128,7 @@ CMeat::CMeat(CModel* model, const CVector& position, const CVector& rotation, co
 	:mLine(this, &mMatrix, CVector(0.0f, 1.0f, 0.0f), CVector(0.0f, -1.0f, 0.0f))
 	, mCollider(this, &mMatrix, CVector(0.0f, 3.0f, 0.0f), 0.3f)
 {
+	spInstance = this;
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定

@@ -1,6 +1,11 @@
 #include "CCharacter3.h"
 #include "CApplication.h"
 
+bool CCharacter3::Enabled()
+{
+	return mEnabled;
+}
+
 CCharacter3::CCharacter3()
 	:mpModel(nullptr)
 	, mTag(EZERO)

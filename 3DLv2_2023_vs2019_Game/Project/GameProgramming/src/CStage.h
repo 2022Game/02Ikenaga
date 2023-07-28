@@ -12,15 +12,6 @@ public:
 	void Collision(CCollider* m, CCollider* o);
 	CStage(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale);
 	void Update();
-private:
-	CModel mStage;
-	CColliderMesh mColliderMesh1;
-	//CPlayer *mpPlayer;
-	//ƒRƒ‰ƒCƒ_
-	CCollider mCollider1;
-	CCollider mCollider2;
-	CCollider mCollider3;
-	//CMatrix *mMatrix;
 };
 
 #endif

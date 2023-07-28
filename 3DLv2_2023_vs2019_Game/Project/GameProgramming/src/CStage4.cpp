@@ -41,8 +41,8 @@ CStage4::CStage4()
 	CModel* sharkModel = GET_MODEL("Shark");
 	AddChara(new CShark(sharkModel, CVector(10.0f,-0.5f, 35.0f), CVector(0.0f, 90.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));
 
-	CModel* tp = GET_MODEL("Transparent");
-	new CTransparent(tp, CVector(40.0f, -1.0f, 23.0f), CVector(0.0f, 0.0f, 0.0f), CVector(70.0f, 3.0f, 0.1f));
+	//CModel* tp = GET_MODEL("Transparent");
+	//AddChara(new CTransparent(tp, CVector(40.0f, -1.0f, 23.0f), CVector(0.0f, 0.0f, 0.0f), CVector(70.0f, 3.0f, 0.1f)));
 }
 
 //デストラクタ

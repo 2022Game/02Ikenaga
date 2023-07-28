@@ -57,27 +57,20 @@ void CShark::Update()
 		float dz = vp.Dot(mMatrixRotate.VectorZ());
 
 		//X軸のズレが2.0以下
-		if (-10.0f < dx && dx < 10.0f)
+		if (dx < 10.0f)
+		{
+			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
+			if (10.0f > dz )
+			{
+				mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //左へ回転
+			}
+		}
+	    if (dx > -10.0f)
 		{
 			mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //左へ回転
-			//Y軸のズレが2.0以下
-			if (-10.0f < dy && dy < 10.0f)
+			if (-10.0f < dz)
 			{
-				//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
-				if (20.0f > dz && dz > -20.0f)
-				{
-					mState = EState::EMOVE;
-					if (mState == EState::EMOVE)
-					{
-						mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
-					}
-				}
-				else //if (5.0f == dz || dz == -1.0f)
-				{
-					mState = EState::ESTOP;
-					mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
-					mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
-				}
+				mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 			}
 		}
 	}
@@ -92,11 +85,10 @@ void CShark::Update()
 	//左右方向へ回転
 	if (dx > margin)
 	{
-		//mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //左へ回転
+		//mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);
 	}
 	else if (dx < -margin)
 	{
-		//課題
 		//mRotation = mRotation + CVector(0.0f, -1.0f, 0.0f);  //右へ回転
 	}
 	//上下方向へ回転
@@ -162,18 +154,11 @@ void CShark::Collision(CCollider* m, CCollider* o) {
 		//三角コライダと球コライダの衝突判定
 		if (CCollider::CollisionTriangleSphere(o, m, &adjust))
 		{
-			mState = EState::ESTOP;
 			//衝突しない位置まで戻す
 			mPosition = mPosition + adjust;
-			if (rand() % 60)
-			{
-				//mState = EState::ESTOP;
-			}
-			else
-			{
-				//mState = EState::ESTOP;
-			}
 			CTransform::Update();
+			mRotation = mRotation + CVector(0.0f, 1.0f, 0.0f);  //左へ回転
+			mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 		}
 		break;
 	}

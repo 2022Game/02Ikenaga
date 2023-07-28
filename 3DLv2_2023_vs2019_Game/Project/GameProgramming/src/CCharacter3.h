@@ -33,6 +33,7 @@ public:
 		EJUMP,	//ジャンプ
 		ECRY,	//泣く
 	};
+	bool Enabled();
 	//タグの取得
 	ETag Tag();
 	//コンストラクタ

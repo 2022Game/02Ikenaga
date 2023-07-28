@@ -4,24 +4,14 @@
 
 CModel CWater::sModel;
 
-//移動速度
-#define VELOCITY CVector(0.0f,0.0f,0.1f)//9
-#define VELOCITY2 0.11f
-#define VELOCITY3 -0.11f
-
 void CWater::Set(float w, float d)
 {
 	//スケール設定
 	mScale = CVector(0.2f, 0.2f, 0.2f);
-	//三角形の頂点設定
-	//mT.Vertex(CVector(w, 0.0f, 0.0f), CVector(0.0f, 0.0f, -d), CVector(-w, 0.0f, 0.0f));
-	//三角形の法線設定
-	//mT.Normal(CVector(0.0f, 1.0f, 0.0f));
 }
 
 CWater::CWater()
 	:CCharacter3(1)
-	, mark(0)
 	//, mCollider(this, &mMatrix, CVector(0.0f, 0.0f, 0.0f), 0.4f)
 {
 	//モデルが無いときは読み込む
@@ -50,38 +40,6 @@ CWater::CWater(const CVector& position, const CVector& rotation, const CVector& 
 // 更新処理
 void CWater::Update()
 {
-	/*mark++;
-	if (mark > 1)
-	{
-		mEnabled = false;
-		mark = 0;
-	}*/
-	//プレイヤーのポインタが0以外の時
-	//CPlayer* player = CPlayer::Instance();
-	//if (player != nullptr)
-	//{
-	//	//プレイヤーまでのベクトルを求める
-	//	CVector vp = player->Position() - mPosition;
-	//	//左ベクトルとの内積を求める
-	//	float dx = vp.Dot(mMatrixRotate.VectorX());
-	//	//上ベクトルとの内積を求める
-	//	float dy = vp.Dot(mMatrixRotate.VectorY());
-	//	float dz = vp.Dot(mMatrixRotate.VectorZ());
-	//HPが0以下の時 撃破
-	//if (mHp <= 0)
-	//{
-	//	mHp--;
-	//	//15フレーム毎にエフェクト
-	//	if (mHp % 15 == 0)
-	//	{
-	//		//エフェクト生成
-	//		new CEffect(mPosition, 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	}
-	//	//下降させる
-	//	mPosition = mPosition - CVector(0.0f, 0.03f, 0.0f);
-	//	CTransform::Update();
-	//	return;
-	//}
 	//目標地点までのベクトルを求める
 	CVector vp = mPoint - mPosition;
 	//課題
@@ -118,34 +76,10 @@ void CWater::Update()
 	//およそ3秒毎に目標地点を更新
 	int r = rand() % 180; //rand()は整数の乱数を返す
 						  //% 180は180で割った余りを求める
-
-	/*if (r == 0)
-	{
-		if (player != nullptr)
-		{
-			mPoint = player->Position();
-		}
-		else
-		{
-			mPoint = mPoint * CMatrix().RotateY(45);
-		}
-	}*/
-	//行列を更新
-	//CTransform::Update();
-	//位置を移動
-	//mPosition = mPosition + VELOCITY * mMatrixRotate;
 }
 
 void CWater::Collision()
 {
-	//コライダの優先度変更
-	//mCollider1.ChangePriority();
-	//mCollider2.ChangePriority();
-	//mCollider3.ChangePriority();
-	//衝突処理を実行
-	//CCollisionManager::Instance()->Collision(&mCollider1, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider2, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider3, COLLISIONRANGE);
 }
 
 //衝突処理
@@ -173,27 +107,16 @@ void CWater::Collision(CCollider* m, CCollider* o) {
 		}
 		break;
 	}
-
-	////コライダもmとoが衝突しているか判定
-	//if (CCollider::CCollision(m, o)) {
-	//	//エフェクト生成
-	//	new CEffect(o->Parent()->Position(), 1.0f, 1.0f, "exp.tga", 4, 4, 2);
-	//	//mEnabled = false;
-	//}
 }
 
 //コンストラクタ
-//CExclamationMark(モデル,位置,回転,拡縮)
+//CWater(モデル,位置,回転,拡縮)
 CWater::CWater(CModel* model, const CVector& position, const CVector& rotation, const CVector& scale)
-	:mark(0)
-	/*: mCollider1(this, &mMatrix, CVector(0.0f, 5.0f, 0.0f), 0.8f)
-	, mCollider2(this, &mMatrix, CVector(0.0f,5.0f,20.0f),0.8f)
-	, mCollider3(this, &mMatrix, CVector(0.0f, 5.0f, -20.0f), 0.8f)*/
 {
 	//モデル,位置,回転,拡縮を設定する
 	mpModel = model;  //モデルの設定
 	mPosition = position;  //位置の設定
 	mRotation = rotation;  //回転の設定
 	mScale = scale;  //拡縮の設定
-	mColliderMesh1.Set(this, &mMatrix, mpModel);
+	//mColliderMesh1.Set(this, &mMatrix, mpModel);
 }

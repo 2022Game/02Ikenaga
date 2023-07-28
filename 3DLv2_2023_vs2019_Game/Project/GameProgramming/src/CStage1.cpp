@@ -9,6 +9,7 @@
 #include "CFrame.h"
 #include "CSceneManager.h"
 #include "CSp.h"
+#include "CNaihu.h"
 
 //コンストラクタ
 CStage1::CStage1()

@@ -6,12 +6,10 @@
 #include"CCharacter3.h"
 #include "CCollisionManager.h"
 #define ROTATION_YV CVector(0.0f,1.0f,0.0f) //回転速度
-#define ROTATION_YY CVector(0.0f,2.0f,0.0f) //回転速度
-#define ROTATION_YO CVector(0.0f,0.3f,0.0f) 
-#define ROTATION_Y CVector(0.0f,-0.1f,0.0f) //回転速度
-#define ROTATION_X CVector(0.0f,-0.1f,0.0f) //回転速度
+#define ROTATION_YY CVector(0.0f,2.0f,0.0f) //ジャンプ
+#define ROTATION_YO CVector(0.0f,0.3f,0.0f) //無限ジャンプ
+#define ROTATION_Y CVector(0.0f,-0.1f,0.0f) //重力
 #define VELOCITY CVector(0.0f,0.0f,0.09f)//移動速度
-#define  ROTATION_XV CVector(1.0f,0.0f,0.f) //回転速度
 #define HP 1 //HP
 
 bool CPlayer::IsDeath() const
@@ -131,7 +129,6 @@ void CPlayer::Update()
 		bullet->Position(CVector(0.0f, 0.0f, 10.0f) * mMatrix);
 		bullet->Rotation(mRotation);
 		bullet->Update();
-		//CApplication::TaskManager()->Add(bullet);
 	}
 	//Dキー入力で回転
 	if (mInput.Key('D')) {
@@ -178,9 +175,4 @@ void CPlayer::Update()
 	mPosition = mPosition + ROTATION_Y * mMatrixRotate;
 	//変換行列の更新
 	CTransform::Update();
-
-	//UI設定
-	/*CApplication::Ui()->PosY(mPosition.Y());
-	CApplication::Ui()->RotX(mRotation.X());
-	CApplication::Ui()->RotY(mRotation.Y());*/
 }

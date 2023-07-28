@@ -17,10 +17,6 @@ public:
 	//衝突処理
 	//Collision(コライダ1,コライダ2)
 	void Collision(CCollider* m, CCollider* o);
-	/*void CBullet::Render() {
-		CCharacter3::Render();
-		mCollider.Render();
-	}*/
 	CBullet();
 	//幅と奥行きの設定
 	//Set(幅,奥行)

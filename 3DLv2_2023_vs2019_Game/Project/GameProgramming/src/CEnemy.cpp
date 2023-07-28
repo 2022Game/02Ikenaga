@@ -62,21 +62,6 @@ void CEnemy::Update()
 					{
 						mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY2;
 					}
-					/*CExclamationMark* exclamationmark = new CExclamationMark();
-					exclamationmark->Set(0.0f, 0.0f);
-					exclamationmark->Position(
-						CVector(0.8f, 5.0f, 0.0f) * mMatrix);
-					exclamationmark->Rotation(mRotation);
-					exclamationmark->Update();
-					mark = 0;*/
-
-					//’e‚ð”­ŽË‚µ‚Ü‚·
-					/*CBullet* bullet = new CBullet();
-					bullet->Set(0.1f, 1.5f);
-					bullet->Position(
-						CVector(0.0f, 0.0f, 10.0f) * mMatrix);
-					bullet->Rotation(mRotation);
-					bullet->Update();*/
 				}
 				else //if (5.0f == dz || dz == -1.0f)
 				{
@@ -102,10 +87,7 @@ void CEnemy::Update()
 	}
 	else if (dx < -margin)
 	{
-		//‰Û‘è
 		mRotation = mRotation + CVector(0.0f, -1.0f, 0.0f);  //‰E‚Ö‰ñ“]
-		//mPosition = mPosition + mMatrixRotate.VectorZ() * VELOCITY3;
-		//mPosition = mPosition + mMatrixRotate.VectorX() * VELOCITY2;
 	}
 	//ã‰º•ûŒü‚Ö‰ñ“]
 	if (dy > margin)

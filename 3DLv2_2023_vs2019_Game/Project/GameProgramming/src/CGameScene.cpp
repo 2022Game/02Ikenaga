@@ -39,6 +39,7 @@ void CGameScene::Load()
 	LOAD_MODEL("Tiger", "res\\tiger.obj", "res\\tiger.mtl");
 	LOAD_MODEL("Meat", "res\\meat.obj", "res\\meat.mtl");
 	LOAD_MODEL("Button", "res\\ボタン.obj", "res\\ボタン.mtl");
+	LOAD_MODEL("Naihu", "res\\ナイフ.obj", "res\\ナイフ.mtl");
 
 	//LOAD_MODEL("BG", "res\\sky.obj", "res\\sky.mtl");
 

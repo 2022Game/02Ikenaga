@@ -43,6 +43,7 @@
     <ClCompile Include="src\CMatrix.cpp" />
     <ClCompile Include="src\CMeat.cpp" />
     <ClCompile Include="src\CModel.cpp" />
+    <ClCompile Include="src\CNaihu.cpp" />
     <ClCompile Include="src\CPlayer.cpp" />
     <ClCompile Include="src\CPoint.cpp" />
     <ClCompile Include="src\CPolice.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="src\CMeat.h" />
     <ClInclude Include="src\CMiss.h" />
     <ClInclude Include="src\CModel.h" />
+    <ClInclude Include="src\CNaihu.h" />
     <ClInclude Include="src\CPlayer.h" />
     <ClInclude Include="src\CPoint.h" />
     <ClInclude Include="src\CPolice.h" />

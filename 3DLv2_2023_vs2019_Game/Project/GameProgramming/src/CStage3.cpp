@@ -20,8 +20,8 @@ CStage3::CStage3()
 	AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, 10.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
 	AddChara(new CEnemy(enemyModel, CVector(30.0f, -1.0f, -11.0f), CVector(0.0f, 0.0f, 0.0f), CVector(0.4f, 0.4f, 0.4f)));
 
-	CModel* policeModel = GET_MODEL("Police");
-	AddChara(new CPolice(policeModel, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));
+	//CModel* policeModel = GET_MODEL("Police");
+	//AddChara(new CPolice(policeModel, CVector(7.0f, 2.5f, -15.7f), CVector(0.0f, 0.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));
 
 	CModel* clearModel = GET_MODEL("Clear");
 	AddChara(new CClear(clearModel, CVector(30.0f, -0.9f, 50.0f), CVector(0.0f, 180.0f, 0.0f), CVector(1.0f, 1.0f, 1.0f)));

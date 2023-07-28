@@ -7,7 +7,7 @@
 #include "CMeat.h"
 
 #define VELOCITYX -0.02
-#define ROTATION_YY CVector(0.0f,0.02f,0.0f)
+#define ROTATION_YY CVector(0.0f,0.09f,0.0f)
 #define ROTATION_YZ CVector(0.0f,-0.02f,0.0f)
 
 CButton* CButton::Instance()
@@ -84,11 +84,6 @@ void CButton::Update()
 		{
 			CTransform::Update();
 			mPosition = mPosition + ROTATION_YY * mMatrixRotate;
-		}
-		else if (dy > 6.0f)
-		{
-			CTransform::Update();
-			mPosition = mPosition + ROTATION_YZ * mMatrixRotate;
 		}
 	}
 	// s—ñ‚ğXV

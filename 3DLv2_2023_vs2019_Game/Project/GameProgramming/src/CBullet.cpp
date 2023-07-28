@@ -8,12 +8,8 @@ void CBullet::Collision()
 {
 	//コライダの優先度変更
 	mCollider .ChangePriority();
-	//mCollider.ChangePriority();
-	//mCollider.ChangePriority();
 	//衝突処理を実行
 	CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
-	//CCollisionManager::Instance()->Collision(&mCollider, COLLISIONRANGE);
 }
 
 //衝突処理
@@ -58,7 +54,7 @@ void CBullet::Update() {
 //描画
 void CBullet::Render() {
 	//DIFFUSE黄色設定
-	float c[] = { 1.0f,1.0f,0.0f,1.0f };
+	float c[] = { 1.0f,0.0f,0.0f,1.0f };
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
 	//三角形の描画
 	mT.Render(mMatrix);

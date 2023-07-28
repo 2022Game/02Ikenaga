@@ -8,7 +8,7 @@ CModel CButton2::sModel;
 //ˆÚ“®‘¬“x
 #define VELOCITY CVector(0.0f,0.0f,0.1f)
 #define VELOCITYYX CVector(0.0f,-0.02f,0.0f)
-#define VELOCITYYZ -0.02f
+#define VELOCITYYZ -0.5f
 
 void CButton2::Set(float w, float d)
 {
