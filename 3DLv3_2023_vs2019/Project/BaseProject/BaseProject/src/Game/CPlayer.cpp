@@ -249,6 +249,9 @@ void CPlayer::Update()
 	CXCharacter::Update();
 
 	mIsGrounded = false;
+
+	CVector scale = Scale();
+	CDebugPrint::Print("  スケール値(%f, %f,%f)\n",scale.X(), scale.Y(), scale.Z());
 }
 
 // 衝突処理
