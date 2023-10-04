@@ -37,6 +37,7 @@ CUi* CApplication::Ui()
 //背景モデルデータの指定
 #define MODEL_BACKGROUND  "res\\sky.obj", "res\\sky.mtl"
 #define MODEL_FILE2 "res\\knight\\knight_low.X"
+//#define MODEL_FILE3 "res\\suraimu.x"
 
 //CTaskManager CApplication::mTaskManager;
 

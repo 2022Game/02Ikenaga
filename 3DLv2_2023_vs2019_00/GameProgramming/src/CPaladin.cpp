@@ -1,5 +1,5 @@
 #include "CPaladin.h"
-#define PALADIN_MODEL_PATH "res\\paladin\\paladin.x"
+#define PALADIN_MODEL_PATH "res\\paladin\\Paladin.x"
 //追加のアニメーションセット
 #define ANIMATION_ATTACKSP1 "res\\paladin\\SwordAndShieldAttack.x"
 
