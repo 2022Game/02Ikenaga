@@ -1,0 +1,41 @@
+#pragma once
+#include "CCollider.h"
+
+/// <summary>
+/// 三角形コライダー
+/// </summary>
+class CColliderTriangle : public CCollider
+{
+public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="owner">コライダーの持ち主</param>
+	/// <param name="layer">衝突判定用レイヤー</param>
+	/// <param name="v0">三角形の頂点 0</param>
+	/// <param name="v1">三角形の頂点 1</param>
+	/// <param name="v2">三角形の頂点 2</param>
+	CColliderTriangle(CObjectBase* owner, ELayer layer,
+		const CVector& v0, const CVector& v1, const CVector& v2);
+	// コンストラクタ（引数なし版）
+	CColliderTriangle();
+
+	/// <summary>
+	/// 三角形コライダーの設定
+	/// </summary>
+	/// <param name="owner">コライダーの持ち主</param>
+	/// <param name="layer">衝突判定用レイヤー</param>
+	/// <param name="v0">三角形の頂点 0</param>
+	/// <param name="v1">三角形の頂点 1</param>
+	/// <param name="v2">三角形の頂点 2</param>
+	void Set(CObjectBase* owner, ELayer layer,
+		const CVector& v0, const CVector& v1, const CVector& v2);
+
+	CVector V(int index) const;
+
+	// コライダー描画
+	void Render();
+
+private:
+	CVector mV[3];	// 三角形の頂点の配列
+};
