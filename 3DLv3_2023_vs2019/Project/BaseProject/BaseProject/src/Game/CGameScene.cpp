@@ -3,6 +3,7 @@
 #include "CField.h"
 #include "CPlayer.h"
 #include "CCamera.h"
+#include "CBall.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -22,6 +23,11 @@ void CGameScene::Load()
 	//リソースの読み込みやクラスの生成を行う
 
 	new CField();
+	//new CBall();
+
+	CBall* ball = new CBall();
+	ball->Position(100.0f, 20.0f, 0.0f);
+	ball->Scale(2.5f, 2.5f, 2.5f);
 
 	CPlayer* player = new CPlayer();
 	player->Scale(1.0f, 1.0f, 1.0f);

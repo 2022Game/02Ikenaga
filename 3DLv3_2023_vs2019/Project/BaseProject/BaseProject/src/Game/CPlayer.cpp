@@ -8,6 +8,7 @@ CPlayer* CPlayer::spInstance = nullptr;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
+#define MODEL_PATH2 "res\\Character\\suraimu\\suraimu5.x"
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
@@ -250,8 +251,11 @@ void CPlayer::Update()
 
 	mIsGrounded = false;
 
-	CVector scale = Scale();
-	CDebugPrint::Print("  スケール値(%f, %f,%f)\n",scale.X(), scale.Y(), scale.Z());
+	if (CInput::Key('R'))
+	{
+		CVector scale = Scale();
+		CDebugPrint::Print(" スケール値(%f,%f,%f)\n", scale.X(), scale.Y(), scale.Z());
+	}
 }
 
 // 衝突処理

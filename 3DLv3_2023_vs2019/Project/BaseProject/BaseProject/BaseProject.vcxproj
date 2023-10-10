@@ -47,6 +47,7 @@
     <ClCompile Include="src\BaseSystem\CObjectBase.cpp" />
     <ClCompile Include="src\BaseSystem\Maths.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
+    <ClCompile Include="src\Game\CBall.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
     <ClCompile Include="src\Game\CGameScene.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="src\BaseSystem\ObjectTag.h" />
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
+    <ClInclude Include="src\Game\CBall.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CField.h" />
     <ClInclude Include="src\Game\CGameScene.h" />
