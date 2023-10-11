@@ -88,7 +88,7 @@ void CField::CreateFieldObjects()
 	new CRotateFloor
 	(
 		mpCubeModel,
-		CVector(135.0f, 20.0f, 0.0f), CVector(1.0f, 1.0f, 0.25f),
+		CVector(135.0f, 21.0f, 0.0f), CVector(1.0f, 1.0f, 0.25f),
 		0.5f
 	);
 	// ìÆÇ©Ç»Ç¢è∞áA

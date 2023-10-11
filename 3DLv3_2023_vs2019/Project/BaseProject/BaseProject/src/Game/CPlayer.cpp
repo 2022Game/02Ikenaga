@@ -8,7 +8,10 @@ CPlayer* CPlayer::spInstance = nullptr;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
-#define MODEL_PATH2 "res\\Character\\suraimu\\suraimu5.x"
+#define MODEL_DOG "Character\\Player\\Dog.x"
+//#define MODEL_SLIME "Character\\Slime\\Slime.x"
+#define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
+#define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
@@ -22,7 +25,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\anim\\jump_end.x",	false,	26.0f	},	// ジャンプ終了
 };
 
-#define PLAYER_HEIGHT 16.0f
+#define PLAYER_HEIGHT 2.0f
 #define MOVE_SPEED 0.375f
 #define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f
@@ -39,16 +42,16 @@ CPlayer::CPlayer()
 
 	// モデルデータ読み込み
 	CModelX* model = new CModelX();
-	model->Load(MODEL_PATH);
+	model->Load(MODEL_MUSHROOM);
 
 	// テーブル内のアニメーションデータを読み込み
-	int size = ARRAY_SIZE(ANIM_DATA);
+	/*int size = ARRAY_SIZE(ANIM_DATA);
 	for (int i = 0; i < size; i++)
 	{
 		const AnimData& data = ANIM_DATA[i];
 		if (data.path.empty()) continue;
 		model->AddAnimationSet(data.path.c_str());
-	}
+	}*/
 	// CXCharacterの初期化
 	Init(model);
 

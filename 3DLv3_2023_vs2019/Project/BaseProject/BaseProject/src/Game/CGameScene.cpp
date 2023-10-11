@@ -1,9 +1,10 @@
 #include "CGameScene.h"
 #include "CSceneManager.h"
 #include "CField.h"
+#include "CBall.h"
 #include "CPlayer.h"
 #include "CCamera.h"
-#include "CBall.h"
+#include "CEnemy.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -30,7 +31,7 @@ void CGameScene::Load()
 	ball->Scale(2.5f, 2.5f, 2.5f);
 
 	CPlayer* player = new CPlayer();
-	player->Scale(1.0f, 1.0f, 1.0f);
+	player->Scale(10.0f, 10.0f, 10.0f);
 
 	CCamera* mainCamera = new CCamera
 	(
@@ -39,6 +40,10 @@ void CGameScene::Load()
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
+
+	CEnemy* enemy = new CEnemy();
+	enemy->Position(135.0f, 10.0f, 0.0f);
+	enemy->Scale(10.0f, 10.0f, 10.0f);
 }
 
 //シーンの更新処理

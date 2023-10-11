@@ -2,7 +2,7 @@
 #include "CCollisionManager.h"
 
 CBall::CBall()
-	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
+	: CObjectBase(ETag::eBall, ETaskPriority::eBackground)
 {
 	mpBall = new CModel();
 	mpBall->Load("Field\\Object\\Ball.obj", "Field\\Object\\Ball.mtl");
