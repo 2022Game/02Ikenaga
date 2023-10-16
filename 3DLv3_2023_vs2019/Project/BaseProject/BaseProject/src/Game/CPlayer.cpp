@@ -65,6 +65,11 @@ CPlayer::CPlayer()
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	mImage = new CImage("Field\\Object\\kimidori.jpg");
+	mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	mImage->SetPos(0.0, 600.0f);
+	mImage->SetSize(300.0f, 100.0f);
 }
 
 CPlayer::~CPlayer()
@@ -258,6 +263,7 @@ void CPlayer::Update()
 	{
 		CVector scale = Scale();
 		CDebugPrint::Print(" スケール値(%f,%f,%f)\n", scale.X(), scale.Y(), scale.Z());
+		//("Field\\Object\\kimidori.jpg");
 	}
 }
 

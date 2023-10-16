@@ -56,6 +56,9 @@
     <Filter Include="ソース ファイル\Game\Field\Object">
       <UniqueIdentifier>{944b0643-4c32-4f86-9d33-49cba7329b64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Item">
+      <UniqueIdentifier>{6ac9733b-d63a-4971-a8bf-475c9c5e3abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -201,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CBall.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPortionRed.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBall.h">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPortionRed.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

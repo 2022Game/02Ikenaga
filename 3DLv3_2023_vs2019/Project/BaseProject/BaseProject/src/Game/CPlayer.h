@@ -3,6 +3,7 @@
 #include "CXCharacter.h"
 #include "CColliderLine.h"
 #include "CRideableObject.h"
+#include "CImage.h"
 
 /*
 プレイヤークラス
@@ -94,4 +95,5 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CTransform* mpRideObject;
+	CImage* mImage;
 };

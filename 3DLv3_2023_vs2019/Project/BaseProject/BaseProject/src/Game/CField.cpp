@@ -91,20 +91,20 @@ void CField::CreateFieldObjects()
 		CVector(135.0f, 21.0f, 0.0f), CVector(1.0f, 1.0f, 0.25f),
 		0.5f
 	);
-	// ìÆÇ©Ç»Ç¢è∞áA
-	new CMoveFloor
-	(
-		mpCubeModel,
-		CVector(135.0f, 20.0f, -35.0f), CVector(0.25f, 1.0f, 0.25f),
-		CVector(0.0f, 0.0f, 0.0f), 5.0f
-	);
-	// ìÆÇ©Ç»Ç¢è∞áA
-	new CMoveFloor
-	(
-		mpCubeModel,
-		CVector(135.0f, 70.0f, -52.5f), CVector(0.25f, 1.0f, 0.25f),
-		CVector(0.0f, 50.0f, 0.0f), 5.0f
-	);
+	//// ìÆÇ©Ç»Ç¢è∞áA
+	//new CMoveFloor
+	//(
+	//	mpCubeModel,
+	//	CVector(135.0f, 20.0f, -35.0f), CVector(0.25f, 1.0f, 0.25f),
+	//	CVector(0.0f, 0.0f, 0.0f), 5.0f
+	//);
+	//// ìÆÇ©Ç»Ç¢è∞áA
+	//new CMoveFloor
+	//(
+	//	mpCubeModel,
+	//	CVector(135.0f, 70.0f, -52.5f), CVector(0.25f, 1.0f, 0.25f),
+	//	CVector(0.0f, 50.0f, 0.0f), 5.0f
+	//);
 }
 
 void CField::Update()

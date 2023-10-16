@@ -5,7 +5,10 @@ CBall::CBall()
 	: CObjectBase(ETag::eBall, ETaskPriority::eBackground)
 {
 	mpBall = new CModel();
-	mpBall->Load("Field\\Object\\Ball.obj", "Field\\Object\\Ball.mtl");
+	//mpBall->Load("Field\\Object\\Ball.obj", "Field\\Object\\Ball.mtl");
+	//mpBall->Load("Item\\Portion\\PortionRed.obj", "Item\\Portion\\PortionRed.mtl");
+	//mpBall->Load("Item\\Portion\\PortionGreen.obj", "Item\\Portion\\PortionGreen.mtl");
+	mpBall->Load("Item\\Portion\\PortionBlue.obj", "Item\\Portion\\PortionBlue.mtl");
 
 	CreateFieldObjects();
 }
