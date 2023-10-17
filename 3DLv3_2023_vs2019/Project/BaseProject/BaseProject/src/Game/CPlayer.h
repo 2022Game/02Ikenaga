@@ -12,6 +12,8 @@
 class CPlayer : public CXCharacter
 {
 public:
+	bool IsDeath() const;
+	static int Hp();
 	//インスタンスのポインタの取得
 	static CPlayer* Instance();
 
@@ -47,6 +49,7 @@ public:
 	void Render();
 
 private:
+	static int  sHp;  //HP
 	// アニメーションの種類
 	enum class EAnimType
 	{

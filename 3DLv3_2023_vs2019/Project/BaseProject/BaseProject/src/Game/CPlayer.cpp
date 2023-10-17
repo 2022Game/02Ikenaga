@@ -36,12 +36,26 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define POWER 5  //攻撃力
 #define MOVE_SPEED 0.375f  //移動速度
 
+bool CPlayer::IsDeath() const
+{
+	return sHp <= 0;
+}
+
+int CPlayer::sHp = 0;
+
+int CPlayer::Hp()
+{
+	return sHp;
+}
+
 // コンストラクタ
 CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
 {
+
+	sHp = HP;
 	//インスタンスの設定
 	spInstance = this;
 
@@ -71,10 +85,20 @@ CPlayer::CPlayer()
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
-	mImage = new CImage("Field\\Object\\kimidori.jpg");
-	mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	mImage->SetPos(0.0, 600.0f);
-	mImage->SetSize(300.0f, 100.0f);
+	if (sHp = 10)
+	{
+		mImage = new CImage("Character\\Player\\HP\\HP1000.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(0.0, 600.0f);
+		mImage->SetSize(300.0f, 100.0f);
+	}
+	else if (sHp = 9)
+	{
+		mImage = new CImage("Field\\Object\\kimidori.jpg");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(0.0, 600.0f);
+		mImage->SetSize(300.0f, 100.0f);
+	}
 }
 
 CPlayer::~CPlayer()
@@ -152,6 +176,7 @@ void CPlayer::UpdateIdle()
 		else if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
+			sHp = sHp - 1;
 		}
 	}
 	else
