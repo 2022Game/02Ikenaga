@@ -28,11 +28,12 @@ public:
 		const CVector& v0, const CVector& v1);
 
 	/// <summary>
-	/// 頂点取得
+	/// 線分の始点と終点を取得
 	/// </summary>
-	/// <param name="index">インデックス値</param>
-	/// <returns>頂点座標</returns>
-	CVector V(int index) const;
+	/// <param name="v0">始点格納用</param>
+	/// <param name="v1">終点格納用</param>
+	void Get(CVector* v0, CVector* v1) const;
+
 	float Radius() const;
 
 	// コライダー描画

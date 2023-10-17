@@ -7,8 +7,7 @@ CRotateFloor::CRotateFloor(CModel* model, const CVector& pos, const CVector& sca
 	: mpModel(model)
 	, mRotateSpeedY(rotateSpeedY)
 {
-	mpColliderMesh = new CColliderMesh();
-	mpColliderMesh->Set(this, ELayer::eField, mpModel);
+	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel);
 
 	Position(pos);
 	Scale(scale);

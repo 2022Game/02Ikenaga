@@ -2,12 +2,21 @@
 #include "CTransform.h"
 #include "CollisionLayer.h"
 #include "ColliderType.h"
-#include "CObjectBase.h"
+#include "CVertex.h"
+#include "ObjectTag.h"
 
+class CObjectBase;
 class CCollisionManager;
 class CColliderLine;
 class CColliderSphere;
 class CColliderTriangle;
+
+class CHitInfo
+{
+public:
+	CVector adjust;
+	std::list<STVertex> tris;
+};
 
 /// <summary>
 /// コライダーのベースクラス
@@ -97,34 +106,128 @@ public:
 	// コライダー描画
 	virtual void Render() = 0;
 
-	//CollisionTriangleLine(三角コライダ, 線分コライダ, 調整値)
-	//retrun:true（衝突している）false(衝突していない)
-	//調整値:衝突しない位置まで戻す値
-	static bool CollisionTriangleLine(CColliderTriangle* triangle, CColliderLine* line, CVector* adjust);
-	//CollisionTriangleSphere(三角コライダ, 球コライダ, 調整値)
-	//retrun:true（衝突している）false(衝突していない)
-	//調整値:衝突しない位置まで戻す値
-	static bool CollisionTriangleSphere(CColliderTriangle* triangle, CColliderSphere* sphere, CVector* adjust);
-	//CollisionSphere(球コライダ, 球コライダ, 調整値)
-	//retrun:true（衝突している）false(衝突していない)
-	//調整値:衝突しない位置まで戻す値
-	static bool CollisionSphere(CColliderSphere* sphere1, CColliderSphere* sphere2, CVector* adjust);
-	//CollisionSphereLine(球コライダ, 線分コライダ, 調整値)
-	//retrun:true（衝突している）false(衝突していない)
-	//調整値:衝突しない位置まで戻す値
-	static bool CollisionSphereLine(CColliderSphere* sphere, CColliderLine* line, CVector* adjust);
-	//CollisionLine(線分コライダ, 線分コライダ, 調整値)
-	//（内部的にはカプセルとカプセルの衝突判定を行っている)
-	//retrun:true（衝突している）false(衝突していない)
-	//調整値:衝突しない位置まで戻す値
-	static bool CollisionLine(CColliderLine* line1, CColliderLine* line2, CVector* adjust);
+	/// <summary>
+	/// 三角形と三角形の衝突判定
+	/// </summary>
+	/// <param name="t00">三角形1の頂点1</param>
+	/// <param name="t01">三角形1の頂点2</param>
+	/// <param name="t02">三角形1の頂点3</param>
+	/// <param name="t10">三角形2の頂点1</param>
+	/// <param name="t11">三角形2の頂点2</param>
+	/// <param name="t12">三角形2の頂点3</param>
+	/// <param name="hit">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionTriangle(	const CVector& t00, const CVector& t01, const CVector& t02,
+									const CVector& t10, const CVector& t11, const CVector& t12,
+									CHitInfo* hit);
+
+	/// <summary>
+	/// 三角形と線分の衝突判定
+	/// </summary>
+	/// <param name="t0">三角形の頂点1</param>
+	/// <param name="t1">三角形の頂点2</param>
+	/// <param name="t2">三角形の頂点3</param>
+	/// <param name="ls">線分の始点</param>
+	/// <param name="le">線分の終点</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionTriangleLine(	const CVector& t0, const CVector& t1, const CVector& t2,
+										const CVector& ls, const CVector& le, CHitInfo* info);
+
+	/// <summary>
+	/// 三角形と球の衝突判定
+	/// </summary>
+	/// <param name="t0">三角形の頂点1</param>
+	/// <param name="t1">三角形の頂点2</param>
+	/// <param name="t2">三角形の頂点3</param>
+	/// <param name="sp">球の座標</param>
+	/// <param name="sr">球の半径</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionTriangleSphere(const CVector& t0, const CVector& t1, const CVector& t2,
+										const CVector& sp, const float sr, CHitInfo* info);
+
+	/// <summary>
+	/// 球と球の衝突判定
+	/// </summary>
+	/// <param name="sp0">球1の座標</param>
+	/// <param name="sr0">球1の半径</param>
+	/// <param name="sp1">球2の座標</param>
+	/// <param name="sr1">球2の半径</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionSphere(const CVector& sp0, const float sr0,
+								const CVector& sp1, const float sr1, CHitInfo* info);
+
+	/// <summary>
+	/// 球と線分の衝突判定
+	/// </summary>
+	/// <param name="sp">球の座標</param>
+	/// <param name="sr">球の半径</param>
+	/// <param name="ls">線分の始点</param>
+	/// <param name="le">線分の終点</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionSphereLine(const CVector& sp, const float sr,
+									const CVector& ls, const CVector& le, CHitInfo* info);
+
+	/// <summary>
+	/// 線分と線分の衝突判定
+	/// </summary>
+	/// <param name="ls0">線分1の始点</param>
+	/// <param name="le0">線分1の終点</param>
+	/// <param name="ls1">線分2の始点</param>
+	/// <param name="le1">線分2の終点</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionLine(	const CVector& ls0, const CVector& le0,
+								const CVector& ls1, const CVector& le1, CHitInfo* info);
+
+	/// <summary>
+	/// メッシュと線分の衝突判定
+	/// </summary>
+	/// <param name="tris">メッシュを構成する三角形ポリゴンのリスト</param>
+	/// <param name="ls">線分の始点</param>
+	/// <param name="le">線分の終点</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionMeshLine(	const std::list<STVertex>& tris,
+									const CVector& ls, const CVector& le, CHitInfo* info);
+
+	/// <summary>
+	/// メッシュと球の衝突判定
+	/// </summary>
+	/// <param name="tris">メッシュを構成する三角形ポリゴンのリスト</param>
+	/// <param name="sp">球の座標</param>
+	/// <param name="sr">球の半径</param>
+	/// <param name="info">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionMeshSpehre(const std::list<STVertex>& tris,
+									const CVector& sp, const float sr, CHitInfo* info);
+
+	/// <summary>
+	/// メッシュと三角形の衝突判定
+	/// </summary>
+	/// <param name="tris">メッシュを構成する三角形ポリゴンのリスト</param>
+	/// <param name="t0">三角形の頂点1</param>
+	/// <param name="t1">三角形の頂点2</param>
+	/// <param name="t2">三角形の頂点3</param>
+	/// <param name="hit">衝突した時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionMeshTriangle(	const std::list<STVertex>& tris,
+										const CVector& t0, const CVector& t1, const CVector& t2,
+										CHitInfo* hit);
 
 	static float CalcDistancePointToLine(const CVector& point, const CVector& lineS, const CVector& lineE, CVector* nearest = nullptr);
 
-	//衝突判定
-	//Collision(コライダ1, コライダ2)
-	//retrun:true（衝突している）false(衝突していない)
-	static bool Collision(CCollider* c0, CCollider* c1, CVector* adjust);
+	/// <summary>
+	/// 衝突判定
+	/// </summary>
+	/// <param name="c0">コライダ1</param>
+	/// <param name="c1">コライダ2</param>
+	/// <param name="hit">ヒットした時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool Collision(CCollider* c0, CCollider* c1, CHitInfo* hit);
 
 protected:
 	/// <summary>

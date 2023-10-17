@@ -66,13 +66,13 @@ void CEnemy::Update()
 }
 
 // Õ“Ëˆ—
-void CEnemy::Collision(CCollider* self, CCollider* other, const CVector& adjust)
+void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
-			Position(Position() + adjust);
+			Position(Position() + hit.adjust);
 			mIsGrounded = true;
 
 			if (other->Tag() == ETag::eRideableObject)

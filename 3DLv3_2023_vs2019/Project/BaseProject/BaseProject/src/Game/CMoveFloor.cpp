@@ -8,8 +8,7 @@ CMoveFloor::CMoveFloor(CModel* model, const CVector& pos, const CVector& scale, 
 	, mMoveTime(moveTime)
 	, mElapsedTime(0.0f)
 {
-	mpColliderMesh = new CColliderMesh();
-	mpColliderMesh->Set(this, ELayer::eField, mpModel);
+	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel);
 
 	Position(mDefaultPos);
 	Scale(scale);

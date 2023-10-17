@@ -31,7 +31,13 @@ public:
 	void Set(CObjectBase* owner, ELayer layer,
 		const CVector& v0, const CVector& v1, const CVector& v2);
 
-	CVector V(int index) const;
+	/// <summary>
+	/// 三角形の頂点を取得
+	/// </summary>
+	/// <param name="v0">頂点1格納用</param>
+	/// <param name="v1">頂点2格納用</param>
+	/// <param name="v2">頂点3格納用</param>
+	void Get(CVector* v0, CVector* v1, CVector* v2) const;
 
 	// コライダー描画
 	void Render();

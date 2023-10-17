@@ -2,8 +2,7 @@
 #include "CTask.h"
 #include "CTransform.h"
 #include "ObjectTag.h"
-
-class CCollider;
+#include "CCollider.h"
 
 /// <summary>
 /// 3D空間に配置するオブジェクトのベースクラス
@@ -29,7 +28,8 @@ public:
 	/// </summary>
 	/// <param name="self">衝突した自身のコライダー</param>
 	/// <param name="other">衝突した相手のコライダー</param>
-	virtual void Collision(CCollider* self, CCollider* other, const CVector& adjust);
+	/// <param name="hit">衝突した時の情報</param>
+	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit);
 
 private:
 	ETag mTag;	//オブジェクト識別用のタグ

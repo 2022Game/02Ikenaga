@@ -23,7 +23,12 @@ public:
 	/// <param name="radius">球の半径</param>
 	void Set(CObjectBase* owner, ELayer layer, float radius);
 
-	float Radius() const;
+	/// <summary>
+	/// 球の座標と半径を取得
+	/// </summary>
+	/// <param name="pos">球の座標</param>
+	/// <param name="rad">球の半径</param>
+	void Get(CVector* pos, float* rad) const;
 
 	// コライダー描画
 	void Render();

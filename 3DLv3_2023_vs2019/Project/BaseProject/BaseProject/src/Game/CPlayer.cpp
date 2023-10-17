@@ -272,14 +272,14 @@ void CPlayer::Update()
 }
 
 // Õ“Ëˆ—
-void CPlayer::Collision(CCollider* self, CCollider* other, const CVector& adjust)
+void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
 			mMoveSpeed.Y(0.0f);
-			Position(Position() + adjust);
+			Position(Position() + hit.adjust);
 			mIsGrounded = true;
 
 			if (other->Tag() == ETag::eRideableObject)

@@ -1,34 +1,42 @@
 #include "CColliderMesh.h"
 
-CColliderMesh::CColliderMesh()
-	: mpColliderTriangles(nullptr)
+CColliderMesh::CColliderMesh(CObjectBase* owner, ELayer layer, CModel* model)
+	: CCollider(owner, layer, EColliderType::eMesh)
 {
+	Set(model);
 }
 
 CColliderMesh::~CColliderMesh()
 {
-	if (mpColliderTriangles != nullptr)
-	{	//三角コライダ配列の削除
-		delete[] mpColliderTriangles;
+	mVertices.clear();
+}
+
+void CColliderMesh::Set(CModel* model)
+{
+	mVertices.clear();
+	if (model == nullptr) return;
+
+	auto triangles = model->Triangles();
+	int count = triangles.size();
+	for (auto& tri : triangles)
+	{
+		mVertices.push_back(STVertex(tri.V0(), tri.V1(), tri.V2()));
 	}
 }
 
-//Set(親, 親行列, モデル)
-//モデルから三角コライダの生成
-void CColliderMesh::Set(CObjectBase* owner, ELayer layer, CModel* model)
+void CColliderMesh::Get(std::list<STVertex>* tris) const
 {
-	auto triangles = model->Triangles();
-	mColliderTriangleCount = triangles.size();
-	//モデルの三角ポリゴンで三角コライダの配列作成
-	mpColliderTriangles = new CColliderTriangle[mColliderTriangleCount];
-	for (int i = 0; i < mColliderTriangleCount; i++)
+	tris->clear();
+	CMatrix m = Matrix();
+	for (auto& vertex : mVertices)
 	{
-		auto& tri = triangles[i];
-		//三角コライダの設定
-		mpColliderTriangles[i].Set
-		(
-			owner, layer,
-			tri.V0(), tri.V1(), tri.V2()
-		);
+		CVector v0 = vertex.V[0] * m;
+		CVector v1 = vertex.V[1] * m;
+		CVector v2 = vertex.V[2] * m;
+		tris->push_back(STVertex(v0, v1, v2));
 	}
+}
+
+void CColliderMesh::Render()
+{
 }

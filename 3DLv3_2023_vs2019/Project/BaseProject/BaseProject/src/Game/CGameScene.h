@@ -1,6 +1,5 @@
 #pragma once
 #include "CSceneBase.h"
-//#include "CImage.h"
 
 //タイトルシーン
 class CGameScene :public CSceneBase

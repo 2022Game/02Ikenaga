@@ -1,5 +1,6 @@
 #include "CCollisionManager.h"
 #include "CCollider.h"
+#include "CObjectBase.h"
 
 // コリジョンマネージャのインスタンス
 CCollisionManager* CCollisionManager::mpInstance = nullptr;
@@ -56,21 +57,26 @@ void CCollisionManager::Collision(CCollider* col0, CCollider* col1)
 	if (!col0->IsEnable() || !col1->IsEnable()) return;
 	// 両コライダーに持ち主が存在しない場合は、衝突判定を行わない
 	if (col0->Owner() == nullptr && col1->Owner() == nullptr) return;
+	// 同じ持ち主のコライダーであれば、衝突判定を行わない
+	if (col0->Owner() == col1->Owner())
+	{
+		return;
+	}
 
 	// 衝突判定を行うコライダーでなければ、衝突判定を行わない
 	if (!col0->IsCollision(col1)) return;
 
 	// 衝突判定を行う
-	CVector adjust;
-	bool collision = CCollider::Collision(col0, col1, &adjust);
+	CHitInfo hit;
+	bool collision = CCollider::Collision(col0, col1, &hit);
 	// 衝突していなければ、衝突処理を行わない
 	if (!collision) return;
 
 	// 各コライダーの持ち主に衝突したことを伝える
 	if (col0->Owner() != nullptr)
-		col0->Owner()->Collision(col0, col1, adjust);
+		col0->Owner()->Collision(col0, col1, hit);
 	if (col1->Owner() != nullptr)
-		col1->Owner()->Collision(col1, col0, adjust);
+		col1->Owner()->Collision(col1, col0, hit);
 }
 
 // 指定したコライダーと他の全てのコライダーとの衝突処理を行う

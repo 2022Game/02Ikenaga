@@ -31,10 +31,13 @@ void CColliderTriangle::Set(CObjectBase* owner, ELayer layer,
 	mV[2] = v2;
 }
 
-CVector CColliderTriangle::V(int index) const
+// 三角形の頂点を取得
+void CColliderTriangle::Get(CVector* v0, CVector* v1, CVector* v2) const
 {
-	index = Math::Clamp(index, 0, ARRAY_SIZE(mV));
-	return mV[index];
+	CMatrix m = Matrix();
+	*v0 = mV[0] * m;
+	*v1 = mV[1] * m;
+	*v2 = mV[2] * m;
 }
 
 // コライダー描画

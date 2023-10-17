@@ -24,10 +24,12 @@ void CColliderLine::Set(CObjectBase* owner, ELayer layer,
 	mV[1] = v1;
 }
 
-CVector CColliderLine::V(int index) const
+// 線分の始点と終点を取得
+void CColliderLine::Get(CVector* v0, CVector* v1) const
 {
-	index = Math::Clamp(index, 0, ARRAY_SIZE(mV));
-	return mV[index];
+	CMatrix m = Matrix();
+	*v0 = mV[0] * m;
+	*v1 = mV[1] * m;
 }
 
 float CColliderLine::Radius() const

@@ -17,9 +17,11 @@ void CColliderSphere::Set(CObjectBase* owner, ELayer layer, float radius)
 	mRadius = radius;
 }
 
-float CColliderSphere::Radius() const
+// ‹…‚ÌÀ•W‚Æ”¼Œa‚ğæ“¾
+void CColliderSphere::Get(CVector* pos, float* rad) const
 {
-	return mRadius;
+	*pos = Position();
+	*rad = mRadius;
 }
 
 void CColliderSphere::Render()

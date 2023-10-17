@@ -20,6 +20,6 @@ ETag CObjectBase::Tag() const
 }
 
 // Õ“Ëˆ—
-void CObjectBase::Collision(CCollider* self, CCollider* other, const CVector& adjust)
+void CObjectBase::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 }
