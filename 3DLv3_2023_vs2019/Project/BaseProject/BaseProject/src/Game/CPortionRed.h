@@ -2,6 +2,10 @@
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
 
+/*
+攻撃力アップのポーションクラス
+オブジェクトベース継承
+*/
 class CPortionRed : public CObjectBase
 {
 public:
@@ -13,8 +17,6 @@ public:
 
 private:
 	void CreateFieldObjects();
-
-	//CModel* mpModel;
 
 	CModel* mpPortionRed;
 };

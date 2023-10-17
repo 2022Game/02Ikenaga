@@ -2,6 +2,10 @@
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
 
+/*
+経験値クラス
+オブジェクトベース継承
+*/
 class CBall : public CObjectBase
 {
 public:

@@ -6,6 +6,8 @@
 #include "CEnemy.h"
 #include "CBall.h"
 #include "CPortionRed.h"
+#include "CPortionGreen.h"
+#include "CPortionBlue.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -43,11 +45,19 @@ void CGameScene::Load()
 
 	CBall* ball = new CBall();
 	ball->Position(100.0f, 10.0f, 0.0f);
-	ball->Scale(70.0f, 70.0f, 70.0f);
+	ball->Scale(4.0f, 4.0f, 4.0f);
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
 	portionred->Scale(70.0f, 70.0f, 70.0f);
+
+	CPortionGreen* portiongreen = new CPortionGreen();
+	portiongreen->Position(80.0f, 10.0f, 0.0f);
+	portiongreen->Scale(70.0f, 70.0f, 70.0f);
+
+	CPortionBlue* portionblue = new CPortionBlue();
+	portionblue->Position(70.0f, 10.0f, 0.0f);
+	portionblue->Scale(70.0f, 70.0f, 70.0f);
 }
 
 //シーンの更新処理

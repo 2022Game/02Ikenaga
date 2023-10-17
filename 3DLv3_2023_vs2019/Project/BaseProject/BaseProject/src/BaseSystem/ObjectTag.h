@@ -10,6 +10,8 @@ enum class ETag
 	eBall,  //経験値
 	eRideableObject,	// 乗ることができるオブジェクト
 	eItem,	// アイテムの攻撃力アップ
+	eItem2, // アイテムの回復
+	eItem3, // アイテムの移動速度アップ
 
 	ePlayer,// プレイヤー
 	eEnemy,	// エネミー

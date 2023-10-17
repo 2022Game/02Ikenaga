@@ -17,19 +17,24 @@ CPlayer* CPlayer::spInstance = nullptr;
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},	// Tポーズ
-	{ "Character\\Player\\anim\\idle.x",		true,	153.0f	},	// 待機
-	{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
-	{ "Character\\Player\\anim\\attack.x",		false,	91.0f	},	// 攻撃
-	{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
-	{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
-	{ "Character\\Player\\anim\\jump_end.x",	false,	26.0f	},	// ジャンプ終了
+	//{ "Character\\Player\\anim\\idle.x",		true,	153.0f	},	// 待機
+	//{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
+	{ "Character\\Mushroom\\anim\\attack.x",	false,	26.0f	},	// 攻撃
+	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
+	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
+	//{ "Character\\Player\\anim\\jump_end.x",	false,	26.0f	},	// ジャンプ終了
 };
 
 #define PLAYER_HEIGHT 2.0f
-#define MOVE_SPEED 0.375f
+
 #define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f
 #define JUMP_END_Y 1.0f
+
+#define HP 10  //HP
+#define SA 5   //特殊攻撃
+#define POWER 5  //攻撃力
+#define MOVE_SPEED 0.375f  //移動速度
 
 // コンストラクタ
 CPlayer::CPlayer()
@@ -45,13 +50,13 @@ CPlayer::CPlayer()
 	model->Load(MODEL_MUSHROOM);
 
 	// テーブル内のアニメーションデータを読み込み
-	/*int size = ARRAY_SIZE(ANIM_DATA);
+	int size = ARRAY_SIZE(ANIM_DATA);
 	for (int i = 0; i < size; i++)
 	{
 		const AnimData& data = ANIM_DATA[i];
 		if (data.path.empty()) continue;
 		model->AddAnimationSet(data.path.c_str());
-	}*/
+	}
 	// CXCharacterの初期化
 	Init(model);
 
@@ -263,7 +268,6 @@ void CPlayer::Update()
 	{
 		CVector scale = Scale();
 		CDebugPrint::Print(" スケール値(%f,%f,%f)\n", scale.X(), scale.Y(), scale.Z());
-		//("Field\\Object\\kimidori.jpg");
 	}
 }
 
