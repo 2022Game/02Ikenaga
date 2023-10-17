@@ -84,21 +84,6 @@ CPlayer::CPlayer()
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-
-	if (sHp = 10)
-	{
-		mImage = new CImage("Character\\Player\\HP\\HP1000.png");
-		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage->SetPos(0.0, 600.0f);
-		mImage->SetSize(300.0f, 100.0f);
-	}
-	else if (sHp = 9)
-	{
-		mImage = new CImage("Field\\Object\\kimidori.jpg");
-		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage->SetPos(0.0, 600.0f);
-		mImage->SetSize(300.0f, 100.0f);
-	}
 }
 
 CPlayer::~CPlayer()
@@ -113,6 +98,12 @@ CPlayer::~CPlayer()
 	{
 		delete mpModel;
 		mpModel = nullptr;
+	}
+
+	if (mImage != nullptr)
+	{
+		delete mImage;
+		mImage = nullptr;
 	}
 }
 
@@ -176,7 +167,7 @@ void CPlayer::UpdateIdle()
 		else if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
-			sHp = sHp - 1;
+			sHp--;
 		}
 	}
 	else
@@ -269,6 +260,23 @@ void CPlayer::Update()
 		case EState::eJumpEnd:
 			UpdateJumpEnd();
 			break;
+	}
+
+	if (sHp == 9)
+	{
+		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 630.0f);
+		mImage->SetSize(100.0f, 20.0f);
+		mImage->Kill();
+	}
+	if (sHp == 10)
+	{
+		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 630.0f);
+		mImage->SetSize(250.0f, 20.0f);
+		mImage->Kill();
 	}
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
