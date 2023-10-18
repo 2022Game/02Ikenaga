@@ -2,6 +2,7 @@
 //キャラクタクラスのインクルード
 #include "CXCharacter.h"
 #include "CColliderLine.h"
+#include "CColliderSphere.h"
 #include "CRideableObject.h"
 #include "CImage.h"
 
@@ -55,7 +56,7 @@ private:
 	{
 		None = -1,
 
-		eTPose,		// Tポーズ
+		//eTPose,		// Tポーズ
 		eIdle,		// 待機
 		eWalk,		// 歩行
 		eAttack,	// 攻撃
@@ -97,6 +98,9 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+	CColliderSphere* mpColliderSphere;
+
 	CTransform* mpRideObject;
 	CImage* mImage;
+	CImage* mImage2;
 };

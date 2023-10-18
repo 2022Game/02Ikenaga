@@ -16,10 +16,11 @@ CPlayer* CPlayer::spInstance = nullptr;
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},	// Tポーズ
-	//{ "Character\\Player\\anim\\idle.x",		true,	153.0f	},	// 待機
+	//{ "",										true,	0.0f	},	// Tポーズ
+	//{ "Character\\Player\\anim\\DogAttack.x",		true,	91.0f	},	// 待機
 	//{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
-	{ "Character\\Mushroom\\anim\\attack.x",	false,	26.0f	},	// 攻撃
+	{ "Character\\Player\\anim\\DogAttack.x",	true,	91.0f	}
+	//{ "Character\\Mushroom\\anim\\attack.x",	false,	26.0f	},	// 攻撃
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
 	//{ "Character\\Player\\anim\\jump_end.x",	false,	26.0f	},	// ジャンプ終了
@@ -61,7 +62,7 @@ CPlayer::CPlayer()
 
 	// モデルデータ読み込み
 	CModelX* model = new CModelX();
-	model->Load(MODEL_MUSHROOM);
+	model->Load(MODEL_DOG);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -84,6 +85,14 @@ CPlayer::CPlayer()
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	/*mpColliderSphere = new CColliderSphere
+	(
+		mpColliderSphere->Owner(),
+		ELayer::eField,
+		mpColliderSphere->Type()
+	);*/
+	//mpColliderSphere->SetCollisionLayers({ ELayer::eField });
 }
 
 CPlayer::~CPlayer()
@@ -92,6 +101,12 @@ CPlayer::~CPlayer()
 	{
 		delete mpColliderLine;
 		mpColliderLine = nullptr;
+	}
+
+	if (mpColliderSphere != nullptr)
+	{
+		delete mpColliderSphere;
+		mpColliderSphere = nullptr;
 	}
 
 	if (mpModel != nullptr)
@@ -162,6 +177,7 @@ void CPlayer::UpdateIdle()
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 			mState = EState::eAttack;
+			sHp++;
 		}
 		// SPACEキーでジャンプ開始へ移行
 		else if (CInput::PushKey(VK_SPACE))
@@ -262,20 +278,79 @@ void CPlayer::Update()
 			break;
 	}
 
-	if (sHp == 9)
-	{
-		mImage = new CImage("Character\\Player\\HP\\HP.png");
-		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage->SetPos(30.0, 630.0f);
-		mImage->SetSize(100.0f, 20.0f);
-		mImage->Kill();
-	}
 	if (sHp == 10)
 	{
+
+		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetSize(1017.0f, 27.0f);
+		mImage2->Kill();
+
 		mImage = new CImage("Character\\Player\\HP\\HP.png");
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage->SetPos(30.0, 630.0f);
-		mImage->SetSize(250.0f, 20.0f);
+		mImage->SetPos(30.0, 30.0f);
+		mImage->SetSize(1000.0f, 15.0f);
+		mImage->Kill();
+	}
+
+	if (sHp == 9)
+	{
+		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetSize(917.0f, 27.0f);
+		mImage2->Kill();
+
+		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 30.0f);
+		mImage->SetSize(900.0f, 15.0f);
+		mImage->Kill();
+	}
+
+	if (sHp == 8)
+	{
+		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetSize(817.0f, 27.0f);
+		mImage2->Kill();
+
+		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 30.0f);
+		mImage->SetSize(800.0f, 15.0f);
+		mImage->Kill();
+	}
+
+	if (sHp == 7)
+	{
+		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetSize(717.0f, 27.0f);
+		mImage2->Kill();
+
+		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 30.0f);
+		mImage->SetSize(700.0f, 15.0f);
+		mImage->Kill();
+	}
+
+	if (sHp == 6)
+	{
+		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetSize(617.0f, 27.0f);
+		mImage2->Kill();
+
+		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 30.0f);
+		mImage->SetSize(600.0f, 15.0f);
 		mImage->Kill();
 	}
 
@@ -308,6 +383,21 @@ void CPlayer::Update()
 void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpColliderLine)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			mMoveSpeed.Y(0.0f);
+			Position(Position() + hit.adjust);
+			mIsGrounded = true;
+
+			if (other->Tag() == ETag::eRideableObject)
+			{
+				mpRideObject = other->Owner();
+			}
+		}
+	}
+
+	if (self == mpColliderSphere)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
