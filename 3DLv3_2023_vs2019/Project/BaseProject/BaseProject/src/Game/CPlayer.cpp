@@ -12,6 +12,8 @@ CPlayer* CPlayer::spInstance = nullptr;
 //#define MODEL_SLIME "Character\\Slime\\Slime.x"
 #define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
 #define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
+#define HP_FRAME_IMAGE "Character\\Player\\HP\\HPframe.png"  //HPフレーム画像
+#define HP_IMAGE "Character\\Player\\HP\\HP.png"//HP画像
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
@@ -19,7 +21,9 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	//{ "",										true,	0.0f	},	// Tポーズ
 	//{ "Character\\Player\\anim\\DogAttack.x",		true,	91.0f	},	// 待機
 	//{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
-	{ "Character\\Player\\anim\\DogAttack.x",	true,	91.0f	}
+	{ "Character\\Player\\anim\\DogIdle.x",	true,	221.0f	},  //待機
+	{ "Character\\Player\\anim\\DogWalk.x",	true,	69.0f	},  //歩行
+	{ "Character\\Player\\anim\\DogAttack.x",	true,	91.0f	}  //攻撃
 	//{ "Character\\Mushroom\\anim\\attack.x",	false,	26.0f	},	// 攻撃
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -119,6 +123,12 @@ CPlayer::~CPlayer()
 	{
 		delete mImage;
 		mImage = nullptr;
+	}
+
+	if (mImage2 != nullptr)
+	{
+		delete mImage2;
+		mImage2 = nullptr;
 	}
 }
 
@@ -281,13 +291,13 @@ void CPlayer::Update()
 	if (sHp == 10)
 	{
 
-		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage2->SetPos(22.0, 24.0f);
 		mImage2->SetSize(1017.0f, 27.0f);
 		mImage2->Kill();
 
-		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
 		mImage->SetSize(1000.0f, 15.0f);
@@ -296,13 +306,13 @@ void CPlayer::Update()
 
 	if (sHp == 9)
 	{
-		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage2->SetPos(22.0, 24.0f);
 		mImage2->SetSize(917.0f, 27.0f);
 		mImage2->Kill();
 
-		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
 		mImage->SetSize(900.0f, 15.0f);
@@ -311,13 +321,13 @@ void CPlayer::Update()
 
 	if (sHp == 8)
 	{
-		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage2->SetPos(22.0, 24.0f);
 		mImage2->SetSize(817.0f, 27.0f);
 		mImage2->Kill();
 
-		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
 		mImage->SetSize(800.0f, 15.0f);
@@ -326,13 +336,13 @@ void CPlayer::Update()
 
 	if (sHp == 7)
 	{
-		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage2->SetPos(22.0, 24.0f);
 		mImage2->SetSize(717.0f, 27.0f);
 		mImage2->Kill();
 
-		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
 		mImage->SetSize(700.0f, 15.0f);
@@ -341,13 +351,13 @@ void CPlayer::Update()
 
 	if (sHp == 6)
 	{
-		mImage2 = new CImage("Character\\Player\\HP\\HPframe.png");
+		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage2->SetPos(22.0, 24.0f);
 		mImage2->SetSize(617.0f, 27.0f);
 		mImage2->Kill();
 
-		mImage = new CImage("Character\\Player\\HP\\HP.png");
+		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
 		mImage->SetSize(600.0f, 15.0f);
