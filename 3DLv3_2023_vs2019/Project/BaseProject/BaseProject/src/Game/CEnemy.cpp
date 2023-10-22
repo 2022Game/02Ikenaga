@@ -1,13 +1,25 @@
 #include "CEnemy.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
+#include "CInput.h"
+
+// エネミーのインスタンス
+CEnemy* CEnemy::spInstance = nullptr;
 
 #define MODEL_SLIME "Character\\Slime\\Slime.x"
 
 #define PLAYER_HEIGHT 2.0f
 
-// エネミーのインスタンス
-CEnemy* CEnemy::spInstance = nullptr;
+// エネミーのアニメーションデータのテーブル
+const CEnemy::AnimData CEnemy::ANIM_DATA[] =
+{
+	{ "",										true,	0.0f	},	// Tポーズ
+	//{ "Character\\Slime\\animation\\SlimeAttack.x",	true,	26.0f	},  //攻撃
+	//{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	26.0f	},  //攻撃2
+	//{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  //死ぬ 41.0f
+	//{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  //めまい 41.0f
+	{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	100.0f	},  //ヒット 26.0f
+};
 
 // コンストラクタ
 CEnemy::CEnemy()
@@ -21,8 +33,19 @@ CEnemy::CEnemy()
 	CModelX* model = new CModelX();
 	model->Load(MODEL_SLIME);
 
+	// テーブル内のアニメーションデータを読み込み
+	int size = ARRAY_SIZE(ANIM_DATA);
+	for (int i = 0; i < size; i++)
+	{
+		const AnimData& data = ANIM_DATA[i];
+		if (data.path.empty()) continue;
+		model->AddAnimationSet(data.path.c_str());
+	}
 	// CXCharacterの初期化
 	Init(model);
+
+	// 最初は待機アニメーションを再生
+	ChangeAnimation(EAnimType::eIdle);
 
 	mpColliderLine = new CColliderLine
 	(
@@ -53,11 +76,33 @@ CEnemy* CEnemy::Instance()
 	return spInstance;
 }
 
+// アニメーション切り替え
+void CEnemy::ChangeAnimation(EAnimType type)
+{
+	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
+	AnimData data = ANIM_DATA[(int)type];
+	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
+}
+
+void CEnemy::UpdateIdle()
+{
+	// 待機アニメーションに切り替え
+	ChangeAnimation(EAnimType::eIdle);
+}
+
 //更新処理
 void CEnemy::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	// 状態に合わせて、更新処理を切り替える
+	switch (mState)
+	{
+		// 待機状態
+	case EState::eIdle:
+		UpdateIdle();
+		break;
+	}
 
 	// キャラクターの更新
 	CXCharacter::Update();

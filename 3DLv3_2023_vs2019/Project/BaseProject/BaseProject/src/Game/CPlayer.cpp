@@ -9,7 +9,7 @@ CPlayer* CPlayer::spInstance = nullptr;
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
 #define MODEL_DOG "Character\\Player\\Dog.x"
-//#define MODEL_SLIME "Character\\Slime\\Slime.x"
+#define MODEL_SLIME "Character\\Slime\\Slime.x"
 #define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
 #define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
 #define HP_FRAME_IMAGE "Character\\Player\\HP\\HPframe.png"  //HPフレーム画像
@@ -21,9 +21,12 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	//{ "",										true,	0.0f	},	// Tポーズ
 	//{ "Character\\Player\\anim\\DogAttack.x",		true,	91.0f	},	// 待機
 	//{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
-	{ "Character\\Player\\anim\\DogIdle.x",	true,	221.0f	},  //待機
-	{ "Character\\Player\\anim\\DogWalk.x",	true,	69.0f	},  //歩行
-	{ "Character\\Player\\anim\\DogAttack.x",	true,	91.0f	}  //攻撃
+
+	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  //待機 221.0f
+	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  //歩行
+	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
+	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
+
 	//{ "Character\\Mushroom\\anim\\attack.x",	false,	26.0f	},	// 攻撃
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -239,7 +242,7 @@ void CPlayer::UpdateJump()
 {
 	if (mMoveSpeed.Y() <= 0.0f)
 	{
-		ChangeAnimation(EAnimType::eJumpEnd);
+		//ChangeAnimation(EAnimType::eJumpEnd);
 		mState = EState::eJumpEnd;
 	}
 }

@@ -40,7 +40,7 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(player);
 
 	CEnemy* enemy = new CEnemy();
-	enemy->Position(135.0f, 0.0f, 0.0f);
+	enemy->Position(100.0f, 0.0f, 0.0f);
 	enemy->Scale(10.0f, 10.0f, 10.0f);
 
 	CPortionRed* portionred = new CPortionRed();
