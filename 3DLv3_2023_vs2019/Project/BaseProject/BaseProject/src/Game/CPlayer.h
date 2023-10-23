@@ -39,6 +39,8 @@ public:
 	void UpdateJump();
 	// ジャンプ終了
 	void UpdateJumpEnd();
+	//レベル
+	void UpdateLevel();
 
 	// 更新
 	void Update();

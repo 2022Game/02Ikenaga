@@ -43,8 +43,8 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define LEVEL 1  //レベル
 #define SA 5   //特殊攻撃
 #define POWER 5  //攻撃力
-#define MOVE_SPEED 0.1f  //移動速度
-#define MOVE_SPEED2 0.2f  //移動速度
+#define MOVE_SPEED 0.3f  //移動速度
+#define MOVE_SPEED2 0.31f  //移動速度
 
 bool CPlayer::IsDeath() const
 {
@@ -92,6 +92,7 @@ CPlayer::CPlayer()
 	sHp = HP;
 	sLevel = LEVEL;
 	sPower = POWER;
+
 	//インスタンスの設定
 	spInstance = this;
 
@@ -289,6 +290,38 @@ void CPlayer::UpdateJumpEnd()
 	}
 }
 
+void CPlayer::UpdateLevel()
+{
+	switch (sLevel)
+	{
+	case 2:
+		sHp = 20;
+		sPower = 10;
+		break;
+	case 3:
+		sHp = 30;
+		sPower = 15;
+		break;
+	case 4:
+		sPower = 20;
+		break;
+	case 5:
+		sPower = 25;
+		break;
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	case 10:
+	case 11:
+	case 12:
+	case 13:
+	case 14:
+	case 15:
+		break;
+	}
+}
+
 // 更新
 void CPlayer::Update()
 {
@@ -325,22 +358,8 @@ void CPlayer::Update()
 			UpdateJumpEnd();
 			break;
 	}
-
-	switch (sLevel)
-	{
-	case 2:
-		sHp = 20;
-		sPower = 10;
-		break;
-	case 3:
-		sHp = 30;
-		break;
-	}
-	/*if (sLevel == 3)
-	{
-		sHp = 30;
-		sPower = 15;
-	}*/
+	
+	UpdateLevel();
 
 	if (sHp == 10)
 	{
@@ -353,7 +372,7 @@ void CPlayer::Update()
 
 		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage->SetPos(30.0, 30.0f);
+		mImage->SetPos(18.0, 676.0f);
 		mImage->SetSize(10.0f, 15.0f);
 		mImage->Kill();
 	}
@@ -377,13 +396,13 @@ void CPlayer::Update()
 	{
 		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetPos(10.0, 670.0f);
 		mImage2->SetSize(917.0f, 27.0f);
 		mImage2->Kill();
 
 		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage->SetPos(30.0, 30.0f);
+		mImage->SetPos(18.0, 676.0f);
 		mImage->SetSize(20.0f, 15.0f);
 		mImage->Kill();
 	}
