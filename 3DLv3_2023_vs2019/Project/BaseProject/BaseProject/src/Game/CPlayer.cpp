@@ -40,13 +40,25 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define JUMP_END_Y 1.0f
 
 #define HP 10  //HP
+#define LEVEL 1  //レベル
 #define SA 5   //特殊攻撃
 #define POWER 5  //攻撃力
-#define MOVE_SPEED 0.375f  //移動速度
+#define MOVE_SPEED 0.1f  //移動速度
+#define MOVE_SPEED2 0.2f  //移動速度
 
 bool CPlayer::IsDeath() const
 {
 	return sHp <= 0;
+}
+
+bool CPlayer::IsDeath2() const
+{
+	return sLevel <= 0;
+}
+
+bool CPlayer::IsDeath3() const
+{
+	return sPower <= 0;
 }
 
 int CPlayer::sHp = 0;
@@ -54,6 +66,20 @@ int CPlayer::sHp = 0;
 int CPlayer::Hp()
 {
 	return sHp;
+}
+
+int CPlayer::sLevel = 0;
+
+int CPlayer::Level()
+{
+	return sLevel;
+}
+
+int CPlayer::sPower = 0;
+
+int CPlayer::Power()
+{
+	return sPower;
 }
 
 // コンストラクタ
@@ -64,6 +90,8 @@ CPlayer::CPlayer()
 {
 
 	sHp = HP;
+	sLevel = LEVEL;
+	sPower = POWER;
 	//インスタンスの設定
 	spInstance = this;
 
@@ -173,6 +201,10 @@ void CPlayer::UpdateIdle()
 			move.Normalize();
 
 			mMoveSpeed += move * MOVE_SPEED;
+			if (sLevel == 2)
+			{
+				mMoveSpeed += move * MOVE_SPEED2;
+			}
 
 			// 歩行アニメーションに切り替え
 			ChangeAnimation(EAnimType::eWalk);
@@ -190,7 +222,8 @@ void CPlayer::UpdateIdle()
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 			mState = EState::eAttack;
-			sHp++;
+			//sHp++;
+			sLevel++;
 		}
 		// SPACEキーでジャンプ開始へ移行
 		else if (CInput::PushKey(VK_SPACE))
@@ -259,6 +292,8 @@ void CPlayer::UpdateJumpEnd()
 // 更新
 void CPlayer::Update()
 {
+	printf("%d", sHp);
+	//printf("%d", sPower);
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
@@ -291,23 +326,39 @@ void CPlayer::Update()
 			break;
 	}
 
+	switch (sLevel)
+	{
+	case 2:
+		sHp = 20;
+		sPower = 10;
+		break;
+	case 3:
+		sHp = 30;
+		break;
+	}
+	/*if (sLevel == 3)
+	{
+		sHp = 30;
+		sPower = 15;
+	}*/
+
 	if (sHp == 10)
 	{
 
 		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetPos(10.0, 670.0f);
 		mImage2->SetSize(1017.0f, 27.0f);
 		mImage2->Kill();
 
 		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
-		mImage->SetSize(1000.0f, 15.0f);
+		mImage->SetSize(10.0f, 15.0f);
 		mImage->Kill();
 	}
 
-	if (sHp == 9)
+	if (sHp == 19)
 	{
 		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -318,11 +369,26 @@ void CPlayer::Update()
 		mImage = new CImage(HP_IMAGE);
 		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 		mImage->SetPos(30.0, 30.0f);
-		mImage->SetSize(900.0f, 15.0f);
+		mImage->SetSize(19.0f, 15.0f);
 		mImage->Kill();
 	}
 
-	if (sHp == 8)
+	if (sHp == 20)
+	{
+		mImage2 = new CImage(HP_FRAME_IMAGE);
+		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage2->SetPos(22.0, 24.0f);
+		mImage2->SetSize(917.0f, 27.0f);
+		mImage2->Kill();
+
+		mImage = new CImage(HP_IMAGE);
+		mImage->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		mImage->SetPos(30.0, 30.0f);
+		mImage->SetSize(20.0f, 15.0f);
+		mImage->Kill();
+	}
+
+	/*if (sHp == 8)
 	{
 		mImage2 = new CImage(HP_FRAME_IMAGE);
 		mImage2->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -365,7 +431,7 @@ void CPlayer::Update()
 		mImage->SetPos(30.0, 30.0f);
 		mImage->SetSize(600.0f, 15.0f);
 		mImage->Kill();
-	}
+	}*/
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 

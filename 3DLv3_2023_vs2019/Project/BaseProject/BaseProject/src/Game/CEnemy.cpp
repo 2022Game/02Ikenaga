@@ -24,12 +24,12 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 	//{ "Character\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  //走る
 	//{ "Character\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	71.0f	},  //見回す
 	//{ "Character\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	63.0f	},  //開始の見回す
-	//{ "Character\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  //挑発
+	{ "Character\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  //挑発
 	//{ "Character\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  //勝利
 	//{ "Character\\Slime\\animation\\SlimeWalk.x",	true,	31.0f	},  //歩く
 	//{ "Character\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  //後ろに歩く
     //{ "Character\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  //左に移動
-	{ "Character\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  //右に移動
+	//{ "Character\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  //右に移動
 };
 
 // コンストラクタ

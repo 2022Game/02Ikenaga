@@ -14,7 +14,11 @@ class CPlayer : public CXCharacter
 {
 public:
 	bool IsDeath() const;
+	bool IsDeath2() const;
+	bool IsDeath3() const;
 	static int Hp();
+	static int Level();
+	static int Power();
 	//インスタンスのポインタの取得
 	static CPlayer* Instance();
 
@@ -51,6 +55,8 @@ public:
 
 private:
 	static int  sHp;  //HP
+	static int sLevel;  //レベル
+	static int sPower;  //攻撃力
 	// アニメーションの種類
 	enum class EAnimType
 	{
