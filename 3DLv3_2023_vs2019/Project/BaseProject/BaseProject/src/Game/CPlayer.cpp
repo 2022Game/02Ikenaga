@@ -9,9 +9,9 @@ CPlayer* CPlayer::spInstance = nullptr;
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
 #define MODEL_DOG "Character\\Player\\Dog.x"
-#define MODEL_SLIME "Character\\Slime\\Slime.x"
+//#define MODEL_SLIME "Character\\Slime\\Slime.x"
 #define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
-#define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
+//#define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
 #define HP_FRAME_IMAGE "Character\\Player\\HP\\HPframe.png"  //HPフレーム画像
 #define HP_IMAGE "Character\\Player\\HP\\HP.png"//HP画像
 
@@ -27,7 +27,6 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
 
-	//{ "Character\\Mushroom\\anim\\attack.x",	false,	26.0f	},	// 攻撃
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
 	//{ "Character\\Player\\anim\\jump_end.x",	false,	26.0f	},	// ジャンプ終了
@@ -330,6 +329,7 @@ void CPlayer::UpdateJumpEnd()
 	}
 }
 
+//レベル(HP・攻撃力・大きさ)の更新
 void CPlayer::UpdateLevel()
 {
 	switch (sLevel)
@@ -340,7 +340,6 @@ void CPlayer::UpdateLevel()
 		Scale(20.0f, 20.0f, 20.0f);
 		break;
 	case 3:
-		sHp = 30;
 		sPower = 15;
 		break;
 	case 4:
@@ -640,7 +639,7 @@ void CPlayer::UpdateLevel()
 // 更新
 void CPlayer::Update()
 {
-	printf("%d", sPower);
+	printf("%d", sHp);
 	//printf("%d", sPower);
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;

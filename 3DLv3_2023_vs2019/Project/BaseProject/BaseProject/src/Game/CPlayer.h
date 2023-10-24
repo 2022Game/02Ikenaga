@@ -6,6 +6,7 @@
 #include "CRideableObject.h"
 #include "CImage.h"
 
+#include <algorithm>
 /*
 プレイヤークラス
 キャラクタクラスを継承
@@ -39,7 +40,7 @@ public:
 	void UpdateJump();
 	// ジャンプ終了
 	void UpdateJumpEnd();
-	//レベル
+	//レベル(HP・攻撃力・大きさ)の更新
 	void UpdateLevel();
 
 	// 更新

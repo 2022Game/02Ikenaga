@@ -6,6 +6,7 @@
 #include "CShield.h"
 #include "CCamera.h"
 #include "CEnemy.h"
+#include "CEnemy2.h"
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
@@ -49,6 +50,7 @@ void CGameScene::Load()
 	shield2->Scale(10.0f, 10.0f, 10.0f);
 	shield2->Rotate(0.0f, -90.0f, 0.0f);
 	shield2->SetParent(player);
+	
 
 	CCamera* mainCamera = new CCamera
 	(
@@ -61,6 +63,10 @@ void CGameScene::Load()
 	CEnemy* enemy = new CEnemy();
 	enemy->Position(100.0f, 0.0f, 0.0f);
 	enemy->Scale(10.0f, 10.0f, 10.0f);
+
+	CEnemy2* enemy2 = new CEnemy2();
+	enemy2->Position(100.0f, 0.0f, 20.0f);
+	enemy2->Scale(10.0f, 10.0f, 10.0f);
 
 	/*sword->LocalPosition(enemy->VectorZ());
 	sword->LocalRotation(enemy->VectorZ());

@@ -220,6 +220,9 @@
     <ClCompile Include="src\Game\CShield.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CEnemy2.cpp">
+      <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -401,6 +404,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CShield.h">
       <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemy2.h">
+      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
