@@ -44,7 +44,6 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define SA 5   //特殊攻撃
 #define POWER 5  //攻撃力
 #define MOVE_SPEED 0.3f  //移動速度
-#define MOVE_SPEED2 0.31f  //移動速度
 
 bool CPlayer::IsDeath() const
 {
@@ -99,6 +98,7 @@ CPlayer::CPlayer()
 	// モデルデータ読み込み
 	CModelX* model = new CModelX();
 	model->Load(MODEL_DOG);
+	Scale(10.0f, 10.0f, 10.0f);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -202,9 +202,49 @@ void CPlayer::UpdateIdle()
 			move.Normalize();
 
 			mMoveSpeed += move * MOVE_SPEED;
-			if (sLevel == 2)
+
+			int speed = 1.2f;
+			int speed2 = 1.4f;
+			int speed3 = 1.6f;
+			int speed4 = 1.8f;
+			int speed5 = 2.0f;
+			int speed6 = 2.2f;
+			int speed7 = 2.4f;
+			int speed8 = 2.6f;
+			int speed9 = 2.8f;
+			int speed10 = 3.0f;
+			switch (sLevel)
 			{
-				mMoveSpeed += move * MOVE_SPEED2;
+			case 10:	
+				mMoveSpeed += move * MOVE_SPEED* speed;
+			 break;
+			case 20:
+				mMoveSpeed += move * MOVE_SPEED * speed2;
+				break;
+			case 30:
+				mMoveSpeed += move * MOVE_SPEED * speed3;
+				break;
+			case 40:
+				mMoveSpeed += move * MOVE_SPEED * speed4;
+				break;
+			case 50:
+				mMoveSpeed += move * MOVE_SPEED * speed5;
+				break;
+			case 60:
+				mMoveSpeed += move * MOVE_SPEED * speed6;
+				break;
+			case 70:
+				mMoveSpeed += move * MOVE_SPEED * speed7;
+				break;
+			case 80:
+				mMoveSpeed += move * MOVE_SPEED * speed8;
+				break;
+			case 90:
+				mMoveSpeed += move * MOVE_SPEED * speed9;
+				break;
+			case 100:
+				mMoveSpeed += move * MOVE_SPEED * speed10;
+				break;
 			}
 
 			// 歩行アニメーションに切り替え
@@ -297,6 +337,7 @@ void CPlayer::UpdateLevel()
 	case 2:
 		sHp = 20;
 		sPower = 10;
+		Scale(20.0f, 20.0f, 20.0f);
 		break;
 	case 3:
 		sHp = 30;
@@ -309,15 +350,289 @@ void CPlayer::UpdateLevel()
 		sPower = 25;
 		break;
 	case 6:
+		sPower = 30;
+		break;
 	case 7:
+		sPower = 35;
+		break;
 	case 8:
+		sPower = 40;
+		break;
 	case 9:
+		sPower = 45;
+		break;
 	case 10:
+		sPower = 50;
+		break;
 	case 11:
+		sPower = 55;
+		break;
 	case 12:
+		sPower = 60;
+		break;
 	case 13:
+		sPower = 65;
+		break;
 	case 14:
+		sPower = 70;
+		break;
 	case 15:
+		sPower = 75;
+		break;
+	case 16:
+		sPower = 80;
+		break;
+	case 17:
+		sPower = 85;
+		break;
+	case 18:
+		sPower = 90;
+		break;
+	case 19:
+		sPower = 95;
+		break;
+	case 20:
+		sPower = 100;
+		break;
+	case 21:
+		sPower = 105;
+		break;
+	case 22:
+		sPower = 110;
+		break;
+	case 23:
+		sPower = 115;
+		break;
+	case 24:
+		sPower = 120;
+		break;
+	case 25:
+		sPower = 125;
+		break;
+	case 26:
+		sPower = 130;
+		break;
+	case 27:
+		sPower = 135;
+		break;
+	case 28:
+		sPower = 140;
+		break;
+	case 29:
+		sPower = 145;
+		break;
+	case 30:
+		sPower = 150;
+		break;
+	case 31:
+		sPower = 155;
+		break;
+	case 32:
+		sPower = 160;
+		break;
+	case 33:
+		sPower = 165;
+		break;
+	case 34:
+		sPower = 170;
+		break;
+	case 35:
+		sPower = 175;
+		break;
+	case 36:
+		sPower = 180;
+		break;
+	case 37:
+		sPower = 185;
+		break;
+	case 38:
+		sPower = 190;
+		break;
+	case 39:
+		sPower = 195;
+		break;
+	case 40:
+		sPower = 200;
+		break;
+	case 41:
+		sPower = 205;
+		break;
+	case 42:
+		sPower = 210;
+		break;
+	case 43:
+		sPower = 215;
+		break;
+	case 44:
+		sPower = 220;
+		break;
+	case 45:
+		sPower = 225;
+		break;
+	case 46:
+		sPower = 230;
+		break;
+	case 47:
+		sPower = 235;
+		break;
+	case 48:
+		sPower = 240;
+		break;
+	case 49:
+		sPower = 245;
+		break;
+	case 50:
+		sPower = 250;
+		break;
+	case 51:
+		sPower = 255;
+		break;
+	case 52:
+		sPower = 260;
+		break;
+	case 53:
+		sPower = 265;
+		break;
+	case 54:
+		sPower = 270;
+		break;
+	case 55:
+		sPower = 275;
+		break;
+	case 56:
+		sPower = 280;
+		break;
+	case 57:
+		sPower = 285;
+		break;
+	case 58:
+		sPower = 290;
+		break;
+	case 59:
+		sPower = 295;
+		break;
+	case 60:
+		sPower = 300;
+		break;
+	case 61:
+		sPower = 305;
+		break;
+	case 62:
+		sPower = 310;
+		break;
+	case 63:
+		sPower = 315;
+		break;
+	case 64:
+		sPower = 320;
+		break;
+	case 65:
+		sPower = 325;
+		break;
+	case 66:
+		sPower = 330;
+		break;
+	case 67:
+		sPower = 335;
+		break;
+	case 68:
+		sPower = 340;
+		break;
+	case 69:
+		sPower = 345;
+		break;
+	case 70:
+		sPower = 350;
+		break;
+	case 71:
+		sPower = 355;
+		break;
+	case 72:
+		sPower = 360;
+		break;
+	case 73:
+		sPower = 365;
+		break;
+	case 74:
+		sPower = 370;
+		break;
+	case 75:
+		sPower = 375;
+		break;
+	case 76:
+		sPower = 380;
+		break;
+	case 77:
+		sPower = 385;
+		break;
+	case 78:
+		sPower = 390;
+		break;
+	case 79:
+		sPower = 395;
+		break;
+	case 80:
+		sPower = 400;
+		break;
+	case 81:
+		sPower = 405;
+		break;
+	case 82:
+		sPower = 410;
+		break;
+	case 83:
+		sPower = 415;
+		break;
+	case 84:
+		sPower = 420;
+		break;
+	case 85:
+		sPower = 425;
+		break;
+	case 86:
+		sPower = 430;
+		break;
+	case 87:
+		sPower = 435;
+		break;
+	case 88:
+		sPower = 440;
+		break;
+	case 89:
+		sPower = 445;
+		break;
+	case 90:
+		sPower = 450;
+		break;
+	case 91:
+		sPower = 455;
+		break;
+	case 92:
+		sPower = 460;
+		break;
+	case 93:
+		sPower = 465;
+		break;
+	case 94:
+		sPower = 470;
+		break;
+	case 95:
+		sPower = 475;
+		break;
+	case 96:
+		sPower = 480;
+		break;
+	case 97:
+		sPower = 485;
+		break;
+	case 98:
+		sPower = 490;
+		break;
+	case 99:
+		sPower = 495;
+		break;
+	case 100:
+		sPower = 500;
 		break;
 	}
 }
@@ -325,7 +640,7 @@ void CPlayer::UpdateLevel()
 // 更新
 void CPlayer::Update()
 {
-	printf("%d", sHp);
+	printf("%d", sPower);
 	//printf("%d", sPower);
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;

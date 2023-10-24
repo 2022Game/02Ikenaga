@@ -2,6 +2,8 @@
 #include "CSceneManager.h"
 #include "CField.h"
 #include "CPlayer.h"
+#include "CSword.h"
+#include "CShield.h"
 #include "CCamera.h"
 #include "CEnemy.h"
 #include "CPortionRed.h"
@@ -29,12 +31,29 @@ void CGameScene::Load()
 	new CField();
 
 	CPlayer* player = new CPlayer();
-	player->Scale(10.0f, 10.0f, 10.0f);
+	//player->Scale(10.0f, 10.0f, 10.0f);
+
+	CSword* sword = new CSword();
+	sword->Position(0.0f, 0.0f, 0.0f);
+	sword->Scale(10.0f, 10.0f, 10.0f);
+	sword->SetParent(player);
+
+	CShield* shield = new CShield();
+	shield->Position(0.0f, 10.0f, 0.0f);
+	shield->Scale(10.0f, 10.0f, 10.0f);
+	shield->Rotate(0.0f, 90.0f, 0.0f);
+	shield->SetParent(player);
+
+	CShield* shield2 = new CShield();
+	shield2->Position(13.0f, 10.0f, 0.0f);
+	shield2->Scale(10.0f, 10.0f, 10.0f);
+	shield2->Rotate(0.0f, -90.0f, 0.0f);
+	shield2->SetParent(player);
 
 	CCamera* mainCamera = new CCamera
 	(
 		//CVector(5.0f, -15.0f, 180.0f),
-		CVector(0.0f, 50.0f, 105.0f),
+		CVector(0.0f, 50.0f, 75.0f),
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
@@ -42,6 +61,10 @@ void CGameScene::Load()
 	CEnemy* enemy = new CEnemy();
 	enemy->Position(100.0f, 0.0f, 0.0f);
 	enemy->Scale(10.0f, 10.0f, 10.0f);
+
+	/*sword->LocalPosition(enemy->VectorZ());
+	sword->LocalRotation(enemy->VectorZ());
+	sword->LookAt(enemy->VectorZ());*/
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f,10.0f,0.0f);

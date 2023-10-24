@@ -214,6 +214,12 @@
     <ClCompile Include="src\Game\CPortionBlue.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CSword.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CShield.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -388,6 +394,12 @@
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPortionBlue.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSword.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CShield.h">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
