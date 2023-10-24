@@ -2,7 +2,6 @@
 #include "CCollisionManager.h"
 
 CSword::CSword()
-	: CObjectBase(ETag::eItem, ETaskPriority::eBackground)
 {
 	mpSword = new CModel();
 	mpSword->Load("Item\\Equipment\\Sword\\Sword.obj", "Item\\Equipment\\Sword\\Sword.mtl");
@@ -30,5 +29,14 @@ void CSword::Update()
 
 void CSword::Render()
 {
-	mpSword->Render(Matrix());
+	if (mpAttachMtx == nullptr)
+	{
+		mpSword->Render(Matrix());
+	}
+	else
+	{
+		CMatrix sm;
+		sm.Scale(100.0f, 100.0f, 100.0f);
+		mpSword->Render(sm * (*mpAttachMtx));
+	}
 }

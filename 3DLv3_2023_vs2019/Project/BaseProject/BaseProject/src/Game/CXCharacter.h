@@ -28,6 +28,8 @@ public:
 
 	int AnimationIndex();	//アニメーションの番号の取得
 
+	const CMatrix* GetFrameMtx(std::string name) const;
+
 protected:
 	CModelX* mpModel;			//モデルデータ
 	CMatrix* mpCombinedMatrix;	//合成行列退避

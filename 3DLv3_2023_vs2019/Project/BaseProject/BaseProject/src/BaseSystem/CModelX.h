@@ -51,7 +51,7 @@ public:
 	std::vector<CModelXFrame*>& Frames();
 	std::vector<CAnimationSet*>& CModelX::AnimationSet();
 	//フレーム名に該当するフレームのアドレスを返す
-	CModelXFrame* FinedFrame(char* name);
+	CModelXFrame* FinedFrame(const char* name);
 	//マテリアルの検索
 	CMaterial* FindMaterial(char* name);
 

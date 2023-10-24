@@ -10,6 +10,8 @@ enum class ETaskPriority
 	eDefault,	// デフォルト
 	ePlayer,	// プレイヤー
 
+	eWeapon,	// 武器
+
 	eEffect,	// エフェクト
 
 	eCamera,	// カメラ

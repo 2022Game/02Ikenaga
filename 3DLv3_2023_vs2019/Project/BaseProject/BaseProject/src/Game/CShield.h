@@ -1,12 +1,13 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
+#include "CWeapon.h"
 
 /*
 盾クラス
 オブジェクトベース継承
 */
-class CShield : public CObjectBase
+class CShield : public CWeapon
 {
 public:
 	CShield();

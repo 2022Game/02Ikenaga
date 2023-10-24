@@ -13,6 +13,8 @@ enum class ETag
 	eItem2, // アイテムの回復
 	eItem3, // アイテムの移動速度アップ
 
+	eWeapon,// 武器
+
 	ePlayer,// プレイヤー
 	eEnemy,	// エネミー
 

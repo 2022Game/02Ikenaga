@@ -57,7 +57,7 @@ std::vector<CAnimationSet*>& CModelX::AnimationSet()
 FinedFrame(フレーム名)
 フレーム名に該当するフレームのアドレスを返す
 */
-CModelXFrame* CModelX::FinedFrame(char* name)
+CModelXFrame* CModelX::FinedFrame(const char* name)
 {
 	//イテレータの作成
 	//std::vector<CModelXFrame*>::iterator itr;

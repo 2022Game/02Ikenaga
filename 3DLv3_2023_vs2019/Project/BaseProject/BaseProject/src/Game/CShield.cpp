@@ -2,7 +2,6 @@
 #include "CCollisionManager.h"
 
 CShield::CShield()
-	: CObjectBase(ETag::eItem, ETaskPriority::eBackground)
 {
 	mpShield = new CModel();
 	mpShield->Load("Item\\Equipment\\Shield\\Shield.obj", "Item\\Equipment\\Shield\\Shield.mtl");
@@ -29,5 +28,14 @@ void CShield::Update()
 
 void CShield::Render()
 {
-	mpShield->Render(Matrix());
+	if (mpAttachMtx == nullptr)
+	{
+		mpShield->Render(Matrix());
+	}
+	else
+	{
+		CMatrix sm;
+		sm.Scale(100.0f, 100.0f, 100.0f);
+		mpShield->Render(sm * (*mpAttachMtx));
+	}
 }

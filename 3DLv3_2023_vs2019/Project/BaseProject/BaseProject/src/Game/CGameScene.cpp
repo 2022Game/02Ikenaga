@@ -35,22 +35,23 @@ void CGameScene::Load()
 	//player->Scale(10.0f, 10.0f, 10.0f);
 
 	CSword* sword = new CSword();
-	sword->Position(0.0f, 0.0f, 0.0f);
-	sword->Scale(10.0f, 10.0f, 10.0f);
-	sword->SetParent(player);
+	sword->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_RightHand"));
+	//sword->Position(0.0f, 0.0f, 0.0f);
+	//sword->Scale(10.0f, 10.0f, 10.0f);
+	//sword->SetParent(player);
 
 	CShield* shield = new CShield();
-	shield->Position(0.0f, 10.0f, 0.0f);
-	shield->Scale(10.0f, 10.0f, 10.0f);
-	shield->Rotate(0.0f, 90.0f, 0.0f);
-	shield->SetParent(player);
+	shield->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_LeftHand"));
+	//shield->Position(0.0f, 10.0f, 0.0f);
+	//shield->Scale(10.0f, 10.0f, 10.0f);
+	//shield->Rotate(0.0f, 90.0f, 0.0f);
+	//shield->SetParent(player);
 
 	CShield* shield2 = new CShield();
 	shield2->Position(13.0f, 10.0f, 0.0f);
 	shield2->Scale(10.0f, 10.0f, 10.0f);
 	shield2->Rotate(0.0f, -90.0f, 0.0f);
 	shield2->SetParent(player);
-	
 
 	CCamera* mainCamera = new CCamera
 	(
@@ -73,7 +74,7 @@ void CGameScene::Load()
 	sword->LookAt(enemy->VectorZ());*/
 
 	CPortionRed* portionred = new CPortionRed();
-	portionred->Position(90.0f,10.0f,0.0f);
+	portionred->Position(90.0f, 10.0f, 0.0f);
 	portionred->Scale(70.0f, 70.0f, 70.0f);
 
 	CPortionGreen* portiongreen = new CPortionGreen();
