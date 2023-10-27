@@ -32,6 +32,8 @@ public:
 	void UpdateIdle();
 	// 攻撃
 	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 	// ジャンプ開始
@@ -40,6 +42,10 @@ public:
 	void UpdateJump();
 	// ジャンプ終了
 	void UpdateJumpEnd();
+	//攻撃力アップ
+	void UpdatePowerUp();
+	//攻撃力アップ終了
+	void UpdatePowerUpEnd();
 	//レベル(HP・攻撃力・大きさ)の更新
 	void UpdateLevel();
 
@@ -69,7 +75,9 @@ private:
 		eIdle,		// 待機
 		eWalk,		// 歩行
 		eAttack,	// 攻撃
+		//eAttack2,	// 攻撃2
 		eJumpStart,	// ジャンプ開始
+		ePowerUp,   //攻撃力アップ
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 
@@ -96,10 +104,13 @@ private:
 	{
 		eIdle,		// 待機
 		eAttack,	// 攻撃
+		eAttack2,	// 攻撃2
 		eAttackWait,// 攻撃終了待ち
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
+		ePowerUp,   //攻撃力アップ
+		ePowerUpEnd,   //攻撃力アップ終了
 	};
 	EState mState;	// プレイヤーの状態
 

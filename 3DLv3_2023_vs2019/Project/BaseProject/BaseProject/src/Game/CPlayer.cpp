@@ -25,7 +25,9 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  //待機 221.0f
 	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  //歩行
 	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
+	//{ "Character\\Player\\animation\\DogAttack3.x",	true,	140.0f	},  //攻撃2
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
+	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
 
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -264,12 +266,23 @@ void CPlayer::UpdateIdle()
 			mState = EState::eAttack;
 			//sHp++;
 			sLevel++;
+			/*int count = 20;
+			if (count <= 20 - count == 0)
+			{
+				mState = EState::eAttack;
+			}*/
 		}
 		// SPACEキーでジャンプ開始へ移行
 		else if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
 			sHp--;
+		}
+		if (CInput::PushKey(VK_RBUTTON))
+		{
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+			mState = EState::ePowerUp;
 		}
 	}
 	else
@@ -284,6 +297,15 @@ void CPlayer::UpdateAttack()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
+	// 攻撃終了待ち状態へ移行
+	mState = EState::eAttackWait;
+}
+
+// 攻撃
+void CPlayer::UpdateAttack2()
+{
+	// 攻撃アニメーションを開始
+	//ChangeAnimation(EAnimType::eAttack2);
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
@@ -326,6 +348,25 @@ void CPlayer::UpdateJumpEnd()
 	if (IsAnimationFinished())
 	{
 		mState = EState::eIdle;
+	}
+}
+
+//攻撃力アップ
+void CPlayer::UpdatePowerUp()
+{
+	ChangeAnimation(EAnimType::ePowerUp);
+	//攻撃力アップ終了
+	mState = EState::ePowerUpEnd;
+}
+
+void CPlayer::UpdatePowerUpEnd()
+{
+	// 攻撃アップのアニメーションが終了したら、
+	if (IsAnimationFinished())
+	{
+		// 待機状態へ移行
+		mState = EState::eIdle;
+		ChangeAnimation(EAnimType::eIdle);
 	}
 }
 
@@ -655,6 +696,10 @@ void CPlayer::Update()
 		case EState::eAttack:
 			UpdateAttack();
 			break;
+		// 攻撃2
+		case EState::eAttack2:
+			UpdateAttack2();
+			break;
 		// 攻撃終了待ち
 		case EState::eAttackWait:
 			UpdateAttackWait();
@@ -670,6 +715,14 @@ void CPlayer::Update()
 		// ジャンプ終了
 		case EState::eJumpEnd:
 			UpdateJumpEnd();
+			break;
+	    // 攻撃力アップ
+		case EState::ePowerUp:
+			UpdatePowerUp();
+			break;
+	    // 攻撃力アップ終了
+		case EState::ePowerUpEnd:
+			UpdatePowerUpEnd();
 			break;
 	}
 	

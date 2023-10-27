@@ -47,11 +47,11 @@ void CGameScene::Load()
 	//shield->Rotate(0.0f, 90.0f, 0.0f);
 	//shield->SetParent(player);
 
-	CShield* shield2 = new CShield();
+	/*CShield* shield2 = new CShield();
 	shield2->Position(13.0f, 10.0f, 0.0f);
 	shield2->Scale(10.0f, 10.0f, 10.0f);
 	shield2->Rotate(0.0f, -90.0f, 0.0f);
-	shield2->SetParent(player);
+	shield2->SetParent(player);*/
 
 	CCamera* mainCamera = new CCamera
 	(
