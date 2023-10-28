@@ -14,7 +14,12 @@ CEnemy2* CEnemy2::spInstance = nullptr;
 const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tƒ|[ƒY
-	{ "Character\\Mushroom\\anim\\attack.x",	true,	26.0f	},	// UŒ‚
+	//{ "Character\\Mushroom\\animation\\MushroomAttack.x",	true,	26.0f	},	// UŒ‚
+	//{ "Character\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// UŒ‚ 26.0f
+	//{ "Character\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// UŒ‚ 26.0f
+	//{ "Character\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	// UŒ‚ 26.0f
+	//{ "Character\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// ‚ß‚Ü‚¢ 41.0f
+	{ "Character\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ƒqƒbƒg 23.0f
 };
 
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^

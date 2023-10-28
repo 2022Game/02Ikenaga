@@ -25,9 +25,9 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  //待機 221.0f
 	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  //歩行
 	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
-	//{ "Character\\Player\\animation\\DogAttack3.x",	true,	140.0f	},  //攻撃2
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
+	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
 
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -266,11 +266,6 @@ void CPlayer::UpdateIdle()
 			mState = EState::eAttack;
 			//sHp++;
 			sLevel++;
-			/*int count = 20;
-			if (count <= 20 - count == 0)
-			{
-				mState = EState::eAttack;
-			}*/
 		}
 		// SPACEキーでジャンプ開始へ移行
 		else if (CInput::PushKey(VK_SPACE))
@@ -283,6 +278,12 @@ void CPlayer::UpdateIdle()
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 			mState = EState::ePowerUp;
+		}
+		if (CInput::PushKey(WM_LBUTTONDBLCLK))
+		{
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+			mState = EState::eAttack2;
 		}
 	}
 	else
@@ -305,7 +306,7 @@ void CPlayer::UpdateAttack()
 void CPlayer::UpdateAttack2()
 {
 	// 攻撃アニメーションを開始
-	//ChangeAnimation(EAnimType::eAttack2);
+	ChangeAnimation(EAnimType::eAttack2);
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
@@ -680,7 +681,7 @@ void CPlayer::UpdateLevel()
 // 更新
 void CPlayer::Update()
 {
-	printf("%d", sHp);
+	printf("%d", sLevel);
 	//printf("%d", sPower);
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;

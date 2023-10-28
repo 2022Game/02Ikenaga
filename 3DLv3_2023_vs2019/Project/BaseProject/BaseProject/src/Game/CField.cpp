@@ -55,20 +55,20 @@ void CField::CreateFieldObjects()
 		CVector(0.0f, 10.0f, -50.0f), CVector(1.0f, 1.0f, 1.0f),
 		CVector(50.0f, 0.0f, 0.0f), 10.0f
 	);
-	new CRotateFloor
+	/*new CRotateFloor
 	(
 		mpCylinderModel,
 		CVector(-40.0f, 15.0f, 20.0f), CVector(1.0f, 1.0f, 1.0f),
 		1.0f
-	);
+	);*/
 
 	// ìÆÇ©Ç»Ç¢è∞á@
-	new CMoveFloor
+	/*new CMoveFloor
 	(
 		mpCubeModel,
 		CVector(20.0f, 10.0f, 0.0f), CVector(0.5f, 1.0f, 0.25f),
 		CVector(0.0f, 0.0f, 0.0f), 5.0f
-	);
+	);*/
 	//// ìÆÇ≠è∞á@
 	//new CMoveFloor
 	//(

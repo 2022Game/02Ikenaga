@@ -62,10 +62,11 @@ public:
 	// 描画
 	void Render();
 
-private:
 	static int  sHp;  //HP
 	static int sLevel;  //レベル
 	static int sPower;  //攻撃力
+
+private:
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -75,9 +76,9 @@ private:
 		eIdle,		// 待機
 		eWalk,		// 歩行
 		eAttack,	// 攻撃
-		//eAttack2,	// 攻撃2
 		eJumpStart,	// ジャンプ開始
 		ePowerUp,   //攻撃力アップ
+		eAttack2,	// 攻撃2
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 
@@ -104,13 +105,13 @@ private:
 	{
 		eIdle,		// 待機
 		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
 		eAttackWait,// 攻撃終了待ち
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		ePowerUp,   //攻撃力アップ
 		ePowerUpEnd,   //攻撃力アップ終了
+		eAttack2,	// 攻撃2
 	};
 	EState mState;	// プレイヤーの状態
 
