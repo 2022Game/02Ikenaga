@@ -89,10 +89,6 @@ CPlayer::CPlayer()
 	, mpRideObject(nullptr)
 {
 
-	sHp = HP;
-	sLevel = LEVEL;
-	sPower = POWER;
-
 	//インスタンスの設定
 	spInstance = this;
 
@@ -100,6 +96,9 @@ CPlayer::CPlayer()
 	CModelX* model = new CModelX();
 	model->Load(MODEL_DOG);
 	Scale(10.0f, 10.0f, 10.0f);
+	sHp = HP;
+	sLevel = LEVEL;
+	sPower = POWER;
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -681,8 +680,6 @@ void CPlayer::UpdateLevel()
 // 更新
 void CPlayer::Update()
 {
-	printf("%d", sLevel);
-	//printf("%d", sPower);
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
@@ -840,9 +837,13 @@ void CPlayer::Update()
 
 	if (CInput::Key('R'))
 	{
+		CDebugPrint::Print("  レベル %d\n", sLevel);
+		CDebugPrint::Print("  HP     %d\n", sHp);
+		CDebugPrint::Print("  攻撃値 %d\n",sPower);
 		CVector scale = Scale();
-		CDebugPrint::Print(" スケール値(%f,%f,%f)\n", scale.X(), scale.Y(), scale.Z());
+		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 	}
+	//CDebugPrint::Print(" ステータス確認  R");
 }
 
 // 衝突処理

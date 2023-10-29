@@ -32,7 +32,6 @@ void CGameScene::Load()
 	new CField();
 
 	CPlayer* player = new CPlayer();
-	//player->Scale(10.0f, 10.0f, 10.0f);
 
 	CSword* sword = new CSword();
 	sword->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_RightHand"));
@@ -62,10 +61,6 @@ void CGameScene::Load()
 	CEnemy2* enemy2 = new CEnemy2();
 	enemy2->Position(100.0f, 0.0f, 20.0f);
 	enemy2->Scale(20.0f, 20.0f, 20.0f);
-
-	/*sword->LocalPosition(enemy->VectorZ());
-	sword->LocalRotation(enemy->VectorZ());
-	sword->LookAt(enemy->VectorZ());*/
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
