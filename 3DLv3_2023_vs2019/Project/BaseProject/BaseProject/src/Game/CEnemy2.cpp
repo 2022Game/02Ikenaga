@@ -9,6 +9,7 @@ CEnemy2* CEnemy2::spInstance = nullptr;
 #define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
 
 #define PLAYER_HEIGHT 2.0f
+#define HP 100
 
 // エネミーのアニメーションデータのテーブル
 const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
@@ -19,7 +20,20 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 	//{ "Character\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// 攻撃 26.0f
 	//{ "Character\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	// 攻撃 26.0f
 	//{ "Character\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
-	{ "Character\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
+	//{ "Character\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
+	//{ "Character\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// 待機 18.0f
+	//{ "Character\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// 待機2 41.0f
+	{ "Character\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	// 植物 21.0f
+	//{ "Character\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	70.0f	},	// 植物からきのこ 21.0f
+	//{ "Character\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//走る 17.0f
+	//{ "Character\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//見回す 121.0f
+	//{ "Character\\Mushroom\\animation\\MushroomSenseSomethingStart.x",	true,	25.0f	},	//開始の見回す 25.0f
+	//{ "Character\\Mushroom\\animation\\MushroomTaunting.x",	true,	80.0f	},	//挑発 41.0f
+	//{ "Character\\Mushroom\\animation\\MushroomVictory.x",	true,	61.0f	},	//勝利 61.0f
+	//{ "Character\\Mushroom\\animation\\MushroomWalk.x",	true,	31.0f	},	//歩く 31.0f
+	//{ "Character\\Mushroom\\animation\\MushroomWalk2.x",	true,	31.0f	},	//歩く2 31.0f
+	//{ "Character\\Mushroom\\animation\\MushroomWalk3.x",	true,	31.0f	},	//歩く3 31.0f
+	//{ "Character\\Mushroom\\animation\\MushroomWalk4.x",	true,	31.0f	},	//歩く4 31.0f
 };
 
 // コンストラクタ
