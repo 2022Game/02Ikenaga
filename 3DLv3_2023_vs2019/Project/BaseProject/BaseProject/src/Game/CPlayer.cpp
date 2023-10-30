@@ -26,8 +26,10 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  //歩行
 	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
-	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
-	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
+	//{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
+	//{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
+	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  //衝撃
+	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  //死ぬ
 
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -124,11 +126,9 @@ CPlayer::CPlayer()
 
 	/*mpColliderSphere = new CColliderSphere
 	(
-		mpColliderSphere->Owner(),
-		ELayer::eField,
-		mpColliderSphere->Type()
-	);*/
-	//mpColliderSphere->SetCollisionLayers({ ELayer::eField });
+		this, ELayer::eField,
+	);
+	mpColliderSphere->SetCollisionLayers({ ELayer::eField });*/
 }
 
 CPlayer::~CPlayer()
@@ -188,7 +188,7 @@ void CPlayer::UpdateIdle()
 		// 移動処理
 		// キーの入力ベクトルを取得
 		CVector input;
-		if (CInput::Key('W'))		input.Z(1.0f);
+		if (CInput::Key('W'))		input.Z(1.0f),sHp--;
 		else if (CInput::Key('S'))	input.Z(-1.0f);
 		if (CInput::Key('A'))		input.X(-1.0f);
 		else if (CInput::Key('D'))	input.X(1.0f);
@@ -270,7 +270,7 @@ void CPlayer::UpdateIdle()
 		else if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
-			sHp--;
+			//sHp--;
 		}
 		if (CInput::PushKey(VK_RBUTTON))
 		{
@@ -376,7 +376,6 @@ void CPlayer::UpdateLevel()
 	switch (sLevel)
 	{
 	case 2:
-		sHp = 20;
 		sPower = 10;
 		Scale(20.0f, 20.0f, 20.0f);
 		break;
@@ -677,6 +676,21 @@ void CPlayer::UpdateLevel()
 	}
 }
 
+void CPlayer::UpdateHp()
+{
+	switch (sLevel)
+	{
+	case 2:
+		if (sHp < 20)
+		{
+			sHp = sHp + 5;
+		}
+		break;
+	case 3:
+		break;
+	}
+}
+
 // 更新
 void CPlayer::Update()
 {
@@ -725,6 +739,7 @@ void CPlayer::Update()
 	}
 	
 	UpdateLevel();
+	UpdateHp();
 
 	if (sHp == 10)
 	{
@@ -843,7 +858,8 @@ void CPlayer::Update()
 		CVector scale = Scale();
 		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 	}
-	//CDebugPrint::Print(" ステータス確認  R");
+	
+	//CDebugPrint::Print(" ステータス確認  Rボタン");
 }
 
 // 衝突処理

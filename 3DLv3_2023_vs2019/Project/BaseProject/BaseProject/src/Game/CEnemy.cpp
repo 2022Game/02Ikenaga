@@ -15,7 +15,7 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},	// Tƒ|[ƒY
 	//{ "Character\\Slime\\animation\\SlimeAttack.x",	true,	26.0f	},  //UŒ‚
-	{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	26.0f	},  //UŒ‚2
+	{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	80.0f	},  //UŒ‚2 26.0f
 	//{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  //€‚Ê 41.0f
 	//{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  //‚ß‚Ü‚¢ 41.0f
 	//{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	100.0f	},  //ƒqƒbƒg 26.0f

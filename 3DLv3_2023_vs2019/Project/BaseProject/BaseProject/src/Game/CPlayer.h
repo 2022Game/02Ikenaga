@@ -48,6 +48,8 @@ public:
 	void UpdatePowerUpEnd();
 	//レベル(HP・攻撃力・大きさ)の更新
 	void UpdateLevel();
+	//HPの更新
+	void UpdateHp();
 
 	// 更新
 	void Update();

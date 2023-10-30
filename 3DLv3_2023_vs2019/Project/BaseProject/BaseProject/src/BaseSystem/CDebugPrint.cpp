@@ -13,9 +13,9 @@ CDebugPrint::CDebugPrint()
 	mpText = new CText
 	(
 		nullptr, 24,
-		CVector2::zero,
+		CVector2(0,300),
 		CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
-		CColor::red
+		CColor::green
 	);
 }
 
