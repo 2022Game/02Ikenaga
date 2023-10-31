@@ -7,10 +7,11 @@ CText::CText(CFont* font, int fontSize, const CVector2& pos,
 	: mpFont(font)
 	, mText(L"")
 	, mFontSize(fontSize)
-	, mPosition(pos)
-	, mSize(size)
-	, mColor(color)
 {
+	mPosition = pos;
+	mSize = size;
+	mColor = color;
+
 	if (mpFont == nullptr)
 	{
 		mpFont = new CFont();
@@ -31,45 +32,10 @@ void CText::SetFontSize(int fontSize)
 	mpFont->SetFontSize(fontSize);
 }
 
-void CText::SetPos(const CVector2& pos)
-{
-	mPosition = pos;
-}
-
-void CText::SetPos(const float x, const float y)
-{
-	mPosition = CVector2(x, y);
-}
-
 void CText::SetSize(const CVector2& size)
 {
 	mSize = size;
 	mpFont->SetLineLength(size.X());
-}
-
-void CText::SetSize(const float w, const float h)
-{
-	SetSize(CVector2(w, h));
-}
-
-void CText::SetColor(const CColor& color)
-{
-	mColor = color;
-}
-
-void CText::SetColor(const float r, const float g, const float b)
-{
-	mColor.Set(r, g, b);
-}
-
-void CText::SetColor(const float r, const float g, const float b, const float a)
-{
-	mColor.Set(r, g, b, a);
-}
-
-void CText::SetAlpha(const float a)
-{
-	mColor.A(a);
 }
 
 void CText::SetTextAlign(ETextAlignH alignH, ETextAlignV alignV)

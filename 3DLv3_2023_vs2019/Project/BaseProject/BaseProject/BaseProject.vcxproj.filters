@@ -59,6 +59,9 @@
     <Filter Include="ソース ファイル\Game\Item">
       <UniqueIdentifier>{6ac9733b-d63a-4971-a8bf-475c9c5e3abe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI">
+      <UniqueIdentifier>{b05a1b66-ada2-4d06-b2f0-c206d5271ba0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -225,6 +228,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CWeapon.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHpGauge.cpp">
+      <Filter>ソース ファイル\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CharaStatus.cpp">
+      <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +422,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CWeapon.h">
       <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHpGauge.h">
+      <Filter>ソース ファイル\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CharaStatus.h">
+      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

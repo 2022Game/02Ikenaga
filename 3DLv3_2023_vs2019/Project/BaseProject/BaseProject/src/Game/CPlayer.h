@@ -5,6 +5,7 @@
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
 #include "CImage.h"
+class CHpGauge;
 
 #include <algorithm>
 /*
@@ -17,9 +18,7 @@ public:
 	bool IsDeath() const;
 	bool IsDeath2() const;
 	bool IsDeath3() const;
-	static int Hp();
-	static int Level();
-	static int Power();
+
 	//インスタンスのポインタの取得
 	static CPlayer* Instance();
 
@@ -46,10 +45,12 @@ public:
 	void UpdatePowerUp();
 	//攻撃力アップ終了
 	void UpdatePowerUpEnd();
-	//レベル(HP・攻撃力・大きさ)の更新
-	void UpdateLevel();
-	//HPの更新
-	void UpdateHp();
+
+	//1レベルアップ
+	void LevelUp();
+	//レベルの変更
+	void ChangeLevel(int level);
+
 
 	// 更新
 	void Update();
@@ -63,10 +64,6 @@ public:
 
 	// 描画
 	void Render();
-
-	static int  sHp;  //HP
-	static int sLevel;  //レベル
-	static int sPower;  //攻撃力
 
 private:
 	// アニメーションの種類
@@ -124,6 +121,6 @@ private:
 	CColliderSphere* mpColliderSphere;
 
 	CTransform* mpRideObject;
-	CImage* mImage;
-	CImage* mImage2;
+
+	CHpGauge* mpHpGauge;  //HPゲージ
 };

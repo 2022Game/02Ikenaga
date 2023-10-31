@@ -3,11 +3,11 @@
 //コンストラクタ
 CImage::CImage()
 	: mpTexture(nullptr)
-	, mPosition(0.0f, 0.0f)
-	, mSize(128.0f, 128.0f)
 	, mUV(0.0f, 0.0f, 1.0f, 1.0f)
-	, mColor(1.0f, 1.0f, 1.0f, 1.0f)
 {
+	mPosition = CVector2(0.0f, 0.0f);
+	mSize = CVector2(128.0f, 128.0f);
+	mColor = CColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //コンストラクタ（テクスチャ指定版）
@@ -48,42 +48,6 @@ void CImage::Load(const char* path)
 	}
 }
 
-//表示座標を設定（CVector2版）
-void CImage::SetPos(const CVector2& pos)
-{
-	mPosition = pos;
-}
-
-//表示座標を設定
-void CImage::SetPos(const float& x, const float& y)
-{
-	SetPos(CVector2(x, y));
-}
-
-//表示座標を取得
-const CVector2& CImage::GetPos() const
-{
-	return mPosition;
-}
-
-//表示サイズを設定（CVector2版）
-void CImage::SetSize(const CVector2& size)
-{
-	mSize = size;
-}
-
-//表示サイズを設定
-void CImage::SetSize(const float& x, const float& y)
-{
-	SetSize(CVector2(x, y));
-}
-
-//表示サイズを取得
-const CVector2& CImage::GetSize() const
-{
-	return mSize;
-}
-
 //表示する範囲を設定（CVector4版）
 void CImage::SetUV(const CVector4& uv)
 {
@@ -100,48 +64,6 @@ void CImage::SetUV(const float& left, const float& top, const float& right, cons
 const CVector4& CImage::GetUV() const
 {
 	return mUV;
-}
-
-//表示カラーを設定（CVector4版）
-void CImage::SetColor(const CVector4& color)
-{
-	mColor = color;
-}
-
-//表示カラーを設定（CVector版）
-void CImage::SetColor(const CVector& color)
-{
-	mColor = color;
-}
-
-//表示カラーを設定（アルファ値有り版）
-void CImage::SetColor(const float& r, const float& g, const float& b, const float& a)
-{
-	mColor.Set(r, g, b, a);
-}
-
-//表示カラーを設定
-void CImage::SetColor(const float& r, const float& g, const float& b)
-{
-	mColor.Set(r, g, b);
-}
-
-//表示カラーを取得
-const CVector4& CImage::GetColor() const
-{
-	return mColor;
-}
-
-//アルファ値を設定
-void CImage::SetAlpha(const float& alpha)
-{
-	mColor.W(alpha);
-}
-
-//アルファ値を取得
-const float& CImage::GetAlpha() const
-{
-	return mColor.W();
 }
 
 //描画

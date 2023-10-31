@@ -29,15 +29,7 @@ public:
 
 	void SetFontSize(int fontSize);
 
-	void SetPos(const CVector2& pos);
-	void SetPos(const float x, const float y);
 	void SetSize(const CVector2& size);
-	void SetSize(const float w, const float h);
-
-	void SetColor(const CColor& color);
-	void SetColor(const float r, const float g, const float b);
-	void SetColor(const float r, const float g, const float b, const float a);
-	void SetAlpha(const float a);
 
 	void SetTextAlign(ETextAlignH alignH, ETextAlignV alignV);
 	void SetTextAlignH(ETextAlignH align);
@@ -52,9 +44,6 @@ private:
 	CFont* mpFont;
 	std::wstring mText;
 	int mFontSize;
-	CVector2 mPosition;
-	CVector2 mSize;
-	CColor mColor;
 	ETextAlignH mTextAlignH;
 	ETextAlignV mTextAlignV;
 };
