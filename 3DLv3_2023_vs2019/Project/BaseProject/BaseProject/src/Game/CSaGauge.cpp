@@ -8,12 +8,12 @@
 #define BAR_IMAGE "UI\\white.png"
 
 //フレームの横のサイズ
-#define FRAME_SIZE_X (150.0f)
+#define FRAME_SIZE_X (230.0f)
 //#define FRAME_SIZE_XX (430.0f)
 //フレームの縦のサイズ
 #define FRAME_SIZE_Y (25.0f)
 //緑の幅
-#define FRAME_BORDER (1.6f)
+#define FRAME_BORDER (2.0f)
 //バーの横のサイズ
 #define BAR_SIZE_X (FRAME_SIZE_X - FRAME_BORDER*2.0f)
 //バーの縦のサイズ
@@ -66,7 +66,7 @@ void CSaGauge::Update()
 	//SAの割合でバーの色を変更
 	CColor color;
 	//青色
-	if (percent <= 1.0f) color = CColor(0.0f, 0.3f, 1.0f);
+	if (percent <= 1.0f) color = CColor(0.0f, 0.4f, 1.0f);
 	//バーに色を設定
 	mpBarImage->SetColor(color);
 }
