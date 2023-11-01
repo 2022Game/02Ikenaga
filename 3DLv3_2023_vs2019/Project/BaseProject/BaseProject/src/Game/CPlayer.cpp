@@ -3,6 +3,7 @@
 #include "CInput.h"
 #include "CCamera.h"
 #include "CHpGauge.h"
+#include "CSaGauge.h"
 #include "Maths.h"
 
 // プレイヤーのインスタンス
@@ -70,7 +71,7 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	,time(0)
+	, recoverycount(0)
 {
 
 	//インスタンスの設定
@@ -84,6 +85,10 @@ CPlayer::CPlayer()
 	//HPゲージを作成
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetPos(10.0f, 690.f);
+
+	//SAゲージを作成
+	mpSaGauge = new CSaGauge();
+	mpSaGauge->SetPos(10.0f,663.0f);
 
 	//最初に1レベルに設定
 	ChangeLevel(1);
@@ -175,7 +180,7 @@ void CPlayer::UpdateIdle()
 			move.Y(0.0f);
 			move.Normalize();
 
-			mMoveSpeed += move * MOVE_SPEED* mCharaStatus.mobility;
+			mMoveSpeed += move * MOVE_SPEED * mCharaStatus.mobility;
 
 			// 歩行アニメーションに切り替え
 			ChangeAnimation(EAnimType::eWalk);
@@ -203,9 +208,8 @@ void CPlayer::UpdateIdle()
 		{
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
-		//	mState = EState::ePowerUp;
+			//	mState = EState::ePowerUp;
 		}
-		time++;
 		if (mCharaStatus.SpecialAttack > 0)
 		{
 			if (CInput::PushKey('K'))
@@ -214,30 +218,6 @@ void CPlayer::UpdateIdle()
 				mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack2;
 				mCharaStatus.SpecialAttack--;
-			}
-		}
-		if (mCharaStatus.SpecialAttack < 2)
-		{
-			if (time > 500)
-			{
-				mCharaStatus.SpecialAttack++;
-				time = 0;
-			}
-			else if (mCharaStatus.SpecialAttack == 2)
-			{
-				time = 0;
-			}
-		}
-		else if (mCharaStatus.SpecialAttack < 4)
-		{
-			if (time > 500)
-			{
-				mCharaStatus.SpecialAttack++;
-				time = 0;
-			}
-			else if (mCharaStatus.SpecialAttack == 4)
-			{
-				time = 0;
 			}
 		}
 	}
@@ -345,6 +325,39 @@ void CPlayer::ChangeLevel(int level)
 
 	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
 	mpHpGauge->SetValue(mCharaStatus.hp);
+
+	mpSaGauge->SetMaxValue(mCharaStatus.SpecialAttack);
+	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+}
+
+//特殊攻撃(SA)の自動回復
+void CPlayer::AutomaticRecovery()
+{
+	recoverycount++;
+	if (mCharaStatus.level <= 4 && mCharaStatus.SpecialAttack < 3)
+	{
+		if (recoverycount > 300)
+		{
+			mCharaStatus.SpecialAttack++;
+			recoverycount = 0;
+		}
+		else if (mCharaStatus.SpecialAttack == 2)
+		{
+			recoverycount = 0;
+		}
+	}
+	if (mCharaStatus.level <= 9 && mCharaStatus.SpecialAttack < 5)
+	{
+		if (recoverycount > 300)
+		{
+			mCharaStatus.SpecialAttack++;
+			recoverycount = 0;
+		}
+		else if (mCharaStatus.SpecialAttack == 4)
+		{
+			recoverycount = 0;
+		}
+	}
 }
 
 // 更新
@@ -407,6 +420,8 @@ void CPlayer::Update()
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
 
+	AutomaticRecovery();
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -440,6 +455,8 @@ void CPlayer::Update()
 
 	//HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	//SAゲージに現在のSAを設定
+	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
 }
 
 // 衝突処理

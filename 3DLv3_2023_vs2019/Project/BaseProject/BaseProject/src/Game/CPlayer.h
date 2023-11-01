@@ -6,6 +6,7 @@
 #include "CRideableObject.h"
 #include "CImage.h"
 class CHpGauge;
+class CSaGauge;
 
 #include <algorithm>
 /*
@@ -51,6 +52,8 @@ public:
 	//レベルの変更
 	void ChangeLevel(int level);
 
+	//特殊攻撃(SA)回数を自動回復
+	void AutomaticRecovery();
 
 	// 更新
 	void Update();
@@ -66,7 +69,8 @@ public:
 	void Render();
 
 private:
-	int time;
+	//特殊攻撃の回数の回復までのカウント
+	int recoverycount;
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -124,4 +128,5 @@ private:
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  //HPゲージ
+	CSaGauge* mpSaGauge;  //SAゲージ(スペシャルアタック)
 };
