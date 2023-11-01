@@ -6,8 +6,9 @@
 class CUIBase : public CTask
 {
 public:
-	CUIBase();
+	CUIBase(ETaskPriority prio = ETaskPriority::eUI, bool dontDelete = false);
 	virtual ~CUIBase();
+
 	//表示座標を設定（CVector2版）
 	virtual void SetPos(const CVector2& pos);
 	//表示座標を設定
@@ -37,8 +38,8 @@ public:
 	const float& GetAlpha() const;
 
 protected:
-	CVector2 mPosition;		//表示座標
-	CVector2 mSize;			//表示サイズ
-	CColor mColor;          //UIのカラー
+	CVector2 mPosition;	//表示座標
+	CVector2 mSize;		//表示サイズ
+	CColor mColor;		//UIのカラー
 private:
 };

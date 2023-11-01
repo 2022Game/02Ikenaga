@@ -1,6 +1,6 @@
 #pragma once
 
-//キャラクターステータス
+//プレイヤーのステータス
 struct CharaStatus
 {
 	int level;         //レベル

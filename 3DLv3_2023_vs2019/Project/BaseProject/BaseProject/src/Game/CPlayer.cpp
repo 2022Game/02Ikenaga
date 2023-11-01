@@ -29,9 +29,9 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
 	//{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
-	//{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
+	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  //衝撃
-	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  //死ぬ
+	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  //死ぬ
 
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -70,6 +70,7 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
+	,time(0)
 {
 
 	//インスタンスの設定
@@ -197,19 +198,47 @@ void CPlayer::UpdateIdle()
 		else if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
-			//sHp--;
 		}
 		if (CInput::PushKey(VK_RBUTTON))
 		{
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
-			mState = EState::ePowerUp;
+		//	mState = EState::ePowerUp;
 		}
-		if (CInput::PushKey(WM_LBUTTONDBLCLK))
+		time++;
+		if (mCharaStatus.SpecialAttack > 0)
 		{
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-			mState = EState::eAttack2;
+			if (CInput::PushKey('K'))
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				mState = EState::eAttack2;
+				mCharaStatus.SpecialAttack--;
+			}
+		}
+		if (mCharaStatus.SpecialAttack < 2)
+		{
+			if (time > 500)
+			{
+				mCharaStatus.SpecialAttack++;
+				time = 0;
+			}
+			else if (mCharaStatus.SpecialAttack == 2)
+			{
+				time = 0;
+			}
+		}
+		else if (mCharaStatus.SpecialAttack < 4)
+		{
+			if (time > 500)
+			{
+				mCharaStatus.SpecialAttack++;
+				time = 0;
+			}
+			else if (mCharaStatus.SpecialAttack == 4)
+			{
+				time = 0;
+			}
 		}
 	}
 	else
@@ -391,11 +420,12 @@ void CPlayer::Update()
 	}
 	if(debug)
 	{
-		CDebugPrint::Print("  レベル %d\n", mCharaStatus.level);
-		CDebugPrint::Print("  HP     %d /%d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
-		CDebugPrint::Print("  攻撃値 %d\n",mCharaStatus.power);
+		CDebugPrint::Print("  レベル     %d\n", mCharaStatus.level);
+		CDebugPrint::Print("   HP        %d /%d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
+		CDebugPrint::Print("  攻撃値     %d\n",mCharaStatus.power);
 		CVector scale = Scale();
 		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
+		CDebugPrint::Print("  特殊攻撃(SA)   %d\n", mCharaStatus.SpecialAttack);
 	}
 	if (CInput::Key('1'))
 	{

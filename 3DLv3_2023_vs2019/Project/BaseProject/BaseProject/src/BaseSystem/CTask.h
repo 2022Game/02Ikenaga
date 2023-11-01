@@ -13,7 +13,7 @@ public:
 	virtual void Collision() {}
 
 	//コンストラクタ
-	CTask(ETaskPriority prio = ETaskPriority::eDefault);
+	CTask(ETaskPriority prio = ETaskPriority::eDefault, bool dontDelete = false);
 	//デストラクタ
 	virtual ~CTask();
 	//更新

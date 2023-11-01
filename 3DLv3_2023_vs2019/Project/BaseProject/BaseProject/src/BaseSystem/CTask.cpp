@@ -3,14 +3,19 @@
 #include "CSceneManager.h"
 
 //コンストラクタ
-CTask::CTask(ETaskPriority prio)
+CTask::CTask(ETaskPriority prio, bool dontDelete)
 	: mpNext(nullptr)
 	, mpPrev(nullptr)
 	, mPriority(prio)
 	, mEnabled(true)
 	, mPauseType(ETaskPauseType::eDefault)
-	, mSceneType(CSceneManager::Instance()->GetCurrentScene())
 {
+	//シーン遷移で破棄しないタスクかどうかで
+	//所属するシーンのタイプを切り替える
+	mSceneType = dontDelete
+		? EScene::eNone
+		: CSceneManager::Instance()->GetCurrentScene();
+
 	//タスクを生成した時に
 	//タスクマネージャーのタスクリストに追加
 	CTaskManager::Instance()->Add(this);

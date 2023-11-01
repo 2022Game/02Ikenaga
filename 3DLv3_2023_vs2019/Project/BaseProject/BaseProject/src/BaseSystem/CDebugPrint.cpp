@@ -7,15 +7,16 @@ CDebugPrint* CDebugPrint::mspInstance = nullptr;
 
 // コンストラクタ
 CDebugPrint::CDebugPrint()
-	: CTask(ETaskPriority::eDebug)
+	: CTask(ETaskPriority::eDebug, true)
 {
 	// 文字列描画用のクラスを生成
 	mpText = new CText
 	(
 		nullptr, 24,
-		CVector2(0,300),
+		CVector2(0.0f, 300.f),
 		CVector2(WINDOW_WIDTH, WINDOW_HEIGHT),
-		CColor::green
+		CColor::green,
+		true
 	);
 }
 

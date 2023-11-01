@@ -3,10 +3,13 @@
 #include <locale.h>
 
 CText::CText(CFont* font, int fontSize, const CVector2& pos,
-	const CVector2& size, const CColor& color)
-	: mpFont(font)
+	const CVector2& size, const CColor& color, bool dontDelete)
+	: CUIBase(ETaskPriority::eUI, dontDelete)
+	, mpFont(font)
 	, mText(L"")
 	, mFontSize(fontSize)
+	, mTextAlignH(ETextAlignH::eLeft)
+	, mTextAlignV(ETextAlignV::eTop)
 {
 	mPosition = pos;
 	mSize = size;
@@ -49,15 +52,15 @@ void CText::SetTextAlignH(ETextAlignH align)
 	mTextAlignH = align;
 	switch (mTextAlignH)
 	{
-		case ETextAlignH::eLeft:
-			mpFont->SetAlignment(FTGL::ALIGN_LEFT);
-			break;
-		case ETextAlignH::eCenter:
-			mpFont->SetAlignment(FTGL::ALIGN_CENTER);
-			break;
-		case ETextAlignH::eRight:
-			mpFont->SetAlignment(FTGL::ALIGN_RIGHT);
-			break;
+	case ETextAlignH::eLeft:
+		mpFont->SetAlignment(FTGL::ALIGN_LEFT);
+		break;
+	case ETextAlignH::eCenter:
+		mpFont->SetAlignment(FTGL::ALIGN_CENTER);
+		break;
+	case ETextAlignH::eRight:
+		mpFont->SetAlignment(FTGL::ALIGN_RIGHT);
+		break;
 	}
 }
 
@@ -66,26 +69,27 @@ void CText::SetTextAlignV(ETextAlignV align)
 	mTextAlignV = align;
 	switch (mTextAlignV)
 	{
-		case ETextAlignV::eTop:
-			break;
-		case ETextAlignV::eMiddle:
-			break;
-		case ETextAlignV::eBottom:
-			break;
+	case ETextAlignV::eTop:
+		break;
+	case ETextAlignV::eMiddle:
+		break;
+	case ETextAlignV::eBottom:
+		break;
 	}
 }
 
 void CText::SetText(const char* format, ...)
 {
-	char buf[256];
+	static const int size = 1024;
+	char buf[size];
 	va_list ap;
 	va_start(ap, format);
 	vsprintf_s(buf, format, ap);
 	va_end(ap);
 
-	wchar_t wbuf[256];
+	wchar_t wbuf[size];
 	setlocale(LC_CTYPE, "jpn");
-	size_t len = mbstowcs(wbuf, buf, 256);
+	size_t len = mbstowcs(wbuf, buf, size);
 	if (len >= 0)
 	{
 		mText = wbuf;

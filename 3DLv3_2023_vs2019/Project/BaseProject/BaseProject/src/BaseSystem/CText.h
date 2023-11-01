@@ -4,14 +4,14 @@
 #include "CVector.h"
 #include "CColor.h"
 
-enum ETextAlignH
+enum class ETextAlignH
 {
 	eLeft,	// ç∂ëµÇ¶
 	eCenter,// íÜâõëµÇ¶
 	eRight,	// âEëµÇ¶
 };
 
-enum ETextAlignV
+enum class ETextAlignV
 {
 	eTop,	// è„ëµÇ¶
 	eMiddle,// è„â∫íÜâõëµÇ¶
@@ -24,7 +24,8 @@ public:
 	CText(CFont* font = nullptr, int fontSize = 24,
 		const CVector2& pos = CVector2::zero,
 		const CVector2& size = CVector2(400.0f, 300.0f),
-		const CColor& color = CColor::black);
+		const CColor& color = CColor::black,
+		bool dontDelete = false);
 	~CText();
 
 	void SetFontSize(int fontSize);

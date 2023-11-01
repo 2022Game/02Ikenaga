@@ -65,6 +65,7 @@ void CCollisionManager::Collision(CCollider* col0, CCollider* col1)
 
 	// 衝突判定を行うコライダーでなければ、衝突判定を行わない
 	if (!col0->IsCollision(col1)) return;
+	if (!col1->IsCollision(col0)) return;
 
 	// 衝突判定を行う
 	CHitInfo hit;

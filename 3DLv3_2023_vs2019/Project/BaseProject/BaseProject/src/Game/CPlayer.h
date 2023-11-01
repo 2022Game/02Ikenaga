@@ -66,6 +66,7 @@ public:
 	void Render();
 
 private:
+	int time;
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -76,8 +77,8 @@ private:
 		eWalk,		// 歩行
 		eAttack,	// 攻撃
 		eJumpStart,	// ジャンプ開始
-		ePowerUp,   //攻撃力アップ
 		eAttack2,	// 攻撃2
+		ePowerUp,   //攻撃力アップ
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 

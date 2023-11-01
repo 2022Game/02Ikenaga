@@ -21,6 +21,8 @@
     <ClCompile Include="src\BaseSystem\CCollisionManager.cpp" />
     <ClCompile Include="src\BaseSystem\CColor.cpp" />
     <ClCompile Include="src\BaseSystem\CDebugPrint.cpp" />
+    <ClCompile Include="src\BaseSystem\CDebugProfiler.cpp" />
+    <ClCompile Include="src\BaseSystem\CDebugTimer.cpp" />
     <ClCompile Include="src\BaseSystem\CEffect.cpp" />
     <ClCompile Include="src\BaseSystem\CFont.cpp" />
     <ClCompile Include="src\BaseSystem\CCharaBase.cpp" />
@@ -80,6 +82,8 @@
     <ClInclude Include="src\BaseSystem\CCollisionManager.h" />
     <ClInclude Include="src\BaseSystem\CColor.h" />
     <ClInclude Include="src\BaseSystem\CDebugPrint.h" />
+    <ClInclude Include="src\BaseSystem\CDebugProfiler.h" />
+    <ClInclude Include="src\BaseSystem\CDebugTimer.h" />
     <ClInclude Include="src\BaseSystem\CEffect.h" />
     <ClInclude Include="src\BaseSystem\CFont.h" />
     <ClInclude Include="src\BaseSystem\CCharaBase.h" />
@@ -112,6 +116,7 @@
     <ClInclude Include="src\BaseSystem\TaskPauseType.h" />
     <ClInclude Include="src\BaseSystem\TaskPriority.h" />
     <ClInclude Include="src\BaseSystem\ObjectTag.h" />
+    <ClInclude Include="src\BaseSystem\Time.h" />
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CBall.h" />
