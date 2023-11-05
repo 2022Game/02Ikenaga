@@ -49,12 +49,12 @@ void CField::CreateFieldObjects()
 	mpCylinderModel = new CModel();
 	mpCylinderModel->Load("Field\\Object\\cylinder.obj", "Field\\Object\\cylinder.mtl");
 
-	new CMoveFloor
+	/*new CMoveFloor
 	(
 		mpCubeModel,
 		CVector(0.0f, 10.0f, -50.0f), CVector(1.0f, 1.0f, 1.0f),
 		CVector(50.0f, 0.0f, 0.0f), 10.0f
-	);
+	);*/
 	/*new CRotateFloor
 	(
 		mpCylinderModel,
@@ -84,12 +84,12 @@ void CField::CreateFieldObjects()
 	//	CVector(0.0f, 0.0f, 0.0f), 5.0f
 	//);
 	// âÒì]Ç∑ÇÈè∞á@
-	new CRotateFloor
+	/*new CRotateFloor
 	(
 		mpCubeModel,
 		CVector(135.0f, 20.0f, 0.0f), CVector(1.0f, 1.0f, 0.25f),
 		0.5f
-	);
+	);*/
 	//// ìÆÇ©Ç»Ç¢è∞áA
 	//new CMoveFloor
 	//(

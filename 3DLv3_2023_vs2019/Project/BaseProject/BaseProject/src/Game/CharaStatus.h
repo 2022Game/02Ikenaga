@@ -15,5 +15,6 @@ struct CharaStatus
 //プレイヤーの最大レベル
 #define PLAYER_LEVEL_MAX 100
 
+
 //プレイヤーのレベルごとにステータスのテーブル
 extern const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX];

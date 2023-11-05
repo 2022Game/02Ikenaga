@@ -5,6 +5,7 @@
 #include "CMaterial.h"
 #include "CCharaBase.h"
 #include "CharaStatus.h"
+#include "CharaStatus2.h"
 
 class CXCharacter : public CCharaBase
 {
@@ -31,10 +32,15 @@ public:
 
 	const CMatrix* GetFrameMtx(std::string name) const;
 
-	//キャラの最大ステータスを取得
+	//プレイヤーの最大ステータスを取得
 	const CharaStatus& MaxStatus() const;
-	//キャラのステータスを取得
+	//プレイヤーのステータスを取得
 	const CharaStatus& Status() const;
+
+	//エネミーの最大ステータスを取得
+	const CharaStatus2& MaxStatus2() const;
+	//エネミーのステータスを取得
+	const CharaStatus2& Status2() const;
 protected:
 	CModelX* mpModel;			//モデルデータ
 	CMatrix* mpCombinedMatrix;	//合成行列退避
@@ -46,7 +52,10 @@ protected:
 	float mAnimationFrame;		//アニメーションの再生フレーム
 	float mAnimationFrameSize;	//アニメーションの再生フレーム数
 
-	CharaStatus mCharaMaxStatus;  //キャラの最大ステータス
-	CharaStatus mCharaStatus;  //キャラのステータス
+	CharaStatus mCharaMaxStatus;  //プレイヤーの最大ステータス
+	CharaStatus mCharaStatus;  //プレイヤーのステータス
+
+	CharaStatus2 mCharaMaxStatus2;  //エネミーの最大ステータス
+	CharaStatus2 mCharaStatus2;  //エネミーのステータス
 };
 #endif

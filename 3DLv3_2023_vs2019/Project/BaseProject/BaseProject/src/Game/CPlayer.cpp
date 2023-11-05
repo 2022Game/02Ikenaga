@@ -409,8 +409,10 @@ void CPlayer::Update()
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 
+	CDebugPrint::Print("%.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+
 	// 移動
-	Position(Position() + mMoveSpeed);
+	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
 
 	// プレイヤーを移動方向へ向ける
 	CVector current = VectorZ();
@@ -436,11 +438,11 @@ void CPlayer::Update()
 	if(debug)
 	{
 		CDebugPrint::Print("  レベル     %d\n", mCharaStatus.level);
-		CDebugPrint::Print("   HP        %d /%d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
+		CDebugPrint::Print("   HP        %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
 		CDebugPrint::Print("  攻撃値     %d\n",mCharaStatus.power);
 		CVector scale = Scale();
 		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
-		CDebugPrint::Print("  特殊攻撃(SA)   %d\n", mCharaStatus.SpecialAttack);
+		CDebugPrint::Print("  特殊攻撃(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 	}
 	if (CInput::Key('1'))
 	{

@@ -244,6 +244,9 @@
     <ClCompile Include="src\Game\CSaGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CharaStatus2.cpp">
+      <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -449,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSaGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CharaStatus2.h">
+      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

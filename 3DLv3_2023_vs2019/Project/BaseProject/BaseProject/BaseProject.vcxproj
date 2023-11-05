@@ -55,6 +55,7 @@
     <ClCompile Include="src\Game\CField.cpp" />
     <ClCompile Include="src\Game\CGameScene.cpp" />
     <ClCompile Include="src\Game\CharaStatus.cpp" />
+    <ClCompile Include="src\Game\CharaStatus2.cpp" />
     <ClCompile Include="src\Game\CHpGauge.cpp" />
     <ClCompile Include="src\Game\CImage.cpp" />
     <ClCompile Include="src\Game\CMoveFloor.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="src\Game\CField.h" />
     <ClInclude Include="src\Game\CGameScene.h" />
     <ClInclude Include="src\Game\CharaStatus.h" />
+    <ClInclude Include="src\Game\CharaStatus2.h" />
     <ClInclude Include="src\Game\CHpGauge.h" />
     <ClInclude Include="src\Game\CImage.h" />
     <ClInclude Include="src\Game\CMoveFloor.h" />

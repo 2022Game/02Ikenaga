@@ -6,6 +6,7 @@
 #include "CShield.h"
 #include "CCamera.h"
 #include "CEnemy.h"
+#include "CHpGauge.h"
 #include "CEnemy2.h"
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
@@ -35,16 +36,9 @@ void CGameScene::Load()
 
 	CSword* sword = new CSword();
 	sword->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_RightHand"));
-	//sword->Position(0.0f, 0.0f, 0.0f);
-	//sword->Scale(10.0f, 10.0f, 10.0f);
-	//sword->SetParent(player);
 
 	CShield* shield = new CShield();
 	shield->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_LeftHand"));
-	//shield->Position(0.0f, 10.0f, 0.0f);
-	//shield->Scale(10.0f, 10.0f, 10.0f);
-	//shield->Rotate(0.0f, 90.0f, 0.0f);
-	//shield->SetParent(player);
 
 	CCamera* mainCamera = new CCamera
 	(
@@ -55,8 +49,12 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(player);
 
 	CEnemy* enemy = new CEnemy();
-	enemy->Position(100.0f, 0.0f, 0.0f);
+	enemy->Position(0.0f, 0.0f, -20.0f);
 	enemy->Scale(20.0f, 20.0f, 20.0f);
+
+	//HPƒQ[ƒW‚ðì¬
+	/*CHpGauge* hpgauge = new CHpGauge();
+	hpgauge->SetPos(10.0f, 190.0f);*/
 
 	CEnemy2* enemy2 = new CEnemy2();
 	enemy2->Position(100.0f, 0.0f, 20.0f);
