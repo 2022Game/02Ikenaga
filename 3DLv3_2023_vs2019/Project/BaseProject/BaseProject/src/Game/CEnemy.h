@@ -25,15 +25,22 @@ public:
 	void UpdateIdle();
 	// 待機2状態
 	void UpdateIdle2();
-	// 攻撃した時の待機状態
+	// プレイヤーの攻撃がヒットした時の待機状態
 	void UpdateIdle3();
-	//待機2の終了待ち
+	// 待機2の終了待ち
 	void UpdateIdleWait();
 
 	// 攻撃
 	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
+
+	//ヒット
+	void UpdateHIt();
+	// 死ぬ時
+	void UpdateDie();
 
 	// 更新処理
 	void Update();
@@ -47,9 +54,9 @@ public:
 	// 描画
 	void Render();
 
-	//1レベルアップ
+	// 1レベルアップ
 	void LevelUp();
-	//レベルの変更
+	// レベルの変更
 	void ChangeLevel(int level);
 private:
 	// アニメーションの種類
@@ -63,6 +70,9 @@ private:
 		eIdle3,		// 待機3
 		eIdle4,		// 待機4
 		eAttack,	// 攻撃
+		eAttack2,	// 攻撃2
+		eHit,       // ヒット
+		eDie,       // 死ぬ時
 		eWalk,		// 歩行
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
@@ -90,11 +100,14 @@ private:
 	enum class EState
 	{
 		eIdle,		// 待機
-		eIdle2,     //待機2
-		eIdle3,     //待機3
-		eIdleWait,  //待機終了待ち
+		eIdle2,     // 待機2
+		eIdle3,     // 待機3
+		eIdleWait,  // 待機終了待ち
 		eAttack,	// 攻撃
+		eAttack2,	// 攻撃2
 		eAttackWait,// 攻撃終了待ち
+		eHit,       // ヒット
+		eDie,       // 死ぬ時
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
@@ -106,5 +119,5 @@ private:
 	CColliderLine* mpColliderLine;
 	CTransform* mpRideObject;
 
-	CHpGauge* mpHpGauge;  //HPゲージ
+	CHpGauge* mpHpGauge;  // HPゲージ
 };

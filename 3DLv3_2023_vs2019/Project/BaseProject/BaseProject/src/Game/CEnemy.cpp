@@ -10,7 +10,7 @@ CEnemy* CEnemy::spInstance = nullptr;
 
 #define MODEL_SLIME "Character\\Slime\\Slime.x"
 
-#define PLAYER_HEIGHT 2.0f
+#define PLAYER_HEIGHT 1.0f
 
 // エネミーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
@@ -21,10 +21,10 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 	{ "Character\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	140.0f	},  //見回す 71.0f
 	{ "Character\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  //アイドルバトル 25.0f
 	{ "Character\\Slime\\animation\\SlimeAttack.x",	true,	26.0f	},  //攻撃 26.0f
-	//{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	70.0f	},  //攻撃2 26.0f
-	//{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  //死ぬ 41.0f
+	{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	70.0f	},  //攻撃2 26.0f
+	{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  //ヒット 26.0f
+	{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  //死ぬ 41.0f
 	//{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  //めまい 41.0f
-	//{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	100.0f	},  //ヒット 26.0f
 	//{ "Character\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  //走る
 	//{ "Character\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  //挑発
 	//{ "Character\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  //勝利
@@ -109,7 +109,7 @@ void CEnemy::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
-//待機状態
+// 待機状態
 void CEnemy::UpdateIdle()
 {
 	if (IsAnimationFinished())
@@ -118,7 +118,7 @@ void CEnemy::UpdateIdle()
 	}
 }
 
-//待機2状態
+// 待機2状態
 void CEnemy::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
@@ -128,7 +128,7 @@ void CEnemy::UpdateIdle2()
 	}
 }
 
-//攻撃した時の待機状態
+// 攻撃した時の待機状態
 void CEnemy::UpdateIdle3()
 {
 	ChangeAnimation(EAnimType::eIdle4);
@@ -138,6 +138,7 @@ void CEnemy::UpdateIdle3()
 	}
 }
 
+// 待機2の終了待ち
 void CEnemy::UpdateIdleWait()
 {
 	// 待機3アニメーションに切り替え
@@ -163,15 +164,51 @@ void CEnemy::UpdateAttack()
 	}
 }
 
-// 攻撃終了待ち
-void CEnemy::UpdateAttackWait()
+// 攻撃2
+void CEnemy::UpdateAttack2()
 {
-	// 攻撃アニメーションが終了したら、
+	// 攻撃2アニメーションを開始
+	ChangeAnimation(EAnimType::eAttack2);
+	// 攻撃2終了待ち状態へ移行
 	if (IsAnimationFinished())
 	{
-		// 待機状態へ移行
+		mState = EState::eAttackWait;
+	}
+}
+
+// 攻撃と攻撃2終了待ち
+void CEnemy::UpdateAttackWait()
+{
+	// 攻撃と攻撃2アニメーションが終了したら、
+	if (IsAnimationFinished())
+	{
+		// プレイヤーの攻撃がヒットした時の待機状態へ移行
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
+	}
+}
+
+//ヒット
+void CEnemy::UpdateHIt()
+{
+	// ヒットアニメーションを開始
+	ChangeAnimation(EAnimType::eHit);
+	if (IsAnimationFinished())
+	{
+		// プレイヤーの攻撃がヒットした時の待機状態へ移行
+		mState = EState::eIdle3;
+		ChangeAnimation(EAnimType::eIdle4);
+	}
+}
+
+// 死ぬ時
+void CEnemy::UpdateDie()
+{
+	// 死ぬ時のアニメーションを開始
+	ChangeAnimation(EAnimType::eDie);
+	if (IsAnimationFinished())
+	{
+		Kill();
 	}
 }
 
@@ -182,7 +219,22 @@ void CEnemy::Update()
 	mpRideObject = nullptr;
 	if (CInput::PushKey('Z'))
 	{
-		mState = EState::eAttack;
+		mState = EState::eAttack2;
+	}
+	if (CInput::PushKey('X'))
+	{
+		mCharaMaxStatus2.hp--;
+		if (mCharaMaxStatus2.hp >= 1 && mCharaMaxStatus2.hp <= 30)
+		{
+			mState = EState::eHit;
+		}
+	}
+	else if (IsAnimationFinished())
+	{
+		if (mCharaMaxStatus2.hp <= 0)
+		{
+			mState = EState::eDie;
+		}
 	}
 
 	// 状態に合わせて、更新処理を切り替える
@@ -202,11 +254,25 @@ void CEnemy::Update()
 	case EState::eIdleWait:
 		UpdateIdleWait();
 		break;
+		// 攻撃
 	case EState::eAttack:
 		UpdateAttack();
 		break;
+		// 攻撃2
+	case EState::eAttack2:
+		UpdateAttack2();
+		break;
+		// 攻撃終了待ち
 	case EState::eAttackWait:
 		UpdateAttackWait();
+		break;
+		// ヒット
+	case EState::eHit:
+		UpdateHIt();
+		break;
+		// 死ぬ時
+	case EState::eDie:
+		UpdateDie();
 		break;
 	}
 
@@ -223,7 +289,7 @@ void CEnemy::Update()
 	}
 	if (debug)
 	{
-		CDebugPrint::Print("HP %d/%d", mCharaStatus2.hp,mCharaMaxStatus2.hp);
+		CDebugPrint::Print("HP %d/%d", mCharaMaxStatus2.hp, mCharaStatus2.hp);
 	}
 	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
