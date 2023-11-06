@@ -223,13 +223,13 @@ void CEnemy::Update()
 	}
 	if (CInput::PushKey('X'))
 	{
-		mCharaMaxStatus2.hp--;
+		mCharaMaxStatus2.hp = mCharaMaxStatus2.hp - 10;
 		if (mCharaMaxStatus2.hp >= 1 && mCharaMaxStatus2.hp <= 30)
 		{
 			mState = EState::eHit;
 		}
 	}
-	else if (IsAnimationFinished())
+	else
 	{
 		if (mCharaMaxStatus2.hp <= 0)
 		{
