@@ -5,6 +5,8 @@
 #include "CHpGauge.h"
 #include "CSaGauge.h"
 #include "Maths.h"
+#include "CSword.h"
+#include "CShield.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -51,6 +53,9 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define POWER 5  //攻撃力
 #define MOVE_SPEED 0.3f  //移動速度
 
+//デフォルトのスケール値
+#define DEFAULT_SCALE 10.0f
+
 bool CPlayer::IsDeath() const
 {
 	return mCharaStatus.hp <= 0;
@@ -80,7 +85,8 @@ CPlayer::CPlayer()
 	// モデルデータ読み込み
 	CModelX* model = new CModelX();
 	model->Load(MODEL_DOG);
-	Scale(10.0f, 10.0f, 10.0f);
+	//デフォルトスケールの反映
+	Scale(CVector::one * DEFAULT_SCALE);
 
 	//HPゲージを作成
 	mpHpGauge = new CHpGauge();
@@ -120,6 +126,17 @@ CPlayer::CPlayer()
 		this, ELayer::eField,
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::eField });*/
+
+	//デフォルト座標を設定
+	mDefaultPos = Position();
+
+	//剣を生成して右手に持たせる
+	mpSword = new CSword();
+	mpSword->SetAttachMtx(GetFrameMtx("Armature_mixamorig_RightHand"));
+
+	//盾を生成して左手に持たせる
+	mpShield= new CShield();
+	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
 }
 
 CPlayer::~CPlayer()
@@ -235,6 +252,9 @@ void CPlayer::UpdateAttack()
 	ChangeAnimation(EAnimType::eAttack);
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
+
+	//剣に攻撃開始を伝える
+	mpSword->AttackStart();
 }
 
 // 攻撃
@@ -255,6 +275,9 @@ void CPlayer::UpdateAttackWait()
 		// 待機状態へ移行
 		mState = EState::eIdle;
 		ChangeAnimation(EAnimType::eIdle);
+
+		//剣に攻撃終了を伝える
+		mpSword->AttackEnd();
 	}
 }
 
@@ -328,6 +351,18 @@ void CPlayer::ChangeLevel(int level)
 
 	mpSaGauge->SetMaxValue(mCharaStatus.SpecialAttack);
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+
+	//現在値のステータスのスケール値を反映
+	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
+
+	//現在のレベルのカメラの高さを設定
+	CCamera* mainCamera = CCamera::MainCamera();
+	if (mainCamera != nullptr)
+	{
+		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
+		diff.Y(diff.Y() + mCharaStatus.cameraHeight);
+		mainCamera->SetFollowTargetOffset(diff);
+	}
 }
 
 //特殊攻撃(SA)の自動回復

@@ -1,6 +1,6 @@
 #pragma once
 
-//プレイヤーのステータス
+//キャラのステータス
 struct CharaStatus
 {
 	int level;         //レベル
@@ -10,11 +10,16 @@ struct CharaStatus
 	float mobility;    //移動性
 	int SpecialAttack; //特殊攻撃
 	float volume;      //大きさ
+	float cameraHeight; //カメラの高さ
 }; 
 
-//プレイヤーの最大レベル
+// プレイヤーの最大レベル
 #define PLAYER_LEVEL_MAX 100
-
-
-//プレイヤーのレベルごとにステータスのテーブル
+// プレイヤーのレベルごとにステータスのテーブル
 extern const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX];
+
+// 敵の最大レベル
+#define ENEMY__LEVEL_MAX 5
+// 敵のレベルごとにステータスのテーブル
+extern const CharaStatus ENEMY_STATUS[ENEMY__LEVEL_MAX];
+extern const CharaStatus ENEMY2_STATUS[ENEMY__LEVEL_MAX];

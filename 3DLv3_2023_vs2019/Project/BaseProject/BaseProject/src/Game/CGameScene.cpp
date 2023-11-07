@@ -34,16 +34,9 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 
-	CSword* sword = new CSword();
-	sword->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_RightHand"));
-
-	CShield* shield = new CShield();
-	shield->SetAttachMtx(player->GetFrameMtx("Armature_mixamorig_LeftHand"));
-
 	CCamera* mainCamera = new CCamera
 	(
-		//CVector(5.0f, -15.0f, 180.0f),
-		CVector(0.0f, 50.0f, 75.0f),
+		DEFAULT_CAMERA_POS,
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);

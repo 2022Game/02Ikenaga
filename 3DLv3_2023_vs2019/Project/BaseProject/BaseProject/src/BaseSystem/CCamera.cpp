@@ -61,6 +61,14 @@ void CCamera::SetFollowTargetTf(CTransform* target)
 	}
 }
 
+void  CCamera::SetFollowTargetOffset(const CVector& offset)
+{
+	if (mFollowTargetTf != nullptr)
+	{
+		mFollowOffsetPos = offset;
+	}
+}
+
 // ’‹‚·‚éˆÊ’u‚ğİ’è
 void CCamera::LookAt(const CVector& pos)
 {

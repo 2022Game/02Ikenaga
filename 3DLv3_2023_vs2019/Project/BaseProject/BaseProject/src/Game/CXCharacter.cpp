@@ -149,27 +149,3 @@ const CMatrix* CXCharacter::GetFrameMtx(std::string name) const
 	if (frame == nullptr) return nullptr;
 	return &frame->CombinedMatrix();
 }
-
-//キャラ最大ステータスを取得
-const CharaStatus& CXCharacter::MaxStatus() const
-{
-	return mCharaMaxStatus;
-}
-
-//キャラのステータスを取得
-const CharaStatus& CXCharacter::Status() const
-{
-	return mCharaStatus;
-}
-
-//キャラ最大ステータスを取得
-const CharaStatus2& CXCharacter::MaxStatus2() const
-{
-	return mCharaMaxStatus2;
-}
-
-//キャラのステータスを取得
-const CharaStatus2& CXCharacter::Status2() const
-{
-	return mCharaStatus2;
-}

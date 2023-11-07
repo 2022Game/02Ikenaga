@@ -32,6 +32,12 @@ public:
 	void SetFollowTargetTf(CTransform* target);
 
 	/// <summary>
+	/// 追従時のオフセット座標をを設定
+	/// </summary>
+	/// <param name="target">追従するターゲット</param>
+	void SetFollowTargetOffset(const CVector& offset);
+
+	/// <summary>
 	/// 注視する位置を設定
 	/// </summary>
 	/// <param name="pos"></param>

@@ -1,6 +1,7 @@
 #pragma once
 #include "CXCharacter.h"
 #include "CColliderLine.h"
+#include "CColliderSphere.h"
 #include "CRideableObject.h"
 
 class CHpGauge;
@@ -41,6 +42,8 @@ public:
 	void UpdateHIt();
 	// 死ぬ時
 	void UpdateDie();
+	// めまい(混乱)
+	void UpdateDizzy();
 
 	// 更新処理
 	void Update();
@@ -58,6 +61,12 @@ public:
 	void LevelUp();
 	// レベルの変更
 	void ChangeLevel(int level);
+
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	void TakeDamage(int damage)override;
 private:
 	// アニメーションの種類
 	enum class EAnimType
@@ -73,6 +82,7 @@ private:
 		eAttack2,	// 攻撃2
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
+		eDizzy,     // めまい(混乱)
 		eWalk,		// 歩行
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
@@ -108,6 +118,7 @@ private:
 		eAttackWait,// 攻撃終了待ち
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
+		eDizzy,     // めまい(混乱)
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
@@ -117,6 +128,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+	CColliderSphere* mpDamageCol;  //ダメージを受けるコライダー
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  // HPゲージ

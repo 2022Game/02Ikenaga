@@ -7,8 +7,12 @@
 #include "CImage.h"
 class CHpGauge;
 class CSaGauge;
+class CSword;
+class CShield;
 
 #include <algorithm>
+
+#define DEFAULT_CAMERA_POS CVector(0.0f, 50.0f, 75.0f)
 /*
 プレイヤークラス
 キャラクタクラスを継承
@@ -129,4 +133,9 @@ private:
 
 	CHpGauge* mpHpGauge;  //HPゲージ
 	CSaGauge* mpSaGauge;  //SAゲージ(スペシャルアタック)
+
+	CVector mDefaultPos;  //デフォルトの座標
+
+	CSword* mpSword;  // 右手に持つ剣
+	CShield* mpShield;  // 左手に持つ盾
 };

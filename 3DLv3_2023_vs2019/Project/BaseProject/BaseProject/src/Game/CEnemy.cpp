@@ -36,7 +36,7 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 
 bool CEnemy::IsDeath() const
 {
-	return mCharaStatus2.hp <= 0;
+	return mCharaStatus.hp <= 0;
 }
 
 // コンストラクタ
@@ -79,6 +79,19 @@ CEnemy::CEnemy()
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	//ダメージを受けるコライダーを作成
+	mpDamageCol = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.5f
+	);
+	//ダメージを受けるコライダーと
+	//衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
+	//ダメージを受けるコライダーを少し上へずらす
+	mpDamageCol->Position(0.0f, 0.3f,0.0f);
 }
 
 CEnemy::~CEnemy()
@@ -87,6 +100,13 @@ CEnemy::~CEnemy()
 	{
 		delete mpColliderLine;
 		mpColliderLine = nullptr;
+	}
+
+	//ダメージを受けるコライダーを削除
+	if (mpDamageCol != nullptr)
+	{
+		delete mpDamageCol;
+		mpDamageCol = nullptr;
 	}
 
 	if (mpModel != nullptr)
@@ -212,6 +232,19 @@ void CEnemy::UpdateDie()
 	}
 }
 
+// めまい(混乱)
+void CEnemy::UpdateDizzy()
+{
+	// めまい(混乱)アニメーションを開始
+	ChangeAnimation(EAnimType::eDizzy);
+	//if (IsAnimationFinished())
+	//{
+	//	// プレイヤーの攻撃がヒットした時の待機状態へ移行
+	//	mState = EState::eIdle3;
+	//	ChangeAnimation(EAnimType::eIdle4);
+	//}
+}
+
 //更新処理
 void CEnemy::Update()
 {
@@ -220,21 +253,6 @@ void CEnemy::Update()
 	if (CInput::PushKey('Z'))
 	{
 		mState = EState::eAttack2;
-	}
-	if (CInput::PushKey('X'))
-	{
-		mCharaMaxStatus2.hp = mCharaMaxStatus2.hp - 10;
-		if (mCharaMaxStatus2.hp >= 1 && mCharaMaxStatus2.hp <= 30)
-		{
-			mState = EState::eHit;
-		}
-	}
-	else
-	{
-		if (mCharaMaxStatus2.hp <= 0)
-		{
-			mState = EState::eDie;
-		}
 	}
 
 	// 状態に合わせて、更新処理を切り替える
@@ -274,6 +292,10 @@ void CEnemy::Update()
 	case EState::eDie:
 		UpdateDie();
 		break;
+		// めまい(混乱)
+	case EState::eDizzy:
+		UpdateDizzy();
+		break;
 	}
 
 	// キャラクターの更新
@@ -289,7 +311,7 @@ void CEnemy::Update()
 	}
 	if (debug)
 	{
-		CDebugPrint::Print("HP %d/%d", mCharaMaxStatus2.hp, mCharaStatus2.hp);
+		CDebugPrint::Print("HP %d/%d", mCharaStatus.hp, mCharaMaxStatus.hp);
 	}
 	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
@@ -321,7 +343,7 @@ void CEnemy::Render()
 //1レベルアップ
 void CEnemy::LevelUp()
 {
-	int level = mCharaStatus2.level;
+	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
@@ -331,10 +353,31 @@ void CEnemy::ChangeLevel(int level)
 	//ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
 	//最大ステータスに設定
-	mCharaMaxStatus2 = ENEMY_STATUS[index];
+	mCharaMaxStatus = ENEMY_STATUS[index];
 	//現在のステータスを最大値にすることで、HP回復
-	mCharaStatus2 = mCharaMaxStatus2;
+	mCharaStatus = mCharaMaxStatus;
 
 	//mpHpGauge->SetMaxValue(mCharaMaxStatus2.hp);
 	//mpHpGauge->SetValue(mCharaStatus2.hp);
+}
+
+//被ダメージ処理
+void CEnemy::TakeDamage(int damage)
+{
+	//死亡していたら、ダメージは受けない
+	//if (mCharaStatus.hp <= 0)return;
+
+	//HPからダメージを引く
+	//mCharaStatus.hp = max(mCharaStatus.hp - damage, 0);
+	//mCharaStatus.hp -= damage;
+	if (mCharaStatus.hp -= damage)
+	{
+		mState = EState::eHit;
+	}
+	//HPが0になったら、
+	if (mCharaStatus.hp == 0)
+	{
+		//死亡処理
+		mState = EState::eDie;
+	}
 }

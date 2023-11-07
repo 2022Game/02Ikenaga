@@ -20,8 +20,9 @@ void CColliderSphere::Set(CObjectBase* owner, ELayer layer, float radius)
 // 球の座標と半径を取得
 void CColliderSphere::Get(CVector* pos, float* rad) const
 {
-	*pos = Position();
-	*rad = mRadius;
+	CMatrix m = Matrix();
+	*pos = Position() * m;
+	*rad = mRadius * m.VectorX().Length();
 }
 
 void CColliderSphere::Render()
@@ -30,7 +31,9 @@ void CColliderSphere::Render()
 	glPushMatrix();
 
 	// 自身の行列を適用
-	glMultMatrixf(Matrix().M());
+	CMatrix m;
+	m.Translate(Position());
+	glMultMatrixf((m * Matrix()).M());
 	// アルファブレンドを有効にする
 	glEnable(GL_BLEND);
 	// ブレンド方法を指定
