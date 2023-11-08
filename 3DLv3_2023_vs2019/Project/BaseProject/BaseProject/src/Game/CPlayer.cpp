@@ -121,11 +121,18 @@ CPlayer::CPlayer()
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
-	/*mpColliderSphere = new CColliderSphere
+	///ダメージを受けるコライダーを作成
+	mpDamageCol = new CColliderSphere
 	(
-		this, ELayer::eField,
+		this, ELayer::eDamageCol,
+		0.4f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::eField });*/
+	//ダメージを受けるコライダーと
+	//衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageCol->SetCollisionLayers({ ELayer::ePlayer });
+	mpDamageCol->SetCollisionTags({ ETag::eEnemy });
+	//ダメージを受けるコライダーを少し上へずらす
+	mpDamageCol->Position(-0.05f, 0.7f, 0.0f);
 
 	//デフォルト座標を設定
 	mDefaultPos = Position();
@@ -534,4 +541,19 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 void CPlayer::Render()
 {
 	CXCharacter::Render();
+}
+
+//被ダメージ処理
+void CPlayer::TakeDamage(int damage)
+{
+	//死亡していたら、ダメージは受けない
+	//if (mCharaStatus.hp <= 0)return;
+
+	//HPからダメージを引く
+	//mCharaStatus.hp = max(mCharaStatus.hp - damage, 0);
+	//mCharaStatus.hp -= damage;
+	if (mCharaStatus.hp -= damage)
+	{
+		mState = EState::ePowerUp;
+	}
 }

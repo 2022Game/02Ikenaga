@@ -16,9 +16,9 @@ public:
 	virtual void AttackEnd();
 
 protected:
-	//攻撃がヒットしたオブジェクトを追加
+	// 攻撃がヒットしたオブジェクトを追加
 	void AddAttackHitObj(CObjectBase* obj);
-	//既に攻撃がヒットしているオブジェクトかどうか
+	// 既に攻撃がヒットしているオブジェクトかどうか
 	bool IsAttackHitObj(CObjectBase* obj) const;
 	const CMatrix* mpAttachMtx;
 

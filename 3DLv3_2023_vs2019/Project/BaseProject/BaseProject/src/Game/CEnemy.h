@@ -3,7 +3,7 @@
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
-
+#include "CWeapon.h"
 class CHpGauge;
 
 #include <algorithm>
@@ -52,7 +52,7 @@ public:
 	/// </summary>
 	/// <param name="self">衝突した自身のコライダー</param>
 	/// <param name="other">衝突した相手のコライダー</param>
-	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
 	// 描画
 	void Render();
@@ -67,7 +67,9 @@ public:
 	/// </summary>
 	/// <param name="damage">受けるダメージ</param>
 	void TakeDamage(int damage)override;
+
 private:
+	int mAttackTime;
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -128,7 +130,8 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpDamageCol;  //ダメージを受けるコライダー
+	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
+	CColliderSphere* mpAttack;
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  // HPゲージ

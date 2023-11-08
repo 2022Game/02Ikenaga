@@ -12,7 +12,6 @@ CCharaBase::~CCharaBase()
 // 被ダメージ処理
 void CCharaBase::TakeDamage(int damage)
 {
-	
 }
 
 //キ最大ステータスを取得

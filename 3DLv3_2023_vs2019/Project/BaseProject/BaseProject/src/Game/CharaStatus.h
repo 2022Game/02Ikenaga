@@ -3,7 +3,7 @@
 //キャラのステータス
 struct CharaStatus
 {
-	int level;         //レベル
+    int level;         //レベル
 	int hp;            //HP
 	int power;         //攻撃力
 	int defense;       //防御力

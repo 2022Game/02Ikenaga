@@ -72,6 +72,12 @@ public:
 	// 描画
 	void Render();
 
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	void TakeDamage(int damage)override;
+
 private:
 	//特殊攻撃の回数の回復までのカウント
 	int recoverycount;
@@ -113,13 +119,13 @@ private:
 	{
 		eIdle,		// 待機
 		eAttack,	// 攻撃
+		eAttack2,	// 攻撃2
 		eAttackWait,// 攻撃終了待ち
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		ePowerUp,   //攻撃力アップ
 		ePowerUpEnd,   //攻撃力アップ終了
-		eAttack2,	// 攻撃2
 	};
 	EState mState;	// プレイヤーの状態
 
@@ -127,6 +133,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 	CColliderSphere* mpColliderSphere;
 
 	CTransform* mpRideObject;

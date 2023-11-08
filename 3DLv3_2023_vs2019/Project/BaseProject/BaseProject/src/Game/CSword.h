@@ -34,7 +34,6 @@ public:
 	//攻撃終了
 	void AttackEnd() override;
 private:
-
 	CModel* mpSword;
 	//攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;

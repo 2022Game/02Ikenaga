@@ -2,6 +2,7 @@
 #include "CObjectBase.h"
 #include "CharaStatus.h"
 
+
 /// <summary>
 /// キャラクターのベースクラス
 /// </summary>

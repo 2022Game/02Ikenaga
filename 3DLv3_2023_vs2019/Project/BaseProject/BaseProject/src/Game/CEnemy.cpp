@@ -44,6 +44,7 @@ CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eEnemy)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
+	,mAttackTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -250,9 +251,16 @@ void CEnemy::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-	if (CInput::PushKey('Z'))
+
+	mAttackTime++;
+
+	if (mAttackTime > 20)
 	{
-		mState = EState::eAttack2;
+		mState = EState::eAttack;
+	}
+	if(mState == EState::eAttack)
+	{
+		mAttackTime = 0;
 	}
 
 	// 状態に合わせて、更新処理を切り替える
@@ -311,7 +319,8 @@ void CEnemy::Update()
 	}
 	if (debug)
 	{
-		CDebugPrint::Print("HP %d/%d", mCharaStatus.hp, mCharaMaxStatus.hp);
+		CDebugPrint::Print(" HP %d/%d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
+		CDebugPrint::Print(" 攻撃時間計測 :%d", mAttackTime);
 	}
 	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
