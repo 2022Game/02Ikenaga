@@ -254,7 +254,7 @@ void CEnemy::Update()
 
 	mAttackTime++;
 
-	if (mAttackTime > 20)
+	if (mAttackTime > 200)
 	{
 		mState = EState::eAttack;
 	}
