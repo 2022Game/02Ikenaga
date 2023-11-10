@@ -69,7 +69,8 @@ public:
 	void TakeDamage(int damage)override;
 
 private:
-	int mAttackTime;
+	int mAttackTime;  // UŒ‚ŠÔ‚ÌŠÔŠu
+	int mRevivalTime;  // •œŠˆŠÔ‚ÌŠÔŠu
 	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìí—Ş
 	enum class EAnimType
 	{

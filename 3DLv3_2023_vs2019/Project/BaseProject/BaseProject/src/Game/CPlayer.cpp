@@ -32,7 +32,8 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
 	//{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
-	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
+	//{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
+	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  //攻撃2
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  //衝撃
 	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  //死ぬ
 
@@ -271,6 +272,9 @@ void CPlayer::UpdateAttack2()
 	ChangeAnimation(EAnimType::eAttack2);
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
+
+	//剣に攻撃開始を伝える
+	mpSword->AttackStart();
 }
 
 // 攻撃終了待ち

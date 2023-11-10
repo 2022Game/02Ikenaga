@@ -45,6 +45,7 @@ CEnemy::CEnemy()
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	,mAttackTime(0)
+	,mRevivalTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -252,15 +253,18 @@ void CEnemy::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
-	mAttackTime++;
 
-	if (mAttackTime > 200)
+	if (mCharaStatus.hp < 29)
 	{
-		mState = EState::eAttack;
-	}
-	if(mState == EState::eAttack)
-	{
-		mAttackTime = 0;
+		mAttackTime++;
+		if (mAttackTime > 200)
+		{
+			mState = EState::eAttack;
+		}
+		if (mState == EState::eAttack)
+		{
+			mAttackTime = 0;
+		}
 	}
 
 	// 状態に合わせて、更新処理を切り替える
