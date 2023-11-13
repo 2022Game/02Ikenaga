@@ -26,16 +26,16 @@ public:
 	/// <param name="hit">衝突した時の情報</param>
 	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit);
 
-	//武器の行列取得
+	// 武器の行列取得
 	CMatrix Matrix() const override;
 
-	//攻撃開始
+	// 攻撃開始
 	void AttackStart() override;
-	//攻撃終了
+	// 攻撃終了
 	void AttackEnd() override;
 private:
 	CModel* mpSword;
-	//攻撃判定用のコライダー
+	// 攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;
 };
 

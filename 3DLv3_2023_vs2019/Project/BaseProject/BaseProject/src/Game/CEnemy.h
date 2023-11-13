@@ -3,7 +3,6 @@
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
-#include "CWeapon.h"
 class CHpGauge;
 
 #include <algorithm>
@@ -53,6 +52,11 @@ public:
 	/// <param name="self">衝突した自身のコライダー</param>
 	/// <param name="other">衝突した相手のコライダー</param>
 	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	// 攻撃開始
+	void AttackStart() override;
+	// 攻撃終了
+	void AttackEnd() override;
 
 	// 描画
 	void Render();
@@ -132,7 +136,6 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	CColliderSphere* mpAttack;
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  // HPゲージ

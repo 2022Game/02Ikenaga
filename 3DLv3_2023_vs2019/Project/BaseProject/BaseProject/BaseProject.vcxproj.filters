@@ -205,7 +205,7 @@
     <ClCompile Include="src\Game\CRotateFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CBall.cpp">
+    <ClCompile Include="src\Game\CExp.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CPortionRed.cpp">
@@ -408,7 +408,7 @@
     <ClInclude Include="src\Game\CRotateFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CBall.h">
+    <ClInclude Include="src\Game\CExp.h">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPortionRed.h">

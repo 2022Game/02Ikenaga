@@ -149,3 +149,33 @@ const CMatrix* CXCharacter::GetFrameMtx(std::string name) const
 	if (frame == nullptr) return nullptr;
 	return &frame->CombinedMatrix();
 }
+
+// 攻撃開始
+void CXCharacter::AttackStart()
+{
+	mAttackHitObjects.clear();
+}
+
+// 攻撃終了
+void CXCharacter::AttackEnd()
+{
+}
+
+// 攻撃がヒットしたオブジェクトを追加
+void CXCharacter::AddAttackHitObj(CObjectBase* obj)
+{
+	mAttackHitObjects.push_back(obj);
+}
+
+// 既に攻撃がヒットしているオブジェクトかどうか
+bool CXCharacter::IsAttackHitObj(CObjectBase* obj) const
+{
+	// 既にリストに追加されているかを確認する
+	auto find = std::find
+	(
+		mAttackHitObjects.begin(),
+		mAttackHitObjects.end(),
+		obj
+	);
+	return find != mAttackHitObjects.end();
+}

@@ -29,6 +29,12 @@ public:
 	int AnimationIndex();	//アニメーションの番号の取得
 
 	const CMatrix* GetFrameMtx(std::string name) const;
+
+	//攻撃開始
+	virtual void AttackStart();
+
+	//攻撃終了
+	virtual void AttackEnd();
 protected:
 	CModelX* mpModel;			//モデルデータ
 	CMatrix* mpCombinedMatrix;	//合成行列退避
@@ -39,5 +45,12 @@ protected:
 
 	float mAnimationFrame;		//アニメーションの再生フレーム
 	float mAnimationFrameSize;	//アニメーションの再生フレーム数
+
+	// 攻撃がヒットしたオブジェクトを追加
+	void AddAttackHitObj(CObjectBase* obj);
+	// 既に攻撃がヒットしているオブジェクトかどうか
+	bool IsAttackHitObj(CObjectBase* obj) const;
+	// 攻撃がヒット済みのオブジェクトリスト
+	std::list<CObjectBase*> mAttackHitObjects;
 };
 #endif

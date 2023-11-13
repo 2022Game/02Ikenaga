@@ -11,7 +11,8 @@
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
-#include "CBall.h"
+#include "CExp.h"
+#include "CCharaBase.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -43,7 +44,7 @@ void CGameScene::Load()
 
 	CEnemy* enemy = new CEnemy();
 	enemy->Position(0.0f, 0.0f, -20.0f);
-	enemy->Scale(20.0f, 20.0f, 20.0f);
+	enemy->Scale(25.0f, 25.0f, 25.0f);
 
 	//HPゲージを作成
 	/*CHpGauge* hpgauge = new CHpGauge();
@@ -65,9 +66,9 @@ void CGameScene::Load()
 	portionblue->Position(70.0f, 10.0f, 0.0f);
 	portionblue->Scale(70.0f, 70.0f, 70.0f);
 
-	CBall* ball = new CBall();
-	ball->Position(100.0f, 10.0f, 0.0f);
-	ball->Scale(4.0f, 4.0f, 4.0f);
+	CExp* exp = new CExp();
+	exp->Position(100.0f, 10.0f, 0.0f);
+	exp->Scale(4.0f, 4.0f, 4.0f);
 }
 
 //シーンの更新処理

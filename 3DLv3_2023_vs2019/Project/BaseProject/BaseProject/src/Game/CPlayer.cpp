@@ -27,15 +27,17 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	//{ "Character\\Player\\anim\\DogAttack.x",		true,	91.0f	},	// 待機
 	//{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
 
-	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  //待機 221.0f
-	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  //歩行
-	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  //攻撃
-	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  //ジャンプ
-	//{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  //攻撃力アップ
-	//{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  //攻撃2
-	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  //攻撃2
-	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  //衝撃
-	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  //死ぬ
+	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  // 待機 221.0f
+	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  // 歩行
+	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  // 攻撃
+	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  // ジャンプ
+	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // 攻撃2
+	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // 攻撃3
+	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // 攻撃4
+	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // 攻撃力アップ
+	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ヒット 43.0f
+	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
+	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
 
 	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
 	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
@@ -130,7 +132,7 @@ CPlayer::CPlayer()
 	);
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::ePlayer });
+	mpDamageCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpDamageCol->SetCollisionTags({ ETag::eEnemy });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(-0.05f, 0.7f, 0.0f);
@@ -265,11 +267,35 @@ void CPlayer::UpdateAttack()
 	mpSword->AttackStart();
 }
 
-// 攻撃
+// 攻撃2
 void CPlayer::UpdateAttack2()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack2);
+	// 攻撃終了待ち状態へ移行
+	mState = EState::eAttackWait;
+
+	//剣に攻撃開始を伝える
+	mpSword->AttackStart();
+}
+
+// 攻撃3
+void CPlayer::UpdateAttack3()
+{
+	// 攻撃アニメーションを開始
+	ChangeAnimation(EAnimType::eAttack3);
+	// 攻撃終了待ち状態へ移行
+	mState = EState::eAttackWait;
+
+	//剣に攻撃開始を伝える
+	mpSword->AttackStart();
+}
+
+// 攻撃4
+void CPlayer::UpdateAttack4()
+{
+	// 攻撃アニメーションを開始
+	ChangeAnimation(EAnimType::eAttack4);
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 
@@ -340,11 +366,21 @@ void CPlayer::UpdatePowerUpEnd()
 	}
 }
 
+// ヒット
+void CPlayer::UpdateHit()
+{
+	ChangeAnimation(EAnimType::eHit);
+	if (IsAnimationFinished())
+	{
+		mState = EState::eIdle;
+	}
+}
+
 //1レベルアップ
 void CPlayer::LevelUp()
 {
 	int level = mCharaStatus.level;
-	ChangeLevel(level + 1);
+	ChangeLevel(level + 99);
 }
 
 //レベルを変更
@@ -427,6 +463,14 @@ void CPlayer::Update()
 		case EState::eAttack2:
 			UpdateAttack2();
 			break;
+		// 攻撃3
+		case EState::eAttack3:
+			UpdateAttack3();
+			break;
+		// 攻撃4
+		case EState::eAttack4:
+			UpdateAttack4();
+			break;
 		// 攻撃終了待ち
 		case EState::eAttackWait:
 			UpdateAttackWait();
@@ -450,6 +494,10 @@ void CPlayer::Update()
 	    // 攻撃力アップ終了
 		case EState::ePowerUpEnd:
 			UpdatePowerUpEnd();
+			break;
+	    // ヒット
+		case EState::eHit:
+			UpdateHit();
 			break;
 	}
 
@@ -493,7 +541,11 @@ void CPlayer::Update()
 	if (CInput::Key('1'))
 	{
 		if (CInput::PushKey(VK_UP)) mCharaStatus.hp++;
-		else if (CInput::PushKey(VK_DOWN)) mCharaStatus.hp--;
+		else if (CInput::PushKey(VK_DOWN))
+		{
+			mCharaStatus.hp--;
+			mState = EState::eHit;
+		}
 	}
 	else if (CInput::PushKey('2'))
 	{
@@ -558,6 +610,6 @@ void CPlayer::TakeDamage(int damage)
 	//mCharaStatus.hp -= damage;
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::ePowerUp;
+		mState = EState::eHit;
 	}
 }

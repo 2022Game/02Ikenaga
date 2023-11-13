@@ -179,6 +179,7 @@ void CEnemy::UpdateAttack()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
+	AttackStart();
 	// 攻撃終了待ち状態へ移行
 	if (IsAnimationFinished())
 	{
@@ -191,6 +192,7 @@ void CEnemy::UpdateAttack2()
 {
 	// 攻撃2アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack2);
+	AttackStart();
 	// 攻撃2終了待ち状態へ移行
 	if (IsAnimationFinished())
 	{
@@ -207,6 +209,8 @@ void CEnemy::UpdateAttackWait()
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
+
+		AttackEnd();
 	}
 }
 
@@ -253,20 +257,6 @@ void CEnemy::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 
-
-	if (mCharaStatus.hp < 29)
-	{
-		mAttackTime++;
-		if (mAttackTime > 200)
-		{
-			mState = EState::eAttack;
-		}
-		if (mState == EState::eAttack)
-		{
-			mAttackTime = 0;
-		}
-	}
-
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
@@ -310,6 +300,25 @@ void CEnemy::Update()
 		break;
 	}
 
+	if (mCharaStatus.hp == 0)
+	{
+		//死亡処理
+		mState = EState::eDie;
+	}
+
+	if (mCharaStatus.hp < 30)
+	{
+		mAttackTime++;
+		if (mAttackTime > 200)
+		{
+			mState = EState::eAttack;
+		}
+		if (mState == EState::eAttack)
+		{
+			mAttackTime = 0;
+		}
+	}
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -345,6 +354,22 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
+}
+
+// 攻撃開始
+void CEnemy::AttackStart()
+{
+	CXCharacter::AttackStart();
+	//攻撃が始まったら、攻撃判定用のコライダーをオンにする
+	mpDamageCol->SetEnable(true);
+}
+
+//攻撃終了
+void CEnemy::AttackEnd()
+{
+	CXCharacter::AttackEnd();
+	//攻撃が終われば、攻撃判定用のコライダーをオフにする
+	mpDamageCol->SetEnable(false);
 }
 
 // 描画

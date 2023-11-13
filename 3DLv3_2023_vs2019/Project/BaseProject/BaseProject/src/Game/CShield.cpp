@@ -5,8 +5,6 @@ CShield::CShield()
 {
 	mpShield = new CModel();
 	mpShield->Load("Item\\Equipment\\Shield\\Shield.obj", "Item\\Equipment\\Shield\\Shield.mtl");
-
-	CreateFieldObjects();
 }
 
 CShield::~CShield()
@@ -16,10 +14,6 @@ CShield::~CShield()
 		delete mpShield;
 		mpShield = nullptr;
 	}
-}
-
-void CShield::CreateFieldObjects()
-{
 }
 
 void CShield::Update()

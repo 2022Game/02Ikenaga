@@ -6,8 +6,6 @@ CPortionRed::CPortionRed()
 {
 	mpPortionRed = new CModel();
 	mpPortionRed->Load("Item\\Portion\\PortionRed.obj", "Item\\Portion\\PortionRed.mtl");
-
-	CreateFieldObjects();
 }
 
 CPortionRed::~CPortionRed()
@@ -17,10 +15,6 @@ CPortionRed::~CPortionRed()
 		delete mpPortionRed;
 		mpPortionRed = nullptr;
 	}
-}
-
-void CPortionRed::CreateFieldObjects()
-{
 }
 
 void CPortionRed::Update()

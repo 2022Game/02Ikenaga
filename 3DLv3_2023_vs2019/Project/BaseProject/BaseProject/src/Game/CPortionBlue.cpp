@@ -6,8 +6,6 @@ CPortionBlue::CPortionBlue()
 {
 	mpPortionBlue = new CModel();
 	mpPortionBlue->Load("Item\\Portion\\PortionBlue.obj", "Item\\Portion\\PortionBlue.mtl");
-
-	CreateFieldObjects();
 }
 
 CPortionBlue::~CPortionBlue()
@@ -17,10 +15,6 @@ CPortionBlue::~CPortionBlue()
 		delete mpPortionBlue;
 		mpPortionBlue = nullptr;
 	}
-}
-
-void CPortionBlue::CreateFieldObjects()
-{
 }
 
 void CPortionBlue::Update()

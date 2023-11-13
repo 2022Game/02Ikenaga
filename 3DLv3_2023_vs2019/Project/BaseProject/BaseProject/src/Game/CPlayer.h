@@ -38,6 +38,10 @@ public:
 	void UpdateAttack();
 	// 攻撃2
 	void UpdateAttack2();
+	// 攻撃3
+	void UpdateAttack3();
+	// 攻撃4
+	void UpdateAttack4();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 	// ジャンプ開始
@@ -48,15 +52,17 @@ public:
 	void UpdateJumpEnd();
 	//攻撃力アップ
 	void UpdatePowerUp();
-	//攻撃力アップ終了
+	// 攻撃力アップ終了
 	void UpdatePowerUpEnd();
+	// ヒット
+	void UpdateHit();
 
-	//1レベルアップ
+	// 1レベルアップ
 	void LevelUp();
-	//レベルの変更
+	// レベルの変更
 	void ChangeLevel(int level);
 
-	//特殊攻撃(SA)回数を自動回復
+	// 特殊攻撃(SA)回数を自動回復
 	void AutomaticRecovery();
 
 	// 更新
@@ -79,7 +85,7 @@ public:
 	void TakeDamage(int damage)override;
 
 private:
-	//特殊攻撃の回数の回復までのカウント
+	// 特殊攻撃の回数の回復までのカウント
 	int recoverycount;
 	// アニメーションの種類
 	enum class EAnimType
@@ -92,7 +98,10 @@ private:
 		eAttack,	// 攻撃
 		eJumpStart,	// ジャンプ開始
 		eAttack2,	// 攻撃2
-		ePowerUp,   //攻撃力アップ
+		eAttack3,	// 攻撃3
+		eAttack4,	// 攻撃4
+		ePowerUp,   // 攻撃力アップ
+		eHit,       // ヒット
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 
@@ -120,12 +129,15 @@ private:
 		eIdle,		// 待機
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
+		eAttack3,	// 攻撃3
+		eAttack4,	// 攻撃4
 		eAttackWait,// 攻撃終了待ち
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
-		ePowerUp,   //攻撃力アップ
-		ePowerUpEnd,   //攻撃力アップ終了
+		ePowerUp,   // 攻撃力アップ
+		ePowerUpEnd,   // 攻撃力アップ終了
+		eHit,       // ヒット
 	};
 	EState mState;	// プレイヤーの状態
 
@@ -138,10 +150,10 @@ private:
 
 	CTransform* mpRideObject;
 
-	CHpGauge* mpHpGauge;  //HPゲージ
-	CSaGauge* mpSaGauge;  //SAゲージ(スペシャルアタック)
+	CHpGauge* mpHpGauge;  // HPゲージ
+	CSaGauge* mpSaGauge;  // SAゲージ(スペシャルアタック)
 
-	CVector mDefaultPos;  //デフォルトの座標
+	CVector mDefaultPos;  // デフォルトの座標
 
 	CSword* mpSword;  // 右手に持つ剣
 	CShield* mpShield;  // 左手に持つ盾

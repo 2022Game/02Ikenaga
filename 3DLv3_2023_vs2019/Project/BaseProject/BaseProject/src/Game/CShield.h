@@ -17,7 +17,6 @@ public:
 	void Render();
 
 private:
-	void CreateFieldObjects();
 
 	CModel* mpShield;
 };
