@@ -94,6 +94,16 @@ CEnemy::CEnemy()
 	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.0f, 0.3f,0.0f);
+
+	mpAttackCol = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		0.5f
+	);
+	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
+	mpAttackCol->Position(0.0f, 0.3f, 0.0f);
+
 }
 
 CEnemy::~CEnemy()
@@ -109,6 +119,11 @@ CEnemy::~CEnemy()
 	{
 		delete mpDamageCol;
 		mpDamageCol = nullptr;
+	}
+	if (mpAttackCol != nullptr)
+	{
+		delete mpAttackCol;
+		mpAttackCol = nullptr;
 	}
 
 	if (mpModel != nullptr)
@@ -179,11 +194,11 @@ void CEnemy::UpdateAttack()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
-	AttackStart();
 	// 攻撃終了待ち状態へ移行
 	if (IsAnimationFinished())
 	{
 		mState = EState::eAttackWait;
+		AttackStart();
 	}
 }
 
@@ -192,11 +207,11 @@ void CEnemy::UpdateAttack2()
 {
 	// 攻撃2アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack2);
-	AttackStart();
 	// 攻撃2終了待ち状態へ移行
 	if (IsAnimationFinished())
 	{
 		mState = EState::eAttackWait;
+		AttackStart();
 	}
 }
 
@@ -251,7 +266,7 @@ void CEnemy::UpdateDizzy()
 	//}
 }
 
-//更新処理
+// 更新処理
 void CEnemy::Update()
 {
 	SetParent(mpRideObject);
@@ -302,7 +317,7 @@ void CEnemy::Update()
 
 	if (mCharaStatus.hp == 0)
 	{
-		//死亡処理
+		// 死亡処理
 		mState = EState::eDie;
 	}
 
@@ -324,7 +339,7 @@ void CEnemy::Update()
 
 	mIsGrounded = false;
 
-	//エネミーのデバック表示
+	// エネミーのデバック表示
 	static bool debug = false;
 	if (CInput::PushKey('Q'))
 	{
@@ -341,16 +356,24 @@ void CEnemy::Update()
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self == mpColliderLine)
+	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
+	if (self == mpAttackCol)
 	{
-		if (other->Layer() == ELayer::eField)
+		// キャラのポインタに変換
+		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
+		// 相手のコライダーの持ち主がキャラであれば、
+		if (chara != nullptr)
 		{
-			Position(Position() + hit.adjust);
-			mIsGrounded = true;
-
-			if (other->Tag() == ETag::eRideableObject)
+			// 既に攻撃済みのキャラでなければ
+			if (!IsAttackHitObj(chara))
 			{
-				mpRideObject = other->Owner();
+				int damage = 0;
+				damage = mCharaStatus.power;
+				// ダメージを与える
+				chara->TakeDamage(damage);
+
+				// 攻撃済みリストに追加
+				AddAttackHitObj(chara);
 			}
 		}
 	}
@@ -360,16 +383,16 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 void CEnemy::AttackStart()
 {
 	CXCharacter::AttackStart();
-	//攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpDamageCol->SetEnable(true);
+	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
+	mpAttackCol->SetEnable(true);
 }
 
-//攻撃終了
+// 攻撃終了
 void CEnemy::AttackEnd()
 {
 	CXCharacter::AttackEnd();
-	//攻撃が終われば、攻撃判定用のコライダーをオフにする
-	mpDamageCol->SetEnable(false);
+	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
+	mpAttackCol->SetEnable(false);
 }
 
 // 描画
@@ -378,28 +401,25 @@ void CEnemy::Render()
 	CXCharacter::Render();
 }
 
-//1レベルアップ
+// 1レベルアップ
 void CEnemy::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
-//レベルを変更
+// レベルを変更
 void CEnemy::ChangeLevel(int level)
 {
-	//ステータスのテーブルのインデックス値に変換
+	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
-	//最大ステータスに設定
+	// 最大ステータスに設定
 	mCharaMaxStatus = ENEMY_STATUS[index];
-	//現在のステータスを最大値にすることで、HP回復
+	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
-
-	//mpHpGauge->SetMaxValue(mCharaMaxStatus2.hp);
-	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
 
-//被ダメージ処理
+// 被ダメージ処理
 void CEnemy::TakeDamage(int damage)
 {
 	//死亡していたら、ダメージは受けない
@@ -412,10 +432,10 @@ void CEnemy::TakeDamage(int damage)
 	{
 		mState = EState::eHit;
 	}
-	//HPが0になったら、
+	// HPが0になったら、
 	if (mCharaStatus.hp == 0)
 	{
-		//死亡処理
+		// 死亡処理
 		mState = EState::eDie;
 	}
 }

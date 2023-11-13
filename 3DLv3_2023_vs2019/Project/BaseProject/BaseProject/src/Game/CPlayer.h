@@ -24,7 +24,7 @@ public:
 	bool IsDeath2() const;
 	bool IsDeath3() const;
 
-	//インスタンスのポインタの取得
+	// インスタンスのポインタの取得
 	static CPlayer* Instance();
 
 	// コンストラクタ
@@ -62,7 +62,7 @@ public:
 	// レベルの変更
 	void ChangeLevel(int level);
 
-	// 特殊攻撃(SA)回数を自動回復
+	// HP回復と特殊攻撃(SA)回数を自動回復
 	void AutomaticRecovery();
 
 	// 更新
@@ -85,6 +85,8 @@ public:
 	void TakeDamage(int damage)override;
 
 private:
+	// 回復までのカウント
+	int healcount;
 	// 特殊攻撃の回数の回復までのカウント
 	int recoverycount;
 	// アニメーションの種類
@@ -136,7 +138,7 @@ private:
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 		ePowerUp,   // 攻撃力アップ
-		ePowerUpEnd,   // 攻撃力アップ終了
+		ePowerUpEnd,  // 攻撃力アップ終了
 		eHit,       // ヒット
 	};
 	EState mState;	// プレイヤーの状態
@@ -146,7 +148,6 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	CColliderSphere* mpColliderSphere;
 
 	CTransform* mpRideObject;
 
@@ -155,6 +156,6 @@ private:
 
 	CVector mDefaultPos;  // デフォルトの座標
 
-	CSword* mpSword;  // 右手に持つ剣
-	CShield* mpShield;  // 左手に持つ盾
+	CSword* mpSword;      // 右手に持つ剣
+	CShield* mpShield;    // 左手に持つ盾
 };

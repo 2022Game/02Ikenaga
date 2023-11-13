@@ -6,7 +6,6 @@ CSword::CSword()
 {
 	mpSword = new CModel();
 	mpSword->Load("Item\\Equipment\\Sword\\Sword.obj", "Item\\Equipment\\Sword\\Sword.mtl");
-	//mpSword->Load("Item\\Equipment\\Shield\\Shield.obj", "Item\\Equipment\\Shield\\Shield.mtl");
 
 	//攻撃判定用のコライダーを作成
 	mpAttackCol = new CColliderLine

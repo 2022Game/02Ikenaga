@@ -136,6 +136,7 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
+	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  // HPゲージ

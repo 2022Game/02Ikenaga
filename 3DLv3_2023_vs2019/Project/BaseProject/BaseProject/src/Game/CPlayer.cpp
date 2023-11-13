@@ -79,6 +79,7 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
+	,healcount(0)
 	, recoverycount(0)
 {
 
@@ -132,7 +133,7 @@ CPlayer::CPlayer()
 	);
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::eDamageCol });
+	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol->SetCollisionTags({ ETag::eEnemy });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(-0.05f, 0.7f, 0.0f);
@@ -157,10 +158,10 @@ CPlayer::~CPlayer()
 		mpColliderLine = nullptr;
 	}
 
-	if (mpColliderSphere != nullptr)
+	if (mpDamageCol != nullptr)
 	{
-		delete mpColliderSphere;
-		mpColliderSphere = nullptr;
+		delete mpDamageCol;
+		mpDamageCol = nullptr;
 	}
 
 	if (mpModel != nullptr)
@@ -380,7 +381,7 @@ void CPlayer::UpdateHit()
 void CPlayer::LevelUp()
 {
 	int level = mCharaStatus.level;
-	ChangeLevel(level + 99);
+	ChangeLevel(level + 1);
 }
 
 //レベルを変更
@@ -412,33 +413,34 @@ void CPlayer::ChangeLevel(int level)
 	}
 }
 
-//特殊攻撃(SA)の自動回復
+// HP回復と特殊攻撃(SA)の自動回復
 void CPlayer::AutomaticRecovery()
 {
+	healcount++;
 	recoverycount++;
-	if (mCharaStatus.level <= 4 && mCharaStatus.SpecialAttack < 3)
+	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		if (recoverycount > 300)
+		if (healcount > 700)
+		{
+			mCharaStatus.hp++;
+			healcount = 0;
+		}
+	}
+	if (mCharaStatus.hp == mCharaMaxStatus.hp)
+	{
+		healcount = 0;
+	}
+	if (mCharaStatus.SpecialAttack < mCharaMaxStatus.SpecialAttack)
+	{
+		if (recoverycount > 400)
 		{
 			mCharaStatus.SpecialAttack++;
-			recoverycount = 0;
-		}
-		else if (mCharaStatus.SpecialAttack == 2)
-		{
 			recoverycount = 0;
 		}
 	}
-	if (mCharaStatus.level <= 9 && mCharaStatus.SpecialAttack < 5)
+	if (mCharaStatus.SpecialAttack == mCharaMaxStatus.SpecialAttack)
 	{
-		if (recoverycount > 300)
-		{
-			mCharaStatus.SpecialAttack++;
-			recoverycount = 0;
-		}
-		else if (mCharaStatus.SpecialAttack == 4)
-		{
-			recoverycount = 0;
-		}
+		recoverycount = 0;
 	}
 }
 
@@ -503,7 +505,8 @@ void CPlayer::Update()
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 
-	CDebugPrint::Print("%.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
 
 	// 移動
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
@@ -525,10 +528,13 @@ void CPlayer::Update()
 
 	//プレイヤーのデバック表示
 	static bool debug = false;
+	static bool debug2 = true;
 	if (CInput::PushKey('R'))
 	{
 		debug = !debug;
+		debug2 = !debug2;
 	}
+
 	if(debug)
 	{
 		CDebugPrint::Print("  レベル     %d\n", mCharaStatus.level);
@@ -538,6 +544,13 @@ void CPlayer::Update()
 		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 		CDebugPrint::Print("  特殊攻撃(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 	}
+
+	if (debug2)
+	{
+		CDebugPrint::Print(" R:ステータス確認\n");
+		CDebugPrint::Print(" 2キーでレベルアップ");
+	}
+
 	if (CInput::Key('1'))
 	{
 		if (CInput::PushKey(VK_UP)) mCharaStatus.hp++;
@@ -563,21 +576,6 @@ void CPlayer::Update()
 void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpColliderLine)
-	{
-		if (other->Layer() == ELayer::eField)
-		{
-			mMoveSpeed.Y(0.0f);
-			Position(Position() + hit.adjust);
-			mIsGrounded = true;
-
-			if (other->Tag() == ETag::eRideableObject)
-			{
-				mpRideObject = other->Owner();
-			}
-		}
-	}
-
-	if (self == mpColliderSphere)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
