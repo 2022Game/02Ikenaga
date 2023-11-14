@@ -562,6 +562,7 @@ void CPlayer::Update()
 // Õ“Ëˆ—
 void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
+	Position(Position() + hit.adjust);
 	if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)

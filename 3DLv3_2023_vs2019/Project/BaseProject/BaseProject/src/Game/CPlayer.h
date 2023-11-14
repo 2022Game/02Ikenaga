@@ -140,6 +140,7 @@ private:
 		ePowerUp,   // 攻撃力アップ
 		ePowerUpEnd,  // 攻撃力アップ終了
 		eHit,       // ヒット
+		eStop,      // 停止
 	};
 	EState mState;	// プレイヤーの状態
 

@@ -89,13 +89,14 @@ CEnemy::CEnemy()
 		0.5f,
 		false
 	);
-	//ダメージを受けるコライダーと
-	//衝突判定を行うコライダーのレイヤーとタグを設定
+	//　ダメージを受けるコライダーと
+	//　衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.0f, 0.3f,0.0f);
 
+	// ダメージを与えるコライダー
 	mpAttackCol = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
@@ -340,6 +341,7 @@ void CEnemy::Update()
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
+	Position(Position() + hit.adjust);
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol)
 	{
