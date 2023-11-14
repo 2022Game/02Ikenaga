@@ -13,7 +13,9 @@ CBootMenuScene::CBootMenuScene()
 	{
 		{ "■メイン", EScene::eNone },
 		{ "タイトル画面", EScene::eTitle },
+		{ "チュートリアル",EScene::eTutorial},
 		{ "ゲーム画面", EScene::eGame },
+		{ "操作方法",EScene::eMethod},
 		{ "", EScene::eNone },
 		{ "■デバッグ", EScene::eNone },
 		{ "衝突判定テスト", EScene::eColTest },

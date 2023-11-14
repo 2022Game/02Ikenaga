@@ -12,7 +12,6 @@
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
 #include "CExp.h"
-#include "CCharaBase.h"
 
 //コンストラクタ
 CGameScene::CGameScene()

@@ -564,7 +564,7 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpDamageCol)
 	{
-		Position(Position() + hit.adjust);
+		//Position(Position() + hit.adjust);
 	}
 	if (self == mpColliderLine)
 	{

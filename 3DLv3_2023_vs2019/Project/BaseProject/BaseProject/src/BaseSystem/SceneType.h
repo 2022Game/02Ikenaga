@@ -1,13 +1,15 @@
 #pragma once
 
-//シーンの種類
+// シーンの種類
 enum class EScene
 {
-	eNone,	//どのシーンにも所属していない
+	eNone,	// どのシーンにも所属していない
 
-	eTitle,	//タイトルシーン
-	eGame,	//ゲームシーン
+	eTitle,	    // タイトルシーン
+	eTutorial,  // チュートリアルシーン
+	eGame,	    // ゲームシーン
+	eMethod,    // 操作方法
 
-	eBootMenu,	//起動時メニュー
-	eColTest,	//衝突判定テスト
+	eBootMenu,	// 起動時メニュー
+	eColTest,	// 衝突判定テスト
 };
