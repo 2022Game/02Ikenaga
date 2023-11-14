@@ -363,6 +363,19 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
+	if (self == mpColliderLine)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			Position(Position() + hit.adjust);
+			mIsGrounded = true;
+
+			if (other->Tag() == ETag::eRideableObject)
+			{
+				mpRideObject = other->Owner();
+			}
+		}
+	}
 }
 
 // UŒ‚ŠJn

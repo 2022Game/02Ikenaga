@@ -535,7 +535,7 @@ void CPlayer::Update()
 	if (debug2)
 	{
 		CDebugPrint::Print(" R:ステータス確認\n");
-		CDebugPrint::Print(" 2キーでレベルアップ");
+		CDebugPrint::Print(" 2キーでレベルアップ\n");
 	}
 
 	if (CInput::Key('1'))
@@ -562,7 +562,10 @@ void CPlayer::Update()
 // 衝突処理
 void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	Position(Position() + hit.adjust);
+	if (self == mpDamageCol)
+	{
+		Position(Position() + hit.adjust);
+	}
 	if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)
