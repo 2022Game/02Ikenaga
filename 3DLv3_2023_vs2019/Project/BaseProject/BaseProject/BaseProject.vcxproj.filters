@@ -62,6 +62,9 @@
     <Filter Include="ソース ファイル\Game\UI">
       <UniqueIdentifier>{b05a1b66-ada2-4d06-b2f0-c206d5271ba0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Test">
+      <UniqueIdentifier>{1b92afcf-c66e-4411-8c66-dfd52317a640}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -243,6 +246,42 @@
     </ClCompile>
     <ClCompile Include="src\Game\CSaGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CDebugCamera.cpp">
+      <Filter>ソース ファイル\BaseSystem\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CDebugInput.cpp">
+      <Filter>ソース ファイル\BaseSystem\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CBootMenuScene.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CColBase.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CColLine.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CCollisionTestScene.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CColQuad.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CColSphere.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CColTriangle.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test\CMeasure.cpp">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\System.cpp">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\Primitive.cpp">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -449,6 +488,42 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSaGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CDebugCamera.h">
+      <Filter>ソース ファイル\BaseSystem\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CDebugInput.h">
+      <Filter>ソース ファイル\BaseSystem\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CBootMenuScene.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CColBase.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CColLine.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CCollisionTestScene.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CColQuad.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CColSphere.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CColTriangle.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test\CMeasure.h">
+      <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\System.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\Primitive.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@ enum class ELayer
 {
 	eNone = -1,
 	eField,
+	eTest,
 	ePlayer,
 
 	eDamageCol,  //ダメージを受ける時のコライダー

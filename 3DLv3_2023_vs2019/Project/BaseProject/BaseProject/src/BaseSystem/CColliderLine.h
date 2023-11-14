@@ -14,8 +14,11 @@ public:
 	/// <param name="layer">衝突判定用レイヤー</param>
 	/// <param name="v0">線分の始点</param>
 	/// <param name="v1">線分の終点</param>
+	/// <param name="isKinematic">trueならば、衝突時に押し戻しの影響を受けない</param>
+	/// <param name="weight">コライダーの重量</param>
 	CColliderLine(CObjectBase* owner, ELayer layer,
-		const CVector& v0, const CVector& v1);
+		const CVector& v0, const CVector& v1,
+		bool isKinematic = false, float weight = 1.0f);
 
 	/// <summary>
 	/// 線分コライダーの設定

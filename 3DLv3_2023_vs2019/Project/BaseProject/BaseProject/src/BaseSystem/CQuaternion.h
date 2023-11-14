@@ -18,6 +18,8 @@ public:
 	void Euler(const CVector& euler);
 	CVector Euler() const;
 
+	void RotationAxis(const CVector& axis, float angle);
+
 	CMatrix Matrix() const;
 
 	float Length() const;

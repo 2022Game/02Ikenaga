@@ -1,6 +1,7 @@
 #include "CCamera.h"
 #include "glut.h"
 #include "Maths.h"
+#include "CDebugCamera.h"
 
 CCamera* CCamera::spMainCamera = nullptr;
 
@@ -10,8 +11,12 @@ CCamera::CCamera(const CVector& eye, const CVector& center, bool isMainCamera)
 	, mIsMainCamera(isMainCamera)
 	, mFollowTargetTf(nullptr)
 	, mFollowOffsetPos(CVector::zero)
+	, mFovy(CAMERA_FOVY)
+	, mZNear(CAMERA_ZNEAR)
+	, mZFar(CAMERA_ZFAR)
 {
-	Set(eye, center);
+	LookAt(eye, center, CVector::up);
+	Reshape(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	// メインカメラであれば
 	if (mIsMainCamera)
@@ -37,18 +42,39 @@ CCamera* CCamera::MainCamera()
 	return spMainCamera;
 }
 
-void CCamera::Set(const CVector& eye, const CVector& center)
+// 現在のカメラを取得
+CCamera* CCamera::CurrentCamera()
 {
-	Position(eye);
-	CVector forward = (center - eye).Normalized();
-	CVector side = CVector::Cross(CVector::up, forward).Normalized();
-	CVector up =  CVector::Cross(forward, side).Normalized();
-	Rotation(CQuaternion::LookRotation(forward));
-
-	if (mFollowTargetTf != nullptr)
+	// デバッグカメラが有効であれば、
+	if (CDebugCamera::IsOn())
 	{
-		mFollowOffsetPos = Position() - mFollowTargetTf->Position();
+		// デバッグカメラを返す
+		return CDebugCamera::DebugCamera();
 	}
+	// デバッグカメラが無効であれば、
+	else
+	{
+		// メインカメラを返す
+		return spMainCamera;
+	}
+}
+
+// カメラの状態をコピー
+void CCamera::CopyCamera(CCamera* copy)
+{
+	if (copy == nullptr) return;
+
+	Position(copy->Position());
+	Rotation(copy->Rotation());
+	mViewMatrix = copy->mViewMatrix;
+	mProjectionMatrix = copy->mProjectionMatrix;
+	mViewportMatrix = copy->mViewportMatrix;
+	mFovy = copy->mFovy;
+	mZNear = copy->mZNear;
+	mZFar = copy->mZFar;
+	mEye = copy->mEye;
+	mAt = copy->mAt;
+	mUp = copy->mUp;
 }
 
 // 追従するターゲットを設定
@@ -61,7 +87,8 @@ void CCamera::SetFollowTargetTf(CTransform* target)
 	}
 }
 
-void  CCamera::SetFollowTargetOffset(const CVector& offset)
+// 追従時のオフセット座標を設定
+void CCamera::SetFollowTargetOffset(const CVector& offset)
 {
 	if (mFollowTargetTf != nullptr)
 	{
@@ -69,13 +96,111 @@ void  CCamera::SetFollowTargetOffset(const CVector& offset)
 	}
 }
 
-// 注視する位置を設定
+// 注視する位置を設定（注視点のみ）
 void CCamera::LookAt(const CVector& pos)
 {
-	CVector forward = (pos - Position()).Normalized();
-	CVector side = CVector::Cross(CVector::up, forward).Normalized();
-	CVector up = CVector::Cross(forward, side).Normalized();
-	Rotation(CQuaternion::LookRotation(forward));
+	LookAt(mEye, pos, mUp);
+}
+
+// 注視する位置を設定（注視点 + 上ベクトル）
+void CCamera::LookAt(const CVector& pos, const CVector& up)
+{
+	LookAt(mEye, pos, up);
+}
+
+// 注視する位置を設定（視点 + 注視点 + 上ベクトル）
+void CCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up)
+{
+	mEye = eye; mAt = at; mUp = up;
+	mViewMatrix.Identity();
+	CVector f = (mEye - mAt).Normalized();
+	CVector r = CVector::Cross(mUp, f).Normalized();
+	CVector u = CVector::Cross(f, r).Normalized();
+	mViewMatrix.M(0, 0, r.X()); mViewMatrix.M(1, 0, r.Y()); mViewMatrix.M(2, 0, r.Z());
+	mViewMatrix.M(0, 1, u.X()); mViewMatrix.M(1, 1, u.Y()); mViewMatrix.M(2, 1, u.Z());
+	mViewMatrix.M(0, 2, f.X()); mViewMatrix.M(1, 2, f.Y()); mViewMatrix.M(2, 2, f.Z());
+	mViewMatrix.M(3, 0, -CVector::Dot(mEye, r));
+	mViewMatrix.M(3, 1, -CVector::Dot(mEye, u));
+	mViewMatrix.M(3, 2, -CVector::Dot(mEye, f));
+
+	Position(mEye);
+	Rotation(CQuaternion::LookRotation(f));
+
+	if (mFollowTargetTf != nullptr)
+	{
+		mFollowOffsetPos = Position() - mFollowTargetTf->Position();
+	}
+}
+
+// 画面サイズ変更処理
+void CCamera::Reshape(int width, int height)
+{
+	//画面の描画エリアの指定
+	Viewport(0.0f, 0.0f, width, height);
+
+	Perspective
+	(
+		CAMERA_FOVY,
+		(float)width / height,
+		CAMERA_ZNEAR,
+		CAMERA_ZFAR
+	);
+}
+
+// 画面の描画エリアを指定
+void CCamera::Viewport(float x, float y, float w, float h)
+{
+	glViewport(x, y, w, h);
+	mViewportMatrix.Identity();
+	mViewportMatrix.M(0, 0, w * 0.5f);
+	mViewportMatrix.M(3, 0, x + w * 0.5f);
+	mViewportMatrix.M(1, 1, -h * 0.5f);
+	mViewportMatrix.M(3, 1, y + h * 0.5f);
+}
+
+// 透視投影行列を設定
+void CCamera::Perspective(float fovy, float aspect, float zNear, float zFar)
+{
+	//各値を設定
+	mFovy = fovy;
+	mZNear = zNear;
+	mZFar = zFar;
+
+	//プロジェクション行列へ切り替え
+	glMatrixMode(GL_PROJECTION);
+	//行列を初期化して、新しいプロジェクション行列を設定
+	glLoadIdentity();
+	gluPerspective(mFovy, aspect, mZNear, mZFar);
+	//プロジェクション行列を記憶しておく
+	glGetFloatv(GL_PROJECTION_MATRIX, mProjectionMatrix.M());
+
+	//モデルビュー行列へ戻す
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+// スクリーン座標からワールド座標へ変換
+CVector CCamera::ScreenToWorldPos(const CVector& screenPos)
+{
+	float z = screenPos.Z();
+	float d = ((z * (mZFar + mZNear) - 2.0f * mZFar * mZNear) / (mZFar - mZNear) / z);
+	CVector4 v =
+		mViewportMatrix.Inverse() *
+		mProjectionMatrix.Inverse() *
+		mViewMatrix.Inverse() *
+		CVector4(screenPos.X(), screenPos.Y(), d, 1.0f);
+	return CVector(v.X() / v.W(), v.Y() / v.W(), v.Z() / v.W());
+}
+
+// ワールド座標からスクリーン座標へ変換
+CVector CCamera::WorldToScreenPos(const CVector& worldPos)
+{
+	CVector4 v =
+		mViewMatrix *
+		mProjectionMatrix *
+		mViewportMatrix *
+		CVector4(worldPos, 1.0f);
+	return CVector(v.X() / v.W(), v.Y() / v.W(), v.Z() / fabsf(v.W()));
 }
 
 // 更新
@@ -86,21 +211,17 @@ void CCamera::Update()
 	if (mFollowTargetTf != nullptr)
 	{
 		Position(mFollowTargetTf->Position() + mFollowOffsetPos);
+		mEye = Position();
+		mAt = mEye + -VectorZ().Normalized();
 	}
+
+	LookAt(mEye, mAt, mUp);
 }
 
 // カメラ反映
 void CCamera::Apply()
 {
-	CVector eye = CTransform::Position();
-	CVector center = eye + VectorZ().Normalized();
-	CVector up = CVector::up;
-	gluLookAt
-	(
-		eye.X(), eye.Y(), eye.Z(),
-		center.X(), center.Y(), center.Z(),
-		up.X(), up.Y(), up.Z()
-	);
+	glMultMatrixf(mViewMatrix.M());
 }
 
 // 2D用のカメラ行列を反映

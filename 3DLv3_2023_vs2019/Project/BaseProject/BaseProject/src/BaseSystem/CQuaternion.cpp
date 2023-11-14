@@ -150,6 +150,17 @@ CVector CQuaternion::Euler() const
 	return CVector(tx, ty, tz);
 }
 
+void CQuaternion::RotationAxis(const CVector& axis, float angle)
+{
+	angle = Math::DegreeToRadian(angle);
+	float a2 = angle * 0.5f;
+	float s = sinf(a2);
+	mW = cosf(a2);
+	mX = axis.X() * s;
+	mY = axis.Y() * s;
+	mZ = axis.Z() * s;
+}
+
 CMatrix CQuaternion::Matrix() const
 {
 	float x2 = mX * mX, y2 = mY * mY, z2 = mZ * mZ, w2 = mW * mW;

@@ -5,13 +5,17 @@
 #include "CColliderTriangle.h"
 #include "CColliderMesh.h"
 #include "CObjectBase.h"
+#include "Maths.h"
 
 // コンストラクタ
-CCollider::CCollider(CObjectBase* owner, ELayer layer, EColliderType type)
+CCollider::CCollider(CObjectBase* owner, ELayer layer, EColliderType type,
+	bool isKinematic, float weight)
 	: mLayer(layer)
 	, mType(type)
 	, mpOwner(owner)
 	, mIsEnable(true)
+	, mIsKinematic(isKinematic)
+	, mWeight(weight)
 	, mCollisionLayers(~0)
 	, mCollisionTags(~0)
 {
@@ -62,6 +66,30 @@ void CCollider::SetEnable(bool isEnable)
 bool CCollider::IsEnable() const
 {
 	return mIsEnable;
+}
+
+// 衝突時の押し戻しの影響を受けるかどうかを設定
+void CCollider::SetKinematic(bool iskinematic)
+{
+	mIsKinematic = iskinematic;
+}
+
+// 衝突時の押し戻しの影響を受けるかどうか
+bool CCollider::IsKinematic() const
+{
+	return mIsKinematic;
+}
+
+// コライダーの重量を設定
+void CCollider::SetWeight(float weight)
+{
+	mWeight = weight;
+}
+
+// コライダーの重量を取得
+float CCollider::GetWeight() const
+{
+	return mWeight;
 }
 
 // 指定したコライダーと衝突判定を行うかどうかを取得
@@ -215,11 +243,11 @@ bool CCollider::CollisionTriangleLine(
 	//調整値計算（衝突しない位置まで戻す）
 	if (dots < 0.0f) {
 		//始点が裏面
-		h->adjust = normal * -dots;
+		h->adjust = normal * dots;
 	}
 	else {
 		//終点が裏面
-		h->adjust = normal * -dote;
+		h->adjust = normal * dote;
 	}
 	return true;
 }
@@ -257,7 +285,7 @@ bool CCollider::CollisionSphere(const CVector& sp0, const float sr0,
 	//中心の距離が半径の合計より小さいと衝突
 	float sum = sr0 + sr1;
 	if (sum > length) {
-		hit->adjust = sp1 + vec.Normalized() * sum;
+		hit->adjust = vec.Normalized() * (sum - length);
 		//衝突している
 		return  true;
 	}
@@ -275,7 +303,7 @@ bool CCollider::CollisionSphereLine(const CVector& sp, const float sr,
 	float length = CalcDistancePointToLine(sp, ls, le, &nearest);
 	if (length < sr)
 	{
-		hit->adjust = nearest + (sp - nearest).Normalized() * sr;
+		hit->adjust = (sp - nearest).Normalized() * (sr - length);
 		return true;
 	}
 
@@ -479,7 +507,7 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 		}
 		case EColliderType::eTriangle:
 		{
-			CColliderTriangle* triangle0 = dynamic_cast<CColliderTriangle*>(c1);
+			CColliderTriangle* triangle0 = dynamic_cast<CColliderTriangle*>(c0);
 			CVector t00, t01, t02;
 			triangle0->Get(&t00, &t01, &t02);
 			switch (c1->Type())
@@ -555,4 +583,27 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 		}
 	}
 	return false;
+}
+
+// 衝突時の押し戻し割合を算出
+float CCollider::CalcPushBackRatio(CCollider* self, CCollider* other)
+{
+	// 自身のコライダーが押し戻しの影響を受けない
+	if (self->IsKinematic()) return 0.0f;
+	// 相手のコライダーが押し戻しの影響を受けない
+	if (other->IsKinematic()) return 1.0f;
+
+	// 両方のコライダーが押し戻しの影響を受ける場合は、
+	// 両方のコライダーの重量で押し戻し割合を算出
+	float sw = self->GetWeight();
+	float ow = self->GetWeight();
+	// 同じ重量ならば、50%の影響を受ける
+	if (sw == ow) return 0.5f;
+	// 自身の重量が0ならば、100%の影響を受ける
+	if (sw <= 0.0f) return 1.0f;
+	// 相手の重量が0ならば、影響は受けない
+	if (ow <= 0.0f) return 0.0f;
+
+	// 重量の割合を計算して返す
+	return Math::Clamp01((sw + ow) / sw);
 }

@@ -2,6 +2,7 @@
 
 const CColor CColor::black(0.0f, 0.0f, 0.0f, 1.0f);
 const CColor CColor::white(1.0f, 1.0f, 1.0f, 1.0f);
+const CColor CColor::gray(0.5f, 0.5f, 0.5f, 1.0f);
 const CColor CColor::red(1.0f, 0.0f, 0.0f, 1.0f);
 const CColor CColor::green(0.0f, 1.0f, 0.0f, 1.0f);
 const CColor CColor::blue(0.0f, 0.0f, 1.0f, 1.0f);

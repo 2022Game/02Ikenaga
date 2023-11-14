@@ -1,7 +1,8 @@
 #include "CColliderMesh.h"
 
-CColliderMesh::CColliderMesh(CObjectBase* owner, ELayer layer, CModel* model)
-	: CCollider(owner, layer, EColliderType::eMesh)
+CColliderMesh::CColliderMesh(CObjectBase* owner, ELayer layer, CModel* model,
+	bool isKinematic, float weight)
+	: CCollider(owner, layer, EColliderType::eMesh, isKinematic, weight)
 {
 	Set(model);
 }

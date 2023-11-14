@@ -4,7 +4,6 @@
 #include "CTaskManager.h"
 #include "CCollisionManager.h"
 #include "CSceneManager.h"
-#include "CTitleScene.h"
 
 CApplication::~CApplication()
 {
@@ -12,7 +11,7 @@ CApplication::~CApplication()
 
 void CApplication::Start()
 {
-	CSceneManager::Instance()->LoadScene(EScene::eTitle);
+	CSceneManager::Instance()->LoadScene(EScene::eBootMenu);
 }
 
 void CApplication::Update()

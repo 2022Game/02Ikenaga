@@ -129,7 +129,8 @@ CPlayer::CPlayer()
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.4f
+		0.4f,
+		false
 	);
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
@@ -152,23 +153,9 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
-	if (mpColliderLine != nullptr)
-	{
-		delete mpColliderLine;
-		mpColliderLine = nullptr;
-	}
-
-	if (mpDamageCol != nullptr)
-	{
-		delete mpDamageCol;
-		mpDamageCol = nullptr;
-	}
-
-	if (mpModel != nullptr)
-	{
-		delete mpModel;
-		mpModel = nullptr;
-	}
+	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpDamageCol);
+	SAFE_DELETE(mpModel);
 }
 
 CPlayer* CPlayer::Instance()
@@ -195,8 +182,8 @@ void CPlayer::UpdateIdle()
 		// 移動処理
 		// キーの入力ベクトルを取得
 		CVector input;
-		if (CInput::Key('W'))		input.Z(1.0f);
-		else if (CInput::Key('S'))	input.Z(-1.0f);
+		if (CInput::Key('W'))		input.Z(-1.0f);
+		else if (CInput::Key('S'))	input.Z(1.0f);
 		if (CInput::Key('A'))		input.X(-1.0f);
 		else if (CInput::Key('D'))	input.X(1.0f);
 

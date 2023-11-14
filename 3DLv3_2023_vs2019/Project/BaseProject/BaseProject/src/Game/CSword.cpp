@@ -26,11 +26,7 @@ CSword::CSword()
 
 CSword::~CSword()
 {
-	if (mpSword != nullptr)
-	{
-		delete mpSword;
-		mpSword = nullptr;
-	}
+	SAFE_DELETE(mpSword);
 }
 
 void CSword::Update()

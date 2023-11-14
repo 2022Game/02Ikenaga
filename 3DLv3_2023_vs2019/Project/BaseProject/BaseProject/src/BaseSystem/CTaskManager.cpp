@@ -1,5 +1,6 @@
 #include "CTaskManager.h"
 #include "CCamera.h"
+#include "CDebugCamera.h"
 
 //タスクマネージャのインスタンス
 CTaskManager* CTaskManager::mpInstance = nullptr;
@@ -150,8 +151,15 @@ void CTaskManager::Render()
 	CTask* task = mpHead->mpNext;
 
 	// 3D関連の描画
-	// メインカメラを反映
-	CCamera::MainCamera()->Apply();
+	if (CDebugCamera::IsOn())
+	{
+		CDebugCamera::DebugCamera()->Apply();
+	}
+	else
+	{
+		// メインカメラを反映
+		CCamera::MainCamera()->Apply();
+	}
 	// 先頭から2D関連のタスクまで描画する
 	while (task != mpTail && task->mPriority < ETaskPriority::Start2d)
 	{

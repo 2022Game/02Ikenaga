@@ -24,6 +24,8 @@ public:
 	const static CColor black;
 	// 白色 [1, 1, 1, 1]
 	const static CColor white;
+	// 灰色 [0.5, 0.5, 0.5, 1]
+	const static CColor gray;
 	// 赤色 [1, 0, 0, 1]
 	const static CColor red;
 	// 緑色 [0, 1, 0, 1]

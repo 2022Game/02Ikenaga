@@ -1,5 +1,7 @@
 #pragma once
 #include "CMatrix.h"
+class CVector2;
+class CVector4;
 
 /// <summary>
 /// 3次元ベクトル
@@ -7,10 +9,16 @@
 class CVector
 {
 public:
-	// コンストラクタ
+	// コンストラクタ（引数なし）
 	CVector();
-	// コンストラクタ
+	// コンストラクタ（xyz）
 	CVector(float x, float y, float z);
+	// コンストラクタ（CVector2）
+	CVector(const CVector2& v);
+	// コンストラクタ（CVector2 + z）
+	CVector(const CVector2& v, float z);
+	// コンストラクタ（CVector4）
+	CVector(const CVector4& v);
 	// デストラクタ
 	~CVector();
 
@@ -163,10 +171,12 @@ private:
 class CVector2
 {
 public:
-	// コンストラクタ
+	// コンストラクタ（引数なし）
 	CVector2();
-	// コンストラクタ
+	// コンストラクタ（xy）
 	CVector2(float x, float y);
+	// コンストラクタ（CVector）
+	CVector2(const CVector& v);
 	// デストラクタ
 	~CVector2();
 
@@ -292,6 +302,17 @@ private:
 class CVector4
 {
 public:
+	// コンストラクタ（引数なし）
+	CVector4();
+	// コンストラクタ（xyzw）
+	CVector4(float x, float y, float z, float w);
+	// コンストラクタ（xyz）
+	CVector4(float x, float y, float z);
+	// コンストラクタ（CVector）
+	CVector4(const CVector& v);
+	// コンストラクタ（CVector + w）
+	CVector4(const CVector& v, float w);
+
 	//各軸での値の設定
 	//Set(X座標, Y座標, Z座標, W)
 	void Set(float x, float y, float z, float w);
@@ -313,14 +334,10 @@ public:
 	float W() const;
 	//Wの値を設定
 	void W(float w);
-
-	//デフォルトコンストラクタ
-	CVector4();
-	//コンストラクタ
-	//CVector(X座標, Y座標, Z座標, W)
-	CVector4(float x, float y, float z, float w);
-	CVector4(float x, float y, float z);
-	CVector4(const CVector& v);
+	//インデックス値を指定して値を取得
+	float V(int n) const;
+	//インデックス値を指定して値を設定
+	void V(int n, float v);
 
 	//代入演算子
 	//CVector4 = CVector でCVectorの内容を自身に代入
@@ -351,7 +368,15 @@ public:
 	//CVector4 *= float で演算結果を自身に代入
 	void operator*=(const float& f);
 
+	//CVector4 * CMatrix の演算結果を返す
+	CVector4 operator*(const CMatrix& m) const;
+
 private:
 	//4Dでの値を設定
 	float mX, mY, mZ, mW;
 };
+
+//CMatrix * CVector の演算結果を返す
+CVector operator * (const CMatrix& m, const CVector& v);
+//CMatrix * CVector4 の演算結果を返す
+CVector4 operator * (const CMatrix& m, const CVector4& v);

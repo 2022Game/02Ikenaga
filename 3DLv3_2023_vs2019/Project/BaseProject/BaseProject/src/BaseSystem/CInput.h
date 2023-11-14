@@ -3,18 +3,29 @@
 #include "GLFW/glfw3.h"
 #include <map>
 #include "CVector.h"
+class CDebugInput;
 
 // 入力判定クラス
 class CInput
 {
+	friend CDebugInput;
 public:
 	/// <summary>
 	/// ウィンドウを設定
 	/// </summary>
 	/// <param name="pwindow"></param>
 	static void Window(GLFWwindow* pwindow);
+
 	// マウス座標を取得
 	static CVector2 GetMousePos();
+
+	// マウス座標の移動量を取得
+	static CVector2 GetDeltaMousePos();
+
+	// マウスホイールの回転量を加算
+	static void AddMouseWheel(int wheel);
+	// マウスホイールの回転量の差分を取得
+	static int GetDeltaMouseWheel();
 
 	/// <summary>
 	/// キーが入力されているか
@@ -66,4 +77,19 @@ private:
 	};
 	// キーの入力状態を管理するリスト
 	static std::map<int, int> msInputBits;
+	// 現在のマウス座標
+	static CVector2 msMousePos;
+	// 前回のマウス座標
+	static CVector2 msLastMousePos;
+	// マウスホイールの回転量
+	static int msMouseWheel;
+	// 前回のマウスホイールの回転量
+	static int msLastMouseWheel;
+	// マウスホイールの回転量の差分
+	static int msDeltaMouseWheel;
+
+#if _DEBUG
+	// 通常入力が無効化される前のマウス座標
+	static CVector2 msDebugLastMousePos;
+#endif
 };

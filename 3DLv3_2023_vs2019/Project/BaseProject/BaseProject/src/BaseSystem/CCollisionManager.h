@@ -56,4 +56,6 @@ private:
 	static CCollisionManager* mpInstance;
 	// コライダーのリスト
 	std::list<CCollider*> mColliderList;
+	// コライダーを描画するかどうか
+	bool mIsShowCollider;
 };

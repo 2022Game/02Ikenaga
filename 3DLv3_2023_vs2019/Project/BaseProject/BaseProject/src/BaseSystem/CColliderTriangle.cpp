@@ -4,19 +4,14 @@
 
 // コンストラクタ
 CColliderTriangle::CColliderTriangle(CObjectBase* owner, ELayer layer,
-	const CVector& v0, const CVector& v1, const CVector& v2)
-	: CCollider(owner, layer, EColliderType::eTriangle)
+	const CVector& v0, const CVector& v1, const CVector& v2,
+	bool isKinematic, float weight)
+	: CCollider(owner, layer, EColliderType::eTriangle, isKinematic, weight)
 {
 	// 三角形の頂点を設定
 	mV[0] = v0;
 	mV[1] = v1;
 	mV[2] = v2;
-}
-
-// コンストラクタ（引数なし版）
-CColliderTriangle::CColliderTriangle()
-	: CCollider(nullptr, ELayer::eNone, EColliderType::eTriangle)
-{
 }
 
 // 三角形コライダーの設定

@@ -86,7 +86,8 @@ CEnemy::CEnemy()
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.5f
+		0.5f,
+		false
 	);
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
@@ -98,7 +99,8 @@ CEnemy::CEnemy()
 	mpAttackCol = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		0.5f
+		0.5f,
+		false
 	);
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
@@ -108,29 +110,11 @@ CEnemy::CEnemy()
 
 CEnemy::~CEnemy()
 {
-	if (mpColliderLine != nullptr)
-	{
-		delete mpColliderLine;
-		mpColliderLine = nullptr;
-	}
-
-	//ダメージを受けるコライダーを削除
-	if (mpDamageCol != nullptr)
-	{
-		delete mpDamageCol;
-		mpDamageCol = nullptr;
-	}
-	if (mpAttackCol != nullptr)
-	{
-		delete mpAttackCol;
-		mpAttackCol = nullptr;
-	}
-
-	if (mpModel != nullptr)
-	{
-		delete mpModel;
-		mpModel = nullptr;
-	}
+	SAFE_DELETE(mpColliderLine);
+	// ダメージを受けるコライダーを削除
+	SAFE_DELETE(mpDamageCol);
+	SAFE_DELETE(mpAttackCol);
+	SAFE_DELETE(mpModel);
 }
 
 CEnemy* CEnemy::Instance()

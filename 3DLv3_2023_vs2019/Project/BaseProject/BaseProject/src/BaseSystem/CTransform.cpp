@@ -338,6 +338,9 @@ void CTransform::Rotate(float x, float y, float z)
 // 任意軸回転
 void CTransform::RotateAxis(const CVector& axis, float angle)
 {
+	CQuaternion q;
+	q.RotationAxis(axis, angle);
+	Rotation(mRotation * q);
 }
 
 // ターゲット位置へ向ける

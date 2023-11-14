@@ -18,6 +18,9 @@ CTitleScene::~CTitleScene()
 //シーン読み込み
 void CTitleScene::Load()
 {
+	// 背景色設定
+	System::SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
 	//ここでタイトル画面に必要な
 	//リソースの読み込みやクラスの生成を行う
 	//mBgImage = new CImage("white.png");

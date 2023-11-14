@@ -36,8 +36,10 @@ public:
 	CVector VectorZ() const; //Z軸ベクトルの取得
 	CVector VectorX() const; //X軸ベクトルの取得
 	CVector VectorY() const; //Y軸ベクトルの取得
-	//逆行列取得
+	//転置行列取得
 	CMatrix Transpose() const;
+	//逆行列取得
+	CMatrix Inverse() const;
 	//表示確認用
 	//4×4の行列を画面出力
 	void Print();

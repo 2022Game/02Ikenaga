@@ -1,6 +1,7 @@
 #include "CCollisionManager.h"
 #include "CCollider.h"
 #include "CObjectBase.h"
+#include "CDebugInput.h"
 
 // コリジョンマネージャのインスタンス
 CCollisionManager* CCollisionManager::mpInstance = nullptr;
@@ -24,6 +25,7 @@ void CCollisionManager::ClearInstance()
 
 // コンストラクタ
 CCollisionManager::CCollisionManager()
+	: mIsShowCollider(false)
 {
 }
 
@@ -73,11 +75,21 @@ void CCollisionManager::Collision(CCollider* col0, CCollider* col1)
 	// 衝突していなければ、衝突処理を行わない
 	if (!collision) return;
 
+	// 押し戻しの影響割合を重量で計算
+	hit.weight = CCollider::CalcPushBackRatio(col0, col1);
+
 	// 各コライダーの持ち主に衝突したことを伝える
 	if (col0->Owner() != nullptr)
+	{
 		col0->Owner()->Collision(col0, col1, hit);
+	}
 	if (col1->Owner() != nullptr)
+	{
+		// 押し戻し方向と影響割合を反転
+		hit.adjust = -hit.adjust;
+		hit.weight = 1.0f - hit.weight;
 		col1->Owner()->Collision(col1, col0, hit);
+	}
 }
 
 // 指定したコライダーと他の全てのコライダーとの衝突処理を行う
@@ -121,6 +133,14 @@ void CCollisionManager::CollisionAll()
 // 全コライダーを描画
 void CCollisionManager::Render()
 {
+	// 「SHIFT」+「9」でコライダー表示機能オンオフ
+	if (CDebugInput::Key(VK_SHIFT) && CDebugInput::PushKey('9'))
+	{
+		mIsShowCollider = !mIsShowCollider;
+	}
+	// コライダー表示フラグがオフなら、以降処理しない
+	if (!mIsShowCollider) return;
+
 	// リスト内の全てのコライダーを描画
 	for (auto& col : mColliderList)
 	{

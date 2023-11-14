@@ -2,6 +2,9 @@
 #include "CTitleScene.h"
 #include "CGameScene.h"
 
+#include "Test/CBootMenuScene.h"
+#include "Test/CCollisionTestScene.h"
+
 // シーンマネージャのインスタンス
 CSceneManager* CSceneManager::mpInstance = nullptr;
 
@@ -47,10 +50,15 @@ void CSceneManager::LoadScene(EScene scene)
 	//生成するシーンのクラスを変更する
 	switch (scene)
 	{
-		//タイトルシーン
-	case EScene::eTitle:   mpScene = new CTitleScene();   break;
-		//ゲームシーン
-	case EScene::eGame:    mpScene = new CGameScene();    break;
+	//タイトルシーン
+	case EScene::eTitle:	mpScene = new CTitleScene();	break;
+	//ゲームシーン
+	case EScene::eGame:		mpScene = new CGameScene();		break;
+
+	//起動時メニュー
+	case EScene::eBootMenu:	mpScene = new CBootMenuScene();	break;
+	//衝突判定テスト
+	case EScene::eColTest:	mpScene = new CCollisionTestScene(); break;
 	}
 
 	//シーンを新しく生成できたら、

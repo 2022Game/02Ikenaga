@@ -4,6 +4,7 @@
 #include "GLFW/glfw3.h"
 #include "CApplication.h"
 #include "CInput.h"
+#include "CCamera.h"
 
 // 1秒間に実行するフレーム数
 int gFPS = 60;
@@ -28,6 +29,16 @@ void display() {
 
 }
 
+/// <summary>
+/// マウスホイール回転時のコールバック関数
+/// </summary>
+/// <param name="window"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+void wheel(GLFWwindow* window, double x, double y)
+{
+	CInput::AddMouseWheel((int)y);
+}
 
 /*ウィンドウサイズ変更時の処理
 void reshape(int width, int height)
@@ -35,16 +46,29 @@ width:画面幅
 height:画面高さ
 */
 void reshape(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);	//画面の描画エリアの指定
-	glMatrixMode(GL_PROJECTION);	//行列をプロジェクションモードへ変更
-	glLoadIdentity();				//行列を初期化
-#ifndef GAME3D
-	gluOrtho2D(0, width, 0, height);	//2Dの画面を設定
-#else
-	gluPerspective(60.0, (double)width / (double)height, 1.0, 10000.0);	//3Dの画面を設定
-#endif
-	glMatrixMode(GL_MODELVIEW);		//行列をモデルビューモードへ変更
-	glLoadIdentity();				//行列を初期化
+	CCamera* cam = CCamera::CurrentCamera();
+	if (cam == nullptr)
+	{
+		glViewport(0, 0, width, height);	//画面の描画エリアの指定
+
+		glMatrixMode(GL_PROJECTION);	//行列をプロジェクションモードへ変更
+		glLoadIdentity();				//行列を初期化
+		//3Dの画面を設定
+		gluPerspective
+		(
+			CAMERA_FOVY,
+			(double)width / (double)height,
+			CAMERA_ZNEAR,
+			CAMERA_ZFAR
+		);
+
+		glMatrixMode(GL_MODELVIEW);		//行列をモデルビューモードへ変更
+		glLoadIdentity();				//行列を初期化
+	}
+	else
+	{
+		cam->Reshape(width, height);
+	}
 }
 //
 LARGE_INTEGER last_time;	//前回のカウンタ値
@@ -84,10 +108,10 @@ int main(void)
 
 	/* Create a windowed mode window and its OpenGL context */
 #ifndef FULL_SCREEN
-	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE, NULL, NULL);
 #else
 	//Full Screen
-	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello World", glfwGetPrimaryMonitor(), NULL);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE, glfwGetPrimaryMonitor(), NULL);
 #endif
 	if (!window)
 	{
@@ -116,18 +140,19 @@ int main(void)
 	glfwSetWindowSizeCallback(window, reshape);
 	reshape(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-#ifdef GAME3D
-	glEnable(GL_DEPTH_TEST);	//3D必要 2D不要
+	// マウスホイール回転時のコールバック関数を登録
+	glfwSetScrollCallback(window, wheel);
+
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-	//ライトの設定（3D必要 2D不要）
+	//ライトの設定
 	//固定シェーダー用
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	float lightPosition[] = {0.0f, 100.0f, 100.0f, 1.0f};
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glEnable(GL_NORMALIZE);
-#endif
 
 	//初期処理
 	gApplication.Start();
@@ -155,17 +180,20 @@ int main(void)
 	return 0;
 }
 
+// 目標フレームレートを取得
 int Time::TargetFPS()
 {
 	return gFPS;
 }
 
+// 前回のフレームのFPSを取得
 float Time::FPS()
 {
 	if (gDeltaTime == 0.0f) return 0.0f;
 	return 1.0f / gDeltaTime;
 }
 
+// 前回のフレームの経過時間を取得
 float Time::DeltaTime()
 {
 	return gDeltaTime;

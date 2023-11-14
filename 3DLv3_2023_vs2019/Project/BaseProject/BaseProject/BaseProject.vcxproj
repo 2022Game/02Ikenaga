@@ -20,6 +20,8 @@
     <ClCompile Include="src\BaseSystem\CColliderTriangle.cpp" />
     <ClCompile Include="src\BaseSystem\CCollisionManager.cpp" />
     <ClCompile Include="src\BaseSystem\CColor.cpp" />
+    <ClCompile Include="src\BaseSystem\CDebugCamera.cpp" />
+    <ClCompile Include="src\BaseSystem\CDebugInput.cpp" />
     <ClCompile Include="src\BaseSystem\CDebugPrint.cpp" />
     <ClCompile Include="src\BaseSystem\CDebugProfiler.cpp" />
     <ClCompile Include="src\BaseSystem\CDebugTimer.cpp" />
@@ -48,6 +50,8 @@
     <ClCompile Include="src\BaseSystem\CVector.cpp" />
     <ClCompile Include="src\BaseSystem\CObjectBase.cpp" />
     <ClCompile Include="src\BaseSystem\Maths.cpp" />
+    <ClCompile Include="src\BaseSystem\Primitive.cpp" />
+    <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CExp.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
@@ -71,6 +75,14 @@
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Test\CBootMenuScene.cpp" />
+    <ClCompile Include="src\Test\CColBase.cpp" />
+    <ClCompile Include="src\Test\CColLine.cpp" />
+    <ClCompile Include="src\Test\CCollisionTestScene.cpp" />
+    <ClCompile Include="src\Test\CColQuad.cpp" />
+    <ClCompile Include="src\Test\CColSphere.cpp" />
+    <ClCompile Include="src\Test\CColTriangle.cpp" />
+    <ClCompile Include="src\Test\CMeasure.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CBillBoard.h" />
@@ -82,6 +94,8 @@
     <ClInclude Include="src\BaseSystem\CColliderTriangle.h" />
     <ClInclude Include="src\BaseSystem\CCollisionManager.h" />
     <ClInclude Include="src\BaseSystem\CColor.h" />
+    <ClInclude Include="src\BaseSystem\CDebugCamera.h" />
+    <ClInclude Include="src\BaseSystem\CDebugInput.h" />
     <ClInclude Include="src\BaseSystem\CDebugPrint.h" />
     <ClInclude Include="src\BaseSystem\CDebugProfiler.h" />
     <ClInclude Include="src\BaseSystem\CDebugTimer.h" />
@@ -113,7 +127,9 @@
     <ClInclude Include="src\BaseSystem\CVertex.h" />
     <ClInclude Include="src\BaseSystem\CObjectBase.h" />
     <ClInclude Include="src\BaseSystem\Maths.h" />
+    <ClInclude Include="src\BaseSystem\Primitive.h" />
     <ClInclude Include="src\BaseSystem\SceneType.h" />
+    <ClInclude Include="src\BaseSystem\System.h" />
     <ClInclude Include="src\BaseSystem\TaskPauseType.h" />
     <ClInclude Include="src\BaseSystem\TaskPriority.h" />
     <ClInclude Include="src\BaseSystem\ObjectTag.h" />
@@ -141,6 +157,14 @@
     <ClInclude Include="src\Game\CTitleScene.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
+    <ClInclude Include="src\Test\CBootMenuScene.h" />
+    <ClInclude Include="src\Test\CColBase.h" />
+    <ClInclude Include="src\Test\CColLine.h" />
+    <ClInclude Include="src\Test\CCollisionTestScene.h" />
+    <ClInclude Include="src\Test\CColQuad.h" />
+    <ClInclude Include="src\Test\CColSphere.h" />
+    <ClInclude Include="src\Test\CColTriangle.h" />
+    <ClInclude Include="src\Test\CMeasure.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8802AF2F-2920-4700-89F2-CA6778727283}</ProjectGuid>

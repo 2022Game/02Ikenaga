@@ -15,6 +15,7 @@ class CHitInfo
 {
 public:
 	CVector adjust;
+	float weight;
 	std::list<STVertex> tris;
 };
 
@@ -31,7 +32,7 @@ public:
 	/// <param name="owner">コライダーの持ち主</param>
 	/// <param name="layer">衝突判定用のレイヤー</param>
 	/// <param name="type">コライダーの種類</param>
-	CCollider(CObjectBase* owner, ELayer layer, EColliderType type);
+	CCollider(CObjectBase* owner, ELayer layer, EColliderType type, bool isKinematic, float weight);
 	// デストラクタ
 	virtual ~CCollider();
 
@@ -54,6 +55,28 @@ public:
 	/// </summary>
 	/// <returns>trueならば有効</returns>
 	bool IsEnable() const;
+
+	/// <summary>
+	/// 衝突時の押し戻しの影響を受けるかどうかを設定
+	/// </summary>
+	/// <param name="isKinematic">trueならば、影響を受けない</param>
+	void SetKinematic(bool isKinematic);
+	/// <summary>
+	/// 衝突時の押し戻しの影響を受けるかどうか
+	/// </summary>
+	/// <returns>trueならば、影響を受けない</returns>
+	bool IsKinematic() const;
+
+	/// <summary>
+	/// コライダーの重量を設定
+	/// </summary>
+	/// <param name="weight"></param>
+	void SetWeight(float weight);
+	/// <summary>
+	/// コライダーの重量を取得
+	/// </summary>
+	/// <returns></returns>
+	float GetWeight() const;
 
 	/// <summary>
 	/// 指定したコライダーと衝突判定を行うかどうかを取得
@@ -229,6 +252,14 @@ public:
 	/// <returns>trueならば、衝突している</returns>
 	static bool Collision(CCollider* c0, CCollider* c1, CHitInfo* hit);
 
+	/// <summary>
+	/// 衝突時の押し戻し割合を算出
+	/// </summary>
+	/// <param name="self">自身のコライダー</param>
+	/// <param name="other">相手のコライダー</param>
+	/// <returns>押し戻し割合（0.0f ～ 1.0f）</returns>
+	static float CalcPushBackRatio(CCollider* self, CCollider* other);
+
 protected:
 	/// <summary>
 	/// コライダーの設定
@@ -242,6 +273,8 @@ private:
 	EColliderType mType;	// コライダーの種類
 	CObjectBase* mpOwner;	// コライダーの持ち主
 	bool mIsEnable;			// 有効かどうか
+	bool mIsKinematic;		// 衝突時の押し戻しの影響を受けないかどうか
+	float mWeight;			// コライダーの重量
 	int mCollisionLayers;	// 衝突判定を行うレイヤーのビットフラグ
 	int mCollisionTags;		// 衝突判定を行うオブジェクトタグのビットフラグ
 };

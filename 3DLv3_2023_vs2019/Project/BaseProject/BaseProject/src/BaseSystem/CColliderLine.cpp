@@ -4,8 +4,9 @@
 
 // コンストラクタ
 CColliderLine::CColliderLine(CObjectBase* owner, ELayer layer,
-	const CVector& v0, const CVector& v1)
-	: CCollider(owner, layer, EColliderType::eLine)
+	const CVector& v0, const CVector& v1,
+	bool isKinematic, float weight)
+	: CCollider(owner, layer, EColliderType::eLine, isKinematic, weight)
 	, mRadius(0.1f)
 {
 	// 線分の頂点を設定

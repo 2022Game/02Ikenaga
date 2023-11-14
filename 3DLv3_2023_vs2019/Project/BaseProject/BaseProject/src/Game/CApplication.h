@@ -1,17 +1,8 @@
 #pragma once
-#include "CEnemy.h"
-#include "CPlayer.h"
-#include "CSound.h"
-#include "CModel.h"
-#include "CModelX.h"
 
 class CApplication
 {
 private:
-	CPlayer* mpPlayer;
-
-	CSound mSoundBgm;	        //BGM
-	CSound mSoundOver;	        //ゲームオーバー
 public:
 	~CApplication();
 
