@@ -132,6 +132,7 @@ private:
 	};
 	EState mState;	// エネミーの状態
 
+	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;

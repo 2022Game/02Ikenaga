@@ -37,7 +37,7 @@ void CCollisionTestScene::Load()
 	new CMeasure(100);
 
 	// ‹…‚ð¶¬
-	CColSphere* cs = new CColSphere(1.0f, CColor::gray);
+	CColSphere* cs = new CColSphere(10.0f, CColor::gray);
 	cs->Scale(5.0f, 5.0f, 5.0f);
 	cs->Position(10.0f, 10.0f, 0.0f);
 	mColList.push_back(cs);

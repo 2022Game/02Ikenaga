@@ -10,7 +10,8 @@ CEnemy* CEnemy::spInstance = nullptr;
 
 #define MODEL_SLIME "Character\\Slime\\Slime.x"
 
-#define PLAYER_HEIGHT 1.0f
+#define ENEMY_HEIGHT 1.0f
+#define GRAVITY 0.0625f
 
 // エネミーのアニメーションデータのテーブル
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
@@ -78,7 +79,7 @@ CEnemy::CEnemy()
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
-		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
+		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
@@ -299,6 +300,7 @@ void CEnemy::Update()
 		UpdateDizzy();
 		break;
 	}
+	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 
 	if (mCharaStatus.hp == 0)
 	{
@@ -341,7 +343,10 @@ void CEnemy::Update()
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	Position(Position() + hit.adjust);
+	if (self != mpDamageCol)
+	{
+		Position(Position() + hit.adjust);
+	}
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol)
 	{

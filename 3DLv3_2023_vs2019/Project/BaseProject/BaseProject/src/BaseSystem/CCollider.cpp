@@ -193,7 +193,8 @@ bool CCollider::CollisionTriangle(	const CVector& t00, const CVector& t01, const
 // 三角形と線分の衝突判定
 bool CCollider::CollisionTriangleLine(
 	const CVector& t0, const CVector& t1, const CVector& t2,
-	const CVector& ls, const CVector& le, CHitInfo* h)
+	const CVector& ls, const CVector& le,
+	CHitInfo* h, bool isLeftMain)
 {
 	//面の法線を、外積を正規化して求める
 	CVector normal = CVector::Cross(t1 - t0, t2 - t0).Normalized();
@@ -249,13 +250,15 @@ bool CCollider::CollisionTriangleLine(
 		//終点が裏面
 		h->adjust = normal * dote;
 	}
+	if (!isLeftMain) h->adjust = -h->adjust;
 	return true;
 }
 
 // 三角形と球の衝突判定
 bool CCollider::CollisionTriangleSphere(
 	const CVector& t0, const CVector& t1, const CVector& t2,
-	const CVector& sp, const float sr, CHitInfo* h)
+	const CVector& sp, const float sr,
+	CHitInfo* h, bool isLeftMain)
 {
 	//CVector v[3], sv, ev;
 	////各コライダの頂点をワールド座標へ変換
@@ -297,13 +300,15 @@ bool CCollider::CollisionSphere(const CVector& sp0, const float sr0,
 
 // 球と線分の衝突判定
 bool CCollider::CollisionSphereLine(const CVector& sp, const float sr,
-									const CVector& ls, const CVector& le, CHitInfo* hit)
+									const CVector& ls, const CVector& le,
+									CHitInfo* hit, bool isLeftMain)
 {
 	CVector nearest;
 	float length = CalcDistancePointToLine(sp, ls, le, &nearest);
 	if (length < sr)
 	{
-		hit->adjust = (sp - nearest).Normalized() * (sr - length);
+		CVector n = (sp - nearest).Normalized() * (isLeftMain ? 1.0f : -1.0f);
+		hit->adjust = n * (sr - length);
 		return true;
 	}
 
@@ -352,13 +357,14 @@ bool CCollider::CollisionLine(	const CVector& ls0, const CVector& le0,
 
 // メッシュと線分の衝突判定
 bool CCollider::CollisionMeshLine(	const std::list<STVertex>& tris,
-									const CVector& ls, const CVector& le, CHitInfo* hit)
+									const CVector& ls, const CVector& le,
+									CHitInfo* hit, bool isLeftMain)
 {
 	bool ret = false;
 	CVector adjust;
 	for (auto& v : tris)
 	{
-		if (CollisionTriangleLine(v.V[0], v.V[1], v.V[2], ls, le, hit)) 
+		if (CollisionTriangleLine(v.V[0], v.V[1], v.V[2], ls, le, hit, isLeftMain)) 
 		{
 			hit->tris.push_back(v);
 			adjust = hit->adjust;
@@ -371,12 +377,13 @@ bool CCollider::CollisionMeshLine(	const std::list<STVertex>& tris,
 
 // メッシュと球の衝突判定
 bool CCollider::CollisionMeshSpehre(const std::list<STVertex>& tris,
-									const CVector& sp, const float sr, CHitInfo* hit)
+									const CVector& sp, const float sr,
+									CHitInfo* hit, bool isLeftMain)
 {
 	bool ret = false;
 	for (auto& v : tris)
 	{
-		if (CollisionTriangleSphere(v.V[0], v.V[1], v.V[2], sp, sr, hit))
+		if (CollisionTriangleSphere(v.V[0], v.V[1], v.V[2], sp, sr, hit, isLeftMain))
 		{
 			hit->tris.push_back(v);
 			ret = true;
@@ -388,12 +395,18 @@ bool CCollider::CollisionMeshSpehre(const std::list<STVertex>& tris,
 // メッシュと三角形の衝突判定
 bool CCollider::CollisionMeshTriangle(	const std::list<STVertex>& tris,
 										const CVector& t0, const CVector& t1, const CVector& t2,
-										CHitInfo* hit)
+										CHitInfo* hit, bool isLeftMain)
 {
 	bool ret = false;
 	for (auto& v : tris)
 	{
-		if (CollisionTriangle(v.V[0], v.V[1], v.V[2], t0, t1, t2, hit))
+		CVector v00 = isLeftMain ? v.V[0] : t0;
+		CVector v01 = isLeftMain ? v.V[1] : t1;
+		CVector v02 = isLeftMain ? v.V[2] : t2;
+		CVector v10 = isLeftMain ? t0 : v.V[0];
+		CVector v11 = isLeftMain ? t1 : v.V[1];
+		CVector v12 = isLeftMain ? t2 : v.V[2];
+		if (CollisionTriangle(v00, v01, v02, v10, v11, v12, hit))
 		{
 			hit->tris.push_back(v);
 			ret = true;
@@ -445,21 +458,21 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CVector sp;
 					float sr;
 					sphere->Get(&sp, &sr);
-					return CollisionSphereLine(sp, sr, ls0, le0, hit);
+					return CollisionSphereLine(sp, sr, ls0, le0, hit, false);
 				}
 				case EColliderType::eTriangle:
 				{
 					CColliderTriangle* triangle = dynamic_cast<CColliderTriangle*>(c1);
 					CVector t0, t1, t2;
 					triangle->Get(&t0, &t1, &t2);
-					return CollisionTriangleLine(t0, t1, t2, ls0, le0, hit);
+					return CollisionTriangleLine(t0, t1, t2, ls0, le0, hit, false);
 				}
 				case EColliderType::eMesh:
 				{
 					CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
 					std::list<STVertex> tris;
 					mesh->Get(&tris);
-					return CollisionMeshLine(tris, ls0, le0, hit);
+					return CollisionMeshLine(tris, ls0, le0, hit, false);
 				}
 			}
 			break;
@@ -478,7 +491,7 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CColliderLine* line = dynamic_cast<CColliderLine*>(c1);
 					CVector ls, le;
 					line->Get(&ls, &le);
-					return CollisionSphereLine(sp0, sr0, ls, le, hit);
+					return CollisionSphereLine(sp0, sr0, ls, le, hit, true);
 				}
 				case EColliderType::eSphere:
 				{
@@ -493,14 +506,14 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CColliderTriangle* triangle = dynamic_cast<CColliderTriangle*>(c1);
 					CVector t0, t1, t2;
 					triangle->Get(&t0, &t1, &t2);
-					return CollisionTriangleSphere(t0, t1, t2, sp0, sr0, hit);
+					return CollisionTriangleSphere(t0, t1, t2, sp0, sr0, hit, false);
 				}
 				case EColliderType::eMesh:
 				{
 					CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
 					std::list<STVertex> tris;
 					mesh->Get(&tris);
-					return CollisionMeshSpehre(tris, sp0, sr0, hit);
+					return CollisionMeshSpehre(tris, sp0, sr0, hit, false);
 				}
 			}
 			break;
@@ -517,7 +530,7 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CColliderLine* line = dynamic_cast<CColliderLine*>(c1);
 					CVector ls, le;
 					line->Get(&ls, &le);
-					return CollisionTriangleLine(t00, t01, t02, ls, le, hit);
+					return CollisionTriangleLine(t00, t01, t02, ls, le, hit, true);
 				}
 				case EColliderType::eSphere:
 				{
@@ -525,7 +538,7 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CVector sp;
 					float sr;
 					sphere->Get(&sp, &sr);
-					return CollisionTriangleSphere(t00, t01, t02, sp, sr, hit);
+					return CollisionTriangleSphere(t00, t01, t02, sp, sr, hit, true);
 				}
 				case EColliderType::eTriangle:
 				{
@@ -539,7 +552,7 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
 					std::list<STVertex> tris;
 					mesh->Get(&tris);
-					return CollisionMeshTriangle(tris, t00, t01, t02, hit);
+					return CollisionMeshTriangle(tris, t00, t01, t02, hit, false);
 				}
 			}
 			break;
@@ -556,7 +569,7 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CColliderLine* line = dynamic_cast<CColliderLine*>(c1);
 					CVector ls, le;
 					line->Get(&ls, &le);
-					return CollisionMeshLine(tris, ls, le, hit);
+					return CollisionMeshLine(tris, ls, le, hit, true);
 				}
 				case EColliderType::eSphere:
 				{
@@ -564,14 +577,14 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 					CVector sp;
 					float sr;
 					sphere->Get(&sp, &sr);
-					return CollisionMeshSpehre(tris, sp, sr, hit);
+					return CollisionMeshSpehre(tris, sp, sr, hit, true);
 				}
 				case EColliderType::eTriangle:
 				{
 					CColliderTriangle* triangle = dynamic_cast<CColliderTriangle*>(c1);
 					CVector t0, t1, t2;
 					triangle->Get(&t0, &t1, &t2);
-					return CollisionMeshTriangle(tris, t0, t1, t2, hit);
+					return CollisionMeshTriangle(tris, t0, t1, t2, hit, true);
 				}
 				case EColliderType::eMesh:
 				{

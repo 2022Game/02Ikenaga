@@ -49,8 +49,10 @@ void Primitive::DrawSphere(const CMatrix& m, float rad, const CColor& color)
 	// 現在の行列を退避しておく
 	glPushMatrix();
 
+	CMatrix sm;
+	sm.Scale(rad, rad, rad);
 	// 描画行列を反映
-	glMultMatrixf(m.M());
+	glMultMatrixf((sm * m).M());
 
 	// アルファブレンドを有効にする
 	glEnable(GL_BLEND);
@@ -70,8 +72,8 @@ void Primitive::DrawSphere(const CMatrix& m, float rad, const CColor& color)
 	float* c = new float[cut + 1];
 	for (int i = 0; i <= cut; ++i)
 	{
-		s[i] = sinf((float)M_PI * 2 * i / cut) * rad;
-		c[i] = cosf((float)M_PI * 2 * i / cut) * rad;
+		s[i] = sinf((float)M_PI * 2 * i / cut);
+		c[i] = cosf((float)M_PI * 2 * i / cut);
 	}
 
 	int idx = 0;

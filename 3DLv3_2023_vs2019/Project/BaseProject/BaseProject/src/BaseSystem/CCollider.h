@@ -155,7 +155,8 @@ public:
 	/// <param name="info">衝突した時の情報</param>
 	/// <returns>trueならば、衝突している</returns>
 	static bool CollisionTriangleLine(	const CVector& t0, const CVector& t1, const CVector& t2,
-										const CVector& ls, const CVector& le, CHitInfo* info);
+										const CVector& ls, const CVector& le,
+										CHitInfo* info, bool isLeftMain);
 
 	/// <summary>
 	/// 三角形と球の衝突判定
@@ -168,7 +169,8 @@ public:
 	/// <param name="info">衝突した時の情報</param>
 	/// <returns>trueならば、衝突している</returns>
 	static bool CollisionTriangleSphere(const CVector& t0, const CVector& t1, const CVector& t2,
-										const CVector& sp, const float sr, CHitInfo* info);
+										const CVector& sp, const float sr,
+										CHitInfo* info, bool isLeftMain);
 
 	/// <summary>
 	/// 球と球の衝突判定
@@ -192,7 +194,8 @@ public:
 	/// <param name="info">衝突した時の情報</param>
 	/// <returns>trueならば、衝突している</returns>
 	static bool CollisionSphereLine(const CVector& sp, const float sr,
-									const CVector& ls, const CVector& le, CHitInfo* info);
+									const CVector& ls, const CVector& le,
+									CHitInfo* info, bool isLeftMain);
 
 	/// <summary>
 	/// 線分と線分の衝突判定
@@ -215,7 +218,8 @@ public:
 	/// <param name="info">衝突した時の情報</param>
 	/// <returns>trueならば、衝突している</returns>
 	static bool CollisionMeshLine(	const std::list<STVertex>& tris,
-									const CVector& ls, const CVector& le, CHitInfo* info);
+									const CVector& ls, const CVector& le,
+									CHitInfo* info, bool isLeftMain);
 
 	/// <summary>
 	/// メッシュと球の衝突判定
@@ -226,7 +230,8 @@ public:
 	/// <param name="info">衝突した時の情報</param>
 	/// <returns>trueならば、衝突している</returns>
 	static bool CollisionMeshSpehre(const std::list<STVertex>& tris,
-									const CVector& sp, const float sr, CHitInfo* info);
+									const CVector& sp, const float sr,
+									CHitInfo* info, bool isLeftMain);
 
 	/// <summary>
 	/// メッシュと三角形の衝突判定
@@ -239,7 +244,7 @@ public:
 	/// <returns>trueならば、衝突している</returns>
 	static bool CollisionMeshTriangle(	const std::list<STVertex>& tris,
 										const CVector& t0, const CVector& t1, const CVector& t2,
-										CHitInfo* hit);
+										CHitInfo* hit, bool isLeftMain);
 
 	static float CalcDistancePointToLine(const CVector& point, const CVector& lineS, const CVector& lineE, CVector* nearest = nullptr);
 
