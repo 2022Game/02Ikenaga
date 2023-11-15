@@ -1,6 +1,7 @@
 #include "CSword.h"
 #include "CCollisionManager.h"
 #include "CCharaBase.h"
+#include "Maths.h"
 
 CSword::CSword()
 {
@@ -14,6 +15,7 @@ CSword::CSword()
 		CVector(0.15f, 0.15f, 0.0f),
 		CVector(0.8f,0.8f, 0.0f)
 	);
+	ChangeLevel(1);
 
 	// 攻撃判定用のコライダーと衝突判定を行う
 	//レイヤーとタグを設定
@@ -52,9 +54,8 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			//既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				//int damage = mPower;
 				// ダメージを与える
-				chara->TakeDamage(5);
+				chara->TakeDamage(mCharaMaxStatus.power,mOwner);
 
 				//攻撃済みリストに追加
 				AddAttackHitObj(chara);
@@ -94,4 +95,20 @@ void CSword:: AttackEnd()
 	CWeapon::AttackEnd();
 	//攻撃が終われば、攻撃判定用のコライダーをオフにする
 	mpAttackCol->SetEnable(false);
+}
+
+//1レベルアップ
+void CSword::LevelUp()
+{
+	int level = mCharaStatus.level;
+	ChangeLevel(level + 1);
+}
+
+//レベルを変更
+void CSword::ChangeLevel(int level)
+{
+	//ステータスのテーブルのインデックス値に変換
+	int index = Math::Clamp(level - 1, 0, PLAYER_LEVEL_MAX);
+	//最大ステータスに設定
+	mCharaMaxStatus = PLAYER_STATUS[index];
 }

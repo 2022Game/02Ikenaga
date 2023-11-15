@@ -119,11 +119,19 @@ CPlayer::CPlayer()
 
 	mpColliderLine = new CColliderLine
 	(
-		this, ELayer::eField,
+		this, ELayer::ePlayer,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	// キャラクター同士の押し戻しコライダー
+	mpColliderSphere = new CColliderSphere
+	(
+		this,ELayer::ePlayer,
+		0.4f
+	);
+	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy });
 
 	///ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -145,10 +153,12 @@ CPlayer::CPlayer()
 	//剣を生成して右手に持たせる
 	mpSword = new CSword();
 	mpSword->SetAttachMtx(GetFrameMtx("Armature_mixamorig_RightHand"));
+	mpSword->SetOwner(this);
 
 	//盾を生成して左手に持たせる
 	mpShield= new CShield();
 	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
+	mpShield->SetOwner(this);
 }
 
 CPlayer::~CPlayer()
@@ -571,7 +581,7 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (other->Layer() == ELayer::eField)
 		{
 			mMoveSpeed.Y(0.0f);
-			Position(Position() + hit.adjust);
+			Position(Position() + hit.adjust * hit.weight);
 			mIsGrounded = true;
 
 			if (other->Tag() == ETag::eRideableObject)
@@ -579,6 +589,13 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				mpRideObject = other->Owner();
 			}
 		}
+	}
+	// 他のキャラクターとの押し戻し処理
+	else if (self == mpColliderSphere)
+	{
+		CVector pushBack = hit.adjust * hit.weight;
+		pushBack.Y(0.0f);
+		Position(Position() + pushBack);
 	}
 }
 
@@ -589,7 +606,7 @@ void CPlayer::Render()
 }
 
 //被ダメージ処理
-void CPlayer::TakeDamage(int damage)
+void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//死亡していたら、ダメージは受けない
 	//if (mCharaStatus.hp <= 0)return;

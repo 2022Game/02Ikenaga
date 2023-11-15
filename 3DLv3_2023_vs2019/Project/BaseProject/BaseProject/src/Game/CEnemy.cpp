@@ -77,13 +77,22 @@ CEnemy::CEnemy()
 
 	mpColliderLine = new CColliderLine
 	(
-		this, ELayer::eField,
+		this, ELayer::eEnemy,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
-	//ダメージを受けるコライダーを作成
+	// キャラクター押し戻し処理
+	mpColliderSphere = new CColliderSphere
+	(
+		this,ELayer::eEnemy,
+		0.5f,false,5.0f
+	);
+	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer });
+	mpColliderSphere->Position(0.0f, 0.3f, 0.0f);
+
+	// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
@@ -113,6 +122,7 @@ CEnemy::CEnemy()
 CEnemy::~CEnemy()
 {
 	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColliderSphere);
 	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
@@ -301,6 +311,7 @@ void CEnemy::Update()
 		break;
 	}
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	Position(Position() + mMoveSpeed);
 
 	if (mCharaStatus.hp == 0)
 	{
@@ -343,10 +354,6 @@ void CEnemy::Update()
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self != mpDamageCol)
-	{
-		Position(Position() + hit.adjust);
-	}
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol)
 	{
@@ -361,25 +368,34 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				int damage = 0;
 				damage = mCharaStatus.power;
 				// ダメージを与える
-				chara->TakeDamage(damage);
+				chara->TakeDamage(damage,this);
 
 				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);
 			}
 		}
 	}
-	if (self == mpColliderLine)
+	// フィールドとの接地判定
+	else if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
-			Position(Position() + hit.adjust);
+			Position(Position() + hit.adjust * hit.weight);
 			mIsGrounded = true;
+			mMoveSpeed.Y(0.0f);
 
 			if (other->Tag() == ETag::eRideableObject)
 			{
 				mpRideObject = other->Owner();
 			}
 		}
+	}
+	// キャラクター同士の衝突処理
+	else if (self == mpColliderSphere)
+	{
+		CVector pushBack = hit.adjust * hit.weight;
+		pushBack.Y(0.0f);
+		Position(Position() + pushBack);
 	}
 }
 
@@ -424,7 +440,7 @@ void CEnemy::ChangeLevel(int level)
 }
 
 // 被ダメージ処理
-void CEnemy::TakeDamage(int damage)
+void CEnemy::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//死亡していたら、ダメージは受けない
 	//if (mCharaStatus.hp <= 0)return;
@@ -441,5 +457,18 @@ void CEnemy::TakeDamage(int damage)
 	{
 		// 死亡処理
 		mState = EState::eDie;
+	}
+
+	if (causedObj != nullptr)
+	{
+		// ダメージを与えた相手の方向へ向く
+		CVector dir = causedObj->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+
+		// ノックバックでダメージを与えた相手の方向から
+		// 後ろにズラす
+		Position(Position() - dir * Scale().X() * 0.4f);
 	}
 }

@@ -609,7 +609,7 @@ float CCollider::CalcPushBackRatio(CCollider* self, CCollider* other)
 	// 両方のコライダーが押し戻しの影響を受ける場合は、
 	// 両方のコライダーの重量で押し戻し割合を算出
 	float sw = self->GetWeight();
-	float ow = self->GetWeight();
+	float ow = other->GetWeight();
 	// 同じ重量ならば、50%の影響を受ける
 	if (sw == ow) return 0.5f;
 	// 自身の重量が0ならば、100%の影響を受ける
@@ -618,5 +618,5 @@ float CCollider::CalcPushBackRatio(CCollider* self, CCollider* other)
 	if (ow <= 0.0f) return 0.0f;
 
 	// 重量の割合を計算して返す
-	return Math::Clamp01((sw + ow) / sw);
+	return 1.0f - Math::Clamp01(sw / (sw + ow));
 }

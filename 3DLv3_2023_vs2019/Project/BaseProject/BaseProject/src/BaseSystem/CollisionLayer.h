@@ -8,6 +8,7 @@ enum class ELayer
 	eField,
 	eTest,
 	ePlayer,
+	eEnemy,
 
 	eDamageCol,  //ダメージを受ける時のコライダー
 	eAttackCol,  //攻撃を与える時のコライダー

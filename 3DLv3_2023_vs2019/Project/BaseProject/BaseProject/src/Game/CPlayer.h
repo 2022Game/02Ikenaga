@@ -82,7 +82,7 @@ public:
 	/// 被ダメージ処理
 	/// </summary>
 	/// <param name="damage">受けるダメージ</param>
-	void TakeDamage(int damage)override;
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
 private:
 	// 回復までのカウント
@@ -148,6 +148,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+	CColliderSphere* mpColliderSphere;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 
 	CTransform* mpRideObject;

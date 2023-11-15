@@ -16,7 +16,7 @@ public:
 	/// 被ダメージ処理
 	/// </summary>
 	/// <param name="damage">受ける処理</param>
-	virtual void TakeDamage(int damage);
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
 	/// <summary>
 	/// 最大ステータスを取得

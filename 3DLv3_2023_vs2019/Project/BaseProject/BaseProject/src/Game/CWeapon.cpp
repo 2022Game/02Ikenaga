@@ -1,4 +1,5 @@
 #include "CWeapon.h"
+#include "CCharaBase.h"
 
 CWeapon::CWeapon()
 	: CObjectBase(ETag::eWeapon, ETaskPriority::eWeapon)
@@ -26,6 +27,29 @@ void CWeapon::AttackEnd()
 {
 }
 
+// 武器の所持キャラクターを設定
+void CWeapon::SetOwner(CCharaBase* owner)
+{
+	mOwner = owner;
+}
+
+// 武器の所持キャラクターを取得
+CCharaBase* CWeapon::GetOwner() const
+{
+	return mOwner;
+}
+
+// 最大ステータスを取得
+const CharaStatus& CWeapon::MaxStatus() const
+{
+	return mCharaMaxStatus;
+}
+
+// 現在のステータスを取得
+const CharaStatus& CWeapon::Status() const
+{
+	return mCharaStatus;
+}
 
 // 攻撃がヒットしたオブジェクトを追加
 void CWeapon::AddAttackHitObj(CObjectBase* obj)

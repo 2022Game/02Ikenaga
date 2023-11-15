@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseSystem/CObjectBase.h"
+#include "CharaStatus.h"
+class CCharaBase;
 
 class CWeapon : public CObjectBase
 {
@@ -15,6 +17,15 @@ public:
 	//攻撃終了
 	virtual void AttackEnd();
 
+	// 武器の所持キャラクターを設定
+	void SetOwner(CCharaBase* owner);
+
+	// 武器の所持キャラクターを取得
+	CCharaBase* GetOwner() const;
+
+	const CharaStatus& MaxStatus() const;
+	const CharaStatus& Status() const;
+
 protected:
 	// 攻撃がヒットしたオブジェクトを追加
 	void AddAttackHitObj(CObjectBase* obj);
@@ -24,4 +35,9 @@ protected:
 
 	// 攻撃がヒット済みのオブジェクトリスト
 	std::list<CObjectBase*> mAttackHitObjects;
+
+	// 武器の所持キャラクター
+	CCharaBase* mOwner;
+	CharaStatus mCharaMaxStatus;  //最大ステータス
+	CharaStatus mCharaStatus;
 };

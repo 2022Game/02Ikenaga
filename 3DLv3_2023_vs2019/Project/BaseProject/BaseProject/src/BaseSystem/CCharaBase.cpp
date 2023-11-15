@@ -10,11 +10,11 @@ CCharaBase::~CCharaBase()
 }
 
 // 被ダメージ処理
-void CCharaBase::TakeDamage(int damage)
+void CCharaBase::TakeDamage(int damage, CObjectBase* causedObj)
 {
 }
 
-//キ最大ステータスを取得
+// 最大ステータスを取得
 const CharaStatus& CCharaBase::MaxStatus() const
 {
 	return mCharaMaxStatus;

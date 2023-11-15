@@ -70,7 +70,8 @@ public:
 	/// 被ダメージ処理
 	/// </summary>
 	/// <param name="damage">受けるダメージ</param>
-	void TakeDamage(int damage)override;
+	//ダメージを与えたオブジェクト
+	virtual void TakeDamage(int damage, CObjectBase*causedObj);
 
 private:
 	int mAttackTime;  // 攻撃時間の間隔
@@ -136,6 +137,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+	CColliderSphere* mpColliderSphere;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;
