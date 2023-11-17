@@ -73,9 +73,10 @@ public:
 	//ダメージを与えたオブジェクト
 	virtual void TakeDamage(int damage, CObjectBase*causedObj);
 
+	static int mHp;
+
 private:
-	int mAttackTime;  // 攻撃時間の間隔
-	int mRevivalTime;  // 復活時間の間隔
+	int mAttackTime;   // 攻撃時間の間隔
 	// アニメーションの種類
 	enum class EAnimType
 	{

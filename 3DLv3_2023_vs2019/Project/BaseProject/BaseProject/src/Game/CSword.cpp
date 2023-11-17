@@ -2,7 +2,7 @@
 #include "CCollisionManager.h"
 #include "CCharaBase.h"
 #include "Maths.h"
-#include "CInput.h"
+#include "CPlayer.h"
 
 CSword::CSword()
 {
@@ -16,7 +16,6 @@ CSword::CSword()
 		CVector(0.15f, 0.15f, 0.0f),
 		CVector(0.8f,0.8f, 0.0f)
 	);
-	ChangeLevel(1);
 
 	// 攻撃判定用のコライダーと衝突判定を行う
 	// レイヤーとタグを設定
@@ -30,18 +29,11 @@ CSword::CSword()
 CSword::~CSword()
 {
 	SAFE_DELETE(mpSword);
+	SAFE_DELETE(mpAttackCol);
 }
 
 void CSword::Update()
 {
-	if (CInput::PushKey('2'))
-	{
-		mCharaStatus.exp++;
-		if (mCharaStatus.exp == mCharaMaxStatus.exp)
-		{
-			LevelUp();
-		}
-	}
 }
 
 void CSword::Render()
@@ -63,8 +55,10 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
+				int damage = 0;
+				damage = mpPlayer->mPower;
 				// ダメージを与える
-				chara->TakeDamage(mCharaMaxStatus.power,mOwner);
+				chara->TakeDamage(damage,mOwner);
 
 				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);
@@ -104,23 +98,4 @@ void CSword:: AttackEnd()
 	CWeapon::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
 	mpAttackCol->SetEnable(false);
-}
-
-// 1レベルアップ
-void CSword::LevelUp()
-{
-	int level = mCharaStatus.level;
-	ChangeLevel(level + 1);
-}
-
-// レベルを変更
-void CSword::ChangeLevel(int level)
-{
-	// ステータスのテーブルのインデックス値に変換
-	int index = Math::Clamp(level - 1, 0, PLAYER_LEVEL_MAX);
-	// 最大ステータスに設定
-	mCharaMaxStatus = PLAYER_STATUS[index];
-	mCharaStatus = mCharaMaxStatus;
-	// 経験値を0に戻す
-	mCharaStatus.exp = 0;
 }

@@ -50,14 +50,12 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define GRAVITY 0.0625f
 #define JUMP_END_Y 1.0f
 
-#define HP 10  //HP
-#define LEVEL 1  //レベル
-#define SA 5   //特殊攻撃
-#define POWER 5  //攻撃力
 #define MOVE_SPEED 0.3f  //移動速度
 
 //デフォルトのスケール値
 #define DEFAULT_SCALE 10.0f
+
+int CPlayer::mPower;
 
 bool CPlayer::IsDeath() const
 {
@@ -79,28 +77,28 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	,healcount(0)
+	, healcount(0)
 	, recoverycount(0)
 {
 
-	//インスタンスの設定
+	// インスタンスの設定
 	spInstance = this;
 
 	// モデルデータ読み込み
 	CModelX* model = new CModelX();
 	model->Load(MODEL_DOG);
-	//デフォルトスケールの反映
+	// デフォルトスケールの反映
 	Scale(CVector::one * DEFAULT_SCALE);
 
-	//HPゲージを作成
+	// HPゲージを作成
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetPos(10.0f, 690.f);
 
-	//SAゲージを作成
+	// SAゲージを作成
 	mpSaGauge = new CSaGauge();
 	mpSaGauge->SetPos(10.0f,663.0f);
 
-	//最初に1レベルに設定
+	// 最初に1レベルに設定
 	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
@@ -131,7 +129,7 @@ CPlayer::CPlayer()
 		this,ELayer::ePlayer,
 		0.4f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy });
+	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eExp });
 
 	///ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -164,6 +162,7 @@ CPlayer::CPlayer()
 CPlayer::~CPlayer()
 {
 	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpModel);
 }
@@ -447,6 +446,7 @@ void CPlayer::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mPower = mCharaStatus.power;
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -601,6 +601,14 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);
 		Position(Position() + pushBack);
+		if (other->Layer() == ELayer::eExp)
+		{
+			mCharaStatus.exp++;
+			if (mCharaStatus.exp == mCharaMaxStatus.exp)
+			{
+				LevelUp();
+			}
+		}
 	}
 }
 

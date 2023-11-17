@@ -39,18 +39,6 @@ CCharaBase* CWeapon::GetOwner() const
 	return mOwner;
 }
 
-// 最大ステータスを取得
-const CharaStatus& CWeapon::MaxStatus() const
-{
-	return mCharaMaxStatus;
-}
-
-// 現在のステータスを取得
-const CharaStatus& CWeapon::Status() const
-{
-	return mCharaStatus;
-}
-
 // 攻撃がヒットしたオブジェクトを追加
 void CWeapon::AddAttackHitObj(CObjectBase* obj)
 {

@@ -23,9 +23,6 @@ public:
 	// 武器の所持キャラクターを取得
 	CCharaBase* GetOwner() const;
 
-	const CharaStatus& MaxStatus() const;
-	const CharaStatus& Status() const;
-
 protected:
 	// 攻撃がヒットしたオブジェクトを追加
 	void AddAttackHitObj(CObjectBase* obj);
@@ -38,6 +35,4 @@ protected:
 
 	// 武器の所持キャラクター
 	CCharaBase* mOwner;
-	CharaStatus mCharaMaxStatus;  //最大ステータス
-	CharaStatus mCharaStatus;
 };

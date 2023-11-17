@@ -4,6 +4,7 @@
 #include "CModel.h"
 #include "CWeapon.h"
 #include "CharaStatus.h"
+class CPlayer;
 
 /*
 剣クラス
@@ -34,13 +35,10 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// 1レベルアップ
-	void LevelUp();
-	// レベルの変更
-	void ChangeLevel(int level);
 private:
 	CModel* mpSword;
 	// 攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;
+	CPlayer* mpPlayer;
 };
 

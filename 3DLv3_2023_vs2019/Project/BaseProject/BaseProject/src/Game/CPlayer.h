@@ -84,6 +84,7 @@ public:
 	/// <param name="damage">受けるダメージ</param>
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
+	static int mPower;
 private:
 	// 回復までのカウント
 	int healcount;

@@ -16,6 +16,7 @@
 //コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
+	,RevivalTime(0)
 {
 }
 
@@ -53,7 +54,7 @@ void CGameScene::Load()
 	hpgauge->SetPos(10.0f, 190.0f);*/
 
 	CEnemy2* enemy2 = new CEnemy2();
-	enemy2->Position(100.0f, 0.0f, 20.0f);
+	enemy2->Position(-20.0f, 0.0f, 20.0f);
 	enemy2->Scale(20.0f, 20.0f, 20.0f);
 
 	CPortionRed* portionred = new CPortionRed();
@@ -69,11 +70,23 @@ void CGameScene::Load()
 	portionblue->Scale(70.0f, 70.0f, 70.0f);
 
 	CExp* exp = new CExp();
-	exp->Position(100.0f, 10.0f, 0.0f);
+	exp->Position(50.0f, 5.0f, 0.0f);
 	exp->Scale(4.0f, 4.0f, 4.0f);
 }
 
 //シーンの更新処理
 void CGameScene::Update()
 {
+	if (mpEnemy->mHp <= 0)
+	{
+		(RevivalTime++/100);
+		if (RevivalTime > 1000)
+		{
+			CEnemy* enemy = new CEnemy();
+			enemy->Position(0.0f, 0.0f, -20.0f);
+			enemy->Scale(25.0f, 25.0f, 25.0f);
+			RevivalTime = 0;
+		}
+	}
+	CDebugPrint::Print(" 復活時間: %d\n", RevivalTime / 100);
 }

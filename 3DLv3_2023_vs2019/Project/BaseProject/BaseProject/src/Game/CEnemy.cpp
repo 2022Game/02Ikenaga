@@ -4,6 +4,7 @@
 #include "CInput.h"
 #include "CHpGauge.h"
 #include "Maths.h"
+#include "CExp.h"
 
 // エネミーのインスタンス
 CEnemy* CEnemy::spInstance = nullptr;
@@ -40,13 +41,14 @@ bool CEnemy::IsDeath() const
 	return mCharaStatus.hp <= 0;
 }
 
+int CEnemy::mHp;
+
 // コンストラクタ
 CEnemy::CEnemy()
 	: CXCharacter(ETag::eEnemy, ETaskPriority::eEnemy)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	,mAttackTime(0)
-	,mRevivalTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -96,8 +98,7 @@ CEnemy::CEnemy()
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.5f,
-		false
+		0.5f,false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
@@ -110,8 +111,7 @@ CEnemy::CEnemy()
 	mpAttackCol = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		0.5f,
-		false
+		0.5f,false
 	);
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
@@ -246,6 +246,11 @@ void CEnemy::UpdateDie()
 	if (IsAnimationFinished())
 	{
 		Kill();
+		CVector posY = Position();
+		posY.Y(4.5f);
+		CExp* exp = new CExp();
+		exp->Position(posY);
+		exp->Scale(4.0f, 4.0f, 4.0f);
 	}
 }
 
@@ -267,6 +272,8 @@ void CEnemy::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+
+	mHp = mCharaStatus.hp;
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -313,13 +320,13 @@ void CEnemy::Update()
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	Position(Position() + mMoveSpeed);
 
-	if (mCharaStatus.hp == 0)
+	if (mCharaStatus.hp <= 0)
 	{
 		// 死亡処理
 		mState = EState::eDie;
 	}
 
-	if (mCharaStatus.hp > 1 || mCharaStatus.hp < 30)
+	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
 		mAttackTime++;
 		if (mAttackTime > 200)

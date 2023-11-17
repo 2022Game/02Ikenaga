@@ -1,5 +1,6 @@
 #pragma once
 #include "CSceneBase.h"
+class CEnemy;
 
 //タイトルシーン
 class CGameScene :public CSceneBase
@@ -15,4 +16,6 @@ public:
 	void Update();
 
 private:
+	int RevivalTime;
+	CEnemy* mpEnemy;
 };
