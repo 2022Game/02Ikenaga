@@ -2,13 +2,14 @@
 #include "CCollisionManager.h"
 #include "CCharaBase.h"
 #include "Maths.h"
+#include "CInput.h"
 
 CSword::CSword()
 {
 	mpSword = new CModel();
 	mpSword->Load("Item\\Equipment\\Sword\\Sword.obj", "Item\\Equipment\\Sword\\Sword.mtl");
 
-	//攻撃判定用のコライダーを作成
+	// 攻撃判定用のコライダーを作成
 	mpAttackCol = new CColliderLine
 	(
 		this, ELayer::eAttackCol,
@@ -18,7 +19,7 @@ CSword::CSword()
 	ChangeLevel(1);
 
 	// 攻撃判定用のコライダーと衝突判定を行う
-	//レイヤーとタグを設定
+	// レイヤーとタグを設定
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackCol->SetCollisionTags({ ETag::eEnemy });
 
@@ -33,6 +34,14 @@ CSword::~CSword()
 
 void CSword::Update()
 {
+	if (CInput::PushKey('2'))
+	{
+		mCharaStatus.exp++;
+		if (mCharaStatus.exp == mCharaMaxStatus.exp)
+		{
+			LevelUp();
+		}
+	}
 }
 
 void CSword::Render()
@@ -51,28 +60,28 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		// 相手のコライダーの持ち主がキャラであれば、
 		if (chara != nullptr)
 		{
-			//既に攻撃済みのキャラでなければ
+			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
 				// ダメージを与える
 				chara->TakeDamage(mCharaMaxStatus.power,mOwner);
 
-				//攻撃済みリストに追加
+				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);
 			}
 		}
 	}
 }
 
-//武器の行列取得
+// 武器の行列取得
 CMatrix CSword::Matrix() const
 {
-	//手に持っていないときは自分自身の行列を返す
+	// 手に持っていないときは自分自身の行列を返す
 	if (mpAttachMtx == nullptr)
 	{
 		return CTransform::Matrix();
 	}
-	//手に持っているときは、アタッチしている行列を返す
+	// 手に持っているときは、アタッチしている行列を返す
 	else
 	{
 		CMatrix sm;
@@ -85,30 +94,33 @@ CMatrix CSword::Matrix() const
 void CSword::AttackStart()
 {
 	CWeapon::AttackStart();
-	//攻撃が始まったら、攻撃判定用のコライダーをオンにする
+	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
 	mpAttackCol->SetEnable(true);
 }
 
-//攻撃終了
+// 攻撃終了
 void CSword:: AttackEnd()
 {
 	CWeapon::AttackEnd();
-	//攻撃が終われば、攻撃判定用のコライダーをオフにする
+	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
 	mpAttackCol->SetEnable(false);
 }
 
-//1レベルアップ
+// 1レベルアップ
 void CSword::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
-//レベルを変更
+// レベルを変更
 void CSword::ChangeLevel(int level)
 {
-	//ステータスのテーブルのインデックス値に変換
+	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, PLAYER_LEVEL_MAX);
-	//最大ステータスに設定
+	// 最大ステータスに設定
 	mCharaMaxStatus = PLAYER_STATUS[index];
+	mCharaStatus = mCharaMaxStatus;
+	// 経験値を0に戻す
+	mCharaStatus.exp = 0;
 }

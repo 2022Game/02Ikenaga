@@ -319,12 +319,16 @@ void CEnemy::Update()
 		mState = EState::eDie;
 	}
 
-	if (mCharaStatus.hp < 30)
+	if (mCharaStatus.hp > 1 || mCharaStatus.hp < 30)
 	{
 		mAttackTime++;
 		if (mAttackTime > 200)
 		{
 			mState = EState::eAttack;
+		}
+		else if (mCharaStatus.hp <= 0)
+		{
+			mAttackTime = 0;
 		}
 		if (mState == EState::eAttack)
 		{
@@ -452,8 +456,8 @@ void CEnemy::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		mState = EState::eHit;
 	}
-	// HP‚ª0‚É‚È‚Á‚½‚çA
-	if (mCharaStatus.hp == 0)
+	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çA
+	if (mCharaStatus.hp <= 0)
 	{
 		// Ž€–Sˆ—
 		mState = EState::eDie;

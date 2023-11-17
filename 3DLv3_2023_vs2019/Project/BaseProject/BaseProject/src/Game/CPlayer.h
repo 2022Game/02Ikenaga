@@ -60,7 +60,7 @@ public:
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
-	void ChangeLevel(int level);
+	virtual void ChangeLevel(int level);
 
 	// HP回復と特殊攻撃(SA)回数を自動回復
 	void AutomaticRecovery();

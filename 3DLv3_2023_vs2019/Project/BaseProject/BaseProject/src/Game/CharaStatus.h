@@ -3,14 +3,15 @@
 //キャラのステータス
 struct CharaStatus
 {
-    int level;         //レベル
-	int hp;            //HP
-	int power;         //攻撃力
-	int defense;       //防御力
-	float mobility;    //移動性
-	int SpecialAttack; //特殊攻撃
-	float volume;      //大きさ
-	float cameraHeight; //カメラの高さ
+    int level;         // レベル
+	int exp;           // 経験値
+	int hp;            // HP
+	int power;         // 攻撃力
+	int defense;       // 防御力
+	float mobility;    // 移動性
+	int SpecialAttack; // 特殊攻撃
+	float volume;      // 大きさ
+	float cameraHeight; // カメラの高さ
 }; 
 
 // プレイヤーの最大レベル

@@ -345,11 +345,11 @@ void CPlayer::UpdateJumpEnd()
 	}
 }
 
-//攻撃力アップ
+// 攻撃力アップ
 void CPlayer::UpdatePowerUp()
 {
 	ChangeAnimation(EAnimType::ePowerUp);
-	//攻撃力アップ終了
+	// 攻撃力アップ終了
 	mState = EState::ePowerUpEnd;
 }
 
@@ -374,22 +374,23 @@ void CPlayer::UpdateHit()
 	}
 }
 
-//1レベルアップ
+// 1レベルアップ
 void CPlayer::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
-//レベルを変更
+// レベルを変更
 void CPlayer::ChangeLevel(int level)
 {
-	//ステータスのテーブルのインデックス値に変換
+	// ステータスのテーブルのインデックス値に変換
 	int index =Math::Clamp(level-1,0, PLAYER_LEVEL_MAX);
-	//最大ステータスに設定
+	// 最大ステータスに設定
 	mCharaMaxStatus = PLAYER_STATUS[index];
-	//現在のステータスを最大値にすることで、HP回復
+	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
+	mCharaStatus.exp = 0;
 
 	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
 	mpHpGauge->SetValue(mCharaStatus.hp);
@@ -397,10 +398,10 @@ void CPlayer::ChangeLevel(int level)
 	mpSaGauge->SetMaxValue(mCharaStatus.SpecialAttack);
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
 
-	//現在値のステータスのスケール値を反映
+	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
 
-	//現在のレベルのカメラの高さを設定
+	// 現在のレベルのカメラの高さを設定
 	CCamera* mainCamera = CCamera::MainCamera();
 	if (mainCamera != nullptr)
 	{
@@ -523,7 +524,7 @@ void CPlayer::Update()
 
 	mIsGrounded = false;
 
-	//プレイヤーのデバック表示
+	// プレイヤーのデバック表示
 	static bool debug = false;
 	static bool debug2 = true;
 	if (CInput::PushKey('R'))
@@ -540,6 +541,7 @@ void CPlayer::Update()
 		CVector scale = Scale();
 		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 		CDebugPrint::Print("  特殊攻撃(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
+		CDebugPrint::Print("  経験値     %d / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
 	}
 
 	if (debug2)
@@ -559,23 +561,26 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('2'))
 	{
-		LevelUp();
+		mCharaStatus.exp++;
+		if (mCharaStatus.exp == mCharaMaxStatus.exp)
+		{
+			LevelUp();
+		}
 	}
-	//CDebugPrint::Print(" ステータス確認  Rボタン");
+	else if (CInput::PushKey('3'))
+	{
+		ChangeLevel(100);
+	}
 
-	//HPゲージに現在のHPを設定
+	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	//SAゲージに現在のSAを設定
+	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
 }
 
 // 衝突処理
 void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self == mpDamageCol)
-	{
-		//Position(Position() + hit.adjust);
-	}
 	if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)
