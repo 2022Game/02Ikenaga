@@ -49,7 +49,6 @@ CEnemy::CEnemy()
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	,mAttackTime(0)
-	,mDizzyTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -233,14 +232,14 @@ void CEnemy::UpdateHIt()
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
+		// めまいをfalseにする
 		bool stan = false;
-		int w = Math::Rand(0, 10);
-		if (w == 1)stan = true;
-
+		// 確率を最小に0最大20
+		int probability = Math::Rand(0, 20);
+		if (probability == 1)stan = true;
 		if (stan)
 		{
 			mState = EState::eDizzy;
-			mDizzyTime = 0;
 		}
 		else
 		{
@@ -274,7 +273,6 @@ void CEnemy::UpdateDizzy()
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
-		mDizzyTime = 0;
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
@@ -345,14 +343,25 @@ void CEnemy::Update()
 		mAttackTime++;
 		if (mAttackTime > 200)
 		{
-			mState = EState::eAttack;
-
+			// 大攻撃
+			bool BigAttack = false;
+			// 確率を最小に8最大10
+			int probability2 = Math::Rand(8, 10);
+			if (probability2 == 8)BigAttack = true;
+			if(BigAttack)
+			{ 
+				mState = EState::eAttack2;
+			}
+			else
+			{
+				mState = EState::eAttack;
+			}
 		}
 		else if (mCharaStatus.hp <= 0)
 		{
 			mAttackTime = 0;
 		}
-		if (mState == EState::eAttack || mState == EState::eDizzy)
+		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDizzy)
 		{
 			mAttackTime = 0;
 		}
@@ -380,8 +389,9 @@ void CEnemy::Update()
 // 衝突処理
 void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackCol)
+    // 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
+	if (self == mpAttackCol && mState != EState::eIdle && mState != EState::eIdle2 &&
+		mState != EState::eIdle3 && mState != EState::eIdleWait)
 	{
 		// キャラのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
@@ -393,8 +403,9 @@ void CEnemy::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			{
 				int damage = 0;
 				damage = mCharaStatus.power;
+
 				// ダメージを与える
-				chara->TakeDamage(damage,this);
+				chara->TakeDamage(damage, this);
 
 				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);
