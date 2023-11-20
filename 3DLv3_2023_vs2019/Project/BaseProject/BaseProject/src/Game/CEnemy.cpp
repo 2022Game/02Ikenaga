@@ -26,7 +26,7 @@ const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 	{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	70.0f	},  //攻撃2 26.0f
 	{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  //ヒット 26.0f
 	{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  //死ぬ 41.0f
-	//{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  //めまい 41.0f
+	{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  //めまい 41.0f
 	//{ "Character\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  //走る
 	//{ "Character\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  //挑発
 	//{ "Character\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  //勝利
@@ -49,6 +49,7 @@ CEnemy::CEnemy()
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	,mAttackTime(0)
+	,mDizzyTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -225,16 +226,28 @@ void CEnemy::UpdateAttackWait()
 	}
 }
 
-//ヒット
+// ヒット
 void CEnemy::UpdateHIt()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle3;
-		ChangeAnimation(EAnimType::eIdle4);
+		bool stan = false;
+		int w = Math::Rand(0, 10);
+		if (w == 1)stan = true;
+
+		if (stan)
+		{
+			mState = EState::eDizzy;
+			mDizzyTime = 0;
+		}
+		else
+		{
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			mState = EState::eIdle3;
+			ChangeAnimation(EAnimType::eIdle4);
+		}
 	}
 }
 
@@ -259,12 +272,13 @@ void CEnemy::UpdateDizzy()
 {
 	// めまい(混乱)アニメーションを開始
 	ChangeAnimation(EAnimType::eDizzy);
-	//if (IsAnimationFinished())
-	//{
-	//	// プレイヤーの攻撃がヒットした時の待機状態へ移行
-	//	mState = EState::eIdle3;
-	//	ChangeAnimation(EAnimType::eIdle4);
-	//}
+	if (IsAnimationFinished())
+	{
+		mDizzyTime = 0;
+		// プレイヤーの攻撃がヒットした時の待機状態へ移行
+		mState = EState::eIdle3;
+		ChangeAnimation(EAnimType::eIdle4);
+	}
 }
 
 // 更新処理
@@ -332,12 +346,13 @@ void CEnemy::Update()
 		if (mAttackTime > 200)
 		{
 			mState = EState::eAttack;
+
 		}
 		else if (mCharaStatus.hp <= 0)
 		{
 			mAttackTime = 0;
 		}
-		if (mState == EState::eAttack)
+		if (mState == EState::eAttack || mState == EState::eDizzy)
 		{
 			mAttackTime = 0;
 		}

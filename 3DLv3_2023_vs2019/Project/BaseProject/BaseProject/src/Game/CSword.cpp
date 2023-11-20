@@ -1,7 +1,6 @@
 #include "CSword.h"
 #include "CCollisionManager.h"
 #include "CCharaBase.h"
-#include "Maths.h"
 #include "CPlayer.h"
 
 CSword::CSword()

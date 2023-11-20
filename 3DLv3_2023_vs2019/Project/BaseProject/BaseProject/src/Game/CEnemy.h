@@ -77,6 +77,7 @@ public:
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔
+	int mDizzyTime;    // めまいの時間
 	// アニメーションの種類
 	enum class EAnimType
 	{
