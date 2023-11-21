@@ -125,7 +125,7 @@ CPlayer::CPlayer()
 		this,ELayer::ePlayer,
 		0.4f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eExp });
+	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eEnemy2,ELayer::eExp });
 
 	///ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere

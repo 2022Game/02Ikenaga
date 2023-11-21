@@ -9,6 +9,7 @@ enum class ELayer
 	eTest,
 	ePlayer,
 	eEnemy,
+	eEnemy2,
 	eExp,        // 経験値
 
 	eDamageCol,  // ダメージを受ける時のコライダー

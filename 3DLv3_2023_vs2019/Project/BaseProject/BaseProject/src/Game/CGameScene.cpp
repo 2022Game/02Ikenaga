@@ -5,7 +5,8 @@
 #include "CSword.h"
 #include "CShield.h"
 #include "CCamera.h"
-#include "CEnemy.h"
+#include "CSlime.h"
+#include "CSlime2.h"
 #include "CHpGauge.h"
 #include "CEnemy2.h"
 #include "CPortionRed.h"
@@ -45,17 +46,21 @@ void CGameScene::Load()
 	);
 	mainCamera->SetFollowTargetTf(player);
 
-	CEnemy* enemy = new CEnemy();
+	CSlime* enemy = new CSlime();
 	enemy->Position(0.0f, 0.0f, -20.0f);
 	enemy->Scale(25.0f, 25.0f, 25.0f);
+
+	CSlime2* enemy2 = new CSlime2();
+	enemy2->Position(-40.0f, 0.0f, -20.0f);
+	enemy2->Scale(25.0f, 25.0f, 25.0f);
 
 	//HPゲージを作成
 	/*CHpGauge* hpgauge = new CHpGauge();
 	hpgauge->SetPos(10.0f, 190.0f);*/
 
-	CEnemy2* enemy2 = new CEnemy2();
-	enemy2->Position(-20.0f, 0.0f, 20.0f);
-	enemy2->Scale(20.0f, 20.0f, 20.0f);
+	CEnemy2* enemy5 = new CEnemy2();
+	enemy5->Position(60.0f, 0.0f, 20.0f);
+	enemy5->Scale(20.0f, 20.0f, 20.0f);
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
@@ -77,14 +82,25 @@ void CGameScene::Load()
 //シーンの更新処理
 void CGameScene::Update()
 {
-	if (mpEnemy->mHp <= 0)
+	if (mpSlime->mHp <= 0)
 	{
 		(RevivalTime++/100);
 		if (RevivalTime > 1000)
 		{
-			CEnemy* enemy = new CEnemy();
+			CSlime* enemy = new CSlime();
 			enemy->Position(0.0f, 0.0f, -20.0f);
 			enemy->Scale(25.0f, 25.0f, 25.0f);
+			RevivalTime = 0;
+		}
+	}
+	if (mpSlime2->mHp <= 0)
+	{
+		(RevivalTime++ / 100);
+		if (RevivalTime > 1000)
+		{
+			CSlime2* enemy2 = new CSlime2();
+			enemy2->Position(-40.0f, 0.0f, -20.0f);
+			enemy2->Scale(25.0f, 25.0f, 25.0f);
 			RevivalTime = 0;
 		}
 	}

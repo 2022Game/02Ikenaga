@@ -65,6 +65,9 @@
     <Filter Include="ソース ファイル\Test">
       <UniqueIdentifier>{1b92afcf-c66e-4411-8c66-dfd52317a640}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy">
+      <UniqueIdentifier>{7c572c2f-0463-4f46-bb20-675600305f9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -134,9 +137,6 @@
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CPlayer.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CEnemy.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CEffect.cpp">
@@ -226,9 +226,6 @@
     <ClCompile Include="src\Game\CShield.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CEnemy2.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CWeapon.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
@@ -282,6 +279,15 @@
     </ClCompile>
     <ClCompile Include="src\BaseSystem\Primitive.cpp">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlime.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CEnemy2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlime2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,9 +361,6 @@
       <Filter>ソース ファイル\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPlayer.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CEnemy.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CEffect.h">
@@ -465,9 +468,6 @@
     <ClInclude Include="src\Game\CShield.h">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CEnemy2.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CWeapon.h">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
@@ -524,6 +524,15 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\Primitive.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlime.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemy2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlime2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
