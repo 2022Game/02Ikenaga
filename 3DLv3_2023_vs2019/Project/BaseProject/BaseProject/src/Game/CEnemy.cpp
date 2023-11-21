@@ -10,6 +10,7 @@
 CEnemy* CEnemy::spInstance = nullptr;
 
 #define MODEL_SLIME "Character\\Slime\\Slime.x"
+#define MODEL_SLIME_BLUE "Character\\Slime\\SlimeBlue.x"
 
 #define ENEMY_HEIGHT 1.0f
 #define GRAVITY 0.0625f
@@ -98,7 +99,7 @@ CEnemy::CEnemy()
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.5f,false
+		0.4f,false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
@@ -116,7 +117,13 @@ CEnemy::CEnemy()
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCol->Position(0.0f, 0.3f, 0.0f);
+	
+	// 攻撃コライダーをスライムのBodyの行列にアタッチ
+	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
+	mpAttackCol->SetAttachMtx(bodyMty);
 
+	// 最初の攻撃コライダーを無効にしておく
+	mpAttackCol->SetEnable(false);
 }
 
 CEnemy::~CEnemy()
@@ -191,11 +198,8 @@ void CEnemy::UpdateAttack()
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
 	// 攻撃終了待ち状態へ移行
-	if (IsAnimationFinished())
-	{
-		mState = EState::eAttackWait;
-		AttackStart();
-	}
+	mState = EState::eAttackWait;
+	AttackStart();
 }
 
 // 攻撃2
@@ -203,9 +207,9 @@ void CEnemy::UpdateAttack2()
 {
 	// 攻撃2アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack2);
-	// 攻撃2終了待ち状態へ移行
-	if (IsAnimationFinished())
+	if (mAnimationFrame >= 35.0f)
 	{
+		// 攻撃2終了待ち状態へ移行
 		mState = EState::eAttackWait;
 		AttackStart();
 	}

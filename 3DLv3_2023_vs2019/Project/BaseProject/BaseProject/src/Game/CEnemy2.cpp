@@ -16,14 +16,14 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tƒ|[ƒY
 	//{ "Character\\Mushroom\\animation\\MushroomAttack.x",	true,	26.0f	},	// UŒ‚
-	//{ "Character\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// UŒ‚ 26.0f
+	{ "Character\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// UŒ‚ 26.0f
 	//{ "Character\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// UŒ‚ 26.0f
 	//{ "Character\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	// UŒ‚ 26.0f
 	//{ "Character\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// ‚ß‚Ü‚¢ 41.0f
 	//{ "Character\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ƒqƒbƒg 23.0f
 	//{ "Character\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// ‘Ò‹@ 18.0f
 	//{ "Character\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// ‘Ò‹@2 41.0f
-	{ "Character\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	// A•¨ 21.0f
+	//{ "Character\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	// A•¨ 21.0f
 	//{ "Character\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	70.0f	},	// A•¨‚©‚ç‚«‚Ì‚± 21.0f
 	//{ "Character\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//‘–‚é 17.0f
 	//{ "Character\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//Œ©‰ñ‚· 121.0f
