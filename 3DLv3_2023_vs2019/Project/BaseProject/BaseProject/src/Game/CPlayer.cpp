@@ -14,11 +14,7 @@ CPlayer* CPlayer::spInstance = nullptr;
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
 #define MODEL_DOG "Character\\Player\\Dog.x"
-//#define MODEL_SLIME "Character\\Slime\\Slime.x"
 #define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
-//#define MODEL_MUSHROOM "Character\\Mushroom\\Mushroom.x"
-#define HP_FRAME_IMAGE "Character\\Player\\HP\\HPframe.png"  //HPフレーム画像
-#define HP_IMAGE "Character\\Player\\HP\\HP.png"//HP画像
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
@@ -535,13 +531,13 @@ void CPlayer::Update()
 
 	if(debug)
 	{
-		CDebugPrint::Print("  レベル     %d\n", mCharaStatus.level);
-		CDebugPrint::Print("   HP        %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
-		CDebugPrint::Print("  攻撃値     %d\n",mCharaStatus.power);
+		CDebugPrint::Print("   Lv:     %d\n", mCharaStatus.level);
+		CDebugPrint::Print("   EXP:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
+		CDebugPrint::Print("   HP:     %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
+		CDebugPrint::Print(" 攻撃力    %d\n",mCharaStatus.power);
+		CDebugPrint::Print(" 特殊攻撃(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 		CVector scale = Scale();
-		CDebugPrint::Print("  スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
-		CDebugPrint::Print("  特殊攻撃(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
-		CDebugPrint::Print("  経験値     %d / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
+		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 	}
 
 	if (debug2)

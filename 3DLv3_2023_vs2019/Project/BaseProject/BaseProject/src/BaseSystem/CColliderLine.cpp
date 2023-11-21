@@ -1,6 +1,7 @@
 #include "CColliderLine.h"
 #include <glut.h>
 #include "Maths.h"
+#include "CColor.h"
 
 // コンストラクタ
 CColliderLine::CColliderLine(CObjectBase* owner, ELayer layer,
@@ -53,7 +54,9 @@ void CColliderLine::Render()
 	glDisable(GL_LIGHTING);
 
 	// DIFFUSE赤色設定
-	float c[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	CColor col = CColor::red;
+	if (!IsEnable()) col = CColor::gray;
+	float* c = (float*)&col;
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
 	glColor4fv(c);
 

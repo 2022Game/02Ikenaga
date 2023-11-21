@@ -1,5 +1,6 @@
 #include "CColliderSphere.h"
 #include <glut.h>
+#include "CColor.h"
 
 // コンストラクタ
 CColliderSphere::CColliderSphere(CObjectBase* owner, ELayer layer, float radius,
@@ -43,7 +44,10 @@ void CColliderSphere::Render()
 	glDisable(GL_LIGHTING);
 
 	// DIFFUSE赤色設定
-	float c[] = { 1.0f, 0.0f, 0.0f, 0.2f };
+	CColor col = CColor::red;
+	if (!IsEnable()) col = CColor::gray;
+	col.A(0.2f);
+	float* c = (float*)&col;
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
 	glColor4fv(c);
 

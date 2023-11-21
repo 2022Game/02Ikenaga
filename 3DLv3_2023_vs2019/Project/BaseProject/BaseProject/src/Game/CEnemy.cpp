@@ -18,22 +18,22 @@ CEnemy* CEnemy::spInstance = nullptr;
 const CEnemy::AnimData CEnemy::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},	// Tポーズ
-	{ "Character\\Slime\\animation\\SlimeIdleNormal.x",	true,	70.0f	},  //アイドル通常 51.0f
-	{ "Character\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	120.0f	},  //開始の見回す 63.0f
-	{ "Character\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	140.0f	},  //見回す 71.0f
-	{ "Character\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  //アイドルバトル 25.0f
-	{ "Character\\Slime\\animation\\SlimeAttack.x",	true,	26.0f	},  //攻撃 26.0f
-	{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	70.0f	},  //攻撃2 26.0f
-	{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  //ヒット 26.0f
-	{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  //死ぬ 41.0f
-	{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  //めまい 41.0f
-	//{ "Character\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  //走る
-	//{ "Character\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  //挑発
-	//{ "Character\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  //勝利
-	//{ "Character\\Slime\\animation\\SlimeWalk.x",	true,	31.0f	},  //歩く
-	//{ "Character\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  //後ろに歩く
-    //{ "Character\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  //左に移動
-	//{ "Character\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  //右に移動
+	{ "Character\\Slime\\animation\\SlimeIdleNormal.x",	true,	70.0f	},  // アイドル通常 51.0f
+	{ "Character\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	120.0f	},  // 開始の見回す 63.0f
+	{ "Character\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	140.0f	},  // 見回す 71.0f
+	{ "Character\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  // アイドルバトル 25.0f
+	{ "Character\\Slime\\animation\\SlimeAttack.x",	true,	26.0f	},  // 攻撃 26.0f
+	{ "Character\\Slime\\animation\\SlimeAttack2.x",	true,	70.0f	},  // 攻撃2 26.0f
+	{ "Character\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  // ヒット 26.0f
+	{ "Character\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  // 死ぬ 41.0f
+	{ "Character\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // めまい 41.0f
+	//{ "Character\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  // 走る
+	//{ "Character\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  // 挑発
+	//{ "Character\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  // 勝利
+	//{ "Character\\Slime\\animation\\SlimeWalk.x",	true,	31.0f	},  // 歩く
+	//{ "Character\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  // 後ろに歩く
+    //{ "Character\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
+	//{ "Character\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
 };
 
 bool CEnemy::IsDeath() const
