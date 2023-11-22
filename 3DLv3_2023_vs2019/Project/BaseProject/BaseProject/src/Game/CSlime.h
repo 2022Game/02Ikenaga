@@ -36,6 +36,8 @@ public:
 	void UpdateAttack2();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
+	// 攻撃モード
+	void UpdateAttackMode();
 
 	//ヒット
 	void UpdateHIt();
@@ -43,6 +45,8 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+	// 歩行
+	void UpdateWalk();
 
 	// 更新処理
 	void Update();
@@ -93,6 +97,9 @@ private:
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
 		eWalk,		// 歩行
+		eLeftWalk,  // 右に歩行
+		eRightWalk, // 左に歩行
+		eRun,       // 走る
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
@@ -125,9 +132,11 @@ private:
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
 		eAttackWait,// 攻撃終了待ち
+		eAttackMode,// 攻撃モード
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
+		eWalk,      // 歩行
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了

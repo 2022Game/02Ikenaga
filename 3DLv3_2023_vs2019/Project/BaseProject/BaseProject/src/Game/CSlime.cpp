@@ -5,16 +5,22 @@
 #include "CHpGauge.h"
 #include "Maths.h"
 #include "CExp.h"
+#include "CPlayer.h"
 
 // レッドスライム(エネミー)のインスタンス
 CSlime* CSlime::spInstance = nullptr;
 
 #define MODEL_SLIME "Character\\Enemy\\Slime\\Slime.x"
 #define MODEL_SLIME_BLUE "Character\\Enemy\\Slime\\SlimeBlue.x"
-#define MODEL_SLIME_ORANGE "Character\\Enemy\\Slime\\SlimeOrange.x"
 
 #define ENEMY_HEIGHT 1.0f
-#define GRAVITY 0.0625f
+
+#define MOVE_SPEED 0.1f    // 移動速度
+#define GRAVITY 0.0625f    // 重力
+
+#define FIELD_OF_VIEW  90.0f    // 視野
+#define WALK_RANGE 50.0f        // 追跡する範囲
+#define ROTATE_RANGE  300.0f     // 回転する範囲
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
 const CSlime::AnimData CSlime::ANIM_DATA[] =
@@ -29,13 +35,13 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  // ヒット 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  // 死ぬ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // めまい 41.0f
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  // 走る
+	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	true,	50.0f	},  // 歩く 31.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
+	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
+	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  // 走る
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  // 挑発
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  // 勝利
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	true,	31.0f	},  // 歩く
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  // 後ろに歩く
-    //{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
 };
 
 bool CSlime::IsDeath() const
@@ -196,16 +202,20 @@ void CSlime::UpdateIdleWait()
 // 攻撃
 void CSlime::UpdateAttack()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
+	AttackStart();
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
-	AttackStart();
 }
 
 // 攻撃2
 void CSlime::UpdateAttack2()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// 攻撃2アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack2);
 	if (mAnimationFrame >= 35.0f)
@@ -222,13 +232,37 @@ void CSlime::UpdateAttackWait()
 	// 攻撃と攻撃2アニメーションが終了したら、
 	if (IsAnimationFinished())
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle3;
-		ChangeAnimation(EAnimType::eIdle4);
-
 		AttackEnd();
+		CPlayer* player = CPlayer::Instance();
+		float vectorp = (player->Position() - Position()).Length();
+		if (vectorp <= WALK_RANGE)
+		{
+			mState = EState::eWalk;
+		}
+		else
+		{
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			mState = EState::eIdle3;
+			ChangeAnimation(EAnimType::eIdle4);
+		}
 	}
 }
+
+// 攻撃モード
+void CSlime::UpdateAttackMode()
+{
+	CPlayer* player = CPlayer::Instance();
+	CVector nowplayer = (player->Position() - Position()).Normalized();
+	//CVector newposition = Position() + nowplayer * MOVE_SPEED * mCharaStatus.mobility;
+
+	ChangeAnimation(EAnimType::eWalk);
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp <= WALK_RANGE)
+	{
+		mState = EState::eWalk;
+	}
+}
+
 
 // ヒット
 void CSlime::UpdateHIt()
@@ -284,6 +318,20 @@ void CSlime::UpdateDizzy()
 	}
 }
 
+// 歩行
+void CSlime::UpdateWalk() 
+{
+	ChangeAnimation(EAnimType::eWalk);
+
+	CPlayer* player = CPlayer::Instance();
+	CVector nowPos = (player->Position() - Position()).Normalized();
+	mMoveSpeed += nowPos * MOVE_SPEED;
+	/*float vectorp = (player->Position() - Position()).Length();
+	if (vectorp <= WALK_RANGE)
+	{
+	}*/
+}
+
 // 更新処理
 void CSlime::Update()
 {
@@ -291,6 +339,22 @@ void CSlime::Update()
 	mpRideObject = nullptr;
 
 	mHp = mCharaStatus.hp;
+
+	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
+	{
+		CPlayer* player = CPlayer::Instance();
+		float vectorp = (player->Position() - Position()).Length();
+		if (vectorp <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
+	}
+	
+	Position(Position() + mMoveSpeed * MOVE_SPEED * mCharaStatus.mobility);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -321,6 +385,10 @@ void CSlime::Update()
 	case EState::eAttackWait:
 		UpdateAttackWait();
 		break;
+		// 攻撃モード
+	case EState::eAttackMode:
+		UpdateAttackMode();
+		break;
 		// ヒット
 	case EState::eHit:
 		UpdateHIt();
@@ -333,9 +401,11 @@ void CSlime::Update()
 	case EState::eDizzy:
 		UpdateDizzy();
 		break;
+		// 歩行
+	case EState::eWalk:
+		UpdateWalk();
+		break;
 	}
-	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
-	Position(Position() + mMoveSpeed);
 
 	if (mCharaStatus.hp <= 0)
 	{
