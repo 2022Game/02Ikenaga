@@ -15,12 +15,13 @@ CSlime* CSlime::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
 
-#define MOVE_SPEED 0.1f    // 移動速度
+#define MOVE_SPEED 0.05f    // 移動速度
 #define GRAVITY 0.0625f    // 重力
 
 #define FIELD_OF_VIEW  90.0f    // 視野
-#define WALK_RANGE 50.0f        // 追跡する範囲
-#define ROTATE_RANGE  300.0f     // 回転する範囲
+#define WALK_RANGE 150.0f        // 追跡する範囲
+#define STOP_RANGE 20.0f         // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
 const CSlime::AnimData CSlime::ANIM_DATA[] =
@@ -183,6 +184,20 @@ void CSlime::UpdateIdle3()
 	{
 		mState = EState::eIdle3;
 	}
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if ( vectorp >22.0f &&vectorp <= WALK_RANGE)
+	{
+		mState = EState::eWalk;
+	}
+	else
+	{
+		ChangeAnimation(EAnimType::eIdle4);
+		if (IsAnimationFinished())
+		{
+			mState = EState::eIdle3;
+		}
+	}
 }
 
 // 待機2の終了待ち
@@ -235,7 +250,7 @@ void CSlime::UpdateAttackWait()
 		AttackEnd();
 		CPlayer* player = CPlayer::Instance();
 		float vectorp = (player->Position() - Position()).Length();
-		if (vectorp <= WALK_RANGE)
+		if (vectorp >=22.0f &&vectorp >= WALK_RANGE)
 		{
 			mState = EState::eWalk;
 		}
@@ -259,7 +274,7 @@ void CSlime::UpdateAttackMode()
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp <= WALK_RANGE)
 	{
-		mState = EState::eWalk;
+		//mState = EState::eWalk;
 	}
 }
 
@@ -325,7 +340,32 @@ void CSlime::UpdateWalk()
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	mMoveSpeed += nowPos * MOVE_SPEED;
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp <= STOP_RANGE)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+		CPlayer* player = CPlayer::Instance();
+		float vectorp = (player->Position() - Position()).Length();
+		if (vectorp <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
+	}
+	else
+	{
+		mMoveSpeed += nowPos * MOVE_SPEED;
+	}
+	if (vectorp <= 22.0f)
+	{
+		mState = EState::eIdle3;
+		ChangeAnimation(EAnimType::eIdle4);
+	}
+	CDebugPrint::Print(" 距離 %f", vectorp);
 	/*float vectorp = (player->Position() - Position()).Length();
 	if (vectorp <= WALK_RANGE)
 	{
@@ -354,7 +394,10 @@ void CSlime::Update()
 		}
 	}
 	
-	Position(Position() + mMoveSpeed * MOVE_SPEED * mCharaStatus.mobility);
+	if (mState == EState::eWalk)
+	{
+		Position(Position() + mMoveSpeed * MOVE_SPEED * mCharaStatus.mobility);
+	}
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -437,6 +480,12 @@ void CSlime::Update()
 			mAttackTime = 0;
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDizzy)
+		{
+			mAttackTime = 0;
+		}
+		CPlayer* player = CPlayer::Instance();
+		float vectorp = (player->Position() - Position()).Length();
+		if (vectorp >= WALK_RANGE)
 		{
 			mAttackTime = 0;
 		}
