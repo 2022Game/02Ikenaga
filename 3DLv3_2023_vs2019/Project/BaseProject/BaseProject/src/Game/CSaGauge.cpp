@@ -8,10 +8,10 @@
 #define BAR_IMAGE "UI\\white.png"
 
 //フレームの横のサイズ
-#define FRAME_SIZE_X (230.0f)
+#define FRAME_SIZE_X (250.0f)
 //#define FRAME_SIZE_XX (430.0f)
 //フレームの縦のサイズ
-#define FRAME_SIZE_Y (25.0f)
+#define FRAME_SIZE_Y (30.0f)
 //緑の幅
 #define FRAME_BORDER (2.0f)
 //バーの横のサイズ

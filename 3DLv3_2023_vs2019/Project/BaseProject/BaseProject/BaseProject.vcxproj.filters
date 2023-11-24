@@ -289,6 +289,9 @@
     <ClCompile Include="src\Game\CSlime2.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="src\BaseSystem\CGamePause.cpp">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -533,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSlime2.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CGamePause.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

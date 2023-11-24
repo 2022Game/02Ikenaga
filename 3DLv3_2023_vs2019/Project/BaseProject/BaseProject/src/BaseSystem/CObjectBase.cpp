@@ -2,8 +2,8 @@
 #include "CCollider.h"
 
 // コンストラクタ
-CObjectBase::CObjectBase(ETag tag, ETaskPriority prio)
-	: CTask(prio)
+CObjectBase::CObjectBase(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
+	: CTask(prio, sortOrder, pause)
 	, mTag(tag)
 {
 }

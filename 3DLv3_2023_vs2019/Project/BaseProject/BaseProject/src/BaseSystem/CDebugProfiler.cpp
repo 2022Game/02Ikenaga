@@ -7,7 +7,7 @@ CDebugProfiler* CDebugProfiler::mpInstance = nullptr;
 
 // コンストラクタ
 CDebugProfiler::CDebugProfiler()
-	: CTask(ETaskPriority::eDebug, true)
+	: CTask(ETaskPriority::eDebug, 0, ETaskPauseType::eDefault, true)
 {
 }
 

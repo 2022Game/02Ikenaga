@@ -3,12 +3,13 @@
 #include "CSceneManager.h"
 
 //コンストラクタ
-CTask::CTask(ETaskPriority prio, bool dontDelete)
-	: mpNext(nullptr)
-	, mpPrev(nullptr)
-	, mPriority(prio)
+CTask::CTask(ETaskPriority prio, int sortOrder,
+	ETaskPauseType pause, bool dontDelete, bool addTaskList)
+	: mPriority(prio)
+	, mSortOrder(sortOrder)
 	, mEnabled(true)
-	, mPauseType(ETaskPauseType::eDefault)
+	, mPauseType(pause)
+	, mAddTaskList(addTaskList)
 {
 	//シーン遷移で破棄しないタスクかどうかで
 	//所属するシーンのタイプを切り替える
@@ -16,16 +17,23 @@ CTask::CTask(ETaskPriority prio, bool dontDelete)
 		? EScene::eNone
 		: CSceneManager::Instance()->GetCurrentScene();
 
-	//タスクを生成した時に
-	//タスクマネージャーのタスクリストに追加
-	CTaskManager::Instance()->Add(this);
+	// 自動登録がオンならば
+	if (mAddTaskList)
+	{
+		//タスクを生成した時に
+		//タスクマネージャーのタスクリストに追加
+		CTaskManager::Instance()->Add(this);
+	}
 }
 
 //デストラクタ
 CTask::~CTask()
 {
-	//タスクマネージャーのタスクリストから取り除く
-	CTaskManager::Instance()->Remove(this);
+	if (mAddTaskList)
+	{
+		//タスクマネージャーのタスクリストから取り除く
+		CTaskManager::Instance()->Remove(this);
+	}
 }
 
 //更新
@@ -49,6 +57,31 @@ void CTask::SetPriority(ETaskPriority prio)
 	mPriority = prio;
 	CTaskManager::Instance()->Remove(this);
 	CTaskManager::Instance()->Add(this);
+}
+
+//優先度を取得
+ETaskPriority CTask::GetPriority() const
+{
+	return mPriority;
+}
+
+//優先度内の順番を設定
+void CTask::SetSortOrder(int sortOder)
+{
+	//既に設定されている順番であれば処理しない
+	if (mSortOrder == sortOder) return;
+
+	//一度タスクリストから取り除き、再度追加することで、
+	//新しい優先度の場所にタスクを差し込む
+	mSortOrder = sortOder;
+	CTaskManager::Instance()->Remove(this);
+	CTaskManager::Instance()->Add(this);
+}
+
+//優先度内の順番を取得
+int CTask::GetSortOrder() const
+{
+	return mSortOrder;
 }
 
 //ポーズの種類を設定

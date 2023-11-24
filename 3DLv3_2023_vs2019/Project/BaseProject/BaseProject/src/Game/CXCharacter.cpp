@@ -1,8 +1,8 @@
 #include "CXCharacter.h"
 
 //コンストラクタ
-CXCharacter::CXCharacter(ETag tag, ETaskPriority prio)
-	: CCharaBase(tag, prio)
+CXCharacter::CXCharacter(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
+	: CCharaBase(tag, prio, sortOrder, pause)
 	, mpModel(nullptr)
 	, mpCombinedMatrix(nullptr)
 	, mAnimationLoopFlg(false)

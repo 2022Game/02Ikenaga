@@ -13,9 +13,12 @@ private:
 
 public:
 	//コンストラクタ
-	CImage();
-	//コンストラクタ（テクスチャ指定版）
-	CImage(const char* path);
+	CImage(const char* path,
+		ETaskPriority prio = ETaskPriority::eUI,
+		int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eDefault,
+		bool dontDelete = false,
+		bool addTaskList = true);
 	//デストラクタ
 	~CImage();
 
@@ -28,7 +31,6 @@ public:
 	void SetUV(const float& left, const float& top, const float& right, const float& bottom);
 	//表示する範囲を取得
 	const CVector4& GetUV() const;
-
 
 	//描画
 	void Render();

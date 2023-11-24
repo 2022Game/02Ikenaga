@@ -27,7 +27,7 @@ bool CDebugCamera::msIsOn = false;
 
 // コンストラクタ
 CDebugCamera::CDebugCamera()
-	: CCamera(CVector(0.0f, 0.0f, 10.0f), CVector(0.0f, 0.0f, 0.0f))
+	: CCamera(CVector(0.0f, 0.0f, 10.0f), CVector(0.0f, 0.0f, 0.0f), false)
 	, mMoveSpeed(0.0f, 0.0f, 0.0f)
 	, mMoveSpeedRatio(1.0f)
 	, mRotateAngle(0.0f, 0.0f, 0.0f)

@@ -25,7 +25,11 @@ public:
 		const CVector2& pos = CVector2::zero,
 		const CVector2& size = CVector2(400.0f, 300.0f),
 		const CColor& color = CColor::black,
-		bool dontDelete = false);
+		ETaskPriority prio = ETaskPriority::eUI,
+		int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eDefault,
+		bool dontDelete = false,
+		bool addTaskList = true);
 	~CText();
 
 	void SetFontSize(int fontSize);

@@ -15,7 +15,10 @@ public:
 	/// </summary>
 	/// <param name="tag">オブジェクトのタグ</param>
 	/// <param name="prio">タスクの優先度</param>
-	CObjectBase(ETag tag = ETag::eNone, ETaskPriority prio = ETaskPriority::eDefault);
+	CObjectBase(ETag tag = ETag::eNone,
+		ETaskPriority prio = ETaskPriority::eDefault,
+		int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eDefault);
 
 	// デストラクタ
 	virtual ~CObjectBase();

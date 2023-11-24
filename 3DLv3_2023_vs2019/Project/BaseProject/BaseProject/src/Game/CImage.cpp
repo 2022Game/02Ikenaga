@@ -1,19 +1,16 @@
 #include "CImage.h"
 
 //コンストラクタ
-CImage::CImage()
-	: mpTexture(nullptr)
+CImage::CImage(const char* path, ETaskPriority prio, int sortOrder,
+	ETaskPauseType pause, bool dontDelete, bool addTaskList)
+	: CUIBase(prio, sortOrder, pause, dontDelete, addTaskList)
+	, mpTexture(nullptr)
 	, mUV(0.0f, 0.0f, 1.0f, 1.0f)
 {
 	mPosition = CVector2(0.0f, 0.0f);
 	mSize = CVector2(128.0f, 128.0f);
 	mColor = CColor(1.0f, 1.0f, 1.0f, 1.0f);
-}
 
-//コンストラクタ（テクスチャ指定版）
-CImage::CImage(const char* path)
-	: CImage()
-{
 	Load(path);
 }
 
@@ -96,9 +93,8 @@ void CImage::Render()
 
 	float vtxLeft = mPosition.X();
 	float vtxRight = vtxLeft + mSize.X();
-	//OpenGLは左下原点なので、左上が原点になるよう調整
-	float vtxBottom = WINDOW_HEIGHT - mPosition.Y();
-	float vtxTop = vtxBottom - mSize.Y();
+	float vtxBottom = mPosition.Y();
+	float vtxTop = vtxBottom + mSize.Y();
 
 	glTexCoord2f(uvLeft, uvTop);
 	glVertex2d(vtxLeft, vtxTop);

@@ -5,6 +5,7 @@
 #include "CApplication.h"
 #include "CInput.h"
 #include "CCamera.h"
+#include "CGamePause.h"
 
 // 1•bŠÔ‚ÉÀs‚·‚éƒtƒŒ[ƒ€”
 int gFPS = 60;

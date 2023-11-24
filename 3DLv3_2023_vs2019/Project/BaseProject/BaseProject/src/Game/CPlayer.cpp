@@ -88,11 +88,11 @@ CPlayer::CPlayer()
 
 	// HPゲージを作成
 	mpHpGauge = new CHpGauge();
-	mpHpGauge->SetPos(10.0f, 690.f);
+	mpHpGauge->SetPos(10.0f, 63.0f);
 
 	// SAゲージを作成
 	mpSaGauge = new CSaGauge();
-	mpSaGauge->SetPos(10.0f,663.0f);
+	mpSaGauge->SetPos(10.0f,94.0f);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);

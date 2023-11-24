@@ -93,8 +93,18 @@ public:
 	/// <returns>スクリーン座標</returns>
 	CVector WorldToScreenPos(const CVector& worldPos);
 
+	/// <summary>
+	/// このカメラを現在のカメラに設定するかどうか
+	/// （解除した場合はメインカメラが現在のカメラに設定される）
+	/// </summary>
+	/// <param name="isCurrent">trueならば、現在のカメラに設定</param>
+	void SetCurrent(bool isCurrent);
+
 	// 更新
 	void Update() override;
+
+	// 削除
+	void Kill() override;
 
 	// カメラ反映
 	void Apply();
@@ -110,8 +120,15 @@ protected:
 	CVector mUp;		// 上ベクトル
 
 private:
+	// カメラを削除
+	void DeleteCamera();
+
+	static std::list<CCamera*> spCameraList;// 生成されているカメラのリスト
 	static CCamera* spMainCamera;	// メインカメラ
+	static CCamera* spCurrentCamera;// 現在のカメラ
+
 	bool mIsMainCamera;				// メインカメラかどうか
+
 	CTransform* mFollowTargetTf;	// 追従するターゲットのCTransfrom
 	CVector mFollowOffsetPos;		// 追従ターゲットの位置から視点までのオフセット値
 

@@ -3,7 +3,9 @@
 #include "Maths.h"
 #include "CDebugCamera.h"
 
+std::list<CCamera*> CCamera::spCameraList;
 CCamera* CCamera::spMainCamera = nullptr;
+CCamera* CCamera::spCurrentCamera = nullptr;
 
 // コンストラクタ
 CCamera::CCamera(const CVector& eye, const CVector& center, bool isMainCamera)
@@ -18,22 +20,23 @@ CCamera::CCamera(const CVector& eye, const CVector& center, bool isMainCamera)
 	LookAt(eye, center, CVector::up);
 	Reshape(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	// メインカメラであれば
-	if (mIsMainCamera)
+	// メインカメラが設定されていなければ、
+	if (mIsMainCamera && spMainCamera == nullptr)
 	{
+		// メインカメラに設定
 		spMainCamera = this;
+		// メインカメラを現在のカメラに設定
+		spCurrentCamera = spMainCamera;
 	}
+
+	spCameraList.push_back(this);
 }
 
 // デストラクタ
 CCamera::~CCamera()
 {
-	// 削除されたのがメインカメラであれば、
-	// 登録しているメインカメラを解除
-	if (spMainCamera == this)
-	{
-		spMainCamera = nullptr;
-	}
+	// カメラ削除処理
+	DeleteCamera();
 }
 
 // メインカメラを取得
@@ -54,8 +57,50 @@ CCamera* CCamera::CurrentCamera()
 	// デバッグカメラが無効であれば、
 	else
 	{
-		// メインカメラを返す
-		return spMainCamera;
+		// 現在のカメラを返す
+		return spCurrentCamera;
+	}
+}
+
+// カメラを削除
+void CCamera::DeleteCamera()
+{
+	// カメラリストから自分自身を取り除く
+	spCameraList.remove(this);
+
+	// 削除されたのがメインカメラであれば、
+	// 登録しているメインカメラを解除
+	if (spMainCamera == this)
+	{
+		spMainCamera = nullptr;
+	}
+
+	// 現在のカメラが削除された場合は
+	if (spCurrentCamera == this)
+	{
+		// 現在のカメラとは別にメインカメラが存在すれば、
+		// メインカメラを現在のカメラに変更
+		if (spMainCamera != nullptr)
+		{
+			spCurrentCamera = spMainCamera;
+		}
+		// メインカメラが存在しない場合
+		else
+		{
+			spCurrentCamera = nullptr;
+			// カメラリストの先頭から調べて
+			// メインカメラが存在すれば、
+			// そのカメラを現在のカメラに設定する
+			for (CCamera* cam : spCameraList)
+			{
+				if (cam->mIsMainCamera)
+				{
+					spMainCamera = cam;
+					spCurrentCamera = spMainCamera;
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -203,6 +248,21 @@ CVector CCamera::WorldToScreenPos(const CVector& worldPos)
 	return CVector(v.X() / v.W(), v.Y() / v.W(), v.Z() / fabsf(v.W()));
 }
 
+// このカメラを現在のカメラに設定するかどうか
+void CCamera::SetCurrent(bool isCurrent)
+{
+	// このカメラを現在のカメラに変更
+	if (isCurrent)
+	{
+		spCurrentCamera = this;
+	}
+	// 解除時はメインカメラを現在のカメラにする
+	else
+	{
+		spCurrentCamera = spMainCamera;
+	}
+}
+
 // 更新
 void CCamera::Update()
 {
@@ -216,6 +276,13 @@ void CCamera::Update()
 	}
 
 	LookAt(mEye, mAt, mUp);
+}
+
+// 削除
+void CCamera::Kill()
+{
+	CTask::Kill();
+	DeleteCamera();
 }
 
 // カメラ反映

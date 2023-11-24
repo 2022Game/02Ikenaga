@@ -12,7 +12,6 @@ CTaskManager* CTaskManager::Instance()
 	if (mpInstance == nullptr)
 	{
 		mpInstance = new CTaskManager();
-		mpInstance->Initialize();
 	}
 	return mpInstance;
 }
@@ -26,8 +25,7 @@ void CTaskManager::ClearInstance()
 
 // コンストラクタ
 CTaskManager::CTaskManager()
-	: mpHead(nullptr)
-	, mpTail(nullptr)
+	: mPauseBit(0)
 {
 }
 
@@ -36,78 +34,95 @@ CTaskManager::~CTaskManager()
 {
 }
 
-// 初期化
-void CTaskManager::Initialize()
-{
-	mpHead = new CTask();
-	mpTail = new CTask();
-
-	mpHead->mpNext = mpTail;
-	mpTail->mpPrev = mpHead;
-}
-
 // 指定したタスクをリストに追加
 void CTaskManager::Add(CTask* task)
 {
-	if (mpHead == nullptr) return;
-	if (mpHead->mpNext == nullptr) return;
+	if (!task->mAddTaskList) return;
+	// 追加するタスクが3Dタスクかどうか
+	bool is3dTask = task->mPriority < ETaskPriority::Start2d;
+	// 3Dタスクか2Dタスクかで追加するリスト切り替える
+	std::list<CTask*>& list = is3dTask ? m3dTasks : m2dTasks;
 
-	// mHeadの次から検索
-	CTask* next = mpHead->mpNext;
-
-	// 優先度の数値が小さい順に並べる
-	// 挿入位置の検索
-	// （追加するタスクの優先度より大きいタスクの前に挿入）
-	while (next != mpTail && task->mPriority >= next->mPriority)
+	// リストの先頭から順番に調べる
+	auto itr = list.begin();
+	auto end = list.end();
+	while (itr != end)
 	{
-		next = next->mpNext;	// 次へ
+		CTask* current = *itr;
+		// 追加するタスクと検索中のタスクの優先度が同じ場合
+		if (task->mPriority == current->mPriority)
+		{
+			// 並び替え順の番号が小さい順に並べる
+			if (task->mSortOrder < current->mSortOrder)
+			{
+				list.insert(itr, task);
+				return;
+			}
+		}
+		// 追加するタスクの優先度が
+		// 検索中のタスクの優先度より小さい場合は、
+		// 検索中のタスクの前に挿入
+		else if (task->mPriority < current->mPriority)
+		{
+			list.insert(itr, task);
+			return;
+		}
+		// 次へ
+		itr++;
 	}
 
-	// 次タスクの前のタスクを覚えておく
-	CTask* prev = next->mpPrev;
-
-	// [prev]→[task]→[next] の順に各タスクの次のタスクを繋ぐ
-	prev->mpNext = task;	// prev → task を繋ぐ
-	task->mpNext = next;	// task → next を繋ぐ
-
-	// [prev]←[task]←[next] の順に各タスクの前のタスクを繋ぐ
-	task->mpPrev = prev;	// prev ← task を繋ぐ
-	next->mpPrev = task;	// task ← next を繋ぐ
+	// ここまで調べてタスクを差し込む場所がなかった場合は、
+	// リストの最後尾に追加
+	list.push_back(task);
 }
 
 // 指定したタスクをリストから取り除く
 void CTaskManager::Remove(CTask* task)
 {
-	// 取り除くタスクの前後のタスクを繋ぐ
-	CTask* prev = task->mpPrev;
-	CTask* next = task->mpNext;
+	if (!task->mAddTaskList) return;
+	// 取り除くタスクが3Dタスクかどうか
+	bool is3dTask = task->mPriority < ETaskPriority::Start2d;
+	// 3Dタスクか2Dタスクかでリストを切り替える
+	std::list<CTask*>& list = is3dTask ? m3dTasks : m2dTasks;
 
-	// [prev]→[next] を繋ぐ
-	prev->mpNext = next;
-	// [prev]←[next] を繋ぐ
-	next->mpPrev = prev;
+	// リスト内に取り除くタスクが存在するかどうか
+	auto find = std::find(list.begin(), list.end(), task);
+	if (find == list.end()) return;
 
-	// 取り除くタスクの前後のタスクを初期化
-	task->mpPrev = nullptr;
-	task->mpNext = nullptr;
+	// 存在した場合は、リストからタスクを取り除く
+	list.erase(find);
 }
 
 // 削除フラグが立っているタスクを全て削除
 void CTaskManager::Delete()
 {
+	// 3Dタスクリスト内を精査
+	Delete(m3dTasks);
+	// 2Dタスクリスト内を精査
+	Delete(m2dTasks);
+}
+
+// 指定されたリスト内で
+// 削除フラグが立っているタスクを全て削除
+void CTaskManager::Delete(std::list<CTask*>& list)
+{
 	// 先頭から最後まで繰り返し
-	CTask* task = mpHead->mpNext;
-	while (task != mpTail)
+	auto itr = list.begin();
+	auto end = list.end();
+	while (itr != end)
 	{
 		// 削除タスクを記憶しておく
-		CTask* del = task;
-		// 次へ
-		task = task->mpNext;
-
-		// 削除フラグが立っていたら、削除
+		CTask* del = *itr;
+		// 削除フラグが立っていたら、削除して次へ
 		if (del->IsKill())
 		{
+			itr = list.erase(itr);
 			delete del;
+		}
+		// 削除フラグが立っていなければ、そのまま次へ
+		else
+		{
+			itr++;
 		}
 	}
 }
@@ -115,9 +130,8 @@ void CTaskManager::Delete()
 // 指定したシーンに所属するタスクを全て削除
 void CTaskManager::DeleteInScene(EScene scene)
 {
-	// 先頭から最後まで繰り返し
-	CTask* task = mpHead->mpNext;
-	while (task != mpTail)
+	// 3Dタスクリストを精査
+	for (CTask* task : m3dTasks)
 	{
 		// 所属するシーンが一致したら、
 		// 削除フラグを立てる
@@ -125,72 +139,102 @@ void CTaskManager::DeleteInScene(EScene scene)
 		{
 			task->Kill();
 		}
-		// 次へ
-		task = task->mpNext;
 	}
+	// 2Dタスクリストを精査
+	for (CTask* task : m2dTasks)
+	{
+		// 所属するシーンが一致したら、
+		// 削除フラグを立てる
+		if (task->GetSceneType() == scene)
+		{
+			task->Kill();
+		}
+	}
+}
+
+// 3Dタスクのリストを取得
+const std::list<CTask*>& CTaskManager::Get3dTasks() const
+{
+	return m3dTasks;
+}
+
+// 2Dタスクのリストを取得
+const std::list<CTask*>& CTaskManager::Get2dTasks() const
+{
+	return m2dTasks;
+}
+
+// ポーズする
+void CTaskManager::Pause(int pauseBit)
+{
+	mPauseBit |= pauseBit;
+}
+
+// ポーズを解除する
+void CTaskManager::UnPause(int pauseBit)
+{
+	mPauseBit &= ~pauseBit;
+}
+
+// ポーズ中かどうか
+bool CTaskManager::IsPaused(int pauseBit) const
+{
+	if (pauseBit == 0) pauseBit = ~pauseBit;
+	return (mPauseBit & pauseBit) != 0;
 }
 
 // 更新
 void CTaskManager::Update()
 {
-	// 先頭から最後まで繰り返し
-	CTask* task = mpHead->mpNext;
-	while (task != mpTail)
+	// 3Dタスクリスト内のタスクを順番に更新
+	for (CTask* task : m3dTasks)
 	{
-		// タスクを更新
-		task->Update();
-		// 次へ
-		task = task->mpNext;
+		// ポーズ中のタスクでなければ、
+		ETaskPauseType pause = task->GetPauseType();
+		if (pause == ETaskPauseType::eNone || (mPauseBit & (int)pause) == 0)
+		{
+			// タスクを更新
+			task->Update();
+		}
+	}
+	// 2Dタスクリスト内のタスクを順番に更新
+	for (CTask* task : m2dTasks)
+	{
+		// ポーズ中のタスクでなければ、
+		ETaskPauseType pause = task->GetPauseType();
+		if (pause == ETaskPauseType::eNone || (mPauseBit & (int)pause) == 0)
+		{
+			// タスクを更新
+			task->Update();
+		}
 	}
 }
 
 // 描画
 void CTaskManager::Render()
 {
-	// 先頭から最後まで繰り返し
-	CTask* task = mpHead->mpNext;
-
-	// 3D関連の描画
-	if (CDebugCamera::IsOn())
+	// 現在のカメラが存在すれば
+	CCamera* current = CCamera::CurrentCamera();
+	if (current != nullptr)
 	{
-		CDebugCamera::DebugCamera()->Apply();
-	}
-	else
-	{
-		// メインカメラを反映
-		CCamera::MainCamera()->Apply();
-	}
-	// 先頭から2D関連のタスクまで描画する
-	while (task != mpTail && task->mPriority < ETaskPriority::Start2d)
-	{
-		// タスクを描画
-		task->Render();
-		task = task->mpNext;
+		// 現在のカメラを反映
+		current->Apply();
+		// 3D関連の描画
+		for (CTask* task : m3dTasks)
+		{
+			// タスクを描画
+			task->Render();
+		}
 	}
 
-	// 2D関連の描画
 	// 2D描画用のカメラに切り替える
 	CCamera::Start2DCamera();
-	while (task != mpTail)
+	// 2D関連の描画
+	for (CTask* task : m2dTasks)
 	{
 		// タスクを描画
 		task->Render();
-		task = task->mpNext;
 	}
 	// 3D描画用のカメラへ戻す
 	CCamera::End2DCamera();
-}
-
-//衝突処理
-void CTaskManager::Collision()
-{
-	//先頭から最後まで繰り返し
-	CTask* task = mpHead->mpNext;
-	while (task->mpNext)
-	{
-		//衝突処理を呼ぶ
-		task->Collision();
-		//次へ
-		task = task->mpNext;
-	}
 }

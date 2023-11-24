@@ -9,11 +9,17 @@ class CTask
 {
 	friend CTaskManager;
 public:
-	//衝突処理
-	virtual void Collision() {}
-
-	//コンストラクタ
-	CTask(ETaskPriority prio = ETaskPriority::eDefault, bool dontDelete = false);
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="prio">タスク優先度</param>
+	/// <param name="sortOrder">タスク優先度内の順番</param>
+	/// <param name="pause">ポーズ種類</param>
+	/// <param name="dontDelete">trueにするとシーン遷移で削除されない</param>
+	/// <param name="addTaskList">falseにするとタスクリストに自動登録されない</param>
+	CTask(ETaskPriority prio = ETaskPriority::eDefault, int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eDefault,
+		bool dontDelete = false, bool addTaskList = true);
 	//デストラクタ
 	virtual ~CTask();
 	//更新
@@ -23,25 +29,33 @@ public:
 
 	//優先度を設定
 	void SetPriority(ETaskPriority prio);
+	//優先度を取得
+	ETaskPriority GetPriority() const;
+	//優先度内の順番を設定
+	void SetSortOrder(int sortOder);
+	//優先度内の順番を取得
+	int GetSortOrder() const;
+
 	//ポーズの種類を設定
 	void SetPauseType(ETaskPauseType type);
 	//ポーズの種類を取得
 	ETaskPauseType GetPauseType() const;
+
 	//所属するシーンを設定
 	void SetSceneType(EScene scene);
 	//所属するシーンを取得
 	EScene GetSceneType() const;
 
 	//タスクを削除
-	void Kill();
+	virtual void Kill();
 	//削除フラグ取得
 	bool IsKill() const;
 
 private:
-	CTask* mpNext;		//次のポインタ
-	CTask* mpPrev;		//前のポインタ
 	ETaskPriority mPriority;	//優先度
+	int mSortOrder;		//優先度内での順番
 	bool mEnabled;		//有効フラグ
 	ETaskPauseType mPauseType;//ポーズの種類
+	bool mAddTaskList;	//タスクリストに追加しているかどうか
 	EScene mSceneType;	//所属するシーンの種類
 };

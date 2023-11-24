@@ -4,6 +4,7 @@
 #include "CTaskManager.h"
 #include "CCollisionManager.h"
 #include "CSceneManager.h"
+#include "CGamePause.h"
 
 CApplication::~CApplication()
 {
@@ -11,6 +12,7 @@ CApplication::~CApplication()
 
 void CApplication::Start()
 {
+	new CGamePause();
 	CSceneManager::Instance()->LoadScene(EScene::eBootMenu);
 }
 

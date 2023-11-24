@@ -9,7 +9,8 @@ class CXCharacter : public CCharaBase
 {
 public:
 	//コンストラクタ
-	CXCharacter(ETag tag, ETaskPriority prio);
+	CXCharacter(ETag tag, ETaskPriority prio, int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eGame);
 	//デストラクタ
 	virtual ~CXCharacter();
 

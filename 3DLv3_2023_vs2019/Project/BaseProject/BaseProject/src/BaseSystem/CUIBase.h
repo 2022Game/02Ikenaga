@@ -6,7 +6,9 @@
 class CUIBase : public CTask
 {
 public:
-	CUIBase(ETaskPriority prio = ETaskPriority::eUI, bool dontDelete = false);
+	CUIBase(ETaskPriority prio = ETaskPriority::eUI, int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eGame,
+		bool dontDelete = false, bool addTaskList = true);
 	virtual ~CUIBase();
 
 	//表示座標を設定（CVector2版）

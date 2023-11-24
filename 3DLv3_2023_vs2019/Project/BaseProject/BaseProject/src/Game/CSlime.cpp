@@ -378,6 +378,8 @@ void CSlime::Update()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
+			
+			//ChangeAnimation(EAnimType::eLeftWalk);
 		}
 	}
 	CPlayer* player = CPlayer::Instance();

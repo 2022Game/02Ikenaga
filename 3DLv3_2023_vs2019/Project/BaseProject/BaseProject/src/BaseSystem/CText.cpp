@@ -3,8 +3,10 @@
 #include <locale.h>
 
 CText::CText(CFont* font, int fontSize, const CVector2& pos,
-	const CVector2& size, const CColor& color, bool dontDelete)
-	: CUIBase(ETaskPriority::eUI, dontDelete)
+	const CVector2& size, const CColor& color,
+	ETaskPriority prio, int sortOrder, ETaskPauseType pause,
+	bool dontDelete, bool addTaskList)
+	: CUIBase(prio, sortOrder, pause, dontDelete, addTaskList)
 	, mpFont(font)
 	, mText(L"")
 	, mFontSize(fontSize)

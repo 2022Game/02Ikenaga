@@ -1,7 +1,7 @@
 #include "CRideableObject.h"
 
 CRideableObject::CRideableObject()
-	: CObjectBase(ETag::eRideableObject, ETaskPriority::eBackground)
+	: CObjectBase(ETag::eRideableObject, ETaskPriority::eBackground, 0, ETaskPauseType::eGame)
 {
 }
 
