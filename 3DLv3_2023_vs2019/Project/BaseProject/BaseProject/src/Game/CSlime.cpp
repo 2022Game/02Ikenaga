@@ -186,11 +186,11 @@ void CSlime::UpdateIdle3()
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if ( vectorp >22.0f &&vectorp <= WALK_RANGE)
+	if ( vectorp >=23.5f && vectorp <= WALK_RANGE)
 	{
 		mState = EState::eWalk;
 	}
-	else
+	else 
 	{
 		ChangeAnimation(EAnimType::eIdle4);
 		if (IsAnimationFinished())
@@ -250,7 +250,7 @@ void CSlime::UpdateAttackWait()
 		AttackEnd();
 		CPlayer* player = CPlayer::Instance();
 		float vectorp = (player->Position() - Position()).Length();
-		if (vectorp >=22.0f &&vectorp >= WALK_RANGE)
+		if (vectorp >=23.5f && vectorp <= WALK_RANGE)
 		{
 			mState = EState::eWalk;
 		}
@@ -262,22 +262,6 @@ void CSlime::UpdateAttackWait()
 		}
 	}
 }
-
-// 攻撃モード
-void CSlime::UpdateAttackMode()
-{
-	CPlayer* player = CPlayer::Instance();
-	CVector nowplayer = (player->Position() - Position()).Normalized();
-	//CVector newposition = Position() + nowplayer * MOVE_SPEED * mCharaStatus.mobility;
-
-	ChangeAnimation(EAnimType::eWalk);
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WALK_RANGE)
-	{
-		//mState = EState::eWalk;
-	}
-}
-
 
 // ヒット
 void CSlime::UpdateHIt()
@@ -341,12 +325,15 @@ void CSlime::UpdateWalk()
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= STOP_RANGE)
+	// 追跡をやめて止まる
+	if (vectorp <= 22.0f)
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
+
 		CPlayer* player = CPlayer::Instance();
 		float vectorp = (player->Position() - Position()).Length();
+		// 回転する範囲であれば
 		if (vectorp <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
@@ -354,22 +341,22 @@ void CSlime::UpdateWalk()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
+			
+			//ChangeAnimation(EAnimType::eLeftWalk);
 		}
 	}
-	else
+	// 範囲内の時、移動し追跡する
+	else if(vectorp <= 150.0f)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
-	if (vectorp <= 22.0f)
+	// 追跡が止まった時、攻撃用の待機モーションへ
+	if (vectorp <= 23.5f ||vectorp >=150.0f)
 	{
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
 	}
 	CDebugPrint::Print(" 距離 %f", vectorp);
-	/*float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WALK_RANGE)
-	{
-	}*/
 }
 
 // 更新処理
@@ -393,8 +380,9 @@ void CSlime::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	
-	if (mState == EState::eWalk)
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp >= 23.5f && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED * mCharaStatus.mobility);
 	}
@@ -427,10 +415,6 @@ void CSlime::Update()
 		// 攻撃終了待ち
 	case EState::eAttackWait:
 		UpdateAttackWait();
-		break;
-		// 攻撃モード
-	case EState::eAttackMode:
-		UpdateAttackMode();
 		break;
 		// ヒット
 	case EState::eHit:

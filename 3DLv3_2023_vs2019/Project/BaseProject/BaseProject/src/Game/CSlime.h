@@ -36,9 +36,7 @@ public:
 	void UpdateAttack2();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
-	// 攻撃モード
-	void UpdateAttackMode();
-
+	
 	//ヒット
 	void UpdateHIt();
 	// 死ぬ時
@@ -132,7 +130,6 @@ private:
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
 		eAttackWait,// 攻撃終了待ち
-		eAttackMode,// 攻撃モード
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)

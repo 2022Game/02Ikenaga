@@ -376,18 +376,6 @@ void CSlime2::Update()
 	CXCharacter::Update();
 
 	mIsGrounded = false;
-
-	// オレンジスライム(エネミー)のデバック表示
-	static bool debug = false;
-	if (CInput::PushKey('Q'))
-	{
-		debug = !debug;
-	}
-	if (debug)
-	{
-		CDebugPrint::Print(" HP %d/%d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
-		CDebugPrint::Print(" 攻撃時間計測 :%d", mAttackTime);
-	}
 	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
 
