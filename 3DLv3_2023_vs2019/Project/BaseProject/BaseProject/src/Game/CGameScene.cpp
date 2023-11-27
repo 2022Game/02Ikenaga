@@ -14,6 +14,7 @@
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
 #include "CExp.h"
+#include "CCane.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -65,9 +66,13 @@ void CGameScene::Load()
 	enemy5->Scale(25.0f, 25.0f, 25.0f);
 
 	CRich* enemy6 = new CRich();
-	enemy6->Position(100.0f, 2.0f, 20.0f);
+	enemy6->Position(100.0f, 4.0f, 20.0f);
 	enemy6->Rotate(0.0f,90.0f,-90.0f);
 	enemy6->Scale(0.1f, 0.1f, 0.1f);
+
+	/*CCane* cane = new CCane();
+	cane->Position(60.0f, 0.0f, 20.0f);
+	cane->Scale(25.0f, 25.0f, 25.0f);*/
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);

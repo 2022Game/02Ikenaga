@@ -71,6 +71,9 @@
     <Filter Include="ソース ファイル\Game\Character\Player">
       <UniqueIdentifier>{4edc7b3e-7fe6-4463-9b03-d91fe54fdc4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Weapon">
+      <UniqueIdentifier>{bbe1abaa-1fa4-4b66-8919-ad3945c54160}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -220,15 +223,6 @@
     <ClCompile Include="src\Game\CPortionBlue.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSword.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CShield.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CWeapon.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CHpGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
@@ -297,6 +291,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CRich.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CWeapon.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSword.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CShield.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCane.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -468,15 +474,6 @@
     <ClInclude Include="src\Game\CPortionBlue.h">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSword.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CShield.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CWeapon.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CHpGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
@@ -548,6 +545,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CRich.h">
       <Filter>ソース ファイル\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CWeapon.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSword.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CShield.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCane.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

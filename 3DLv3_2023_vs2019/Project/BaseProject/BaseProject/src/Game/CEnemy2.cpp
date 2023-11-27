@@ -15,7 +15,7 @@ CEnemy2* CEnemy2::spInstance = nullptr;
 const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tƒ|[ƒY
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	true,	26.0f	},	// UŒ‚
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	true,	80.0f	},	// UŒ‚ 26.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// UŒ‚ 26.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// UŒ‚ 26.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	// UŒ‚ 26.0f

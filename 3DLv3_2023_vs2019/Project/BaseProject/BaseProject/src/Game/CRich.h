@@ -4,6 +4,7 @@
 #include "CColliderLine.h"
 
 #include "CModel.h"
+class CCane;
 
 /*
 リッチクラス
@@ -81,6 +82,7 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CTransform* mpRideObject;
+	CCane* mpCane;  // 杖
 };
 
 #endif

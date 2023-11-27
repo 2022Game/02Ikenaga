@@ -1,7 +1,7 @@
 #include "CRich.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
-#include "CInput.h"
+#include "CCane.h"
 
 // リッチのインスタンス
 CRich* CRich::spInstance = nullptr;
@@ -14,15 +14,14 @@ CRich* CRich::spInstance = nullptr;
 const CRich::AnimData CRich::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\RichAttack.x",	true,	90.0f	},	// 攻撃 41.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// 待機 18.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// 待機2 41.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	// 植物 21.0f
+	{ "Character\\animation\\RichAttack.x",	true,	90.0f	},	// 攻撃 41.0f
+	//{ "Character\\animation\\RichAttack2.x",	true,	71.0f	},	// 攻撃 71.0f
+	//{ "Character\\animation\\RichDie.x",	true,	100.0f	},	// 死ぬ 29.0f
+	//{ "Character\\animation\\RichGetHit.x",true,	80.0f	},	// ヒット  41.0f
+	//{ "Character\\animation\\RichIdle.x",	true,	80.0f	},	// 待機 41.0f
+	//{ "Character\\animation\\RichRun.x",	true,	60.0f	},	// 走る 21.0f
+	//{ "Character\\animation\\RichVictory.x",	true,	81.0f	},	// 勝利 81.0f
+	//{ "Character\\animation\\RichWalk.x",	true,	80.0f	},	// 歩く 41.0f
 };
 
 // コンストラクタ
@@ -58,6 +57,10 @@ CRich::CRich()
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+
+	mpCane = new CCane();
+	mpCane->SetAttachMtx(GetFrameMtx("Hips_Hand_L"));
+	mpCane->SetOwner(this);
 }
 
 CRich::~CRich()
