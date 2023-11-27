@@ -75,8 +75,8 @@ CPlayer::CPlayer()
 	, mpRideObject(nullptr)
 	, healcount(0)
 	, recoverycount(0)
+	, mDefaultPos(CVector::zero)
 {
-
 	// インスタンスの設定
 	spInstance = this;
 

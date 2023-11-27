@@ -6,7 +6,7 @@
 #include "CModel.h"
 
 /*
-エネミー2クラス
+マッシュルームクラス
 キャラクタクラスを継承
 */
 class CEnemy2 : public CXCharacter

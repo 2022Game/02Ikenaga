@@ -7,9 +7,9 @@
 CEnemy2* CEnemy2::spInstance = nullptr;
 
 #define MODEL_MUSHROOM "Character\\Enemy\\Mushroom\\Mushroom.x"
+#define MODEL_RICH "Character\\Rich.x"
 
-#define PLAYER_HEIGHT 2.0f
-#define HP 100
+#define ENEMY_HEIGHT 2.0f
 
 // エネミーのアニメーションデータのテーブル
 const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
@@ -23,7 +23,7 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// 待機 18.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// 待機2 41.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	// 植物 21.0f
+	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	// 植物 21.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	70.0f	},	// 植物からきのこ 21.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//走る 17.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//見回す 121.0f
@@ -66,7 +66,7 @@ CEnemy2::CEnemy2()
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
-		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
+		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 }
