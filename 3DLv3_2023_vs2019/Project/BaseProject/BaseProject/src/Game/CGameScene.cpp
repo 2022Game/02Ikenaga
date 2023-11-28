@@ -40,7 +40,7 @@ void CGameScene::Load()
 	new CField();
 
 	CPlayer* player = new CPlayer();
-	player->Position(0.0f, 5.0f, 0.0f);
+    player->Position(0.0f, 5.0f, 0.0f);
 
 	CCamera* mainCamera = new CCamera
 	(
@@ -66,7 +66,7 @@ void CGameScene::Load()
 	enemy5->Scale(25.0f, 25.0f, 25.0f);
 
 	CRich* enemy6 = new CRich();
-	enemy6->Position(100.0f, 4.0f, 20.0f);
+	enemy6->Position(100.0f, 5.0f, 20.0f);
 	enemy6->Rotate(0.0f,90.0f,-90.0f);
 	enemy6->Scale(0.1f, 0.1f, 0.1f);
 

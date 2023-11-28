@@ -10,11 +10,7 @@ CPortionRed::CPortionRed()
 
 CPortionRed::~CPortionRed()
 {
-	if (mpPortionRed != nullptr)
-	{
-		delete mpPortionRed;
-		mpPortionRed = nullptr;
-	}
+	SAFE_DELETE(mpPortionRed);
 }
 
 void CPortionRed::Update()

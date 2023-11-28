@@ -42,6 +42,10 @@ public:
 	void UpdateAttack3();
 	// 攻撃4
 	void UpdateAttack4();
+	// 攻撃5
+	void UpdateAttack5();
+	// 攻撃6
+	void UpdateAttack6();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 	// ジャンプ開始
@@ -86,6 +90,8 @@ public:
 
 	static int mPower;
 private:
+	int mAttackTime;
+	int mAttackcount;
 	// 回復までのカウント
 	int healcount;
 	// 特殊攻撃の回数の回復までのカウント
@@ -103,6 +109,8 @@ private:
 		eAttack2,	// 攻撃2
 		eAttack3,	// 攻撃3
 		eAttack4,	// 攻撃4
+	    eAttack5,	// 攻撃5
+		eAttack6,	// 攻撃6
 		ePowerUp,   // 攻撃力アップ
 		eHit,       // ヒット
 		eJump,		// ジャンプ中
@@ -134,6 +142,8 @@ private:
 		eAttack2,	// 攻撃2
 		eAttack3,	// 攻撃3
 		eAttack4,	// 攻撃4
+		eAttack5,	// 攻撃5
+		eAttack6,	// 攻撃6
 		eAttackWait,// 攻撃終了待ち
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中

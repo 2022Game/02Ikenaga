@@ -30,6 +30,8 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // 攻撃2
 	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // 攻撃3
 	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // 攻撃4
+	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // 攻撃5
+	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // 攻撃6
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // 攻撃力アップ
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ヒット 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
@@ -73,6 +75,8 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
+	,mAttackTime(0)
+	,mAttackcount(0)
 	, healcount(0)
 	, recoverycount(0)
 	, mDefaultPos(CVector::zero)
@@ -215,12 +219,30 @@ void CPlayer::UpdateIdle()
 		// 左クリックで攻撃状態へ移行
 		if (CInput::PushKey(VK_LBUTTON))
 		{
+			mAttackcount++;
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 			mState = EState::eAttack;
+			if (mAttackcount == 2)
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				mState = EState::eAttack3;
+			}
+			if (mAttackcount == 3)
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				mState = EState::eAttack6;
+			}
+		}
+		if (mAttackTime >= 300 ||mAttackcount<=0)
+		{
+			mAttackcount = 0;
+			mAttackTime = 0;
 		}
 		// SPACEキーでジャンプ開始へ移行
-		else if (CInput::PushKey(VK_SPACE))
+		if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
 		}
@@ -253,7 +275,8 @@ void CPlayer::UpdateAttack()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
-	// 攻撃終了待ち状態へ移行
+	
+    // 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 
 	//剣に攻撃開始を伝える
@@ -265,6 +288,7 @@ void CPlayer::UpdateAttack2()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack2);
+
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 
@@ -289,6 +313,30 @@ void CPlayer::UpdateAttack4()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack4);
+	// 攻撃終了待ち状態へ移行
+	mState = EState::eAttackWait;
+
+	//剣に攻撃開始を伝える
+	mpSword->AttackStart();
+}
+
+// 攻撃5
+void CPlayer::UpdateAttack5()
+{
+	// 攻撃アニメーションを開始
+	ChangeAnimation(EAnimType::eAttack5);
+	// 攻撃終了待ち状態へ移行
+	mState = EState::eAttackWait;
+
+	//剣に攻撃開始を伝える
+	mpSword->AttackStart();
+}
+
+// 攻撃6
+void CPlayer::UpdateAttack6()
+{
+	// 攻撃アニメーションを開始
+	ChangeAnimation(EAnimType::eAttack6);
 	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 
@@ -444,6 +492,11 @@ void CPlayer::Update()
 	mpRideObject = nullptr;
 	mPower = mCharaStatus.power;
 
+	if (mAttackcount >= 1)
+	{
+		mAttackTime++;
+	}
+
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
@@ -466,6 +519,14 @@ void CPlayer::Update()
 		// 攻撃4
 		case EState::eAttack4:
 			UpdateAttack4();
+			break;
+		// 攻撃5
+		case EState::eAttack5:
+			UpdateAttack5();
+			break;
+		// 攻撃6
+		case EState::eAttack6:
+			UpdateAttack6();
 			break;
 		// 攻撃終了待ち
 		case EState::eAttackWait:
@@ -501,6 +562,8 @@ void CPlayer::Update()
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 	CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
+	CDebugPrint::Print(" 攻撃計測 %d\n", mAttackTime);
+	CDebugPrint::Print(" 攻撃した回数 %d\n", mAttackcount);
 
 	// 移動
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());

@@ -14,13 +14,11 @@ CSlime* CSlime::spInstance = nullptr;
 #define MODEL_SLIME_BLUE "Character\\Enemy\\Slime\\SlimeBlue.x"
 
 #define ENEMY_HEIGHT 1.0f
-
 #define MOVE_SPEED 0.05f    // 移動速度
 #define GRAVITY 0.0625f    // 重力
 
-#define FIELD_OF_VIEW  90.0f    // 視野
-#define WALK_RANGE 150.0f        // 追跡する範囲
-#define STOP_RANGE 20.0f         // 追跡を辞める範囲
+#define WALK_RANGE 100.0f        // 追跡する範囲
+#define STOP_RANGE 23.5f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
@@ -65,10 +63,6 @@ CSlime::CSlime()
 	// モデルデータ読み込み
 	CModelX* model = new CModelX();
 	model->Load(MODEL_SLIME);
-
-	//mpHpGauge = new CHpGauge();
-	//mpHpGauge->SetPos(10.0f, 90.f);
-
 	//最初に1レベルに設定
 	ChangeLevel(1);
 
@@ -186,7 +180,7 @@ void CSlime::UpdateIdle3()
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if ( vectorp >=23.5f && vectorp <= WALK_RANGE)
+	if ( vectorp >=STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		mState = EState::eWalk;
 	}
@@ -250,7 +244,7 @@ void CSlime::UpdateAttackWait()
 		AttackEnd();
 		CPlayer* player = CPlayer::Instance();
 		float vectorp = (player->Position() - Position()).Length();
-		if (vectorp >=23.5f && vectorp <= WALK_RANGE)
+		if (vectorp >=STOP_RANGE && vectorp <= WALK_RANGE)
 		{
 			mState = EState::eWalk;
 		}
@@ -331,8 +325,6 @@ void CSlime::UpdateWalk()
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
 
-		CPlayer* player = CPlayer::Instance();
-		float vectorp = (player->Position() - Position()).Length();
 		// 回転する範囲であれば
 		if (vectorp <= ROTATE_RANGE)
 		{
@@ -341,17 +333,15 @@ void CSlime::UpdateWalk()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-			
-			//ChangeAnimation(EAnimType::eLeftWalk);
 		}
 	}
 	// 範囲内の時、移動し追跡する
-	else if(vectorp <= 150.0f)
+	else if(vectorp <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	if (vectorp <= 23.5f ||vectorp >=150.0f)
+	if (vectorp <= STOP_RANGE ||vectorp >= WALK_RANGE)
 	{
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
@@ -367,9 +357,9 @@ void CSlime::Update()
 
 	mHp = mCharaStatus.hp;
 
+	CPlayer* player = CPlayer::Instance();
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
 	{
-		CPlayer* player = CPlayer::Instance();
 		float vectorp = (player->Position() - Position()).Length();
 		if (vectorp <= ROTATE_RANGE)
 		{
@@ -378,17 +368,14 @@ void CSlime::Update()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-			
-			//ChangeAnimation(EAnimType::eLeftWalk);
 		}
 	}
-	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= 23.5f && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED * mCharaStatus.mobility);
 	}
-
+	//mMoveSpeed -=CVector(0.0f, GRAVITY, 0.0f);
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
@@ -434,12 +421,6 @@ void CSlime::Update()
 	case EState::eWalk:
 		UpdateWalk();
 		break;
-	}
-
-	if (mCharaStatus.hp <= 0)
-	{
-		// 死亡処理
-		mState = EState::eDie;
 	}
 
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
@@ -493,7 +474,6 @@ void CSlime::Update()
 		CDebugPrint::Print(" HP %d/%d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
 		CDebugPrint::Print(" 攻撃時間計測 :%d", mAttackTime);
 	}
-	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
 
 // 衝突処理
@@ -589,9 +569,6 @@ void CSlime::ChangeLevel(int level)
 // 被ダメージ処理
 void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 {
-	//死亡していたら、ダメージは受けない
-	//if (mCharaStatus.hp <= 0)return;
-
 	//HPからダメージを引く
 	//mCharaStatus.hp = max(mCharaStatus.hp - damage, 0);
 	//mCharaStatus.hp -= damage;

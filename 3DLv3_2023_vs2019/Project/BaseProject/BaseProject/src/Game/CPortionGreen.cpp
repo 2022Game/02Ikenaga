@@ -10,11 +10,7 @@ CPortionGreen::CPortionGreen()
 
 CPortionGreen::~CPortionGreen()
 {
-	if (mpPortionGreen != nullptr)
-	{
-		delete mpPortionGreen;
-		mpPortionGreen = nullptr;
-	}
+	SAFE_DELETE(mpPortionGreen);
 }
 
 void CPortionGreen::Update()

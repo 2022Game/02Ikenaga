@@ -9,11 +9,7 @@ CShield::CShield()
 
 CShield::~CShield()
 {
-	if (mpShield != nullptr)
-	{
-		delete mpShield;
-		mpShield = nullptr;
-	}
+	SAFE_DELETE(mpShield);
 }
 
 void CShield::Update()

@@ -10,11 +10,7 @@ CPortionBlue::CPortionBlue()
 
 CPortionBlue::~CPortionBlue()
 {
-	if (mpPortionBlue != nullptr)
-	{
-		delete mpPortionBlue;
-		mpPortionBlue = nullptr;
-	}
+	SAFE_DELETE(mpPortionBlue);
 }
 
 void CPortionBlue::Update()

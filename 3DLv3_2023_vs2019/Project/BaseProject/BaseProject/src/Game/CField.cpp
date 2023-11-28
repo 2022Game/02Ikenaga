@@ -18,7 +18,6 @@ CField::~CField()
 {
 	SAFE_DELETE(mpModel);
 	SAFE_DELETE(mpColliderMesh);
-
 	if (mpCubeModel != nullptr)
 	{
 		delete mpCubeModel;
