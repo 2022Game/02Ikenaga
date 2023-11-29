@@ -202,6 +202,51 @@ void CTexture::Draw(float left, float right, float bottom, float top, int tleft,
 	DrawImage(left, right, bottom, top, tleft, tright, tbottom, ttop);
 }
 
+// 行数と列数を指定してUVを計算
+CRect CTexture::CalcUV(int row, int col, int num) const
+{
+	CRect ret = CRect(0.0f, 0.0f, 1.0f, 1.0f);
+	if (row == 0 || col == 0) return ret;
+
+	int x = num % col;
+	int y = num / col;
+
+	ret.X((float)x / col);
+	ret.Y((float)y / row);
+	ret.W(1.0f / col);
+	ret.H(1.0f / row);
+
+	return ret;
+}
+
+// 座標を指定してUVを計算
+CRect CTexture::CalcUV(float left, float top, float right, float bottom) const
+{
+	CRect ret = CRect(0.0f, 0.0f, 1.0f, 1.0f);
+	if (mHeader.width == 0 || mHeader.height == 0) return ret;
+
+	ret.X(left / mHeader.width);
+	ret.Y(top / mHeader.height);
+	ret.W((right - left) / mHeader.width);
+	ret.H((bottom - top) / mHeader.height);
+
+	return ret;
+}
+
+// 開始位置とサイズを指定してUVを計算
+CRect CTexture::CalcUV(const CVector2& pos, const CVector2& size) const
+{
+	CRect ret = CRect(0.0f, 0.0f, 1.0f, 1.0f);
+	if (mHeader.width == 0 || mHeader.height == 0) return ret;
+
+	ret.X(pos.X() / mHeader.width);
+	ret.Y(pos.Y() / mHeader.height);
+	ret.W(size.X() / mHeader.width);
+	ret.H(size.Y() / mHeader.height);
+
+	return ret;
+}
+
 void CTexture::DrawImage(float left, float right, float bottom, float top, int tleft, int tright, int tbottom, int ttop) const
 {
 	DrawImage(left, right, bottom, top,

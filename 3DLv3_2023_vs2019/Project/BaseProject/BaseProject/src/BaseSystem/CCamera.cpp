@@ -263,6 +263,24 @@ void CCamera::SetCurrent(bool isCurrent)
 	}
 }
 
+// ビュー行列を取得
+const CMatrix& CCamera::GetViewMatrix() const
+{
+	return mViewMatrix;
+}
+
+// プロジェクション行列を取得
+const CMatrix& CCamera::GetProjectionMatrix() const
+{
+	return mProjectionMatrix;
+}
+
+// ビューポート行列を取得
+const CMatrix& CCamera::GetViewportMatrix() const
+{
+	return mViewportMatrix;
+}
+
 // 更新
 void CCamera::Update()
 {

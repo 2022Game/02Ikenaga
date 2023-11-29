@@ -1,6 +1,8 @@
 #ifndef CTEXTURE_H
 #define CTEXTURE_H
 #include "glut.h"
+#include "CRect.h"
+#include <vector>
 
 /*
 TGAファイルのヘッダフォーマット
@@ -54,6 +56,32 @@ public:
 	void SetParts(int row, int col);
 	void Draw(float left, float right, float bottom, float top, float tleft, float tright, float tbottom, float ttop);
 	void Draw(float left, float right, float bottom, float top, int tleft, int tright, int tbottom, int ttop) const ;
+
+	/// <summary>
+	/// 行数と列数を指定してUVを計算
+	/// </summary>
+	/// <param name="row">行数</param>
+	/// <param name="col">列数</param>
+	/// <param name="num">取得するUVの番号</param>
+	/// <returns></returns>
+	CRect CalcUV(int row, int col, int num) const;
+	/// <summary>
+	/// 座標を指定してUVを計算
+	/// </summary>
+	/// <param name="left">左側の座標</param>
+	/// <param name="top">上側の座標</param>
+	/// <param name="right">右側の座標</param>
+	/// <param name="bottom">下側の座標</param>
+	/// <returns></returns>
+	CRect CalcUV(float left, float top, float right, float bottom) const;
+	/// <summary>
+	/// 開始位置とサイズを指定してUVを計算
+	/// </summary>
+	/// <param name="pos">開始位置</param>
+	/// <param name="size">サイズ</param>
+	/// <returns></returns>
+	CRect CalcUV(const CVector2& pos, const CVector2& size) const;
+
 private:
 	//	static std::map<std::string, CTexture>mTexFile;
 		//ファイル名
@@ -65,6 +93,23 @@ private:
 	//
 	int mRow;//行数
 	int mCol;//列数
+};
+
+// テクスチャのアニメーションのフレーム情報
+struct TexAnimFrameData
+{
+	int no;		// 画像番号
+	float time;	// 次の画像までの時間
+};
+
+// テクスチャのアニメーションデータ
+class TexAnimData
+{
+public:
+	int row;	// 行数
+	int col;	// 列数
+	// フレーム情報リスト
+	std::vector<TexAnimFrameData> frames;
 };
 
 #endif

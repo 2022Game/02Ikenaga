@@ -88,6 +88,13 @@ CVector CMatrix::Position() const
 	return CVector(mM[3][0], mM[3][1], mM[3][2]);
 }
 
+void CMatrix::Position(const CVector& pos)
+{
+	mM[3][0] = pos.X();
+	mM[3][1] = pos.Y();
+	mM[3][2] = pos.Z();
+}
+
 CVector CMatrix::VectorZ() const
 {
 	return CVector(mM[2][0], mM[2][1], mM[2][2]);

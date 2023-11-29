@@ -100,6 +100,22 @@ public:
 	/// <param name="isCurrent">trueならば、現在のカメラに設定</param>
 	void SetCurrent(bool isCurrent);
 
+	/// <summary>
+	/// ビュー行列を取得
+	/// </summary>
+	/// <returns>ビュー行列</returns>
+	const CMatrix& GetViewMatrix() const;
+	/// <summary>
+	/// プロジェクション行列を取得
+	/// </summary>
+	/// <returns>プロジェクション行列</returns>
+	const CMatrix& GetProjectionMatrix() const;
+	/// <summary>
+	/// ビューポート行列を取得
+	/// </summary>
+	/// <returns></returns>
+	const CMatrix& GetViewportMatrix() const;
+
 	// 更新
 	void Update() override;
 

@@ -3,6 +3,7 @@
 #include "CObjectBase.h"
 #include "CTriangle.h"
 #include "CMaterial.h"
+#include "CColor.h"
 
 /*
 ビルボードクラス
@@ -11,19 +12,20 @@
 class CBillBoard : public CObjectBase {
 public:
 	//コンストラクタ
-	CBillBoard();
-	//CBillBoard(位置, 幅, 高さ)
-	CBillBoard(CVector pos, float w, float h);
-	//CBillBoard(位置, 幅, 高さ, 優先度)
-	CBillBoard(CVector pos, float w, float h, int priority);
-	//位置と大きさの設定
-	//Set(位置, 幅, 高さ)
-	void Set(CVector pos, float w, float h);
+	CBillBoard(ETag tag = ETag::eNone,
+		ETaskPriority prio = ETaskPriority::eDefault,
+		int sortOrder = 0,
+		ETaskPauseType pause = ETaskPauseType::eDefault);
+
+	void SetSize(const CVector2& size);
+	void SetColor(const CColor& color);
+
 	//更新
-	void Update();
+	void Update() override;
 	//描画
-	void Render();
+	void Render() override;
 	void Render(CMaterial* mpMaterial);
+
 protected:
 	//三角形2つ
 	CTriangle mT[2];

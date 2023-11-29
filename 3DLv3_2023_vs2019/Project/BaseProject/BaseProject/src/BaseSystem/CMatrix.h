@@ -33,6 +33,7 @@ public:
 	//クオータニオンで回転行列を設定する
 	CMatrix Quaternion(float x, float y, float z, float w);
 	CVector Position() const;
+	void Position(const CVector& pos);
 	CVector VectorZ() const; //Z軸ベクトルの取得
 	CVector VectorX() const; //X軸ベクトルの取得
 	CVector VectorY() const; //Y軸ベクトルの取得

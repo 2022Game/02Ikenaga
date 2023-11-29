@@ -5,8 +5,10 @@ CMaterial CEffect::sMaterial; //マテリアル.テクスチャ
 
 CEffect::CEffect(const CVector& pos, float w, float h, char* texture
 	, int row, int col, int fps)
-	: CBillBoard(pos, w, h, PRIORITY), mRows(row), mCols(col), mFps(fps), mFrame(0)
+	: CBillBoard(ETag::eNone, ETaskPriority::eEffect), mRows(row), mCols(col), mFps(fps), mFrame(0)
 {
+	Position(pos);
+	SetSize(CVector2(w, h));
 	//テクスチャを読んでない場合は読む
 	if (sMaterial.Texture()->Id() == 0)
 	{
