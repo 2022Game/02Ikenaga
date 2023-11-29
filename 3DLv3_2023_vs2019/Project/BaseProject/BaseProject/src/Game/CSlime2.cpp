@@ -47,8 +47,7 @@ int CSlime2::mHp;
 
 // コンストラクタ
 CSlime2::CSlime2()
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eEnemy)
-	, mState(EState::eIdle)
+	:mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
 {
@@ -263,11 +262,11 @@ void CSlime2::UpdateDie()
 	if (IsAnimationFinished())
 	{
 		Kill();
-		CVector posY = Position();
+		/*CVector posY = Position();
 		posY.Y(4.5f);
 		CExp* exp = new CExp();
 		exp->Position(posY);
-		exp->Scale(4.0f, 4.0f, 4.0f);
+		exp->Scale(4.0f, 4.0f, 4.0f);*/
 	}
 }
 
@@ -486,7 +485,7 @@ void CSlime2::TakeDamage(int damage, CObjectBase* causedObj)
 	if (mCharaStatus.hp <= 0)
 	{
 		// 死亡処理
-		mState = EState::eDie;
+		Death();
 	}
 
 	if (causedObj != nullptr)
@@ -501,4 +500,13 @@ void CSlime2::TakeDamage(int damage, CObjectBase* causedObj)
 		// 後ろにズラす
 		Position(Position() - dir * Scale().X() * 0.4f);
 	}
+}
+
+// 死亡処理
+void CSlime2::Death()
+{
+	// エネミーの死亡処理
+	CEnemy::Death();
+	// 死亡状態へ移行
+	mState = EState::eDie;
 }

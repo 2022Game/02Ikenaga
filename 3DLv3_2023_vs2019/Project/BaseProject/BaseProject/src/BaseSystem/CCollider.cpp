@@ -271,27 +271,85 @@ bool CCollider::CollisionTriangleLine(
 	return true;
 }
 
+// 三角形と点の衝突判定
+bool CCollider::CollisionTrianglePoint(const CVector& t0, const CVector& t1, const CVector& t2, const CVector& tn, const CVector& p)
+{
+	if (CVector::Dot(CVector::Cross(t1 - t0, p - t0), tn) < 0.0f) return false;
+	if (CVector::Dot(CVector::Cross(t2 - t1, p - t1), tn) < 0.0f) return false;
+	if (CVector::Dot(CVector::Cross(t0 - t2, p - t2), tn) < 0.0f) return false;
+	return true;
+}
+
+// 三角形と点の衝突判定
+bool CCollider::CollisionTrianglePoint(const CVector& t0, const CVector& t1, const CVector& t2, const CVector& p)
+{
+	CVector n = CVector::Cross(t1 - t0, t2 - t0).Normalized();
+	return CollisionTrianglePoint(t0, t1, t2, n, p);
+}
+
 // 三角形と球の衝突判定
 bool CCollider::CollisionTriangleSphere(
 	const CVector& t0, const CVector& t1, const CVector& t2,
 	const CVector& sp, const float sr,
 	CHitInfo* h, bool isLeftMain)
 {
-	//CVector v[3], sv, ev;
-	////各コライダの頂点をワールド座標へ変換
-	//CMatrix tm = t->Matrix();
-	//v[0] = t->V(0) * tm;
-	//v[1] = t->V(1) * tm;
-	//v[2] = t->V(2) * tm;
-	////面の法線を、外積を正規化して求める
-	//CVector normal = CVector::Cross(v[1] - v[0], v[2] - v[0]).Normalized();
-	////線コライダをワールド座標で作成
-	//CMatrix sm = s->Matrix();
-	//sv = normal * sm * s->Radius();
-	//ev = -normal * sm * s->Radius();
-	//CColliderLine line(nullptr, ELayer::eNone, sv, ev);
-	////三角コライダと線コライダの衝突処理
-	//return CollisionTriangleLine(t, &line, h);
+	// 三角形の法線を求める
+	CVector n = CVector::Cross(t1 - t0, t2 - t0).Normalized();
+	// 法線の長さが0であれば、無効な三角形なため、衝突していない
+	if (n.LengthSqr() <= 0.0f) return false;
+
+	// 三角形から球までの距離を求めて、
+	// 距離が球の半径より離れていたら、衝突していない
+	CVector v = sp - t0;
+	float dist = CVector::Dot(v, n);
+	if (fabsf(dist) > sr) return false;
+
+	// 球の中心点から三角形へ垂直に下ろした点を求める
+	CVector point = sp + (-n * dist);
+	// 求めた点が三角形の範囲内か調べる
+	if (CollisionTrianglePoint(t0, t1, t2, n, point))
+	{
+		// 範囲内であれば、衝突しているので、
+		// 押し戻し量を計算
+		float l = (sr - fabsf(dist)) * (dist < 0.0f ? -1.0f : 1.0f);
+		h->adjust = n * l * (isLeftMain ? -1.0f : 1.0f);
+		return true;
+	}
+
+	// 垂直に下ろした点が三角形の範囲外の場合、
+	// 各辺と球が衝突していないか確認
+
+	// 三角形の各辺との最短距離を求め、
+	// 半径より小さい場合は衝突しているため、
+	// その辺との押し戻し量を計算して返す
+
+	// 三角形の頂点0から頂点1までの辺
+	dist = CalcDistancePointToLine(sp, t0, t1);
+	if (dist <= sr)
+	{
+		float l = sr - dist;
+		h->adjust = n * l * (isLeftMain ? -1.0f : 1.0f);
+		return true;
+	}
+	// 三角形の頂点1から頂点2までの辺
+	dist = CalcDistancePointToLine(sp, t1, t2);
+	if (dist <= sr)
+	{
+		float l = sr - dist;
+		h->adjust = n * l * (isLeftMain ? -1.0f : 1.0f);
+		return true;
+	}
+	// 三角形の頂点2から頂点0までの辺
+	dist = CalcDistancePointToLine(sp, t2, t0);
+	if (dist <= sr)
+	{
+		float l = sr - dist;
+		h->adjust = n * l * (isLeftMain ? -1.0f : 1.0f);
+		return true;
+	}
+
+	// 三角形の範囲外かつ、各辺とも衝突していない場合は、
+	// 完全に衝突していない
 	return false;
 }
 
@@ -398,13 +456,21 @@ bool CCollider::CollisionMeshSpehre(const std::list<STVertex>& tris,
 	CHitInfo* hit, bool isLeftMain)
 {
 	bool ret = false;
+	CVector adjust = CVector::zero;
 	for (auto& v : tris)
 	{
 		if (CollisionTriangleSphere(v.V[0], v.V[1], v.V[2], sp, sr, hit, isLeftMain))
 		{
+			adjust.Y(fabsf(adjust.Y()) > fabsf(hit->adjust.Y()) ? adjust.Y() : hit->adjust.Y());
+			adjust.X(fabsf(adjust.X()) > fabsf(hit->adjust.X()) ? adjust.X() : hit->adjust.X());
+			adjust.Z(fabsf(adjust.Z()) > fabsf(hit->adjust.Z()) ? adjust.Z() : hit->adjust.Z());
 			hit->tris.push_back(v);
 			ret = true;
 		}
+	}
+	if (ret)
+	{
+		hit->adjust = adjust;
 	}
 	return ret;
 }

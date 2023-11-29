@@ -2,14 +2,14 @@
 #define CENEMY2_H
 #include "CXCharacter.h"
 #include "CColliderLine.h"
-
 #include "CModel.h"
+#include "CEnemy.h"
 
 /*
 マッシュルームクラス
 キャラクタクラスを継承
 */
-class CEnemy2 : public CXCharacter
+class CEnemy2 : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
@@ -33,6 +33,10 @@ public:
 
 	// 描画
 	void Render();
+
+	// 死亡処理
+	void Death() override;
+
 private:
 	// アニメーションの種類
 	enum class EAnimType

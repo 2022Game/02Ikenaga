@@ -162,6 +162,26 @@ public:
 		CHitInfo* info, bool isLeftMain);
 
 	/// <summary>
+	/// 三角形と点の衝突判定
+	/// </summary>
+	/// <param name="t0">三角形の頂点1</param>
+	/// <param name="t1">三角形の頂点2</param>
+	/// <param name="t2">三角形の頂点3</param>
+	/// <param name="tn">三角形の法線</param>
+	/// <param name="p">点の座標</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionTrianglePoint(const CVector& t0, const CVector& t1, const CVector& t2, const CVector& tn, const CVector& p);
+	/// <summary>
+	/// 三角形と点の衝突判定
+	/// </summary>
+	/// <param name="t0">三角形の頂点1</param>
+	/// <param name="t1">三角形の頂点2</param>
+	/// <param name="t2">三角形の頂点3</param>
+	/// <param name="p">点の座標</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionTrianglePoint(const CVector& t0, const CVector& t1, const CVector& t2, const CVector& p);
+
+	/// <summary>
 	/// 三角形と球の衝突判定
 	/// </summary>
 	/// <param name="t0">三角形の頂点1</param>
@@ -249,6 +269,14 @@ public:
 		const CVector& t0, const CVector& t1, const CVector& t2,
 		CHitInfo* hit, bool isLeftMain);
 
+	/// <summary>
+	/// 点から線分までの最短距離を求める
+	/// </summary>
+	/// <param name="point">点の座標</param>
+	/// <param name="lineS">線分の始点</param>
+	/// <param name="lineE">線分の終点</param>
+	/// <param name="nearest">最近点返却用の変数のポインタ</param>
+	/// <returns>最短距離</returns>
 	static float CalcDistancePointToLine(const CVector& point, const CVector& lineS, const CVector& lineE, CVector* nearest = nullptr);
 
 	/// <summary>

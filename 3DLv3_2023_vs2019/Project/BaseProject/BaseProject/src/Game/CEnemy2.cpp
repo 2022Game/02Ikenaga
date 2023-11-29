@@ -38,8 +38,7 @@ const CEnemy2::AnimData CEnemy2::ANIM_DATA[] =
 
 // コンストラクタ
 CEnemy2::CEnemy2()
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
-	, mpRideObject(nullptr)
+	: mpRideObject(nullptr)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -147,4 +146,14 @@ void CEnemy2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 void CEnemy2::Render()
 {
 	CXCharacter::Render();
+}
+
+
+// 死亡処理
+void CEnemy2::Death()
+{
+	// エネミーの死亡処理
+	CEnemy::Death();
+	// 死亡状態へ移行
+	//mState = EState::eDie;
 }

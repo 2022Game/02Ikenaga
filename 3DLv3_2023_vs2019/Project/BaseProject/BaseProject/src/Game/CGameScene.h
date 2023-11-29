@@ -17,6 +17,7 @@ public:
 	void Update();
 
 private:
+	// •œŠˆŽžŠÔ
 	int RevivalTime;
 	CSlime* mpSlime;
 	CSlime2* mpSlime2;

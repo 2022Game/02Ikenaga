@@ -4,13 +4,13 @@
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
 class CHpGauge;
-
 #include <algorithm>
+#include "CEnemy.h"
 /*
 オレンジスライム(エネミー)のクラス
 キャラクタクラスを継承
 */
-class CSlime2 : public CXCharacter
+class CSlime2 : public CEnemy
 {
 public:
 	bool IsDeath() const;
@@ -72,6 +72,9 @@ public:
 	/// <param name="damage">受けるダメージ</param>
 	//ダメージを与えたオブジェクト
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
+
+	// 死亡処理
+	void Death() override;
 
 	static int mHp;
 
