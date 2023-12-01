@@ -26,7 +26,7 @@ void CCane::Render()
 	else
 	{
 		CMatrix sm;
-		sm.Scale(8000.0f, 8000.0f, 8000.0f);
+		sm.Scale(10000.0f, 10000.0f, 10000.0f);
 		mpCane->Render(sm * (*mpAttachMtx));
 	}
 }

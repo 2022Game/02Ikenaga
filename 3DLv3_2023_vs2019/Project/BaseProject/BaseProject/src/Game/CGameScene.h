@@ -19,6 +19,7 @@ public:
 private:
 	// •œŠˆŽžŠÔ
 	int RevivalTime;
+	int RevivalTime2;
 	CSlime* mpSlime;
 	CSlime2* mpSlime2;
 };

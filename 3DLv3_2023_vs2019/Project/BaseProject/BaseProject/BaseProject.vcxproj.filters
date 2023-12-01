@@ -211,9 +211,6 @@
     <ClCompile Include="src\Game\CRotateFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CExp.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CPortionRed.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
@@ -315,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CEnemy.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CExp.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -474,9 +474,6 @@
     <ClInclude Include="src\Game\CRotateFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CExp.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CPortionRed.h">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
@@ -581,6 +578,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEnemy.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExp.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

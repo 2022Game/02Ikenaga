@@ -233,7 +233,7 @@ void CPlayer::UpdateIdle()
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
-				mState = EState::eAttack6;
+				mState = EState::eAttack4;
 			}
 		}
 		if (mAttackTime >= 300 ||mAttackcount<=0)
@@ -449,7 +449,8 @@ void CPlayer::ChangeLevel(int level)
 	if (mainCamera != nullptr)
 	{
 		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
-		diff.Y(diff.Y() + mCharaStatus.cameraHeight);
+		diff.Y(diff.Y() +   mCharaStatus.cameraHeight);
+		//diff.Z(diff.Z() + mCharaStatus.cameraHeight);
 		mainCamera->SetFollowTargetOffset(diff);
 	}
 }
@@ -594,9 +595,9 @@ void CPlayer::Update()
 
 	if(debug)
 	{
-		CDebugPrint::Print("   Lv:     %d\n", mCharaStatus.level);
-		CDebugPrint::Print("   EXP:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
-		CDebugPrint::Print("   HP:     %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
+		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
+		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
+		CDebugPrint::Print("    HP:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
 		CDebugPrint::Print(" çUåÇóÕ    %d\n",mCharaStatus.power);
 		CDebugPrint::Print(" ì¡éÍçUåÇ(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 		CVector scale = Scale();

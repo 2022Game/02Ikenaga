@@ -9,7 +9,7 @@ CExp::CExp()
 	mpColliderSphere = new CColliderSphere
 	(
 		this,ELayer::eExp,
-		1.1f
+		0.5f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eField });
 	//mpColliderSphere->Position(-0.03f, 0.1f, 0.05f);
@@ -64,7 +64,7 @@ void CExp::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 void CExp::Update()
 {
 	// d—Í‚ğ‰ÁZ
-	mMoveSpeed.Y(mMoveSpeed.Y() - 1.0f);
+	mMoveSpeed.Y(mMoveSpeed.Y() - 2.0f);
 	// À•W‚ğˆÚ“®‘¬“x•ªˆÚ“®‚³‚¹‚é
 	Position(Position() + mMoveSpeed * Time::DeltaTime());
 }

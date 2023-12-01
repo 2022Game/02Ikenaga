@@ -262,11 +262,8 @@ void CSlime2::UpdateDie()
 	if (IsAnimationFinished())
 	{
 		Kill();
-		/*CVector posY = Position();
-		posY.Y(4.5f);
-		CExp* exp = new CExp();
-		exp->Position(posY);
-		exp->Scale(4.0f, 4.0f, 4.0f);*/
+		// エネミーの死亡処理
+		CEnemy::Death();
 	}
 }
 
@@ -506,7 +503,7 @@ void CSlime2::TakeDamage(int damage, CObjectBase* causedObj)
 void CSlime2::Death()
 {
 	// エネミーの死亡処理
-	CEnemy::Death();
+	//CEnemy::Death();
 	// 死亡状態へ移行
 	mState = EState::eDie;
 }

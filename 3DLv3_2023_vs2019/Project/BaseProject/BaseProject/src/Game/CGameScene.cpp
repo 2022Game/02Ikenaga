@@ -20,6 +20,7 @@
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
 	,RevivalTime(0)
+	,RevivalTime2(0)
 {
 }
 
@@ -67,7 +68,7 @@ void CGameScene::Load()
 
 	CRich* enemy6 = new CRich();
 	enemy6->Position(100.0f, 5.0f, 20.0f);
-	enemy6->Rotate(0.0f,90.0f,-90.0f);
+	enemy6->Rotate(0.0f,90.0f,-70.0f);
 	enemy6->Scale(0.1f, 0.1f, 0.1f);
 
 	/*CCane* cane = new CCane();
@@ -107,13 +108,13 @@ void CGameScene::Update()
 	}
 	if (mpSlime2->mHp <= 0)
 	{
-		(RevivalTime++ / 100);
-		if (RevivalTime > 1000)
+		(RevivalTime2++ / 100);
+		if (RevivalTime2 > 1000)
 		{
 			CSlime2* enemy2 = new CSlime2();
 			enemy2->Position(-40.0f, 0.0f, -20.0f);
 			enemy2->Scale(25.0f, 25.0f, 25.0f);
-			RevivalTime = 0;
+			RevivalTime2 = 0;
 		}
 	}
 	CDebugPrint::Print(" •œŠˆŽžŠÔ: %d\n", RevivalTime / 100);
