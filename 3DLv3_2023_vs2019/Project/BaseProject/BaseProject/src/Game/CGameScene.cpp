@@ -13,7 +13,6 @@
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
-#include "CExp.h"
 #include "CCane.h"
 
 //コンストラクタ
@@ -71,10 +70,6 @@ void CGameScene::Load()
 	enemy6->Rotate(0.0f,90.0f,-70.0f);
 	enemy6->Scale(0.1f, 0.1f, 0.1f);
 
-	/*CCane* cane = new CCane();
-	cane->Position(60.0f, 0.0f, 20.0f);
-	cane->Scale(25.0f, 25.0f, 25.0f);*/
-
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
 	portionred->Scale(70.0f, 70.0f, 70.0f);
@@ -86,10 +81,6 @@ void CGameScene::Load()
 	CPortionBlue* portionblue = new CPortionBlue();
 	portionblue->Position(70.0f, 10.0f, 0.0f);
 	portionblue->Scale(70.0f, 70.0f, 70.0f);
-
-	CExp* exp = new CExp();
-	exp->Position(50.0f, 5.0f, 0.0f);
-	exp->Scale(4.0f, 4.0f, 4.0f);
 }
 
 //シーンの更新処理

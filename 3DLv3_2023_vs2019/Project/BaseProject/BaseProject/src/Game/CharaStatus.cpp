@@ -1,4 +1,5 @@
 #include "CharaStatus.h"
+#include "Maths.h"
 
 //プレイヤーのレベルごとにステータス
 const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX] =
@@ -106,11 +107,12 @@ const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX] =
 	{  100,   100,  1000,  500,   0,    3.0f,    80,       3.0f,    30.02f},
 };
 
-//エネミーのレベルごとにステータス
+int Exp = Math::Rand(2, 3);
+//スライム(エネミー)のレ;ベルごとにステータス
 const CharaStatus ENEMY_STATUS[ENEMY__LEVEL_MAX] =
 {
-	// レベル　経験値  HP　  攻撃　 防御　 移動性   特殊攻撃　大きさ　カメラの高さ
-	{    1,      5,    30,    2,     0,     1.0f,      0,      1.0f,    0.0f},
+	// レベル　 経験値   HP　  攻撃　 防御　 移動性   特殊攻撃　大きさ　カメラの高さ
+	{    1,      Exp,    30,    2,     0,     1.0f,      0,      1.0f,    0.0f},
 	{    2,      5,    30,    2,     0,     1.0f,      0,      1.0f,    0.0f},
 	{    3,      5,    30,    2,     0,     1.0f,      0,      1.0f,    0.0f},
 	{    4,      5,    30,    2,     0,     1.0f,      0,      1.0f,    0.0f},

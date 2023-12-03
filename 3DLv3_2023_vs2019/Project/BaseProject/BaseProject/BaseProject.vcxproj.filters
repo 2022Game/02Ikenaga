@@ -307,13 +307,13 @@
     <ClCompile Include="src\BaseSystem\CRect.cpp">
       <Filter>ソース ファイル\BaseSystem\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CExpManager.cpp">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CEnemy.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CExp.cpp">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CExpManager.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
   </ItemGroup>
@@ -573,13 +573,13 @@
     <ClInclude Include="src\BaseSystem\CRect.h">
       <Filter>ソース ファイル\BaseSystem\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CExpManager.h">
-      <Filter>ソース ファイル\Game\Field</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CEnemy.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CExp.h">
+      <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExpManager.h">
       <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
   </ItemGroup>

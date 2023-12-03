@@ -28,4 +28,14 @@ public:
 private:
 	CColliderSphere* mpColliderSphere;
 	CVector mMoveSpeed;  //移動速度
+
+	// 状態
+	enum class EState
+	{
+		Drop,       // 経験値を落とした時の処理
+		Absorb,     // 経験値が吸収される時の処理
+	};
+	EState mState;  // 現在の状態
+	float mElapsedTime;  // 経過時間計測用
+
 };

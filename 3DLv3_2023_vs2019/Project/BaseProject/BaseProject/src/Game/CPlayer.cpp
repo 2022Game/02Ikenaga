@@ -658,9 +658,12 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// 他のキャラクターとの押し戻し処理
 	else if (self == mpColliderSphere)
 	{
-		CVector pushBack = hit.adjust * hit.weight;
-		pushBack.Y(0.0f);
-		Position(Position() + pushBack);
+		if (other->Layer() == ELayer::eEnemy || other->Layer() == ELayer::eEnemy2)
+		{
+			CVector pushBack = hit.adjust * hit.weight;
+			pushBack.Y(0.0f);
+			Position(Position() + pushBack);
+		}
 		if (other->Layer() == ELayer::eExp)
 		{
 			mCharaStatus.exp++;

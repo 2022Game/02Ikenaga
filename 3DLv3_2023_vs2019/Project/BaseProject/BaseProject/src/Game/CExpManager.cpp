@@ -32,8 +32,8 @@ void CExpManeger::SpawnExp(int exp, const CVector& pos)
 		CVector epos = pos + dir * 1.0f;
 		CExp* e = new CExp();
 		e->Setup(epos, dir);
-		e->Scale(4.0f, 4.0f, 4.0f);
-		e->SetColor(CColor(0.0f, 1.0f, 0.5, 1.0f));
+		e->Scale(3.0f, 3.0f, 3.0f);
+		e->SetColor(CColor(0.0f, 1.0f, 0.2, 1.0f));
 	}
 
 }
