@@ -3,7 +3,6 @@
 #include "CColliderLine.h"
 #include "CModel.h"
 #include "CWeapon.h"
-#include "CharaStatus.h"
 class CPlayer;
 
 /*

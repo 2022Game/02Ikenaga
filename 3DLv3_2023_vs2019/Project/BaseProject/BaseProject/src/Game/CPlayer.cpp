@@ -129,7 +129,7 @@ CPlayer::CPlayer()
 		this,ELayer::ePlayer,
 		0.4f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eEnemy2,ELayer::eExp });
+	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eEnemy2 });
 
 	///ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -417,11 +417,24 @@ void CPlayer::UpdateHit()
 	}
 }
 
-// 1レベルアップ
+// 現在の経験値を消費してレベルアップ
 void CPlayer::LevelUp()
 {
+	// 現在のレベル
 	int level = mCharaStatus.level;
-	ChangeLevel(level + 1);
+	// 現在の最大ステータス
+	CharaStatus current = PLAYER_STATUS[level - 1];
+	// 次のレベルまでの経験値が溜まっていたら
+	while (mCharaStatus.exp >=current.exp)
+	{
+		// 経験値を消費して、レベルを加算
+		mCharaStatus.exp -= current.exp;
+		level++;
+		// 次のレベルの最大ステータスを設定
+		current = PLAYER_STATUS[level - 1];
+	}
+	// レベルを切り替え
+	ChangeLevel(level);
 }
 
 // レベルを変更
@@ -431,9 +444,12 @@ void CPlayer::ChangeLevel(int level)
 	int index =Math::Clamp(level-1,0, PLAYER_LEVEL_MAX);
 	// 最大ステータスに設定
 	mCharaMaxStatus = PLAYER_STATUS[index];
+	// 残りの経験値を記憶しておく
+	int remaiExp = mCharaStatus.exp;
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
-	mCharaStatus.exp = 0;
+	// 残りの経験値を反映
+	mCharaStatus.exp = remaiExp;
 
 	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
 	mpHpGauge->SetValue(mCharaStatus.hp);
@@ -483,6 +499,19 @@ void CPlayer::AutomaticRecovery()
 	if (mCharaStatus.SpecialAttack == mCharaMaxStatus.SpecialAttack)
 	{
 		recoverycount = 0;
+	}
+}
+
+// 経験値を加算
+void CPlayer::AddExp(int exp)
+{
+	// 現在のステータスに経験値を加算
+	mCharaStatus.exp += exp;
+	// 次のレベルまでの経験値を獲得していたら
+	if (mCharaStatus.exp >= mCharaMaxStatus.exp)
+	{
+		// レベルアップ
+		LevelUp();
 	}
 }
 
@@ -619,7 +648,7 @@ void CPlayer::Update()
 			mState = EState::eHit;
 		}
 	}
-	else if (CInput::PushKey('2'))
+	else if (CInput::Key('2'))
 	{
 		mCharaStatus.exp++;
 		if (mCharaStatus.exp == mCharaMaxStatus.exp)
@@ -664,14 +693,6 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			pushBack.Y(0.0f);
 			Position(Position() + pushBack);
 		}
-		if (other->Layer() == ELayer::eExp)
-		{
-			mCharaStatus.exp++;
-			if (mCharaStatus.exp == mCharaMaxStatus.exp)
-			{
-				LevelUp();
-			}
-		}
 	}
 }
 
@@ -694,4 +715,11 @@ void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		mState = EState::eHit;
 	}
+
+	// ダメージを受けたら、移動を停止
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+
+	// 攻撃も中止
+	mpSword->AttackEnd();
 }

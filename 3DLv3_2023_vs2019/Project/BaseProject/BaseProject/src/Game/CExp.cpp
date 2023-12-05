@@ -1,10 +1,12 @@
 #include "CExp.h"
 #include "CCollisionManager.h"
 #include "CPlayer.h"
+#include "Maths.h"
 
-CExp::CExp()
+CExp::CExp(int exp)
 	: CBillBoardImage("Item\\exp.png",ETag::eExp, ETaskPriority::eExp, 
 		0, ETaskPauseType::eGame)
+	,mAddExp(exp)
 	,mMoveSpeed(0.0f,0.0f,0.0f)
 	, mState(EState::Drop)
 	, mElapsedTime(0.0f)
@@ -14,7 +16,7 @@ CExp::CExp()
 		this,ELayer::eExp,
 		0.5f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer, ELayer::eField });
+	mpColliderSphere->SetCollisionLayers({ ELayer::eField });
 	//mpColliderSphere->Position(-0.03f, 0.1f, 0.05f);
 }
 
@@ -40,12 +42,8 @@ void CExp::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpColliderSphere)
 	{
-		if (other->Layer() == ELayer::ePlayer)
-		{
-			Kill();
-		}
 		// フィールドと衝突した場合
-		else if (other->Layer() == ELayer::eField)
+		if (other->Layer() == ELayer::eField)
 		{
 			//押し戻す
 			Position(Position() + hit.adjust * hit.weight);
@@ -60,15 +58,6 @@ void CExp::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// Y軸の移動量を0にする
 			//mMoveSpeed.Y(0.0f);
 		}
-		//else if(other->Layer() == ELayer::ePlayer)
-		//{
-		//	mpColliderSphere->SetEnable(true);
-		//}
-		//else
-		//{
-		//	// 吸収状態では地面との当たり判定は無効
-		//	//mpColliderSphere->SetEnable(false);
-		//}
 	}
 }
 
@@ -90,7 +79,6 @@ void CExp::Update()
 	}
 	CDebugPrint::Print(" 経験値距離:%f\n", dist);
 
-
 	// 状態に合わせて移動処理を切り替える
 	switch (mState)
 	{
@@ -104,7 +92,7 @@ void CExp::Update()
 				mState = EState::Absorb;
 				mMoveSpeed = CVector::zero;
 				// 吸収状態では地面との当たり判定は無効
-				//mpColliderSphere->SetEnable(false);
+				mpColliderSphere->SetEnable(false);
 			}
 			else
 			{
@@ -129,10 +117,11 @@ void CExp::Update()
 			// プレイヤーまでの距離が移動距離より短いならば
 			if (dist <= currMoveSpeed.Length())
 			{
-				// 経験値を取得
-				
-				// 経験値は削除
-				//Kill();
+				// 経験値をプレイヤーに加算して、
+				player->AddExp(mAddExp);
+
+				// 経験値オーブは削除
+				Kill();
 			}
 			else
 			{

@@ -12,6 +12,19 @@ struct CharaStatus
 	int SpecialAttack; // 特殊攻撃
 	float volume;      // 大きさ
 	float cameraHeight; // カメラの高さ
+
+	// ステータスのリセット
+	void Reset()
+	{
+		level = 1;
+		exp = 0;
+		power = 5;
+		defense = 0;
+		mobility = 1.0f;
+		SpecialAttack = 2;
+		volume = 1.02f;
+		cameraHeight = 0.0f;
+	}
 }; 
 
 // プレイヤーの最大レベル

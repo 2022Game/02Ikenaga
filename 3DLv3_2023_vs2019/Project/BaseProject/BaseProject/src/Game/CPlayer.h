@@ -69,6 +69,9 @@ public:
 	// HP回復と特殊攻撃(SA)回数を自動回復
 	void AutomaticRecovery();
 
+	// 経験値を加算
+	void AddExp(int exp);
+
 	// 更新
 	void Update();
 

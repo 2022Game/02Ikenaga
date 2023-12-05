@@ -40,7 +40,6 @@ void CGameScene::Load()
 	new CField();
 
 	CPlayer* player = new CPlayer();
-    player->Position(0.0f, 5.0f, 0.0f);
 
 	CCamera* mainCamera = new CCamera
 	(
@@ -48,6 +47,8 @@ void CGameScene::Load()
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
+
+	player->Position(0.0f, 5.0f, 0.0f);
 
 	CSlime* enemy = new CSlime();
 	enemy->Position(0.0f, 0.0f, -40.0f);

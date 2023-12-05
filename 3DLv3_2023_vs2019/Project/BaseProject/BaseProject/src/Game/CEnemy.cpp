@@ -5,7 +5,6 @@
 CEnemy::CEnemy()
 	:CXCharacter(ETag::eEnemy,ETaskPriority::eEnemy)
 {
-
 }
 
 

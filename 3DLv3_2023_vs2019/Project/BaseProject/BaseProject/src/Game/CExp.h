@@ -10,7 +10,7 @@
 class CExp : public CBillBoardImage
 {
 public:
-	CExp();
+	CExp(int exp);
 	~CExp();
 
 	// ‰Šúİ’è
@@ -26,6 +26,7 @@ public:
 	void Update() override;
 
 private:
+	int mAddExp;   // æ“¾‚ÉŠl“¾‚·‚éŒoŒ±’l—Ê
 	CColliderSphere* mpColliderSphere;
 	CVector mMoveSpeed;  //ˆÚ“®‘¬“x
 

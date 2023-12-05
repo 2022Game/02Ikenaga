@@ -14,7 +14,7 @@ CSlime* CSlime::spInstance = nullptr;
 #define MODEL_SLIME_BLUE "Character\\Enemy\\Slime\\SlimeBlue.x"
 
 #define ENEMY_HEIGHT 1.0f
-#define MOVE_SPEED 0.05f    // 移動速度
+#define MOVE_SPEED 0.06f    // 移動速度
 #define GRAVITY 0.0625f    // 重力
 
 #define WALK_RANGE 100.0f        // 追跡する範囲
@@ -367,9 +367,9 @@ void CSlime::Update()
 		}
 	}
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= 23.5f && vectorp <= WALK_RANGE)
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED * mCharaStatus.mobility);
+		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
 	//mMoveSpeed -=CVector(0.0f, GRAVITY, 0.0f);
 	// 状態に合わせて、更新処理を切り替える
@@ -429,8 +429,9 @@ void CSlime::Update()
 			// 確率を最小に8最大10
 			int probability2 = Math::Rand(8, 10);
 			if (probability2 == 8)BigAttack = true;
-			if(BigAttack)
-			{ 
+
+			if (BigAttack)
+			{
 				mState = EState::eAttack2;
 			}
 			else
