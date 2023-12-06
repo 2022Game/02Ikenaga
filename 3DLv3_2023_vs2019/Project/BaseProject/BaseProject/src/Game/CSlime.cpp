@@ -11,11 +11,11 @@
 CSlime* CSlime::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
-#define MOVE_SPEED 0.06f    // 移動速度
+#define MOVE_SPEED 0.07f    // 移動速度
 #define GRAVITY 0.0625f    // 重力
 
 #define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 23.5f         // 追跡を辞める範囲
+#define STOP_RANGE 24.5f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
@@ -31,10 +31,10 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  // ヒット 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  // 死ぬ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // めまい 41.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	30.0f	},  // 走る 21.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	true,	50.0f	},  // 歩く 31.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
-	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	21.0f	},  // 走る
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  // 挑発
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  // 勝利
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  // 後ろに歩く
@@ -179,7 +179,7 @@ void CSlime::UpdateIdle3()
 	{
 		mState = EState::eWalk;
 	}
-	else 
+	else
 	{
 		ChangeAnimation(EAnimType::eIdle4);
 		if (IsAnimationFinished())
@@ -312,7 +312,7 @@ void CSlime::UpdateWalk()
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
 	// 追跡をやめて止まる
-	if (vectorp <= 22.0f)
+	if (vectorp <= 22.0f && vectorp >= 24.0f)
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
@@ -331,17 +331,20 @@ void CSlime::UpdateWalk()
 		}
 	}
 	// 範囲内の時、移動し追跡する
-	else if(vectorp <= WALK_RANGE)
+	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	if (vectorp <= STOP_RANGE ||vectorp >= WALK_RANGE)
+	if (vectorp <= 24.5f ||vectorp >= WALK_RANGE)
 	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
 	}
-	CDebugPrint::Print(" 距離 %f", vectorp);
+	//CDebugPrint::Print(" 距離 %f", vectorp);
+	CDebugPrint::Print(" 速度 %f", mMoveSpeed);
 }
 
 // 更新処理
@@ -371,7 +374,8 @@ void CSlime::Update()
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
-	//mMoveSpeed -=CVector(0.0f, GRAVITY, 0.0f);
+	
+	CDebugPrint::Print(" 距離 %f", vectorp);
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
