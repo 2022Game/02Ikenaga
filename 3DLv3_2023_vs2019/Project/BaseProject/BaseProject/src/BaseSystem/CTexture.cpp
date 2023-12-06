@@ -2,6 +2,7 @@
 #include <stdio.h>	//ファイルの入力に使用
 #include <string.h>
 #include "soil.h"
+#include <string>
 //std::map<std::string, CTexture>CTexture::mTexFile;
 
 CTexture::CTexture()
@@ -10,12 +11,6 @@ CTexture::CTexture()
 	, mRow(1)
 	, mCol(1)
 {
-}
-
-CTexture::CTexture(char *file)
-	: CTexture()
-{
-	Load(file);
 }
 
 CTexture::~CTexture() {
@@ -35,14 +30,13 @@ void CTexture::Destory() {
 	}
 }
 
-#include <string>
-bool CTexture::Load(const char* filename)
+bool CTexture::Load(std::string path, bool dontDelete)
 {
 	//ファイルオープン
-	std::string file(filename);
+	std::string file(path);
 	file = RES_DIR + file;	//ファイル名の退避
-	mpName = new char[strlen(filename) + 1];
-	strcpy(mpName, filename);
+	mpName = new char[strlen(path.c_str()) + 1];
+	strcpy(mpName, path.c_str());
 	//画像データ
 	unsigned char* data;
 	//ファイルの入力

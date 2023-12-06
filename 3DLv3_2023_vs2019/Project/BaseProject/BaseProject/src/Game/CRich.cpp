@@ -6,8 +6,6 @@
 // リッチのインスタンス
 CRich* CRich::spInstance = nullptr;
 
-#define MODEL_RICH "Character\\Rich.x"
-
 #define ENEMY_HEIGHT 2.0f
 
 // リッチのアニメーションデータのテーブル
@@ -33,8 +31,7 @@ CRich::CRich()
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = new CModelX();
-	model->Load(MODEL_RICH);
+	CModelX* model = CResourceManager::Get<CModelX>("Player2");;
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -66,7 +63,6 @@ CRich::CRich()
 CRich::~CRich()
 {
 	SAFE_DELETE(mpColliderLine);
-	SAFE_DELETE(mpModel);
 }
 
 CRich* CRich::Instance()

@@ -44,8 +44,7 @@ CEnemy2::CEnemy2()
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = new CModelX();
-	model->Load(MODEL_MUSHROOM);
+	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -72,17 +71,7 @@ CEnemy2::CEnemy2()
 
 CEnemy2::~CEnemy2()
 {
-	if (mpColliderLine != nullptr)
-	{
-		delete mpColliderLine;
-		mpColliderLine = nullptr;
-	}
-
-	if (mpModel != nullptr)
-	{
-		delete mpModel;
-		mpModel = nullptr;
-	}
+	SAFE_DELETE(mpColliderLine);
 }
 
 CEnemy2* CEnemy2::Instance()

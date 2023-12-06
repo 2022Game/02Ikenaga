@@ -23,7 +23,7 @@ public:
 	~CImage();
 
 	//テクスチャの読み込み
-	void Load(const char* path);
+	void Load(const char* path, bool dontDelete = false);
 
 	//表示する範囲を設定（CVector4版）
 	void SetUV(const CVector4& uv);

@@ -6,8 +6,7 @@
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 {
-	mpModel = new CModel();
-	mpModel->Load("Field\\field.obj", "Field\\field.mtl");
+	mpModel = CResourceManager::Get<CModel>("Field");
 
 	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
 
@@ -16,28 +15,16 @@ CField::CField()
 
 CField::~CField()
 {
-	SAFE_DELETE(mpModel);
 	SAFE_DELETE(mpColliderMesh);
-	if (mpCubeModel != nullptr)
-	{
-		delete mpCubeModel;
-		mpCubeModel = nullptr;
-	}
-
-	if (mpCylinderModel != nullptr)
-	{
-		delete mpCubeModel;
-		mpCubeModel = nullptr;
-	}
 }
 
 void CField::CreateFieldObjects()
 {
-	mpCubeModel = new CModel();
+	/*mpCubeModel = new CModel();
 	mpCubeModel->Load("Field\\Object\\cube.obj", "Field\\Object\\cube.mtl");
 
 	mpCylinderModel = new CModel();
-	mpCylinderModel->Load("Field\\Object\\cylinder.obj", "Field\\Object\\cylinder.mtl");
+	mpCylinderModel->Load("Field\\Object\\cylinder.obj", "Field\\Object\\cylinder.mtl");*/
 
 	//// ìÆÇ©Ç»Ç¢è∞áA
 	//new CMoveFloor

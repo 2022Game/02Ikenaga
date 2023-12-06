@@ -9,10 +9,6 @@
 // オレンジスライム(エネミー)のインスタンス
 CSlime2* CSlime2::spInstance = nullptr;
 
-#define MODEL_SLIME "Character\\Enemy\\Slime\\Slime.x"
-#define MODEL_SLIME_BLUE "Character\\Enemy\\Slime\\SlimeBlue.x"
-#define MODEL_SLIME_ORANGE "Character\\Enemy\\Slime\\SlimeOrange.x"
-
 #define ENEMY_HEIGHT 1.0f
 #define GRAVITY 0.0625f
 
@@ -55,8 +51,7 @@ CSlime2::CSlime2()
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = new CModelX();
-	model->Load(MODEL_SLIME_ORANGE);
+	CModelX* model = CResourceManager::Get<CModelX>("Slime2");;
 
 	//mpHpGauge = new CHpGauge();
 	//mpHpGauge->SetPos(10.0f, 90.f);
@@ -133,7 +128,6 @@ CSlime2::~CSlime2()
 	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
-	SAFE_DELETE(mpModel);
 }
 
 CSlime2* CSlime2::Instance()

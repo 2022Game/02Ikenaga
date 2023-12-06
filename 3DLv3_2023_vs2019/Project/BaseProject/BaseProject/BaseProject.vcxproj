@@ -38,6 +38,8 @@
     <ClCompile Include="src\BaseSystem\CMyShader.cpp" />
     <ClCompile Include="src\BaseSystem\CQuaternion.cpp" />
     <ClCompile Include="src\BaseSystem\CRect.cpp" />
+    <ClCompile Include="src\BaseSystem\CResource.cpp" />
+    <ClCompile Include="src\BaseSystem\CResourceManager.cpp" />
     <ClCompile Include="src\BaseSystem\CSceneBase.cpp" />
     <ClCompile Include="src\BaseSystem\CSceneManager.cpp" />
     <ClCompile Include="src\BaseSystem\CShader.cpp" />
@@ -122,6 +124,8 @@
     <ClInclude Include="src\BaseSystem\CollisionLayer.h" />
     <ClInclude Include="src\BaseSystem\CQuaternion.h" />
     <ClInclude Include="src\BaseSystem\CRect.h" />
+    <ClInclude Include="src\BaseSystem\CResource.h" />
+    <ClInclude Include="src\BaseSystem\CResourceManager.h" />
     <ClInclude Include="src\BaseSystem\CSceneBase.h" />
     <ClInclude Include="src\BaseSystem\CSceneManager.h" />
     <ClInclude Include="src\BaseSystem\CShader.h" />

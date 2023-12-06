@@ -10,9 +10,6 @@
 // レッドスライム(エネミー)のインスタンス
 CSlime* CSlime::spInstance = nullptr;
 
-#define MODEL_SLIME "Character\\Enemy\\Slime\\Slime.x"
-#define MODEL_SLIME_BLUE "Character\\Enemy\\Slime\\SlimeBlue.x"
-
 #define ENEMY_HEIGHT 1.0f
 #define MOVE_SPEED 0.06f    // 移動速度
 #define GRAVITY 0.0625f    // 重力
@@ -60,8 +57,8 @@ CSlime::CSlime()
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = new CModelX();
-	model->Load(MODEL_SLIME);
+	CModelX* model = CResourceManager::Get<CModelX>("Slime");
+
 	//最初に1レベルに設定
 	ChangeLevel(1);
 
@@ -134,7 +131,6 @@ CSlime::~CSlime()
 	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
-	SAFE_DELETE(mpModel);
 }
 
 CSlime* CSlime::Instance()
@@ -329,6 +325,9 @@ void CSlime::UpdateWalk()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
+
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
 		}
 	}
 	// 範囲内の時、移動し追跡する
@@ -370,6 +369,7 @@ void CSlime::Update()
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 	//mMoveSpeed -=CVector(0.0f, GRAVITY, 0.0f);
 	// 状態に合わせて、更新処理を切り替える

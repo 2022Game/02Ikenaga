@@ -4,13 +4,11 @@
 CPortionGreen::CPortionGreen()
 	: CObjectBase(ETag::eItem2, ETaskPriority::eBackground)
 {
-	mpPortionGreen = new CModel();
-	mpPortionGreen->Load("Item\\Portion\\PortionGreen.obj", "Item\\Portion\\PortionGreen.mtl");
+	mpPortionGreen = CResourceManager::Get<CModel>("Portion2");
 }
 
 CPortionGreen::~CPortionGreen()
 {
-	SAFE_DELETE(mpPortionGreen);
 }
 
 void CPortionGreen::Update()

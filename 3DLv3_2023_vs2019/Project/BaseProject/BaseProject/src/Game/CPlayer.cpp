@@ -13,7 +13,7 @@ CPlayer* CPlayer::spInstance = nullptr;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
-#define MODEL_DOG "Character\\Player\\Dog.x"
+
 #define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
 
 // プレイヤーのアニメーションデータのテーブル
@@ -85,8 +85,7 @@ CPlayer::CPlayer()
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = new CModelX();
-	model->Load(MODEL_DOG);
+	CModelX* model = CResourceManager::Get<CModelX>("Player");
 	// デフォルトスケールの反映
 	Scale(CVector::one * DEFAULT_SCALE);
 
@@ -164,7 +163,6 @@ CPlayer::~CPlayer()
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpDamageCol);
-	SAFE_DELETE(mpModel);
 }
 
 CPlayer* CPlayer::Instance()

@@ -4,13 +4,11 @@
 CPortionRed::CPortionRed()
 	: CObjectBase(ETag::eItem, ETaskPriority::eBackground)
 {
-	mpPortionRed = new CModel();
-	mpPortionRed->Load("Item\\Portion\\PortionRed.obj", "Item\\Portion\\PortionRed.mtl");
+	mpPortionRed = CResourceManager::Get<CModel>("Portion");
 }
 
 CPortionRed::~CPortionRed()
 {
-	SAFE_DELETE(mpPortionRed);
 }
 
 void CPortionRed::Update()

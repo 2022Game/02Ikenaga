@@ -79,24 +79,24 @@ std::vector<CTriangle> CModel::Triangles() const
 	return mTriangles;
 }
 
-//モデルファイルの入力
-//Load(モデルファイル名, マテリアルファイル名)
-void CModel::Load(char* obj, char* mtl) {
+//モデル読み込み
+bool CModel::Load(std::string path, bool dontDelete)
+{
 	//頂点データの保存(CVector型)
 	std::vector<CVector> vertex;
 	std::vector<CVector> normal;
 	//テクスチャマッピングの保存(CVector型)
 	std::vector<CVector> uv;
 
-	std::string mtlPath = RES_DIR;
-	mtlPath += mtl;
-
-	std::string dirPath = mtl;
+	std::string dirPath = path;
 	int index = dirPath.find_last_of('\\');
 	if (index >= 0)
 	{
 		dirPath = dirPath.substr(0, index + 1);
 	}
+
+	std::string objPath = RES_DIR;
+	objPath += path;
 
 	//ファイルポインタ変数の作成
 	FILE* fp;
@@ -107,70 +107,16 @@ void CModel::Load(char* obj, char* mtl) {
 	//ファイルのオープン
 	//fopen(ファイル名,モード)
 	//オープンできない時はNULLを返す
-	fp = fopen(mtlPath.c_str(), "r");
-	//ファイルオープンエラーの判定
-	//fpがNULLの時はエラー
-	if (fp == NULL) {
-		//コンソールにエラー出力して戻る
-		printf("%s file open error￥n", mtlPath.c_str());
-		return;
-	}
-
-	//マテリアルインデックス
-	int idx = 0;
-	//ファイルから1行入力
-	//fgets(入力エリア,エリアサイズ,ファイルポインタ)
-	//ファイルの最後になるとNULLを返す
-	while (fgets(buf, sizeof(buf), fp) != NULL) {
-		//データを分割する
-		char str[4][64] = { "", "", "", "" };
-		//文字列からデータを4つ変数へ代入する
-		sscanf(buf, "%s %s %s %s", str[0], str[1], str[2], str[3]);
-		//先頭がnewmtlの時、マテリアルを追加する
-		if (strcmp(str[0], "newmtl") == 0) {
-			CMaterial* pm = new CMaterial();
-			//マテリアル名の設定
-			pm->Name(str[1]);
-			//マテリアルの可変長配列に追加
-			mpMaterials.push_back(pm);
-			//配列の長さを取得
-			idx = mpMaterials.size() - 1;
-		}
-		//先頭がKdの時、Diffuseを設定する
-		else if (strcmp(str[0], "Kd") == 0) {
-			mpMaterials[idx]->Diffuse()[0] = atof(str[1]);
-			mpMaterials[idx]->Diffuse()[1] = atof(str[2]);
-			mpMaterials[idx]->Diffuse()[2] = atof(str[3]);
-		}
-		//先頭がdの時、α値を設定する
-		else if (strcmp(str[0], "d") == 0) {
-			mpMaterials[idx]->Diffuse()[3] = atof(str[1]);
-		}
-		//先頭がmap_Kdの時、テクスチャを入力する
-		else if (strcmp(str[0], "map_Kd") == 0) {
-			std::string texPath = dirPath + str[1];
-			mpMaterials[idx]->Texture()->Load(texPath.c_str());
-		}
-
-	}
-
-	//ファイルのクローズ
-	fclose(fp);
-
-	std::string objPath = RES_DIR;
-	objPath += obj;
-
-	//ファイルのオープン
-	//fopen(ファイル名,モード)
-	//オープンできない時はNULLを返す
 	fp = fopen(objPath.c_str(), "r");
 	//ファイルオープンエラーの判定
 	//fpがNULLの時はエラー
 	if (fp == NULL) {
 		//コンソールにエラー出力して戻る
 		printf("%s file open error￥n", objPath.c_str());
-		return;
+		return false;
 	}
+
+	int matIdx = 0;
 
 	//ファイルから1行入力
 	//fgets(入力エリア,エリアサイズ,ファイルポインタ)
@@ -210,7 +156,7 @@ void CModel::Load(char* obj, char* mtl) {
 				t.Vertex(vertex[v[0] - 1], vertex[v[1] - 1], vertex[v[2] - 1]);
 				t.Normal(normal[n[0] - 1], normal[n[1] - 1], normal[n[2] - 1]);
 				//マテリアル番号の設定
-				t.MaterialIdx(idx);
+				t.MaterialIdx(matIdx);
 				//可変長配列mTrianglesに三角形を追加
 				mTriangles.push_back(t);
 			}
@@ -228,17 +174,22 @@ void CModel::Load(char* obj, char* mtl) {
 				//テクスチャマッピングの設定
 				t.UV(uv[u[0] - 1], uv[u[1] - 1], uv[u[2] - 1]);
 				//マテリアル番号の設定
-				t.MaterialIdx(idx);
+				t.MaterialIdx(matIdx);
 				//可変長配列mTrianglesに三角形を追加
 				mTriangles.push_back(t);
 			}
 		}
+		//先頭がmtllibの時、マテリアルを読み込む
+		else if (strcmp(str[0], "mtllib") == 0) {
+			std::string mtlPath = dirPath + "\\" + str[1];
+			LoadMaterial(mtlPath, dontDelete);
+		}
 		//先頭がusemtlの時、マテリアルインデックスを取得する
 		else if (strcmp(str[0], "usemtl") == 0) {
 			//可変長配列を後から比較
-			for (idx = mpMaterials.size() - 1; idx > 0; idx--) {
+			for (matIdx = mpMaterials.size() - 1; matIdx > 0; matIdx--) {
 				//同じ名前のマテリアルがあればループ終了
-				if (strcmp(mpMaterials[idx]->Name(), str[1]) == 0) {
+				if (strcmp(mpMaterials[matIdx]->Name(), str[1]) == 0) {
 					break; //ループから出る
 				}
 			}
@@ -255,6 +206,82 @@ void CModel::Load(char* obj, char* mtl) {
 	fclose(fp);
 
 	CreateVertexBuffer();
+
+	return true;
+}
+
+//マテリアル読み込み
+bool CModel::LoadMaterial(std::string path, bool dontDelete)
+{
+	std::string mtlPath = RES_DIR + path;
+
+	std::string dirPath = path;
+	int index = dirPath.find_last_of('\\');
+	if (index >= 0)
+	{
+		dirPath = dirPath.substr(0, index + 1);
+	}
+
+	//ファイルポインタ変数の作成
+	FILE* fp;
+	//ファイルからデータを入力
+	//入力エリアを作成する
+	char buf[256];
+
+	//ファイルのオープン
+	//fopen(ファイル名,モード)
+	//オープンできない時はNULLを返す
+	fp = fopen(mtlPath.c_str(), "r");
+	//ファイルオープンエラーの判定
+	//fpがNULLの時はエラー
+	if (fp == NULL) {
+		//コンソールにエラー出力して戻る
+		printf("%s file open error￥n", mtlPath.c_str());
+		return false;
+	}
+
+	//マテリアルインデックス
+	int idx = 0;
+	//ファイルから1行入力
+	//fgets(入力エリア,エリアサイズ,ファイルポインタ)
+	//ファイルの最後になるとNULLを返す
+	while (fgets(buf, sizeof(buf), fp) != NULL) {
+		//データを分割する
+		char str[4][64] = { "", "", "", "" };
+		//文字列からデータを4つ変数へ代入する
+		sscanf(buf, "%s %s %s %s", str[0], str[1], str[2], str[3]);
+		//先頭がnewmtlの時、マテリアルを追加する
+		if (strcmp(str[0], "newmtl") == 0) {
+			CMaterial* pm = new CMaterial();
+			//マテリアル名の設定
+			pm->Name(str[1]);
+			//マテリアルの可変長配列に追加
+			mpMaterials.push_back(pm);
+			//配列の長さを取得
+			idx = mpMaterials.size() - 1;
+		}
+		//先頭がKdの時、Diffuseを設定する
+		else if (strcmp(str[0], "Kd") == 0) {
+			mpMaterials[idx]->Diffuse()[0] = atof(str[1]);
+			mpMaterials[idx]->Diffuse()[1] = atof(str[2]);
+			mpMaterials[idx]->Diffuse()[2] = atof(str[3]);
+		}
+		//先頭がdの時、α値を設定する
+		else if (strcmp(str[0], "d") == 0) {
+			mpMaterials[idx]->Diffuse()[3] = atof(str[1]);
+		}
+		//先頭がmap_Kdの時、テクスチャを入力する
+		else if (strcmp(str[0], "map_Kd") == 0) {
+			std::string texPath = dirPath + str[1];
+			mpMaterials[idx]->LoadTexture(str[1], texPath.c_str(), dontDelete);
+		}
+
+	}
+
+	//ファイルのクローズ
+	fclose(fp);
+
+	return true;
 }
 
 void CModel::Render()

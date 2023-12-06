@@ -5,8 +5,7 @@
 
 CSword::CSword()
 {
-	mpSword = new CModel();
-	mpSword->Load("Item\\Equipment\\Sword\\Sword.obj", "Item\\Equipment\\Sword\\Sword.mtl");
+	mpSword = CResourceManager::Get<CModel>("Sword");
 
 	// 攻撃判定用のコライダーを作成
 	mpAttackCol = new CColliderLine
@@ -27,7 +26,6 @@ CSword::CSword()
 
 CSword::~CSword()
 {
-	SAFE_DELETE(mpSword);
 	SAFE_DELETE(mpAttackCol);
 }
 

@@ -4,7 +4,7 @@
 class CTextureFont
 {
 private:
-	CTexture mTexture;
+	CTexture* mpTexture;
 public:
 	//Load(ファイル名, 行数, 列数)
 	void Load(const char* file, int row, int col);

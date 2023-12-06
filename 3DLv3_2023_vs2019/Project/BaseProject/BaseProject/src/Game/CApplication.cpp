@@ -16,6 +16,14 @@ void CApplication::Start()
 	CSceneManager::Instance()->LoadScene(EScene::eBootMenu);
 }
 
+void CApplication::End()
+{
+	CSceneManager::ClearInstance();
+	CTaskManager::ClearInstance();
+	CCollisionManager::ClearInstance();
+	CResourceManager::ClearInstance();
+}
+
 void CApplication::Update()
 {
 	CTaskManager::Instance()->Delete();

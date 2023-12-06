@@ -74,6 +74,9 @@
     <Filter Include="ソース ファイル\Game\Weapon">
       <UniqueIdentifier>{bbe1abaa-1fa4-4b66-8919-ad3945c54160}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\BaseSystem\Resource">
+      <UniqueIdentifier>{ffd69484-88ac-4071-b845-e760a392a043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -315,6 +318,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CExpManager.cpp">
       <Filter>ソース ファイル\Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CResource.cpp">
+      <Filter>ソース ファイル\BaseSystem\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CResourceManager.cpp">
+      <Filter>ソース ファイル\BaseSystem\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,6 +590,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CExpManager.h">
       <Filter>ソース ファイル\Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CResource.h">
+      <Filter>ソース ファイル\BaseSystem\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CResourceManager.h">
+      <Filter>ソース ファイル\BaseSystem\Resource</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

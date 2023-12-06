@@ -12,7 +12,7 @@ CEffect::CEffect(const CVector& pos, float w, float h, char* texture
 	//テクスチャを読んでない場合は読む
 	if (sMaterial.Texture()->Id() == 0)
 	{
-		sMaterial.Texture()->Load(texture);
+		sMaterial.LoadTexture(texture, texture, false);
 		sMaterial.Diffuse()[0] = 1.0f;
 		sMaterial.Diffuse()[1] = 1.0f;
 		sMaterial.Diffuse()[2] = 1.0f;

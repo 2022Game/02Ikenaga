@@ -4,6 +4,7 @@
 #include "CMatrix.h"	//マトリクスクラスのインクルード
 #include "CVector.h"	//Vectorクラスのインクルード
 #include "CMyShader.h"	//シェーダークラスのインクルード
+#include "CResource.h"
 
 class CModelX;			//CModelクラスの宣言
 class CModelXFrame;		//CModelXFrameクラスの宣言
@@ -19,7 +20,9 @@ class CXCharacter;		//CXCharacterクラスの宣言
 CModel
 Xファイル形式の3Dモデルデータをプログラムで認識する
 */
-class CModelX {
+class CModelX : public CResource
+{
+	friend CResourceManager;
 	friend CModelXFrame;
 	friend CMesh;
 	friend CAnimationSet;
@@ -27,6 +30,14 @@ class CModelX {
 	friend CModelX;
 	friend CMyShader;
 private:
+	//コンストラクタ
+	CModelX();
+	//デストラクタ
+	~CModelX();
+
+	//ファイル読み込み
+	bool Load(std::string path, bool dontDelete) override;
+
 	std::vector<CMaterial*> mMaterial;	//マテリアル配列
 	std::vector<CModelXFrame*> mFrame;  //フレームの配列
 	std::vector<CAnimationSet*> mAnimationSet;	//アニメーションセット配列
@@ -55,11 +66,6 @@ public:
 	//マテリアルの検索
 	CMaterial* FindMaterial(char* name);
 
-	//コンストラクタ
-	CModelX();
-	//デストラクタ
-	~CModelX();
-
 	//単語の取り出し
 	char* GetToken();
 	char* Token();
@@ -76,6 +82,7 @@ public:
 
 	//シェーダーを使った描画
 	void RenderShader(CMatrix* m);
+	bool IsAddAnimationSet(std::string path) const;
 	//アニメーションセットの追加
 	void AddAnimationSet(const char* file);
 	//アニメーションを抜き出す
@@ -89,8 +96,6 @@ public:
 	void AnimateFrame();
 	//ノードの読み飛ばし
 	void SkipNode();
-	//ファイル読み込み
-	void Load(char* file);
 
 	//描画処理
 	void Render();
@@ -114,7 +119,7 @@ public:
 	//デフォルトコンストラクタ
 	CModelXFrame();
 	//コンストラクタ
-	CModelXFrame(CModelX* model);
+	CModelXFrame(CModelX* model, bool dontDelete);
 	//デストラクタ
 	~CModelXFrame();
 
@@ -167,7 +172,7 @@ public:
 	//スキンウェイトにフレーム番号を設定する
 	void SetSkinWeightFrameIndex(CModelX* model);
 	//読み込み処理
-	void Init(CModelX* model);
+	void Init(CModelX* model, bool dontDelete);
 	//描画処理
 	void Render();
 };
@@ -205,6 +210,7 @@ class CAnimationSet
 	friend CModelX;
 	friend CXCharacter;
 private:
+	std::string mPath;
 	char* mpName;	//アニメーションセット名
 	float mTime;	//現在時間
 	float mWeight;	//重み

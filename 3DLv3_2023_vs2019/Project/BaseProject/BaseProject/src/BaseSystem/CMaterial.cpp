@@ -20,15 +20,21 @@ char* strncpy(char* str1, const char* str2, int len)
 	return str1; //コピー先の先頭アドレスを返却
 }
 
+bool CMaterial::LoadTexture(std::string name, std::string path, bool dontDelete)
+{
+	mpTexture = CResourceManager::Load<CTexture>(name, path, dontDelete);
+	return mpTexture != nullptr;
+}
+
 CTexture* CMaterial::Texture()
 {
-	return &mTexture;
+	return mpTexture;
 }
 
 void CMaterial::Disabled()
 {
 	//テクスチャ有り
-	if (mTexture.Id())
+	if (mpTexture != nullptr && mpTexture->Id())
 	{
 		//アルファブレンドを無効
 		glDisable(GL_BLEND);
@@ -44,6 +50,7 @@ CMaterial::CMaterial()
 	: mVertexNum(0)
 	, mPower(0)
 	, mpTextureFilename(nullptr)
+	, mpTexture(nullptr)
 {
 	//名前を0で埋め
 	memset(mName, 0, sizeof(mName));
@@ -58,7 +65,7 @@ CMaterial::CMaterial()
 /*
 Materialデータの読み込みと設定
 */
-CMaterial::CMaterial(CModelX *model)
+CMaterial::CMaterial(CModelX *model, bool dontDelete)
 	:mpTextureFilename(nullptr)
 {
 	//CModelXにマテリアルを追加する
@@ -98,7 +105,7 @@ CMaterial::CMaterial(CModelX *model)
 
 		//テクスチャの読み込み
 		std::string texPath = model->DirPath() + mpTextureFilename;
-		mTexture.Load(texPath.c_str());
+		LoadTexture(mpTextureFilename, texPath, dontDelete);
 
 		model->GetToken(); // }
 		model->GetToken(); // }
@@ -112,6 +119,10 @@ CMaterial::~CMaterial()
 		delete[] mpTextureFilename;
 	}
 	mpTextureFilename = nullptr;
+
+	if (mpTexture != nullptr)
+	{
+	}
 }
 
 //マテリアルを有効にする
@@ -119,12 +130,12 @@ void CMaterial::Enabled() {
 	//拡散光の設定
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mDiffuse);
 	//テクスチャ有り
-	if (mTexture.Id())
+	if (mpTexture != nullptr && mpTexture->Id())
 	{
 		//テクスチャを使用可能にする
 		glEnable(GL_TEXTURE_2D);
 		//テクスチャをバインドする
-		glBindTexture(GL_TEXTURE_2D, mTexture.Id());
+		glBindTexture(GL_TEXTURE_2D, mpTexture->Id());
 		//アルファブレンドを有効にする
 		glEnable(GL_BLEND);
 		//ブレンド方法を指定

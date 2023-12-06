@@ -14,6 +14,7 @@
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
 #include "CCane.h"
+//#include "CLineEffect.h"
 
 //コンストラクタ
 CGameScene::CGameScene()
@@ -36,6 +37,38 @@ void CGameScene::Load()
 
 	//ここでゲーム中に必要な
 	//リソースの読み込みやクラスの生成を行う
+
+	// フィールド関連
+	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
+
+	// プレイヤー関連
+	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
+	CResourceManager::Load<CModelX>("Playe2", "Character\\Rich.x");
+
+	// エネミー関連
+	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
+	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
+	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
+
+	// 武器関連
+	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
+	CResourceManager::Load<CModel>("Shield", "Item\\Equipment\\Shield\\Shield.obj");
+	CResourceManager::Load<CModel>("Cane", "Character\\Cane.obj");
+
+	// アイテム関連
+	CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
+	CResourceManager::Load<CModel>("Portion2", "Item\\Portion\\PortionGreen.obj");
+	CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
+
+	// UI関連
+	CResourceManager::Load<CTexture>("HpFrame", "Character\\Player\\HP\\Frame.png");
+	CResourceManager::Load<CTexture>("HpGauge", "UI\\white.png");
+	CResourceManager::Load<CTexture>("SaFrame", "Character\\Player\\HP\\Frame.png");
+	CResourceManager::Load<CTexture>("SaGauge", "UI\\white.png");
+
+	// その他
+	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
 
 	new CField();
 
@@ -82,6 +115,12 @@ void CGameScene::Load()
 	CPortionBlue* portionblue = new CPortionBlue();
 	portionblue->Position(70.0f, 10.0f, 0.0f);
 	portionblue->Scale(70.0f, 70.0f, 70.0f);
+
+	//CLineEffect* le = new CLineEffect(ETag::eNone);
+	//le->AddPoint(CVector(0.0f, 10.0f, 10.0f), 1.0f);
+	//le->AddPoint(CVector(10.0f, 10.0f, 10.0f), 1.0f);
+	//le->AddPoint(CVector(10.0f, 20.0f, 50.0f), 1.0f);
+	//le->AddPoint(CVector(50.0f, 10.0f, 50.0f), 1.0f);
 }
 
 //シーンの更新処理

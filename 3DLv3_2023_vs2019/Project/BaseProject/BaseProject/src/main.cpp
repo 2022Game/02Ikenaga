@@ -177,6 +177,9 @@ int main(void)
 		}
 	}
 
+	//I—¹ˆ—
+	gApplication.End();
+
 	glfwTerminate();
 	return 0;
 }

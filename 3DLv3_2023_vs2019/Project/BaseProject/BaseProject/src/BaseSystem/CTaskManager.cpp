@@ -32,6 +32,22 @@ CTaskManager::CTaskManager()
 // デストラクタ
 CTaskManager::~CTaskManager()
 {
+	for (int i = 0; i < 2; i++)
+	{
+		std::list<CTask*>& list = i == 0 ? m3dTasks : m2dTasks;
+		// 先頭から最後まで繰り返し
+		auto itr = list.begin();
+		auto end = list.end();
+		while (itr != end)
+		{
+			// 削除タスクを記憶しておく
+			CTask* del = *itr;
+			itr = list.erase(itr);
+			delete del;
+		}
+	}
+	m3dTasks.clear();
+	m2dTasks.clear();
 }
 
 // 指定したタスクをリストに追加

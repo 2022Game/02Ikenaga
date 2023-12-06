@@ -3,13 +3,11 @@
 
 CCane::CCane()
 {
-	mpCane = new CModel();
-	mpCane->Load("Character\\Cane.obj", "Character\\Cane.mtl");
+	mpCane = CResourceManager::Get<CModel>("Cane");
 }
 
 CCane::~CCane()
 {
-	SAFE_DELETE(mpCane);
 }
 
 void CCane::Update()

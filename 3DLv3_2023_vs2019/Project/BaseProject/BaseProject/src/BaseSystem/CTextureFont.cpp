@@ -2,14 +2,14 @@
 
 void CTextureFont::Load(const char* file, int row, int col)
 {
-	mTexture.Load(file);
-	mTexture.SetRowCol(row, col);
+	mpTexture = CResourceManager::Load<CTexture>("", file);
+	mpTexture->SetRowCol(row, col);
 }
 
 void CTextureFont::Draw(float x, float y, float w, float h, char c)
 {
 	int i = c - 0x20;
-	mTexture.DrawImage(x - w, x + w, y - h, y + h, i);
+	mpTexture->DrawImage(x - w, x + w, y - h, y + h, i);
 }
 
 void CTextureFont::Draw(float x, float y, float w, float h, char c[])

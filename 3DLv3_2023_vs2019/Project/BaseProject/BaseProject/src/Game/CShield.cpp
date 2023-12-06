@@ -3,13 +3,11 @@
 
 CShield::CShield()
 {
-	mpShield = new CModel();
-	mpShield->Load("Item\\Equipment\\Shield\\Shield.obj", "Item\\Equipment\\Shield\\Shield.mtl");
+	mpShield = CResourceManager::Get<CModel>("Shield");
 }
 
 CShield::~CShield()
 {
-	SAFE_DELETE(mpShield);
 }
 
 void CShield::Update()
