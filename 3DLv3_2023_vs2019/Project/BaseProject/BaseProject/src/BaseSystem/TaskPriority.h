@@ -13,6 +13,7 @@ enum class ETaskPriority
 
 	eWeapon,	// 武器
 	eExp,       // 経験値
+	eItem,      // アイテム
 
 	eEffect,	// エフェクト
 

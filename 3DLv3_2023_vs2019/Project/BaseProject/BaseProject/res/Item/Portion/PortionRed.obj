@@ -1,6 +1,6 @@
 # Blender 3.5.1
 # www.blender.org
-mtllib Portion.mtl
+mtllib PortionRed.mtl
 o default
 v -0.025439 -0.036634 0.000000
 v 0.001988 -0.046923 0.000000

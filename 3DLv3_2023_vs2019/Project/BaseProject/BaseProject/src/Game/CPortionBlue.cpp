@@ -2,7 +2,7 @@
 #include "CCollisionManager.h"
 
 CPortionBlue::CPortionBlue()
-	: CObjectBase(ETag::eItem3, ETaskPriority::eBackground)
+	: CObjectBase(ETag::eItem3, ETaskPriority::eItem)
 {
 	mpPortionBlue = CResourceManager::Get<CModel>("Portion3");
 }

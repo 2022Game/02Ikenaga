@@ -22,7 +22,7 @@ char* strncpy(char* str1, const char* str2, int len)
 
 bool CMaterial::LoadTexture(std::string name, std::string path, bool dontDelete)
 {
-	mpTexture = CResourceManager::Load<CTexture>(name, path, dontDelete);
+	mpTexture = CResourceManager::Load<CTexture>(path, path, dontDelete);
 	return mpTexture != nullptr;
 }
 

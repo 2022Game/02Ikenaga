@@ -43,7 +43,7 @@ void CGameScene::Load()
 
 	// プレイヤー関連
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
-	CResourceManager::Load<CModelX>("Playe2", "Character\\Rich.x");
+	CResourceManager::Load<CModelX>("Player2", "Character\\Rich.x");
 
 	// エネミー関連
 	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");

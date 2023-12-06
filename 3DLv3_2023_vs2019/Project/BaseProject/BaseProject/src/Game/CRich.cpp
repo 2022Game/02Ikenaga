@@ -31,7 +31,7 @@ CRich::CRich()
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = CResourceManager::Get<CModelX>("Player2");;
+	CModelX* model = CResourceManager::Get<CModelX>("Player2");
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
