@@ -34,6 +34,8 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // 攻撃6
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // 攻撃力アップ
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ヒット 43.0f
+	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ガード 47.0f
+	{ "Character\\Player\\animation\\DogGuardHit.x",	false,	47.0f	},  // ガードヒット 47.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
 	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
 
@@ -260,6 +262,10 @@ void CPlayer::UpdateIdle()
 				mCharaStatus.SpecialAttack--;
 			}
 		}
+		if (CInput::Key('G'))
+		{
+			mState = EState::eGuard;
+		}
 	}
 	else
 	{
@@ -410,6 +416,35 @@ void CPlayer::UpdateHit()
 {
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
+	{
+		mState = EState::eIdle;
+	}
+}
+
+// ガード
+void CPlayer::UpdateGuard()
+{
+	if (CInput::Key('G'))
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+		ChangeAnimation(EAnimType::eGuard);
+	}
+	else
+	{
+		mState = EState::eIdle;
+	}
+}
+
+void CPlayer::UpdateGuardHit()
+{
+	ChangeAnimation(EAnimType::eGuardHit);
+
+	if (CInput::Key('G'))
+	{
+		mState = EState::eGuard;
+	}
+	else
 	{
 		mState = EState::eIdle;
 	}
@@ -584,6 +619,14 @@ void CPlayer::Update()
 		case EState::eHit:
 			UpdateHit();
 			break;
+		// ガード
+		case EState::eGuard:
+			UpdateGuard();
+			break;
+		// ガードヒット
+		case EState::eGuardHit:
+			UpdateGuardHit();
+			break;
 	}
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
@@ -711,7 +754,14 @@ void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 	//mCharaStatus.hp -= damage;
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		if (mState == EState::eGuard)
+		{
+			mState = EState::eGuardHit;
+		}
+		else
+		{
+			mState = EState::eHit;
+		}
 	}
 
 	// ダメージを受けたら、移動を停止

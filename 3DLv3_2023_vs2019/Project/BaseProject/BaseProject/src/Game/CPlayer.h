@@ -60,6 +60,10 @@ public:
 	void UpdatePowerUpEnd();
 	// ヒット
 	void UpdateHit();
+	// ガード
+	void UpdateGuard();
+	// ガードヒット
+	void UpdateGuardHit();
 
 	// 1レベルアップ
 	void LevelUp();
@@ -116,6 +120,8 @@ private:
 		eAttack6,	// 攻撃6
 		ePowerUp,   // 攻撃力アップ
 		eHit,       // ヒット
+		eGuard,     // ガード
+		eGuardHit,  // ガードヒット
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 
@@ -154,6 +160,8 @@ private:
 		ePowerUp,   // 攻撃力アップ
 		ePowerUpEnd,  // 攻撃力アップ終了
 		eHit,       // ヒット
+		eGuard,     // ガード
+		eGuardHit,  // ガードヒット
 		eStop,      // 停止
 	};
 	EState mState;	// プレイヤーの状態
