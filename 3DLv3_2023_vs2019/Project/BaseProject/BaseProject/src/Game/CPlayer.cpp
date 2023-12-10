@@ -632,9 +632,9 @@ void CPlayer::Update()
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
-	CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
-	CDebugPrint::Print(" 攻撃計測 %d\n", mAttackTime);
-	CDebugPrint::Print(" 攻撃した回数 %d\n", mAttackcount);
+	//CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
+	//CDebugPrint::Print(" 攻撃計測 %d\n", mAttackTime);
+	//CDebugPrint::Print(" 攻撃した回数 %d\n", mAttackcount);
 
 	// 移動
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
@@ -676,8 +676,9 @@ void CPlayer::Update()
 
 	if (debug2)
 	{
-		CDebugPrint::Print(" R:ステータス確認\n");
-		CDebugPrint::Print(" 2キーでレベルアップ\n");
+		CDebugPrint::Print(" R: ステータス確認\n");
+		CDebugPrint::Print(" 2: レベルアップ\n");
+		CDebugPrint::Print(" G: ガード\n");
 	}
 
 	if (CInput::Key('1'))

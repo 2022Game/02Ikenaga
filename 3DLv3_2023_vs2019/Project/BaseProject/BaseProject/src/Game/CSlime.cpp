@@ -26,8 +26,8 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	120.0f	},  // 開始の見回す 63.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	140.0f	},  // 見回す 71.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  // アイドルバトル 25.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	26.0f	},  // 攻撃 26.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	true,	70.0f	},  // 攻撃2 26.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	30.0f	},  // 攻撃 26.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	true,	80.0f	},  // 攻撃2 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  // ヒット 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  // 死ぬ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // めまい 41.0f
@@ -336,7 +336,7 @@ void CSlime::UpdateWalk()
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	if (vectorp <= 24.5f ||vectorp >= WALK_RANGE)
+	if (vectorp <= STOP_RANGE ||vectorp >= WALK_RANGE)
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
@@ -352,7 +352,6 @@ void CSlime::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-
 	mHp = mCharaStatus.hp;
 
 	CPlayer* player = CPlayer::Instance();
@@ -423,6 +422,7 @@ void CSlime::Update()
 		break;
 	}
 
+	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
 		mAttackTime++;
@@ -571,8 +571,6 @@ void CSlime::ChangeLevel(int level)
 void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//HPからダメージを引く
-	//mCharaStatus.hp = max(mCharaStatus.hp - damage, 0);
-	//mCharaStatus.hp -= damage;
 	if (mCharaStatus.hp -= damage)
 	{
 		mState = EState::eHit;
@@ -592,8 +590,7 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 		dir.Normalize();
 		Rotation(CQuaternion::LookRotation(dir));
 
-		// ノックバックでダメージを与えた相手の方向から
-		// 後ろにズラす
+		// ノックバックでダメージを与えた相手の方向から後ろにズラす
 		Position(Position() - dir * Scale().X() * 0.4f);
 	}
 }
