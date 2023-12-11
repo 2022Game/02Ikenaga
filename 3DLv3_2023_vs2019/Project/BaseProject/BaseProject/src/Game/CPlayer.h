@@ -62,8 +62,10 @@ public:
 	void UpdateHit();
 	// ガード
 	void UpdateGuard();
-	// ガードヒット
+	// ガード中のヒット
 	void UpdateGuardHit();
+	// 回避
+	void UpdateRolling();
 
 	// 1レベルアップ
 	void LevelUp();
@@ -122,6 +124,7 @@ private:
 		eHit,       // ヒット
 		eGuard,     // ガード
 		eGuardHit,  // ガードヒット
+		eRolling,   // 回避
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 
@@ -162,6 +165,7 @@ private:
 		eHit,       // ヒット
 		eGuard,     // ガード
 		eGuardHit,  // ガードヒット
+		eRolling,   // 回避
 		eStop,      // 停止
 	};
 	EState mState;	// プレイヤーの状態

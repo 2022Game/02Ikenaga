@@ -36,6 +36,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ヒット 43.0f
 	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ガード 47.0f
 	{ "Character\\Player\\animation\\DogGuardHit.x",	false,	47.0f	},  // ガードヒット 47.0f
+	{ "Character\\Player\\animation\\DogRolling.x",	true,	71.0f	},      // ヒット 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
 	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
 
@@ -191,10 +192,17 @@ void CPlayer::UpdateIdle()
 		// 移動処理
 		// キーの入力ベクトルを取得
 		CVector input;
-		if (CInput::Key('W'))		input.Z(-1.0f);
+		if (CInput::Key('W'))	input.Z(-1.0f);
 		else if (CInput::Key('S'))	input.Z(1.0f);
 		if (CInput::Key('A'))		input.X(-1.0f);
 		else if (CInput::Key('D'))	input.X(1.0f);
+
+		// SPACEキーで回避
+		if (CInput::PushKey(VK_SPACE))
+		{
+			input.Z(-1.0f);
+			mState = EState::eRolling;
+		}
 
 		// 入力ベクトルの長さで入力されているか判定
 		if (input.LengthSqr() > 0.0f)
@@ -241,11 +249,6 @@ void CPlayer::UpdateIdle()
 			mAttackcount = 0;
 			mAttackTime = 0;
 		}
-		// SPACEキーでジャンプ開始へ移行
-		if (CInput::PushKey(VK_SPACE))
-		{
-			mState = EState::eJumpStart;
-		}
 		if (CInput::PushKey(VK_RBUTTON))
 		{
 			mMoveSpeed.X(0.0f);
@@ -262,9 +265,14 @@ void CPlayer::UpdateIdle()
 				mCharaStatus.SpecialAttack--;
 			}
 		}
+
 		if (CInput::Key('G'))
 		{
 			mState = EState::eGuard;
+		}
+		if (CInput::PushKey('J'))
+		{
+			mState = EState::eJumpStart;
 		}
 	}
 	else
@@ -436,6 +444,7 @@ void CPlayer::UpdateGuard()
 	}
 }
 
+// ガード中のヒット
 void CPlayer::UpdateGuardHit()
 {
 	ChangeAnimation(EAnimType::eGuardHit);
@@ -445,6 +454,17 @@ void CPlayer::UpdateGuardHit()
 		mState = EState::eGuard;
 	}
 	else
+	{
+		mState = EState::eIdle;
+	}
+}
+
+// 回避
+void CPlayer::UpdateRolling()
+{
+	ChangeAnimation(EAnimType::eRolling);
+	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
+	if (IsAnimationFinished())
 	{
 		mState = EState::eIdle;
 	}
@@ -627,6 +647,10 @@ void CPlayer::Update()
 		case EState::eGuardHit:
 			UpdateGuardHit();
 			break;
+		// 回避
+		case EState::eRolling:
+			UpdateRolling();
+			break;
 	}
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
@@ -679,6 +703,7 @@ void CPlayer::Update()
 		CDebugPrint::Print(" R: ステータス確認\n");
 		CDebugPrint::Print(" 2: レベルアップ\n");
 		CDebugPrint::Print(" G: ガード\n");
+		CDebugPrint::Print(" スペース: 回避\n");
 	}
 
 	if (CInput::Key('1'))
