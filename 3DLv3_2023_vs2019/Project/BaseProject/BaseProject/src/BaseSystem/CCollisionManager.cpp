@@ -60,12 +60,13 @@ void CCollisionManager::Collision(CCollider* col0, CCollider* col1)
 	// 両コライダーに持ち主が存在しない場合は、衝突判定を行わない
 	if (col0->Owner() == nullptr && col1->Owner() == nullptr) return;
 	// 同じ持ち主のコライダーであれば、衝突判定を行わない
-	if (col0->Owner() == col1->Owner())
-	{
-		return;
-	}
+	if (col0->Owner() == col1->Owner()) return;
+	// 1つ目のコライダーの持ち主が衝突判定を行わない状態であれば、衝突判定を行わない
+	if (col0->Owner() != nullptr && !col0->Owner()->IsEnableCol()) return;
+	// 2つ目のコライダーの持ち主が衝突判定を行わない状態であれば、衝突判定を行わない
+	if (col1->Owner() != nullptr && !col1->Owner()->IsEnableCol()) return;
 
-	// 衝突判定を行うコライダーでなければ、衝突判定を行わない
+	// 相手のコライダーと衝突判定を行うコライダーでなければ、衝突判定を行わない
 	if (!col0->IsCollision(col1)) return;
 	if (!col1->IsCollision(col0)) return;
 

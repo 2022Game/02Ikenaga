@@ -52,8 +52,13 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// Šù‚ÉUŒ‚Ï‚Ý‚ÌƒLƒƒƒ‰‚Å‚È‚¯‚ê‚Î
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = 0;
-				damage = mpPlayer->mPower;
+			    // —^‚¦‚éƒ_ƒ[ƒW‚ðŒvŽZ
+				int damage = CalcDamage
+				(
+					mOwner->Status().power,
+					chara->Status().defense
+				);
+
 				// ƒ_ƒ[ƒW‚ð—^‚¦‚é
 				chara->TakeDamage(damage,mOwner);
 

@@ -181,7 +181,7 @@ CMatrix CCollider::Matrix() const
 		// その行列に附属する
 		CMatrix sm;
 		sm.Scale(100.0f, 100.0f, 100.0f);
-		m = sm * *mpAttachMtx * m;
+		m = sm * mAttachMtx * m;
 	}
 	// 持ち主が設定されていれば
 	else if (mpOwner != nullptr)
@@ -190,6 +190,17 @@ CMatrix CCollider::Matrix() const
 		m = mpOwner->Matrix() * m;
 	}
 	return m;
+}
+
+// コライダー更新
+void CCollider::Update()
+{
+	// くっつける行列が設定されていれば、
+	if (mpAttachMtx != nullptr)
+	{
+		// くっつける行列をメンバ変数にコピー
+		mAttachMtx = *mpAttachMtx;
+	}
 }
 
 // コライダーの設定

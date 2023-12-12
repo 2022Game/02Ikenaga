@@ -365,6 +365,8 @@ void CSlime2::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	mpAttackCol->Update();
+
 	mIsGrounded = false;
 	//mpHpGauge->SetValue(mCharaStatus2.hp);
 }
@@ -384,8 +386,11 @@ void CSlime2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = 0;
-				damage = mCharaStatus.power;
+				int damage = CalcDamage
+				(
+					mCharaStatus.power,
+					chara->Status().defense
+				);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);

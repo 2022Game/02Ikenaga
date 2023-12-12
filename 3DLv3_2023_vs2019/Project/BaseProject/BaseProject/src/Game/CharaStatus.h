@@ -37,3 +37,6 @@ extern const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX];
 // 敵のレベルごとにステータスのテーブル
 extern const CharaStatus ENEMY_STATUS[ENEMY__LEVEL_MAX];
 extern const CharaStatus ENEMY2_STATUS[ENEMY__LEVEL_MAX];
+
+// ダメージ量を計算して返す
+extern int CalcDamage(int atk, int def);

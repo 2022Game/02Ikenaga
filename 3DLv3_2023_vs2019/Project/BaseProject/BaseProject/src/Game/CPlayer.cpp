@@ -709,6 +709,9 @@ void CPlayer::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	/*mpSword->Update();
+	mpShield->Update();*/
+
 	mIsGrounded = false;
 
 	// プレイヤーのデバック表示

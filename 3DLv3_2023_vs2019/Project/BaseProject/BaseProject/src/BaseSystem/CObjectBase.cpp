@@ -5,6 +5,7 @@
 CObjectBase::CObjectBase(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
 	: CTask(prio, sortOrder, pause)
 	, mTag(tag)
+	, mIsEnableCol(true)
 {
 }
 
@@ -17,6 +18,18 @@ CObjectBase::~CObjectBase()
 ETag CObjectBase::Tag() const
 {
 	return mTag;
+}
+
+// Õ“Ë”»’è‚ğs‚¤‚©İ’è
+void CObjectBase::SetEnableCol(bool isEnable)
+{
+	mIsEnableCol = isEnable;
+}
+
+// Õ“Ë”»’è‚ğs‚¤‚©‚Ç‚¤‚©
+bool CObjectBase::IsEnableCol() const
+{
+	return mIsEnableCol;
 }
 
 // Õ“Ëˆ—

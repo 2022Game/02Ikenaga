@@ -26,6 +26,11 @@ public:
 	// オブジェクトタグを取得
 	ETag Tag() const;
 
+	// 衝突判定を行うか設定
+	void SetEnableCol(bool isEnable);
+	// 衝突判定を行うかどうか
+	bool IsEnableCol() const;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -36,4 +41,5 @@ public:
 
 private:
 	ETag mTag;	//オブジェクト識別用のタグ
+	bool mIsEnableCol;	// 衝突判定を行うかどうか
 };
