@@ -183,6 +183,7 @@ private:
 	CSaGauge* mpSaGauge;  // SAゲージ(スペシャルアタック)
 
 	CVector mDefaultPos;  // デフォルトの座標
+	CVector current;
 
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾

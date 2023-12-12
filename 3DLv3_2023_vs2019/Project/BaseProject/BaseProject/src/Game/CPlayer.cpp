@@ -200,7 +200,7 @@ void CPlayer::UpdateIdle()
 		// SPACEキーで回避
 		if (CInput::PushKey(VK_SPACE))
 		{
-			input.Z(-1.0f);
+			//input.Z(-1.0f);
 			mState = EState::eRolling;
 		}
 
@@ -216,12 +216,14 @@ void CPlayer::UpdateIdle()
 
 			// 歩行アニメーションに切り替え
 			ChangeAnimation(EAnimType::eWalk);
+			mpDamageCol->SetEnable(true);
 		}
 		// 移動キーを入力していない
 		else
 		{
 			// 待機アニメーションに切り替え
 			ChangeAnimation(EAnimType::eIdle);
+			mpDamageCol->SetEnable(true);
 		}
 
 		// 左クリックで攻撃状態へ移行
@@ -279,6 +281,7 @@ void CPlayer::UpdateIdle()
 	{
 		// 待機アニメーションに切り替え
 		ChangeAnimation(EAnimType::eIdle);
+		mpDamageCol->SetEnable(true);
 	}
 }
 
@@ -467,6 +470,10 @@ void CPlayer::UpdateRolling()
 	if (IsAnimationFinished())
 	{
 		mState = EState::eIdle;
+	}
+	else
+	{
+		mpDamageCol->SetEnable(false);
 	}
 }
 
@@ -670,6 +677,16 @@ void CPlayer::Update()
 	target.Normalize();
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
+
+	CDebugPrint::Print("回転 %d\n", current);
+
+	//if (CInput::PushKey(VK_SPACE))
+	//{
+	//	if (target == forward)
+	//	{
+	//		mState = EState::eRolling;
+	//	}
+	//}
 
 	AutomaticRecovery();
 
