@@ -99,8 +99,14 @@ public:
 
 	static int mPower;
 private:
+	// 回避回数を増やす時間
+	int mRollingTime;
+	// 回避回数
+	int mRollingCount;
+	// 攻撃時間
 	int mAttackTime;
-	int mAttackcount;
+	//	攻撃回数
+	int mAttackCount;
 	// 回復までのカウント
 	int healcount;
 	// 特殊攻撃の回数の回復までのカウント

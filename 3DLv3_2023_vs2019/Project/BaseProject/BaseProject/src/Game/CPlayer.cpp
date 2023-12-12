@@ -78,8 +78,10 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
+	,mRollingTime(0)
+	,mRollingCount(3)
 	,mAttackTime(0)
-	,mAttackcount(0)
+	,mAttackCount(0)
 	, healcount(0)
 	, recoverycount(0)
 	, mDefaultPos(CVector::zero)
@@ -197,11 +199,18 @@ void CPlayer::UpdateIdle()
 		if (CInput::Key('A'))		input.X(-1.0f);
 		else if (CInput::Key('D'))	input.X(1.0f);
 
-		// SPACEキーで回避
+			// SPACEキーで回避
 		if (CInput::PushKey(VK_SPACE))
 		{
-			//input.Z(-1.0f);
-			mState = EState::eRolling;
+			mRollingCount--;
+			if (mRollingCount >= 0)
+			{
+				mState = EState::eRolling;
+			}
+			if (mRollingCount <= 0)
+			{
+				mRollingCount = 0;
+			}
 		}
 
 		// 入力ベクトルの長さで入力されているか判定
@@ -229,26 +238,26 @@ void CPlayer::UpdateIdle()
 		// 左クリックで攻撃状態へ移行
 		if (CInput::PushKey(VK_LBUTTON))
 		{
-			mAttackcount++;
+			mAttackCount++;
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 			mState = EState::eAttack;
-			if (mAttackcount == 2)
+			if (mAttackCount == 2)
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack3;
 			}
-			if (mAttackcount == 3)
+			if (mAttackCount == 3)
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack4;
 			}
 		}
-		if (mAttackTime >= 300 ||mAttackcount<=0)
+		if (mAttackTime >= 300 ||mAttackCount <=0)
 		{
-			mAttackcount = 0;
+			mAttackCount = 0;
 			mAttackTime = 0;
 		}
 		if (CInput::PushKey(VK_RBUTTON))
@@ -469,6 +478,7 @@ void CPlayer::UpdateRolling()
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
 	if (IsAnimationFinished())
 	{
+		//mRollingTime--;
 		mState = EState::eIdle;
 	}
 	else
@@ -582,7 +592,7 @@ void CPlayer::Update()
 	mpRideObject = nullptr;
 	mPower = mCharaStatus.power;
 
-	if (mAttackcount >= 1)
+	if (mAttackCount >= 1)
 	{
 		mAttackTime++;
 	}
@@ -678,15 +688,19 @@ void CPlayer::Update()
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
 
-	CDebugPrint::Print("回転 %d\n", current);
+	CDebugPrint::Print("回避回数: %d\n", mRollingCount);
+	CDebugPrint::Print("回避回数を増やす時間: %d\n", mRollingTime);
 
-	//if (CInput::PushKey(VK_SPACE))
-	//{
-	//	if (target == forward)
-	//	{
-	//		mState = EState::eRolling;
-	//	}
-	//}
+	if (mRollingCount < 3)
+	{
+		mRollingTime++;
+	}
+	if (mRollingTime >= 500)
+	{
+		mRollingCount++;
+		mRollingTime = 0;
+	}
+
 
 	AutomaticRecovery();
 
