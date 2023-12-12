@@ -57,6 +57,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 #define DEFAULT_SCALE 10.0f
 
 int CPlayer::mPower;
+int CPlayer::mDefense;
 
 bool CPlayer::IsDeath() const
 {
@@ -591,6 +592,7 @@ void CPlayer::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mPower = mCharaStatus.power;
+	mDefense = mCharaStatus.defense;
 
 	if (mAttackCount >= 1)
 	{
@@ -688,8 +690,8 @@ void CPlayer::Update()
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
 
-	CDebugPrint::Print("‰ñ”ğ‰ñ”: %d\n", mRollingCount);
-	CDebugPrint::Print("‰ñ”ğ‰ñ”‚ğ‘‚â‚·ŠÔ: %d\n", mRollingTime);
+	CDebugPrint::Print(" ‰ñ”ğ‰ñ”: %d\n", mRollingCount);
+	CDebugPrint::Print(" ‰ñ”ğ‰ñ”‚ğ‘‚â‚·ŠÔ: %d\n", mRollingTime);
 
 	if (mRollingCount < 3)
 	{
@@ -723,10 +725,11 @@ void CPlayer::Update()
 		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
 		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
 		CDebugPrint::Print("    HP:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
-		CDebugPrint::Print(" UŒ‚—Í    %d\n",mCharaStatus.power);
-		CDebugPrint::Print(" “ÁêUŒ‚(SA)  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
+		CDebugPrint::Print(" UŒ‚—Í:    %d\n",mCharaStatus.power);
+		CDebugPrint::Print(" “ÁêUŒ‚(SA):  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 		CVector scale = Scale();
 		CDebugPrint::Print(" ƒXƒP[ƒ‹’l %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
+		CDebugPrint::Print(" ‰ñ”ğ‰ñ”: %d\n", mRollingCount);
 	}
 
 	if (debug2)

@@ -98,6 +98,7 @@ public:
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
 	static int mPower;
+	static int mDefense;
 private:
 	// ‰ñ”ğ‰ñ”‚ğ‘‚â‚·ŠÔ
 	int mRollingTime;
