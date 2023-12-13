@@ -2,9 +2,9 @@
 #include "Maths.h"
 
 // 生成する経験値オーブの最小数
-#define SPAWN_EXP_COUNT_MIN 3
+#define SPAWN_EXP_COUNT_MIN 1
 // 生成する経験値オーブの最大数
-#define SPAWN_EXP_COUNT_MAX 4
+#define SPAWN_EXP_COUNT_MAX 2
 
 CExpManeger* CExpManeger::spInstance = nullptr;
 

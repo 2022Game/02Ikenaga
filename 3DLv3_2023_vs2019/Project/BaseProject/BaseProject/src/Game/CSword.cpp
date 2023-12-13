@@ -53,11 +53,7 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			if (!IsAttackHitObj(chara))
 			{
 			    // 与えるダメージを計算
-				int damage = CalcDamage
-				(
-					mOwner->Status().power,
-					chara->Status().defense
-				);
+				int damage = CalcDamage(mOwner, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage,mOwner);

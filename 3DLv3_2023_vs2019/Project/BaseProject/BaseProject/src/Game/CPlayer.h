@@ -32,6 +32,54 @@ public:
 	// デストラクタ
 	~CPlayer();
 
+	// 1レベルアップ
+	void LevelUp();
+	// レベルの変更
+	virtual void ChangeLevel(int level);
+
+	// HP回復と特殊攻撃(SA)回数を自動回復
+	void AutomaticRecovery();
+
+	//回避カウント	
+	void RollingCount();
+
+	// 経験値を加算
+	void AddExp(int exp);
+
+	// 更新
+	void Update();
+
+	/// <summary>
+	/// 衝突処理
+	/// </summary>
+	/// <param name="self">衝突した自身のコライダー</param>
+	/// <param name="other">衝突した相手のコライダー</param>
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	// 描画
+	void Render();
+
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
+
+
+	/// <summary>
+	/// 攻撃力の強化割合を取得
+	/// </summary>
+	/// <returns></returns>
+	float GetAtkBuff() const override;
+
+    /// <summary>
+    /// 防御力の強化割合を取得
+    /// </summary>
+    /// <param name="attackDir"></param>
+    /// <returns></returns>
+    float GetDefBuff(const CVector& attackDir) const override;
+
+private:
 	// 待機状態
 	void UpdateIdle();
 	// 攻撃
@@ -67,39 +115,7 @@ public:
 	// 回避
 	void UpdateRolling();
 
-	// 1レベルアップ
-	void LevelUp();
-	// レベルの変更
-	virtual void ChangeLevel(int level);
 
-	// HP回復と特殊攻撃(SA)回数を自動回復
-	void AutomaticRecovery();
-
-	// 経験値を加算
-	void AddExp(int exp);
-
-	// 更新
-	void Update();
-
-	/// <summary>
-	/// 衝突処理
-	/// </summary>
-	/// <param name="self">衝突した自身のコライダー</param>
-	/// <param name="other">衝突した相手のコライダー</param>
-	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-	// 描画
-	void Render();
-
-	/// <summary>
-	/// 被ダメージ処理
-	/// </summary>
-	/// <param name="damage">受けるダメージ</param>
-	virtual void TakeDamage(int damage, CObjectBase* causedObj);
-
-	static int mPower;
-	static int mDefense;
-private:
 	// 回避回数を増やす時間
 	int mRollingTime;
 	// 回避回数

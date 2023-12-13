@@ -56,9 +56,6 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 //デフォルトのスケール値
 #define DEFAULT_SCALE 10.0f
 
-int CPlayer::mPower;
-int CPlayer::mDefense;
-
 bool CPlayer::IsDeath() const
 {
 	return mCharaStatus.hp <= 0;
@@ -80,7 +77,7 @@ CPlayer::CPlayer()
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	,mRollingTime(0)
-	,mRollingCount(3)
+	,mRollingCount(1)
 	,mAttackTime(0)
 	,mAttackCount(0)
 	, healcount(0)
@@ -195,22 +192,37 @@ void CPlayer::UpdateIdle()
 		// 移動処理
 		// キーの入力ベクトルを取得
 		CVector input;
-		if (CInput::Key('W'))	input.Z(-1.0f);
-		else if (CInput::Key('S'))	input.Z(1.0f);
-		if (CInput::Key('A'))		input.X(-1.0f);
-		else if (CInput::Key('D'))	input.X(1.0f);
-
-			// SPACEキーで回避
-		if (CInput::PushKey(VK_SPACE))
+		if (CInput::Key('W'))
 		{
-			mRollingCount--;
-			if (mRollingCount >= 0)
+			input.Z(-1.0f);
+			// SPACEキーで回避
+			if (CInput::Key(VK_SPACE))
 			{
-				mState = EState::eRolling;
+				RollingCount();
 			}
-			if (mRollingCount <= 0)
+		}
+		else if (CInput::Key('S'))
+		{
+			input.Z(1.0f);
+			if (CInput::Key(VK_SPACE))
 			{
-				mRollingCount = 0;
+				RollingCount();
+			}
+		}
+		if (CInput::Key('A'))
+		{
+			input.X(-1.0f);
+			if (CInput::Key(VK_SPACE))
+			{
+				RollingCount();
+			}
+		}
+		else if (CInput::Key('D'))
+		{
+			input.X(1.0f);
+			if (CInput::Key(VK_SPACE))
+			{
+				RollingCount();
 			}
 		}
 
@@ -477,6 +489,7 @@ void CPlayer::UpdateRolling()
 {
 	ChangeAnimation(EAnimType::eRolling);
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
+	RollingCount();
 	if (IsAnimationFinished())
 	{
 		//mRollingTime--;
@@ -573,6 +586,20 @@ void CPlayer::AutomaticRecovery()
 	}
 }
 
+// 回避カウント
+void CPlayer::RollingCount()
+{
+	mRollingCount--;
+	if (mRollingCount >= 0)
+	{
+		mState = EState::eRolling;
+	}
+	if (mRollingCount <= 0)
+	{
+		mRollingCount = 0;
+	}
+}
+
 // 経験値を加算
 void CPlayer::AddExp(int exp)
 {
@@ -591,8 +618,6 @@ void CPlayer::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-	mPower = mCharaStatus.power;
-	mDefense = mCharaStatus.defense;
 
 	if (mAttackCount >= 1)
 	{
@@ -693,7 +718,7 @@ void CPlayer::Update()
 	CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
 	CDebugPrint::Print(" 回避回数を増やす時間: %d\n", mRollingTime);
 
-	if (mRollingCount < 3)
+	if (mRollingCount < 1)
 	{
 		mRollingTime++;
 	}
@@ -705,6 +730,7 @@ void CPlayer::Update()
 
 
 	AutomaticRecovery();
+	//RollingCount();
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -727,9 +753,10 @@ void CPlayer::Update()
 	{
 		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
 		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
-		CDebugPrint::Print("    HP:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
-		CDebugPrint::Print(" 攻撃力:    %d\n",mCharaStatus.power);
-		CDebugPrint::Print(" 特殊攻撃(SA):  %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
+		CDebugPrint::Print("    Hp:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
+		CDebugPrint::Print(" 攻撃力:    %d\n",mCharaStatus.power/2);
+		CDebugPrint::Print(" 防御力:    %d\n", mCharaStatus.defense);
+		CDebugPrint::Print("    SA:    %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 		CVector scale = Scale();
 		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 		CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
@@ -737,10 +764,10 @@ void CPlayer::Update()
 
 	if (debug2)
 	{
-		CDebugPrint::Print(" R: ステータス確認\n");
+		CDebugPrint::Print(" R: ステータス表示\n");
 		CDebugPrint::Print(" 2: レベルアップ\n");
 		CDebugPrint::Print(" G: ガード\n");
-		CDebugPrint::Print(" スペース: 回避\n");
+		CDebugPrint::Print(" WASD+スペース: 回避\n");
 	}
 
 	if (CInput::Key('1'))
@@ -833,4 +860,26 @@ void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 
 	// 攻撃も中止
 	mpSword->AttackEnd();
+}
+
+
+float CPlayer::GetAtkBuff()const
+{
+	return mBaseAttackBuffRatio;
+}
+
+float CPlayer::GetDefBuff(const CVector& attackDir)const
+{
+	// ガード状態であれば、防御2倍
+	if (mState == EState::eGuard)
+	{
+		float dot = CVector::Dot(attackDir.Normalized(),VectorZ());
+		if (dot >= cosf(Math::DegreeToRadian(30.0f)))
+		{
+			return 2.0f;
+		}
+	}
+
+	// 通常時の防御の割合
+	return mBaseDefenseBuffRatio;
 }

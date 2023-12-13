@@ -494,11 +494,7 @@ void CSlime::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// Šù‚ÉUŒ‚Ï‚Ý‚ÌƒLƒƒƒ‰‚Å‚È‚¯‚ê‚Î
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage
-				(
-					mCharaStatus.power,
-					chara->Status().defense
-				);
+				int damage = CalcDamage(this,chara);
 
 				// ƒ_ƒ[ƒW‚ð—^‚¦‚é
 				chara->TakeDamage(damage, this);

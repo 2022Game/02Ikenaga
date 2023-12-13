@@ -30,7 +30,22 @@ public:
 	/// <returns></returns>
 	const CharaStatus& Status() const;
 
+	virtual float GetAtkBuff()const;
+
+	virtual float GetDefBuff(const CVector&attackDir)const;
+
 protected:
 	CharaStatus mCharaMaxStatus;  //最大ステータス
 	CharaStatus mCharaStatus;  //現在のステータス
+
+	float mBaseAttackBuffRatio;  // 攻撃力の強化割合 (1.0で等値)
+	float mBaseDefenseBuffRatio; // 防御力の強化割合 (1.0で等値)
 };
+
+/// <summary>
+/// ダメージ量を算出
+/// </summary>
+/// <param name="attaker">攻撃側のキャラ</param>
+/// <param name="defender">防御力のキャラ</param>
+/// <returns>ダメージ量</returns>
+extern int CalcDamage(const CCharaBase* attaker, const CCharaBase* defender);
