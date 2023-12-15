@@ -3,7 +3,7 @@
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
-class CHpGauge;
+class CHpGauge2;
 class CPlayer;
 #include <algorithm>
 #include "CEnemy.h"
@@ -155,5 +155,5 @@ private:
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;
 
-	CHpGauge* mpHpGauge;  // HPゲージ
+	CHpGauge2* mpHpGauge;  // HPゲージ
 };

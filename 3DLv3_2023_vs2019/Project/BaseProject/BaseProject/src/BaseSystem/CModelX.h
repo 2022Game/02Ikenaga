@@ -5,6 +5,7 @@
 #include "CVector.h"	//Vectorクラスのインクルード
 #include "CMyShader.h"	//シェーダークラスのインクルード
 #include "CResource.h"
+#include "CColor.h"
 
 class CModelX;			//CModelクラスの宣言
 class CModelXFrame;		//CModelXFrameクラスの宣言
@@ -56,6 +57,8 @@ private:
 	std::string mFilePath;	//モデルデータのファイルパス
 	std::string mDirPath;	//モデルデータのディレクトリパス
 
+	CColor mColor;		//モデルのカラー
+
 public:
 	//マテリアル配列の取得
 	std::vector<CMaterial*>& Material();
@@ -97,6 +100,15 @@ public:
 	//ノードの読み飛ばし
 	void SkipNode();
 
+	// カラーを設定
+	void SetColor(const CColor& color);
+	// カラーを取得
+	const CColor& GetColor() const;
+	// アルファ値設定
+	void SetAlpha(float alpha);
+	// アルファ値取得
+	float GetAlpha() const;
+
 	//描画処理
 	void Render();
 };
@@ -129,7 +141,7 @@ public:
 	//合成行列の作成
 	void AnimateCombined(const CMatrix* parent);
 	//描画処理
-	void Render();
+	void Render(const CColor& color);
 };
 
 //Meshクラスの定義
@@ -174,7 +186,7 @@ public:
 	//読み込み処理
 	void Init(CModelX* model, bool dontDelete);
 	//描画処理
-	void Render();
+	void Render(const CColor& color);
 };
 
 /*

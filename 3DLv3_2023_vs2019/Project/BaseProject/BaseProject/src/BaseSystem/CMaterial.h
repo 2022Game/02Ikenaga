@@ -3,6 +3,7 @@
 #include "CTexture.h"
 #include "CModelX.h"
 #define MATERIAL_NAME_LEN 64 //名前の長さ
+#include "CColor.h"
 
 class CMyShader;
 /*
@@ -39,7 +40,7 @@ public:
 	CMaterial(CModelX* model, bool dontDelete);
 	~CMaterial();
 	//マテリアルを有効にする
-	void Enabled();
+	void Enabled(const CColor& color, bool isModelX = false);
 	//マテリアルの名前の取得
 	char* Name();
 	//マテリアルの名前を設定する

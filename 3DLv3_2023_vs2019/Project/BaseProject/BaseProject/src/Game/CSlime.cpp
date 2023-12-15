@@ -2,7 +2,7 @@
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
-#include "CHpGauge.h"
+#include "CHpGauge2.h"
 #include "Maths.h"
 #include "CExp.h"
 #include "CPlayer.h"
@@ -55,6 +55,11 @@ CSlime::CSlime()
 {
 	//インスタンスの設定
 	spInstance = this;
+
+	// HPゲージを作成
+	mpHpGauge = new CHpGauge2();
+	mpHpGauge->Position(0.0f,3.0f,0.0f);
+	mpHpGauge->Scale(100.0f, 100.0f, 100.0f);
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Slime");

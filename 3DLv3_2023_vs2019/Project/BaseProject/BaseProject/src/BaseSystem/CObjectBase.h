@@ -3,6 +3,7 @@
 #include "CTransform.h"
 #include "ObjectTag.h"
 #include "CCollider.h"
+#include "CColor.h"
 
 /// <summary>
 /// 3D空間に配置するオブジェクトのベースクラス
@@ -31,6 +32,15 @@ public:
 	// 衝突判定を行うかどうか
 	bool IsEnableCol() const;
 
+	// カラーを設定
+	void SetColor(const CColor& color);
+	// カラーを取得
+	const CColor& GetColor() const;
+	// アルファ値設定
+	void SetAlpha(float alpha);
+	// アルファ値取得
+	float GetAlpha() const;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -42,4 +52,6 @@ public:
 private:
 	ETag mTag;	//オブジェクト識別用のタグ
 	bool mIsEnableCol;	// 衝突判定を行うかどうか
+protected:
+	CColor mColor;	//オブジェクトの色
 };

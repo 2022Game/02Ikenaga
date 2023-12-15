@@ -58,7 +58,7 @@ void CBillBoard::Render(CMaterial* mpMaterial)
 	//描画色の設定
 	glColor4fv(mpMaterial->Diffuse());
 	//マテリアル適用
-	mpMaterial->Enabled();
+	mpMaterial->Enabled(CColor::white);
 	//三角形の描画
 	mT[0].Render();
 	mT[1].Render();

@@ -12,7 +12,7 @@ class CModel;
 class CMyShader : public CShader {
 private:
 	//ƒ}ƒeƒŠƒAƒ‹‚Ìİ’è
-	void SetShader(CMaterial* material);
+	void SetShader(CModelX* model, CMaterial* material);
 	//•`‰æˆ—
 	void Render(CModelX* model, CMesh* mesh, CMatrix* pCombinedMatrix);
 public:

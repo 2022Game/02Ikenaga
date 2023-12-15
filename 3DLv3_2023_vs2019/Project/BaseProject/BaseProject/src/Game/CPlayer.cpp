@@ -740,6 +740,15 @@ void CPlayer::Update()
 
 	mIsGrounded = false;
 
+	if (mState == EState::eHit)
+	{
+		SetColor(CColor(1.0f, 0.0f, 0.0f, 1.0f));
+	}
+	else
+	{
+		SetColor(CColor(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+
 	// プレイヤーのデバック表示
 	static bool debug = false;
 	static bool debug2 = true;

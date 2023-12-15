@@ -6,6 +6,7 @@
 #include "glut.h"
 #include "CMaterial.h"
 #include "CVertex.h"
+#include "Maths.h"
 
 /*
 IsDelimiter(c)
@@ -99,6 +100,7 @@ CModelX::CModelX()
 	, mLoaded(false)
 	, mFilePath("")
 	, mDirPath("")
+	, mColor(CColor::white)
 {
 	//mTokenを初期化
 	memset(mToken, 0, sizeof(mToken));
@@ -423,6 +425,30 @@ void CModelX::SkipNode()
 	}
 }
 
+// カラーを設定
+void CModelX::SetColor(const CColor& color)
+{
+	mColor = color;
+}
+
+// カラーを取得
+const CColor& CModelX::GetColor() const
+{
+	return mColor;
+}
+
+// アルファ値設定
+void CModelX::SetAlpha(float alpha)
+{
+	mColor.A(Math::Clamp01(alpha));
+}
+
+// アルファ値取得
+float CModelX::GetAlpha() const
+{
+	return mColor.A();
+}
+
 bool CModelX::Load(std::string path, bool dontDelete)
 {
 	//ファイルサイズを取得する
@@ -544,7 +570,7 @@ void CModelX::Render()
 {
 	for (size_t i = 0; i < mFrame.size(); i++)
 	{
-		mFrame[i]->Render();
+		mFrame[i]->Render(mColor);
 	}
 }
 
@@ -698,10 +724,10 @@ void CModelXFrame::AnimateCombined(const CMatrix* parent)
 Render
 メッシュが存在すれば描画する
 */
-void CModelXFrame::Render()
+void CModelXFrame::Render(const CColor& color)
 {
 	if (mpMesh != nullptr)
-		mpMesh->Render();
+		mpMesh->Render(color);
 }
 
 //コンストラクタ
@@ -1067,7 +1093,7 @@ void CMesh::Init(CModelX* model, bool dontDelete)
 Render
 画面に描画する
 */
-void CMesh::Render()
+void CMesh::Render(const CColor& color)
 {
 	/*頂点データ,法線データの配列を有効にする*/
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -1084,7 +1110,7 @@ void CMesh::Render()
 	for (int i = 0; i < mFaceNum; i++)
 	{
 		//マテリアルを適用する
-		mMaterial[mpMaterialIndex[i]]->Enabled();
+		mMaterial[mpMaterialIndex[i]]->Enabled(color, true);
 		/*頂点のインデックスの場所を指定して図形を描画する*/
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (mpVertexIndex + i * 3));
 		mMaterial[mpMaterialIndex[i]]->Disabled();

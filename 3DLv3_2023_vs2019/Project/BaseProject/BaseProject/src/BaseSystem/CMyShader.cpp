@@ -83,7 +83,7 @@ void CMyShader::Render(CModelX* model, CMesh* mesh, CMatrix* pCombinedMatrix) {
 
 	for (size_t i = 0; i < mesh->mMaterial.size(); i++) {
 		//マテリアルの値をシェーダーに設定
-		SetShader(mesh->mMaterial[i]);
+		SetShader(model, mesh->mMaterial[i]);
 		//三角形描画、開始頂点番号、描画に使用する頂点数
 		glDrawArrays(GL_TRIANGLES, k, mesh->mMaterialVertexCount[i]);	//DrawArrays:VertexIndexなし
 		//開始位置計算
@@ -106,7 +106,8 @@ void CMyShader::Render(CModelX* model, CMesh* mesh, CMatrix* pCombinedMatrix) {
 /*
 マテリアルの値をシェーダーに設定する
 */
-void CMyShader::SetShader(CMaterial* material) {
+void CMyShader::SetShader(CModelX* model, CMaterial* material) {
+
 	//	float mColorRGBA[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	int AmbientId = glGetUniformLocation(GetProgram(), "Ambient");  //カラー設定
 	glUniform4fv(AmbientId, 1, (GLfloat*)material->mDiffuse);
@@ -128,9 +129,9 @@ void CMyShader::SetShader(CMaterial* material) {
 	GLint samplerId = glGetUniformLocation(GetProgram(), "Sampler");
 	GLint textureFlg = glGetUniformLocation(GetProgram(), "TextureFlg");
 	//if (material->mTextureId > 0) {
+	material->Enabled(model->GetColor(), true);
 	if (material->mpTexture != nullptr && material->mpTexture->Id()) {
 		//テクスチャあり
-		material->Enabled();
 		glUniform1i(samplerId, 0);//GL_TEXTURE0を適用
 		glUniform1i(textureFlg, 0);//GL_TEXTURE0を適用
 	}

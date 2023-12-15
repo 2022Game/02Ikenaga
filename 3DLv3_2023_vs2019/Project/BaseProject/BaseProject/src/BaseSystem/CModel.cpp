@@ -3,6 +3,7 @@
 //#include <string.h>
 //CVectorのインクルード
 #include "CVector.h"
+#include "Maths.h"
 
 ////文字列s1と文字列s2の比較
 ////s1とs2が等しければ0を
@@ -289,12 +290,18 @@ void CModel::Render()
 	//可変長配列の要素数だけ繰り返し
 	for (int i = 0; i < mTriangles.size(); i++) {
 		//マテリアルの適用
-		mpMaterials[mTriangles[i].MaterialIdx()]->Enabled();
+		mpMaterials[mTriangles[i].MaterialIdx()]->Enabled(mColor);
 		//可変長配列に添え字でアクセスする
 		mTriangles[i].Render();
 		//マテリアルを無効
 		mpMaterials[mTriangles[i].MaterialIdx()]->Disabled();
 	}
+}
+
+CModel::CModel()
+	: mpVertexes(nullptr)
+	, mColor(CColor::white)
+{
 }
 
 CModel::~CModel()
@@ -304,6 +311,30 @@ CModel::~CModel()
 		delete mpMaterials[i];
 	}
 	delete[] mpVertexes;
+}
+
+// カラーを設定
+void CModel::SetColor(const CColor& color)
+{
+	mColor = color;
+}
+
+// カラーを取得
+const CColor& CModel::GetColor() const
+{
+	return mColor;
+}
+
+// アルファ値設定
+void CModel::SetAlpha(float alpha)
+{
+	mColor.A(Math::Clamp01(alpha));
+}
+
+// アルファ値取得
+float CModel::GetAlpha() const
+{
+	return mColor.A();
 }
 
 //描画
@@ -329,7 +360,7 @@ void CModel::Render(const CMatrix& m)
 	//マテリアル毎に描画する
 	for (size_t i = 0; i < mpMaterials.size(); i++) {
 		//マテリアルを適用する
-		mpMaterials[i]->Enabled();
+		mpMaterials[i]->Enabled(mColor);
 		//描画位置からのデータで三角形を描画します
 		glDrawArrays(GL_TRIANGLES, first, mpMaterials[i]->VertexNum());
 		//マテリアルを無効にする

@@ -129,6 +129,7 @@ Render
 */
 void CXCharacter::Render()
 {
+	mpModel->SetColor(mColor);
 	mpModel->RenderShader(mpCombinedMatrix);
 }
 

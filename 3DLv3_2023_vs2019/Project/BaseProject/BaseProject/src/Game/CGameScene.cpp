@@ -7,7 +7,6 @@
 #include "CCamera.h"
 #include "CSlime.h"
 #include "CSlime2.h"
-#include "CHpGauge.h"
 #include "CEnemy2.h"
 #include "CRich.h"
 #include "CPortionRed.h"

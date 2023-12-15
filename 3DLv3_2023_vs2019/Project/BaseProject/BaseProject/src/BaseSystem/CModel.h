@@ -6,6 +6,7 @@
 #include "CMaterial.h"
 #include "CVertex.h"
 #include "CResource.h"
+#include "CColor.h"
 
 /*
 モデルクラス
@@ -17,12 +18,23 @@ class CModel : public CResource
 
 public:
 	std::vector<CTriangle> Triangles() const;
+
+	// カラーを設定
+	void SetColor(const CColor& color);
+	// カラーを取得
+	const CColor& GetColor() const;
+	// アルファ値設定
+	void SetAlpha(float alpha);
+	// アルファ値取得
+	float GetAlpha() const;
+
 	//描画
 	void Render();
 	//描画
 	//Render(行列)
 	void Render(const CMatrix& m);
 private:
+	CModel();
 	~CModel();
 	//モデル読み込み
 	bool Load(std::string path, bool dontDelete) override;
@@ -36,6 +48,8 @@ private:
 	std::vector<CTriangle> mTriangles;
 	//頂点の配列
 	CVertex* mpVertexes;
+	//モデルのカラー
+	CColor mColor;
 };
 
 #include "CVertex.h"

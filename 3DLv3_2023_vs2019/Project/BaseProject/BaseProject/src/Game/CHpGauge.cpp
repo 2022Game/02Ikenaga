@@ -53,7 +53,7 @@ void CHpGauge::SetValue(int value)
 //更新
 void CHpGauge::Update()
 {
-	//ゲージのフレームｔｐバーの位置を設定
+	//ゲージのフレームバーの位置を設定
 	mpFrameImage->SetPos(mPosition);
 	mpBarImage->SetPos(mPosition + CVector2(FRAME_BORDER, FRAME_BORDER));
 
