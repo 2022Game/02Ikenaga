@@ -30,7 +30,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // UŒ‚2
 	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // UŒ‚3
 	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // UŒ‚4
-	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // UŒ‚5
+	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // UŒ‚5 101.0f
 	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // UŒ‚6
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // UŒ‚—ÍƒAƒbƒv
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ƒqƒbƒg 43.0f
@@ -259,7 +259,7 @@ void CPlayer::UpdateIdle()
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
-				mState = EState::eAttack3;
+				mState = EState::eAttack5;
 			}
 			if (mAttackCount == 3)
 			{

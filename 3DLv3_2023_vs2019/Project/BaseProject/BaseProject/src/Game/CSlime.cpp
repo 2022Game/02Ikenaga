@@ -6,6 +6,7 @@
 #include "Maths.h"
 #include "CExp.h"
 #include "CPlayer.h"
+#include "CCamera.h"
 
 // レッドスライム(エネミー)のインスタンス
 CSlime* CSlime::spInstance = nullptr;
@@ -56,10 +57,12 @@ CSlime::CSlime()
 	//インスタンスの設定
 	spInstance = this;
 
+	//CCamera* camera = CCamera::CurrentCamera();
+	//CVector gaugePos = Position() + CVector(0.0f, 40.0f, 40.0f);
 	// HPゲージを作成
 	mpHpGauge = new CHpGauge2();
-	mpHpGauge->Position(0.0f,3.0f,0.0f);
-	mpHpGauge->Scale(100.0f, 100.0f, 100.0f);
+	//mpHpGauge->SetPos(gaugePos);
+	//mpHpGauge->Scale(60.0f, 50.0f, 0.0f);
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Slime");
@@ -358,28 +361,7 @@ void CSlime::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
-
-	CPlayer* player = CPlayer::Instance();
-	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
-	{
-		float vectorp = (player->Position() - Position()).Length();
-		if (vectorp <= ROTATE_RANGE)
-		{
-			// プレイヤーのいる方向へ向く
-			CVector dir = player->Position() - Position();
-			dir.Y(0.0f);
-			dir.Normalize();
-			Rotation(CQuaternion::LookRotation(dir));
-		}
-	}
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
-	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
-		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
-	}
 	
-	CDebugPrint::Print(" 距離 %f", vectorp);
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
@@ -427,6 +409,12 @@ void CSlime::Update()
 		break;
 	}
 
+	CCamera* camera = CCamera::CurrentCamera();
+	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 40.0f);
+	mpHpGauge->SetPos(gaugePos);
+	//CVector gaugeP = camera->WorldToScreenPos(gaugePos);
+	//mpHpGauge->SetPos(gaugeP.X(),gaugeP.Y());
+
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
@@ -463,6 +451,31 @@ void CSlime::Update()
 			mAttackTime = 0;
 		}
 	}
+	else
+	{
+		//mpHpGauge->SetPos(-1000.0f, -1000.0f);
+	}
+
+	CPlayer* player = CPlayer::Instance();
+	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
+	{
+		float vectorp = (player->Position() - Position()).Length();
+		if (vectorp <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
+	}
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	{
+		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	}
+	CDebugPrint::Print(" 距離 %f", vectorp);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -482,6 +495,9 @@ void CSlime::Update()
 		CDebugPrint::Print(" HP %d/%d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
 		CDebugPrint::Print(" 攻撃時間計測 :%d", mAttackTime);
 	}
+
+	// HPゲージに現在のHPを設定
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -571,6 +587,9 @@ void CSlime::ChangeLevel(int level)
 	mCharaMaxStatus = ENEMY_STATUS[index];
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
+
+	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

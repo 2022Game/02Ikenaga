@@ -1,20 +1,19 @@
 #pragma once
-#include "CObjectBase.h"
-#include "CColliderSphere.h"
-#include "CBillBoardImage.h"
-class CImage;
+#include "CUIBase.h"
+class CBillBoardImage;
 
 /*
 敵のHPクラス
 オブジェクトベース継承
 */
-class CHpGauge2 : public CBillBoardImage
+class CHpGauge2 : public CUIBase
 {
 private:
-	CImage* mpFrameImage;  //ゲージのフレームのイメージ
-	CImage* mpBarImage;    //ゲージのバーのイメージ	
+	CBillBoardImage* mpBarImage;    //ゲージのバーのイメージ	
+	CBillBoardImage* mpFrameImage;  //ゲージのフレームのイメージ
 	int mMaxValue;         //ポイントの最大値
 	int mValue;            //ポイン
+	CVector mMoveSpeed;  //移動速度
 
 public:
 	CHpGauge2();
@@ -28,6 +27,5 @@ public:
 	//現在値を設定
 	void SetValue(int value);
 
-
-	void Update() override;
+	void Update()override;
 };

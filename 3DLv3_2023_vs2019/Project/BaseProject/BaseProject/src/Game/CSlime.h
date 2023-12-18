@@ -148,6 +148,7 @@ private:
 	bool mIsGrounded;	// Ú’n‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 
 	CPlayer* mpPlayer;
+	CSlime* mpEnemy;
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;

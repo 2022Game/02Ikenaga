@@ -13,7 +13,6 @@ private:
 	int mMaxValue;         //ポイントの最大値
 	int mValue;            //ポイントの現在値
 
-
 public:
 	//コンストラクタ
 	CHpGauge();
