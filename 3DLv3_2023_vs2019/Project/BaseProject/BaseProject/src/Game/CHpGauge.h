@@ -1,5 +1,6 @@
 #pragma once
 #include "CUIBase.h"
+#include "CVector.h"
 class CImage;
 
 /*
@@ -8,22 +9,34 @@ HPゲージ
 class CHpGauge : public CUIBase
 {
 private:
-	CImage* mpFrameImage;  //ゲージのフレームのイメージ
-	CImage* mpBarImage;    //ゲージのバーのイメージ	
-	int mMaxValue;         //ポイントの最大値
-	int mValue;            //ポイントの現在値
+	CImage* mpFrameImage;  // ゲージのフレームのイメージ
+	CImage* mpBarImage;    // ゲージのバーのイメージ	
+	int mMaxValue;         // ポイントの最大値
+	int mValue;            // ポイントの現在値
+	CVector2 mCenterRatio; // 中心位置の割合
+	float mScale;          // HPゲージのスケール値
+	bool mIsShow;          // HPゲージを表示するかどうか
 
 public:
-	//コンストラクタ
+	// コンストラクタ
 	CHpGauge();
-	//デストラクタ
+	// デストラクタ
 	~CHpGauge();
 
-	//最大値を設定
+	// HPゲージを削除
+	void Kill()override;
+
+	// 最大値を設定
 	void SetMaxValue(int value);
-	//現在値を設定
+	// 現在値を設定
 	void SetValue(int value);
 
-	//更新
+	// 中心位置のの割合の設定
+	void SetCenterRatio(const CVector2& ratio);
+
+	// ワールド座標を設定
+	void SetWorldPos(const CVector& worldPos);
+
+	// 更新
 	void Update();
 };

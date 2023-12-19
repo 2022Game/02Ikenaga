@@ -57,12 +57,10 @@ CSlime::CSlime()
 	//インスタンスの設定
 	spInstance = this;
 
-	//CCamera* camera = CCamera::CurrentCamera();
-	//CVector gaugePos = Position() + CVector(0.0f, 40.0f, 40.0f);
 	// HPゲージを作成
 	mpHpGauge = new CHpGauge();
-	//mpHpGauge->SetPos(gaugePos);
-	//mpHpGauge->Scale(60.0f, 50.0f, 0.0f);
+	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
+	//mpHpGauge->SetSize(0.0f, 0.0f);
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Slime");
@@ -139,6 +137,9 @@ CSlime::~CSlime()
 	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
+
+	// HPゲージを削除
+	mpHpGauge->Kill();
 }
 
 CSlime* CSlime::Instance()
@@ -409,10 +410,9 @@ void CSlime::Update()
 		break;
 	}
 
-	CCamera* camera = CCamera::CurrentCamera();
+	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
-	CVector gaugeP = camera->WorldToScreenPos(gaugePos);
-	mpHpGauge->SetPos(gaugeP.X(),gaugeP.Y());
+	mpHpGauge->SetWorldPos(gaugePos);
 
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
