@@ -4,7 +4,7 @@
 #include "Maths.h"
 
 // ゲージのフレーム画像のファイルパス
-//#define FRAME_IMAGE "Character\\Player\\HP\\Frame.png"  //HPフレーム画像
+#define FRAME_IMAGE "Character\\Player\\HP\\Frame.png"  //HPフレーム画像
 // ゲージのバー画像のファイルパス
 #define BAR_IMAGE "UI\\white.png"
 

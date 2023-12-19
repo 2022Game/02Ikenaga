@@ -79,7 +79,7 @@ void CUIBase::SetAlpha(const float& alpha)
 }
 
 //アルファ値を取得
-const float& CUIBase::GetAlpha() const
+float CUIBase::GetAlpha() const
 {
 	return mColor.A();
 }

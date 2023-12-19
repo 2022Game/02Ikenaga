@@ -191,6 +191,11 @@ public:
 	/// </summary>
 	/// <param name="parent">İ’è‚·‚ée‚ÌCTransform</param>
 	void SetParent(CTransform* parent);
+	/// <summary>
+	/// e‚ğæ“¾
+	/// </summary>
+	/// <returns>İ’è‚³‚ê‚Ä‚¢‚ée</returns>
+	const CTransform* GetParent() const;
 
 private:
 	/// <summary>

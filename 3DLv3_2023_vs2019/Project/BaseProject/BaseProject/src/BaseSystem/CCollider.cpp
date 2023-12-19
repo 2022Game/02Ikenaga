@@ -269,6 +269,9 @@ bool CCollider::CollisionTriangleLine(
 		return false;
 	}
 
+	//ヒット情報に交点を設定
+	h->cross = cross;
+
 	//調整値計算（衝突しない位置まで戻す）
 	if (dots < 0.0f) {
 		//始点が裏面
@@ -395,6 +398,14 @@ bool CCollider::CollisionSphereLine(const CVector& sp, const float sr,
 	{
 		CVector n = (sp - nearest).Normalized() * (isLeftMain ? 1.0f : -1.0f);
 		hit->adjust = n * (sr - length);
+
+		CVector v = (le - ls).Normalized();
+		CVector p = (sp - ls).Normalized();
+		float a = CVector::Dot(v, v);
+		float b = CVector::Dot(v, p);
+		float c = CVector::Dot(p, p) - sr * sr;
+		if (a != 0.0f) hit->cross = ls + v * ((b - sqrtf(b * b - a * c)) / a);
+		else hit->cross = CVector::zero;
 		return true;
 	}
 
@@ -408,9 +419,12 @@ bool CCollider::CollisionLine(const CVector& ls0, const CVector& le0,
 	//TODO:調整値の対応
 	hit->adjust = CVector(0.0f, 0.0f, 0.0f);
 
+	CVector V0 = le0 - ls0;
+	CVector V1 = le1 - ls1;
+
 	CVector S1E1 = le0 - ls0;
 	CVector S2E2 = le1 - ls1;
-	CVector CD = CVector::Cross(le0 - ls0, le1 - ls1).Normalized();
+	CVector CD = CVector::Cross(V0, V1).Normalized();
 
 	CVector S1S2 = ls1 - ls0;
 	CVector S1E2 = le1 - ls0;
@@ -447,17 +461,43 @@ bool CCollider::CollisionMeshLine(const std::list<STVertex>& tris,
 	CHitInfo* hit, bool isLeftMain)
 {
 	bool ret = false;
-	CVector adjust;
+	CVector adjust = CVector::zero;
+	CVector cross = CVector::zero;
+	float nearDist = 0.0f;
+	bool isFirst = true;
 	for (auto& v : tris)
 	{
 		if (CollisionTriangleLine(v.V[0], v.V[1], v.V[2], ls, le, hit, isLeftMain))
 		{
 			hit->tris.push_back(v);
-			adjust = hit->adjust;
+
+			CVector adj = hit->adjust;
+			adjust.X(abs(adjust.X()) > abs(adj.X()) ? adjust.X() : adj.X());
+			adjust.Y(abs(adjust.Y()) > abs(adj.Y()) ? adjust.Y() : adj.Y());
+			adjust.Z(abs(adjust.Z()) > abs(adj.Z()) ? adjust.Z() : adj.Z());
+
+			if (isFirst)
+			{
+				cross = hit->cross;
+				nearDist = (cross - ls).Length();
+				isFirst = false;
+			}
+			else
+			{
+				float dist = (hit->cross - ls).Length();
+				if (dist < nearDist)
+				{
+					cross = hit->cross;
+					nearDist = dist;
+				}
+			}
+
 			ret = true;
 		}
 	}
 	hit->adjust = adjust;
+	hit->cross = cross;
+	hit->dist = nearDist;
 	return ret;
 }
 
@@ -689,6 +729,57 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 		break;
 	}
 	}
+	return false;
+}
+
+// レイとコライダーの衝突判定
+bool CCollider::CollisionRay(CCollider* c, const CVector& start, const CVector& end, CHitInfo* hit)
+{
+	// コライダーがnullならば、衝突していない
+	if (c == nullptr) return false;
+	// レイの長さが0ならば、衝突していない
+	CVector v = end - start;
+	if (v.LengthSqr() == 0.0f) return false;
+
+	// コライダーの種類によって衝突判定を切り替える
+	switch(c->Type())
+	{
+		// 線コライダーとの衝突
+		case EColliderType::eLine:
+		{
+			CColliderLine* line = dynamic_cast<CColliderLine*>(c);
+			CVector ls, le;
+			line->Get(&ls, &le);
+			return CollisionLine(start, end, ls, le, hit);
+		}
+		// 球コライダーとの衝突
+		case EColliderType::eSphere:
+		{
+			CColliderSphere* sphere = dynamic_cast<CColliderSphere*>(c);
+			CVector sp;
+			float sr;
+			sphere->Get(&sp, &sr);
+			return CollisionSphereLine(sp, sr, start, end, hit, false);
+		}
+		// 三角形コライダーとの衝突
+		case EColliderType::eTriangle:
+		{
+			CColliderTriangle* triangle = dynamic_cast<CColliderTriangle*>(c);
+			CVector t0, t1, t2;
+			triangle->Get(&t0, &t1, &t2);
+			return CollisionTriangleLine(t0, t1, t2, start, end, hit, false);
+		}
+		// メッシュコライダーとの衝突
+		case EColliderType::eMesh:
+		{
+			CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c);
+			std::list<STVertex> tris;
+			mesh->Get(&tris);
+			return CollisionMeshLine(tris, start, end, hit, false);
+		}
+	}
+
+	// それ以外は失敗
 	return false;
 }
 

@@ -11,12 +11,15 @@ class CColliderLine;
 class CColliderSphere;
 class CColliderTriangle;
 
+// ヒット情報
 class CHitInfo
 {
 public:
-	CVector adjust;
-	float weight;
-	std::list<STVertex> tris;
+	CVector adjust;	// 押し戻しベクトル
+	float weight;	// 押し戻し割合
+	CVector cross;	// 衝突位置
+	float dist;		// 衝突位置までの距離
+	std::list<STVertex> tris;	// 衝突している三角形リスト
 };
 
 /// <summary>
@@ -289,6 +292,16 @@ public:
 	/// <param name="hit">ヒットした時の情報</param>
 	/// <returns>trueならば、衝突している</returns>
 	static bool Collision(CCollider* c0, CCollider* c1, CHitInfo* hit);
+
+	/// <summary>
+	/// レイとコライダーの衝突判定
+	/// </summary>
+	/// <param name="c">コライダー</param>
+	/// <param name="start">レイの開始位置</param>
+	/// <param name="end">レイの終了位置</param>
+	/// <param name="hit">ヒットした時の情報</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionRay(CCollider* c, const CVector& start, const CVector& end, CHitInfo* hit);
 
 	/// <summary>
 	/// 衝突時の押し戻し割合を算出

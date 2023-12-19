@@ -17,6 +17,7 @@ CCamera::CCamera(const CVector& eye, const CVector& center, bool isMainCamera)
 	, mZNear(CAMERA_ZNEAR)
 	, mZFar(CAMERA_ZFAR)
 {
+	mTargetEye = eye;
 	LookAt(eye, center, CVector::up);
 	Reshape(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -117,6 +118,7 @@ void CCamera::CopyCamera(CCamera* copy)
 	mFovy = copy->mFovy;
 	mZNear = copy->mZNear;
 	mZFar = copy->mZFar;
+	mTargetEye = copy->mTargetEye;
 	mEye = copy->mEye;
 	mAt = copy->mAt;
 	mUp = copy->mUp;
@@ -128,7 +130,7 @@ void CCamera::SetFollowTargetTf(CTransform* target)
 	mFollowTargetTf = target;
 	if (mFollowTargetTf != nullptr)
 	{
-		mFollowOffsetPos = Position() - mFollowTargetTf->Position();
+		mFollowOffsetPos = mTargetEye - mFollowTargetTf->Position();
 	}
 }
 
@@ -173,7 +175,7 @@ void CCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up)
 
 	if (mFollowTargetTf != nullptr)
 	{
-		mFollowOffsetPos = Position() - mFollowTargetTf->Position();
+		mFollowOffsetPos = mTargetEye - mFollowTargetTf->Position();
 	}
 }
 
@@ -281,6 +283,53 @@ const CMatrix& CCamera::GetViewportMatrix() const
 	return mViewportMatrix;
 }
 
+// 衝突判定を行うコライダーをリストに追加
+void CCamera::AddCollider(CCollider* col)
+{
+	mColliders.push_back(col);
+}
+
+// 衝突判定を行うコライダーをリストから取り除く
+void CCamera::RemoveCollider(CCollider* col)
+{
+	mColliders.remove(col);
+}
+
+// 設定されているコライダーとの衝突結果を反映する
+void CCamera::ApplyCollision()
+{
+	// 注視点から視点までレイを飛ばして、
+	// 間に障害物があれば、視点を障害物より手前にズラす
+	CHitInfo hit;
+	CVector rayStart = mAt;
+	CVector rayEnd = mEye;
+	float nearDist = 0.0f;
+	bool isHit = false;
+	// 設定されているコライダーを順番に調べる
+	for (CCollider* c : mColliders)
+	{
+		// レイとコライダーの衝突判定を行う
+		if (CCollider::CollisionRay(c, rayStart, rayEnd, &hit))
+		{
+			// 交点が不整値でなければ、
+			if (hit.cross.LengthSqr() != 0.0f)
+			{
+				// 衝突位置までの距離で一番近い距離を求める
+				if (!isHit) nearDist = hit.dist;
+				else nearDist = std::min(hit.dist, nearDist);
+				isHit = true;
+			}
+		}
+	}
+
+	// レイが衝突していたら、
+	// 視点を衝突地点より手前に押し戻す
+	if (isHit)
+	{
+		mEye = rayStart + (rayEnd - rayStart).Normalized() * nearDist;
+	}
+}
+
 // 更新
 void CCamera::Update()
 {
@@ -288,11 +337,20 @@ void CCamera::Update()
 	// カメラの位置を追従ターゲットの位置に合わせる
 	if (mFollowTargetTf != nullptr)
 	{
-		Position(mFollowTargetTf->Position() + mFollowOffsetPos);
-		mEye = Position();
-		mAt = mEye + -VectorZ().Normalized();
+		CVector eye = mFollowTargetTf->Position() + mFollowOffsetPos;
+		Position(eye);
+		CVector diff = eye - mTargetEye;
+		mTargetEye = eye;
+		mEye = mTargetEye;
+		mAt += diff;
+
 	}
 
+	// 設定されているコライダーと衝突する場合は、
+	// カメラの位置を押し出す
+	ApplyCollision();
+
+	// 視点、注視点、上ベクトルから各行列を更新
 	LookAt(mEye, mAt, mUp);
 }
 

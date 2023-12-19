@@ -37,7 +37,7 @@ public:
 	//アルファ値を設定
 	virtual void SetAlpha(const float& alpha);
 	//アルファ値を取得
-	const float& GetAlpha() const;
+	float GetAlpha() const;
 
 protected:
 	CVector2 mPosition;	//表示座標

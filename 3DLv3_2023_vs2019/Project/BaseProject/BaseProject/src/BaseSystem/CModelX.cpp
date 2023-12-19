@@ -197,6 +197,9 @@ std::string CModelX::DirPath() const
 
 void CModelX::RenderShader(CMatrix* pCombinedMatrix)
 {
+	// 完全に透明な状態であれば、描画しない
+	if (mColor.A() == 0.0f) return;
+
 	mShader.Render(this, pCombinedMatrix);
 }
 
@@ -568,6 +571,9 @@ Render
 */
 void CModelX::Render()
 {
+	// 完全に透明な状態であれば、描画しない
+	if (mColor.A() == 0.0f) return;
+
 	for (size_t i = 0; i < mFrame.size(); i++)
 	{
 		mFrame[i]->Render(mColor);

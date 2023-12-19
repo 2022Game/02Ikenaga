@@ -116,6 +116,17 @@ public:
 	/// <returns></returns>
 	const CMatrix& GetViewportMatrix() const;
 
+	/// <summary>
+	/// 衝突判定を行うコライダーをリストに追加
+	/// </summary>
+	/// <param name="col"></param>
+	void AddCollider(CCollider* col);
+	/// <summary>
+	/// 衝突判定を行うコライダーをリストから取り除く
+	/// </summary>
+	/// <param name="col"></param>
+	void RemoveCollider(CCollider* col);
+
 	// 更新
 	void Update() override;
 
@@ -131,13 +142,17 @@ public:
 	static void End2DCamera();
 
 protected:
-	CVector mEye;		// 視点
+	CVector mTargetEye;	// 視点の目標位置
+	CVector mEye;		// 視点の実際の位置
 	CVector mAt;		// 注視点
 	CVector mUp;		// 上ベクトル
 
 private:
 	// カメラを削除
 	void DeleteCamera();
+
+	// 設定されているコライダーとの衝突結果を反映する
+	void ApplyCollision();
 
 	static std::list<CCamera*> spCameraList;// 生成されているカメラのリスト
 	static CCamera* spMainCamera;	// メインカメラ
@@ -154,4 +169,7 @@ private:
 	float mFovy;		// カメラの画角
 	float mZNear;		// 描画最短距離
 	float mZFar;		// 描画最長距離
+
+	// カメラが衝突判定を行うコライダーのリスト
+	std::list<CCollider*> mColliders;
 };

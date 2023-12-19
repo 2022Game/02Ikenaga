@@ -340,7 +340,7 @@ void CTransform::RotateAxis(const CVector& axis, float angle)
 {
 	CQuaternion q;
 	q.RotationAxis(axis, angle);
-	Rotation(mRotation * q);
+	Rotation(q * mRotation);
 }
 
 // ターゲット位置へ向ける
@@ -385,6 +385,12 @@ void CTransform::SetParent(CTransform* parent)
 		Rotation(mRotation);
 		Scale(mScale);
 	}
+}
+
+// 親を取得
+const CTransform* CTransform::GetParent() const
+{
+	return mpParent;
 }
 
 // 子のリストに追加

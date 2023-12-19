@@ -94,6 +94,8 @@ private:
 	void UpdateAttack5();
 	// 攻撃6
 	void UpdateAttack6();
+	// 攻撃7
+	void UpdateAttack7();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 	// ジャンプ開始
@@ -143,6 +145,7 @@ private:
 		eAttack4,	// 攻撃4
 	    eAttack5,	// 攻撃5
 		eAttack6,	// 攻撃6
+		eAttack7,	// 攻撃7
 		ePowerUp,   // 攻撃力アップ
 		eHit,       // ヒット
 		eGuard,     // ガード
@@ -179,6 +182,7 @@ private:
 		eAttack4,	// 攻撃4
 		eAttack5,	// 攻撃5
 		eAttack6,	// 攻撃6
+		eAttack7,	// 攻撃7
 		eAttackWait,// 攻撃終了待ち
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
