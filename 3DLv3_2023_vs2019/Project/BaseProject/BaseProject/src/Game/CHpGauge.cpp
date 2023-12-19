@@ -54,8 +54,9 @@ void CHpGauge::SetValue(int value)
 void CHpGauge::Update()
 {
 	//ゲージのフレームバーの位置を設定
-	mpFrameImage->SetPos(mPosition);
-	mpBarImage->SetPos(mPosition + CVector2(FRAME_BORDER, FRAME_BORDER));
+	CVector2 pos = mPosition - CVector2(FRAME_SIZE_X, 0.0f) * 0.5;
+	mpFrameImage->SetPos(pos);
+	mpBarImage->SetPos(pos + CVector2(FRAME_BORDER, FRAME_BORDER));
 
 	//バーのサイズを最大値と現在値から求める
 	float percent = Math::Clamp01((float)mValue / mMaxValue);

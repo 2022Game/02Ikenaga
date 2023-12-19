@@ -4,6 +4,7 @@ CUIBase::CUIBase(ETaskPriority prio, int sortOrder, ETaskPauseType pause, bool d
 	: CTask(prio, sortOrder, pause, dontDelete, addTaskList)
 	, mPosition(0.0f, 0.0f)
 	, mSize(100.0f, 100.0f)
+	, mCenter(0.0f, 0.0f)
 	, mColor(1.0f, 1.0f, 1.0f, 1.0f)
 {
 }
@@ -46,6 +47,24 @@ void CUIBase::SetSize(const float& x, const float& y)
 const CVector2& CUIBase::GetSize() const
 {
 	return mSize;
+}
+
+//中心位置を設定（CVector2版）
+void CUIBase::SetCenter(const CVector2& center)
+{
+	mCenter = center;
+}
+
+//中心位置を設定
+void CUIBase::SetCenter(const float x, const float y)
+{
+	SetCenter(CVector2(x, y));
+}
+
+//中心位置を取得
+const CVector2& CUIBase::GetCenter() const
+{
+	return mCenter;
 }
 
 //表示カラーを設定（CColor版）

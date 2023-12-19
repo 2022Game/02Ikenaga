@@ -2,7 +2,7 @@
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
-#include "CHpGauge2.h"
+#include "CHpGauge.h"
 #include "Maths.h"
 #include "CExp.h"
 #include "CPlayer.h"
@@ -60,7 +60,7 @@ CSlime::CSlime()
 	//CCamera* camera = CCamera::CurrentCamera();
 	//CVector gaugePos = Position() + CVector(0.0f, 40.0f, 40.0f);
 	// HPゲージを作成
-	mpHpGauge = new CHpGauge2();
+	mpHpGauge = new CHpGauge();
 	//mpHpGauge->SetPos(gaugePos);
 	//mpHpGauge->Scale(60.0f, 50.0f, 0.0f);
 
@@ -410,10 +410,9 @@ void CSlime::Update()
 	}
 
 	CCamera* camera = CCamera::CurrentCamera();
-	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 40.0f);
-	mpHpGauge->SetPos(gaugePos);
-	//CVector gaugeP = camera->WorldToScreenPos(gaugePos);
-	//mpHpGauge->SetPos(gaugeP.X(),gaugeP.Y());
+	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+	CVector gaugeP = camera->WorldToScreenPos(gaugePos);
+	mpHpGauge->SetPos(gaugeP.X(),gaugeP.Y());
 
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
@@ -615,6 +614,8 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 		dir.Normalize();
 		Rotation(CQuaternion::LookRotation(dir));
 
+		//bool atk = false;
+		//mpPlayer->UpdateAttack7();
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
 		Position(Position() - dir * Scale().X() * 0.4f);
 	}

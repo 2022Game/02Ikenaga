@@ -79,6 +79,9 @@ public:
     /// <returns></returns>
     float GetDefBuff(const CVector& attackDir) const override;
 
+	// 攻撃7
+	void UpdateAttack7();
+
 private:
 	// 待機状態
 	void UpdateIdle();
@@ -94,8 +97,6 @@ private:
 	void UpdateAttack5();
 	// 攻撃6
 	void UpdateAttack6();
-	// 攻撃7
-	void UpdateAttack7();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 	// ジャンプ開始

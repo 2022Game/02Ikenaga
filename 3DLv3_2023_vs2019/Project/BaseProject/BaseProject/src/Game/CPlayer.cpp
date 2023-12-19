@@ -32,7 +32,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // UŒ‚4
 	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // UŒ‚5 101.0f
 	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // UŒ‚6
-	{ "Character\\Player\\animation\\DogAttack7.x",	true,	120.0f	},  // UŒ‚7 213.0f
+	{ "Character\\Player\\animation\\DogAttack7.x",	true,	160.0f	},  // UŒ‚7 213.0f
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // UŒ‚—ÍƒAƒbƒv
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ƒqƒbƒg 43.0f
 	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ƒK[ƒh 47.0f
@@ -284,10 +284,10 @@ void CPlayer::UpdateIdle()
 		{
 			if (CInput::PushKey('K'))
 			{
-				//mMoveSpeed.X(0.0f);
-				//mMoveSpeed.Z(0.0f);
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack7;
-				mCharaStatus.SpecialAttack--;
+				//mCharaStatus.SpecialAttack--;
 			}
 		}
 
@@ -387,22 +387,26 @@ void CPlayer::UpdateAttack7()
 {
 	// UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“‚ğŠJn
 	ChangeAnimation(EAnimType::eAttack7);
-	if (mAnimationFrame == 40.0f)
+	bool spd = false;
+	if (mAnimationFrame <= 10.0f)
 	{
 		mpSword->AttackStart();
 	}
-	else if (mAnimationFrame == 41.0f)
+	else if (mAnimationFrame == 52.0f)
 	{
 		//Œ•‚ÉUŒ‚I—¹‚ğ“`‚¦‚é
 		mpSword->AttackEnd();
 	}
-	if (mAnimationFrame >= 53.0f)
+    if (mAnimationFrame >= 100.0f)spd = true;
+	if (spd)
 	{
 		// UŒ‚I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
 		mState = EState::eAttackWait;
 
 		//Œ•‚ÉUŒ‚ŠJn‚ğ“`‚¦‚é
 		mpSword->AttackStart();
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
 	}
 }
 

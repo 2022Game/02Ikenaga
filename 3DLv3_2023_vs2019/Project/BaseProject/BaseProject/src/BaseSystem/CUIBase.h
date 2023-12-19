@@ -25,6 +25,13 @@ public:
 	//表示サイズを取得
 	const CVector2& GetSize() const;
 
+	//中心位置を設定（CVector2版）
+	virtual void SetCenter(const CVector2& center);
+	//中心位置を設定
+	virtual void SetCenter(const float x, const float y);
+	//中心位置を取得
+	const CVector2& GetCenter() const;
+
 	//表示カラーを設定（CColor版）
 	virtual void SetColor(const CColor& color);
 	//表示カラーを設定（アルファ値有り版）
@@ -42,6 +49,7 @@ public:
 protected:
 	CVector2 mPosition;	//表示座標
 	CVector2 mSize;		//表示サイズ
+	CVector2 mCenter;	//中心位置
 	CColor mColor;		//UIのカラー
 private:
 };

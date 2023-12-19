@@ -78,9 +78,9 @@ void CImage::Render()
 	float uvRight = mUV.Z();
 	float uvBottom = mUV.W();
 
-	float vtxLeft = mPosition.X();
+	float vtxLeft = mPosition.X() - mCenter.X();
 	float vtxRight = vtxLeft + mSize.X();
-	float vtxBottom = mPosition.Y();
+	float vtxBottom = mPosition.Y() - mCenter.Y();
 	float vtxTop = vtxBottom + mSize.Y();
 
 	glTexCoord2f(uvLeft, uvTop);
