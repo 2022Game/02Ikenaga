@@ -3,21 +3,22 @@
 #include "Maths.h"
 #include "CCamera.h"
 
-//ゲージのフレーム画像のファイルパス
-#define FRAME_IMAGE "Character\\Player\\HP\\Frame.png"  //HPフレーム画像
+// ゲージのフレーム画像のファイルパス
+//#define FRAME_IMAGE "Character\\Player\\HP\\Frame.png"
 //ゲージのバー画像のファイルパス
-#define BAR_IMAGE "UI\\white.png"
+//#define BAR_IMAGE "UI\\white.png"
+// ゲージのふち
+#define EDGE_IMAGE "Character\\Player\\HP\\FrameEdge.png"
 
-//フレームの横のサイズ
-#define FRAME_SIZE_X (250.0f)
-//#define FRAME_SIZE_XX (430.0f)
-//フレームの縦のサイズ
-#define FRAME_SIZE_Y (30.0f)
-//緑の幅
+// フレームの横のサイズ
+#define FRAME_SIZE_X (350.0f)
+// フレームの縦のサイズ
+#define FRAME_SIZE_Y (40.0f)
+// 緑の幅
 #define FRAME_BORDER (2.0f)
-//バーの横のサイズ
+// バーの横のサイズ
 #define BAR_SIZE_X (FRAME_SIZE_X - FRAME_BORDER*2.0f)
-//バーの縦のサイズ
+// バーの縦のサイズ
 #define BAR_SIZE_Y (FRAME_SIZE_Y - FRAME_BORDER*2.0f)
 
 // スケール値計算時のカメラとの距離の最小
@@ -25,26 +26,28 @@
 // スケール値計算時のカメラとの距離の最大
 #define SCALE_DIST_MAX 200.0f
 // スケール値の最小値
-#define SCALE_MIN 0.2f
+#define SCALE_MIN 0.5f
 // スケール値の最大値
 #define SCALE_MAX 1.0f
 
-//コンストラクタ
+// コンストラクタ
 CHpGauge::CHpGauge()
 	:mMaxValue(100)
-	,mValue(100)
-	,mCenterRatio(0.0f,0.0f)
-	,mScale(1.0f)
-	,mIsShow(true)
+	, mValue(100)
+	, mCenterRatio(0.0f, 0.0f)
+	, mScale(1.0f)
 {
-	mpFrameImage = new CImage(FRAME_IMAGE);
+	mpFrameImage = new CImage("HpFrame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 
-	mpBarImage = new CImage(BAR_IMAGE);
+	mpBarImage = new CImage("HpGauge");
 	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
+
+	mpEdgeImage = new CImage(EDGE_IMAGE);
+	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 }
 
-//デストラクタ
+// デストラクタ
 CHpGauge::~CHpGauge()
 {
 }
@@ -55,15 +58,16 @@ void CHpGauge::Kill()
 	CTask::Kill();
 	mpFrameImage->Kill();
 	mpBarImage->Kill();
+	mpEdgeImage->Kill();
 }
 
-//最大値を設定
+// 最大値を設定
 void CHpGauge::SetMaxValue(int value)
 {
 	mMaxValue = value;
 }
 
-//現在値
+// 現在値
 void CHpGauge::SetValue(int value)
 {
 	mValue = value;
@@ -89,12 +93,12 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 	// HPゲージを表示しない
 	if (screenPos.Z() < 0.0f)
 	{
-		mIsShow = false;
+		SetShow(false);
 		return;
 	}
 	
 	// HPゲージを表示
-	mIsShow = true;
+	SetShow(true);
 	// もとめたスクリーン座標を自身の位置に設定
 	mPosition = screenPos;
 
@@ -106,19 +110,21 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 	mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
 }
 
-//更新
+// 更新
 void CHpGauge::Update()
 {
-	//ゲージのフレームバーの位置を設定
+	// ゲージのフレームバーの位置を設定
 	mpFrameImage->SetPos(mPosition);
 	CVector2 barPos = mPosition;
 	barPos.X(barPos.X() - FRAME_SIZE_X * mCenterRatio.X() * mScale);
 	mpBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
+	mpEdgeImage->SetPos(mPosition);
 
 	// フレームサイズを変更
 	mpFrameImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
+	mpEdgeImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
 
-	//バーのサイズを最大値と現在値から求める
+	// バーのサイズを最大値と現在値から求める
 	float percent = Math::Clamp01((float)mValue / mMaxValue);
 	CVector2 size = CVector2(BAR_SIZE_X * percent, BAR_SIZE_Y) * mScale;
 	mpBarImage->SetSize(size);
@@ -134,15 +140,20 @@ void CHpGauge::Update()
 		0.0f,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
+	mpEdgeImage->SetCenter
+	(
+		FRAME_SIZE_X * mCenterRatio.X() * mScale,
+		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
+	);
 
-	//HPの割合でバーの色を変更
+	// HPの割合でバーの色を変更
 	CColor color;
-	//10%以下は赤色
+	// 10%以下は赤色
 	if (percent <= 0.1f) color = CColor(1.0f, 0.0f, 0.0f);
-	//30%以下は黄色
+	// 30%以下は黄色
 	else if (percent <= 0.3f)color = CColor(1.0f, 1.0f, 0.0f);
-	//それ以外は緑色
+	// それ以外は緑色
 	else color = CColor(0.0f, 1.0f,0.0f);
-	//バーに色を設定
+	// バーに色を設定
 	mpBarImage->SetColor(color);
 }

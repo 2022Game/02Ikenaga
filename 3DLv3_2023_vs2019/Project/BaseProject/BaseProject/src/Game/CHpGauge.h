@@ -11,11 +11,11 @@ class CHpGauge : public CUIBase
 private:
 	CImage* mpFrameImage;  // ゲージのフレームのイメージ
 	CImage* mpBarImage;    // ゲージのバーのイメージ	
+	CImage* mpEdgeImage;   // ゲージのふち
 	int mMaxValue;         // ポイントの最大値
 	int mValue;            // ポイントの現在値
 	CVector2 mCenterRatio; // 中心位置の割合
 	float mScale;          // HPゲージのスケール値
-	bool mIsShow;          // HPゲージを表示するかどうか
 
 public:
 	// コンストラクタ

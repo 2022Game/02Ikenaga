@@ -29,8 +29,8 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  // アイドルバトル 25.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	30.0f	},  // 攻撃 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	true,	80.0f	},  // 攻撃2 26.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	65.0f	},  // ヒット 26.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	81.0f	},  // 死ぬ 41.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	40.0f	},  // ヒット 26.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	90.0f	},  // 死ぬ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // めまい 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	30.0f	},  // 走る 21.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	true,	50.0f	},  // 歩く 31.0f
@@ -54,18 +54,17 @@ CSlime::CSlime()
 	, mpRideObject(nullptr)
 	,mAttackTime(0)
 {
-	//インスタンスの設定
+	// インスタンスの設定
 	spInstance = this;
 
 	// HPゲージを作成
 	mpHpGauge = new CHpGauge();
 	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
-	//mpHpGauge->SetSize(0.0f, 0.0f);
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Slime");
 
-	//最初に1レベルに設定
+	// 最初に1レベルに設定
 	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
@@ -412,11 +411,12 @@ void CSlime::Update()
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
-	mpHpGauge->SetWorldPos(gaugePos);
 
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
+		mpHpGauge->SetWorldPos(gaugePos);
+
 		mAttackTime++;
 		if (mAttackTime > 200)
 		{
@@ -452,7 +452,7 @@ void CSlime::Update()
 	}
 	else
 	{
-		//mpHpGauge->SetPos(-1000.0f, -1000.0f);
+		mpHpGauge->SetPos(-1000.0f, -1000.0f);
 	}
 
 	CPlayer* player = CPlayer::Instance();
@@ -475,6 +475,7 @@ void CSlime::Update()
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 	CDebugPrint::Print(" 距離 %f", vectorp);
+	CDebugPrint::Print(" 攻撃 %d", mAttackTime);
 
 	// キャラクターの更新
 	CXCharacter::Update();

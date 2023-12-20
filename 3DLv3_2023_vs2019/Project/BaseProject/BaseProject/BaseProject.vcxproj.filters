@@ -325,9 +325,6 @@
     <ClCompile Include="src\BaseSystem\CResourceManager.cpp">
       <Filter>ソース ファイル\BaseSystem\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CHpGauge2.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -599,9 +596,6 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CResourceManager.h">
       <Filter>ソース ファイル\BaseSystem\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CHpGauge2.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
