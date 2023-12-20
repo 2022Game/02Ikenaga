@@ -7,7 +7,9 @@ CTask::CTask(ETaskPriority prio, int sortOrder,
 	ETaskPauseType pause, bool dontDelete, bool addTaskList)
 	: mPriority(prio)
 	, mSortOrder(sortOrder)
-	, mEnabled(true)
+	, mIsKill(false)
+	, mIsEnable(true)
+	, mIsShow(true)
 	, mPauseType(pause)
 	, mAddTaskList(addTaskList)
 {
@@ -111,11 +113,35 @@ EScene CTask::GetSceneType() const
 //タスクを削除
 void CTask::Kill()
 {
-	mEnabled = false;
+	mIsKill = true;
 }
 
 //削除フラグ取得
 bool CTask::IsKill() const
 {
-	return !mEnabled;
+	return mIsKill;
+}
+
+//有効フラグを設定
+void CTask::SetEnable(bool enable)
+{
+	mIsEnable = enable;
+}
+
+//有効フラグを取得
+bool CTask::IsEnable() const
+{
+	return mIsEnable;
+}
+
+//表示フラグを設定
+void CTask::SetShow(bool show)
+{
+	mIsShow = show;
+}
+
+//表示フラグを取得
+bool CTask::IsShow() const
+{
+	return mIsShow;
 }

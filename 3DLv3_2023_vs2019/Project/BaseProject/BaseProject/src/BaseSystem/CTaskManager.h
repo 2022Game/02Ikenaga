@@ -72,6 +72,9 @@ private:
 	// 削除フラグが立っているタスクを全て削除
 	void Delete(std::list<CTask*>& list);
 
+	// 更新するかどうか
+	bool IsUpdate(CTask* task) const;
+
 	// タスクマネージャのインスタンス
 	static CTaskManager* mpInstance;
 

@@ -31,7 +31,7 @@ void CObjectBase::SetEnableCol(bool isEnable)
 // Õ“Ë”»’è‚ğs‚¤‚©‚Ç‚¤‚©
 bool CObjectBase::IsEnableCol() const
 {
-	return mIsEnableCol;
+	return mIsEnableCol && IsEnable();
 }
 
 // ƒJƒ‰[‚ğİ’è

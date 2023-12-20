@@ -51,10 +51,23 @@ public:
 	//削除フラグ取得
 	bool IsKill() const;
 
+	//有効フラグを設定
+	//（オフにすると、更新、描画、衝突判定を停止）
+	void SetEnable(bool enable);
+	//有効フラグ取得
+	bool IsEnable() const;
+
+	//表示フラグを設定
+	void SetShow(bool show);
+	//表示フラグを取得
+	bool IsShow() const;
+
 private:
 	ETaskPriority mPriority;	//優先度
 	int mSortOrder;		//優先度内での順番
-	bool mEnabled;		//有効フラグ
+	bool mIsKill;		//削除フラグ
+	bool mIsEnable;		//有効フラグ
+	bool mIsShow;		//表示フラグ
 	ETaskPauseType mPauseType;//ポーズの種類
 	bool mAddTaskList;	//タスクリストに追加しているかどうか
 	EScene mSceneType;	//所属するシーンの種類
