@@ -26,13 +26,13 @@ CSaGauge::CSaGauge()
 	:mMaxValue(100)
 	, mValue(100)
 {
-	mpFrameImage = new CImage(FRAME_IMAGE);
+	mpFrameImage = new CImage("HpFrame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 
-	mpBarImage = new CImage(BAR_IMAGE);
+	mpBarImage = new CImage("HpGauge");
 	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
-	mpEdgeImage = new CImage(EDGE_IMAGE);
+	mpEdgeImage = new CImage("FrameEdge");
 	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 }
 

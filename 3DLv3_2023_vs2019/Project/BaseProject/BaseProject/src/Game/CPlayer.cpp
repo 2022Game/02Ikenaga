@@ -10,6 +10,7 @@
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
+int CPlayer::mHp;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -37,13 +38,9 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ヒット 43.0f
 	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ガード 47.0f
 	{ "Character\\Player\\animation\\DogGuardHit.x",	false,	47.0f	},  // ガードヒット 47.0f
-	{ "Character\\Player\\animation\\DogRolling.x",	true,	71.0f	},      // ヒット 43.0f
+	{ "Character\\Player\\animation\\DogRolling.x",	true,	71.0f	},      // 回避 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
-	//{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
-
-	//{ "Character\\Player\\anim\\jump_start.x",	false,	25.0f	},	// ジャンプ開始
-	//{ "Character\\Player\\anim\\jump.x",		true,	1.0f	},	// ジャンプ中
-	//{ "Character\\Player\\anim\\jump_end.x",	false,	26.0f	},	// ジャンプ終了
+	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
 };
 
 #define PLAYER_HEIGHT 2.0f
@@ -487,6 +484,10 @@ void CPlayer::UpdateHit()
 	if (IsAnimationFinished())
 	{
 		mState = EState::eIdle;
+		if (mCharaStatus.hp <= 0)
+		{
+			mState = EState::eDie;
+		}
 	}
 }
 
@@ -534,6 +535,18 @@ void CPlayer::UpdateRolling()
 	else
 	{
 		mpDamageCol->SetEnable(false);
+	}
+}
+
+// 死ぬ
+void CPlayer::UpdateDei()
+{
+	ChangeAnimation(EAnimType::eDie);
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	if (IsAnimationFinished())
+	{
+		//EScene::eGameOver;
 	}
 }
 
@@ -604,6 +617,10 @@ void CPlayer::AutomaticRecovery()
 			healcount = 0;
 		}
 	}
+	if (mCharaStatus.hp <= 0)
+	{
+		healcount = 0;
+	}
 	if (mCharaStatus.hp == mCharaMaxStatus.hp)
 	{
 		healcount = 0;
@@ -654,6 +671,7 @@ void CPlayer::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mHp = mCharaStatus.hp;
 
 	if (mAttackCount >= 1)
 	{
@@ -735,6 +753,10 @@ void CPlayer::Update()
 		case EState::eRolling:
 			UpdateRolling();
 			break;
+		// 死ぬ
+		case EState::eDie:
+			UpdateDei();
+			break;
 	}
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
@@ -768,15 +790,10 @@ void CPlayer::Update()
 		mRollingTime = 0;
 	}
 
-
 	AutomaticRecovery();
-	//RollingCount();
 
 	// キャラクターの更新
 	CXCharacter::Update();
-
-	/*mpSword->Update();
-	mpShield->Update();*/
 
 	mIsGrounded = false;
 

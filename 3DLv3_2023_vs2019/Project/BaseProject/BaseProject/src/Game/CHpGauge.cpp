@@ -8,10 +8,10 @@
 //ゲージのバー画像のファイルパス
 //#define BAR_IMAGE "UI\\white.png"
 // ゲージのふち
-#define EDGE_IMAGE "Character\\Player\\HP\\FrameEdge.png"
+//#define EDGE_IMAGE "Character\\Player\\HP\\FrameEdge.png"
 
 // フレームの横のサイズ
-#define FRAME_SIZE_X (350.0f)
+#define FRAME_SIZE_X (450.0f)
 // フレームの縦のサイズ
 #define FRAME_SIZE_Y (40.0f)
 // 緑の幅
@@ -26,9 +26,9 @@
 // スケール値計算時のカメラとの距離の最大
 #define SCALE_DIST_MAX 200.0f
 // スケール値の最小値
-#define SCALE_MIN 0.5f
+#define SCALE_MIN 0.7f
 // スケール値の最大値
-#define SCALE_MAX 1.0f
+#define SCALE_MAX 1.5f
 
 // コンストラクタ
 CHpGauge::CHpGauge()
@@ -43,7 +43,7 @@ CHpGauge::CHpGauge()
 	mpBarImage = new CImage("HpGauge");
 	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
-	mpEdgeImage = new CImage(EDGE_IMAGE);
+	mpEdgeImage = new CImage("FrameEdge");
 	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 }
 
@@ -106,7 +106,7 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 	float dist = (worldPos - cam->Position()).Length();
 
 	// カメラから離れるごとにスケール値を小さくする
-	float ratio = Math::Clamp01(dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN);
+	float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
 	mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
 }
 

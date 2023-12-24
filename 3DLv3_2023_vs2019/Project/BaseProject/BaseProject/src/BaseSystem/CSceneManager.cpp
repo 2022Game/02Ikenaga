@@ -3,6 +3,7 @@
 #include "CGameScene.h"
 
 #include "Test/CBootMenuScene.h"
+#include "CGameOverScene.h"
 #include "Test/CCollisionTestScene.h"
 
 // シーンマネージャのインスタンス
@@ -57,6 +58,8 @@ void CSceneManager::LoadScene(EScene scene)
 
 	//起動時メニュー
 	case EScene::eBootMenu:	mpScene = new CBootMenuScene();	break;
+	// ゲームオーバーシーン
+	case EScene::eGameOver: mpScene = new CGameOverScene(); break;
 	//衝突判定テスト
 	case EScene::eColTest:	mpScene = new CCollisionTestScene(); break;
 	}

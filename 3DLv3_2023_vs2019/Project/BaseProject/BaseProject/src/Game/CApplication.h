@@ -1,8 +1,17 @@
 #pragma once
+class CGameScene;
 
 class CApplication
 {
 private:
+	enum class EState
+	{
+		EPLAY,	//ゲーム中
+		ECLEAR,	//ゲームクリア
+		EOVER,	//ゲームオーバー
+	};
+	CGameScene* mpGameScene;
+	EState mState;
 public:
 	~CApplication();
 

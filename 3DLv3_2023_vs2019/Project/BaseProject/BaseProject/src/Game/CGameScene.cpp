@@ -15,7 +15,7 @@
 #include "CCane.h"
 //#include "CLineEffect.h"
 
-//コンストラクタ
+// コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
 	,RevivalTime(0)
@@ -23,12 +23,12 @@ CGameScene::CGameScene()
 {
 }
 
-//デストラクタ
+// デストラクタ
 CGameScene::~CGameScene()
 {
 }
 
-//シーン読み込み
+// シーン読み込み
 void CGameScene::Load()
 {
 	// 背景色設定
@@ -65,6 +65,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("HpGauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("SaFrame", "Character\\Player\\HP\\Frame.png");
 	CResourceManager::Load<CTexture>("SaGauge", "UI\\white.png");
+	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
 
 	// その他
 	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
@@ -89,10 +90,6 @@ void CGameScene::Load()
 	CSlime2* enemy2 = new CSlime2();
 	enemy2->Position(-40.0f, 0.0f, -40.0f);
 	enemy2->Scale(25.0f, 25.0f, 25.0f);
-
-	//HPゲージを作成
-	/*CHpGauge* hpgauge = new CHpGauge();
-	hpgauge->SetPos(10.0f, 190.0f);*/
 
 	CEnemy2* enemy5 = new CEnemy2();
 	enemy5->Position(60.0f, 0.0f, 20.0f);
@@ -122,7 +119,34 @@ void CGameScene::Load()
 	//le->AddPoint(CVector(50.0f, 10.0f, 50.0f), 1.0f);
 }
 
-//シーンの更新処理
+// ゲームクリア判定
+bool CGameScene::IsClear()
+{
+	return mpPlayer->mHp >= 10000;
+}
+
+// ゲームクリア処理
+void CGameScene::Clear()
+{
+	//CSceneManager::ClearInstance();
+}
+
+// ゲームオーバー判定
+bool CGameScene::IsOver()
+{
+	return mpPlayer->mHp <= 0;
+	//CSceneManager::ClearInstance();
+	//CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+}
+
+// ゲームオーバー処理
+void CGameScene::Over()
+{
+	CSceneManager::ClearInstance();
+	CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+}
+
+// シーンの更新処理
 void CGameScene::Update()
 {
 	if (mpSlime->mHp <= 0)

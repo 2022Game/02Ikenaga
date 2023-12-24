@@ -16,6 +16,7 @@ CBootMenuScene::CBootMenuScene()
 		{ "チュートリアル",EScene::eTutorial},
 		{ "ゲーム画面", EScene::eGame },
 		{ "操作方法",EScene::eMethod},
+		{ "ゲームオーバー",EScene::eGameOver},
 		{ "", EScene::eNone },
 		{ "■デバッグ", EScene::eNone },
 		{ "衝突判定テスト", EScene::eColTest },

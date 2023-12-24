@@ -79,8 +79,7 @@ public:
     /// <returns></returns>
     float GetDefBuff(const CVector& attackDir) const override;
 
-	// 攻撃7
-	void UpdateAttack7();
+	static int mHp;
 
 private:
 	// 待機状態
@@ -97,6 +96,8 @@ private:
 	void UpdateAttack5();
 	// 攻撃6
 	void UpdateAttack6();
+	// 攻撃7
+	void UpdateAttack7();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 	// ジャンプ開始
@@ -117,7 +118,8 @@ private:
 	void UpdateGuardHit();
 	// 回避
 	void UpdateRolling();
-
+	// 死ぬ
+	void UpdateDei();
 
 	// 回避回数を増やす時間
 	int mRollingTime;
@@ -152,6 +154,7 @@ private:
 		eGuard,     // ガード
 		eGuardHit,  // ガードヒット
 		eRolling,   // 回避
+		eDie,       // 死ぬ
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 
@@ -194,6 +197,7 @@ private:
 		eGuard,     // ガード
 		eGuardHit,  // ガードヒット
 		eRolling,   // 回避
+		eDie,       // 死ぬ
 		eStop,      // 停止
 	};
 	EState mState;	// プレイヤーの状態

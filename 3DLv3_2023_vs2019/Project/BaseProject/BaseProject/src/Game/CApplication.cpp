@@ -5,6 +5,7 @@
 #include "CCollisionManager.h"
 #include "CSceneManager.h"
 #include "CGamePause.h"
+#include "CGameScene.h"
 
 CApplication::~CApplication()
 {
@@ -14,6 +15,7 @@ void CApplication::Start()
 {
 	new CGamePause();
 	CSceneManager::Instance()->LoadScene(EScene::eBootMenu);
+	//mpGameScene = new CGameScene();
 }
 
 void CApplication::End()
@@ -38,4 +40,25 @@ void CApplication::Update()
 	CTaskManager::Instance()->Render();
 	// コライダの描画
 	CCollisionManager::Instance()->Render();
+
+	/*switch (mState)
+	{
+	case EState::EPLAY:
+		mpGameScene->Update();
+		if (mpGameScene->IsClear())
+		{
+			mState = EState::ECLEAR;
+		}
+		if (mpGameScene->IsOver())
+		{
+			mState = EState::EOVER;
+		}
+		break;
+	case EState::ECLEAR:
+		mpGameScene->Clear();
+		break;
+	case EState::EOVER:
+		mpGameScene->Over();
+		break;
+	}*/
 }

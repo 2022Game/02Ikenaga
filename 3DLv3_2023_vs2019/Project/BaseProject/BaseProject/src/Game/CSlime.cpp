@@ -411,6 +411,8 @@ void CSlime::Update()
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
 
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
@@ -455,7 +457,6 @@ void CSlime::Update()
 		mpHpGauge->SetPos(-1000.0f, -1000.0f);
 	}
 
-	CPlayer* player = CPlayer::Instance();
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
 	{
 		float vectorp = (player->Position() - Position()).Length();
@@ -468,7 +469,6 @@ void CSlime::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
