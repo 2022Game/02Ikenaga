@@ -33,7 +33,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // UŒ‚4
 	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // UŒ‚5 101.0f
 	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // UŒ‚6
-	{ "Character\\Player\\animation\\DogAttack7.x",	true,	140.0f	},  // UŒ‚7 213.0f
+	{ "Character\\Player\\animation\\DogAttack7.x",	true,	190.0f	},  // UŒ‚7 213.0f
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // UŒ‚—ÍƒAƒbƒv
 	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ƒqƒbƒg 43.0f
 	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ƒK[ƒh 47.0f
@@ -385,11 +385,11 @@ void CPlayer::UpdateAttack7()
 	// UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“‚ðŠJŽn
 	ChangeAnimation(EAnimType::eAttack7);
 
-	if (mAnimationFrame >= 40.0f&& mAnimationFrame <= 41.0f)
+	if (mAnimationFrame >= 30.0f&& mAnimationFrame <= 31.0f)
 	{
 		mpSword->AttackStart();
 	}
-	else if (mAnimationFrame == 41.0f)
+	else if (mAnimationFrame == 31.0f)
 	{
 		//Œ•‚ÉUŒ‚I—¹‚ð“`‚¦‚é
 		mpSword->AttackEnd();

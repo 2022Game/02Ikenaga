@@ -7,6 +7,7 @@
 #include "CCamera.h"
 #include "CSlime.h"
 #include "CSlime2.h"
+#include "CSlime3.h"
 #include "CEnemy2.h"
 #include "CRich.h"
 #include "CPortionRed.h"
@@ -83,14 +84,22 @@ void CGameScene::Load()
 
 	player->Position(0.0f, 5.0f, 0.0f);
 
+	// レッドスライム
 	CSlime* enemy = new CSlime();
 	enemy->Position(0.0f, 0.0f, -40.0f);
 	enemy->Scale(25.0f, 25.0f, 25.0f);
 
+	// オレンジスライム
 	CSlime2* enemy2 = new CSlime2();
 	enemy2->Position(-40.0f, 0.0f, -40.0f);
 	enemy2->Scale(25.0f, 25.0f, 25.0f);
 
+	// ブルースライム
+	CSlime3* enemy3 = new CSlime3();
+	enemy3->Position(-20.0f, 0.0f, -90.0f);
+	enemy3->Scale(35.0f, 35.0f, 35.0f);
+
+	// きのこ
 	CEnemy2* enemy5 = new CEnemy2();
 	enemy5->Position(60.0f, 0.0f, 20.0f);
 	enemy5->Scale(25.0f, 25.0f, 25.0f);

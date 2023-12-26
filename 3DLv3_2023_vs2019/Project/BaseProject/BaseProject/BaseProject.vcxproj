@@ -81,6 +81,7 @@
     <ClCompile Include="src\Game\CSaGauge.cpp" />
     <ClCompile Include="src\Game\CShield.cpp" />
     <ClCompile Include="src\Game\CSlime2.cpp" />
+    <ClCompile Include="src\Game\CSlime3.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\Game\CSaGauge.h" />
     <ClInclude Include="src\Game\CShield.h" />
     <ClInclude Include="src\Game\CSlime2.h" />
+    <ClInclude Include="src\Game\CSlime3.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
     <ClInclude Include="src\Game\CWeapon.h" />

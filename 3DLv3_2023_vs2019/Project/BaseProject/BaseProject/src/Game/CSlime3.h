@@ -7,19 +7,19 @@ class CHpGauge;
 #include <algorithm>
 #include "CEnemy.h"
 /*
-オレンジスライム(エネミー)のクラス
+ブルースライム(エネミー)のクラス
 キャラクタクラスを継承
 */
-class CSlime2 : public CEnemy
+class CSlime3 : public CEnemy
 {
 public:
 	bool IsDeath() const;
 	//インスタンスのポインタの取得
-	static CSlime2* Instance();
+	static CSlime3* Instance();
 
 	// コンストラクタ
-	CSlime2();
-	~CSlime2();
+	CSlime3();
+	~CSlime3();
 
 	// 待機状態
 	void UpdateIdle();
@@ -107,8 +107,8 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// オレンジスライム(エネミー)のインスタンス
-	static CSlime2* spInstance;
+	// ブルースライム(エネミー)のインスタンス
+	static CSlime3* spInstance;
 
 	// アニメーションデータ
 	struct AnimData
@@ -120,7 +120,7 @@ private:
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// オレンジスライム(エネミー)の状態
+	// ブルースライム(エネミー)の状態
 	enum class EState
 	{
 		eIdle,		// 待機
@@ -138,7 +138,7 @@ private:
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 	};
-	EState mState;	// オレンジスライム(エネミー)の状態
+	EState mState;	// ブルースライム(エネミー)の状態
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか

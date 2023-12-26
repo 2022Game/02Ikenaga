@@ -4,7 +4,6 @@
 #include "CInput.h"
 #include "CHpGauge.h"
 #include "Maths.h"
-#include "CExp.h"
 #include "CPlayer.h"
 #include "CCamera.h"
 
@@ -29,13 +28,13 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  // アイドルバトル 25.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	30.0f	},  // 攻撃 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	true,	80.0f	},  // 攻撃2 26.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	40.0f	},  // ヒット 26.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	70.0f	},  // ヒット 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	90.0f	},  // 死ぬ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // めまい 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	30.0f	},  // 走る 21.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	true,	50.0f	},  // 歩く 31.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
-	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
+	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
+	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  // 挑発
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  // 勝利
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  // 後ろに歩く
@@ -351,8 +350,6 @@ void CSlime::UpdateWalk()
 		mState = EState::eIdle3;
 		ChangeAnimation(EAnimType::eIdle4);
 	}
-	//CDebugPrint::Print(" 距離 %f", vectorp);
-	CDebugPrint::Print(" 速度 %f", mMoveSpeed);
 }
 
 // 更新処理
@@ -420,12 +417,12 @@ void CSlime::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 
 		mAttackTime++;
-		if (mAttackTime > 200)
+		if (mAttackTime > 230)
 		{
 			// 大攻撃
 			bool BigAttack = false;
 			// 確率を最小に8最大10
-			int probability2 = Math::Rand(8, 10);
+			int probability2 = Math::Rand(8, 11);
 			if (probability2 == 8)BigAttack = true;
 
 			if (BigAttack)
@@ -474,8 +471,6 @@ void CSlime::Update()
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
-	CDebugPrint::Print(" 距離 %f", vectorp);
-	CDebugPrint::Print(" 攻撃 %d", mAttackTime);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -483,18 +478,6 @@ void CSlime::Update()
 	mpAttackCol->Update();
 
 	mIsGrounded = false;
-
-	// レッドスライム(エネミー)のデバック表示
-	static bool debug = false;
-	if (CInput::PushKey('Q'))
-	{
-		debug = !debug;
-	}
-	if (debug)
-	{
-		CDebugPrint::Print(" HP %d/%d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
-		CDebugPrint::Print(" 攻撃時間計測 :%d", mAttackTime);
-	}
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
@@ -615,8 +598,6 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 		dir.Normalize();
 		Rotation(CQuaternion::LookRotation(dir));
 
-		//bool atk = false;
-		//mpPlayer->UpdateAttack7();
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
 		Position(Position() - dir * Scale().X() * 0.4f);
 	}
@@ -625,8 +606,6 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 // 死亡処理
 void CSlime::Death()
 {
-	// エネミーの死亡処理
-	//CEnemy::Death();
 	// 死亡状態へ移行
 	mState = EState::eDie;
 }

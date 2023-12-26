@@ -4,7 +4,6 @@
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
 class CHpGauge;
-class CPlayer;
 #include <algorithm>
 #include "CEnemy.h"
 /*
@@ -146,9 +145,6 @@ private:
 
 	CVector mMoveSpeed;	// ˆÚ“®‘¬“x
 	bool mIsGrounded;	// Ú’n‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
-
-	CPlayer* mpPlayer;
-	CSlime* mpEnemy;
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;

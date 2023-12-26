@@ -1,4 +1,4 @@
-#include "CSlime2.h"
+#include "CSlime3.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
@@ -7,8 +7,8 @@
 #include "CPlayer.h"
 #include "CCamera.h"
 
-// オレンジスライム(エネミー)のインスタンス
-CSlime2* CSlime2::spInstance = nullptr;
+// ブルースライム(エネミー)のインスタンス
+CSlime3* CSlime3::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
 #define MOVE_SPEED 0.07f    // 移動速度
@@ -18,13 +18,13 @@ CSlime2* CSlime2::spInstance = nullptr;
 #define STOP_RANGE 24.5f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
-// オレンジスライム(エネミー)のアニメーションデータのテーブル
-const CSlime2::AnimData CSlime2::ANIM_DATA[] =
+// ブルースライム(エネミー)のアニメーションデータのテーブル
+const CSlime3::AnimData CSlime3::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},	// Tポーズ
-	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleNormal.x",	true,	80.0f	},  // アイドル通常 51.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	130.0f	},  // 開始の見回す 63.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	150.0f	},  // 見回す 71.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleNormal.x",	true,	90.0f	},  // アイドル通常 51.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	150.0f	},  // 開始の見回す 63.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,160.0f	},  // 見回す 71.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  // アイドルバトル 25.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	30.0f	},  // 攻撃 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	true,	80.0f	},  // 攻撃2 26.0f
@@ -40,15 +40,15 @@ const CSlime2::AnimData CSlime2::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
 };
 
-bool CSlime2::IsDeath() const
+bool CSlime3::IsDeath() const
 {
 	return mCharaStatus.hp <= 0;
 }
 
-int CSlime2::mHp;
+int CSlime3::mHp;
 
 // コンストラクタ
-CSlime2::CSlime2()
+CSlime3::CSlime3()
 	:mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
@@ -61,10 +61,10 @@ CSlime2::CSlime2()
 	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
 
 	// モデルデータ読み込み
-	CModelX* model = CResourceManager::Get<CModelX>("Slime2");
+	CModelX* model = CResourceManager::Get<CModelX>("Slime3");
 
 	//最初に1レベルに設定
-	ChangeLevel(1);
+	ChangeLevel(5);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -128,7 +128,7 @@ CSlime2::CSlime2()
 	mpAttackCol->SetEnable(false);
 }
 
-CSlime2::~CSlime2()
+CSlime3::~CSlime3()
 {
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
@@ -139,13 +139,13 @@ CSlime2::~CSlime2()
 	mpHpGauge->Kill();
 }
 
-CSlime2* CSlime2::Instance()
+CSlime3* CSlime3::Instance()
 {
 	return spInstance;
 }
 
 // アニメーション切り替え
-void CSlime2::ChangeAnimation(EAnimType type)
+void CSlime3::ChangeAnimation(EAnimType type)
 {
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
 	AnimData data = ANIM_DATA[(int)type];
@@ -153,7 +153,7 @@ void CSlime2::ChangeAnimation(EAnimType type)
 }
 
 // 待機状態
-void CSlime2::UpdateIdle()
+void CSlime3::UpdateIdle()
 {
 	if (IsAnimationFinished())
 	{
@@ -162,7 +162,7 @@ void CSlime2::UpdateIdle()
 }
 
 // 待機2状態
-void CSlime2::UpdateIdle2()
+void CSlime3::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
@@ -172,7 +172,7 @@ void CSlime2::UpdateIdle2()
 }
 
 // 攻撃した時の待機状態
-void CSlime2::UpdateIdle3()
+void CSlime3::UpdateIdle3()
 {
 	ChangeAnimation(EAnimType::eIdle4);
 	if (IsAnimationFinished())
@@ -196,7 +196,7 @@ void CSlime2::UpdateIdle3()
 }
 
 // 待機2の終了待ち
-void CSlime2::UpdateIdleWait()
+void CSlime3::UpdateIdleWait()
 {
 	// 待機3アニメーションに切り替え
 	ChangeAnimation(EAnimType::eIdle3);
@@ -210,7 +210,7 @@ void CSlime2::UpdateIdleWait()
 }
 
 // 攻撃
-void CSlime2::UpdateAttack()
+void CSlime3::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -222,7 +222,7 @@ void CSlime2::UpdateAttack()
 }
 
 // 攻撃2
-void CSlime2::UpdateAttack2()
+void CSlime3::UpdateAttack2()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -237,7 +237,7 @@ void CSlime2::UpdateAttack2()
 }
 
 // 攻撃と攻撃2終了待ち
-void CSlime2::UpdateAttackWait()
+void CSlime3::UpdateAttackWait()
 {
 	// 攻撃と攻撃2アニメーションが終了したら、
 	if (IsAnimationFinished())
@@ -259,7 +259,7 @@ void CSlime2::UpdateAttackWait()
 }
 
 // ヒット
-void CSlime2::UpdateHIt()
+void CSlime3::UpdateHIt()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -284,7 +284,7 @@ void CSlime2::UpdateHIt()
 }
 
 // 死ぬ時
-void CSlime2::UpdateDie()
+void CSlime3::UpdateDie()
 {
 	// 死ぬ時のアニメーションを開始
 	ChangeAnimation(EAnimType::eDie);
@@ -297,7 +297,7 @@ void CSlime2::UpdateDie()
 }
 
 // めまい(混乱)
-void CSlime2::UpdateDizzy()
+void CSlime3::UpdateDizzy()
 {
 	// めまい(混乱)アニメーションを開始
 	ChangeAnimation(EAnimType::eDizzy);
@@ -310,7 +310,7 @@ void CSlime2::UpdateDizzy()
 }
 
 // 歩行
-void CSlime2::UpdateWalk()
+void CSlime3::UpdateWalk()
 {
 	ChangeAnimation(EAnimType::eWalk);
 
@@ -352,7 +352,7 @@ void CSlime2::UpdateWalk()
 }
 
 // 更新処理
-void CSlime2::Update()
+void CSlime3::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
@@ -406,7 +406,7 @@ void CSlime2::Update()
 	}
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+	CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 
@@ -475,7 +475,7 @@ void CSlime2::Update()
 }
 
 // 衝突処理
-void CSlime2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+void CSlime3::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol && mState != EState::eIdle && mState != EState::eIdle2 &&
@@ -524,7 +524,7 @@ void CSlime2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 }
 
 // 攻撃開始
-void CSlime2::AttackStart()
+void CSlime3::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
@@ -532,7 +532,7 @@ void CSlime2::AttackStart()
 }
 
 // 攻撃終了
-void CSlime2::AttackEnd()
+void CSlime3::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
@@ -540,20 +540,20 @@ void CSlime2::AttackEnd()
 }
 
 // 描画
-void CSlime2::Render()
+void CSlime3::Render()
 {
 	CXCharacter::Render();
 }
 
 // 1レベルアップ
-void CSlime2::LevelUp()
+void CSlime3::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
 // レベルを変更
-void CSlime2::ChangeLevel(int level)
+void CSlime3::ChangeLevel(int level)
 {
 	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
@@ -567,7 +567,7 @@ void CSlime2::ChangeLevel(int level)
 }
 
 // 被ダメージ処理
-void CSlime2::TakeDamage(int damage, CObjectBase* causedObj)
+void CSlime3::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
@@ -595,7 +595,7 @@ void CSlime2::TakeDamage(int damage, CObjectBase* causedObj)
 }
 
 // 死亡処理
-void CSlime2::Death()
+void CSlime3::Death()
 {
 	// 死亡状態へ移行
 	mState = EState::eDie;
