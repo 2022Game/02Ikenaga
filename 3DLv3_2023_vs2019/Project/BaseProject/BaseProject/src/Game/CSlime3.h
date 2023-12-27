@@ -6,9 +6,10 @@
 class CHpGauge;
 #include <algorithm>
 #include "CEnemy.h"
+
 /*
 ブルースライム(エネミー)のクラス
-キャラクタクラスを継承
+エネミークラスを継承
 */
 class CSlime3 : public CEnemy
 {

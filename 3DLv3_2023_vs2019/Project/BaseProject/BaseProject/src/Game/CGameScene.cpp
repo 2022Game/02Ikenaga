@@ -8,7 +8,7 @@
 #include "CSlime.h"
 #include "CSlime2.h"
 #include "CSlime3.h"
-#include "CEnemy2.h"
+#include "CMushroom.h"
 #include "CRich.h"
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
@@ -99,10 +99,10 @@ void CGameScene::Load()
 	enemy3->Position(-20.0f, 0.0f, -90.0f);
 	enemy3->Scale(35.0f, 35.0f, 35.0f);
 
-	// きのこ
-	CEnemy2* enemy5 = new CEnemy2();
-	enemy5->Position(60.0f, 0.0f, 20.0f);
-	enemy5->Scale(25.0f, 25.0f, 25.0f);
+	// マッシュルーム
+	CMushroom* enemy4 = new CMushroom();
+	enemy4->Position(60.0f, 0.0f, 20.0f);
+	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	CRich* enemy6 = new CRich();
 	enemy6->Position(100.0f, 5.0f, 20.0f);

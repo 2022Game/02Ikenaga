@@ -65,7 +65,7 @@
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
     <ClCompile Include="src\Game\CSlime.cpp" />
-    <ClCompile Include="src\Game\CEnemy2.cpp" />
+    <ClCompile Include="src\Game\CMushroom.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
     <ClCompile Include="src\Game\CGameScene.cpp" />
     <ClCompile Include="src\Game\CharaStatus.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CRich.h" />
     <ClInclude Include="src\Game\CSlime.h" />
-    <ClInclude Include="src\Game\CEnemy2.h" />
+    <ClInclude Include="src\Game\CMushroom.h" />
     <ClInclude Include="src\Game\CField.h" />
     <ClInclude Include="src\Game\CGameScene.h" />
     <ClInclude Include="src\Game\CharaStatus.h" />

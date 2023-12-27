@@ -277,7 +277,7 @@
     <ClCompile Include="src\Game\CSlime.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CEnemy2.cpp">
+    <ClCompile Include="src\Game\CMushroom.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CSlime2.cpp">
@@ -555,7 +555,7 @@
     <ClInclude Include="src\Game\CSlime.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CEnemy2.h">
+    <ClInclude Include="src\Game\CMushroom.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CSlime2.h">
