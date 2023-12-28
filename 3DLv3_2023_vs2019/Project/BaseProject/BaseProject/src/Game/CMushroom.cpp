@@ -3,13 +3,12 @@
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
+#include "Maths.h"
 
 // マッシュルームのインスタンス
 CMushroom* CMushroom::spInstance = nullptr;
 
-#define MODEL_MUSHROOM "Character\\Enemy\\Mushroom\\Mushroom.x"
-
-#define ENEMY_HEIGHT 2.0f
+#define ENEMY_HEIGHT 1.0f
 #define WITHIN_RANGE 40.0f    // 範囲内
 
 // マッシュルームのアニメーションデータのテーブル
@@ -19,13 +18,13 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	        // 植物 21.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	70.0f	},	// 植物からきのこ 21.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// 待機2 18.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	    // 待機 18.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// 待機 18.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	true,	80.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// 攻撃 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// 攻撃 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	    //  死ぬ26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//走る 17.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//見回す 121.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingStart.x",	true,	25.0f	},	//開始の見回す 25.0f
@@ -40,12 +39,16 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 // コンストラクタ
 CMushroom::CMushroom()
 	: mpRideObject(nullptr)
+	,mAttackTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
+
+	//最初に1レベルに設定
+	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -91,13 +94,11 @@ CMushroom::CMushroom()
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.0f, 0.3f, 0.0f);
 
-	mpDamageCol->SetEnable(false);
-
 	// ダメージを与えるコライダー
 	mpAttackCol = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		0.6f, false
+		0.55f, false
 	);
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
@@ -155,12 +156,35 @@ void CMushroom::UpdateIdle2()
 void CMushroom::UpdateIdle3()
 {
 	ChangeAnimation(EAnimType::eIdle3);
+	if (IsAnimationFinished())
+	{
+		mState = EState::eIdle3;
+	}
 }
 
 // 攻撃
 void CMushroom::UpdateAttack()
 {
 	ChangeAnimation(EAnimType::eAttack);
+	AttackStart();
+	// 攻撃2終了待ち状態へ移行
+	mState = EState::eAttackWait;
+}
+
+// 攻撃2
+void CMushroom::UpdateAttack2()
+{
+	ChangeAnimation(EAnimType::eAttack2);
+	AttackStart();
+	// 攻撃2終了待ち状態へ移行
+	mState = EState::eAttackWait;
+}
+
+
+// 攻撃3
+void CMushroom::UpdateAttack3()
+{
+	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
 	mState = EState::eAttackWait;
@@ -174,6 +198,43 @@ void  CMushroom::UpdateAttackWait()
 		AttackEnd();
 		mState = EState::eIdle3;
 	}
+}
+
+// ヒット
+void CMushroom::UpdateHit()
+{
+	// ヒットアニメーションを開始
+	ChangeAnimation(EAnimType::eHit);
+	if (IsAnimationFinished())
+	{
+		// めまいをfalseにする
+		bool stan = false;
+		// 確率を最小に0最大40
+		int probability = Math::Rand(0, 20);
+		if (probability == 1)stan = true;
+		if (stan)
+		{
+			//mState = EState::eDizzy;
+		}
+		else
+		{
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			mState = EState::eIdle3;
+			ChangeAnimation(EAnimType::eIdle3);
+		}
+	}
+}
+
+// 死ぬ
+void CMushroom::UpdateDie()
+{
+	//ChangeAnimation(EAnimType::eDie);
+}
+
+// めまい(混乱)
+void CMushroom::UpdateDizzy()
+{
+	//ChangeAnimation(EAnimType::eDizzy);
 }
 
 // 更新処理
@@ -201,9 +262,30 @@ void CMushroom::Update()
 	case EState::eAttack:
 		UpdateAttack();
 		break;
+		// 攻撃2
+	case EState::eAttack2:
+		UpdateAttack2();
+		break;
+		// 攻撃3
+	case EState::eAttack3:
+		UpdateAttack3();
+		break;
 		// 攻撃終了待ち
 	case EState::eAttackWait:
 		UpdateAttackWait();
+		break;
+		// ヒット
+	case EState::eHit:
+		UpdateHit();
+		break;
+		// 死ぬ
+	case EState::eDie:
+		UpdateDie();
+		break;
+		// めまい(混乱)
+	case EState::eDizzy:
+		UpdateDizzy();
+		break;
 	}
 
 	CPlayer* player = CPlayer::Instance();
@@ -212,6 +294,41 @@ void CMushroom::Update()
 	{
 		UpdateIdle();
 	}
+	if (mState == EState::eIdle3)
+	{
+		mAttackTime++;
+		if (mAttackTime > 200)
+		{
+			// 攻撃2
+			bool Attack2 = false;
+			// 攻撃3
+			bool Attack3 = false;
+			// 確率を最小に3最大6
+			int probability2 = Math::Rand(2, 5);
+			int probability3 = Math::Rand(6, 10);
+			if (probability2 == 2)Attack2 = true;
+			if (probability3 == 6)Attack3 = true;
+			if (Attack2)
+			{
+				mState = EState::eAttack2;
+			}
+			else if (Attack3)
+			{
+				mState = EState::eAttack3;
+			}
+			else
+			{
+				mState = EState::eAttack;
+			}
+		}
+		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3)
+		{
+			mAttackTime = 0;
+		}
+	}
+
+	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
+	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -296,12 +413,59 @@ void CMushroom::Render()
 	CXCharacter::Render();
 }
 
+// 1レベルアップ
+void CMushroom::LevelUp()
+{
+	int level = mCharaStatus.level;
+	ChangeLevel(level + 1);
+}
+
+// レベルを変更
+void CMushroom::ChangeLevel(int level)
+{
+	// ステータスのテーブルのインデックス値に変換
+	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
+	// 最大ステータスに設定
+	mCharaMaxStatus = ENEMY2_STATUS[index];
+	// 現在のステータスを最大値にすることで、HP回復
+	mCharaStatus = mCharaMaxStatus;
+
+	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
+}
+
+// 被ダメージ処理
+void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
+{
+	//HPからダメージを引く
+	if (mCharaStatus.hp -= damage)
+	{
+		mState = EState::eHit;
+	}
+	// HPが0以下になったら、
+	if (mCharaStatus.hp <= 0)
+	{
+		// 死亡処理
+		Death();
+	}
+
+	if (causedObj != nullptr)
+	{
+		// ダメージを与えた相手の方向へ向く
+		CVector dir = causedObj->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+
+		// ノックバックでダメージを与えた相手の方向から後ろにズラす
+		Position(Position() - dir * Scale().X() * 0.4f);
+	}
+}
+
 
 // 死亡処理
 void CMushroom::Death()
 {
-	// マッシュルームの死亡処理
-	CEnemy::Death();
 	// 死亡状態へ移行
-	//mState = EState::eDie;
+	mState = EState::eDie;
 }

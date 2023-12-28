@@ -260,7 +260,7 @@ void CSlime::UpdateAttackWait()
 }
 
 // ヒット
-void CSlime::UpdateHIt()
+void CSlime::UpdateHit()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -390,7 +390,7 @@ void CSlime::Update()
 		break;
 		// ヒット
 	case EState::eHit:
-		UpdateHIt();
+		UpdateHit();
 		break;
 		// 死ぬ時
 	case EState::eDie:

@@ -99,7 +99,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,105.0f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(1);
+	ChangeLevel(5);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -483,10 +483,13 @@ void CPlayer::UpdateHit()
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;
 		if (mCharaStatus.hp <= 0)
 		{
 			mState = EState::eDie;
+		}
+		else
+		{
+			mState = EState::eIdle;
 		}
 	}
 }

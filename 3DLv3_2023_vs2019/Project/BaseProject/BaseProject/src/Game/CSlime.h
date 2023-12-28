@@ -39,7 +39,7 @@ public:
 	void UpdateAttackWait();
 	
 	//ƒqƒbƒg
-	void UpdateHIt();
+	void UpdateHit();
 	// €‚Ê
 	void UpdateDie();
 	// ‚ß‚Ü‚¢(¬—)

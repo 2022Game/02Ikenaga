@@ -27,8 +27,19 @@ public:
 
 	// 攻撃
 	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
+	// 攻撃3
+	void UpdateAttack3();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
+
+	//ヒット
+	void UpdateHit();
+	// 死ぬ時
+	void UpdateDie();
+	// めまい(混乱)
+	void UpdateDizzy();
 
 	// 更新処理
 	void Update();
@@ -47,10 +58,23 @@ public:
 	// 描画
 	void Render();
 
+	// 1レベルアップ
+	void LevelUp();
+	// レベルの変更
+	void ChangeLevel(int level);
+
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	//ダメージを与えたオブジェクト
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
+
 	// 死亡処理
 	void Death() override;
 
 private:
+	int mAttackTime;   // 攻撃時間の間隔
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -62,6 +86,11 @@ private:
 		eIdle3,     // 待機状態3
 		eIdle4,     // 待機状態4
 		eAttack,	// 攻撃
+		eAttack2,	// 攻撃2
+		eAttack3,	// 攻撃3
+		eHit,       // ヒット
+		eDie,       // 死ぬ
+		eDizzy,     // めまい(混乱)
 		eWalk,		// 歩行
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
@@ -92,7 +121,12 @@ private:
 		eIdle2,		// 戦う前の待機2
 		eIdle3,     // 待機状態3
 		eAttack,	// 攻撃
+		eAttack2,	// 攻撃2
+		eAttack3,	// 攻撃3
 		eAttackWait,// 攻撃終了待ち
+		eHit,       // ヒット
+		eDie,       // 死ぬ時
+		eDizzy,     // めまい(混乱)
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了

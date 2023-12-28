@@ -259,7 +259,7 @@ void CSlime2::UpdateAttackWait()
 }
 
 // ヒット
-void CSlime2::UpdateHIt()
+void CSlime2::UpdateHit()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -389,7 +389,7 @@ void CSlime2::Update()
 		break;
 		// ヒット
 	case EState::eHit:
-		UpdateHIt();
+		UpdateHit();
 		break;
 		// 死ぬ時
 	case EState::eDie:

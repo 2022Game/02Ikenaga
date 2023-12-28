@@ -63,7 +63,7 @@ CSlime3::CSlime3()
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Slime3");
 
-	//最初に1レベルに設定
+	//最初に5レベルに設定
 	ChangeLevel(5);
 
 	// テーブル内のアニメーションデータを読み込み
@@ -259,7 +259,7 @@ void CSlime3::UpdateAttackWait()
 }
 
 // ヒット
-void CSlime3::UpdateHIt()
+void CSlime3::UpdateHit()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -389,7 +389,7 @@ void CSlime3::Update()
 		break;
 		// ヒット
 	case EState::eHit:
-		UpdateHIt();
+		UpdateHit();
 		break;
 		// 死ぬ時
 	case EState::eDie:
