@@ -602,7 +602,7 @@ void CPlayer::ChangeLevel(int level)
 	{
 		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
 		diff.Y(diff.Y() +   mCharaStatus.cameraHeight);
-		//diff.Z(diff.Z() + mCharaStatus.cameraHeight);
+		diff.Z(diff.Z() + mCharaStatus.cameraHeight);
 		mainCamera->SetFollowTargetOffset(diff);
 	}
 }

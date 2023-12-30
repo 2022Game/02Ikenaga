@@ -15,20 +15,16 @@ CDragon* CDragon::spInstance = nullptr;
 const CDragon::AnimData CDragon::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	true,	82.0f	},	        // 待機 41.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	true,	202.0f	},	        // 待機 101.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	true,	162.0f	},	        // 攻撃 81.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	true,	182.0f	},	        // 攻撃 91.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	true,	82.0f	},	    // 待機 41.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	true,	202.0f	},	    // 待機 101.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	true,	162.0f	},	    // 攻撃 81.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	true,	182.0f	},	    // 攻撃2 91.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	true,	72.0f	},	    // 攻撃3 36.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	122.0f	},	    // 防御 61.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	true,	130.0f	},	        // 死ぬ 65.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	182.0f	},	    // フライフレーム 91.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x",	true,	62.0f	},	    // フライフォワード 31.0f
 
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	70.0f	},	// 植物からきのこ 21.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// 待機2 18.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// 待機 18.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	true,	80.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// 攻撃 26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	    //  死ぬ26.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
 };
 
 // コンストラクタ

@@ -116,7 +116,7 @@ void CGameScene::Load()
 	// ƒhƒ‰ƒSƒ“
 	CDragon* bossEnemy = new CDragon();
 	bossEnemy->Position(-80.0f, 20.0f, 0.0f);
-	bossEnemy->Scale(5.0f, 5.0f, 5.0f);
+	bossEnemy->Scale(7.0f, 7.0f, 7.0f);
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
