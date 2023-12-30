@@ -22,9 +22,17 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	true,	72.0f	},	    // 攻撃3 36.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	122.0f	},	    // 防御 61.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	true,	130.0f	},	        // 死ぬ 65.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	182.0f	},	    // フライフレーム 91.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x",	true,	62.0f	},	    // フライフォワード 31.0f
-
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	182.0f	},	// フライフレーム 91.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x",	true,	62.0f	},	// フライフォワード 31.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyGlide.x",	true,	51.0f	},	// フライグライド 51.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyIdle.x",	true,	62.0f	},	    // フライアイドル 31.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonGetHit.x",	true,	82.0f	},	    // フライアイドル 41.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	true,	242.0f	},	    // 着地 121.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	true,	42.0f	},	        // 走る 21.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	true,	202.0f	},	    // 雄叫び 101.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	true,	162.0f	},	    // 寝る 81.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	true,	242.0f	},	    // 飛行開始する前 121.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonWalk.x",	true,	82.0f	},	        // 歩く 41.0f
 };
 
 // コンストラクタ
