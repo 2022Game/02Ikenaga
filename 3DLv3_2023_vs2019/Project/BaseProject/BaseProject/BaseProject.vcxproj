@@ -59,6 +59,7 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CCane.cpp" />
+    <ClCompile Include="src\Game\CDragon.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CExp.cpp" />
     <ClCompile Include="src\Game\CExpManager.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CCane.h" />
+    <ClInclude Include="src\Game\CDragon.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CExp.h" />
     <ClInclude Include="src\Game\CExpManager.h" />

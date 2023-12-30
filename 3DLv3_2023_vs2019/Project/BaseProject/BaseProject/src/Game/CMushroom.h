@@ -6,7 +6,7 @@
 
 /*
  マッシュルームクラス
-キャラクタクラスを継承
+ エネミークラスを継承
 */
 class CMushroom : public CEnemy
 {

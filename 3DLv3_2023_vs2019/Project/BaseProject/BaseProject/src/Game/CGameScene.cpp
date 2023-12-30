@@ -10,6 +10,7 @@
 #include "CSlime3.h"
 #include "CMushroom.h"
 #include "CRich.h"
+#include "CDragon.h"
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
@@ -51,6 +52,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 
+	// ボス関連
+	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
+
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
 	CResourceManager::Load<CModel>("Shield", "Item\\Equipment\\Shield\\Shield.obj");
@@ -82,7 +86,7 @@ void CGameScene::Load()
 	);
 	mainCamera->SetFollowTargetTf(player);
 
-	player->Position(0.0f, 5.0f, 0.0f);
+	player->Position(0.0f, 15.0f, 0.0f);
 
 	// レッドスライム
 	CSlime* enemy = new CSlime();
@@ -108,6 +112,11 @@ void CGameScene::Load()
 	enemy6->Position(100.0f, 5.0f, 20.0f);
 	enemy6->Rotate(0.0f,90.0f,-70.0f);
 	enemy6->Scale(0.1f, 0.1f, 0.1f);
+
+	// ドラゴン
+	CDragon* bossEnemy = new CDragon();
+	bossEnemy->Position(-80.0f, 20.0f, 0.0f);
+	bossEnemy->Scale(5.0f, 5.0f, 5.0f);
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
