@@ -326,8 +326,8 @@ void CDragon::Update()
 		}
 	}
 
-	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
+	//CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
+	//CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -338,7 +338,7 @@ void CDragon::Update()
 
 	if (CInput::PushKey('Q'))
 	{
-		mState = EState::eAttack;
+		//mState = EState::eAttack;
 	}
 }
 

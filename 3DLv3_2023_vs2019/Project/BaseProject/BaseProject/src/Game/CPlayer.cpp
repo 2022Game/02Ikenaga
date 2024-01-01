@@ -809,6 +809,18 @@ void CPlayer::Update()
 		SetColor(CColor(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
+	if (mState == EState::eGuard)
+	{
+		if (mCharaStatus.hp <= 0)
+		{
+			mState = EState::eDie;
+		}
+	}
+	if (mCharaStatus.hp <= 0)
+	{
+		mState = EState::eDie;
+	}
+
 	// プレイヤーのデバック表示
 	static bool debug = false;
 	static bool debug2 = true;

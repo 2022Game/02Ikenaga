@@ -16,7 +16,7 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tƒ|[ƒY
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	        // A•¨ 21.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	70.0f	},	// A•¨‚©‚ç‚«‚Ì‚± 21.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	80.0f	},	// A•¨‚©‚ç‚«‚Ì‚± 21.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// ‘Ò‹@2 18.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// ‘Ò‹@ 18.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	true,	80.0f	},	// UŒ‚ 26.0f
@@ -175,9 +175,35 @@ void CMushroom::UpdateAttack()
 void CMushroom::UpdateAttack2()
 {
 	ChangeAnimation(EAnimType::eAttack2);
-	AttackStart();
-	// UŒ‚2I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
-	mState = EState::eAttackWait;
+	if (mAnimationFrame >= 10.0f && mAnimationFrame <= 11.0f)
+	{
+		AttackStart();
+	}
+	if (mAnimationFrame >= 20.0f && mAnimationFrame <= 21.0f)
+	{
+		AttackEnd();
+	}
+	if (mAnimationFrame >= 30.0f && mAnimationFrame <= 31.0f)
+	{
+		AttackStart();
+	}
+	if (mAnimationFrame >= 40.0f && mAnimationFrame <= 41.0f)
+	{
+		AttackEnd();
+	}
+	if (mAnimationFrame >= 50.0f && mAnimationFrame <= 51.0f)
+	{
+		AttackStart();
+	}
+	if (mAnimationFrame >= 60.0f && mAnimationFrame <= 61.0f)
+	{
+		AttackEnd();
+	}
+	if(IsAnimationFinished())
+	{
+		// UŒ‚2I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
+		mState = EState::eAttackWait;
+	}
 }
 
 
@@ -290,9 +316,18 @@ void CMushroom::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack&&
+		mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait)
 	{
 		UpdateIdle();
+	}
+	if (mState == EState::eIdle2 || mState == EState::eIdle3)
+	{
+		// ƒvƒŒƒCƒ„[‚Ì‚¢‚é•ûŒü‚ÖŒü‚­
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
 	}
 	if (mState == EState::eIdle3)
 	{
@@ -339,7 +374,7 @@ void CMushroom::Update()
 
 	if (CInput::PushKey('Q'))
 	{
-		mState = EState::eAttack;
+		mState = EState::eAttack2;
 	}
 }
 
