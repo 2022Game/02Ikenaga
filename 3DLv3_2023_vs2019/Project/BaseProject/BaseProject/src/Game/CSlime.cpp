@@ -456,7 +456,6 @@ void CSlime::Update()
 
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
 	{
-		float vectorp = (player->Position() - Position()).Length();
 		if (vectorp <= ROTATE_RANGE)
 		{
 			// ƒvƒŒƒCƒ„[‚Ì‚¢‚é•ûŒü‚ÖŒü‚­

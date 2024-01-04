@@ -40,6 +40,8 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+	// 歩行
+	void UpdateWalk();
 
 	// 更新処理
 	void Update();
@@ -127,12 +129,14 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
+		eWalk,      // 歩行
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 	};
 	EState mState;	// マッシュルームの状態
 
+	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;

@@ -9,7 +9,13 @@
 CMushroom* CMushroom::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
-#define WITHIN_RANGE 40.0f    // 範囲内
+#define WITHIN_RANGE 40.0f       // 範囲内
+#define MOVE_SPEED 0.07f         // 移動速度
+#define GRAVITY 0.0625f          // 重力
+
+#define WALK_RANGE 100.0f        // 追跡する範囲
+#define STOP_RANGE 24.5f         // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // マッシュルームのアニメーションデータのテーブル
 const CMushroom::AnimData CMushroom::ANIM_DATA[] =
@@ -25,7 +31,7 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	    //  死ぬ26.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
-	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//走る 17.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//走る 17.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//見回す 121.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingStart.x",	true,	25.0f	},	//開始の見回す 25.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomTaunting.x",	true,	80.0f	},	//挑発 41.0f
@@ -160,11 +166,27 @@ void CMushroom::UpdateIdle3()
 	{
 		mState = EState::eIdle3;
 	}
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	{
+		mState = EState::eWalk;
+	}
+	else
+	{
+		ChangeAnimation(EAnimType::eIdle3);
+		if (IsAnimationFinished())
+		{
+			mState = EState::eIdle3;
+		}
+	}
 }
 
 // 攻撃
 void CMushroom::UpdateAttack()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
@@ -174,6 +196,8 @@ void CMushroom::UpdateAttack()
 // 攻撃2
 void CMushroom::UpdateAttack2()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
 	if (mAnimationFrame >= 10.0f && mAnimationFrame <= 11.0f)
 	{
@@ -187,7 +211,7 @@ void CMushroom::UpdateAttack2()
 	{
 		AttackStart();
 	}
-	if (mAnimationFrame >= 40.0f && mAnimationFrame <= 41.0f)
+	if (mAnimationFrame >= 31.0f && mAnimationFrame <= 32.0f)
 	{
 		AttackEnd();
 	}
@@ -210,6 +234,8 @@ void CMushroom::UpdateAttack2()
 // 攻撃3
 void CMushroom::UpdateAttack3()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
@@ -236,11 +262,11 @@ void CMushroom::UpdateHit()
 		// めまいをfalseにする
 		bool stan = false;
 		// 確率を最小に0最大40
-		int probability = Math::Rand(0, 20);
-		if (probability == 1)stan = true;
+		int probability = Math::Rand(5, 20);
+		if (probability == 20)stan = true;
 		if (stan)
 		{
-			//mState = EState::eDizzy;
+			mState = EState::eDizzy;
 		}
 		else
 		{
@@ -254,13 +280,68 @@ void CMushroom::UpdateHit()
 // 死ぬ
 void CMushroom::UpdateDie()
 {
-	//ChangeAnimation(EAnimType::eDie);
+	// 死ぬ時のアニメーションを開始
+	ChangeAnimation(EAnimType::eDie);
+	if (IsAnimationFinished())
+	{
+		Kill();
+		// エネミーの死亡処理
+		CEnemy::Death();
+	}
 }
 
 // めまい(混乱)
 void CMushroom::UpdateDizzy()
 {
-	//ChangeAnimation(EAnimType::eDizzy);
+	// めまい(混乱)アニメーションを開始
+	ChangeAnimation(EAnimType::eDizzy);
+	if (IsAnimationFinished())
+	{
+		// プレイヤーの攻撃がヒットした時の待機状態へ移行
+		mState = EState::eIdle3;
+		ChangeAnimation(EAnimType::eIdle4);
+	}
+}
+
+// 歩行
+void CMushroom::UpdateWalk()
+{
+	ChangeAnimation(EAnimType::eWalk);
+	CPlayer* player = CPlayer::Instance();
+	CVector nowPos = (player->Position() - Position()).Normalized();
+	float vectorp = (player->Position() - Position()).Length();
+	// 追跡をやめて止まる
+	if (vectorp <= 22.0f && vectorp >= 24.0f)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+
+		// 回転する範囲であれば
+		if (vectorp <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+		}
+	}
+	// 範囲内の時、移動し追跡する
+	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
+	{
+		mMoveSpeed += nowPos * MOVE_SPEED;
+	}
+	// 追跡が止まった時、攻撃用の待機モーションへ
+	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+		mState = EState::eIdle3;
+		ChangeAnimation(EAnimType::eIdle4);
+	}
 }
 
 // 更新処理
@@ -312,26 +393,36 @@ void CMushroom::Update()
 	case EState::eDizzy:
 		UpdateDizzy();
 		break;
+		// 歩行
+	case EState::eWalk:
+		UpdateWalk();
+		break;
 	}
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack&&
-		mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait)
+	if (mState != EState::eWalk)
 	{
-		UpdateIdle();
+		if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack &&
+			mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait)
+		{
+			UpdateIdle();
+		}
 	}
-	if (mState == EState::eIdle2 || mState == EState::eIdle3)
-	{
-		// プレイヤーのいる方向へ向く
-		CVector dir = player->Position() - Position();
-		dir.Y(0.0f);
-		dir.Normalize();
-		Rotation(CQuaternion::LookRotation(dir));
-	}
-	if (mState == EState::eIdle3)
+
+	if (mState == EState::eIdle3|| mState == EState::eWalk)
 	{
 		mAttackTime++;
+
+		if (vectorp <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
+
 		if (mAttackTime > 200)
 		{
 			// 攻撃2
@@ -360,6 +451,12 @@ void CMushroom::Update()
 		{
 			mAttackTime = 0;
 		}
+	}
+
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	{
+		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		//mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
@@ -493,7 +590,7 @@ void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
 		Rotation(CQuaternion::LookRotation(dir));
 
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
-		Position(Position() - dir * Scale().X() * 0.4f);
+		Position(Position() - dir * Scale().X() * 0.2f);
 	}
 }
 
