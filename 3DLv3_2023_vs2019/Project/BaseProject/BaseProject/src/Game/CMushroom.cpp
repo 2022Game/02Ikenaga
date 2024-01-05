@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
+#include "CHpGauge.h"
 #include "CInput.h"
 #include "Maths.h"
 
@@ -49,6 +50,10 @@ CMushroom::CMushroom()
 {
 	//インスタンスの設定
 	spInstance = this;
+
+	// HPゲージを作成
+	mpHpGauge = new CHpGauge();
+	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
@@ -124,6 +129,9 @@ CMushroom::~CMushroom()
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
+
+	// HPゲージを削除
+	mpHpGauge->Kill();
 }
 
 CMushroom* CMushroom::Instance()
@@ -409,6 +417,18 @@ void CMushroom::Update()
 			UpdateIdle();
 		}
 	}
+	if (mState == EState::eWalk || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
+		mState == EState::eAttack3 || mState == EState::eHit || mState == EState::eDizzy|| mState == EState::eAttackWait)
+	{
+		// HPゲージの座標を更新(敵の座標の少し上の座標)
+		CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+
+		mpHpGauge->SetWorldPos(gaugePos);
+	}
+	else
+	{
+		mpHpGauge->SetPos(-1000.0f, -1000.0f);
+	}
 
 	if (mState == EState::eIdle3|| mState == EState::eWalk)
 	{
@@ -473,6 +493,9 @@ void CMushroom::Update()
 	{
 		mState = EState::eAttack2;
 	}
+
+	// HPゲージに現在のHPを設定
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -562,8 +585,8 @@ void CMushroom::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	//mpHpGauge->SetValue(mCharaStatus.hp);
+	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

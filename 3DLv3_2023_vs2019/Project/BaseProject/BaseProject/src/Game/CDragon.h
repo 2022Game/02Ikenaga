@@ -1,4 +1,4 @@
-#include "CXCharacter.h"
+#pragma once
 #include "CColliderLine.h"
 #include "CModel.h"
 #include "CEnemy.h"

@@ -9,6 +9,7 @@
 #include "CSlime2.h"
 #include "CSlime3.h"
 #include "CMushroom.h"
+#include "CTurtle.h"
 #include "CRich.h"
 #include "CDragon.h"
 #include "CPortionRed.h"
@@ -51,6 +52,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
+	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 
 	// ボス関連
 	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
@@ -108,8 +110,17 @@ void CGameScene::Load()
 	enemy4->Position(60.0f, 0.0f, 20.0f);
 	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
+	// マッシュルーム2
+
+	// マッシュルーム3
+
+	// 亀
+	CTurtle* enemy7 = new CTurtle();
+	enemy7->Position(100.0f, 0.0f, 20.0f);
+	enemy7->Scale(25.0f, 25.0f, 25.0f);
+
 	CRich* enemy6 = new CRich();
-	enemy6->Position(100.0f, 5.0f, 20.0f);
+	enemy6->Position(100.0f, 5.0f, 50.0f);
 	enemy6->Rotate(0.0f,90.0f,-70.0f);
 	enemy6->Scale(0.1f, 0.1f, 0.1f);
 

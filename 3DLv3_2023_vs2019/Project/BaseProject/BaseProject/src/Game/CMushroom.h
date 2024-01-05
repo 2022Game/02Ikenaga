@@ -1,8 +1,10 @@
+#pragma once
 #include "CXCharacter.h"
 #include "CColliderLine.h"
 #include "CModel.h"
 #include "CEnemy.h"
 #include "CColliderSphere.h"
+class CHpGauge;
 
 /*
  マッシュルームクラス
@@ -144,4 +146,6 @@ private:
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;
+
+	CHpGauge* mpHpGauge;  // HPゲージ
 };
