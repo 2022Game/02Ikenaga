@@ -9,6 +9,7 @@
 #include "CSlime2.h"
 #include "CSlime3.h"
 #include "CMushroom.h"
+#include "CMushroom2.h"
 #include "CTurtle.h"
 #include "CRich.h"
 #include "CDragon.h"
@@ -116,16 +117,19 @@ void CGameScene::Load()
 	enemy5->Scale(25.0f, 25.0f, 25.0f);
 
 	// マッシュルーム3
+	CMushroom2* enemy6 = new CMushroom2();
+	enemy6->Position(180.0f, 0.0f, -210.0f);
+	enemy6->Scale(35.0f, 35.0f, 35.0f);
 
 	// 亀
 	CTurtle* enemy7 = new CTurtle();
 	enemy7->Position(100.0f, -0.1f, 20.0f);
 	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
-	CRich* enemy6 = new CRich();
-	enemy6->Position(100.0f, 5.0f, 50.0f);
-	enemy6->Rotate(0.0f,90.0f,-70.0f);
-	enemy6->Scale(0.1f, 0.1f, 0.1f);
+	CRich* enemy8 = new CRich();
+	enemy8->Position(100.0f, 5.0f, 50.0f);
+	enemy8->Rotate(0.0f,90.0f,-70.0f);
+	enemy8->Scale(0.1f, 0.1f, 0.1f);
 
 	// ドラゴン
 	CDragon* bossEnemy = new CDragon();

@@ -7,18 +7,18 @@
 class CHpGauge;
 
 /*
- マッシュルームクラス
+ マッシュルーム2クラス
  エネミークラスを継承
 */
-class CMushroom : public CEnemy
+class CMushroom2 : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
-	static CMushroom* Instance();
+	static CMushroom2* Instance();
 
 	// コンストラクタ
-	CMushroom();
-	~CMushroom();
+	CMushroom2();
+	~CMushroom2();
 
 	// 戦う前の待機状態
 	void UpdateIdle();
@@ -105,8 +105,8 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// マッシュルームのインスタンス
-	static CMushroom* spInstance;
+	// マッシュルーム2のインスタンス
+	static CMushroom2* spInstance;
 
 	// アニメーションデータ
 	struct AnimData
@@ -118,7 +118,7 @@ private:
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// マッシュルームの状態
+	// マッシュルーム2の状態
 	enum class EState
 	{
 		eIdle,		// 戦う前の待機
@@ -131,19 +131,18 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eRun,       // 走る
+		eRun,      // 走る
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
 	};
-	EState mState;	// マッシュルームの状態
+	EState mState;	// マッシュルーム2の状態
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;
-	CColliderSphere* mpColliderSphere2;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;

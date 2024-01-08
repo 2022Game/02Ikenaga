@@ -247,7 +247,7 @@ void CPlayer::UpdateIdle()
 		}
 
 		// 左クリックで攻撃状態へ移行
-		if (CInput::PushKey(VK_LBUTTON))
+		if (CInput::PushKey(VK_LBUTTON)|| CInput::PushKey('H'))
 		{
 			mAttackCount++;
 			mMoveSpeed.X(0.0f);
@@ -277,14 +277,14 @@ void CPlayer::UpdateIdle()
 			mMoveSpeed.Z(0.0f);
 			//	mState = EState::ePowerUp;
 		}
-		if (mCharaStatus.SpecialAttack > 0)
+		if (mCharaStatus.SpecialAttack >= 4)
 		{
 			if (CInput::PushKey('K'))
 			{
 				//mMoveSpeed.X(0.0f);
 				//mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack7;
-				//mCharaStatus.SpecialAttack--;
+				mCharaStatus.SpecialAttack -= 4;
 			}
 		}
 

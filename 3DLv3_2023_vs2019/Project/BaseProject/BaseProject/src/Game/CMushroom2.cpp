@@ -1,12 +1,12 @@
-#include "CMushroom.h"
+#include "CMushroom2.h"
 #include "CPlayer.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
 #include "Maths.h"
 
-// マッシュルームのインスタンス
-CMushroom* CMushroom::spInstance = nullptr;
+// マッシュルーム2のインスタンス
+CMushroom2* CMushroom2::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
 #define WITHIN_RANGE 40.0f       // 範囲内
@@ -17,8 +17,8 @@ CMushroom* CMushroom::spInstance = nullptr;
 #define STOP_RANGE 24.5f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
-// マッシュルームのアニメーションデータのテーブル
-const CMushroom::AnimData CMushroom::ANIM_DATA[] =
+// マッシュルーム2のアニメーションデータのテーブル
+const CMushroom2::AnimData CMushroom2::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	        // 植物 21.0f
@@ -43,9 +43,9 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 };
 
 // コンストラクタ
-CMushroom::CMushroom()
+CMushroom2::CMushroom2()
 	: mpRideObject(nullptr)
-	,mAttackTime(0)
+	, mAttackTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -58,7 +58,7 @@ CMushroom::CMushroom()
 	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
 
 	//最初に1レベルに設定
-	ChangeLevel(1);
+	ChangeLevel(5);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -82,22 +82,14 @@ CMushroom::CMushroom()
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
-	// キャラクター押し戻し処理(体)
+	// キャラクター押し戻し処理
 	mpColliderSphere = new CColliderSphere
 	(
-		this, ELayer::eEnemy2,
+		this, ELayer::eEnemy,
 		0.3f, false, 5.0f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
 	mpColliderSphere->Position(0.0f, 0.2f, 0.0f);
-
-	mpColliderSphere2 = new CColliderSphere
-	(
-		this, ELayer::eEnemy2,
-		0.55f, false, 5.0f
-	);
-	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
-	mpColliderSphere2->Position(0.0f, 0.7f, 0.0f);
 
 	// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -130,11 +122,10 @@ CMushroom::CMushroom()
 	mpAttackCol->SetEnable(false);
 }
 
-CMushroom::~CMushroom()
+CMushroom2::~CMushroom2()
 {
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
-	SAFE_DELETE(mpColliderSphere2);
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
 
@@ -142,13 +133,13 @@ CMushroom::~CMushroom()
 	mpHpGauge->Kill();
 }
 
-CMushroom* CMushroom::Instance()
+CMushroom2* CMushroom2::Instance()
 {
 	return spInstance;
 }
 
 // アニメーション切り替え
-void CMushroom::ChangeAnimation(EAnimType type)
+void CMushroom2::ChangeAnimation(EAnimType type)
 {
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
 	AnimData data = ANIM_DATA[(int)type];
@@ -156,7 +147,7 @@ void CMushroom::ChangeAnimation(EAnimType type)
 }
 
 // 戦う前の待機状態
-void CMushroom::UpdateIdle()
+void CMushroom2::UpdateIdle()
 {
 	if (IsAnimationFinished())
 	{
@@ -165,7 +156,7 @@ void CMushroom::UpdateIdle()
 }
 
 // 戦う前の待機状態2
-void CMushroom::UpdateIdle2()
+void CMushroom2::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
@@ -175,7 +166,7 @@ void CMushroom::UpdateIdle2()
 }
 
 // 待機状態3
-void CMushroom::UpdateIdle3()
+void CMushroom2::UpdateIdle3()
 {
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
@@ -199,7 +190,7 @@ void CMushroom::UpdateIdle3()
 }
 
 // 攻撃
-void CMushroom::UpdateAttack()
+void CMushroom2::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -210,7 +201,7 @@ void CMushroom::UpdateAttack()
 }
 
 // 攻撃2
-void CMushroom::UpdateAttack2()
+void CMushroom2::UpdateAttack2()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -239,7 +230,7 @@ void CMushroom::UpdateAttack2()
 	{
 		AttackEnd();
 	}
-	if(IsAnimationFinished())
+	if (IsAnimationFinished())
 	{
 		// 攻撃2終了待ち状態へ移行
 		mState = EState::eAttackWait;
@@ -248,7 +239,7 @@ void CMushroom::UpdateAttack2()
 
 
 // 攻撃3
-void CMushroom::UpdateAttack3()
+void CMushroom2::UpdateAttack3()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -259,7 +250,7 @@ void CMushroom::UpdateAttack3()
 }
 
 // 攻撃終了待ち
-void  CMushroom::UpdateAttackWait()
+void  CMushroom2::UpdateAttackWait()
 {
 	if (IsAnimationFinished())
 	{
@@ -269,7 +260,7 @@ void  CMushroom::UpdateAttackWait()
 }
 
 // ヒット
-void CMushroom::UpdateHit()
+void CMushroom2::UpdateHit()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -294,7 +285,7 @@ void CMushroom::UpdateHit()
 }
 
 // 死ぬ
-void CMushroom::UpdateDie()
+void CMushroom2::UpdateDie()
 {
 	// 死ぬ時のアニメーションを開始
 	ChangeAnimation(EAnimType::eDie);
@@ -307,7 +298,7 @@ void CMushroom::UpdateDie()
 }
 
 // めまい(混乱)
-void CMushroom::UpdateDizzy()
+void CMushroom2::UpdateDizzy()
 {
 	// めまい(混乱)アニメーションを開始
 	ChangeAnimation(EAnimType::eDizzy);
@@ -320,7 +311,7 @@ void CMushroom::UpdateDizzy()
 }
 
 // 走る
-void CMushroom::UpdateRun()
+void CMushroom2::UpdateRun()
 {
 	ChangeAnimation(EAnimType::eRun);
 	CPlayer* player = CPlayer::Instance();
@@ -361,7 +352,7 @@ void CMushroom::UpdateRun()
 }
 
 // 更新処理
-void CMushroom::Update()
+void CMushroom2::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
@@ -426,10 +417,10 @@ void CMushroom::Update()
 		}
 	}
 	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
-		mState == EState::eAttack3 || mState == EState::eHit || mState == EState::eDizzy|| mState == EState::eAttackWait)
+		mState == EState::eAttack3 || mState == EState::eHit || mState == EState::eDizzy || mState == EState::eAttackWait)
 	{
 		// HPゲージの座標を更新(敵の座標の少し上の座標)
-		CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+		CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
 
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
@@ -438,7 +429,7 @@ void CMushroom::Update()
 		mpHpGauge->SetPos(-1000.0f, -1000.0f);
 	}
 
-	if (mState == EState::eIdle3|| mState == EState::eRun)
+	if (mState == EState::eIdle3 || mState == EState::eRun)
 	{
 		mAttackTime++;
 
@@ -499,7 +490,7 @@ void CMushroom::Update()
 }
 
 // 衝突処理
-void CMushroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+void CMushroom2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol && mState != EState::eIdle && mState != EState::eIdle2 &&
@@ -538,7 +529,7 @@ void CMushroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		}
 	}
 	// キャラクター同士の衝突処理
-	else if (self == mpColliderSphere || self == mpColliderSphere2)
+	else if (self == mpColliderSphere)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);
@@ -547,7 +538,7 @@ void CMushroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 }
 
 // 攻撃開始
-void CMushroom::AttackStart()
+void CMushroom2::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
@@ -555,7 +546,7 @@ void CMushroom::AttackStart()
 }
 
 // 攻撃終了
-void CMushroom::AttackEnd()
+void CMushroom2::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
@@ -563,20 +554,20 @@ void CMushroom::AttackEnd()
 }
 
 // 描画
-void CMushroom::Render()
+void CMushroom2::Render()
 {
 	CXCharacter::Render();
 }
 
 // 1レベルアップ
-void CMushroom::LevelUp()
+void CMushroom2::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
 // レベルを変更
-void CMushroom::ChangeLevel(int level)
+void CMushroom2::ChangeLevel(int level)
 {
 	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
@@ -590,7 +581,7 @@ void CMushroom::ChangeLevel(int level)
 }
 
 // 被ダメージ処理
-void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
+void CMushroom2::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
@@ -619,7 +610,7 @@ void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
 
 
 // 死亡処理
-void CMushroom::Death()
+void CMushroom2::Death()
 {
 	// 死亡状態へ移行
 	mState = EState::eDie;
