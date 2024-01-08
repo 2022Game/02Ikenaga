@@ -96,7 +96,7 @@ CPlayer::CPlayer()
 
 	// SAƒQ[ƒW‚ğì¬
 	mpSaGauge = new CSaGauge();
-	mpSaGauge->SetPos(10.0f,105.0f);
+	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// Å‰‚É1ƒŒƒxƒ‹‚Éİ’è
 	ChangeLevel(5);

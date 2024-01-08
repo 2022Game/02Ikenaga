@@ -44,8 +44,8 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
-	// 歩行
-	void UpdateWalk();
+	// 走る
+	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -98,10 +98,9 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eWalk,		// 歩行
+		eRun,		// 走る
 		eLeftWalk,  // 右に歩行
 		eRightWalk, // 左に歩行
-		eRun,       // 走る
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
@@ -137,7 +136,7 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eWalk,      // 歩行
+		eRun,       // 走る
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了

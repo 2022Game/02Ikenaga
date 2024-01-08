@@ -16,7 +16,18 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃 26.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃 26.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	true,	24.0f	},	// 防御中のヒット 8.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	true,	122.0f	},	        // 死ぬ 61.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	true,	82.0f	},	    // めまい 41.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	true,	52.0f	},	    // ヒット 26.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	50.0f	},  // 待機 25.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	102.0f	},  // 待機2 51.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	true,	34.0f	},  // 走る 17.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	true,	142.0f	},  // 普通の待機 71.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},  // 普通の待機2 61.0f
+
 };
 
 // コンストラクタ

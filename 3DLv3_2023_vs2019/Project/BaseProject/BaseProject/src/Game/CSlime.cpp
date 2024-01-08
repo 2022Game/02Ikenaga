@@ -25,8 +25,8 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleNormal.x",	true,	70.0f	},  // アイドル通常 51.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingStart.x",	true,	120.0f	},  // 開始の見回す 63.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingRoutine.x",	true,	140.0f	},  // 見回す 71.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	true,	25.0f	},  // アイドルバトル 25.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	30.0f	},  // 攻撃 26.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	true,	50.0f	},  // アイドルバトル 25.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	true,	52.0f	},  // 攻撃 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	true,	80.0f	},  // 攻撃2 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	true,	70.0f	},  // ヒット 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	true,	90.0f	},  // 死ぬ 41.0f
@@ -184,7 +184,7 @@ void CSlime::UpdateIdle3()
 	float vectorp = (player->Position() - Position()).Length();
 	if ( vectorp >=STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eWalk;
+		mState = EState::eRun;
 	}
 	else
 	{
@@ -248,7 +248,7 @@ void CSlime::UpdateAttackWait()
 		float vectorp = (player->Position() - Position()).Length();
 		if (vectorp >=STOP_RANGE && vectorp <= WALK_RANGE)
 		{
-			mState = EState::eWalk;
+			mState = EState::eRun;
 		}
 		else
 		{
@@ -310,10 +310,10 @@ void CSlime::UpdateDizzy()
 	}
 }
 
-// 歩行
-void CSlime::UpdateWalk() 
+// 走る
+void CSlime::UpdateRun() 
 {
-	ChangeAnimation(EAnimType::eWalk);
+	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
@@ -401,8 +401,8 @@ void CSlime::Update()
 		UpdateDizzy();
 		break;
 		// 歩行
-	case EState::eWalk:
-		UpdateWalk();
+	case EState::eRun:
+		UpdateRun();
 		break;
 	}
 

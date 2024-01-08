@@ -178,7 +178,7 @@ void CMushroom::UpdateIdle3()
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eWalk;
+		mState = EState::eRun;
 	}
 	else
 	{
@@ -311,10 +311,10 @@ void CMushroom::UpdateDizzy()
 	}
 }
 
-// 歩行
-void CMushroom::UpdateWalk()
+// 走る
+void CMushroom::UpdateRun()
 {
-	ChangeAnimation(EAnimType::eWalk);
+	ChangeAnimation(EAnimType::eRun);
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
@@ -402,14 +402,14 @@ void CMushroom::Update()
 		UpdateDizzy();
 		break;
 		// 歩行
-	case EState::eWalk:
-		UpdateWalk();
+	case EState::eRun:
+		UpdateRun();
 		break;
 	}
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (mState != EState::eWalk)
+	if (mState != EState::eRun)
 	{
 		if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack &&
 			mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait)
@@ -417,7 +417,7 @@ void CMushroom::Update()
 			UpdateIdle();
 		}
 	}
-	if (mState == EState::eWalk || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
+	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
 		mState == EState::eAttack3 || mState == EState::eHit || mState == EState::eDizzy|| mState == EState::eAttackWait)
 	{
 		// HPゲージの座標を更新(敵の座標の少し上の座標)
@@ -430,7 +430,7 @@ void CMushroom::Update()
 		mpHpGauge->SetPos(-1000.0f, -1000.0f);
 	}
 
-	if (mState == EState::eIdle3|| mState == EState::eWalk)
+	if (mState == EState::eIdle3|| mState == EState::eRun)
 	{
 		mAttackTime++;
 
@@ -479,20 +479,12 @@ void CMushroom::Update()
 		//mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 
-	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
-
 	// キャラクターの更新
 	CXCharacter::Update();
 
 	mpAttackCol->Update();
 
 	mIsGrounded = false;
-
-	if (CInput::PushKey('Q'))
-	{
-		mState = EState::eAttack2;
-	}
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);

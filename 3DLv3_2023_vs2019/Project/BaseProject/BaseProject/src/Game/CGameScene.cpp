@@ -107,16 +107,19 @@ void CGameScene::Load()
 
 	// マッシュルーム
 	CMushroom* enemy4 = new CMushroom();
-	enemy4->Position(60.0f, 0.0f, 20.0f);
+	enemy4->Position(150.0f, 0.0f, -150.0f);
 	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	// マッシュルーム2
+	CMushroom* enemy5 = new CMushroom();
+	enemy5->Position(210.0f, 0.0f, -150.0f);
+	enemy5->Scale(25.0f, 25.0f, 25.0f);
 
 	// マッシュルーム3
 
 	// 亀
 	CTurtle* enemy7 = new CTurtle();
-	enemy7->Position(100.0f, 0.0f, 20.0f);
+	enemy7->Position(100.0f, -0.1f, 20.0f);
 	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
 	CRich* enemy6 = new CRich();
