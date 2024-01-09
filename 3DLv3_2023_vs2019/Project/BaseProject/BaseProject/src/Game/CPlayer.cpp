@@ -179,6 +179,7 @@ void CPlayer::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+
 // ‘Ò‹@
 void CPlayer::UpdateIdle()
 {
