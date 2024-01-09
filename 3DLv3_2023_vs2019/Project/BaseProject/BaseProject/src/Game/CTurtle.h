@@ -18,9 +18,9 @@ public:
 	CTurtle();
 	~CTurtle();
 
-	// 戦う前の待機状態
+	// 待機状態
 	void UpdateIdle();
-	// 戦う前の待機状態2
+	// 待機状態2
 	void UpdateIdle2();
 	// 待機状態3
 	void UpdateIdle3();
@@ -81,10 +81,10 @@ private:
 		None = -1,
 
 		eTPose,		// Tポーズ
-		eIdle,		// 戦う前の待機
-		eIdle2,		// 戦う前の待機2
-		eIdle3,     // 待機状態3
-		eIdle4,     // 待機状態4
+		eIdle,		// 待機
+		eIdle2,		// 待機2
+		eIdle3,     // 待機3
+		eIdle4,     // 待機4
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
 		eAttack3,	// 攻撃3
@@ -117,9 +117,9 @@ private:
 	// 亀の状態
 	enum class EState
 	{
-		eIdle,		// 戦う前の待機
-		eIdle2,		// 戦う前の待機2
-		eIdle3,     // 待機状態3
+		eIdle,		// 待機
+		eIdle2,		// 待機2
+		eIdle3,     // 待機3
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
 		eAttack3,	// 攻撃3

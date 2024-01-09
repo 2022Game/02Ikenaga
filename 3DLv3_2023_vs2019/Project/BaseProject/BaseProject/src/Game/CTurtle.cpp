@@ -15,6 +15,10 @@ CTurtle* CTurtle::spInstance = nullptr;
 const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	102.0f	},  // 待機 51.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	50.0f	},  // 待機2 25.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	true,	142.0f	},          // 見回す待機 71.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},          // 見回す待機2 61.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃 26.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
@@ -22,11 +26,7 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	true,	122.0f	},	        // 死ぬ 61.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	true,	82.0f	},	    // めまい 41.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	true,	52.0f	},	    // ヒット 26.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	50.0f	},  // 待機 25.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	102.0f	},  // 待機2 51.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	true,	34.0f	},  // 走る 17.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	true,	142.0f	},  // 普通の待機 71.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},  // 普通の待機2 61.0f
+	//{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	true,	34.0f	},          // 走る 17.0f
 
 };
 
@@ -127,22 +127,23 @@ void CTurtle::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
-// 戦う前の待機状態
+// 待機状態
 void CTurtle::UpdateIdle()
 {
+	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		mState = EState::eIdle;
 	}
 }
 
-// 戦う前の待機状態2
+// 待機状態2
 void CTurtle::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		mState = EState::eIdle2;
 	}
 }
 
@@ -286,7 +287,16 @@ void CTurtle::Update()
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3)
 	{
+		mState = EState::eIdle;
 		//UpdateIdle();
+	}
+	if (CInput::PushKey('Z'))
+	{
+		mState = EState::eIdle;
+	}
+	if (CInput::PushKey('X'))
+	{
+		mState = EState::eIdle2;
 	}
 	if (mState == EState::eIdle3)
 	{

@@ -204,9 +204,12 @@ void CMushroom::UpdateAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
-	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	if (mAnimationFrame >= 35.0f)
+	{
+		AttackStart();
+		// 攻撃2終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃2
@@ -271,6 +274,9 @@ void  CMushroom::UpdateAttackWait()
 // ヒット
 void CMushroom::UpdateHit()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -417,13 +423,11 @@ void CMushroom::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (mState != EState::eRun)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack &&
+		mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait && mState != EState::eHit
+		&& mState != EState::eDizzy && mState != EState::eDie && mState != EState::eRun)
 	{
-		if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack &&
-			mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait)
-		{
-			UpdateIdle();
-		}
+		UpdateIdle();
 	}
 	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
 		mState == EState::eAttack3 || mState == EState::eHit || mState == EState::eDizzy|| mState == EState::eAttackWait)
