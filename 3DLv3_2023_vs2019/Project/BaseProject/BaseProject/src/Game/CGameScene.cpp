@@ -9,6 +9,7 @@
 #include "CSlime3.h"
 #include "CMushroom.h"
 #include "CMushroom2.h"
+#include "CMushroom3.h"
 #include "CTurtle.h"
 #include "CRich.h"
 #include "CDragon.h"
@@ -23,8 +24,12 @@
 // コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
-	,RevivalTime(0)
-	,RevivalTime2(0)
+	,SlimeReTime(0)
+	,Slime2ReTime(0)
+	,Slime3ReTime(0)
+	,MushroomReTime(0)
+	,Mushroom2ReTime(0)
+	,Mushroom3ReTime(0)
 {
 }
 
@@ -113,12 +118,12 @@ void CGameScene::Load()
 	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	// マッシュルーム2
-	CMushroom* enemy5 = new CMushroom();
+	CMushroom2* enemy5 = new CMushroom2();
 	enemy5->Position(210.0f, 0.0f, -150.0f);
 	enemy5->Scale(25.0f, 25.0f, 25.0f);
 
 	// マッシュルーム3
-	CMushroom2* enemy6 = new CMushroom2();
+	CMushroom3* enemy6 = new CMushroom3();
 	enemy6->Position(180.0f, 0.0f, -210.0f);
 	enemy6->Scale(35.0f, 35.0f, 35.0f);
 
@@ -162,50 +167,98 @@ void CGameScene::Clear()
 	//CSceneManager::ClearInstance();
 }
 
-// ゲームオーバー判定
-bool CGameScene::IsOver()
-{
-	return mpPlayer->mHp <= 0;
-	//CSceneManager::ClearInstance();
-	//CSceneManager::Instance()->LoadScene(EScene::eGameOver);
-}
-
-// ゲームオーバー処理
-void CGameScene::Over()
-{
-	CSceneManager::ClearInstance();
-	CSceneManager::Instance()->LoadScene(EScene::eGameOver);
-}
-
 // シーンの更新処理
 void CGameScene::Update()
 {
+	// プレイヤーのHPが0以下になったら
 	if (mpPlayer->mHp <= 0)
 	{
 		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
 	}
 
+	// レッドスライムの復活
 	if (mpSlime->mHp <= 0)
 	{
-		(RevivalTime++/100);
-		if (RevivalTime > 1000)
+		(SlimeReTime++/100);
+		if (SlimeReTime > 1000)
 		{
+			// レッドスライム
 			CSlime* enemy = new CSlime();
-			enemy->Position(0.0f, 0.0f, -20.0f);
+			enemy->Position(0.0f, 0.0f, -40.0f);
 			enemy->Scale(25.0f, 25.0f, 25.0f);
-			RevivalTime = 0;
+			SlimeReTime = 0;
 		}
 	}
+
+	// オレンジスライムの復活
 	if (mpSlime2->mHp <= 0)
 	{
-		(RevivalTime2++ / 100);
-		if (RevivalTime2 > 1000)
+		(Slime2ReTime++ / 100);
+		if (Slime2ReTime > 1000)
 		{
+			// オレンジスライム
 			CSlime2* enemy2 = new CSlime2();
-			enemy2->Position(-40.0f, 0.0f, -20.0f);
+			enemy2->Position(-40.0f, 0.0f, -40.0f);
 			enemy2->Scale(25.0f, 25.0f, 25.0f);
-			RevivalTime2 = 0;
+			Slime2ReTime = 0;
 		}
 	}
-	CDebugPrint::Print(" 復活時間: %d\n", RevivalTime / 100);
+
+	//	ブルースライムの復活
+	if (mpSlime3->mHp <= 0)
+	{
+		(Slime3ReTime++ / 100);
+		if (Slime3ReTime > 1000)
+		{
+			// ブルースライム
+			CSlime3* enemy3 = new CSlime3();
+			enemy3->Position(-20.0f, 0.0f, -90.0f);
+			enemy3->Scale(35.0f, 35.0f, 35.0f);
+			Slime3ReTime = 0;
+		}
+	}
+
+	// マッシュルームの復活
+	if (mpMushroom->mHp <= 0)
+	{
+		(MushroomReTime++ / 100);
+		if (MushroomReTime > 1000)
+		{
+			// マッシュルーム
+			CMushroom* enemy4 = new CMushroom();
+			enemy4->Position(150.0f, 0.0f, -150.0f);
+			enemy4->Scale(25.0f, 25.0f, 25.0f);
+			MushroomReTime = 0;
+		}
+	}
+
+	// マッシュルーム2の復活
+	if (mpMushroom2->mHp <= 0)
+	{
+		(Mushroom2ReTime++ / 100);
+		if (Mushroom2ReTime > 1000)
+		{
+			// マッシュルーム2
+			CMushroom* enemy5 = new CMushroom();
+			enemy5->Position(210.0f, 0.0f, -150.0f);
+			enemy5->Scale(25.0f, 25.0f, 25.0f);
+			Mushroom2ReTime = 0;
+		}
+	}
+
+	// マッシュルーム3の復活
+	if (mpMushroom3->mHp <= 0)
+	{
+		(Mushroom3ReTime++ / 100);
+		if (Mushroom3ReTime > 1000)
+		{
+			// マッシュルーム3
+			CMushroom3* enemy6 = new CMushroom3();
+			enemy6->Position(180.0f, 0.0f, -210.0f);
+			enemy6->Scale(35.0f, 35.0f, 35.0f);
+			Mushroom3ReTime = 0;
+		}
+	}
+
+	CDebugPrint::Print(" 復活時間: %d\n", SlimeReTime / 100);
 }

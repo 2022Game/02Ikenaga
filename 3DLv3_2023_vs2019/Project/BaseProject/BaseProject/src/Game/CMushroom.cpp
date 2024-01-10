@@ -42,6 +42,8 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomWalk4.x",	true,	31.0f	},	//歩く4 31.0f
 };
 
+int CMushroom::mHp;
+
 // コンストラクタ
 CMushroom::CMushroom()
 	: mpRideObject(nullptr)
@@ -371,6 +373,7 @@ void CMushroom::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mHp = mCharaStatus.hp;
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)

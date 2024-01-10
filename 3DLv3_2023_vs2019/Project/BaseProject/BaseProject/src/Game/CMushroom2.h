@@ -77,6 +77,8 @@ public:
 	// 死亡処理
 	void Death() override;
 
+	static int mHp;
+
 private:
 	int mAttackTime;   // 攻撃時間の間隔
 	// アニメーションの種類
@@ -131,7 +133,7 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eRun,      // 走る
+		eRun,       // 走る
 		eJumpStart,	// ジャンプ開始
 		eJump,		// ジャンプ中
 		eJumpEnd,	// ジャンプ終了
@@ -143,6 +145,7 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;
+	CColliderSphere* mpColliderSphere2;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;

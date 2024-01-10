@@ -16,10 +16,10 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	102.0f	},  // 待機 51.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	50.0f	},  // 待機2 25.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	35.0f	},  // 待機2 25.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	true,	142.0f	},          // 見回す待機 71.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},          // 見回す待機2 61.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},      // 見回す待機2 61.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃 26.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	true,	24.0f	},	// 防御中のヒット 8.0f
@@ -133,7 +133,7 @@ void CTurtle::UpdateIdle()
 	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;
+		mState = EState::eIdle2;
 	}
 }
 
@@ -141,10 +141,16 @@ void CTurtle::UpdateIdle()
 void CTurtle::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
-	if (IsAnimationFinished())
+	mAttackTime++;
+	if (mAttackTime > 200)
 	{
-		mState = EState::eIdle2;
+		mState = EState::eAttack;
 	}
+	if (mState == EState::eAttack)
+	{
+		mAttackTime = 0;
+	}
+	//mState = EState::eIdle2;
 }
 
 // 待機状態3
@@ -191,7 +197,7 @@ void CTurtle::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eIdle3;
+		mState = EState::eIdle2;
 	}
 }
 
@@ -241,11 +247,11 @@ void CTurtle::Update()
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
-		// 戦う前の待機状態
+		// 待機状態
 	case EState::eIdle:
 		UpdateIdle();
 		break;
-		// 戦う前の待機状態2
+		// 待機状態2
 	case EState::eIdle2:
 		UpdateIdle2();
 		break;
@@ -285,11 +291,12 @@ void CTurtle::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eAttack)
 	{
-		mState = EState::eIdle;
-		//UpdateIdle();
+		mState = EState::eIdle2;
+		//mAttackTime++;
 	}
+
 	if (CInput::PushKey('Z'))
 	{
 		mState = EState::eIdle;
@@ -298,11 +305,16 @@ void CTurtle::Update()
 	{
 		mState = EState::eIdle2;
 	}
-	if (mState == EState::eIdle3)
+	if (CInput::PushKey('C'))
 	{
-		//mAttackTime++;
+		mState = EState::eIdle3;
+	}
+	if (mState == EState::eIdle2)
+	{
+		mAttackTime++;
 		if (mAttackTime > 200)
 		{
+			mState = EState::eAttack;
 			// 攻撃2
 			//bool Attack2 = false;
 			//// 攻撃3
@@ -331,7 +343,7 @@ void CTurtle::Update()
 		}
 	}
 
-	//CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
+	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
 	//CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
 
 	// キャラクターの更新

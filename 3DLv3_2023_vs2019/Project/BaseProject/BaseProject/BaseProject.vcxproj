@@ -66,6 +66,7 @@
     <ClCompile Include="src\Game\CGameCamera.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CMushroom2.cpp" />
+    <ClCompile Include="src\Game\CMushroom3.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
     <ClCompile Include="src\Game\CSlime.cpp" />
     <ClCompile Include="src\Game\CMushroom.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="src\Game\CGameCamera.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
+    <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CRich.h" />
     <ClInclude Include="src\Game\CSlime.h" />
     <ClInclude Include="src\Game\CMushroom.h" />

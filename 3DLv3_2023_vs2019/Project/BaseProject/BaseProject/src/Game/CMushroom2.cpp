@@ -42,6 +42,8 @@ const CMushroom2::AnimData CMushroom2::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomWalk4.x",	true,	31.0f	},	//歩く4 31.0f
 };
 
+int CMushroom2::mHp;
+
 // コンストラクタ
 CMushroom2::CMushroom2()
 	: mpRideObject(nullptr)
@@ -58,7 +60,7 @@ CMushroom2::CMushroom2()
 	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
 
 	//最初に1レベルに設定
-	ChangeLevel(5);
+	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -82,14 +84,22 @@ CMushroom2::CMushroom2()
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
-	// キャラクター押し戻し処理
+	// キャラクター押し戻し処理(体)
 	mpColliderSphere = new CColliderSphere
 	(
-		this, ELayer::eEnemy,
+		this, ELayer::eEnemy2,
 		0.3f, false, 5.0f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
 	mpColliderSphere->Position(0.0f, 0.2f, 0.0f);
+
+	mpColliderSphere2 = new CColliderSphere
+	(
+		this, ELayer::eEnemy2,
+		0.55f, false, 5.0f
+	);
+	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
+	mpColliderSphere2->Position(0.0f, 0.7f, 0.0f);
 
 	// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -126,6 +136,7 @@ CMushroom2::~CMushroom2()
 {
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
+	SAFE_DELETE(mpColliderSphere2);
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
 
@@ -362,6 +373,7 @@ void CMushroom2::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mHp = mCharaStatus.hp;
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -424,7 +436,7 @@ void CMushroom2::Update()
 		mState == EState::eAttack3 || mState == EState::eHit || mState == EState::eDizzy || mState == EState::eAttackWait)
 	{
 		// HPゲージの座標を更新(敵の座標の少し上の座標)
-		CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
+		CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
 
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
@@ -533,7 +545,7 @@ void CMushroom2::Collision(CCollider* self, CCollider* other, const CHitInfo& hi
 		}
 	}
 	// キャラクター同士の衝突処理
-	else if (self == mpColliderSphere)
+	else if (self == mpColliderSphere || self == mpColliderSphere2)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);

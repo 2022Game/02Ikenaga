@@ -77,6 +77,8 @@ public:
 	// 死亡処理
 	void Death() override;
 
+	static int mHp;
+
 private:
 	int mAttackTime;   // 攻撃時間の間隔
 	// アニメーションの種類
