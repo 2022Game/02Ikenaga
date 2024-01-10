@@ -77,6 +77,9 @@
     <Filter Include="ソース ファイル\BaseSystem\Resource">
       <UniqueIdentifier>{ffd69484-88ac-4071-b845-e760a392a043}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\System">
+      <UniqueIdentifier>{1e65f8e4-27be-4259-a896-1ddd5dc2fa86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -339,6 +342,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CMushroom2.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameCamera.cpp">
+      <Filter>ソース ファイル\Game\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -626,6 +632,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CMushroom2.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameCamera.h">
+      <Filter>ソース ファイル\Game\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

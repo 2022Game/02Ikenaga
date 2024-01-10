@@ -4,7 +4,6 @@
 #include "CPlayer.h"
 #include "CSword.h"
 #include "CShield.h"
-#include "CCamera.h"
 #include "CSlime.h"
 #include "CSlime2.h"
 #include "CSlime3.h"
@@ -17,6 +16,8 @@
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
 #include "CCane.h"
+#include "CGameCamera.h"
+#include "CInput.h"
 //#include "CLineEffect.h"
 
 // コンストラクタ
@@ -82,7 +83,7 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 
-	CCamera* mainCamera = new CCamera
+	CGameCamera* mainCamera = new CGameCamera
 	(
 		DEFAULT_CAMERA_POS,
 		player->Position()
@@ -147,12 +148,6 @@ void CGameScene::Load()
 	CPortionBlue* portionblue = new CPortionBlue();
 	portionblue->Position(70.0f, 10.0f, 0.0f);
 	portionblue->Scale(70.0f, 70.0f, 70.0f);
-
-	//CLineEffect* le = new CLineEffect(ETag::eNone);
-	//le->AddPoint(CVector(0.0f, 10.0f, 10.0f), 1.0f);
-	//le->AddPoint(CVector(10.0f, 10.0f, 10.0f), 1.0f);
-	//le->AddPoint(CVector(10.0f, 20.0f, 50.0f), 1.0f);
-	//le->AddPoint(CVector(50.0f, 10.0f, 50.0f), 1.0f);
 }
 
 // ゲームクリア判定
@@ -185,6 +180,11 @@ void CGameScene::Over()
 // シーンの更新処理
 void CGameScene::Update()
 {
+	if (mpPlayer->mHp <= 0)
+	{
+		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+	}
+
 	if (mpSlime->mHp <= 0)
 	{
 		(RevivalTime++/100);

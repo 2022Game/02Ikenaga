@@ -87,6 +87,17 @@ bool CInput::PullKey(int key)
 	return (msInputBits[key] & (1 << eInputBit_Pull)) != 0;
 }
 
+// マウスカーソルの表示設定
+void CInput::ShowCursor(bool isShow)
+{
+	glfwSetInputMode
+	(
+		spWindow,
+		GLFW_CURSOR,
+		isShow ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED
+	);
+}
+
 // キーの入力状態を更新
 void CInput::Update()
 {
@@ -123,7 +134,7 @@ void CInput::Update()
 	msLastMousePos = msMousePos;
 	double xpos, ypos;
 	glfwGetCursorPos(spWindow, &xpos, &ypos);
-//	glfwGet
+	//	glfwGet
 	msMousePos = CVector2((float)xpos, (float)ypos);
 #if _DEBUG
 	if (!CDebugInput::IsOn())

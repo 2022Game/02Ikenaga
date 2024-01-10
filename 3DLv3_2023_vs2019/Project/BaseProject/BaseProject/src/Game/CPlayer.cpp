@@ -229,7 +229,10 @@ void CPlayer::UpdateIdle()
 		if (input.LengthSqr() > 0.0f)
 		{
 			// カメラの向きに合わせた移動ベクトルに変換
-			CVector move = CCamera::MainCamera()->Rotation() * input;
+			CCamera* mainCamera = CCamera::MainCamera();
+			CVector camForward = mainCamera->VectorZ();
+			CVector camSide = CVector::Cross(CVector::up, camForward);
+			CVector move = camForward * input.Z() + camSide * input.X();
 			move.Y(0.0f);
 			move.Normalize();
 
@@ -548,10 +551,6 @@ void CPlayer::UpdateDei()
 	ChangeAnimation(EAnimType::eDie);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	if (IsAnimationFinished())
-	{
-		//EScene::eGameOver;
-	}
 }
 
 // 現在の経験値を消費してレベルアップ

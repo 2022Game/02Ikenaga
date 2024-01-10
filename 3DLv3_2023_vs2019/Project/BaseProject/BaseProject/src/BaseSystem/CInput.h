@@ -55,6 +55,12 @@ public:
 	static bool PullKey(int key);
 
 	/// <summary>
+	/// マウスカーソルの表示設定
+	/// </summary>
+	/// <param name="isShow">trueならば、表示する</param>
+	static void ShowCursor(bool isShow);
+
+	/// <summary>
 	/// キーの入力状態を更新
 	/// （呼び出しは1フレームに1回まで）
 	/// </summary>

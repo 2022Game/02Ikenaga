@@ -55,7 +55,8 @@ public:
 	/// <param name="eye">カメラの位置</param>
 	/// <param name="at">注視する位置</param>
 	/// <param name="up">上ベクトル</param>
-	void LookAt(const CVector& eye, const CVector& at, const CVector& up);
+	/// <param name="updateTargetEye">視点の目標位置も更新するかどうか</param>
+	void LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye = true);
 
 	/// <summary>
 	/// 画面サイズ変更時のコールバック関数
@@ -146,6 +147,10 @@ protected:
 	CVector mEye;		// 視点の実際の位置
 	CVector mAt;		// 注視点
 	CVector mUp;		// 上ベクトル
+	CVector mEyeVec;	// 視点から注視点までのベクトル
+
+	CTransform* mFollowTargetTf;	// 追従するターゲットのCTransfrom
+	CVector mFollowOffsetPos;		// 追従ターゲットの位置から視点までのオフセット値
 
 private:
 	// カメラを削除
@@ -159,9 +164,6 @@ private:
 	static CCamera* spCurrentCamera;// 現在のカメラ
 
 	bool mIsMainCamera;				// メインカメラかどうか
-
-	CTransform* mFollowTargetTf;	// 追従するターゲットのCTransfrom
-	CVector mFollowOffsetPos;		// 追従ターゲットの位置から視点までのオフセット値
 
 	CMatrix mViewMatrix;			// ビュー行列
 	CMatrix mProjectionMatrix;		// プロジェクション行列

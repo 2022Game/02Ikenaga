@@ -122,6 +122,7 @@ void CCamera::CopyCamera(CCamera* copy)
 	mEye = copy->mEye;
 	mAt = copy->mAt;
 	mUp = copy->mUp;
+	mEyeVec = copy->mEyeVec;
 }
 
 // 追従するターゲットを設定
@@ -156,9 +157,11 @@ void CCamera::LookAt(const CVector& pos, const CVector& up)
 }
 
 // 注視する位置を設定（視点 + 注視点 + 上ベクトル）
-void CCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up)
+void CCamera::LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye)
 {
+	if (updateTargetEye) mTargetEye = eye;
 	mEye = eye; mAt = at; mUp = up;
+	mEyeVec = mAt - mTargetEye;
 	mViewMatrix.Identity();
 	CVector f = (mEye - mAt).Normalized();
 	CVector r = CVector::Cross(mUp, f).Normalized();
@@ -342,8 +345,7 @@ void CCamera::Update()
 		CVector diff = eye - mTargetEye;
 		mTargetEye = eye;
 		mEye = mTargetEye;
-		mAt += diff;
-
+		mAt = mEye - VectorZ().Normalized() * mEyeVec.Length();
 	}
 
 	// 設定されているコライダーと衝突する場合は、
@@ -351,7 +353,7 @@ void CCamera::Update()
 	ApplyCollision();
 
 	// 視点、注視点、上ベクトルから各行列を更新
-	LookAt(mEye, mAt, mUp);
+	LookAt(mEye, mAt, mUp, false);
 }
 
 // 削除

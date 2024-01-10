@@ -63,6 +63,7 @@
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CExp.cpp" />
     <ClCompile Include="src\Game\CExpManager.cpp" />
+    <ClCompile Include="src\Game\CGameCamera.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CMushroom2.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CExp.h" />
     <ClInclude Include="src\Game\CExpManager.h" />
+    <ClInclude Include="src\Game\CGameCamera.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CRich.h" />
