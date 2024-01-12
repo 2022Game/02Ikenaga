@@ -291,24 +291,11 @@ void CTurtle::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eAttack)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttackWait)
 	{
 		mState = EState::eIdle2;
-		//mAttackTime++;
 	}
 
-	if (CInput::PushKey('Z'))
-	{
-		mState = EState::eIdle;
-	}
-	if (CInput::PushKey('X'))
-	{
-		mState = EState::eIdle2;
-	}
-	if (CInput::PushKey('C'))
-	{
-		mState = EState::eIdle3;
-	}
 	if (mState == EState::eIdle2)
 	{
 		mAttackTime++;
