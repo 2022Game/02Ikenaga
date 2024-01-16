@@ -127,9 +127,10 @@ CPlayer::CPlayer()
 	mpColliderSphere = new CColliderSphere
 	(
 		this,ELayer::ePlayer,
-		0.4f
+		0.5f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eEnemy2 });
+	mpColliderSphere->Position(0.0f,0.6f,0.1f);
 
 	///ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -288,7 +289,7 @@ void CPlayer::UpdateIdle()
 				//mMoveSpeed.X(0.0f);
 				//mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack7;
-				mCharaStatus.SpecialAttack -= 4;
+				//mCharaStatus.SpecialAttack -= 4;
 			}
 		}
 
@@ -386,6 +387,8 @@ void CPlayer::UpdateAttack6()
 // 攻撃7
 void CPlayer::UpdateAttack7()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack7);
 

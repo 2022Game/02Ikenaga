@@ -99,7 +99,7 @@ CMushroom::CMushroom()
 		0.55f, false, 5.0f
 	);
 	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
-	mpColliderSphere2->Position(0.0f, 0.7f, 0.0f);
+	mpColliderSphere2->Position(0.0f, 0.8f, 0.0f);
 
 	// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -491,7 +491,11 @@ void CMushroom::Update()
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
-		//mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	}
+
+	if (Position().Y() >= 0.5f)
+	{
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 
 	// キャラクターの更新

@@ -17,6 +17,7 @@
 #include "CPortionGreen.h"
 #include "CPortionBlue.h"
 #include "CCane.h"
+#include "CCamera.h"
 #include "CGameCamera.h"
 #include "CInput.h"
 //#include "CLineEffect.h"
@@ -79,6 +80,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("HpGauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("SaFrame", "Character\\Player\\HP\\Frame.png");
 	CResourceManager::Load<CTexture>("SaGauge", "UI\\white.png");
+	CResourceManager::Load<CTexture>("AvoidanceFrame", "Character\\Player\\HP\\Frame.png");
+	CResourceManager::Load<CTexture>("AvoidanceGaugeGauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
 
 	// その他
@@ -88,7 +91,7 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 
-	CGameCamera* mainCamera = new CGameCamera
+	CCamera* mainCamera = new CCamera
 	(
 		DEFAULT_CAMERA_POS,
 		player->Position()
@@ -129,7 +132,7 @@ void CGameScene::Load()
 
 	// 亀
 	CTurtle* enemy7 = new CTurtle();
-	enemy7->Position(100.0f, -0.1f, 20.0f);
+	enemy7->Position(100.0f, -0.2f, 20.0f);
 	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
 	CRich* enemy8 = new CRich();
@@ -239,7 +242,7 @@ void CGameScene::Update()
 		if (Mushroom2ReTime > 1000)
 		{
 			// マッシュルーム2
-			CMushroom* enemy5 = new CMushroom();
+			CMushroom2* enemy5 = new CMushroom2();
 			enemy5->Position(210.0f, 0.0f, -150.0f);
 			enemy5->Scale(25.0f, 25.0f, 25.0f);
 			Mushroom2ReTime = 0;
@@ -259,6 +262,4 @@ void CGameScene::Update()
 			Mushroom3ReTime = 0;
 		}
 	}
-
-	CDebugPrint::Print(" 復活時間: %d\n", SlimeReTime / 100);
 }

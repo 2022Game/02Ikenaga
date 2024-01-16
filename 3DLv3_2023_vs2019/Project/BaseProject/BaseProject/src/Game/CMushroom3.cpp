@@ -87,11 +87,19 @@ CMushroom3::CMushroom3()
 	// キャラクター押し戻し処理
 	mpColliderSphere = new CColliderSphere
 	(
-		this, ELayer::eEnemy,
+		this, ELayer::eEnemy2,
 		0.3f, false, 5.0f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
 	mpColliderSphere->Position(0.0f, 0.2f, 0.0f);
+
+	mpColliderSphere2 = new CColliderSphere
+	(
+		this, ELayer::eEnemy2,
+		0.55f, false, 5.0f
+	);
+	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
+	mpColliderSphere2->Position(0.0f, 0.8f, 0.0f);
 
 	// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -129,6 +137,7 @@ CMushroom3::~CMushroom3()
 {
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
+	SAFE_DELETE(mpColliderSphere2);
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
 
@@ -484,7 +493,11 @@ void CMushroom3::Update()
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
-		//mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	}
+
+	if (Position().Y() >= 0.5f)
+	{
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 
 	// キャラクターの更新
@@ -538,7 +551,7 @@ void CMushroom3::Collision(CCollider* self, CCollider* other, const CHitInfo& hi
 		}
 	}
 	// キャラクター同士の衝突処理
-	else if (self == mpColliderSphere)
+	else if (self == mpColliderSphere || self == mpColliderSphere2)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);
