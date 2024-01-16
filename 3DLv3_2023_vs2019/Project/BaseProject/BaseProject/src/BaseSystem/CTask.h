@@ -58,7 +58,7 @@ public:
 	bool IsEnable() const;
 
 	//表示フラグを設定
-	void SetShow(bool show);
+    virtual void SetShow(bool show);
 	//表示フラグを取得
 	bool IsShow() const;
 

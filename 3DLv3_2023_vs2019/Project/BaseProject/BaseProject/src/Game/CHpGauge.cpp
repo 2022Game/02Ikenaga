@@ -31,11 +31,12 @@
 #define SCALE_MAX 1.5f
 
 // コンストラクタ
-CHpGauge::CHpGauge()
+CHpGauge::CHpGauge(bool is3dGauge)
 	:mMaxValue(100)
 	, mValue(100)
 	, mCenterRatio(0.0f, 0.0f)
 	, mScale(1.0f)
+	,mIs3dGauge(is3dGauge)
 {
 	mpFrameImage = new CImage("HpFrame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
@@ -45,6 +46,9 @@ CHpGauge::CHpGauge()
 
 	mpEdgeImage = new CImage("FrameEdge");
 	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
+
+	// 最初は非表示
+	SetShow(false);
 }
 
 // デストラクタ
@@ -59,6 +63,18 @@ void CHpGauge::Kill()
 	mpFrameImage->Kill();
 	mpBarImage->Kill();
 	mpEdgeImage->Kill();
+}
+
+// 表示するかどうか設定
+void CHpGauge::SetShow(bool isShow)
+{
+	// ベースクラスの表示設定処理
+	CTask::SetShow(isShow);
+
+	//
+	mpFrameImage->SetShow(isShow);
+	mpBarImage->SetShow(isShow);
+	mpEdgeImage->SetShow(isShow);
 }
 
 // 最大値を設定
@@ -97,17 +113,26 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 		return;
 	}
 	
-	// HPゲージを表示
-	SetShow(true);
 	// もとめたスクリーン座標を自身の位置に設定
 	mPosition = screenPos;
 
 	// 設定されたワールド座標とカメラの座標を求める
 	float dist = (worldPos - cam->Position()).Length();
 
-	// カメラから離れるごとにスケール値を小さくする
-	float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
-	mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+	if (dist <= SCALE_DIST_MAX)
+	{
+		// カメラから離れるごとにスケール値を小さくする
+		float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
+		mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+	
+		// HPゲージが表示
+		SetShow(true);
+	}
+	// カメラの距離が遠い場合は、非表示
+	else
+	{
+		SetShow(false);
+	}
 }
 
 // 更新
@@ -156,4 +181,10 @@ void CHpGauge::Update()
 	else color = CColor(0.0f, 1.0f,0.0f);
 	// バーに色を設定
 	mpBarImage->SetColor(color);
+
+	// 3D空間に配置するゲージは、残りのHPが0なら非表示にする
+	if (mIs3dGauge && mValue <= 0)
+	{
+		SetShow(false);
+	}
 }

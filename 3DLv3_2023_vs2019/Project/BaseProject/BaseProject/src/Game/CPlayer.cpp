@@ -91,8 +91,9 @@ CPlayer::CPlayer()
 	Scale(CVector::one * DEFAULT_SCALE);
 
 	// HPゲージを作成
-	mpHpGauge = new CHpGauge();
+	mpHpGauge = new CHpGauge(false);
 	mpHpGauge->SetPos(10.0f, 63.0f);
+	mpHpGauge->SetShow(true);
 
 	// SAゲージを作成
 	mpSaGauge = new CSaGauge();
@@ -130,7 +131,7 @@ CPlayer::CPlayer()
 		0.5f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eEnemy2 });
-	mpColliderSphere->Position(0.0f,0.6f,0.1f);
+	mpColliderSphere->Position(0.0f,0.4f,0.1f);
 
 	///ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere

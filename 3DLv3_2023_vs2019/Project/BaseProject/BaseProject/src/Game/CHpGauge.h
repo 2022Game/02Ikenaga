@@ -16,15 +16,19 @@ private:
 	int mValue;            // ポイントの現在値
 	CVector2 mCenterRatio; // 中心位置の割合
 	float mScale;          // HPゲージのスケール値
+	bool mIs3dGauge;       // #D空間に配置するゲージかどうか
 
 public:
 	// コンストラクタ
-	CHpGauge();
+	CHpGauge(bool is3dGauge);
 	// デストラクタ
 	~CHpGauge();
 
 	// HPゲージを削除
 	void Kill()override;
+
+	//表示するかどうか設定
+	void SetShow(bool isShow)override;
 
 	// 最大値を設定
 	void SetMaxValue(int value);

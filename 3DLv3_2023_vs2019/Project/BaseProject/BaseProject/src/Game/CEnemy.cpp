@@ -5,6 +5,9 @@
 CEnemy::CEnemy()
 	:CXCharacter(ETag::eEnemy,ETaskPriority::eEnemy)
 {
+	// HPゲージ作成
+	mpHpGauge = new CHpGauge(true);
+	mpHpGauge->SetCenterRatio(CVector2(0.5, 0.0f));
 }
 
 
@@ -12,7 +15,8 @@ CEnemy::CEnemy()
 // デストラクタ
 CEnemy::~CEnemy()
 {
-
+	// HPゲージを削除
+	mpHpGauge->Kill();
 }
 
 // 死亡処理

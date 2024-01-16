@@ -56,10 +56,6 @@ CSlime2::CSlime2()
 	// インスタンスの設定
 	spInstance = this;
 
-	// HPゲージを作成
-	mpHpGauge = new CHpGauge();
-	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
-
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Slime2");
 
@@ -135,8 +131,6 @@ CSlime2::~CSlime2()
 	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
-
-	mpHpGauge->Kill();
 }
 
 CSlime2* CSlime2::Instance()

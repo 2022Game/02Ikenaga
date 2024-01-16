@@ -52,10 +52,6 @@ CMushroom2::CMushroom2()
 	//インスタンスの設定
 	spInstance = this;
 
-	// HPゲージを作成
-	mpHpGauge = new CHpGauge();
-	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
-
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
 
@@ -139,9 +135,6 @@ CMushroom2::~CMushroom2()
 	SAFE_DELETE(mpColliderSphere2);
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
-
-	// HPゲージを削除
-	mpHpGauge->Kill();
 }
 
 CMushroom2* CMushroom2::Instance()
