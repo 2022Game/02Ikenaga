@@ -26,12 +26,12 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 
 	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  // 待機 221.0f
 	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  // 歩行
-	{ "Character\\Player\\animation\\DogAttack.x",	true,	91.0f	},  // 攻撃
+	{ "Character\\Player\\animation\\DogAttack.x",	true,   110.0f	},  // 攻撃 91.0f
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  // ジャンプ
 	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // 攻撃2
 	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // 攻撃3
-	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // 攻撃4
-	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // 攻撃5 101.0f
+	{ "Character\\Player\\animation\\DogAttack4.x",	true,	130.0f	},  // 攻撃4 105.0f
+	{ "Character\\Player\\animation\\DogAttack5.x",	true,	120.0f	},  // 攻撃5 101.0f
 	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // 攻撃6
 	{ "Character\\Player\\animation\\DogAttack7.x",	true,	190.0f	},  // 攻撃7 213.0f
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // 攻撃力アップ
@@ -100,7 +100,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(5);
+	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -145,7 +145,7 @@ CPlayer::CPlayer()
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol->SetCollisionTags({ ETag::eEnemy });
 	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol->Position(-0.05f, 0.7f, 0.0f);
+	mpDamageCol->Position(-0.05f, 0.5f, 0.0f);
 
 	//デフォルト座標を設定
 	mDefaultPos = Position();

@@ -255,6 +255,9 @@ void CSlime::UpdateAttackWait()
 // ヒット
 void CSlime::UpdateHit()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -345,6 +348,8 @@ void CSlime::UpdateRun()
 	}
 }
 
+
+
 // 更新処理
 void CSlime::Update()
 {
@@ -404,12 +409,16 @@ void CSlime::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 
+	//int rand = 0;
+	//rand = Math::Rand(0, 700);
+
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 
-		mAttackTime++;
+		(mAttackTime++ / 100);
+
 		if (mAttackTime > 230)
 		{
 			// 大攻撃
@@ -442,10 +451,6 @@ void CSlime::Update()
 			mAttackTime = 0;
 		}
 	}
-	else
-	{
-		mpHpGauge->SetPos(-1000.0f, -1000.0f);
-	}
 
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
 	{
@@ -473,6 +478,8 @@ void CSlime::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+
+	CDebugPrint::Print("攻撃 %d", mAttackTime);
 }
 
 // 衝突処理

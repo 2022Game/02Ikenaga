@@ -255,6 +255,9 @@ void CSlime3::UpdateAttackWait()
 // ヒット
 void CSlime3::UpdateHit()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
