@@ -190,7 +190,7 @@ void CMushroom3::UpdateIdle3()
 		ChangeAnimation(EAnimType::eIdle3);
 		if (IsAnimationFinished())
 		{
-			mAttackTime = 0;
+			//mAttackTime = 0;
 			mState = EState::eIdle3;
 		}
 	}
@@ -279,7 +279,7 @@ void CMushroom3::UpdateHit()
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
-		mAttackTime = 100;
+		//mAttackTime = 100;
 		// ‚ß‚Ü‚¢‚ğfalse‚É‚·‚é
 		bool stan = false;
 		// Šm—¦‚ğÅ¬‚É0Å‘å40
@@ -455,7 +455,7 @@ void CMushroom3::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 100)
+		if (mAttackTime > 200)
 		{
 			// UŒ‚2
 			bool Attack2 = false;

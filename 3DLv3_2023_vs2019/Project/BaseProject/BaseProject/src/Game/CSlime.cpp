@@ -479,7 +479,7 @@ void CSlime::Update()
 	// HPƒQ[ƒW‚ÉŒ»İ‚ÌHP‚ğİ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
 
-	CDebugPrint::Print("UŒ‚ %d", mAttackTime);
+	//CDebugPrint::Print("UŒ‚ %d", mAttackTime);
 }
 
 // Õ“Ëˆ—

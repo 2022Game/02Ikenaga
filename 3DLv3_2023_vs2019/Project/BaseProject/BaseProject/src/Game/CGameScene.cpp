@@ -98,7 +98,7 @@ void CGameScene::Load()
 	);
 	mainCamera->SetFollowTargetTf(player);
 
-	player->Position(0.0f, 15.0f, 0.0f);
+	player->Position(0.0f, 20.0f, 0.0f);
 
 	// レッドスライム
 	CSlime* enemy = new CSlime();
@@ -142,7 +142,7 @@ void CGameScene::Load()
 
 	// ドラゴン
 	CDragon* bossEnemy = new CDragon();
-	bossEnemy->Position(-80.0f, 20.0f, 0.0f);
+	bossEnemy->Position(-80.0f, 20.0f, -400.0f);
 	bossEnemy->Scale(7.0f, 7.0f, 7.0f);
 
 	CPortionRed* portionred = new CPortionRed();

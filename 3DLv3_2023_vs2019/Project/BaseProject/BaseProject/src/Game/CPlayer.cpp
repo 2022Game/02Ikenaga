@@ -290,7 +290,7 @@ void CPlayer::UpdateIdle()
 				//mMoveSpeed.X(0.0f);
 				//mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack7;
-				//mCharaStatus.SpecialAttack -= 4;
+				mCharaStatus.SpecialAttack -= 4;
 			}
 		}
 
@@ -768,7 +768,7 @@ void CPlayer::Update()
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 
-	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	//CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
 	//CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
 	//CDebugPrint::Print(" 攻撃計測 %d\n", mAttackTime);
 	//CDebugPrint::Print(" 攻撃した回数 %d\n", mAttackcount);
@@ -783,9 +783,6 @@ void CPlayer::Update()
 	target.Normalize();
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
-
-	CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
-	CDebugPrint::Print(" 回避回数を増やす時間: %d\n", mRollingTime);
 
 	if (mRollingCount < 1)
 	{
@@ -851,8 +848,14 @@ void CPlayer::Update()
 	{
 		CDebugPrint::Print(" R: ステータス表示\n");
 		CDebugPrint::Print(" 2: レベルアップ\n");
+		CDebugPrint::Print(" WASD: 移動\n");
 		CDebugPrint::Print(" G: ガード\n");
+		CDebugPrint::Print(" Hか左クリック: 攻撃\n");
+		CDebugPrint::Print(" K(レベル5以降:使用可): スペシャル攻撃\n");
+		CDebugPrint::Print(" J: ジャンプ\n");
 		CDebugPrint::Print(" WASD+スペース: 回避\n");
+		CDebugPrint::Print(" 回避のクールタイム: %d\n", mRollingTime);
+		CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 	}
 
 	if (CInput::Key('1'))

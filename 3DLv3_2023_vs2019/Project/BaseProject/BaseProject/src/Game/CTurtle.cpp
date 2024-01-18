@@ -331,8 +331,8 @@ void CTurtle::Update()
 		}
 	}
 
-	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" 亀のHP: %d\n", mCharaStatus.hp);
+	//CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
+	//CDebugPrint::Print(" 亀のHP: %d\n", mCharaStatus.hp);
 
 	// キャラクターの更新
 	CXCharacter::Update();

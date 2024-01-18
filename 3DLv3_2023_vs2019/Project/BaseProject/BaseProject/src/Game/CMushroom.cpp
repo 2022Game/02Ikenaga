@@ -188,7 +188,6 @@ void CMushroom::UpdateIdle3()
 		ChangeAnimation(EAnimType::eIdle3);
 		if (IsAnimationFinished())
 		{
-			mAttackTime = 0;
 			mState = EState::eIdle3;
 		}
 	}
@@ -448,7 +447,7 @@ void CMushroom::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 100)
+		if (mAttackTime > 200)
 		{
 			// UŒ‚2
 			bool Attack2 = false;
@@ -497,6 +496,8 @@ void CMushroom::Update()
 
 	// HPƒQ[ƒW‚ÉŒ»İ‚ÌHP‚ğİ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
+
+	CDebugPrint::Print(" %d",mAttackTime);
 }
 
 // Õ“Ëˆ—

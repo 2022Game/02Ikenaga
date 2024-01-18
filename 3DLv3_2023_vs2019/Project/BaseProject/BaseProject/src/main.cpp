@@ -120,7 +120,7 @@ int main(void)
 		return -1;
 	}
 	CInput::Window(window);
-	CInput::ShowCursor(false);
+	//CInput::ShowCursor(false);
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
