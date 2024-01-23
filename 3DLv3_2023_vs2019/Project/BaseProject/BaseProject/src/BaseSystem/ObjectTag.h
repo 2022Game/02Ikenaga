@@ -6,19 +6,20 @@ enum class ETag
 {
 	eNone = -1,
 
-	eField,	// フィールドを構成するオブジェクト
-	eExp,  //経験値
+	eField,	 // フィールドを構成するオブジェクト
+	eExp,    // 経験値
 	eRideableObject,	// 乗ることができるオブジェクト
-	eItem,	// アイテムの攻撃力アップ
-	eItem2, // アイテムの回復
-	eItem3, // アイテムの移動速度アップ
+	eItem,	 // アイテムの攻撃力アップ
+	eItem2,  // アイテムの回復
+	eItem3,  // アイテムの移動速度アップ
 
-	eWeapon,// 武器
+	eWeapon, // 武器
 
-	ePlayer,// プレイヤー
-	eEnemy,	// エネミー
+	ePlayer, // プレイヤー
+	eEnemy,  // エネミー
+	eBullet, // 弾丸 
 
-	eCamera,// カメラ
+	eCamera, // カメラ
 
 	Num
 };

@@ -31,6 +31,7 @@
     <ClCompile Include="src\BaseSystem\CCharaBase.cpp" />
     <ClCompile Include="src\BaseSystem\CGamePause.cpp" />
     <ClCompile Include="src\BaseSystem\CInput.cpp" />
+    <ClCompile Include="src\BaseSystem\CLineEffect.cpp" />
     <ClCompile Include="src\BaseSystem\CMaterial.cpp" />
     <ClCompile Include="src\BaseSystem\CMatrix.cpp" />
     <ClCompile Include="src\BaseSystem\CModel.cpp" />
@@ -49,6 +50,7 @@
     <ClCompile Include="src\BaseSystem\CText.cpp" />
     <ClCompile Include="src\BaseSystem\CTexture.cpp" />
     <ClCompile Include="src\BaseSystem\CTextureFont.cpp" />
+    <ClCompile Include="src\BaseSystem\CTrailEffect.cpp" />
     <ClCompile Include="src\BaseSystem\CTransform.cpp" />
     <ClCompile Include="src\BaseSystem\CTriangle.cpp" />
     <ClCompile Include="src\BaseSystem\CUIBase.cpp" />
@@ -59,6 +61,7 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\AvoidanceGauge.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
+    <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCane.cpp" />
     <ClCompile Include="src\Game\CDragon.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
@@ -123,6 +126,7 @@
     <ClInclude Include="src\BaseSystem\CCharaBase.h" />
     <ClInclude Include="src\BaseSystem\CGamePause.h" />
     <ClInclude Include="src\BaseSystem\CInput.h" />
+    <ClInclude Include="src\BaseSystem\CLineEffect.h" />
     <ClInclude Include="src\BaseSystem\CMaterial.h" />
     <ClInclude Include="src\BaseSystem\CMatrix.h" />
     <ClInclude Include="src\BaseSystem\CModel.h" />
@@ -143,6 +147,7 @@
     <ClInclude Include="src\BaseSystem\CText.h" />
     <ClInclude Include="src\BaseSystem\CTexture.h" />
     <ClInclude Include="src\BaseSystem\CTextureFont.h" />
+    <ClInclude Include="src\BaseSystem\CTrailEffect.h" />
     <ClInclude Include="src\BaseSystem\CTransform.h" />
     <ClInclude Include="src\BaseSystem\CTriangle.h" />
     <ClInclude Include="src\BaseSystem\CUIBase.h" />
@@ -160,6 +165,7 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
+    <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCane.h" />
     <ClInclude Include="src\Game\CDragon.h" />
     <ClInclude Include="src\Game\CEnemy.h" />

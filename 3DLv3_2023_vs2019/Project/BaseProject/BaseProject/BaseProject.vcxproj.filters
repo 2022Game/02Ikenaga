@@ -80,6 +80,9 @@
     <Filter Include="ソース ファイル\Game\System">
       <UniqueIdentifier>{1e65f8e4-27be-4259-a896-1ddd5dc2fa86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Weapon\Bullet">
+      <UniqueIdentifier>{a53e5e9c-fbf1-4b12-b1f2-9d5733a92368}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -351,6 +354,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\AvoidanceGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CLineEffect.cpp">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CTrailEffect.cpp">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBullet.cpp">
+      <Filter>ソース ファイル\Game\Weapon\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -647,6 +659,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CAvoidanceGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CLineEffect.h">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CTrailEffect.h">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBullet.h">
+      <Filter>ソース ファイル\Game\Weapon\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

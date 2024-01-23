@@ -84,6 +84,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("AvoidanceGaugeGauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
 
+	// エフェクト関連
+	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
+
 	// その他
 	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
 
