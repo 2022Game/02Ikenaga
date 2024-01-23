@@ -83,6 +83,9 @@
     <Filter Include="ソース ファイル\Game\Weapon\Bullet">
       <UniqueIdentifier>{a53e5e9c-fbf1-4b12-b1f2-9d5733a92368}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Menu">
+      <UniqueIdentifier>{c40dfc4a-a129-4cf1-9942-b06e817a6144}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -363,6 +366,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CBullet.cpp">
       <Filter>ソース ファイル\Game\Weapon\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameMenu.cpp">
+      <Filter>ソース ファイル\Game\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -668,6 +674,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBullet.h">
       <Filter>ソース ファイル\Game\Weapon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameMenu.h">
+      <Filter>ソース ファイル\Game\Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

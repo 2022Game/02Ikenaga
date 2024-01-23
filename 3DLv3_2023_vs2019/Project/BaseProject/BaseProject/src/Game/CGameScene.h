@@ -7,6 +7,7 @@ class CSlime3;
 class CMushroom;
 class CMushroom2;
 class CMushroom3;
+class CGameMenu;
 
 // タイトルシーン
 class CGameScene :public CSceneBase
@@ -42,4 +43,5 @@ private:
 	CMushroom* mpMushroom;
 	CMushroom2* mpMushroom2;
 	CMushroom3* mpMushroom3;
+	CGameMenu* mpGameMenu;
 };

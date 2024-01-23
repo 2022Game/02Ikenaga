@@ -1,114 +1,6 @@
-﻿  CBillBoard.cpp
-  CBillBoardImage.cpp
-  CCamera.cpp
-  CCollider.cpp
-  CColliderLine.cpp
-  CColliderMesh.cpp
-  CColliderSphere.cpp
-  CColliderTriangle.cpp
-  CCollisionManager.cpp
-  CColor.cpp
-  CDebugCamera.cpp
-  CDebugInput.cpp
-  CDebugPrint.cpp
-  CDebugProfiler.cpp
-  CDebugTimer.cpp
-  CEffect.cpp
-  CFont.cpp
-  CCharaBase.cpp
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CCharaBase.cpp(56,13): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  CGamePause.cpp
-  CInput.cpp
-  コードを生成中...
-  コンパイル中...
-  CLineEffect.cpp
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CLineEffect.cpp(34,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CLineEffect.cpp(50,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CLineEffect.cpp(57,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CMaterial.cpp
-  CMatrix.cpp
-  CModel.cpp
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CModel.cpp(294,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CModel.cpp(312,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CModel.cpp(392,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CModel.cpp(394,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CModelX.cpp
-  CMyShader.cpp
-  CQuaternion.cpp
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CQuaternion.cpp(130,19): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CQuaternion.cpp(136,20): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\BaseSystem\CQuaternion.cpp(244,43): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  CRect.cpp
-  CResource.cpp
-  CResourceManager.cpp
-  CSceneBase.cpp
-  CSceneManager.cpp
-  CShader.cpp
-  CSound.cpp
-  CTask.cpp
-  CTaskManager.cpp
-  CText.cpp
-  CTexture.cpp
-  CTextureFont.cpp
-  CTrailEffect.cpp
-  コードを生成中...
-  コンパイル中...
-  CTransform.cpp
-  CTriangle.cpp
-  CUIBase.cpp
-  CVector.cpp
-  CObjectBase.cpp
-  Maths.cpp
-  Primitive.cpp
-  System.cpp
-  AvoidanceGauge.cpp
-  CApplication.cpp
-  CBullet.cpp
-  CCane.cpp
-  CDragon.cpp
-  CEnemy.cpp
-  CExp.cpp
-  CExpManager.cpp
-  CGameCamera.cpp
+﻿  CGameMenu.cpp
+C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\Game\CGameMenu.cpp(119,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   CGameOverScene.cpp
-  CMushroom2.cpp
-  CMushroom3.cpp
-  コードを生成中...
-  コンパイル中...
-  CRich.cpp
-  CSlime.cpp
-  CMushroom.cpp
-  CField.cpp
-  CGameScene.cpp
-  CharaStatus.cpp
-  CHpGauge.cpp
-  CImage.cpp
-  CMoveFloor.cpp
-  CPlayer.cpp
-  CPortionBlue.cpp
-  CPortionGreen.cpp
-  CPortionRed.cpp
-  CRideabeObject.cpp
-  CRotateFloor.cpp
-  CSaGauge.cpp
-  CShield.cpp
-  CSlime2.cpp
-  CSlime3.cpp
-  CSword.cpp
-  コードを生成中...
-  コンパイル中...
-  CTitleScene.cpp
-  CTurtle.cpp
-  CWeapon.cpp
-  CXCharacter.cpp
-  main.cpp
-  CBootMenuScene.cpp
-  CColBase.cpp
-  CColLine.cpp
-  CCollisionTestScene.cpp
-  CColQuad.cpp
-  CColSphere.cpp
-  CColTriangle.cpp
   CMeasure.cpp
   コードを生成中...
 LINK : warning LNK4098: defaultlib 'MSVCRT' は他のライブラリの使用と競合しています。/NODEFAULTLIB:library を使用してください。
@@ -117,7 +9,7 @@ LINK : warning LNK4098: defaultlib 'LIBCMTD' は他のライブラリの使用�
 ftgl_static_D.lib(FTCharmap.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTCharmap.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(FTFace.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTFace.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(FTFont.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTFont.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static_D.lib(FTPixmapFont.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTPixmapFont.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static_D.lib(FTPixmapFont.obj) : warning LNK4099: PDB '' が 'ftgl_static_D.lib(FTPixmapFont.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(FTGlyphContainer.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTGlyphContainer.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(FTGlyph.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTGlyph.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(FTPixmapGlyph.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTPixmapGlyph.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
@@ -126,7 +18,7 @@ ftgl_static_D.lib(FTSimpleLayout.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb'
 ftgl_static_D.lib(FTLibrary.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTLibrary.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(FTSize.obj) : warning LNK4099: PDB 'ftgl_static_D.pdb' が 'ftgl_static_D.lib(FTSize.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\ftgl_static_D.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(ftsystem.obj) : warning LNK4099: PDB 'freetyped.pdb' が 'ftgl_static_D.lib(ftsystem.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\freetyped.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-ftgl_static_D.lib(ftdebug.obj) : warning LNK4099: PDB 'freetyped.pdb' が 'ftgl_static_D.lib(ftdebug.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\freetyped.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ftgl_static_D.lib(ftdebug.obj) : warning LNK4099: PDB '' が 'ftgl_static_D.lib(ftdebug.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(winfnt.obj) : warning LNK4099: PDB 'freetyped.pdb' が 'ftgl_static_D.lib(winfnt.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\freetyped.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(type42.obj) : warning LNK4099: PDB 'freetyped.pdb' が 'ftgl_static_D.lib(type42.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\freetyped.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 ftgl_static_D.lib(type1.obj) : warning LNK4099: PDB 'freetyped.pdb' が 'ftgl_static_D.lib(type1.obj)' で、または 'C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\freetyped.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。

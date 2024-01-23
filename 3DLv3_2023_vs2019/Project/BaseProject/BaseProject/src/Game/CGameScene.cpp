@@ -20,6 +20,7 @@
 #include "CCamera.h"
 #include "CGameCamera.h"
 #include "CInput.h"
+#include "CGameMenu.h"
 //#include "CLineEffect.h"
 
 // コンストラクタ
@@ -31,6 +32,7 @@ CGameScene::CGameScene()
 	,MushroomReTime(0)
 	,Mushroom2ReTime(0)
 	,Mushroom3ReTime(0)
+	,mpGameMenu(nullptr)
 {
 }
 
@@ -159,6 +161,9 @@ void CGameScene::Load()
 	CPortionBlue* portionblue = new CPortionBlue();
 	portionblue->Position(70.0f, 10.0f, 0.0f);
 	portionblue->Scale(70.0f, 70.0f, 70.0f);
+
+	// ゲームメニューを作成
+	mpGameMenu = new CGameMenu();
 }
 
 // ゲームクリア判定
@@ -176,6 +181,15 @@ void CGameScene::Clear()
 // シーンの更新処理
 void CGameScene::Update()
 {
+	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
+	if (!mpGameMenu->IsOpened())
+	{
+		if (CInput::PushKey('M'))
+		{
+			mpGameMenu->Open();
+		}
+	}
+
 	// プレイヤーのHPが0以下になったら
 	if (mpPlayer->mHp <= 0)
 	{
