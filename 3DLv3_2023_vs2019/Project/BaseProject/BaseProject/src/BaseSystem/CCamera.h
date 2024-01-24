@@ -30,7 +30,7 @@ public:
 	/// 追従するターゲットを設定
 	/// </summary>
 	/// <param name="target">追従するターゲット</param>
-	void SetFollowTargetTf(CTransform* target);
+	virtual void SetFollowTargetTf(CTransform* target);
 
 	/// <summary>
 	/// 追従時のオフセット座標を設定
@@ -56,7 +56,7 @@ public:
 	/// <param name="at">注視する位置</param>
 	/// <param name="up">上ベクトル</param>
 	/// <param name="updateTargetEye">視点の目標位置も更新するかどうか</param>
-	void LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye = true);
+	virtual void LookAt(const CVector& eye, const CVector& at, const CVector& up, bool updateTargetEye = true);
 
 	/// <summary>
 	/// 画面サイズ変更時のコールバック関数
@@ -143,6 +143,9 @@ public:
 	static void End2DCamera();
 
 protected:
+	// 設定されているコライダーとの衝突結果を反映する
+	void ApplyCollision();
+
 	CVector mTargetEye;	// 視点の目標位置
 	CVector mEye;		// 視点の実際の位置
 	CVector mAt;		// 注視点
@@ -155,9 +158,6 @@ protected:
 private:
 	// カメラを削除
 	void DeleteCamera();
-
-	// 設定されているコライダーとの衝突結果を反映する
-	void ApplyCollision();
 
 	static std::list<CCamera*> spCameraList;// 生成されているカメラのリスト
 	static CCamera* spMainCamera;	// メインカメラ

@@ -19,6 +19,7 @@
 #include "CCane.h"
 #include "CCamera.h"
 #include "CGameCamera.h"
+#include "CGameCamera2.h"
 #include "CInput.h"
 #include "CGameMenu.h"
 //#include "CLineEffect.h"
