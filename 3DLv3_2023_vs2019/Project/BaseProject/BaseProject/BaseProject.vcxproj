@@ -45,6 +45,7 @@
     <ClCompile Include="src\BaseSystem\CSceneManager.cpp" />
     <ClCompile Include="src\BaseSystem\CShader.cpp" />
     <ClCompile Include="src\BaseSystem\CSound.cpp" />
+    <ClCompile Include="src\BaseSystem\CSoundManager.cpp" />
     <ClCompile Include="src\BaseSystem\CTask.cpp" />
     <ClCompile Include="src\BaseSystem\CTaskManager.cpp" />
     <ClCompile Include="src\BaseSystem\CText.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="src\BaseSystem\CSceneManager.h" />
     <ClInclude Include="src\BaseSystem\CShader.h" />
     <ClInclude Include="src\BaseSystem\CSound.h" />
+    <ClInclude Include="src\BaseSystem\CSoundManager.h" />
     <ClInclude Include="src\BaseSystem\CTask.h" />
     <ClInclude Include="src\BaseSystem\CTaskManager.h" />
     <ClInclude Include="src\BaseSystem\CText.h" />

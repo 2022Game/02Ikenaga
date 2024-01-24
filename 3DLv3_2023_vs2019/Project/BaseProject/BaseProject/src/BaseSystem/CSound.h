@@ -3,216 +3,159 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <xaudio2.h>
+#include <vector>
+#include <list>
+#include "CResource.h"
 
 #pragma comment(lib,"xaudio2.lib")
 #pragma comment(lib,"winmm.lib")
 
-/*
-サウンドクラス
-サウンドファイルを読み込み、再生する。
-*/
-class CSound {
-	static int mNum;
-	static IXAudio2 *mpXAudio;
-	static IXAudio2MasteringVoice *mpMasterVoice;
-	IXAudio2SourceVoice *mpSourceVoice;
+class CAudioSource;
+class CFadeSound;
+class CSoundManager;
+
+// サウンド再生クラス
+class CSound : public CResource
+{
+	friend CResourceManager;
+	friend CSoundManager;
+public:
+	/// <summary>
+	/// サウンドを再生
+	/// </summary>
+	/// <param name="volume">ボリューム</param>
+	/// <param name="force">再生枠が足りない時に、既に再生中の音声を停止して再生するかどうか</param>
+	/// <param name="fadeTime">再生時のフェードイン時間</param>
+	/// <returns></returns>
+	int Play(float volume = 1.0f, bool force = false, float fadeTime = 0.0f);
+	/// <summary>
+	/// サウンドをループ再生
+	/// </summary>
+	/// <param name="loopCount">ループ数（0:ループなし、-1:永続ループ）</param>
+	/// <param name="fromBegin">最初から再生するかどうか</param>
+	/// <param name="volume">ボリューム</param>
+	/// <param name="force">再生枠が足りない時に、既に再生中の音声を停止して再生するかどうか</param>
+	/// <param name="fadeTime">再生時のフェードイン時間</param>
+	/// <returns></returns>
+	int PlayLoop(int loopCount = -1, bool fromBegin = true, float volume = 1.0f, bool force = false, float fadeTime = 0.0f);
+
+	/// <summary>
+	/// サウンドを停止
+	/// </summary>
+	/// <param name="index">停止するインデックス（指定なければ、全て停止）</param>
+	/// <param name="fadeTime">停止時のフェードアウト時間</param>
+	void Stop(int index = -1, float fadeTime = 0.125f);
+
+	/// <summary>
+	/// サウンドを再生中かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsPlaying(int index = -1) const;
+
+	/// <summary>
+	/// サウンドを同時再生できる数を設定
+	/// </summary>
+	/// <param name="count">同時再生できる数</param>
+	void SetSimultaneousPlayCount(int count);
+
+	/// <summary>
+	/// サウンドのベース音量を設定
+	/// </summary>
+	/// <param name="volume">ベース音量</param>
+	void SetBaseVolume(float volume);
+
+	/// <summary>
+	/// サウンドの音量を設定
+	/// </summary>
+	/// <param name="volume">設定する音量</param>
+	/// <param name="index">設定するインデックス（指定なければ、全てに設定）</param>
+	void SetVolume(float volume, int index = -1);
+
+	/// <summary>
+	/// ループ範囲を設定
+	/// </summary>
+	/// <param name="loopBegin">ループ開始位置</param>
+	/// <param name="loopLength">ループの長さ</param>
+	void SetLoopRange(int loopBegin, int loopLength);
+
+	/// <summary>
+	/// サウンドのサンプル数を取得
+	/// </summary>
+	/// <returns></returns>
+	int GetSampleCount();
+	/// <summary>
+	/// 再生中のサウンドの現在のサンプル数を取得
+	/// </summary>
+	/// <returns></returns>
+	int GetCurrentSampleCount(int index = 0);
+
+private:
+	// コンストラクタ
+	CSound();
+	// デストラクタ
+	~CSound();
+
+	/// <summary>
+	/// 音声ファイルを読み込み
+	/// </summary>
+	/// <param name="path">読み込む音声ファイルのパス</param>
+	/// <returns></returns>
+	bool Load(std::string path, bool dontDelete) override;
+
+	// 音声再生用の情報データを作成
+	bool CreateAudioSource();
+
+	// 音声を再生していないインデックスを取得
+	int FindNotPlayingSourceVoice(bool force) const;
+
+	/// <summary>
+	/// サウンドをフェード開始
+	/// </summary>
+	/// <param name="voice">フェード処理を行うサウンド</param>
+	/// <param name="fadeTime">フェード時間</param>
+	/// <param name="volume">ボリューム</param>
+	/// <param name="isFadeIn">フェードインかどうか</param>
+	void AddFadeSound(IXAudio2SourceVoice* voice, float fadeTime, float volume, bool isFadeIn);
+
+	// 更新
+	void Update();
+
+	// 音声を再生するソースボイスのリスト
+	std::vector<CAudioSource> mAudioSources;
+	// フェード中のサウンドのリスト
+	std::list<CFadeSound> mFadeSounds;
+
 	HMMIO g_hmmio;
 	MMIOINFO g_mmioinfo;
 	MMCKINFO g_riffchunkinfo;
 	MMCKINFO g_datachunkinfo;
 	WAVEFORMATEX g_wfx;
-	unsigned char *buf;
-	XAUDIO2_BUFFER mBufinfo;
-	//オーディオファイル名の保存
-	char	 file[100];
-	//
-	float mVolume;
+	LONG g_readlen;
+	unsigned char* mpBuf;
+	int mSampleCount;
+	int mLoopBegin;
+	int mLoopLength;
+
+	float mBaseVolume;	// ベース音量
+};
+
+// 音声再生用の情報
+class CAudioSource
+{
 public:
+	// 音声を再生するソースボイス
+	IXAudio2SourceVoice* voice;
+	// 音声の再生情報
+	XAUDIO2_BUFFER info;
+};
 
-	CSound()
-		: mpSourceVoice(0)
-		, g_hmmio(0)
-		, buf(nullptr)
-		, mVolume(1.0f)
-	{
-		memset(&g_datachunkinfo, 0, sizeof(g_datachunkinfo));
-		memset(&g_riffchunkinfo, 0, sizeof(g_riffchunkinfo));
-		memset(&g_mmioinfo, 0, sizeof(g_mmioinfo));
-		memset(&mBufinfo, 0, sizeof(mBufinfo));
-		memset(&g_wfx, 0, sizeof(g_wfx));
-		
-		file[0] = 0;
-		if (mNum == 0) {
-			HRESULT hr;
-			(void)CoInitializeEx(NULL, COINIT_MULTITHREADED);
-			hr = XAudio2Create(&mpXAudio, 0, XAUDIO2_DEFAULT_PROCESSOR);
-			if (FAILED(hr))
-			{
-				CoUninitialize();
-				mpXAudio = 0;
-				return;
-			}
-			hr = mpXAudio->CreateMasteringVoice(&mpMasterVoice, XAUDIO2_DEFAULT_CHANNELS, XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL);
-			if (FAILED(hr))
-			{
-				if (mpXAudio != NULL){ mpXAudio->Release(); }
-				mpXAudio = 0;
-				mpMasterVoice = 0;
-				CoUninitialize();
-				return;
-			}
-		}
-		mNum++;
-	}
-
-	/*
-	ファイルの読み込み
-	*/
-	bool Load(char* filename)
-	{
-		return Load(filename, 1.0f);
-	}
-
-	bool Load(char	*filename, float volume)
-	{
-		if (mpSourceVoice == 0)
-		{
-			//ファイル名保存
-			strcpy(file, filename);
-			MMCKINFO mmckinfo; PCMWAVEFORMAT pcmwf; MMRESULT mmret;
-			memset(&g_mmioinfo, 0x00, sizeof(g_mmioinfo));
-			g_hmmio = mmioOpen(const_cast<TCHAR *>(filename), &g_mmioinfo, MMIO_READ);
-			if (g_hmmio == NULL) return false;
-			memset(&g_riffchunkinfo, 0x00, sizeof(g_riffchunkinfo));
-			g_riffchunkinfo.fccType = mmioFOURCC('W', 'A', 'V', 'E');
-			mmret = mmioDescend(g_hmmio, &g_riffchunkinfo, NULL, MMIO_FINDRIFF);
-			if (mmret != MMSYSERR_NOERROR) return false;
-			memset(&mmckinfo, 0x00, sizeof(mmckinfo));
-			mmckinfo.ckid = mmioFOURCC('f', 'm', 't', ' ');
-			mmret = mmioDescend(g_hmmio, &mmckinfo, &g_riffchunkinfo, MMIO_FINDCHUNK);
-			if (mmret != MMSYSERR_NOERROR) return false;
-
-			if (mmckinfo.cksize >= sizeof(WAVEFORMATEX))
-			{
-				mmioRead(g_hmmio, (HPSTR)&g_wfx, sizeof(g_wfx));
-			}
-			else
-			{
-				mmioRead(g_hmmio, (HPSTR)&pcmwf, sizeof(pcmwf));
-				memset(&g_wfx, 0x00, sizeof(g_wfx));
-				memcpy(&g_wfx, &pcmwf, sizeof(pcmwf));
-				g_wfx.cbSize = 0;
-			}
-			mmioAscend(g_hmmio, &mmckinfo, 0);
-			memset(&g_datachunkinfo, 0x00, sizeof(g_datachunkinfo));
-			g_datachunkinfo.ckid = mmioFOURCC('d', 'a', 't', 'a');
-			mmret = mmioDescend(g_hmmio, &g_datachunkinfo, &g_riffchunkinfo, MMIO_FINDCHUNK);
-			if (mmret != MMSYSERR_NOERROR) return false;
-
-			//return true;
-
-
-			//XAUDIO2_VOICE_STATE state;
-			unsigned char /**buf, */ *ptr; UINT32 buflen; LONG readlen; HRESULT hr; //DWORD dw;
-
-			hr = mpXAudio->CreateSourceVoice(&mpSourceVoice, &g_wfx, XAUDIO2_VOICE_NOPITCH /*| XAUDIO2_VOICE_MUSIC*/, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL);
-			if (FAILED(hr))
-				return false;
-
-			//buflen = g_wfx.nAvgBytesPerSec;
-			buflen = g_datachunkinfo.cksize;
-			buf = new unsigned char[buflen];
-			ptr = buf; //cnt = (cnt + 1) % BUFFERQUEUE_ALLOC;
-			readlen = mmioRead(g_hmmio, (HPSTR)ptr, buflen);
-			if (readlen <= 0) return false;
-			memset(&mBufinfo, 0x00, sizeof(mBufinfo));
-//			mBufinfo.Flags = ((UINT32)readlen >= buflen) ? 0 : XAUDIO2_END_OF_STREAM;
-			mBufinfo.Flags = XAUDIO2_END_OF_STREAM;
-			mBufinfo.AudioBytes = readlen;
-			mBufinfo.pAudioData = ptr;
-			//mBufinfo.PlayLength = readlen / g_wfx.nBlockAlign;
-			mVolume = volume;
-		}
-		return true;
-	}
-	/*
-	サウンド再生（1回のみ）
-	*/
-	void Play(float vol)
-	{
-		mVolume = vol;
-		Play();
-	}
-	void Play()
-	{
-		if (mpSourceVoice)
-		{
-			Stop();
-			mBufinfo.LoopCount = 0;
-			HRESULT hr = mpSourceVoice->SubmitSourceBuffer(&mBufinfo, NULL);
-			if (FAILED(hr)) return;
-			hr = mpSourceVoice->SetVolume(mVolume);
-			if (FAILED(hr)) return;
-			mpSourceVoice->Start();
-		}
-
-	}
-	/*
-	サウンド再生（リピート）
-	*/
-	void Repeat(float vol)
-	{
-		mVolume = vol;
-		Repeat();
-	}
-
-	void Repeat()
-	{
-		if (mpSourceVoice)
-		{
-			Stop();
-			mBufinfo.LoopCount = XAUDIO2_LOOP_INFINITE;
-			HRESULT hr = mpSourceVoice->SubmitSourceBuffer(&mBufinfo, NULL);
-			if (FAILED(hr)) return;
-			hr = mpSourceVoice->SetVolume(mVolume);
-			if (FAILED(hr)) return;
-			mpSourceVoice->Start();
-		}
-	}
-	/*
-	サウンド停止
-	*/
-	void Stop()
-	{
-		if (mpSourceVoice)
-		{
-			mpSourceVoice->Stop();
-			mpSourceVoice->FlushSourceBuffers();
-		}
-	}
-	/*
-	デストラクタ
-	*/
-	~CSound()
-	{
-		Stop();		//停止する
-		mNum--;
-		if (buf != NULL){ delete[] buf; }
-		if (mpSourceVoice != NULL){ mpSourceVoice->DestroyVoice(); }
-		if (g_hmmio != NULL){ mmioClose(g_hmmio, 0); }
-		if (mNum == 0)
-		{
-			if (mpMasterVoice != NULL)
-			{
-				mpMasterVoice->DestroyVoice();
-				mpMasterVoice = 0;
-			}
-			if (mpXAudio != NULL)
-			{
-				mpXAudio->Release();
-				mpXAudio = 0;
-			}
-			CoUninitialize();
-		}
-	}
+// 音声フェード用の情報
+class CFadeSound
+{
+public:
+	IXAudio2SourceVoice* voice;
+	float fadeTime;
+	float elapsedTime;
+	float volume;
+	bool isFadeIn;
 };

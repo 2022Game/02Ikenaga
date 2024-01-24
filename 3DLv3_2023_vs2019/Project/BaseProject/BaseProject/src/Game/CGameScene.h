@@ -8,6 +8,7 @@ class CMushroom;
 class CMushroom2;
 class CMushroom3;
 class CGameMenu;
+class CSound;
 
 // タイトルシーン
 class CGameScene :public CSceneBase
@@ -44,4 +45,5 @@ private:
 	CMushroom2* mpMushroom2;
 	CMushroom3* mpMushroom3;
 	CGameMenu* mpGameMenu;
+	CSound* mpGameBGM;
 };

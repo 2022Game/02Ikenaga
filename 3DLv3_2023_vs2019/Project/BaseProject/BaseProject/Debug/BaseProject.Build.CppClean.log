@@ -42,6 +42,7 @@ c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\clineeffect.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cgameoverscene.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cgamemenu.obj
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cgamecamera2.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cgamecamera.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cexpmanager.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cexp.obj
@@ -72,6 +73,7 @@ c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cimage.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\chpgauge.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\charastatus.obj
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cgamescene.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cfield.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cmushroom.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cslime.obj
@@ -93,6 +95,12 @@ c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\ctitlescene.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\csword.obj
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\cslime3.obj
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.ilk
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\debug\baseproject.exe
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\debug\baseproject.pdb
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.tlog\cl.command.1.tlog
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.tlog\cl.read.1.tlog
 c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.tlog\cl.write.1.tlog
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.tlog\link.command.1.tlog
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.tlog\link.read.1.tlog
+c:\users\ikenaga0605\desktop\git - コピー\02ikenaga\3dlv3_2023_vs2019\project\baseproject\baseproject\debug\baseproject.tlog\link.write.1.tlog

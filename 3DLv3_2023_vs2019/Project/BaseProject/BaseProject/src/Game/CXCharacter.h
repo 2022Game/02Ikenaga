@@ -29,6 +29,12 @@ public:
 
 	int AnimationIndex();	//アニメーションの番号の取得
 
+	// 再生中のアニメーションフレームを取得
+	float GetAnimationFrame() const;
+	// 再生中のアニメーションの進行度を取得
+	float GetAnimationFrameRatio() const;
+
+	//指定したボーンの行列を取得
 	const CMatrix* GetFrameMtx(std::string name) const;
 
 	//攻撃開始

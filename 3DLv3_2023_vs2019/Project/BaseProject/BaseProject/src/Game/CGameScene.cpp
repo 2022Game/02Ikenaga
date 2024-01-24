@@ -90,8 +90,21 @@ void CGameScene::Load()
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 
+	// BGM関連
+	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
+
 	// その他
 	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
+
+	// ゲームBGMを読み込み
+	//CBGMManager::Instance()->Play(EBGMType::eGame);
+
+	// ゲームBGMを読み込み
+	mpGameBGM = CResourceManager::Load<CSound>("GameBGM", "Sound\\BGM\\game.wav");
+	// ゲームBGMのループ範囲を設定
+	mpGameBGM->SetLoopRange(0, 2801203);
+	// ゲームBGMをループ再生開始
+	mpGameBGM->PlayLoop();
 
 	new CField();
 
@@ -182,6 +195,12 @@ void CGameScene::Clear()
 // シーンの更新処理
 void CGameScene::Update()
 {
+	// BGM再生中でなければ、BGMを再生
+	//if (!mpGameBGM->IsPlaying())
+	//{
+	//	mpGameBGM->PlayLoop(-1, 1.0f, false, 1.0f);
+	//}
+
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
 	if (!mpGameMenu->IsOpened())
 	{

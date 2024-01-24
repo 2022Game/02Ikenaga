@@ -2,14 +2,17 @@
 #include "CModel.h"
 #include "CModelX.h"
 #include "CTexture.h"
+#include "CSound.h"
 
 //テンプレートの前宣言
 template CModel* CResourceManager::Load(std::string name, std::string path, bool dontDelete);
 template CModelX* CResourceManager::Load(std::string name, std::string path, bool dontDelete);
 template CTexture* CResourceManager::Load(std::string name, std::string path, bool dontDelete);
+template CSound* CResourceManager::Load(std::string name, std::string path, bool dontDelete);
 template CModel* CResourceManager::Get(std::string name);
 template CModelX* CResourceManager::Get(std::string name);
 template CTexture* CResourceManager::Get(std::string name);
+template CSound* CResourceManager::Get(std::string name);
 
 //CResourceManagerのインスタンス
 CResourceManager* CResourceManager::mpInstance = nullptr;

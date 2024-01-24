@@ -2,6 +2,7 @@
 #include "CSceneBase.h"
 #include "CInput.h"
 #include "CImage.h"
+class CSound;
 
 //タイトルシーン
 class CTitleScene :public CSceneBase

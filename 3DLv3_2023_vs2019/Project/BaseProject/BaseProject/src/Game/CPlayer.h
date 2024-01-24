@@ -5,6 +5,7 @@
 #include "CColliderSphere.h"
 #include "CRideableObject.h"
 #include "CImage.h"
+#include "CSound.h"
 class CHpGauge;
 class CSaGauge;
 class CSword;
@@ -219,4 +220,7 @@ private:
 
 	CSword* mpSword;      // ‰Eè‚É‚ÂŒ•
 	CShield* mpShield;    // ¶è‚É‚Â‚
+
+	CSound* mpSlashSE;
+	bool mIsPlayedSlashSE;
 };

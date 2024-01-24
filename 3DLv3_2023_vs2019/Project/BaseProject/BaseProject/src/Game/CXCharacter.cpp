@@ -1,4 +1,5 @@
 #include "CXCharacter.h"
+#include "Maths.h"
 
 //コンストラクタ
 CXCharacter::CXCharacter(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
@@ -143,14 +144,6 @@ int CXCharacter::AnimationIndex()
 	return mAnimationIndex;
 }
 
-const CMatrix* CXCharacter::GetFrameMtx(std::string name) const
-{
-	if (mpModel == nullptr) return nullptr;
-	CModelXFrame* frame = mpModel->FinedFrame(name.c_str());
-	if (frame == nullptr) return nullptr;
-	return &frame->CombinedMatrix();
-}
-
 // 攻撃開始
 void CXCharacter::AttackStart()
 {
@@ -179,4 +172,26 @@ bool CXCharacter::IsAttackHitObj(CObjectBase* obj) const
 		obj
 	);
 	return find != mAttackHitObjects.end();
+}
+
+// 再生中のアニメーションフレームを取得
+float CXCharacter::GetAnimationFrame() const
+{
+	return mAnimationFrame;
+}
+
+// 再生中のアニメーションの進行度を取得
+float CXCharacter::GetAnimationFrameRatio() const
+{
+	if (mAnimationFrameSize == 0.0f) return 0.0f;
+	return Math::Clamp01(mAnimationFrame / mAnimationFrameSize);
+}
+
+// 指定したボーンの行列を取得
+const CMatrix* CXCharacter::GetFrameMtx(std::string name) const
+{
+	if (mpModel == nullptr) return nullptr;
+	CModelXFrame* frame = mpModel->FinedFrame(name.c_str());
+	if (frame == nullptr) return nullptr;
+	return &frame->CombinedMatrix();
 }

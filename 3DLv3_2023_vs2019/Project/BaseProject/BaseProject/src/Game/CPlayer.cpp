@@ -81,6 +81,7 @@ CPlayer::CPlayer()
 	, healcount(0)
 	, recoverycount(0)
 	, mDefaultPos(CVector::zero)
+	, mIsPlayedSlashSE(false)
 {
 	// インスタンスの設定
 	spInstance = this;
@@ -159,6 +160,8 @@ CPlayer::CPlayer()
 	mpShield= new CShield();
 	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
 	mpShield->SetOwner(this);
+
+	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
 
 CPlayer::~CPlayer()
@@ -322,6 +325,9 @@ void CPlayer::UpdateAttack()
 
 	//剣に攻撃開始を伝える
 	mpSword->AttackStart();
+
+	// 斬撃SEの再生済みフラグを初期化
+	mIsPlayedSlashSE = false;
 }
 
 // 攻撃2
@@ -425,6 +431,14 @@ void CPlayer::UpdateAttack7()
 // 攻撃終了待ち
 void CPlayer::UpdateAttackWait()
 {
+	// 斬撃SEを再生していないかつ、アニメーションが25%以上進行したら、
+	if (!mIsPlayedSlashSE && GetAnimationFrameRatio() >= 0.25f)
+	{
+		// 斬撃SEを再生
+		mpSlashSE->Play();
+		mIsPlayedSlashSE = true;
+	}
+
 	// 攻撃アニメーションが終了したら、
 	if (IsAnimationFinished())
 	{
