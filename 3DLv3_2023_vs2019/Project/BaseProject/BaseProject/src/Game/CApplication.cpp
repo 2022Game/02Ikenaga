@@ -4,9 +4,10 @@
 #include "CTaskManager.h"
 #include "CCollisionManager.h"
 #include "CSoundManager.h"
+#include "CBGMManager.h"
 #include "CSceneManager.h"
 #include "CGamePause.h"
-#include "CGameScene.h"
+#include "CFade.h"
 
 CApplication::~CApplication()
 {
@@ -14,9 +15,27 @@ CApplication::~CApplication()
 
 void CApplication::Start()
 {
+#if _DEBUG
+	// デバッグカメラを作成
+	CDebugCamera::DebugCamera();
+#endif
+
+	// フェードクラスを作成
+	CFade::Instance();
+	// ゲームポーズクラスを作成
 	new CGamePause();
+	// サウンド管理クラスを作成
+	CSoundManager::Instance();
+	// BGM管理クラスを作成
+	CBGMManager::Instance();
+
+#if _DEBUG
+	// デバッグモードでは、ブートメニューを最初に開く
 	CSceneManager::Instance()->LoadScene(EScene::eBootMenu);
-	//mpGameScene = new CGameScene();
+#else
+	// リリースモードでは、タイトル画面を最初に開く
+	CSceneManager::Instance()->LoadScene(EScene::eTitle);
+#endif
 }
 
 void CApplication::End()
@@ -25,6 +44,7 @@ void CApplication::End()
 	CTaskManager::ClearInstance();
 	CCollisionManager::ClearInstance();
 	CResourceManager::ClearInstance();
+	CBGMManager::ClearInstance();
 	CSoundManager::ClearInstance();
 }
 
@@ -46,25 +66,4 @@ void CApplication::Update()
 	CTaskManager::Instance()->Render();
 	// コライダの描画
 	CCollisionManager::Instance()->Render();
-
-	/*switch (mState)
-	{
-	case EState::EPLAY:
-		mpGameScene->Update();
-		if (mpGameScene->IsClear())
-		{
-			mState = EState::ECLEAR;
-		}
-		if (mpGameScene->IsOver())
-		{
-			mState = EState::EOVER;
-		}
-		break;
-	case EState::ECLEAR:
-		mpGameScene->Clear();
-		break;
-	case EState::EOVER:
-		mpGameScene->Over();
-		break;
-	}*/
 }

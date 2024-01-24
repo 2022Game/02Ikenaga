@@ -1,5 +1,6 @@
 #pragma once
 #include "CCamera.h"
+#if _DEBUG
 
 // デバッグカメラ
 class CDebugCamera : public CCamera
@@ -38,3 +39,5 @@ private:
 	// カメラの回転角度
 	CVector mRotateAngle;
 };
+
+#endif

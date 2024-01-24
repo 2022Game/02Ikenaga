@@ -49,6 +49,7 @@ CCamera* CCamera::MainCamera()
 // 現在のカメラを取得
 CCamera* CCamera::CurrentCamera()
 {
+#if _DEBUG
 	// デバッグカメラが有効であれば、
 	if (CDebugCamera::IsOn())
 	{
@@ -57,6 +58,7 @@ CCamera* CCamera::CurrentCamera()
 	}
 	// デバッグカメラが無効であれば、
 	else
+#endif
 	{
 		// 現在のカメラを返す
 		return spCurrentCamera;

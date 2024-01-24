@@ -1,7 +1,7 @@
 #include "CGameMenu.h"
 #include "CInput.h"
 #include "CTaskManager.h"
-//#include "CBGMManager.h"
+#include "CBGMManager.h"
 
 #define MENU_ALPHA 0.75f
 
@@ -59,7 +59,7 @@ void CGameMenu::Open()
 	SetEnable(true);
 	SetShow(true);
 	mSelectIndex = 0;
-	//CBGMManager::Instance()->Play(EBGMType::eMenu, false);
+	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 }
 
@@ -67,7 +67,7 @@ void CGameMenu::Close()
 {
 	SetEnable(false);
 	SetShow(false);
-	//CBGMManager::Instance()->Play(EBGMType::eGame, false);
+	CBGMManager::Instance()->Play(EBGMType::eGame, false);
 	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
 }
 

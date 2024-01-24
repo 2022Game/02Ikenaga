@@ -22,6 +22,7 @@
 #include "CGameCamera2.h"
 #include "CInput.h"
 #include "CGameMenu.h"
+#include "CBGMManager.h"
 //#include "CLineEffect.h"
 
 // コンストラクタ
@@ -97,14 +98,7 @@ void CGameScene::Load()
 	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
 
 	// ゲームBGMを読み込み
-	//CBGMManager::Instance()->Play(EBGMType::eGame);
-
-	// ゲームBGMを読み込み
-	mpGameBGM = CResourceManager::Load<CSound>("GameBGM", "Sound\\BGM\\game.wav");
-	// ゲームBGMのループ範囲を設定
-	mpGameBGM->SetLoopRange(0, 2801203);
-	// ゲームBGMをループ再生開始
-	mpGameBGM->PlayLoop();
+	CBGMManager::Instance()->Play(EBGMType::eGame);
 
 	new CField();
 

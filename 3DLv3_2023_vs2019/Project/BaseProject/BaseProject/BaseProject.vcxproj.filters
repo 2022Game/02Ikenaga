@@ -86,6 +86,12 @@
     <Filter Include="ソース ファイル\Game\Menu">
       <UniqueIdentifier>{c40dfc4a-a129-4cf1-9942-b06e817a6144}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\BaseSystem\BGM">
+      <UniqueIdentifier>{d92df25c-4c10-40f7-aa21-3b53671e7fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\BaseSystem\Fade">
+      <UniqueIdentifier>{a03fe14e-2e7a-4924-980b-aa3e14ae9eed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -375,6 +381,15 @@
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CSoundManager.cpp">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\BGMData.cpp">
+      <Filter>ソース ファイル\BaseSystem\BGM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CBGMManager.cpp">
+      <Filter>ソース ファイル\BaseSystem\BGM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CFade.cpp">
+      <Filter>ソース ファイル\BaseSystem\Fade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -689,6 +704,15 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CSoundManager.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\BGMData.h">
+      <Filter>ソース ファイル\BaseSystem\BGM</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CBGMManager.h">
+      <Filter>ソース ファイル\BaseSystem\BGM</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CFade.h">
+      <Filter>ソース ファイル\BaseSystem\Fade</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

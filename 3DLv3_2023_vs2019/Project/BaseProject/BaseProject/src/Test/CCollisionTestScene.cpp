@@ -103,6 +103,7 @@ void CCollisionTestScene::Select(CColBase* col)
 // çXêV
 void CCollisionTestScene::Update()
 {
+#if _DEBUG
 	int size = mColList.size();
 	for (int i = 0; i < size; i++)
 	{
@@ -111,4 +112,5 @@ void CCollisionTestScene::Update()
 			Select(mColList[i]);
 		}
 	}
+#endif
 }

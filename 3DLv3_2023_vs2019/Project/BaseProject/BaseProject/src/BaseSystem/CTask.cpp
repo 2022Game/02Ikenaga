@@ -143,5 +143,7 @@ void CTask::SetShow(bool show)
 //表示フラグを取得
 bool CTask::IsShow() const
 {
-	return mIsShow;
+	// 表示フラグがtrueかつ、
+	// 削除フラグが立っていない場合は、表示する
+	return mIsShow && !mIsKill;
 }

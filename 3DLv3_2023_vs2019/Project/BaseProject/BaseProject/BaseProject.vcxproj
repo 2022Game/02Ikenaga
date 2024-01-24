@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BaseSystem\BGMData.cpp" />
+    <ClCompile Include="src\BaseSystem\CBGMManager.cpp" />
     <ClCompile Include="src\BaseSystem\CBillBoard.cpp" />
     <ClCompile Include="src\BaseSystem\CBillBoardImage.cpp" />
     <ClCompile Include="src\BaseSystem\CCamera.cpp" />
@@ -27,6 +29,7 @@
     <ClCompile Include="src\BaseSystem\CDebugProfiler.cpp" />
     <ClCompile Include="src\BaseSystem\CDebugTimer.cpp" />
     <ClCompile Include="src\BaseSystem\CEffect.cpp" />
+    <ClCompile Include="src\BaseSystem\CFade.cpp" />
     <ClCompile Include="src\BaseSystem\CFont.cpp" />
     <ClCompile Include="src\BaseSystem\CCharaBase.cpp" />
     <ClCompile Include="src\BaseSystem\CGamePause.cpp" />
@@ -109,6 +112,8 @@
     <ClCompile Include="src\Test\CMeasure.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BaseSystem\BGMData.h" />
+    <ClInclude Include="src\BaseSystem\CBGMManager.h" />
     <ClInclude Include="src\BaseSystem\CBillBoard.h" />
     <ClInclude Include="src\BaseSystem\CBillBoardImage.h" />
     <ClInclude Include="src\BaseSystem\CCamera.h" />
@@ -125,6 +130,7 @@
     <ClInclude Include="src\BaseSystem\CDebugProfiler.h" />
     <ClInclude Include="src\BaseSystem\CDebugTimer.h" />
     <ClInclude Include="src\BaseSystem\CEffect.h" />
+    <ClInclude Include="src\BaseSystem\CFade.h" />
     <ClInclude Include="src\BaseSystem\CFont.h" />
     <ClInclude Include="src\BaseSystem\CCharaBase.h" />
     <ClInclude Include="src\BaseSystem\CGamePause.h" />

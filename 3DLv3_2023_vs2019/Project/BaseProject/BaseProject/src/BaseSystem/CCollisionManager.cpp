@@ -134,6 +134,7 @@ void CCollisionManager::CollisionAll()
 // 全コライダーを描画
 void CCollisionManager::Render()
 {
+#if _DEBUG
 	// 「SHIFT」+「9」でコライダー表示機能オンオフ
 	if (CDebugInput::Key(VK_SHIFT) && CDebugInput::PushKey('9'))
 	{
@@ -147,4 +148,5 @@ void CCollisionManager::Render()
 	{
 		col->Render();
 	}
+#endif
 }

@@ -45,5 +45,4 @@ private:
 	CMushroom2* mpMushroom2;
 	CMushroom3* mpMushroom3;
 	CGameMenu* mpGameMenu;
-	CSound* mpGameBGM;
 };

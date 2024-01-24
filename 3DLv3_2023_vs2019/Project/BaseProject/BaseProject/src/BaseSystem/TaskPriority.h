@@ -21,6 +21,7 @@ enum class ETaskPriority
 
 	// 2D関連
 	eUI,		// UI関連のデフォルト
+	eFade,		// 画面フェード
 	eSystem,	// システム関連
 	eDebug,		// デバッグ関連
 
