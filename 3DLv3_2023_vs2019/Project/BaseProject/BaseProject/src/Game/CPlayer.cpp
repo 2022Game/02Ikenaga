@@ -845,6 +845,12 @@ void CPlayer::Update()
 		debug2 = !debug2;
 	}
 
+	if (CInput::PushKey(VK_MBUTTON))
+	{
+		mState = EState::eAttack7;
+		mCharaStatus.SpecialAttack -= 4;
+	}
+
 	if(debug)
 	{
 		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
