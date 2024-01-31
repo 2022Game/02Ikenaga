@@ -26,19 +26,19 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 
 	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  // 待機 221.0f
 	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  // 歩行
-	{ "Character\\Player\\animation\\DogAttack.x",	true,   110.0f	},  // 攻撃 91.0f
+	{ "Character\\Player\\animation\\DogAttack.x",	true,   90.0f	},  // 攻撃 91.0f
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  // ジャンプ
 	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // 攻撃2
 	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // 攻撃3
-	{ "Character\\Player\\animation\\DogAttack4.x",	true,	130.0f	},  // 攻撃4 105.0f
-	{ "Character\\Player\\animation\\DogAttack5.x",	true,	120.0f	},  // 攻撃5 101.0f
+	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // 攻撃4 105.0f
+	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // 攻撃5 101.0f
 	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // 攻撃6
 	{ "Character\\Player\\animation\\DogAttack7.x",	true,	190.0f	},  // 攻撃7 213.0f
 	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // 攻撃力アップ
-	{ "Character\\Player\\animation\\DogHit.x",	true,	60.0f	},      // ヒット 43.0f
+	{ "Character\\Player\\animation\\DogHit.x",	true,	43.0f	},      // ヒット 43.0f
 	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ガード 47.0f
 	{ "Character\\Player\\animation\\DogGuardHit.x",	false,	47.0f	},  // ガードヒット 47.0f
-	{ "Character\\Player\\animation\\DogRolling.x",	true,	71.0f	},      // 回避 43.0f
+	{ "Character\\Player\\animation\\DogRolling.x",	true,	43.0f	},      // 回避 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
 	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
 };
@@ -101,7 +101,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(1);
+	ChangeLevel(11);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -190,7 +190,9 @@ void CPlayer::UpdateIdle()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	
+	int speed = 1.2f;
+	int speed2 = -1.2f;
+
 	if (mIsGrounded)
 	{
 		// 移動処理
@@ -198,35 +200,47 @@ void CPlayer::UpdateIdle()
 		CVector input;
 		if (CInput::Key('W'))
 		{
-			input.Z(-1.0f);
 			// SPACEキーで回避
-			if (CInput::Key(VK_SPACE))
+			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 			{
 				RollingCount();
+				mMoveSpeed.Z(-0.3f);
+			}
+			else
+			{
+				input.Z(speed2);
 			}
 		}
 		else if (CInput::Key('S'))
 		{
-			input.Z(1.0f);
-			if (CInput::Key(VK_SPACE))
+			input.Z(speed);
+			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 			{
 				RollingCount();
 			}
 		}
 		if (CInput::Key('A'))
 		{
-			input.X(-1.0f);
-			if (CInput::Key(VK_SPACE))
+			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 			{
 				RollingCount();
+				mMoveSpeed.X(-0.2f);
+			}
+			else
+			{
+				input.X(speed2);
 			}
 		}
 		else if (CInput::Key('D'))
 		{
-			input.X(1.0f);
-			if (CInput::Key(VK_SPACE))
+			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 			{
 				RollingCount();
+				mMoveSpeed.X(0.2f);
+			}
+			else
+			{
+				input.X(speed);
 			}
 		}
 
@@ -256,7 +270,7 @@ void CPlayer::UpdateIdle()
 		}
 
 		// 左クリックで攻撃状態へ移行
-		if (CInput::PushKey(VK_LBUTTON)|| CInput::PushKey('H'))
+		if (CInput::PushKey(VK_LBUTTON))
 		{
 			mAttackCount++;
 			mMoveSpeed.X(0.0f);
@@ -280,28 +294,22 @@ void CPlayer::UpdateIdle()
 			mAttackCount = 0;
 			mAttackTime = 0;
 		}
-		if (CInput::PushKey(VK_RBUTTON))
-		{
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-			//	mState = EState::ePowerUp;
-		}
+		
+		// スペシャル攻撃
 		if (mCharaStatus.SpecialAttack >= 4)
 		{
-			if (CInput::PushKey('K'))
+			if (CInput::PushKey(VK_MBUTTON))
 			{
-				//mMoveSpeed.X(0.0f);
-				//mMoveSpeed.Z(0.0f);
 				mState = EState::eAttack7;
 				mCharaStatus.SpecialAttack -= 4;
 			}
 		}
 
-		if (CInput::Key('G'))
+		if (CInput::Key(VK_RBUTTON))
 		{
 			mState = EState::eGuard;
 		}
-		if (CInput::PushKey('J'))
+		if (CInput::PushKey(VK_SPACE))
 		{
 			mState = EState::eJumpStart;
 		}
@@ -311,6 +319,16 @@ void CPlayer::UpdateIdle()
 		// 待機アニメーションに切り替え
 		ChangeAnimation(EAnimType::eIdle);
 		mpDamageCol->SetEnable(true);
+	}
+}
+
+// 歩行
+void CPlayer::UpadateWalk()
+{
+	ChangeAnimation(EAnimType::eWalk);
+	if (IsAnimationFinished())
+	{
+		mState = EState::eIdle;
 	}
 }
 
@@ -519,7 +537,7 @@ void CPlayer::UpdateHit()
 // ガード
 void CPlayer::UpdateGuard()
 {
-	if (CInput::Key('G'))
+	if (CInput::Key(VK_RBUTTON))
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
@@ -554,7 +572,6 @@ void CPlayer::UpdateRolling()
 	RollingCount();
 	if (IsAnimationFinished())
 	{
-		//mRollingTime--;
 		mState = EState::eIdle;
 	}
 	else
@@ -663,9 +680,9 @@ void CPlayer::AutomaticRecovery()
 // 回避カウント
 void CPlayer::RollingCount()
 {
-	mRollingCount--;
-	if (mRollingCount >= 0)
+	if (mRollingCount >= 1)
 	{
+		mRollingCount--;
 		mState = EState::eRolling;
 	}
 	if (mRollingCount <= 0)
@@ -705,6 +722,10 @@ void CPlayer::Update()
 		// 待機状態
 		case EState::eIdle:
 			UpdateIdle();
+			break;
+		// 歩行
+		case EState::eWalk:
+			UpadateWalk();
 			break;
 		// 攻撃
 		case EState::eAttack:
@@ -802,7 +823,7 @@ void CPlayer::Update()
 	{
 		mRollingTime++;
 	}
-	if (mRollingTime >= 500)
+	if (mRollingTime >= 300)
 	{
 		mRollingCount++;
 		mRollingTime = 0;
@@ -843,12 +864,6 @@ void CPlayer::Update()
 	{
 		debug = !debug;
 		debug2 = !debug2;
-	}
-
-	if (CInput::PushKey(VK_MBUTTON))
-	{
-		mState = EState::eAttack7;
-		mCharaStatus.SpecialAttack -= 4;
 	}
 
 	if(debug)

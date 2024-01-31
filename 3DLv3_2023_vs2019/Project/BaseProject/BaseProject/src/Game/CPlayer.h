@@ -85,6 +85,8 @@ public:
 private:
 	// ‘Ò‹@ó‘Ô
 	void UpdateIdle();
+	// •às
+	void UpadateWalk();
 	// UŒ‚
 	void UpdateAttack();
 	// UŒ‚2
@@ -181,6 +183,7 @@ private:
 	enum class EState
 	{
 		eIdle,		// ‘Ò‹@
+		eWalk,      // •às
 		eAttack,	// UŒ‚
 		eAttack2,	// UŒ‚2
 		eAttack3,	// UŒ‚3

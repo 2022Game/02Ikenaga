@@ -18,14 +18,14 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	102.0f	},  // 待機 51.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	35.0f	},  // 待機2 25.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	true,	142.0f	},          // 見回す待機 71.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},      // 見回す待機2 61.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},          // 見回す待機2 61.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃 26.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃2 26.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	true,	52.0f	},	    // ヒット 26.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	true,	24.0f	},	// 防御中のヒット 8.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	true,	122.0f	},	        // 死ぬ 61.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	true,	82.0f	},	    // めまい 41.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	true,	52.0f	},	    // ヒット 26.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	true,	34.0f	},          // 走る 17.0f
 
 };
@@ -76,17 +76,17 @@ CTurtle::CTurtle()
 	mpColliderSphere->Position(0.0f, 0.5f, 0.0f);
 
 	//// ダメージを受けるコライダーを作成
-	//mpDamageCol = new CColliderSphere
-	//(
-	//	this, ELayer::eDamageCol,
-	//	0.4f, false
-	//);
-	////　ダメージを受けるコライダーと
-	////　衝突判定を行うコライダーのレイヤーとタグを設定
-	//mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	//mpDamageCol->SetCollisionTags({ ETag::eWeapon });
-	////ダメージを受けるコライダーを少し上へずらす
-	//mpDamageCol->Position(0.0f, 0.3f, 0.0f);
+	mpDamageCol = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.65f, false
+	);
+	//　ダメージを受けるコライダーと
+	//　衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
+	//ダメージを受けるコライダーを少し上へずらす
+	mpDamageCol->Position(0.0f, 0.3f, 0.0f);
 
 	//// ダメージを与えるコライダー
 	mpAttackCol = new CColliderSphere
@@ -111,7 +111,7 @@ CTurtle::~CTurtle()
 {
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
-	//SAFE_DELETE(mpDamageCol);
+	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpAttackCol);
 }
 
@@ -142,16 +142,10 @@ void CTurtle::UpdateIdle()
 void CTurtle::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
-	//mAttackTime++;
-	if (mAttackTime > 200)
+	if (IsAnimationFinished())
 	{
-		mState = EState::eAttack;
+		mState = EState::eIdle2;
 	}
-	if (mState == EState::eAttack)
-	{
-		mAttackTime = 0;
-	}
-	//mState = EState::eIdle2;
 }
 
 // 待機状態3
@@ -177,16 +171,6 @@ void CTurtle::UpdateAttack()
 void CTurtle::UpdateAttack2()
 {
 	ChangeAnimation(EAnimType::eAttack2);
-	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
-}
-
-
-// 攻撃3
-void CTurtle::UpdateAttack3()
-{
-	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
 	mState = EState::eAttackWait;
@@ -268,10 +252,6 @@ void CTurtle::Update()
 	case EState::eAttack2:
 		UpdateAttack2();
 		break;
-		// 攻撃3
-	case EState::eAttack3:
-		UpdateAttack3();
-		break;
 		// 攻撃終了待ち
 	case EState::eAttackWait:
 		UpdateAttackWait();
@@ -292,14 +272,14 @@ void CTurtle::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttackWait)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttackWait&& mState != EState::eHit)
 	{
 		mState = EState::eIdle2;
 	}
 
 	if (mState == EState::eIdle2)
 	{
-		//mAttackTime++;
+		mAttackTime++;
 		if (mAttackTime > 200)
 		{
 			mState = EState::eAttack;
@@ -325,13 +305,13 @@ void CTurtle::Update()
 			//	mState = EState::eAttack;
 			//}
 		}
-		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3)
+		if (mState == EState::eAttack || mState == EState::eAttack2)
 		{
 			mAttackTime = 0;
 		}
 	}
 
-	//CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
+	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
 	//CDebugPrint::Print(" 亀のHP: %d\n", mCharaStatus.hp);
 
 	// キャラクターの更新
@@ -343,7 +323,7 @@ void CTurtle::Update()
 
 	if (CInput::PushKey('Q'))
 	{
-		mState = EState::eIdle;
+		mState = EState::eHit;
 	}
 }
 
@@ -462,7 +442,7 @@ void CTurtle::TakeDamage(int damage, CObjectBase* causedObj)
 		Rotation(CQuaternion::LookRotation(dir));
 
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
-		Position(Position() - dir * Scale().X() * 0.4f);
+		Position(Position() - dir * Scale().X() * 0.01f);
 	}
 }
 

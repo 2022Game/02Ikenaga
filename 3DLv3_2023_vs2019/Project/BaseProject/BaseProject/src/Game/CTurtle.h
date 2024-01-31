@@ -29,8 +29,6 @@ public:
 	void UpdateAttack();
 	// 攻撃2
 	void UpdateAttack2();
-	// 攻撃3
-	void UpdateAttack3();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 
@@ -87,7 +85,6 @@ private:
 		eIdle4,     // 待機4
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
 		eHit,       // ヒット
 		eDie,       // 死ぬ
 		eDizzy,     // めまい(混乱)
@@ -122,7 +119,6 @@ private:
 		eIdle3,     // 待機3
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
 		eAttackWait,// 攻撃終了待ち
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
@@ -137,7 +133,7 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;
-	//CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
+	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
 	CTransform* mpRideObject;
 };

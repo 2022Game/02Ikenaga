@@ -19,7 +19,7 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	true,	202.0f	},	    // ‘Ò‹@ 101.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	true,	162.0f	},	    // UŒ‚ 81.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	true,	182.0f	},	    // UŒ‚2 91.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	true,	72.0f	},	    // UŒ‚3 36.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	true,	72.0f	},	    // UŒ‚3 36.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	122.0f	},	    // –hŒä 61.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	true,	130.0f	},	        // €‚Ê 65.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	182.0f	},	// ƒtƒ‰ƒCƒtƒŒ[ƒ€ 91.0f
@@ -30,7 +30,7 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	true,	242.0f	},	    // ’…’n 121.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	true,	42.0f	},	        // ‘–‚é 21.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	true,	202.0f	},	    // —Y‹©‚Ñ 101.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	true,	162.0f	},	    // Q‚é 81.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	true,	162.0f	},	    // Q‚é 81.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	true,	242.0f	},	    // ”òsŠJn‚·‚é‘O 121.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonWalk.x",	true,	82.0f	},	        // •à‚­ 41.0f
 };
