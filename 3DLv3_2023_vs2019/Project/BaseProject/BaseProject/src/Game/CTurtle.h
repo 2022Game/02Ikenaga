@@ -18,27 +18,6 @@ public:
 	CTurtle();
 	~CTurtle();
 
-	// 待機状態
-	void UpdateIdle();
-	// 待機状態2
-	void UpdateIdle2();
-	// 待機状態3
-	void UpdateIdle3();
-
-	// 攻撃
-	void UpdateAttack();
-	// 攻撃2
-	void UpdateAttack2();
-	// 攻撃終了待ち
-	void UpdateAttackWait();
-
-	//ヒット
-	void UpdateHit();
-	// 死ぬ時
-	void UpdateDie();
-	// めまい(混乱)
-	void UpdateDizzy();
-
 	// 更新処理
 	void Update();
 
@@ -68,30 +47,68 @@ public:
 	//ダメージを与えたオブジェクト
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
+	/// <summary>
+	/// 防御力の強化割合を取得
+	/// </summary>
+	/// <param name="attackDir"></param>
+	/// <returns></returns>
+	float GetDefBuff(const CVector& attackDir) const override;
+
 	// 死亡処理
 	void Death() override;
 
 private:
+	// 待機状態
+	void UpdateIdle();
+	// 待機状態2
+	void UpdateIdle2();
+	// 待機状態3
+	void UpdateIdle3();
+
+	// 攻撃
+	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
+	// 攻撃終了待ち
+	void UpdateAttackWait();
+
+	// ヒット
+	void UpdateHit();
+	// 防御
+	void UpdateDefense();
+	// 防御中のヒット
+	void UpadateDefenseHit();
+	// 防御中の待機
+	void UpadateDefenseIdle();
+	// 死ぬ時
+	void UpdateDie();
+	// めまい(混乱)
+	void UpdateDizzy();
+
+	int mDefenseTime;  // 防御時間の間隔
 	int mAttackTime;   // 攻撃時間の間隔
 	// アニメーションの種類
 	enum class EAnimType
 	{
 		None = -1,
 
-		eTPose,		// Tポーズ
-		eIdle,		// 待機
-		eIdle2,		// 待機2
-		eIdle3,     // 待機3
-		eIdle4,     // 待機4
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eHit,       // ヒット
-		eDie,       // 死ぬ
-		eDizzy,     // めまい(混乱)
-		eWalk,		// 歩行
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eTPose,		  // Tポーズ
+		eIdle,		  // 待機
+		eIdle2,		  // 待機2
+		eIdle3,       // 待機3
+		eIdle4,       // 待機4
+		eAttack,	  // 攻撃
+		eAttack2,	  // 攻撃2
+		eHit,         // ヒット
+		eDefense,     // 防御
+		eDefenseHit,  // 防御中のヒット
+		eDefenseIdle, // 防御中の待機
+		eDie,         // 死ぬ
+		eDizzy,       // めまい(混乱)
+		eWalk,		  // 歩行
+		eJumpStart,	  // ジャンプ開始
+		eJump,		  // ジャンプ中
+		eJumpEnd,	  // ジャンプ終了
 
 		Num
 	};
@@ -114,22 +131,25 @@ private:
 	// 亀の状態
 	enum class EState
 	{
-		eIdle,		// 待機
-		eIdle2,		// 待機2
-		eIdle3,     // 待機3
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eDizzy,     // めまい(混乱)
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eIdle,		  // 待機
+		eIdle2,		  // 待機2
+		eIdle3,       // 待機3
+		eAttack,	  // 攻撃
+		eAttack2,	  // 攻撃2
+		eAttackWait,  // 攻撃終了待ち
+		eHit,         // ヒット
+		eDefense,     // 防御
+		eDefenseHit,  // 防御中のヒット
+		eDefenseIdle, // 防御中の待機
+		eDie,         // 死ぬ時
+		eDizzy,       // めまい(混乱)
+		eJumpStart,	  // ジャンプ開始
+		eJump,		  // ジャンプ中
+		eJumpEnd,	  // ジャンプ終了
 	};
-	EState mState;	// 亀の状態
+	EState mState;	  // 亀の状態
 
-	bool mIsGrounded;	// 接地しているかどうか
+	bool mIsGrounded; // 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;

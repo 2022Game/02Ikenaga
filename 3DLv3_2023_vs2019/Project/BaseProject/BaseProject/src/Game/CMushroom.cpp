@@ -496,8 +496,6 @@ void CMushroom::Update()
 
 	// HPƒQ[ƒW‚ÉŒ»İ‚ÌHP‚ğİ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
-
-	CDebugPrint::Print(" %d",mAttackTime);
 }
 
 // Õ“Ëˆ—

@@ -22,9 +22,10 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃2 26.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	true,	52.0f	},	    // ヒット 26.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	true,	24.0f	},	// 防御中のヒット 8.0f
-	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	true,	122.0f	},	        // 死ぬ 61.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	true,	24.0f	},	    // 防御中のヒット 8.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendIdle.x",	true,	24.0f	},	// 防御中の待機 8.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	true,	122.0f	},	        // 死ぬ 61.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	true,	82.0f	},	    // めまい 41.0f
 	//{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	true,	34.0f	},          // 走る 17.0f
 
@@ -34,6 +35,7 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 CTurtle::CTurtle()
 	: mpRideObject(nullptr)
 	, mAttackTime(0)
+	, mDefenseTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -74,6 +76,7 @@ CTurtle::CTurtle()
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
 	mpColliderSphere->Position(0.0f, 0.5f, 0.0f);
+	mpColliderSphere->SetEnable(false);
 
 	//// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
@@ -86,7 +89,7 @@ CTurtle::CTurtle()
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol->Position(0.0f, 0.3f, 0.0f);
+	mpDamageCol->Position(0.0f, 0.3f, -0.1f); 
 
 	//// ダメージを与えるコライダー
 	mpAttackCol = new CColliderSphere
@@ -97,7 +100,6 @@ CTurtle::CTurtle()
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCol->Position(0.3f, 0.5f, 0.0f);
-	mpAttackCol->SetEnable(false);
 
 	//// 攻撃コライダーを亀の体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
@@ -211,10 +213,53 @@ void CTurtle::UpdateHit()
 	}
 }
 
+// 防御
+void CTurtle::UpdateDefense()
+{
+	ChangeAnimation(EAnimType::eDefense);
+	if (IsAnimationFinished())
+	{
+		mState = EState::eDefenseIdle;
+	}
+}
+
+// 防御中のヒット
+void CTurtle::UpadateDefenseHit()
+{
+	ChangeAnimation(EAnimType::eDefenseHit);
+	if (IsAnimationFinished())
+	{
+		mState = EState::eDefenseIdle;
+	}
+}
+
+// 防御中の待機
+void CTurtle::UpadateDefenseIdle()
+{
+	ChangeAnimation(EAnimType::eDefenseIdle);
+	if (IsAnimationFinished())
+	{
+		if (mDefenseTime >= 800)
+		{
+			mState = EState::eAttack2;
+		}
+		else
+		{
+			mState = EState::eDefenseIdle;
+		}
+	}
+}
+
 // 死ぬ
 void CTurtle::UpdateDie()
 {
-	//ChangeAnimation(EAnimType::eDie);
+	ChangeAnimation(EAnimType::eDie);
+	if (IsAnimationFinished())
+	{
+		Kill();
+		// エネミーの死亡処理
+		CEnemy::Death();
+	}
 }
 
 // めまい(混乱)
@@ -260,6 +305,18 @@ void CTurtle::Update()
 	case EState::eHit:
 		UpdateHit();
 		break;
+		// 防御
+	case EState::eDefense:
+		UpdateDefense();
+		break;
+		// 防御中のヒット
+	case EState::eDefenseHit:
+		UpadateDefenseHit();
+		break;
+		// 防御中のヒット
+	case EState::eDefenseIdle:
+		UpadateDefenseIdle();
+		break;
 		// 死ぬ
 	case EState::eDie:
 		UpdateDie();
@@ -272,47 +329,63 @@ void CTurtle::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttackWait&& mState != EState::eHit)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttackWait&& mState != EState::eHit
+		&& mState != EState::eDefense && mState != EState::eDefenseHit && mState != EState::eDefenseIdle && mState != EState::eDie)
 	{
 		mState = EState::eIdle2;
 	}
-
-	if (mState == EState::eIdle2)
+	if (mState != EState::eDefense)
 	{
-		mAttackTime++;
-		if (mAttackTime > 200)
+		if (mState == EState::eIdle2)
 		{
-			mState = EState::eAttack;
-			// 攻撃2
-			//bool Attack2 = false;
-			//// 攻撃3
-			//bool Attack3 = false;
-			//// 確率を最小に3最大6
-			//int probability2 = Math::Rand(2, 5);
-			//int probability3 = Math::Rand(6, 10);
-			//if (probability2 == 2)Attack2 = true;
-			//if (probability3 == 6)Attack3 = true;
-			//if (Attack2)
-			//{
-			//	mState = EState::eAttack2;
-			//}
-			//else if (Attack3)
-			//{
-			//	mState = EState::eAttack3;
-			//}
-			//else
-			//{
-			//	mState = EState::eAttack;
-			//}
-		}
-		if (mState == EState::eAttack || mState == EState::eAttack2)
-		{
-			mAttackTime = 0;
+			mAttackTime++;
+			if (mAttackTime > 200)
+			{
+				// 攻撃2
+				bool Attack2 = false;
+				// 防御
+				bool Defense = false;
+				// 攻撃2の確率を最小に2最大5
+				int probability2 = Math::Rand(2, 4);
+				// 防御の確率を最小に5最大7
+				int probability3 = Math::Rand(4, 6);
+
+				if (probability2 == 2)Attack2 = true;
+				if (probability3 == 4)Defense = true;
+
+				if (Attack2)
+				{
+					mState = EState::eAttack2;
+				}
+				else if (Defense)
+				{
+					mState = EState::eDefense;
+				}
+				else
+				{
+					mState = EState::eAttack;
+				}
+			}
+			if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDefense)
+			{
+				mAttackTime = 0;
+			}
 		}
 	}
 
+	// 防御時間計測
+	if (mState == EState::eDefense || mState == EState::eDefenseHit || mState == EState::eDefenseIdle)
+	{
+		mDefenseTime++;
+	}
+	else
+	{
+		mDefenseTime = 0;
+	}
+
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	//CDebugPrint::Print(" 亀のHP: %d\n", mCharaStatus.hp);
+	CDebugPrint::Print(" 亀のHP: %d\n", mCharaStatus.hp);
+	CDebugPrint::Print(" 防御時間: %d\n", mDefenseTime);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -323,7 +396,7 @@ void CTurtle::Update()
 
 	if (CInput::PushKey('Q'))
 	{
-		mState = EState::eHit;
+		mState = EState::eDefenseHit;
 	}
 }
 
@@ -424,7 +497,14 @@ void CTurtle::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		if (mState == EState::eDefense || mState == EState::eDefenseIdle)
+		{
+			mState = EState::eDefenseHit;
+		}
+		else
+		{
+			mState = EState::eHit;
+		}
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -444,6 +524,16 @@ void CTurtle::TakeDamage(int damage, CObjectBase* causedObj)
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
 		Position(Position() - dir * Scale().X() * 0.01f);
 	}
+}
+
+// 防御力の強化割合を取得
+float CTurtle::GetDefBuff(const CVector& attackDir)const
+{
+	// 防御状態であれば、防御2倍
+	if (mState == EState::eDefense|| mState == EState::eDefenseIdle) return 2.0f;
+
+	// 通常時の防御の割合
+	return mBaseDefenseBuffRatio;
 }
 
 
