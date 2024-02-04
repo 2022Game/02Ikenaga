@@ -84,6 +84,8 @@ private:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+	// 走る
+	void UpdateRun();
 
 	int mDefenseTime;  // 防御時間の間隔
 	int mAttackTime;   // 攻撃時間の間隔
@@ -105,10 +107,7 @@ private:
 		eDefenseIdle, // 防御中の待機
 		eDie,         // 死ぬ
 		eDizzy,       // めまい(混乱)
-		eWalk,		  // 歩行
-		eJumpStart,	  // ジャンプ開始
-		eJump,		  // ジャンプ中
-		eJumpEnd,	  // ジャンプ終了
+		eRun,		  // 走る
 
 		Num
 	};
@@ -143,13 +142,12 @@ private:
 		eDefenseIdle, // 防御中の待機
 		eDie,         // 死ぬ時
 		eDizzy,       // めまい(混乱)
-		eJumpStart,	  // ジャンプ開始
-		eJump,		  // ジャンプ中
-		eJumpEnd,	  // ジャンプ終了
+		eRun,         // 走る
 	};
 	EState mState;	  // 亀の状態
 
-	bool mIsGrounded; // 接地しているかどうか
+	CVector mMoveSpeed;	// 移動速度
+	bool mIsGrounded;   // 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;

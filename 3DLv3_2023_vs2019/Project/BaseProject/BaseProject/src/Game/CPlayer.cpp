@@ -337,8 +337,8 @@ void CPlayer::UpdateAttack()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
-	
-    // 攻撃終了待ち状態へ移行
+
+	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 
 	//剣に攻撃開始を伝える
