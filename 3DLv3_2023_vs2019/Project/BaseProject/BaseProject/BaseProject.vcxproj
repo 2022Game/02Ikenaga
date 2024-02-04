@@ -66,6 +66,7 @@
     <ClCompile Include="src\Game\AvoidanceGauge.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
+    <ClCompile Include="src\Game\CCactus.cpp" />
     <ClCompile Include="src\Game\CCane.cpp" />
     <ClCompile Include="src\Game\CDragon.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
     <ClInclude Include="src\Game\CBullet.h" />
+    <ClInclude Include="src\Game\CCactus.h" />
     <ClInclude Include="src\Game\CCane.h" />
     <ClInclude Include="src\Game\CDragon.h" />
     <ClInclude Include="src\Game\CEnemy.h" />

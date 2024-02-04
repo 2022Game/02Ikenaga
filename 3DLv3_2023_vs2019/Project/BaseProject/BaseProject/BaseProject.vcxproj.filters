@@ -391,6 +391,9 @@
     <ClCompile Include="src\BaseSystem\CFade.cpp">
       <Filter>ソース ファイル\BaseSystem\Fade</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CCactus.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -713,6 +716,9 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CFade.h">
       <Filter>ソース ファイル\BaseSystem\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCactus.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

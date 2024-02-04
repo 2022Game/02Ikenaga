@@ -11,6 +11,7 @@
 #include "CMushroom2.h"
 #include "CMushroom3.h"
 #include "CTurtle.h"
+#include "CCactus.h"
 #include "CRich.h"
 #include "CDragon.h"
 #include "CPortionRed.h"
@@ -65,6 +66,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
+	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 
 	// ボス関連
 	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
@@ -147,6 +149,11 @@ void CGameScene::Load()
 	CTurtle* enemy7 = new CTurtle();
 	enemy7->Position(100.0f, -0.2f, 20.0f);
 	enemy7->Scale(25.0f, 25.0f, 25.0f);
+
+	// サボテン
+	CCactus* enemy10 = new CCactus();
+	enemy10->Position(150.0f,0.0f,20.0f);
+	enemy10->Scale(30.0f,30.0f,30.0f);
 
 	CRich* enemy8 = new CRich();
 	enemy8->Position(100.0f, 5.0f, 50.0f);

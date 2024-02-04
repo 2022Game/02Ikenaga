@@ -38,3 +38,4 @@ extern const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX];
 extern const CharaStatus ENEMY_STATUS[ENEMY__LEVEL_MAX];
 extern const CharaStatus ENEMY2_STATUS[ENEMY__LEVEL_MAX];
 extern const CharaStatus ENEMY3_STATUS[ENEMY__LEVEL_MAX];
+extern const CharaStatus ENEMY4_STATUS[ENEMY__LEVEL_MAX];
