@@ -33,7 +33,7 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	true,	100.0f	},  // ‚ß‚Ü‚¢ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	true,	30.0f	},  // ‘–‚é 21.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	true,	50.0f	},  // •à‚­ 31.0f
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // ‰E‚ÉˆÚ“®
+	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // ‰E‚ÉˆÚ“®
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // ¶‚ÉˆÚ“®
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  // ’§”­
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  // Ÿ—˜
