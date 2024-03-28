@@ -12,6 +12,12 @@
 #include "CMushroom3.h"
 #include "CTurtle.h"
 #include "CCactus.h"
+#include "CBee.h"
+#include "CRay.h"
+#include "CBeholder.h"
+#include "CChest.h"
+#include "CBoxer.h"
+#include "CBoxer2.h"
 #include "CRich.h"
 #include "CDragon.h"
 #include "CPortionRed.h"
@@ -67,6 +73,12 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
+	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
+	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
+	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
+	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
+	CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
+	CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
 	// ボス関連
 	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
@@ -102,7 +114,11 @@ void CGameScene::Load()
 	// ゲームBGMを読み込み
 	CBGMManager::Instance()->Play(EBGMType::eGame);
 
-	new CField();
+	CField* field = new CField();
+	CField* field2 = new CField();
+	field2->Position(0.0f, 0.0f, -1000.0f);
+	CField* field3 = new CField();
+	field3->Position(0.0f, 0.0f, 1000.0f);
 
 	CPlayer* player = new CPlayer();
 
@@ -113,7 +129,7 @@ void CGameScene::Load()
 	);
 	mainCamera->SetFollowTargetTf(player);
 
-	player->Position(0.0f, 20.0f, 0.0f);
+	player->Position(0.0f, 30.0f, 0.0f);
 
 	// レッドスライム
 	CSlime* enemy = new CSlime();
@@ -150,10 +166,40 @@ void CGameScene::Load()
 	enemy7->Position(100.0f, -0.2f, 20.0f);
 	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
+	// エイ
+	CRay* enemy10 = new CRay();
+	enemy10->Position(150.0f, 0.0f, 20.0f);
+	enemy10->Scale(30.0f, 30.0f, 30.0f);
+
+	// 蜂
+	CBee* enemy13 = new CBee();
+	enemy13->Position(180.0f, 0.0f, 20.0f);
+	enemy13->Scale(30.0f, 30.0f, 30.0f);
+
 	// サボテン
-	CCactus* enemy10 = new CCactus();
-	enemy10->Position(150.0f,0.0f,20.0f);
-	enemy10->Scale(30.0f,30.0f,30.0f);
+	CCactus* enemy16 = new CCactus();
+	enemy16->Position(210.0f, 0.0f, 20.0f);
+	enemy16->Scale(30.0f, 30.0f, 30.0f);
+
+	// チェストモンスター
+	CChest* enemy19 = new CChest();
+	enemy19->Position(240.0f, 0.0f, 20.0f);
+	enemy19->Scale(30.0f, 30.0f, 30.0f);
+
+	// 球体のモンスター
+	CBeholder* enemy22 = new CBeholder();
+	enemy22->Position(0.0f, 0.0f, 60.0f);
+	enemy22->Scale(30.0f, 30.0f, 30.0f);
+
+	// ボクサー
+	CBoxer* enemy25 = new CBoxer();
+	enemy25->Position(360.0f, 0.0f, 20.0f);
+	enemy25->Scale(30.0f, 30.0f, 30.0f);
+
+	// ボクサー2
+	CBoxer2* enemy27 = new CBoxer2();
+	enemy27->Position(400.0f, 0.0f, 20.0f);
+	enemy27->Scale(30.0f, 30.0f, 30.0f);
 
 	CRich* enemy8 = new CRich();
 	enemy8->Position(100.0f, 5.0f, 50.0f);

@@ -16,6 +16,7 @@ enum class ETaskPriority
 	eItem,      // アイテム
 
 	eEffect,	// エフェクト
+	eBillboard,	// ビルボードイメージ
 
 	eCamera,	// カメラ
 

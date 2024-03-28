@@ -92,6 +92,9 @@
     <Filter Include="ソース ファイル\BaseSystem\Fade">
       <UniqueIdentifier>{a03fe14e-2e7a-4924-980b-aa3e14ae9eed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Flame">
+      <UniqueIdentifier>{c8a7d045-d093-4343-b70c-e638db182586}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -393,6 +396,33 @@
     </ClCompile>
     <ClCompile Include="src\Game\CCactus.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBee.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRay.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBeholder.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CChest.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBoxer.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBoxer2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CFlame.cpp">
+      <Filter>ソース ファイル\Game\Flame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CFlamethrower.cpp">
+      <Filter>ソース ファイル\Game\Flame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\Easing.cpp">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -719,6 +749,33 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCactus.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBee.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRay.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBeholder.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CChest.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBoxer.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBoxer2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CFlame.h">
+      <Filter>ソース ファイル\Game\Flame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CFlamethrower.h">
+      <Filter>ソース ファイル\Game\Flame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\Easing.h">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

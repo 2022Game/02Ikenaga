@@ -10,6 +10,7 @@ class CHpGauge;
 class CSaGauge;
 class CSword;
 class CShield;
+class CFlamethrower;
 
 #include <algorithm>
 
@@ -212,6 +213,7 @@ private:
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;
 	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
+	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー
 
 	CTransform* mpRideObject;
 
@@ -226,4 +228,6 @@ private:
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;
+	// 火炎放射エフェクト
+	CFlamethrower* mpFlamethrower;
 };

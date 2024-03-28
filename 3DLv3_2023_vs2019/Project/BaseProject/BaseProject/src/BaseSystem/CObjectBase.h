@@ -33,13 +33,18 @@ public:
 	bool IsEnableCol() const;
 
 	// カラーを設定
-	void SetColor(const CColor& color);
+	virtual void SetColor(const CColor& color);
 	// カラーを取得
 	const CColor& GetColor() const;
 	// アルファ値設定
 	void SetAlpha(float alpha);
 	// アルファ値取得
 	float GetAlpha() const;
+
+	// カメラまでの距離を計算
+	virtual void CalcDepth();
+	// カメラからの距離を取得
+	float GetDepth() const;
 
 	/// <summary>
 	/// 衝突処理
@@ -50,8 +55,10 @@ public:
 	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit);
 
 private:
-	ETag mTag;	//オブジェクト識別用のタグ
+	ETag mTag;			//オブジェクト識別用のタグ
 	bool mIsEnableCol;	// 衝突判定を行うかどうか
+
 protected:
-	CColor mColor;	//オブジェクトの色
+	float mDepth;		// カメラからの距離
+	CColor mColor;		//オブジェクトの色
 };

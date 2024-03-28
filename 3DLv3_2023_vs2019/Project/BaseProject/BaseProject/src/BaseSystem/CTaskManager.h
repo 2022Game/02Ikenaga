@@ -20,12 +20,14 @@ public:
 	/// 指定したタスクをリストに追加
 	/// </summary>
 	/// <param name="task">追加するタスク</param>
-	void Add(CTask* task);
+	/// <param name="isSort">ソートする時の追加処理かどうか</param>
+	void Add(CTask* task, bool isSort = false);
 	/// <summary>
 	/// 指定したタスクをリストから取り除く
 	/// </summary>
 	/// <param name="task">取り除くタスク</param>
-	void Remove(CTask* task);
+	/// <param name="isSort">ソートする時の取り除き処理かどうか</param>
+	void Remove(CTask* task, bool isSort = false);
 
 	// 削除フラグが立っているタスクを全て削除
 	void Delete();

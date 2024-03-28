@@ -57,8 +57,8 @@ void CTask::SetPriority(ETaskPriority prio)
 	//一度タスクリストから取り除き、再度追加することで、
 	//新しい優先度の場所にタスクを差し込む
 	mPriority = prio;
-	CTaskManager::Instance()->Remove(this);
-	CTaskManager::Instance()->Add(this);
+	CTaskManager::Instance()->Remove(this, true);
+	CTaskManager::Instance()->Add(this, true);
 }
 
 //優先度を取得
@@ -76,8 +76,8 @@ void CTask::SetSortOrder(int sortOder)
 	//一度タスクリストから取り除き、再度追加することで、
 	//新しい優先度の場所にタスクを差し込む
 	mSortOrder = sortOder;
-	CTaskManager::Instance()->Remove(this);
-	CTaskManager::Instance()->Add(this);
+	CTaskManager::Instance()->Remove(this, true);
+	CTaskManager::Instance()->Add(this, true);
 }
 
 //優先度内の順番を取得

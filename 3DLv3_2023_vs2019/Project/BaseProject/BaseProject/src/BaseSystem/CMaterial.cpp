@@ -33,8 +33,8 @@ CTexture* CMaterial::Texture()
 
 void CMaterial::Disabled()
 {
-	//アルファブレンドを無効
-	glDisable(GL_BLEND);
+	//ブレンド処理を無効
+	DisableBlend();
 	//テクスチャ有り
 	if (mpTexture != nullptr && mpTexture->Id())
 	{
@@ -51,6 +51,7 @@ CMaterial::CMaterial()
 	, mPower(0)
 	, mpTextureFilename(nullptr)
 	, mpTexture(nullptr)
+	, mBlendType(EBlend::eAlpha)
 {
 	//名前を0で埋め
 	memset(mName, 0, sizeof(mName));
@@ -66,7 +67,8 @@ CMaterial::CMaterial()
 Materialデータの読み込みと設定
 */
 CMaterial::CMaterial(CModelX *model, bool dontDelete)
-	:mpTextureFilename(nullptr)
+	: mpTextureFilename(nullptr)
+	, mBlendType(EBlend::eAlpha)
 {
 	//CModelXにマテリアルを追加する
 	model->Material().push_back(this);
@@ -125,6 +127,40 @@ CMaterial::~CMaterial()
 	}
 }
 
+//ブレンド処理を有効化
+void CMaterial::EnableBlend()
+{
+	//ブレンド処理を有効
+	glEnable(GL_BLEND);
+
+	//ブレンドタイプによって処理を切り替え
+	switch (mBlendType)
+	{
+		// アルファブレンド
+		case EBlend::eAlpha:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		// 加算ブレンド
+		case EBlend::eAdd:
+			glBlendFunc(GL_ONE, GL_ONE);
+			break;
+		// 乗算ブレンド
+		case EBlend::eMultiply:
+			glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+			break;
+		// 色反転
+		case EBlend::eInvert:
+			glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
+			break;
+	}
+}
+
+//ブレンド処理を無効化
+void CMaterial::DisableBlend()
+{
+	glDisable(GL_BLEND);
+}
+
 //マテリアルを有効にする
 void CMaterial::Enabled(const CColor& color, bool isModelX) {
 	if (isModelX)
@@ -144,10 +180,8 @@ void CMaterial::Enabled(const CColor& color, bool isModelX) {
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
 	}
 
-	//アルファブレンドを有効にする
-	glEnable(GL_BLEND);
-	//ブレンド方法を指定
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//ブレンド処理を有効にする
+	EnableBlend();
 	//テクスチャ有り
 	if (mpTexture != nullptr && mpTexture->Id())
 	{
@@ -183,4 +217,10 @@ void CMaterial::VertexNum(int num)
 int CMaterial::VertexNum()
 {
 	return mVertexNum;
+}
+
+//ブレンド処理のタイプを設定
+void CMaterial::SetBlendType(EBlend type)
+{
+	mBlendType = type;
 }

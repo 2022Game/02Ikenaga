@@ -17,7 +17,8 @@ enum class ETag
 
 	ePlayer, // プレイヤー
 	eEnemy,  // エネミー
-	eBullet, // 弾丸 
+	eBullet, // 弾丸
+	eFlame,	// 炎
 
 	eCamera, // カメラ
 

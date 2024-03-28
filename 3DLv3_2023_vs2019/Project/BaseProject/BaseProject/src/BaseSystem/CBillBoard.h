@@ -13,8 +13,6 @@ class CBillBoard : public CObjectBase {
 public:
 	//コンストラクタ
 	CBillBoard(ETag tag = ETag::eNone,
-		ETaskPriority prio = ETaskPriority::eDefault,
-		int sortOrder = 0,
 		ETaskPauseType pause = ETaskPauseType::eDefault);
 
 	void SetSize(const CVector2& size);

@@ -6,6 +6,8 @@
 #include "CColor.h"
 
 class CMyShader;
+enum class EBlend;
+
 /*
 マテリアルクラス
 マテリアルのデータを扱う
@@ -13,6 +15,11 @@ class CMyShader;
 class CMaterial {
 	friend CMyShader;
 private:
+	// ブレンド処理を有効化
+	void EnableBlend();
+	// ブレンド処理を無効化
+	void DisableBlend();
+
 	//マテリアル毎の頂点数
 	int mVertexNum;
 	//拡散光の色RGBA
@@ -27,6 +34,8 @@ private:
 	char mName[MATERIAL_NAME_LEN + 1];
 	//テクスチャ
 	CTexture* mpTexture;
+	//ブレンド処理のタイプ
+	EBlend mBlendType;
 
 public:
 	//テクスチャ読み込み
@@ -53,6 +62,18 @@ public:
 	void VertexNum(int num);
 	//頂点数の取得
 	int VertexNum();
+
+	//ブレンド処理のタイプを設定
+	void SetBlendType(EBlend type);
+};
+
+// ブレンド処理のタイプ
+enum class EBlend
+{
+	eAlpha,		// アルファブレンド
+	eAdd,		// 加算ブレンド
+	eMultiply,	// 乗算ブレンド
+	eInvert,	// 色反転
 };
 
 #endif

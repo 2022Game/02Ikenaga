@@ -113,8 +113,28 @@ class TexAnimData
 public:
 	int row;	// 行数
 	int col;	// 列数
+	bool loop;	// ループするかどうか
 	// フレーム情報リスト
 	std::vector<TexAnimFrameData> frames;
+
+	TexAnimData(int r, int c, bool l, std::vector<TexAnimFrameData> f)
+		: row(r)
+		, col(c)
+		, loop(l)
+		, frames(f)
+	{
+	}
+
+	TexAnimData(int r, int c, bool l, int fc, float fr)
+		: row(r)
+		, col(c)
+		, loop(l)
+	{
+		for (int i = 0; i < fc; i++)
+		{
+			frames.push_back({ i, fr });
+		}
+	}
 };
 
 #endif

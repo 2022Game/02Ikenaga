@@ -7,6 +7,7 @@ CObjectBase::CObjectBase(ETag tag, ETaskPriority prio, int sortOrder, ETaskPause
 	: CTask(prio, sortOrder, pause)
 	, mTag(tag)
 	, mIsEnableCol(true)
+	, mDepth(0.0f)
 	, mColor(CColor::white)
 {
 }
@@ -56,6 +57,24 @@ void CObjectBase::SetAlpha(float alpha)
 float CObjectBase::GetAlpha() const
 {
 	return mColor.A();
+}
+
+// ƒJƒƒ‰‚Ü‚Å‚Ì‹——£‚ğŒvZ
+void CObjectBase::CalcDepth()
+{
+	CCamera* camera = CCamera::CurrentCamera();
+	if (camera == nullptr) return;
+
+	CVector camPos = camera->Position();
+	CVector pos = Position();
+
+	mDepth = (camPos - pos).LengthSqr();
+}
+
+// ƒJƒƒ‰‚©‚ç‚Ì‹——£‚ğæ“¾
+float CObjectBase::GetDepth() const
+{
+	return mDepth;
 }
 
 // Õ“Ëˆ—

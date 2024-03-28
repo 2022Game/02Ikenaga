@@ -1,8 +1,8 @@
 #include "CTurtle.h"
 #include "CPlayer.h"
+#include "CHpGauge.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
-#include "CInput.h"
 #include "Maths.h"
 
 // 亀のインスタンス
@@ -10,9 +10,8 @@ CTurtle* CTurtle::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
 #define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.07f         // 移動速度
+#define MOVE_SPEED 0.05f         // 移動速度
 #define GRAVITY 0.0625f          // 重力
-
 #define WALK_RANGE 100.0f        // 追跡する範囲
 #define STOP_RANGE 24.5f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
@@ -80,10 +79,10 @@ CTurtle::CTurtle()
 		this, ELayer::eEnemy,
 		0.65f, false, 5.0f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
+	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy});
 	mpColliderSphere->Position(0.0f, 0.5f, 0.0f);
 
-	//// ダメージを受けるコライダーを作成
+	// ダメージを受けるコライダーを作成
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
@@ -93,10 +92,10 @@ CTurtle::CTurtle()
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
-	//ダメージを受けるコライダーを少し上へずらす
+	// ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.0f, 0.3f, -0.1f); 
 
-	//// ダメージを与えるコライダー
+	// ダメージを与えるコライダー
 	mpAttackCol = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
@@ -106,11 +105,11 @@ CTurtle::CTurtle()
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCol->Position(0.3f, 0.5f, 0.0f);
 
-	//// 攻撃コライダーを亀の体の行列にアタッチ
+	// 攻撃コライダーを亀の体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
 	mpAttackCol->SetAttachMtx(bodyMty);
 
-	//// 最初の攻撃コライダーを無効にしておく
+	// 最初の攻撃コライダーを無効にしておく
 	mpAttackCol->SetEnable(false);
 }
 
@@ -295,6 +294,8 @@ void CTurtle::UpadateDefenseIdle()
 // 死ぬ
 void CTurtle::UpdateDie()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -422,17 +423,29 @@ void CTurtle::Update()
 		break;
 	}
 
+	// HPゲージの座標を更新(敵の座標の少し上の座標)
+	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
+
 	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttackWait&& mState != EState::eHit
 		&& mState != EState::eDefense && mState != EState::eDefenseHit && mState != EState::eDefenseIdle && mState != EState::eDie && mState != EState::eDizzy
 		&& mState != EState::eRun)
 	{
 		mState = EState::eIdle2;
 	}
-	if (mState != EState::eDefense)
+
+	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
+		mState == EState::eDefense || mState == EState::eHit || mState == EState::eDizzy || mState == EState::eAttackWait
+		|| mState == EState::eDefenseHit || mState == EState::eDefenseIdle)
 	{
-		if (mState == EState::eIdle2 || mState == EState::eRun)
+		mpHpGauge->SetWorldPos(gaugePos);
+	}
+
+	if (mState != EState::eDefense || mState == EState::eDefenseIdle)
+	{
+		if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefense ||mState == EState::eDefenseIdle
+			|| mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttackWait)
 		{
 			mAttackTime++;
 
@@ -499,10 +512,6 @@ void CTurtle::Update()
 		mDefenseTime = 0;
 	}
 
-	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" 亀のHP: %d\n", mCharaStatus.hp);
-	CDebugPrint::Print(" 防御時間: %d\n", mDefenseTime);
-
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -510,10 +519,8 @@ void CTurtle::Update()
 
 	mIsGrounded = false;
 
-	if (CInput::PushKey('Q'))
-	{
-		mState = EState::eRun;
-	}
+	// HPゲージに現在のHPを設定
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -603,8 +610,8 @@ void CTurtle::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	//mpHpGauge->SetValue(mCharaStatus.hp);
+	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

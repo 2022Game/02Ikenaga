@@ -87,7 +87,7 @@ CSlime2::CSlime2()
 	// キャラクター押し戻し処理
 	mpColliderSphere = new CColliderSphere
 	(
-		this, ELayer::eEnemy2,
+		this, ELayer::eEnemy,
 		0.5f, false, 5.0f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });

@@ -90,7 +90,7 @@ CSlime::CSlime()
 		this,ELayer::eEnemy,
 		0.5f,false,5.0f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
+	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphere->Position(0.0f, 0.3f, 0.0f);
 
 	// ダメージを受けるコライダーを作成

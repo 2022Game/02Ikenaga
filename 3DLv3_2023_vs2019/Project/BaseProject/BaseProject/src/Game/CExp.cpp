@@ -5,7 +5,7 @@
 
 CExp::CExp(int exp)
 	: CBillBoardImage("Item\\exp.png",ETag::eExp, ETaskPriority::eExp, 
-		0, ETaskPauseType::eGame)
+		0,ETaskPauseType::eGame)
 	,mAddExp(exp)
 	,mMoveSpeed(0.0f,0.0f,0.0f)
 	, mState(EState::Drop)

@@ -2,8 +2,8 @@
 //#include "CApplication.h"
 #include "CCamera.h"
 
-CBillBoard::CBillBoard(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseType pause)
-	: CObjectBase(tag, prio, sortOrder, pause)
+CBillBoard::CBillBoard(ETag tag, ETaskPauseType pause)
+	: CObjectBase(tag, ETaskPriority::eBillboard, 0, pause)
 {
 }
 
@@ -26,6 +26,7 @@ void CBillBoard::SetSize(const CVector2& size)
 	mT[0].Normal(CVector(0.0f, 0.0f, 1.0f));
 	mT[1].Normal(CVector(0.0f, 0.0f, 1.0f));
 }
+
 void CBillBoard::SetColor(const CColor& color)
 {
 	//色を白色を設定
@@ -34,13 +35,16 @@ void CBillBoard::SetColor(const CColor& color)
 	mMaterial.Diffuse()[2] = color.B();
 	mMaterial.Diffuse()[3] = color.A();
 }
+
 void CBillBoard::Update()
 {
 }
+
 void CBillBoard::Render()
 {
 	Render(&mMaterial);
 }
+
 //Render(マテリアルのポインタ)
 void CBillBoard::Render(CMaterial* mpMaterial)
 {
@@ -53,6 +57,8 @@ void CBillBoard::Render(CMaterial* mpMaterial)
 	m.Position(CVector::zero);
 	glMultMatrixf((m * Matrix()).M());
 
+	//デプス値の書き込みをオフ
+	glDepthMask(false);
 	//ライトオフ
 	glDisable(GL_LIGHTING);
 	//描画色の設定
@@ -66,6 +72,8 @@ void CBillBoard::Render(CMaterial* mpMaterial)
 	mpMaterial->Disabled();
 	//ライトオン
 	glEnable(GL_LIGHTING);
+	//デプス値の書き込みをオンに戻す
+	glDepthMask(true);
 
 	//行列を戻す
 	glPopMatrix();

@@ -7,6 +7,7 @@
 #include "Maths.h"
 #include "CSword.h"
 #include "CShield.h"
+#include "CFlamethrower.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -101,7 +102,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(11);
+	ChangeLevel(70);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -124,7 +125,8 @@ CPlayer::CPlayer()
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-
+	mpColliderLine->Position(0.0f, 1.0f, 0.0f)
+		;
 	// キャラクター同士の押し戻しコライダー
 	mpColliderSphere = new CColliderSphere
 	(
@@ -138,7 +140,7 @@ CPlayer::CPlayer()
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.4f,
+		0.37f,
 		false
 	);
 	//ダメージを受けるコライダーと
@@ -146,7 +148,21 @@ CPlayer::CPlayer()
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol->SetCollisionTags({ ETag::eEnemy });
 	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol->Position(-0.05f, 0.5f, 0.0f);
+	mpDamageCol->Position(-0.05f, 0.3f, 0.0f);
+
+	///ダメージを受けるコライダーを作成
+	mpDamageCol2 = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.35f,
+		false
+	);
+	//ダメージを受けるコライダーと
+	//衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageCol2->SetCollisionTags({ ETag::eEnemy });
+	//ダメージを受けるコライダーを少し上へずらす
+	mpDamageCol2->Position(-0.05f, 0.8f, 0.15f);
 
 	//デフォルト座標を設定
 	mDefaultPos = Position();
@@ -162,6 +178,12 @@ CPlayer::CPlayer()
 	mpShield->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
+
+	mpFlamethrower = new CFlamethrower
+	(
+		this, nullptr,
+		CVector(0.0f, 14.0f, -1.0f)
+	);
 }
 
 CPlayer::~CPlayer()
@@ -169,6 +191,7 @@ CPlayer::~CPlayer()
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpDamageCol);
+	SAFE_DELETE(mpDamageCol2);
 }
 
 CPlayer* CPlayer::Instance()
@@ -260,6 +283,7 @@ void CPlayer::UpdateIdle()
 			// 歩行アニメーションに切り替え
 			ChangeAnimation(EAnimType::eWalk);
 			mpDamageCol->SetEnable(true);
+			mpDamageCol2->SetEnable(true);
 		}
 		// 移動キーを入力していない
 		else
@@ -267,6 +291,7 @@ void CPlayer::UpdateIdle()
 			// 待機アニメーションに切り替え
 			ChangeAnimation(EAnimType::eIdle);
 			mpDamageCol->SetEnable(true);
+			mpDamageCol2->SetEnable(true);
 		}
 
 		// 左クリックで攻撃状態へ移行
@@ -319,6 +344,7 @@ void CPlayer::UpdateIdle()
 		// 待機アニメーションに切り替え
 		ChangeAnimation(EAnimType::eIdle);
 		mpDamageCol->SetEnable(true);
+		mpDamageCol2->SetEnable(true);
 	}
 }
 
@@ -577,6 +603,7 @@ void CPlayer::UpdateRolling()
 	else
 	{
 		mpDamageCol->SetEnable(false);
+		mpDamageCol2->SetEnable(false);
 	}
 }
 
@@ -830,6 +857,19 @@ void CPlayer::Update()
 	}
 
 	AutomaticRecovery();
+
+	// 「E」キーで炎の発射をオンオフする
+	if (CInput::PushKey('E'))
+	{
+		if (!mpFlamethrower->IsThrowing())
+		{
+			mpFlamethrower->Start();
+		}
+		else
+		{
+			mpFlamethrower->Stop();
+		}
+	}
 
 	// キャラクターの更新
 	CXCharacter::Update();

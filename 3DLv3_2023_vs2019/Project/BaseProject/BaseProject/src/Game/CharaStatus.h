@@ -35,7 +35,7 @@ extern const CharaStatus PLAYER_STATUS[PLAYER_LEVEL_MAX];
 // 敵の最大レベル
 #define ENEMY__LEVEL_MAX 5
 // 敵のレベルごとにステータスのテーブル
-extern const CharaStatus ENEMY_STATUS[ENEMY__LEVEL_MAX];
-extern const CharaStatus ENEMY2_STATUS[ENEMY__LEVEL_MAX];
-extern const CharaStatus ENEMY3_STATUS[ENEMY__LEVEL_MAX];
-extern const CharaStatus ENEMY4_STATUS[ENEMY__LEVEL_MAX];
+extern const CharaStatus ENEMY_STATUS[ENEMY__LEVEL_MAX];   // スライム
+extern const CharaStatus ENEMY2_STATUS[ENEMY__LEVEL_MAX];  // マッシュルーム
+extern const CharaStatus ENEMY3_STATUS[ENEMY__LEVEL_MAX];  // 亀
+extern const CharaStatus ENEMY4_STATUS[ENEMY__LEVEL_MAX];  // エイ

@@ -1,6 +1,7 @@
 #include "CTaskManager.h"
 #include "CCamera.h"
 #include "CDebugCamera.h"
+#include "CBillBoard.h"
 
 //タスクマネージャのインスタンス
 CTaskManager* CTaskManager::mpInstance = nullptr;
@@ -51,9 +52,10 @@ CTaskManager::~CTaskManager()
 }
 
 // 指定したタスクをリストに追加
-void CTaskManager::Add(CTask* task)
+void CTaskManager::Add(CTask* task, bool isSort)
 {
 	if (!task->mAddTaskList) return;
+
 	// 追加するタスクが3Dタスクかどうか
 	bool is3dTask = task->mPriority < ETaskPriority::Start2d;
 	// 3Dタスクか2Dタスクかで追加するリスト切り替える
@@ -93,9 +95,10 @@ void CTaskManager::Add(CTask* task)
 }
 
 // 指定したタスクをリストから取り除く
-void CTaskManager::Remove(CTask* task)
+void CTaskManager::Remove(CTask* task, bool isSort)
 {
 	if (!task->mAddTaskList) return;
+
 	// 取り除くタスクが3Dタスクかどうか
 	bool is3dTask = task->mPriority < ETaskPriority::Start2d;
 	// 3Dタスクか2Dタスクかでリストを切り替える

@@ -140,7 +140,7 @@ const CharaStatus ENEMY3_STATUS[ENEMY__LEVEL_MAX] =
 	{    5,     16,    660,    43,   190,     1.5f,      0,      1.0f,    0.0f},
 };
 
-// サボテン(エネミー)のレベルごとにステータス
+// エイ(エネミー)のレベルごとにステータス
 const CharaStatus ENEMY4_STATUS[ENEMY__LEVEL_MAX] =
 {
 	// レベル　経験値   HP　  攻撃　 防御　 移動性   特殊攻撃　大きさ　カメラの高さ

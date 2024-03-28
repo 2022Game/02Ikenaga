@@ -40,6 +40,8 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+	// 移動
+	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -87,14 +89,10 @@ private:
 		eIdle4,     // 待機状態4
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
 		eHit,       // ヒット
 		eDie,       // 死ぬ
 		eDizzy,     // めまい(混乱)
-		eWalk,		// 歩行
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,		// 移動
 
 		Num
 	};
@@ -122,22 +120,32 @@ private:
 		eIdle3,     // 待機状態3
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
 		eAttackWait,// 攻撃終了待ち
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,       // 移動
 	};
 	EState mState;	// サボテンの状態
 
+	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	//CColliderLine* mpColliderLine;
-	//CColliderSphere* mpColliderSphere;
-	//CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	//CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderLine* mpColliderLine;
+	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)
+	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー (体)
+	CColliderSphere* mpColliderSphere3;  // キャラクター押し戻しコライダー (足元)
+	CColliderSphere* mpColliderSphere4;  // キャラクター押し戻しコライダー (左手)
+	CColliderSphere* mpColliderSphere5;  // キャラクター押し戻しコライダー (右手)
+
+	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー (頭)
+	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー (体)
+	CColliderSphere* mpDamageCol3;  // ダメージを受けるコライダー (足元)
+	CColliderSphere* mpDamageCol4;  // ダメージを受けるコライダー (左手)
+	CColliderSphere* mpDamageCol5;  // ダメージを受けるコライダー (右手)
+
+	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー (頭)
+	CColliderSphere* mpAttackCol2;  // ダメージを与えるコライダー2 (左手)
+
 	CTransform* mpRideObject;
 };

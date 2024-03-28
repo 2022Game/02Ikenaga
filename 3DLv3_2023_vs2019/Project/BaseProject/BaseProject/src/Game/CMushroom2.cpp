@@ -83,10 +83,10 @@ CMushroom2::CMushroom2()
 	// キャラクター押し戻し処理(体)
 	mpColliderSphere = new CColliderSphere
 	(
-		this, ELayer::eEnemy2,
+		this, ELayer::eEnemy,
 		0.3f, false, 5.0f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
+	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphere->Position(0.0f, 0.2f, 0.0f);
 
 	mpColliderSphere2 = new CColliderSphere

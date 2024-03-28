@@ -9,8 +9,6 @@ public:
 	// コンストラクタ
 	CBillBoardImage(std::string path,
 		ETag tag = ETag::eNone,
-		ETaskPriority prio = ETaskPriority::eDefault,
-		int sortOrder = 0,
 		ETaskPauseType pause = ETaskPauseType::eDefault);
 	// デストラクタ
 	~CBillBoardImage();
@@ -26,6 +24,9 @@ public:
 	/// </summary>
 	/// <param name="animData"></param>
 	void SetAnimData(TexAnimData* animData);
+
+	// アニメーションが終わったかどうか
+	bool IsEndAnim() const;
 
 	// 更新
 	void Update() override;
