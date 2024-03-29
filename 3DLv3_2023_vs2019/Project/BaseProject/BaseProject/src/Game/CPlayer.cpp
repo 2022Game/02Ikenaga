@@ -102,7 +102,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(70);
+	ChangeLevel(11);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -179,11 +179,11 @@ CPlayer::CPlayer()
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
-	mpFlamethrower = new CFlamethrower
+	/*mpFlamethrower = new CFlamethrower
 	(
 		this, nullptr,
 		CVector(0.0f, 14.0f, -1.0f)
-	);
+	);*/
 }
 
 CPlayer::~CPlayer()

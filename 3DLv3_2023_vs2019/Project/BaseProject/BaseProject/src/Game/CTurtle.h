@@ -77,9 +77,9 @@ private:
 	// –hŒä
 	void UpdateDefense();
 	// –hŒä’†‚Ìƒqƒbƒg
-	void UpadateDefenseHit();
+	void UpdateDefenseHit();
 	// –hŒä’†‚Ì‘Ò‹@
-	void UpadateDefenseIdle();
+	void UpdateDefenseIdle();
 	// €‚Ê
 	void UpdateDie();
 	// ‚ß‚Ü‚¢(¬—)

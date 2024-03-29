@@ -5,7 +5,7 @@
 
 /*
 経験値クラス
-オブジェクトベース継承
+ビルボードイメージ継承
 */
 class CExp : public CBillBoardImage
 {

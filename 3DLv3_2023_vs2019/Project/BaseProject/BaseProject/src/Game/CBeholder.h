@@ -22,13 +22,15 @@ public:
 	void UpdateIdle();
 	// 戦う前の待機状態2
 	void UpdateIdle2();
-	// 待機状態3
-	void UpdateIdle3();
 
 	// 攻撃
 	void UpdateAttack();
 	// 攻撃2
 	void UpdateAttack2();
+	// 攻撃3
+	void UpdateAttack3();
+	// 攻撃4
+	void UpdateAttack4();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 
@@ -38,6 +40,9 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+
+	// 移動
+	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -83,13 +88,12 @@ private:
 		eIdle2,		// 待機2
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
+		eAttack3,	// 攻撃3
+		eAttack4,	// 攻撃4
 		eHit,       // ヒット
 		eDie,       // 死ぬ
 		eDizzy,     // めまい(混乱)
-		eWalk,		// 歩行
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,		// 移動
 
 		Num
 	};
@@ -116,21 +120,43 @@ private:
 		eIdle2,		// 待機2
 		eAttack,	// 攻撃
 		eAttack2,	// 攻撃2
+		eAttack3,	// 攻撃3
+		eAttack4,	// 攻撃4
 		eAttackWait,// 攻撃終了待ち
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,       // 移動
 	};
 	EState mState;	// 球体のモンスターの状態
 
+	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	//CColliderLine* mpColliderLine;
-	//CColliderSphere* mpColliderSphere;
-	//CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	//CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderLine* mpColliderLine;
+
+	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)
+	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー (左上の触手)
+	CColliderSphere* mpColliderSphere3;  // ダメージを受けるコライダー(右上の触手)
+	CColliderSphere* mpColliderSphere4;  // ダメージを受けるコライダー(左下の触手)
+	CColliderSphere* mpColliderSphere5;  // ダメージを受けるコライダー(右下の触手)
+	CColliderSphere* mpColliderSphere6;  // ダメージを受けるコライダー(真ん中上の触手)
+	CColliderSphere* mpColliderSphere7;  // ダメージを受けるコライダー(真ん中下の触手)
+
+	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー(左上の触手)
+	CColliderSphere* mpDamageCol3;  // ダメージを受けるコライダー(右上の触手)
+	CColliderSphere* mpDamageCol4;  // ダメージを受けるコライダー(左下の触手)
+	CColliderSphere* mpDamageCol5;  // ダメージを受けるコライダー(右下の触手)
+	CColliderSphere* mpDamageCol6;  // ダメージを受けるコライダー(真ん中上の触手)
+	CColliderSphere* mpDamageCol7;  // ダメージを受けるコライダー(真ん中下の触手)
+
+	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー(体)
+	CColliderSphere* mpAttackCol2;  // ダメージを与えるコライダー(左上の触手)
+	CColliderSphere* mpAttackCol3;  // ダメージを与えるコライダー(右上の触手)
+	CColliderSphere* mpAttackCol4;  // ダメージを与えるコライダー(左下の触手)
+	CColliderSphere* mpAttackCol5;  // ダメージを与えるコライダー(右下の触手)
+	CColliderSphere* mpAttackCol6;  // ダメージを与えるコライダー(真ん中上の触手)
+	CColliderSphere* mpAttackCol7;  // ダメージを与えるコライダー(真ん中下の触手)
 	CTransform* mpRideObject;
 };

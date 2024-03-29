@@ -249,7 +249,7 @@ void CTurtle::UpdateDefense()
 }
 
 // –hŒä’†‚Ìƒqƒbƒg
-void CTurtle::UpadateDefenseHit()
+void CTurtle::UpdateDefenseHit()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -261,7 +261,7 @@ void CTurtle::UpadateDefenseHit()
 }
 
 // –hŒä’†‚Ì‘Ò‹@
-void CTurtle::UpadateDefenseIdle()
+void CTurtle::UpdateDefenseIdle()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -403,11 +403,11 @@ void CTurtle::Update()
 		break;
 		// –hŒä’†‚Ìƒqƒbƒg
 	case EState::eDefenseHit:
-		UpadateDefenseHit();
+		UpdateDefenseHit();
 		break;
 		// –hŒä’†‚Ìƒqƒbƒg
 	case EState::eDefenseIdle:
-		UpadateDefenseIdle();
+		UpdateDefenseIdle();
 		break;
 		// Ž€‚Ê
 	case EState::eDie:

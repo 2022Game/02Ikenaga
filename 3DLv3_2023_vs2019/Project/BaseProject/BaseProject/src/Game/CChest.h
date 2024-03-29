@@ -130,7 +130,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;  // キャラクター押し戻しコライダー (頭)
+	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)
 	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー (体)
 	CColliderSphere* mpColliderSphere3;  // キャラクター押し戻しコライダー (前の左足)
 	CColliderSphere* mpColliderSphere4;  // キャラクター押し戻しコライダー (前の右足)

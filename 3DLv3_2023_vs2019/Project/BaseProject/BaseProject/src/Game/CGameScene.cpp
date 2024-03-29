@@ -188,13 +188,13 @@ void CGameScene::Load()
 
 	// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();
-	enemy22->Position(0.0f, 0.0f, 60.0f);
-	enemy22->Scale(30.0f, 30.0f, 30.0f);
+	enemy22->Position(270.0f, 0.0f, 20.0f);
+	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	// ボクサー
 	CBoxer* enemy25 = new CBoxer();
-	enemy25->Position(360.0f, 0.0f, 20.0f);
-	enemy25->Scale(30.0f, 30.0f, 30.0f);
+	enemy25->Position(0.0f, 0.0f, 60.0f);
+	enemy25->Scale(15.0f, 15.0f, 15.0f);
 
 	// ボクサー2
 	CBoxer2* enemy27 = new CBoxer2();

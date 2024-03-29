@@ -4,8 +4,7 @@
 #include "Maths.h"
 
 CExp::CExp(int exp)
-	: CBillBoardImage("Item\\exp.png",ETag::eExp, ETaskPriority::eExp, 
-		0,ETaskPauseType::eGame)
+	: CBillBoardImage("Item\\exp.png",ETag::eExp,ETaskPauseType::eGame)
 	,mAddExp(exp)
 	,mMoveSpeed(0.0f,0.0f,0.0f)
 	, mState(EState::Drop)

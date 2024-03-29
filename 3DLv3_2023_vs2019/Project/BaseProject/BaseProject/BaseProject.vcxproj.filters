@@ -415,14 +415,14 @@
     <ClCompile Include="src\Game\CBoxer2.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="src\BaseSystem\Easing.cpp">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClCompile>
     <ClCompile Include="src\Game\CFlame.cpp">
       <Filter>ソース ファイル\Game\Flame</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CFlamethrower.cpp">
       <Filter>ソース ファイル\Game\Flame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BaseSystem\Easing.cpp">
-      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -768,14 +768,14 @@
     <ClInclude Include="src\Game\CBoxer2.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="src\BaseSystem\Easing.h">
+      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\CFlame.h">
       <Filter>ソース ファイル\Game\Flame</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CFlamethrower.h">
       <Filter>ソース ファイル\Game\Flame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BaseSystem\Easing.h">
-      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
