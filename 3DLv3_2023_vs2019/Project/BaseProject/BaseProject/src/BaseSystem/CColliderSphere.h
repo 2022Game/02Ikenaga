@@ -34,8 +34,14 @@ public:
 	void Get(CVector* pos, float* rad) const;
 
 	// コライダー描画
-	void Render();
+	void Render() override;
+
+protected:
+	// コライダーの情報を更新
+	void UpdateCol() override;
 
 private:
 	float mRadius;	// 球の半径
+	CVector mWPos;	// ワールド座標
+	float mWRadius;	// ワールド半径
 };

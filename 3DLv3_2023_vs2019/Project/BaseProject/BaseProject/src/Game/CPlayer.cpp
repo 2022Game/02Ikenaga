@@ -160,7 +160,7 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eEnemy });
+	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol2->Position(-0.05f, 0.8f, 0.15f);
 
@@ -179,11 +179,11 @@ CPlayer::CPlayer()
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
-	/*mpFlamethrower = new CFlamethrower
+	mpFlamethrower = new CFlamethrower
 	(
 		this, nullptr,
 		CVector(0.0f, 14.0f, -1.0f)
-	);*/
+	);
 }
 
 CPlayer::~CPlayer()
@@ -211,109 +211,9 @@ void CPlayer::ChangeAnimation(EAnimType type)
 // 待機
 void CPlayer::UpdateIdle()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
-	int speed = 1.2f;
-	int speed2 = -1.2f;
-
+	// 接地していれば、
 	if (mIsGrounded)
 	{
-		// 移動処理
-		// キーの入力ベクトルを取得
-		CVector input;
-		if (CInput::Key('W'))
-		{
-			// SPACEキーで回避
-			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
-			{
-				RollingCount();
-				mMoveSpeed.Z(-0.3f);
-			}
-			else
-			{
-				input.Z(speed2);
-			}
-		}
-		else if (CInput::Key('S'))
-		{
-			input.Z(speed);
-			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
-			{
-				RollingCount();
-			}
-		}
-		if (CInput::Key('A'))
-		{
-			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
-			{
-				RollingCount();
-				mMoveSpeed.X(-0.2f);
-			}
-			else
-			{
-				input.X(speed2);
-			}
-		}
-		else if (CInput::Key('D'))
-		{
-			if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
-			{
-				RollingCount();
-				mMoveSpeed.X(0.2f);
-			}
-			else
-			{
-				input.X(speed);
-			}
-		}
-
-		// 入力ベクトルの長さで入力されているか判定
-		if (input.LengthSqr() > 0.0f)
-		{
-			// カメラの向きに合わせた移動ベクトルに変換
-			CCamera* mainCamera = CCamera::MainCamera();
-			CVector camForward = mainCamera->VectorZ();
-			CVector camSide = CVector::Cross(CVector::up, camForward);
-			CVector move = camForward * input.Z() + camSide * input.X();
-			move.Y(0.0f);
-			move.Normalize();
-
-			mMoveSpeed += move * MOVE_SPEED * mCharaStatus.mobility;
-
-			// 歩行アニメーションに切り替え
-			ChangeAnimation(EAnimType::eWalk);
-			mpDamageCol->SetEnable(true);
-			mpDamageCol2->SetEnable(true);
-		}
-		// 移動キーを入力していない
-		else
-		{
-			// 待機アニメーションに切り替え
-			ChangeAnimation(EAnimType::eIdle);
-			mpDamageCol->SetEnable(true);
-			mpDamageCol2->SetEnable(true);
-		}
-
-		// 左クリックで攻撃状態へ移行
-		if (CInput::PushKey(VK_LBUTTON))
-		{
-			mAttackCount++;
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-			mState = EState::eAttack;
-			if (mAttackCount == 2)
-			{
-				mMoveSpeed.X(0.0f);
-				mMoveSpeed.Z(0.0f);
-				mState = EState::eAttack5;
-			}
-			if (mAttackCount == 3)
-			{
-				mMoveSpeed.X(0.0f);
-				mMoveSpeed.Z(0.0f);
-				mState = EState::eAttack4;
-			}
-		}
 		if (mAttackTime >= 300 ||mAttackCount <=0)
 		{
 			mAttackCount = 0;
@@ -339,13 +239,6 @@ void CPlayer::UpdateIdle()
 			mState = EState::eJumpStart;
 		}
 	}
-	else
-	{
-		// 待機アニメーションに切り替え
-		ChangeAnimation(EAnimType::eIdle);
-		mpDamageCol->SetEnable(true);
-		mpDamageCol2->SetEnable(true);
-	}
 }
 
 // 歩行
@@ -364,11 +257,14 @@ void CPlayer::UpdateAttack()
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
 
-	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	if (mAnimationFrame >= 35.0f)
+	{
+		//剣に攻撃開始を伝える
+		mpSword->AttackStart();
 
-	//剣に攻撃開始を伝える
-	mpSword->AttackStart();
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 
 	// 斬撃SEの再生済みフラグを初期化
 	mIsPlayedSlashSE = false;
@@ -404,11 +300,15 @@ void CPlayer::UpdateAttack4()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack4);
-	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
 
-	//剣に攻撃開始を伝える
-	mpSword->AttackStart();
+	if (mAnimationFrame >= 30.0f)
+	{
+		//剣に攻撃開始を伝える
+		mpSword->AttackStart();
+
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃5
@@ -416,11 +316,15 @@ void CPlayer::UpdateAttack5()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack5);
-	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
 
-	//剣に攻撃開始を伝える
-	mpSword->AttackStart();
+	if (mAnimationFrame >= 50.0f)
+	{
+		//剣に攻撃開始を伝える
+		mpSword->AttackStart();
+
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃6
@@ -518,11 +422,128 @@ void CPlayer::UpdateJump()
 // ジャンプ終了
 void CPlayer::UpdateJumpEnd()
 {
-	if (IsAnimationFinished())
+	// ジャンプアニメーションが終了かつ、
+	// 地面に接地したら、待機状態へ戻す
+	if (IsAnimationFinished() && mIsGrounded)
 	{
 		mState = EState::eIdle;
 	}
 }
+
+// 移動の更新処理
+void CPlayer::UpdateMove()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	int speed = 1.2f;
+	int speed2 = -1.2f;
+
+	// 移動処理
+    // キーの入力ベクトルを取得
+	CVector input;
+	if (CInput::Key('W'))
+	{
+		// SPACEキーで回避
+		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
+		{
+			RollingCount();
+			mMoveSpeed.Z(-0.3f);
+		}
+		else
+		{
+			input.Z(speed2);
+		}
+	}
+	else if (CInput::Key('S'))
+	{
+		input.Z(speed);
+		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
+		{
+			RollingCount();
+		}
+	}
+	if (CInput::Key('A'))
+	{
+		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
+		{
+			RollingCount();
+			mMoveSpeed.X(-0.2f);
+		}
+		else
+		{
+			input.X(speed2);
+		}
+	}
+	else if (CInput::Key('D'))
+	{
+		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
+		{
+			RollingCount();
+			mMoveSpeed.X(0.2f);
+		}
+		else
+		{
+			input.X(speed);
+		}
+	}
+
+	// 入力ベクトルの長さで入力されているか判定
+	if (input.LengthSqr() > 0.0f)
+	{
+		// カメラの向きに合わせた移動ベクトルに変換
+		CCamera* mainCamera = CCamera::MainCamera();
+		CVector camForward = mainCamera->VectorZ();
+		CVector camSide = CVector::Cross(CVector::up, camForward);
+		CVector move = camForward * input.Z() + camSide * input.X();
+		move.Y(0.0f);
+		move.Normalize();
+
+		mMoveSpeed += move * MOVE_SPEED * mCharaStatus.mobility;
+
+		// 待機状態であれば、歩行アニメーションに切り替え
+		if (mState == EState::eIdle)
+		{
+			// 歩行アニメーションに切り替え
+			ChangeAnimation(EAnimType::eWalk);
+			mpDamageCol->SetEnable(true);
+			mpDamageCol2->SetEnable(true);
+		}
+	}
+	// 移動キーを入力していない
+	else
+	{
+		// 待機状態であれば、待機アニメーションに切り替え
+		if (mState == EState::eIdle)
+		{
+			// 待機アニメーションに切り替え
+			ChangeAnimation(EAnimType::eIdle);
+			mpDamageCol->SetEnable(true);
+			mpDamageCol2->SetEnable(true);
+		}
+	}
+
+	// 左クリックで攻撃状態へ移行
+	if (CInput::PushKey(VK_LBUTTON))
+	{
+		mAttackCount++;
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+		mState = EState::eAttack;
+		if (mAttackCount == 2)
+		{
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+			mState = EState::eAttack5;
+		}
+		if (mAttackCount == 3)
+		{
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+			mState = EState::eAttack4;
+		}
+	}
+}
+
 
 // 攻撃力アップ
 void CPlayer::UpdatePowerUp()
@@ -826,6 +847,15 @@ void CPlayer::Update()
 		case EState::eDie:
 			UpdateDei();
 			break;
+	}
+
+	// 待機中とジャンプ中は、移動処理を行う
+	if (mState == EState::eIdle
+		|| mState == EState::eJumpStart
+		|| mState == EState::eJump
+		|| mState == EState::eJumpEnd)
+	{
+		UpdateMove();
 	}
 
 	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);

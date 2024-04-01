@@ -76,13 +76,13 @@ CVector CFlamethrower::GetThrowDir() const
 {
 	// アタッチする行列が設定されている場合は、行列の正面方向ベクトルを返す
 	if (mpAttachMtx != nullptr)
-	{
-		return mpAttachMtx->VectorZ();
+	{ 
+		return mpAttachMtx->Position() + (mpOwner->Rotation() * mThrowOffsetPos);
 	}
 	// 持ち主が設定されている場合は、持ち主の正面方向ベクトルを返す
 	else if (mpOwner != nullptr)
 	{
-		return mpOwner->VectorZ();
+		return mpOwner->Position() + (mpOwner->Rotation() * mThrowOffsetPos);
 	}
 
 	return CVector::forward;

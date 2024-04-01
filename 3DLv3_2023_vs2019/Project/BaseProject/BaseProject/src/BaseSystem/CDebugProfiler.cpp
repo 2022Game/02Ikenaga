@@ -86,6 +86,7 @@ void CDebugProfiler::Print()
 					dt->Get()
 				);
 			}
+			dt->Reset();
 		}
 		CDebugPrint::Print("Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°Å°\n");
 	}

@@ -76,7 +76,7 @@ void CExp::Update()
 		playerVec = playerPos - Position();
 		dist = playerVec.Length();
 	}
-	CDebugPrint::Print(" 経験値距離:%f\n", dist);
+	//CDebugPrint::Print(" 経験値距離:%f\n", dist);
 
 	// 状態に合わせて移動処理を切り替える
 	switch (mState)

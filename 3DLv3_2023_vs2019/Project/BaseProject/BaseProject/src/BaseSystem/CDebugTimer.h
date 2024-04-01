@@ -12,6 +12,8 @@ public:
 	void Start();
 	// 時間計測終了
 	void End();
+	// 計測した時間をリセット
+	void Reset();
 	// 計測した時間を取得
 	float Get() const;
 	// 時間計測を終了しているか
@@ -22,4 +24,5 @@ private:
 	LARGE_INTEGER startCount;
 	LARGE_INTEGER endCount;
 	bool isEnd;
+	float time;
 };

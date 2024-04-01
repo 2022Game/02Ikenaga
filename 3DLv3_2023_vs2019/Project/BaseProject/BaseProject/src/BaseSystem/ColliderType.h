@@ -7,4 +7,5 @@ enum class EColliderType
 	eSphere,	// 球コライダ
 	eTriangle,	// 三角コライダ
 	eMesh,		// メッシュコライダ
+	eCapsule,	// カプセルコライダー
 };

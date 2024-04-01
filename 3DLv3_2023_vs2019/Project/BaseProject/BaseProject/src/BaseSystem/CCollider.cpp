@@ -3,6 +3,7 @@
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
 #include "CColliderTriangle.h"
+#include "CColliderCapsule.h"
 #include "CColliderMesh.h"
 #include "CObjectBase.h"
 #include "Maths.h"
@@ -192,6 +193,12 @@ CMatrix CCollider::Matrix() const
 	return m;
 }
 
+// バウンディングボックスを取得
+CBounds CCollider::Bounds() const
+{
+	return mBounds;
+}
+
 // コライダー更新
 void CCollider::Update()
 {
@@ -246,25 +253,9 @@ bool CCollider::CollisionTriangleLine(
 	CVector cross = ls + (le - ls) * (abs(dots) / (abs(dots) + abs(dote)));
 
 	//交点が三角形内なら衝突している
-	//頂点1頂点2ベクトルと頂点1交点ベクトルとの外積を求め、
-	//法線との内積がマイナスなら、三角形の外
-	if ((t1 - t0).Cross(cross - t0).Dot(normal) < 0.0f) {
-		//衝突してない
-		h->adjust = CVector(0.0f, 0.0f, 0.0f);
-		return false;
-	}
-	//頂点2頂点3ベクトルと頂点2交点ベクトルとの外積を求め、
-	//法線との内積がマイナスなら、三角形の外
-	if ((t2 - t1).Cross(cross - t1).Dot(normal) < 0.0f) {
-		//衝突してない
-		h->adjust = CVector(0.0f, 0.0f, 0.0f);
-		return false;
-	}
-	//課題３２
-	//頂点3頂点1ベクトルと頂点3交点ベクトルとの外積を求め、
-	//法線との内積がマイナスなら、三角形の外
-	if ((t0 - t2).Cross(cross - t2).Dot(normal) < 0.0f) {
-		//衝突してない
+	if (!IsInsideTriangle(cross, t0, t1, t2, normal))
+	{
+		//三角形外なので、衝突してない
 		h->adjust = CVector(0.0f, 0.0f, 0.0f);
 		return false;
 	}
@@ -283,6 +274,116 @@ bool CCollider::CollisionTriangleLine(
 	}
 	if (!isLeftMain) h->adjust = -h->adjust;
 	return true;
+}
+
+// 三角形とカプセルの衝突判定
+bool CCollider::CollisionTriangleCapsule(
+	const CVector& t0, const CVector& t1, const CVector& t2,
+	const CVector& cs, const CVector& ce, float cr,
+	CHitInfo* h, bool isLeftMain)
+{
+	// 三角形の法線を算出
+	CVector n = CVector::Cross(t1 - t0, t2 - t0).Normalized();
+
+	// カプセルの始点から三角形の頂点までのベクトルを求める
+	CVector vs = cs - t0;
+	// カプセルの終点から三角形の頂点までのベクトルを求める
+	CVector ve = ce - t0;
+
+	// 各ベクトルと三角形の法線との内積を求める
+	float d1 = CVector::Dot(vs, n);
+	float d2 = CVector::Dot(ve, n);
+
+	// パターン①
+	// カプセルを構成する三角形が交差していたら、線分と三角形の衝突判定を行う
+	// （各内積の結果を乗算してマイナスの場合は、
+	// 　カプセルを構成する線分が三角形と交差している）
+	if (d1 * d2 < 0.0f)
+	{
+		// 線分と三角形の衝突判定を行う
+		if (CollisionTriangleLine(t0, t1, t2, cs, ce, h, isLeftMain))
+		{
+			// 衝突していた場合は、押し戻しベクトルに
+			// カプセルの半径分の長さを追加して返す
+			h->adjust += h->adjust.Normalized() * cr;
+			return true;
+		}
+	}
+
+
+	// 始点と終点を垂直に下ろした最近点を求める
+	CVector c1 = cs - n * d1;
+	CVector c2 = ce - n * d2;
+	// 始点と終点の押し戻し量を求める
+	CVector v1, v2;
+	if (fabsf(d1) <= cr) v1 = (c1 + n * cr) - cs;
+	if (fabsf(d2) <= cr) v2 = (c2 + n * cr) - ce;
+
+	// パターン②
+	// カプセルを構成する線分の始点と終点から三角形への距離を求め、
+	// カプセルの半径より近い（めり込んでいる）場合は、押し戻す
+	{
+		float l1 = FLT_MAX, l2 = FLT_MAX;
+		// 求めた最近点が三角形の内側かつ、距離が半径以下であれば、
+		// 距離と押し戻しベクトルを求める
+		if (IsInsideTriangle(c1, t0, t1, t2, n) && fabsf(d1) <= cr) l1 = v1.LengthSqr();
+		if (IsInsideTriangle(c2, t0, t1, t2, n) && fabsf(d2) <= cr) l2 = v2.LengthSqr();
+
+		if (l1 < FLT_MAX || l2 < FLT_MAX)
+		{
+			if (l1 < FLT_MAX && l2 < FLT_MAX) h->adjust = l1 >= l2 ? v1 : v2;
+			else h->adjust = l1 < FLT_MAX ? v1 : v2;
+			if (isLeftMain) h->adjust = -h->adjust;
+			return true;
+		}
+	}
+
+	// パターン③
+	// カプセルを構成する線分と三角形の各辺の距離を求め、
+	// カプセルの半径より近い場合は押し戻す
+	{
+		float e1 = CalcDistanceLine(t0, t1, cs, ce);
+		float e2 = CalcDistanceLine(t1, t2, cs, ce);
+		float e3 = CalcDistanceLine(t2, t0, cs, ce);
+		if (std::min(std::min(e1, e2), e3) <= cr)
+		{
+			if (e1 <= e2 && e1 <= e3)
+			{
+				CVector cv = CVector::Cross(t1 - t0, ce - cs).Normalized();
+				if (cv.LengthSqr() == 0.0f)
+				{
+					CVector nv = (t1 - t0).Normalized();
+					cv = (t0 + nv * CVector::Dot(cs - t0, nv) - cs).Normalized();
+				}
+				h->adjust = cv * (cr - e1);
+			}
+			else if (e2 <= e1 && e2 <= e3)
+			{
+				CVector cv = CVector::Cross(t2 - t1, ce - cs).Normalized();
+				if (cv.LengthSqr() == 0.0f)
+				{
+					CVector nv = (t2 - t1).Normalized();
+					cv = (t1 + nv * CVector::Dot(cs - t1, nv) - cs).Normalized();
+				}
+				h->adjust = cv * (cr - e2);
+			}
+			else
+			{
+				CVector cv = CVector::Cross(t0 - t2, ce - cs).Normalized();
+				if (cv.LengthSqr() == 0.0f)
+				{
+					CVector nv = (t0 - t2).Normalized();
+					cv = (t2 + nv * CVector::Dot(cs - t2, nv) - cs).Normalized();
+				}
+				h->adjust = cv * (cr - e3);
+			}
+			if (!isLeftMain) h->adjust = -h->adjust;
+			return true;
+		}
+	}
+
+	h->adjust = CVector::zero;
+	return false;
 }
 
 // 三角形と点の衝突判定
@@ -412,6 +513,34 @@ bool CCollider::CollisionSphereLine(const CVector& sp, const float sr,
 	hit->adjust = CVector(0.0f, 0.0f, 0.0f);
 	return false;
 }
+
+// 球とカプセルの衝突判定
+bool CCollider::CollisionSphereCapsule(
+	const CVector& sp, const float sr,
+	const CVector& cs, const CVector& ce, float cr,
+	CHitInfo* hit, bool isLeftMain)
+{
+	CVector nearest;
+	float length = CalcDistancePointToLine(sp, cs, ce, &nearest);
+	if (length < sr)
+	{
+		CVector n = (sp - nearest).Normalized() * (isLeftMain ? 1.0f : -1.0f);
+		hit->adjust = n * (sr - length);
+
+		CVector v = (ce - cs).Normalized();
+		CVector p = (sp - cs).Normalized();
+		float a = CVector::Dot(v, v);
+		float b = CVector::Dot(v, p);
+		float c = CVector::Dot(p, p) - sr * sr;
+		if (a != 0.0f) hit->cross = cs + v * ((b - sqrtf(b * b - a * c)) / a);
+		else hit->cross = CVector::zero;
+		return true;
+	}
+
+	hit->adjust = CVector(0.0f, 0.0f, 0.0f);
+	return false;
+}
+
 // 線分と線分の衝突判定
 bool CCollider::CollisionLine(const CVector& ls0, const CVector& le0,
 	const CVector& ls1, const CVector& le1, CHitInfo* hit)
@@ -455,9 +584,96 @@ bool CCollider::CollisionLine(const CVector& ls0, const CVector& le0,
 	return false;
 }
 
-// メッシュと線分の衝突判定
-bool CCollider::CollisionMeshLine(const std::list<STVertex>& tris,
+// カプセルと線分の衝突判定
+bool CCollider::CollisionCapsuleLine(
+	const CVector& cs, const CVector& ce, float cr,
 	const CVector& ls, const CVector& le,
+	CHitInfo* hit, bool isLeftMain)
+{
+	//TODO:調整値の対応
+	hit->adjust = CVector(0.0f, 0.0f, 0.0f);
+
+	CVector V0 = le - ls;
+	CVector V1 = ce - cs;
+
+	CVector S1E1 = le - ls;
+	CVector S2E2 = ce - cs;
+	CVector CD = CVector::Cross(V0, V1).Normalized();
+
+	CVector S1S2 = cs - ls;
+	CVector S1E2 = ce - ls;
+	CVector S2S1 = ls - cs;
+	CVector S2E1 = le - cs;
+
+	float length = 0.0f;
+	float d1 = S1E1.Cross(S1S2).Dot(S1E1.Cross(S1E2));
+	float d2 = S2E2.Cross(S2S1).Dot(S2E2.Cross(S2E1));
+	if (d1 < 0 && d2 < 0)
+	{
+		length = abs(S1S2.Dot(CD));
+	}
+	else
+	{
+		float length1 = CalcDistancePointToLine(ls, cs, ce);
+		float length2 = CalcDistancePointToLine(le, cs, ce);
+		float length3 = CalcDistancePointToLine(cs, ls, le);
+		float length4 = CalcDistancePointToLine(ce, ls, le);
+		length = fminf(fminf(length1, length2), fminf(length3, length4));
+	}
+
+	if (length < cr)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+// カプセルとカプセルの衝突判定
+bool CCollider::CollisionCapsule(const CVector& cs0, const CVector& ce0, float cr0, const CVector& cs1, const CVector& ce1, float cr1, CHitInfo* hit)
+{
+	//TODO:調整値の対応
+	hit->adjust = CVector(0.0f, 0.0f, 0.0f);
+
+	CVector V0 = ce0 - cs0;
+	CVector V1 = ce1 - cs1;
+
+	CVector S1E1 = ce0 - cs0;
+	CVector S2E2 = ce1 - cs1;
+	CVector CD = CVector::Cross(V0, V1).Normalized();
+
+	CVector S1S2 = cs1 - cs0;
+	CVector S1E2 = ce1 - cs0;
+	CVector S2S1 = cs0 - cs1;
+	CVector S2E1 = ce0 - cs1;
+
+	float length = 0.0f;
+	float d1 = S1E1.Cross(S1S2).Dot(S1E1.Cross(S1E2));
+	float d2 = S2E2.Cross(S2S1).Dot(S2E2.Cross(S2E1));
+	if (d1 < 0 && d2 < 0)
+	{
+		length = abs(S1S2.Dot(CD));
+	}
+	else
+	{
+		float length1 = CalcDistancePointToLine(cs0, cs1, ce1);
+		float length2 = CalcDistancePointToLine(ce0, cs1, ce1);
+		float length3 = CalcDistancePointToLine(cs1, cs0, ce0);
+		float length4 = CalcDistancePointToLine(ce1, cs0, ce0);
+		length = fminf(fminf(length1, length2), fminf(length3, length4));
+	}
+
+	if (length < cr0 + cr1)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+// メッシュと線分の衝突判定
+bool CCollider::CollisionMeshLine(const std::list<STVertexData>& tris,
+	const CVector& ls, const CVector& le, const CBounds& lb,
 	CHitInfo* hit, bool isLeftMain)
 {
 	bool ret = false;
@@ -467,9 +683,10 @@ bool CCollider::CollisionMeshLine(const std::list<STVertex>& tris,
 	bool isFirst = true;
 	for (auto& v : tris)
 	{
-		if (CollisionTriangleLine(v.V[0], v.V[1], v.V[2], ls, le, hit, isLeftMain))
+		if (!CBounds::Intersect(v.bounds, lb)) continue;
+		if (CollisionTriangleLine(v.wv.V[0], v.wv.V[1], v.wv.V[2], ls, le, hit, isLeftMain))
 		{
-			hit->tris.push_back(v);
+			hit->tris.push_back(v.wv);
 
 			CVector adj = hit->adjust;
 			adjust.X(abs(adjust.X()) > abs(adj.X()) ? adjust.X() : adj.X());
@@ -502,20 +719,24 @@ bool CCollider::CollisionMeshLine(const std::list<STVertex>& tris,
 }
 
 // メッシュと球の衝突判定
-bool CCollider::CollisionMeshSpehre(const std::list<STVertex>& tris,
-	const CVector& sp, const float sr,
-	CHitInfo* hit, bool isLeftMain)
+bool CCollider::CollisionMeshSpehre(const std::list<STVertexData>& tris,
+	CColliderSphere* sphereCol, CHitInfo* hit, bool isLeftMain)
 {
+	CVector sp;
+	float sr;
+	sphereCol->Get(&sp, &sr);
+
 	bool ret = false;
 	CVector adjust = CVector::zero;
 	for (auto& v : tris)
 	{
-		if (CollisionTriangleSphere(v.V[0], v.V[1], v.V[2], sp, sr, hit, isLeftMain))
+		if (!CBounds::Intersect(v.bounds, sphereCol->Bounds())) continue;
+		if (CollisionTriangleSphere(v.wv.V[0], v.wv.V[1], v.wv.V[2], sp, sr, hit, isLeftMain))
 		{
 			adjust.Y(fabsf(adjust.Y()) > fabsf(hit->adjust.Y()) ? adjust.Y() : hit->adjust.Y());
 			adjust.X(fabsf(adjust.X()) > fabsf(hit->adjust.X()) ? adjust.X() : hit->adjust.X());
 			adjust.Z(fabsf(adjust.Z()) > fabsf(hit->adjust.Z()) ? adjust.Z() : hit->adjust.Z());
-			hit->tris.push_back(v);
+			hit->tris.push_back(v.wv);
 			ret = true;
 		}
 	}
@@ -527,25 +748,78 @@ bool CCollider::CollisionMeshSpehre(const std::list<STVertex>& tris,
 }
 
 // メッシュと三角形の衝突判定
-bool CCollider::CollisionMeshTriangle(const std::list<STVertex>& tris,
-	const CVector& t0, const CVector& t1, const CVector& t2,
-	CHitInfo* hit, bool isLeftMain)
+bool CCollider::CollisionMeshTriangle(const std::list<STVertexData>& tris,
+	CColliderTriangle* triCol, CHitInfo* hit, bool isLeftMain)
 {
+	CVector t0, t1, t2;
+	triCol->Get(&t0, &t1, &t2);
+
 	bool ret = false;
 	for (auto& v : tris)
 	{
-		CVector v00 = isLeftMain ? v.V[0] : t0;
-		CVector v01 = isLeftMain ? v.V[1] : t1;
-		CVector v02 = isLeftMain ? v.V[2] : t2;
-		CVector v10 = isLeftMain ? t0 : v.V[0];
-		CVector v11 = isLeftMain ? t1 : v.V[1];
-		CVector v12 = isLeftMain ? t2 : v.V[2];
+		if (!CBounds::Intersect(v.bounds, triCol->Bounds())) continue;
+		CVector v00 = isLeftMain ? v.wv.V[0] : t0;
+		CVector v01 = isLeftMain ? v.wv.V[1] : t1;
+		CVector v02 = isLeftMain ? v.wv.V[2] : t2;
+		CVector v10 = isLeftMain ? t0 : v.wv.V[0];
+		CVector v11 = isLeftMain ? t1 : v.wv.V[1];
+		CVector v12 = isLeftMain ? t2 : v.wv.V[2];
 		if (CollisionTriangle(v00, v01, v02, v10, v11, v12, hit))
 		{
-			hit->tris.push_back(v);
+			hit->tris.push_back(v.wv);
 			ret = true;
 		}
 	}
+	return ret;
+}
+
+// メッシュとカプセルの衝突判定
+bool CCollider::CollisionMeshCapsule(const std::list<STVertexData>& tris,
+	CColliderCapsule* capsuleCol, CHitInfo* hit, bool isLeftMain)
+{
+	CVector cs, ce;
+	capsuleCol->Get(&cs, &ce);
+	float cr = capsuleCol->Radius();
+
+	bool ret = false;
+	CVector adjust = CVector::zero;
+	CVector cross = CVector::zero;
+	float nearDist = 0.0f;
+	bool isFirst = true;
+	for (auto& v : tris)
+	{
+		if (!CBounds::Intersect(v.bounds, capsuleCol->Bounds())) continue;
+		if (CollisionTriangleCapsule(v.wv.V[0], v.wv.V[1], v.wv.V[2], cs, ce, cr, hit, isLeftMain))
+		{
+			hit->tris.push_back(v.wv);
+
+			CVector adj = hit->adjust;
+			adjust.X(abs(adjust.X()) > abs(adj.X()) ? adjust.X() : adj.X());
+			adjust.Y(abs(adjust.Y()) > abs(adj.Y()) ? adjust.Y() : adj.Y());
+			adjust.Z(abs(adjust.Z()) > abs(adj.Z()) ? adjust.Z() : adj.Z());
+
+			if (isFirst)
+			{
+				cross = hit->cross;
+				nearDist = (cross - cs).Length();
+				isFirst = false;
+			}
+			else
+			{
+				float dist = (hit->cross - cs).Length();
+				if (dist < nearDist)
+				{
+					cross = hit->cross;
+					nearDist = dist;
+				}
+			}
+
+			ret = true;
+		}
+	}
+	hit->adjust = adjust;
+	hit->cross = cross;
+	hit->dist = nearDist;
 	return ret;
 }
 
@@ -565,6 +839,46 @@ float CCollider::CalcDistancePointToLine(const CVector& point, const CVector& li
 	if (nearest != nullptr) *nearest = C;
 
 	return (C - point).Length();
+}
+
+float CCollider::CalcDistanceLine(const CVector& s1, const CVector& e1, const CVector& s2, const CVector& e2)
+{
+	// 線分同士が交差するかどうかで最短距離の判定を変える
+	CVector SE1 = e1 - s1;
+	CVector SE2 = e2 - s2;
+	float d1 = CVector::Dot(CVector::Cross(SE1, s2 - s1), CVector::Cross(SE1, e2 - s1));
+	float d2 = CVector::Dot(CVector::Cross(SE2, s1 - s2), CVector::Cross(SE2, e1 - s2));
+	// 線分同士が交差している場合
+	if (d1 < 0.0f && d2 < 0.0f)
+	{
+		CVector cv = CVector::Cross(SE1, SE2).Normalized();
+		return fabsf(CVector::Dot(cv, s2 - s1));
+	}
+	// 線分同士が交差していない場合
+	else
+	{
+		float l1 = CalcDistancePointToLine(s1, s2, e2);
+		float l2 = CalcDistancePointToLine(e1, s2, e2);
+		float l3 = CalcDistancePointToLine(s2, s1, e1);
+		float l4 = CalcDistancePointToLine(e2, s1, e1);
+		return std::min(std::min(l1, l2), std::min(l3, l4));
+	}
+}
+
+bool CCollider::IsInsideTriangle(const CVector& p, const CVector& t0, const CVector& t1, const CVector& t2, const CVector& n)
+{
+	// 三角形の各辺と三角形の各頂点から点までのベクトルに
+	// 垂直なベクトルを外積（CVector::Cross）で求める。
+
+	// 三角形の法線と求めたベクトルの内積（CVector::Dot）で
+	// 両ベクトルの向きを調べて同じ方向を向いているかを調べる。
+
+	// これを三角形の三辺分行い、全て条件を満たした場合は、
+	// 三角形の内側と判断する。
+	if (CVector::Dot(CVector::Cross(t1 - t0, p - t0), n) < 0.0f) return false;
+	if (CVector::Dot(CVector::Cross(t2 - t1, p - t1), n) < 0.0f) return false;
+	if (CVector::Dot(CVector::Cross(t0 - t2, p - t2), n) < 0.0f) return false;
+	return true;
 }
 
 bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
@@ -601,12 +915,19 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 			triangle->Get(&t0, &t1, &t2);
 			return CollisionTriangleLine(t0, t1, t2, ls0, le0, hit, false);
 		}
+		case EColliderType::eCapsule:
+		{
+			CColliderCapsule* capsule = dynamic_cast<CColliderCapsule*>(c1);
+			CVector cs, ce;
+			capsule->Get(&cs, &ce);
+			float cr = capsule->Radius();
+			return CollisionCapsuleLine(cs, ce, cr, ls0, le0, hit, false);
+		}
 		case EColliderType::eMesh:
 		{
 			CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
-			std::list<STVertex> tris;
-			mesh->Get(&tris);
-			return CollisionMeshLine(tris, ls0, le0, hit, false);
+			auto tris = mesh->Get();
+			return CollisionMeshLine(tris, ls0, le0, line0->Bounds(), hit, false);
 		}
 		}
 		break;
@@ -642,12 +963,20 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 			triangle->Get(&t0, &t1, &t2);
 			return CollisionTriangleSphere(t0, t1, t2, sp0, sr0, hit, false);
 		}
+		case EColliderType::eCapsule:
+		{
+			CColliderCapsule* capsule = dynamic_cast<CColliderCapsule*>(c1);
+			CVector cs, ce;
+			capsule->Get(&cs, &ce);
+			float cr = capsule->Radius();
+			return CollisionSphereCapsule(sp0, sr0, cs, ce, cr, hit, true);
+		}
+		break;
 		case EColliderType::eMesh:
 		{
 			CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
-			std::list<STVertex> tris;
-			mesh->Get(&tris);
-			return CollisionMeshSpehre(tris, sp0, sr0, hit, false);
+			auto tris = mesh->Get();
+			return CollisionMeshSpehre(tris, sphere0, hit, false);
 		}
 		}
 		break;
@@ -681,29 +1010,38 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 			triangle1->Get(&t10, &t11, &t12);
 			return CollisionTriangle(t00, t01, t02, t10, t11, t12, hit);
 		}
+		case EColliderType::eCapsule:
+		{
+			CColliderCapsule* capsule = dynamic_cast<CColliderCapsule*>(c1);
+			CVector cs, ce;
+			capsule->Get(&cs, &ce);
+			float cr = capsule->Radius();
+			return CollisionTriangleCapsule(t00, t01, t02, cs, ce, cr, hit, true);
+		}
 		case EColliderType::eMesh:
 		{
 			CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
-			std::list<STVertex> tris;
-			mesh->Get(&tris);
-			return CollisionMeshTriangle(tris, t00, t01, t02, hit, false);
+			auto tris = mesh->Get();
+			return CollisionMeshTriangle(tris, triangle0, hit, false);
 		}
 		}
 		break;
 	}
-	case EColliderType::eMesh:
+	case EColliderType::eCapsule:
 	{
-		CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c0);
-		std::list<STVertex> tris;
-		mesh->Get(&tris);
+		CColliderCapsule* capsule0 = dynamic_cast<CColliderCapsule*>(c0);
+		CVector cs0, ce0;
+		capsule0->Get(&cs0, &ce0);
+		float cr0 = capsule0->Radius();
+
 		switch (c1->Type())
 		{
 		case EColliderType::eLine:
 		{
-			CColliderLine* line = dynamic_cast<CColliderLine*>(c1);
-			CVector ls, le;
-			line->Get(&ls, &le);
-			return CollisionMeshLine(tris, ls, le, hit, true);
+			CColliderLine* line1 = dynamic_cast<CColliderLine*>(c1);
+			CVector ls1, le1;
+			line1->Get(&ls1, &le1);
+			return CollisionCapsuleLine(cs0, ce0, cr0, ls1, le1, hit, false);
 		}
 		case EColliderType::eSphere:
 		{
@@ -711,14 +1049,59 @@ bool CCollider::Collision(CCollider* c0, CCollider* c1, CHitInfo* hit)
 			CVector sp;
 			float sr;
 			sphere->Get(&sp, &sr);
-			return CollisionMeshSpehre(tris, sp, sr, hit, true);
+			return CollisionSphereCapsule(sp, sr, cs0, ce0, cr0, hit, false);
 		}
 		case EColliderType::eTriangle:
 		{
 			CColliderTriangle* triangle = dynamic_cast<CColliderTriangle*>(c1);
 			CVector t0, t1, t2;
 			triangle->Get(&t0, &t1, &t2);
-			return CollisionMeshTriangle(tris, t0, t1, t2, hit, true);
+			return CollisionTriangleCapsule(t0, t1, t2, cs0, ce0, cr0, hit, false);
+		}
+		case EColliderType::eCapsule:
+		{
+			CColliderCapsule* capsule1 = dynamic_cast<CColliderCapsule*>(c1);
+			CVector cs1, ce1;
+			capsule1->Get(&cs1, &ce1);
+			float cr1 = capsule1->Radius();
+			return CollisionCapsule(cs0, ce0, cr0, cs1, ce1, cr1, hit);
+		}
+		case EColliderType::eMesh:
+		{
+			CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c1);
+			auto tris = mesh->Get();
+			return CollisionMeshCapsule(tris, capsule0, hit, false);
+		}
+		}
+		break;
+	}
+	case EColliderType::eMesh:
+	{
+		CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c0);
+		auto tris = mesh->Get();
+		switch (c1->Type())
+		{
+		case EColliderType::eLine:
+		{
+			CColliderLine* line = dynamic_cast<CColliderLine*>(c1);
+			CVector ls, le;
+			line->Get(&ls, &le);
+			return CollisionMeshLine(tris, ls, le, line->Bounds(), hit, true);
+		}
+		case EColliderType::eSphere:
+		{
+			CColliderSphere* sphere = dynamic_cast<CColliderSphere*>(c1);
+			return CollisionMeshSpehre(tris, sphere, hit, true);
+		}
+		case EColliderType::eTriangle:
+		{
+			CColliderTriangle* triangle = dynamic_cast<CColliderTriangle*>(c1);
+			return CollisionMeshTriangle(tris, triangle, hit, true);
+		}
+		case EColliderType::eCapsule:
+		{
+			CColliderCapsule* capsule = dynamic_cast<CColliderCapsule*>(c1);
+			return CollisionMeshCapsule(tris, capsule, hit, true);
 		}
 		case EColliderType::eMesh:
 		{
@@ -773,9 +1156,9 @@ bool CCollider::CollisionRay(CCollider* c, const CVector& start, const CVector& 
 		case EColliderType::eMesh:
 		{
 			CColliderMesh* mesh = dynamic_cast<CColliderMesh*>(c);
-			std::list<STVertex> tris;
-			mesh->Get(&tris);
-			return CollisionMeshLine(tris, start, end, hit, false);
+			auto tris = mesh->Get();
+			CBounds bounds = CBounds::GetLineBounds(start, end);
+			return CollisionMeshLine(tris, start, end, bounds, hit, false);
 		}
 	}
 

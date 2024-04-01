@@ -1,44 +1,49 @@
-#include "CColliderLine.h"
+#include "CColliderCapsule.h"
 #include <glut.h>
 #include "Maths.h"
 #include "CColor.h"
 
 // コンストラクタ
-CColliderLine::CColliderLine(CObjectBase* owner, ELayer layer,
-	const CVector& v0, const CVector& v1,
+CColliderCapsule::CColliderCapsule(CObjectBase* owner, ELayer layer,
+	const CVector& v0, const CVector& v1, float radius,
 	bool isKinematic, float weight)
-	: CCollider(owner, layer, EColliderType::eLine, isKinematic, weight)
-	, mRadius(0.1f)
+	: CCollider(owner, layer, EColliderType::eCapsule, isKinematic, weight)
+	, mRadius(radius)
 {
-	// 線分の頂点を設定
+	// カプセルを構成する線分の頂点を設定
 	mV[0] = v0;
 	mV[1] = v1;
 }
 
-// 線分コライダーの設定
-void CColliderLine::Set(CObjectBase* owner, ELayer layer,
-	const CVector& v0, const CVector& v1)
+// カプセルコライダーの設定
+void CColliderCapsule::Set(CObjectBase* owner, ELayer layer,
+	const CVector& v0, const CVector& v1, float radius)
 {
 	CCollider::Set(owner, layer);
 
-	// 線分の頂点を設定
+	// カプセルを構成する線分の頂点を設定
 	mV[0] = v0;
 	mV[1] = v1;
+
+	// 半径を設定
+	mRadius = radius;
 }
 
-// 線分の始点と終点を取得
-void CColliderLine::Get(CVector* v0, CVector* v1) const
+// カプセルを構成する線分の視点と終点を取得
+void CColliderCapsule::Get(CVector* v0, CVector* v1) const
 {
 	*v0 = mWV[0];
 	*v1 = mWV[1];
 }
 
-float CColliderLine::Radius() const
+// カプセルの半径を取得
+float CColliderCapsule::Radius() const
 {
 	return mRadius;
 }
 
-void CColliderLine::Render()
+// コライダー描画
+void CColliderCapsule::Render()
 {
 	// 現在の行列を退避しておく
 	glPushMatrix();
@@ -77,7 +82,7 @@ void CColliderLine::Render()
 }
 
 // コライダーの情報を更新
-void CColliderLine::UpdateCol()
+void CColliderCapsule::UpdateCol()
 {
 	// 頂点のワールド座標を算出
 	CMatrix m = Matrix();
@@ -85,5 +90,5 @@ void CColliderLine::UpdateCol()
 	mWV[1] = mV[1] * m;
 
 	// バウンディングボックスを更新
-	mBounds = CBounds::GetLineBounds(mWV[0], mWV[1]);
+	mBounds = CBounds::GetCapsuleBounds(mWV[0], mWV[1], mRadius);
 }

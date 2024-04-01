@@ -1,4 +1,5 @@
 #include "CFlame.h"
+#include "CCharaBase.h"
 #include "Easing.h"
 
 // 炎のスケール値の最大値
@@ -9,11 +10,11 @@
 // アニメーションの1コマ表示時間
 #define ANIM_TIME 0.0625f
 // 炎のエフェクトのアニメーションデータ
-TexAnimData CFlame::msAnimData = TexAnimData(8, 8, false, 64, ANIM_TIME);
+TexAnimData CFlame::msAnimData = TexAnimData(8,8, false, 64, ANIM_TIME);
 
 // コンストラクタ
 CFlame::CFlame(ETag tag)
-	: CBillBoardImage("Effect/flame.png", tag, ETaskPauseType::eGame)
+	: CBillBoardImage("Effect/flame.png", ETag::eFlame, ETaskPauseType::eGame)
 	, mMoveSpeed(CVector::zero)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
@@ -26,8 +27,8 @@ CFlame::CFlame(ETag tag)
 		ELayer::eAttackCol,
 		1.0f
 	);
-	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject });
-	mpCollider->SetCollisionLayers({ ELayer::eField });
+	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer});
+	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
 }
 
 // デストラクタ
@@ -75,6 +76,21 @@ void CFlame::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		float d = CVector::Dot(n, mMoveSpeed);
 		mMoveSpeed = (mMoveSpeed - n * d).Normalized() * length;
 		Position(Position() + hit.adjust * hit.weight);
+	}
+
+	if (other->Layer() == ELayer::eDamageCol)
+	{
+		// キャラのポインタに変換
+		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
+		// 相手のコライダーの持ち主がキャラであれば、
+		if (chara != nullptr)
+		{
+			// 与えるダメージを計算
+			int damage = CalcDamage(0, chara);
+
+			// ダメージを与える
+			chara->TakeDamage(damage,0);
+		}
 	}
 }
 

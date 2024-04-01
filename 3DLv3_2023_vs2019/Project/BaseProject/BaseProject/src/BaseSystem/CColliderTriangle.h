@@ -41,8 +41,13 @@ public:
 	void Get(CVector* v0, CVector* v1, CVector* v2) const;
 
 	// コライダー描画
-	void Render();
+	void Render() override;
+
+protected:
+	// コライダーの情報を更新
+	void UpdateCol() override;
 
 private:
 	CVector mV[3];	// 三角形の頂点の配列
+	CVector mWV[3];	// 三角形の頂点のワールド座標
 };

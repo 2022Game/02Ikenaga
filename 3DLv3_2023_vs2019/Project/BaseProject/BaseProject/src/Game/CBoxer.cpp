@@ -2,7 +2,7 @@
 #include "CPlayer.h"
 #include "CEffect.h"
 #include "CCollisionManager.h"
-#include "CInput.h"
+#include "CHpGauge.h"
 #include "Maths.h"
 
 // ボクサーのインスタンス
@@ -10,10 +10,12 @@ CBoxer* CBoxer::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 1.0f
 #define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.05f         // 移動速度
+#define MOVE_SPEED 0.08f         // 移動速度
+#define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f          // 重力
+#define JUMP_END_Y 1.0f
 #define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.5f         // 追跡を辞める範囲
+#define STOP_RANGE 15.0f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // ボクサーのアニメーションデータのテーブル
@@ -23,18 +25,18 @@ const CBoxer::AnimData CBoxer::ANIM_DATA[] =
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerDance.x",	true,	170.0f	},	    // ダンス 85.0f
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerIdle.x",	true,	42.0f	},	    // 待機 21.0f
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack.x",	true,	35.0f	},	    // 攻撃 19.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack2.x",	true,	52.0f	},	    // 攻撃 26.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack2.x",	true,	52.0f	},	    // 攻撃2 26.0f
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerGetHit.x",	true,	36.0f	},	    // ヒット 17.0f
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefense.x",	true,	42.0f	},	    // 防御 21.0f
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefenseHit.x",	true,	42.0f	},  // 防御中のヒット 21.0f
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerDie.x",	true,	90.0f	},	        // 死ぬ 24.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDizzy.x",	true,	66.0f	},	    // めまい 24.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpStart.x",	true,	12.0f	},	// ジャンプの開始 9.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJump.x",	true,	46.0f	},	    // ジャンプ 23.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpEnd.x",	true,	26.0f	},	    // ジャンプの終了 26.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerRun.x",	true,	42.0f	},	        // 走る 21.0
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerSlide.x",	true,	72.0f	},	    // 滑る 36.0
 	//{ "Character\\Enemy\\Boxer\\animation\\BoxerDieRecover.x",	true,	48.0f	},	// 起き上がる 24.0f
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerDizzy.x",	true,	66.0f	},	    // めまい 24.0f
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerJump.x",	true,	46.0f	},	    // ジャンプ 23.0f
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpStart.x",	true,	36.0f	},	// ジャンプの開始 9.0f
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpEnd.x",	true,	52.0f	},	// ジャンプの終了 26.0f
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerRun.x",	true,	42.0f	},	// 走る 21.0
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerSlide.x",	true,	72.0f	},	// 滑る 36.0
 };
 
 // コンストラクタ
@@ -129,7 +131,7 @@ CBoxer::CBoxer()
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
+	mpDamageCol->SetCollisionTags({ ETag::eWeapon,ETag::eFlame});
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.04f, 0.1f, 0.0f);
 
@@ -140,7 +142,7 @@ CBoxer::CBoxer()
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eWeapon });
+	mpDamageCol2->SetCollisionTags({ ETag::eWeapon,ETag::eFlame });
 	mpDamageCol2->Position(0.07f, 0.0f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(右手)
@@ -210,15 +212,35 @@ CBoxer::CBoxer()
 	mpAttackCol3->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCol3->Position(0.0f, 0.03f, 0.0f);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをボクサーの頭の行列にアタッチ
+	// ダメージを与えるコライダー(頭)
+	mpAttackCol4 = new CColliderSphere
+	(
+		this, ELayer::eAttackCol, 0.4f, false
+	);
+	mpAttackCol4->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackCol4->SetCollisionTags({ ETag::ePlayer });
+	mpAttackCol4->Position(0.04f, 0.1f, 0.0f);
+
+	// ダメージを与えるコライダー(体)
+	mpAttackCol5 = new CColliderSphere
+	(
+		this, ELayer::eAttackCol, 0.5f, false
+	);
+	mpAttackCol5->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackCol5->SetCollisionTags({ ETag::ePlayer });
+	mpAttackCol5->Position(0.07f, 0.0f, 0.0f);
+
+	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをボクサーの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_neck_01");
 	mpColliderSphere->SetAttachMtx(headMty);
 	mpDamageCol->SetAttachMtx(headMty);
+	mpAttackCol4->SetAttachMtx(headMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをボクサーの体の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをボクサーの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_spine_02");
 	mpColliderSphere2->SetAttachMtx(bodyMty);
 	mpDamageCol2->SetAttachMtx(bodyMty);
+	mpAttackCol5->SetAttachMtx(bodyMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをボクサーの右手の行列にアタッチ
 	const CMatrix* rightHandMty = GetFrameMtx("Armature_drill_r");
@@ -253,11 +275,13 @@ CBoxer::CBoxer()
 	mpAttackCol->SetEnable(false);
 	mpAttackCol2->SetEnable(false);
 	mpAttackCol3->SetEnable(false);
+	mpAttackCol4->SetEnable(false);
+	mpAttackCol5->SetEnable(false);
 }
 
 CBoxer::~CBoxer()
 {
-	//SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpColliderSphere2);
 	SAFE_DELETE(mpColliderSphere3);
@@ -275,6 +299,8 @@ CBoxer::~CBoxer()
 	SAFE_DELETE(mpAttackCol);
 	SAFE_DELETE(mpAttackCol2);
 	SAFE_DELETE(mpAttackCol3);
+	SAFE_DELETE(mpAttackCol4);
+	SAFE_DELETE(mpAttackCol5);
 }
 
 CBoxer* CBoxer::Instance()
@@ -293,9 +319,10 @@ void CBoxer::ChangeAnimation(EAnimType type)
 // 待機状態
 void CBoxer::UpdateIdle()
 {
+	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		mState = EState::eIdle;
 	}
 }
 
@@ -303,15 +330,27 @@ void CBoxer::UpdateIdle()
 void CBoxer::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eIdle2;
+		mState = EState::eRun;
+	}
+	else
+	{
+		ChangeAnimation(EAnimType::eIdle2);
+		if (IsAnimationFinished())
+		{
+			mState = EState::eIdle2;
+		}
 	}
 }
 
 // 攻撃
 void CBoxer::UpdateAttack()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
@@ -333,6 +372,52 @@ void CBoxer::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
+
+		// 連続攻撃するかどうか
+		bool continuousz = false;
+		// 確率
+		int percent = Math::Rand(0, 3);
+		if (percent == 1) continuousz = true;
+		if (continuousz)
+		{
+			mState = EState::eAttack;
+		}
+		else
+		{
+			mState = EState::eIdle2;
+		}
+	}
+}
+
+// ジャンプ開始
+void CBoxer::UpdateJumpStart()
+{
+	ChangeAnimation(EAnimType::eJumpStart);
+	if (IsAnimationFinished())
+	{
+		mState = EState::eJump;
+
+		mMoveSpeed += CVector(0.0f, JUMP_SPEED, 0.0f);
+		mIsGrounded = false;
+	}
+}
+
+// ジャンプ中
+void CBoxer::UpdateJump()
+{
+	ChangeAnimation(EAnimType::eJump);
+	if (mMoveSpeed.Y() <= 0.0f || IsAnimationFinished())
+	{
+		mState = EState::eJumpEnd;
+	}
+}
+
+// ジャンプ終了
+void CBoxer::UpdateJumpEnd()
+{
+	// ジャンプアニメーションが待機状態へ戻す
+	if (IsAnimationFinished())
+	{
 		mState = EState::eIdle2;
 	}
 }
@@ -346,12 +431,12 @@ void CBoxer::UpdateHit()
 	{
 		// めまいをfalseにする
 		bool stan = false;
-		// 確率を最小に0最大40
+		// 確率を最小に0最大20
 		int probability = Math::Rand(0, 20);
 		if (probability == 1)stan = true;
 		if (stan)
 		{
-			//mState = EState::eDizzy;
+			mState = EState::eDizzy;
 		}
 		else
 		{
@@ -366,6 +451,7 @@ void CBoxer::UpdateHit()
 void CBoxer::UpdateDefense()
 {
 	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDefense);
 
@@ -382,7 +468,7 @@ void CBoxer::UpdateDefense()
 
 	if (IsAnimationFinished())
 	{
-		if (mDefenseTime >= 800)
+		if (mDefenseTime >= 300)
 		{
 			mState = EState::eAttack;
 		}
@@ -409,6 +495,7 @@ void CBoxer::UpdateDefenseHit()
 void CBoxer::UpdateDie()
 {
 	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
@@ -422,7 +509,70 @@ void CBoxer::UpdateDie()
 // めまい(混乱)
 void CBoxer::UpdateDizzy()
 {
-	//ChangeAnimation(EAnimType::eDizzy);
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	ChangeAnimation(EAnimType::eDizzy);
+	if (IsAnimationFinished())
+	{
+		// プレイヤーの攻撃がヒットした時の待機状態へ移行
+		mState = EState::eIdle2;
+		ChangeAnimation(EAnimType::eIdle2);
+	}
+}
+
+// 移動
+void CBoxer::UpdateRun()
+{
+	ChangeAnimation(EAnimType::eRun);
+
+	CPlayer* player = CPlayer::Instance();
+	CVector nowPos = (player->Position() - Position()).Normalized();
+	float vectorp = (player->Position() - Position()).Length();
+
+	// 追跡をやめて止まる
+	if (vectorp <= STOP_RANGE && vectorp >= 21.0f)
+	{
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+
+			// 回転する範囲であれば
+			if (vectorp <= ROTATE_RANGE)
+			{
+				// プレイヤーのいる方向へ向く
+				CVector dir = player->Position() - Position();
+				dir.Y(0.0f);
+				dir.Normalize();
+				Rotation(CQuaternion::LookRotation(dir));
+
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+			}
+	}
+	// 範囲内の時、移動し追跡する
+	else if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	{
+		mMoveSpeed += nowPos * MOVE_SPEED;
+	}
+	// 追跡が止まった時、待機モーションへ
+	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	{
+		if (mState != EState::eAttack2)
+		{
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
+			mState = EState::eIdle2;
+			ChangeAnimation(EAnimType::eIdle2);
+		}
+	}
+}
+
+// 滑る
+void CBoxer::UpdateSlide()
+{
+	ChangeAnimation(EAnimType::eSlide);
+	AttackStart();
+	// 滑る終了待ち状態へ移行
+	mState = EState::eAttackWait;
 }
 
 // 更新処理
@@ -454,6 +604,18 @@ void CBoxer::Update()
 	case EState::eAttackWait:
 		UpdateAttackWait();
 		break;
+		// ジャンプ開始
+	case EState::eJumpStart:
+		UpdateJumpStart();
+		break;
+		// ジャンプ中
+	case EState::eJump:
+		UpdateJump();
+		break;
+		// ジャンプ終了
+	case EState::eJumpEnd:
+		UpdateJumpEnd();
+		break;
 		// ヒット
 	case EState::eHit:
 		UpdateHit();
@@ -474,19 +636,45 @@ void CBoxer::Update()
 	case EState::eDizzy:
 		UpdateDizzy();
 		break;
+		// 移動
+	case EState::eRun:
+		UpdateRun();
+		break;
+		// 滑る
+	case EState::eSlide:
+		UpdateSlide();
+		break;
 	}
 
+	// HPゲージの座標を更新(敵の座標の少し上の座標)
+	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eAttack
 		&& mState != EState::eAttackWait && mState != EState::eHit && mState != EState::eDefense && mState != EState::eDefenseHit
-		&& mState != EState::eDie)
+		&& mState != EState::eDie && mState != EState::eDizzy && mState != EState::eJumpStart && mState != EState::eJump 
+		&& mState != EState::eJumpEnd && mState != EState::eRun && mState != EState::eSlide)
 	{
 		mState = EState::eIdle2;
 	}
-	if (mState == EState::eIdle2)
+
+	if (vectorp <= WITHIN_RANGE && mState !=EState::eIdle)
+	{
+		mpHpGauge->SetWorldPos(gaugePos);
+	}
+
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
 		mAttackTime++;
+
+		if (vectorp <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
 
 		if (mAttackTime > 200)
 		{
@@ -494,13 +682,24 @@ void CBoxer::Update()
 			bool Attack2 = false;
 			// 防御
 			bool Defense = false;
-			// 確率を最小に2最大5
-			int probability2 = Math::Rand(2, 5);
-			// 確率を最小に6最大10
-			int probability3 = Math::Rand(6, 10);
+			// ジャンプ
+			bool Jump = false;
+			// 滑る
+			bool Slide = false;
+
+			// 確率を最小に2最大4
+			int probability2 = Math::Rand(2, 4);
+			// 確率を最小に5最大7
+			int probability3 = Math::Rand(5, 7);
+			// 確率を最小に8最大10
+			int probability4 = Math::Rand(8, 10);
+			//確率を最小に11最大13
+			int probability5 = Math::Rand(11, 13);
 
 			if (probability2 == 2)Attack2 = true;
-			if (probability3 == 6)Defense = true;
+			if (probability3 == 5)Defense = true;
+			if (probability4 == 8)Jump = true;
+			if (probability5 == 11)Slide = true;
 			if (Attack2)
 			{
 				mState = EState::eAttack2;
@@ -509,12 +708,21 @@ void CBoxer::Update()
 			{
 				mState = EState::eDefense;
 			}
+			else if (Jump)
+			{
+				mState = EState::eJump;
+			}
+			else if (Slide)
+			{
+				mState = EState::eSlide;
+			}
 			else
 			{
 				mState = EState::eAttack;
 			}
 		}
-		if (mState == EState::eAttack || mState == EState::eAttack2)
+		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eSlide
+			|| mState == EState::eJumpStart || mState == EState::eDefense)
 		{
 			mAttackTime = 0;
 		}
@@ -531,7 +739,12 @@ void CBoxer::Update()
 	}
 
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
+	//CDebugPrint::Print(" HP: %f\n", boxer->Position().Y());
+
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	{
+		Position(Position() + mMoveSpeed * MOVE_SPEED);
+	}
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -553,16 +766,21 @@ void CBoxer::Update()
 	mpAttackCol->Update();
 	mpAttackCol2->Update();
 	mpAttackCol3->Update();
+	mpAttackCol4->Update();
+	mpAttackCol5->Update();
 
 	mIsGrounded = false;
+
+	// HPゲージに現在のHPを設定
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
 void CBoxer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackCol || self == mpAttackCol2 || self == mpAttackCol3 
-		&& mState != EState::eIdle && mState != EState::eIdle2)
+	if (self == mpAttackCol || self == mpAttackCol2 || self == mpAttackCol3 || self == mpAttackCol4
+		|| self == mpAttackCol5 && mState != EState::eIdle && mState != EState::eIdle2)
 	{
 		// キャラのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
@@ -614,6 +832,8 @@ void CBoxer::AttackStart()
 	mpAttackCol->SetEnable(true);
 	mpAttackCol2->SetEnable(true);
 	mpAttackCol3->SetEnable(true);
+	mpAttackCol4->SetEnable(true);
+	mpAttackCol5->SetEnable(true);
 }
 
 // 攻撃終了
@@ -624,6 +844,8 @@ void CBoxer::AttackEnd()
 	mpAttackCol->SetEnable(false);
 	mpAttackCol2->SetEnable(false);
 	mpAttackCol3->SetEnable(false);
+	mpAttackCol4->SetEnable(false);
+	mpAttackCol5->SetEnable(false);
 }
 
 // 描画
@@ -649,8 +871,8 @@ void CBoxer::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	//mpHpGauge->SetValue(mCharaStatus.hp);
+	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

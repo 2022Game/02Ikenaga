@@ -22,9 +22,8 @@ void CColliderSphere::Set(CObjectBase* owner, ELayer layer, float radius)
 // 球の座標と半径を取得
 void CColliderSphere::Get(CVector* pos, float* rad) const
 {
-	CMatrix m = Matrix();
-	*pos = Position() * m;
-	*rad = mRadius * m.VectorX().Length();
+	*pos = mWPos;
+	*rad = mWRadius;
 }
 
 void CColliderSphere::Render()
@@ -61,4 +60,16 @@ void CColliderSphere::Render()
 
 	// 描画前の行列に戻す
 	glPopMatrix();
+}
+
+// コライダーの情報を更新
+void CColliderSphere::UpdateCol()
+{
+	// 行列を反映した中心位置と半径を計算
+	CMatrix m = Matrix();
+	mWPos = Position() * m;
+	mWRadius = mRadius * m.VectorX().Length();
+
+	// バウンディングボックスを更新
+	mBounds = CBounds::GetSphereBounds(mWPos, mWRadius);
 }

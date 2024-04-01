@@ -110,6 +110,8 @@ private:
 	void UpdateJump();
 	// ジャンプ終了
 	void UpdateJumpEnd();
+	// 移動の更新処理
+	void UpdateMove();
 	//攻撃力アップ
 	void UpdatePowerUp();
 	// 攻撃力アップ終了

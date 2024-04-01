@@ -30,6 +30,13 @@ public:
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 
+	// ジャンプ開始
+	void UpdateJumpStart();
+	// ジャンプ中
+	void UpdateJump();
+	// ジャンプ終了
+	void UpdateJumpEnd();
+
 	//ヒット
 	void UpdateHit();
 	// 防御
@@ -41,6 +48,10 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+	// 移動
+	void UpdateRun();
+	// 滑る
+	void UpdateSlide();
 
 	// 更新処理
 	void Update();
@@ -99,10 +110,11 @@ private:
 		eDefenseHit,  // 防御中のヒット
 		eDie,         // 死ぬ
 		eDizzy,       // めまい(混乱)
-		eWalk,		  // 歩行
 		eJumpStart,	  // ジャンプ開始
 		eJump,		  // ジャンプ中
 		eJumpEnd,	  // ジャンプ終了
+		eRun,		  // 移動
+		eSlide,       // 滑る
 
 		Num
 	};
@@ -138,6 +150,8 @@ private:
 		eJumpStart,	  // ジャンプ開始
 		eJump,		  // ジャンプ中
 		eJumpEnd,	  // ジャンプ終了
+		eRun,         // 移動
+		eSlide,       // 滑る
 	};
 	EState mState;	// ボクサーの状態
 
@@ -162,6 +176,8 @@ private:
 	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー(右手)
 	CColliderSphere* mpAttackCol2;  // ダメージを与えるコライダー(右足)
 	CColliderSphere* mpAttackCol3;  // ダメージを与えるコライダー(左足)
+	CColliderSphere* mpAttackCol4;  // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackCol5;  // ダメージを与えるコライダー(体)
 
 	CTransform* mpRideObject;
 };

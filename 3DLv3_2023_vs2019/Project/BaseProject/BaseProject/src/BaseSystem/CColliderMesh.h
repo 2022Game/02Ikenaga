@@ -3,6 +3,7 @@
 #include <list>
 #include "CModel.h"
 #include "CCollider.h"
+
 /*
 モデルデータから三角コライダの生成
 */
@@ -23,13 +24,18 @@ public:
 	~CColliderMesh();
 
 	void Set(CModel* model);
-	void Get(std::list<STVertex>* tris) const;
+	const std::list<STVertexData>& Get() const;
 
 	// コライダー描画
-	void Render();
+	void Render() override;
+
+protected:
+	// コライダーの情報を更新
+	void UpdateCol() override;
 
 private:
 	//三角コライダの配列作成
-	std::list<STVertex> mVertices;
+	std::list<STVertexData> mVertices;
 };
+
 #endif

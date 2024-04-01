@@ -15,8 +15,10 @@
     <ClCompile Include="src\BaseSystem\CBGMManager.cpp" />
     <ClCompile Include="src\BaseSystem\CBillBoard.cpp" />
     <ClCompile Include="src\BaseSystem\CBillBoardImage.cpp" />
+    <ClCompile Include="src\BaseSystem\CBounds.cpp" />
     <ClCompile Include="src\BaseSystem\CCamera.cpp" />
     <ClCompile Include="src\BaseSystem\CCollider.cpp" />
+    <ClCompile Include="src\BaseSystem\CColliderCapsule.cpp" />
     <ClCompile Include="src\BaseSystem\CColliderLine.cpp" />
     <ClCompile Include="src\BaseSystem\CColliderMesh.cpp" />
     <ClCompile Include="src\BaseSystem\CColliderSphere.cpp" />
@@ -126,8 +128,10 @@
     <ClInclude Include="src\BaseSystem\CBGMManager.h" />
     <ClInclude Include="src\BaseSystem\CBillBoard.h" />
     <ClInclude Include="src\BaseSystem\CBillBoardImage.h" />
+    <ClInclude Include="src\BaseSystem\CBounds.h" />
     <ClInclude Include="src\BaseSystem\CCamera.h" />
     <ClInclude Include="src\BaseSystem\CCollider.h" />
+    <ClInclude Include="src\BaseSystem\CColliderCapsule.h" />
     <ClInclude Include="src\BaseSystem\CColliderLine.h" />
     <ClInclude Include="src\BaseSystem\CColliderMesh.h" />
     <ClInclude Include="src\BaseSystem\CColliderSphere.h" />

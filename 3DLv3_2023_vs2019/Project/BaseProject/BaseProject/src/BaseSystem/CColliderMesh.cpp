@@ -21,23 +21,29 @@ void CColliderMesh::Set(CModel* model)
 	int count = triangles.size();
 	for (auto& tri : triangles)
 	{
-		mVertices.push_back(STVertex(tri.V0(), tri.V1(), tri.V2()));
+		STVertex v(tri.V0(), tri.V1(), tri.V2());
+		mVertices.push_back({ v, v });
 	}
 }
 
-void CColliderMesh::Get(std::list<STVertex>* tris) const
+const std::list<STVertexData>& CColliderMesh::Get() const
 {
-	tris->clear();
-	CMatrix m = Matrix();
-	for (auto& vertex : mVertices)
-	{
-		CVector v0 = vertex.V[0] * m;
-		CVector v1 = vertex.V[1] * m;
-		CVector v2 = vertex.V[2] * m;
-		tris->push_back(STVertex(v0, v1, v2));
-	}
+	return mVertices;
 }
 
 void CColliderMesh::Render()
 {
+}
+
+// コライダーの情報を更新
+void CColliderMesh::UpdateCol()
+{
+	CMatrix m = Matrix();
+	for (auto& v : mVertices)
+	{
+		v.wv.V[0] = v.lv.V[0] * m;
+		v.wv.V[1] = v.lv.V[1] * m;
+		v.wv.V[2] = v.lv.V[2] * m;
+		v.bounds = CBounds::GetTriangleBounds(v.wv.V[0], v.wv.V[1], v.wv.V[2]);
+	}
 }
