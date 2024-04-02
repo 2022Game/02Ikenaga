@@ -204,3 +204,114 @@ void Primitive::DrawQuad(const CMatrix& m, const CVector2& size, const CColor& c
 	// 描画前の行列に戻す
 	glPopMatrix();
 }
+
+// カプセルを描画
+void Primitive::DrawCapsule(const CVector& sp, const CVector& ep, float rad, const CColor& color)
+{
+	// 現在の行列を退避しておく
+	glPushMatrix();
+
+	float height = CVector::Distance(sp, ep);
+
+	// アルファブレンドを有効にする
+	glEnable(GL_BLEND);
+	// ブレンド方法を指定
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// ライトオフ
+	glDisable(GL_LIGHTING);
+
+	// DIFFUSE赤色設定
+	float col[] = { color.R(), color.G(), color.B(), color.A() };
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, col);
+	glColor4fv(col);
+
+	const int cut = 32;
+	int vtxCnt = cut * cut * 4 + cut * 8;
+	CVector* vertex = new CVector[vtxCnt];
+	float* s = new float[cut + 1];
+	float* c = new float[cut + 1];
+	for (int i = 0; i <= cut; ++i)
+	{
+		s[i] = sinf((float)M_PI * 2 * i / cut);
+		c[i] = cosf((float)M_PI * 2 * i / cut);
+	}
+
+	CVector up = (ep - sp).Normalized();
+	CVector sd = CVector::Cross(up, CVector::up).Normalized();
+	if (sd.LengthSqr() == 0.0f)
+	{
+		sd = CVector::Cross(up, CVector::forward).Normalized();
+	}
+	CVector fw = CVector::Cross(sd, up).Normalized();
+
+	int idx = 0;
+	// 始点と終点
+	for (int i = 0; i < 2; ++i)
+	{
+		CVector offset = i == 0 ? sp : ep;
+		for (int j = 0; j < cut / 2; ++j)
+		{
+			float sj0 = s[j + 0] * (i == 0 ? -1.0f : 1.0f);
+			float sj1 = s[j + 1] * (i == 0 ? -1.0f : 1.0f);
+			float cj0 = c[j + 0];
+			float cj1 = c[j + 1];
+			for (int k = 0; k < cut; ++k)
+			{
+				float sk0 = s[k + 0];
+				float sk1 = s[k + 1];
+				float ck0 = c[k + 0];
+				float ck1 = c[k + 1];
+				vertex[idx + 0] = offset + (sd * sk0 * cj0 + up * sj0 + fw * ck0 * cj0) * rad;
+				vertex[idx + 1] = offset + (sd * sk1 * cj0 + up * sj0 + fw * ck1 * cj0) * rad;
+				vertex[idx + 2] = offset + (sd * sk1 * cj1 + up * sj1 + fw * ck1 * cj1) * rad;
+				vertex[idx + 3] = offset + (sd * sk0 * cj1 + up * sj1 + fw * ck0 * cj1) * rad;
+				idx += 4;
+			}
+		}
+	}
+
+	// 円柱
+	for (int i = 0; i < cut; ++i)
+	{
+		float si0 = s[i + 0];
+		float si1 = s[i + 1];
+		float ci0 = c[i + 0];
+		float ci1 = c[i + 1];
+		vertex[idx + 0] = sp + (sd * si0 + fw * ci0) * rad;
+		vertex[idx + 1] = sp + (sd * si1 + fw * ci1) * rad;
+		vertex[idx + 2] = ep + (sd * si1 + fw * ci1) * rad;
+		vertex[idx + 3] = ep + (sd * si0 + fw * ci0) * rad;
+
+		vertex[idx + 4] = ep + (sd * si0 + fw * ci0) * rad;
+		vertex[idx + 5] = ep + (sd * si1 + fw * ci1) * rad;
+		vertex[idx + 6] = sp + (sd * si1 + fw * ci1) * rad;
+		vertex[idx + 7] = sp + (sd * si0 + fw * ci0) * rad;
+
+		idx += 8;
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertex);
+	glDrawArrays(GL_QUADS, 0, vtxCnt);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	delete[] vertex;
+	delete[] s;
+	delete[] c;
+
+	// ライトオン
+	glEnable(GL_LIGHTING);
+	// アルファブレンド無効
+	glDisable(GL_BLEND);
+
+	// 描画前の行列に戻す
+	glPopMatrix();
+}
+
+// ワイヤーフレームのカプセルを描画
+void Primitive::DrawWireCapsule(const CVector& sp, const CVector& ep, float rad, const CColor& color)
+{
+	glPolygonMode(GL_FRONT, GL_LINE);
+	DrawCapsule(sp, ep, rad, color);
+	glPolygonMode(GL_FRONT, GL_FILL);
+}

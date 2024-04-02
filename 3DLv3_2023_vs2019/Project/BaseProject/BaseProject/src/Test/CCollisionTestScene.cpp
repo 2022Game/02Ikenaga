@@ -3,6 +3,7 @@
 #include "CColLine.h"
 #include "CColTriangle.h"
 #include "CColQuad.h"
+#include "CColCapsule.h"
 #include "CCamera.h"
 #include "CMeasure.h"
 #include "CDebugInput.h"
@@ -38,24 +39,34 @@ void CCollisionTestScene::Load()
 
 	// ãÖÇê∂ê¨
 	CColSphere* cs = new CColSphere(10.0f, CColor::gray);
-	cs->Scale(5.0f, 5.0f, 5.0f);
+	cs->Scale(2.0f, 2.0f, 2.0f);
 	cs->Position(10.0f, 10.0f, 0.0f);
 	mColList.push_back(cs);
 
-	CColSphere* cs2 = new CColSphere(1.0f, CColor::gray);
-	cs2->Scale(5.0f, 5.0f, 5.0f);
-	cs2->Position(-10.0f, 10.0f, 0.0f);
-	mColList.push_back(cs2);
+	//CColSphere* cs2 = new CColSphere(1.0f, CColor::gray);
+	//cs2->Scale(5.0f, 5.0f, 5.0f);
+	//cs2->Position(-10.0f, 10.0f, 0.0f);
+	//mColList.push_back(cs2);
 
 
 	// ê¸ï™Çê∂ê¨
-	CColLine* cl = new CColLine
+	//CColLine* cl = new CColLine
+	//(
+	//	CVector(0.0f, 11.0f, 0.0f),
+	//	CVector(0.0f, 1.0f, 0.0f),
+	//	CColor::gray
+	//);
+	//mColList.push_back(cl);
+
+	// ÉJÉvÉZÉãÇê∂ê¨
+	CColCapsule* cc = new CColCapsule
 	(
-		CVector(0.0f, 11.0f, 0.0f),
-		CVector(0.0f, 1.0f, 0.0f),
+		CVector(-5.0f, 11.0f, 0.0f),
+		CVector(5.0f, 11.0f, 0.0f),
+		2.0f,
 		CColor::gray
 	);
-	mColList.push_back(cl);
+	mColList.push_back(cc);
 
 	//mpColTriangle = new CColTriangle
 	//(

@@ -59,11 +59,27 @@ bool CSound::Load(std::string path, bool dontDelete)
 	memset(&g_riffchunkinfo, 0x00, sizeof(g_riffchunkinfo));
 	g_riffchunkinfo.fccType = mmioFOURCC('W', 'A', 'V', 'E');
 	mmret = mmioDescend(g_hmmio, &g_riffchunkinfo, NULL, MMIO_FINDRIFF);
-	if (mmret != MMSYSERR_NOERROR) return false;
+	if (mmret != MMSYSERR_NOERROR)
+	{
+		if (g_hmmio != nullptr)
+		{
+			mmioClose(g_hmmio, 0);
+			g_hmmio = nullptr;
+		}
+		return false;
+	}
 	memset(&mmckinfo, 0x00, sizeof(mmckinfo));
 	mmckinfo.ckid = mmioFOURCC('f', 'm', 't', ' ');
 	mmret = mmioDescend(g_hmmio, &mmckinfo, &g_riffchunkinfo, MMIO_FINDCHUNK);
-	if (mmret != MMSYSERR_NOERROR) return false;
+	if (mmret != MMSYSERR_NOERROR)
+	{
+		if (g_hmmio != nullptr)
+		{
+			mmioClose(g_hmmio, 0);
+			g_hmmio = nullptr;
+		}
+		return false;
+	}
 
 	if (mmckinfo.cksize >= sizeof(WAVEFORMATEX))
 	{
@@ -80,7 +96,15 @@ bool CSound::Load(std::string path, bool dontDelete)
 	memset(&g_datachunkinfo, 0x00, sizeof(g_datachunkinfo));
 	g_datachunkinfo.ckid = mmioFOURCC('d', 'a', 't', 'a');
 	mmret = mmioDescend(g_hmmio, &g_datachunkinfo, &g_riffchunkinfo, MMIO_FINDCHUNK);
-	if (mmret != MMSYSERR_NOERROR) return false;
+	if (mmret != MMSYSERR_NOERROR)
+	{
+		if (g_hmmio != nullptr)
+		{
+			mmioClose(g_hmmio, 0);
+			g_hmmio = nullptr;
+		}
+		return false;
+	}
 
 	//XAUDIO2_VOICE_STATE state;
 	UINT32 buflen; HRESULT hr; //DWORD dw;
@@ -89,18 +113,27 @@ bool CSound::Load(std::string path, bool dontDelete)
 	buflen = g_datachunkinfo.cksize;
 	mpBuf = new unsigned char[buflen];
 	g_readlen = mmioRead(g_hmmio, (HPSTR)mpBuf, buflen);
-	if (g_readlen <= 0) return false;
+	if (g_readlen <= 0)
+	{
+		if (g_hmmio != nullptr)
+		{
+			mmioClose(g_hmmio, 0);
+			g_hmmio = nullptr;
+		}
+		return false;
+	}
+
+	if (g_hmmio != nullptr)
+	{
+		mmioClose(g_hmmio, 0);
+		g_hmmio = nullptr;
+	}
 
 	// 1つ目の音声再生用の情報データを生成しておく
 	bool success = CreateAudioSource();
 	if (!success) return false;
 
 	mSampleCount = g_datachunkinfo.cksize / g_wfx.nBlockAlign;
-
-	if (g_hmmio != nullptr)
-	{
-		mmioClose(g_hmmio, 0);
-	}
 
 	return true;
 }

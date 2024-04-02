@@ -55,7 +55,7 @@ void CMeasure::Render()
 	// ê¢äEÇÃé≤Çï\é¶
 	float axisLength = 100.0f;
 	float axisLineWidth = 2.0f;
-	Primitive::DrawLine(CVector::zero, CVector::right * axisLength, CColor::red, axisLineWidth);
+	Primitive::DrawLine(CVector::zero, -CVector::right * axisLength, CColor::red, axisLineWidth);
 	Primitive::DrawLine(CVector::zero, CVector::up * axisLength, CColor::green, axisLineWidth);
 	Primitive::DrawLine(CVector::zero, CVector::forward * axisLength, CColor::blue, axisLineWidth);
 
