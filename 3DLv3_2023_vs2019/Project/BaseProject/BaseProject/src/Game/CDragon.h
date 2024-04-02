@@ -34,6 +34,10 @@ public:
 	void UpdateAttack3();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
+	// 飛行時の攻撃
+	void UpdateFlyingAttack();
+	// 飛行時の攻撃終了待ち
+	void UpdateFlyingAttackWait();
 
 	//ヒット
 	void UpdateHit();
@@ -41,6 +45,19 @@ public:
 	void UpdateDefense();
 	// 死ぬ時
 	void UpdateDie();
+
+	// 雄叫び
+	void UpdateRoar();
+
+	// 飛行開始
+	void UpdateFlyingStart();
+	// 飛行の待機
+	void UpdateFlyingIdle();
+	// 飛行終了
+	void UpdateFlyingEnd();
+
+	// 移動
+	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -82,27 +99,31 @@ public:
 	void Death() override;
 
 private:
+	int mFlyingTime;   // 飛行時間
 	int mDefenseTime;  // 防御時間の間隔
 	int mAttackTime;   // 攻撃時間の間隔
+	int mFlyingAttackTime;  // 飛行時の攻撃時間の間隔
 	// アニメーションの種類
 	enum class EAnimType
 	{
 		None = -1,
 
-		eTPose,		  // Tポーズ
-		eIdle,		  // 待機
-		eIdle2,		  // 待機2
-		eIdle3,       // 待機状態3
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
-		eAttack3,	  // 攻撃3
-		eHit,         // ヒット
-		eDefense,     // 防御
-		eDie,         // 死ぬ
-		eWalk,		  // 歩行
-		eJumpStart,	  // ジャンプ開始
-		eJump,		  // ジャンプ中
-		eJumpEnd,	  // ジャンプ終了
+		eTPose,		   // Tポーズ
+		eIdle,		   // 待機
+		eIdle2,		   // 待機2
+		eIdle3,        // 待機状態3
+		eAttack,	   // 攻撃
+		eAttack2,	   // 攻撃2
+		eAttack3,	   // 攻撃3
+		eFlyingAttack, // 飛行時の攻撃
+		eHit,          // ヒットWait
+		eDefense,      // 防御
+		eDie,          // 死ぬ
+		eRoar,         // 雄叫び
+		eFlyingStart,  // 飛行開始
+		eFlyingIdle,   // 飛行の待機
+		eFlyingEnd,    // 飛行終了
+		eRun,		   // 移動
 
 		Num
 	};
@@ -125,26 +146,30 @@ private:
 	// ドラゴンの状態
 	enum class EState
 	{
-		eIdle,		  // 待機
-		eIdle2,		  // 待機2
-		eIdle3,       // 待機状態3
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
-		eAttack3,	  // 攻撃3
-		eAttackWait,  // 攻撃終了待ち
-		eHit,         // ヒット
-		eDefense,     // 防御
-		eDie,         // 死ぬ時
-		eJumpStart,	  // ジャンプ開始
-		eJump,		  // ジャンプ中
-		eJumpEnd,	  // ジャンプ終了
+		eIdle,		       // 待機
+		eIdle2,		       // 待機2
+		eIdle3,            // 待機状態3
+		eAttack,	       // 攻撃
+		eAttack2,	       // 攻撃2
+		eAttack3,	       // 攻撃3
+		eAttackWait,       // 攻撃終了待ち
+		eFlyingAttack,     // 飛行時の攻撃
+		eFlyingAttackWait, // 飛行時の攻撃終了待ち
+		eHit,              // ヒット
+		eDefense,          // 防御
+		eDie,              // 死ぬ時
+		eRoar,             // 雄叫び
+		eFlyingStart,      // 飛行開始
+		eFlyingIdle,       // 飛行の待機
+		eFlyingEnd,        // 飛行終了
+		eRun,              // 移動
 	};
 	EState mState;	// ドラゴンの状態
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	//CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;
 	//CColliderSphere* mpColliderSphere;
 	CColliderSphere* mpDamageCol;    // ダメージを受けるコライダー(頭)
 	CColliderSphere* mpDamageCol2;   // ダメージを受けるコライダー(口)
@@ -163,7 +188,7 @@ private:
 	CColliderSphere* mpDamageCol15;  // ダメージを受けるコライダー(前の左足)
 	CColliderSphere* mpDamageCol16;  // ダメージを受けるコライダー(前の左足2)
 
-	//CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー(頭)
 	CTransform* mpRideObject;
 
 	// 火炎放射エフェクト
