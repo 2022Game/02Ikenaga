@@ -92,8 +92,17 @@
     <Filter Include="ソース ファイル\BaseSystem\Fade">
       <UniqueIdentifier>{a03fe14e-2e7a-4924-980b-aa3e14ae9eed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Flame">
+    <Filter Include="ソース ファイル\Game\Effect">
+      <UniqueIdentifier>{485521b2-aaf0-4d96-a9fb-e06a7bc509c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Flame">
       <UniqueIdentifier>{c8a7d045-d093-4343-b70c-e638db182586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Slashing">
+      <UniqueIdentifier>{eb010f7f-d921-4fb4-a54c-d2729347a082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Roar">
+      <UniqueIdentifier>{e8f06d63-5b64-4fcb-907f-fd4c30e77d46}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -419,19 +428,31 @@
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CFlame.cpp">
-      <Filter>ソース ファイル\Game\Flame</Filter>
+      <Filter>ソース ファイル\Game\Effect\Flame</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CFlamethrower.cpp">
-      <Filter>ソース ファイル\Game\Flame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BaseSystem\CBounds.cpp">
-      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+      <Filter>ソース ファイル\Game\Effect\Flame</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CColliderCapsule.cpp">
       <Filter>ソース ファイル\BaseSystem\Collider</Filter>
     </ClCompile>
     <ClCompile Include="src\Test\CColCapsule.cpp">
       <Filter>ソース ファイル\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlashing.cpp">
+      <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlash.cpp">
+      <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRoarEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Roar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRoar.cpp">
+      <Filter>ソース ファイル\Game\Effect\Roar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CBounds.cpp">
+      <Filter>ソース ファイル\BaseSystem\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -781,19 +802,31 @@
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CFlame.h">
-      <Filter>ソース ファイル\Game\Flame</Filter>
+      <Filter>ソース ファイル\Game\Effect\Flame</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CFlamethrower.h">
-      <Filter>ソース ファイル\Game\Flame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BaseSystem\CBounds.h">
-      <Filter>ソース ファイル\BaseSystem\Effect</Filter>
+      <Filter>ソース ファイル\Game\Effect\Flame</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CColliderCapsule.h">
       <Filter>ソース ファイル\BaseSystem\Collider</Filter>
     </ClInclude>
     <ClInclude Include="src\Test\CColCapsule.h">
       <Filter>ソース ファイル\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlashing.h">
+      <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlash.h">
+      <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRoarEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Roar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRoar.h">
+      <Filter>ソース ファイル\Game\Effect\Roar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CBounds.h">
+      <Filter>ソース ファイル\BaseSystem\Collider</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

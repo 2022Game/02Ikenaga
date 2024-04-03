@@ -84,5 +84,19 @@ public:
 	/// <param name="up">上方向ベクトル</param>
 	/// <returns>回転行列</returns>
 	static CMatrix LookRotation(const CVector& forward, const CVector& up);
+
+	// 零行列
+	// [0, 0, 0, 0]
+	// [0, 0, 0, 0]
+	// [0, 0, 0, 0]
+	// [0, 0, 0, 0]
+	const static CMatrix zero;
+
+	// 単位行列
+	// [1, 0, 0, 0]
+	// [0, 1, 0, 0]
+	// [0, 0, 1, 0]
+	// [0, 0, 0, 1]
+	const static CMatrix identity;
 };
 #endif

@@ -10,11 +10,12 @@ class CHpGauge;
 class CSaGauge;
 class CSword;
 class CShield;
+class CSlash;
 class CFlamethrower;
 
 #include <algorithm>
 
-#define DEFAULT_CAMERA_POS CVector(0.0f, 50.0f, 75.0f)
+#define DEFAULT_CAMERA_POS CVector(0.0f, 10.0f, 35.0f)
 /*
 プレイヤークラス
 キャラクタクラスを継承
@@ -230,6 +231,7 @@ private:
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;
+	CSlash* mpSlash;
 	// 火炎放射エフェクト
 	CFlamethrower* mpFlamethrower;
 };

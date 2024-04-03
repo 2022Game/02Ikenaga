@@ -7,6 +7,7 @@
 #include "Maths.h"
 #include "CSword.h"
 #include "CShield.h"
+#include "CSlash.h"
 #include "CFlamethrower.h"
 
 // プレイヤーのインスタンス
@@ -179,6 +180,13 @@ CPlayer::CPlayer()
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
+	mpSlash = new CSlash
+	(
+		this, nullptr,
+		CVector(0.0f, 10.0f, 5.0f),
+		CQuaternion(0.0f, 0.0f, 0.0f).Matrix()
+	);
+
 	mpFlamethrower = new CFlamethrower
 	(
 		this, nullptr,
@@ -225,7 +233,7 @@ void CPlayer::UpdateIdle()
 		{
 			if (CInput::PushKey(VK_MBUTTON))
 			{
-				mState = EState::eAttack7;
+				mState = EState::eAttack4;
 				mCharaStatus.SpecialAttack -= 4;
 			}
 		}
@@ -309,6 +317,17 @@ void CPlayer::UpdateAttack4()
 		// 攻撃終了待ち状態へ移行
 		mState = EState::eAttackWait;
 	}
+	if (mAnimationFrame >= 9.0f)
+	{
+		if (!mpSlash->IsThrowing())
+		{
+			mpSlash->Start();
+		}
+	}
+	if (mAnimationFrame >= 32.0f)
+	{
+		mpSlash->Stop();
+	}
 }
 
 // 攻撃5
@@ -390,6 +409,7 @@ void CPlayer::UpdateAttackWait()
 	// 攻撃アニメーションが終了したら、
 	if (IsAnimationFinished())
 	{
+		mpSlash->Stop();
 		// 待機状態へ移行
 		mState = EState::eIdle;
 		ChangeAnimation(EAnimType::eIdle);
@@ -901,6 +921,18 @@ void CPlayer::Update()
 		}
 	}
 
+	if (CInput::PushKey('X'))
+	{
+		if (!mpSlash->IsThrowing())
+		{
+			mpSlash->Start();
+		}
+		else
+		{
+			mpSlash->Stop();
+		}
+	}
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -948,17 +980,17 @@ void CPlayer::Update()
 		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 		CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
 	}
-
 	if (debug2)
 	{
 		CDebugPrint::Print(" R: ステータス表示\n");
 		CDebugPrint::Print(" 2: レベルアップ\n");
 		CDebugPrint::Print(" WASD: 移動\n");
-		CDebugPrint::Print(" G: ガード\n");
-		CDebugPrint::Print(" Hか左クリック: 攻撃\n");
-		CDebugPrint::Print(" K(レベル5以降:使用可): スペシャル攻撃\n");
-		CDebugPrint::Print(" J: ジャンプ\n");
-		CDebugPrint::Print(" WASD+スペース: 回避\n");
+		CDebugPrint::Print(" 右クリック: ガード\n");
+		CDebugPrint::Print(" 左クリック: 攻撃\n");
+		CDebugPrint::Print(" マウスホイール\n");
+		CDebugPrint::Print(" (レベル5以降:使用可) : スペシャル攻撃\n");
+		CDebugPrint::Print(" スペース: ジャンプ\n");
+		CDebugPrint::Print(" WASD+Sfift: 回避\n");
 		CDebugPrint::Print(" 回避のクールタイム: %d\n", mRollingTime);
 		CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 	}

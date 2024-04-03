@@ -5,6 +5,7 @@
 #include "CInput.h"
 #include "Maths.h"
 #include "CFlamethrower.h"
+#include "CRoarEffect.h"
 
 // ドラゴンのインスタンス
 CDragon* CDragon::spInstance = nullptr;
@@ -230,20 +231,24 @@ CDragon::CDragon()
 	mpDamageCol14->SetCollisionTags({ ETag::eWeapon });
 	mpDamageCol14->Position(0.2f, 0.1f, 0.0f);
 
+	// カプセルコライダー
 	// ダメージを受けるコライダーを作成(前の左足)
-	mpDamageCol15 = new CColliderSphere
+	mpDamageCol15 = new CColliderCapsule
 	(
-		this, ELayer::eDamageCol, 0.3f, false
+		this, ELayer::eDamageCol,
+		CVector(-2.0f,1.0f, 0.0f),CVector(2.0f, 1.0f, 0.0f),
+		2.0f,false,1.0f
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol15->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageCol15->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol15->Position(0.1f, 0.0f, 0.15f);
+	
+	//mpDamageCol15->Position(0.1f, 0.0f, 0.15f);
 
 	// ダメージを受けるコライダーを作成(前の左足2)
 	mpDamageCol16 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.3f, false
+		this, ELayer::eDamageCol, 0.3f,false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol16->SetCollisionLayers({ ELayer::eAttackCol });
@@ -331,8 +336,16 @@ CDragon::CDragon()
 	mpFlamethrower = new CFlamethrower
 	(
 		this, mtx,
-		CVector(0.0f, 0.0f, 0.0f)
+		CVector(0.0f, 0.0f, 0.0f),
+		CQuaternion(0.0,-90.f,0.0f).Matrix()
 	); 
+
+	mpRoar = new CRoarEffect
+	(
+		this,nullptr,
+		CVector(0.0f, 0.0f, 0.0f),
+		CQuaternion(0.0, 0.f, 0.0f).Matrix()
+	);
 }
 
 CDragon::~CDragon()
@@ -428,17 +441,21 @@ void CDragon::UpdateAttack()
 		dir.Y(0.0f);
 		dir.Normalize();
 		Rotation(CQuaternion::LookRotation(dir));
-		if (mAnimationFrame >= 30.0f)
+	}
+	if (mAnimationFrame >= 35.0f)
+	{
+		if (!mpFlamethrower->IsThrowing())
 		{
-			if (!mpFlamethrower->IsThrowing())
-			{
-				mpFlamethrower->Start();
-			}
+			mpFlamethrower->Start();
 		}
+	}
+	if (mAnimationFrame >=140.0f)
+	{
+		mpFlamethrower->Stop();
 	}
 	if (IsAnimationFinished())
 	{
-		mpFlamethrower->Stop();
+		//mpFlamethrower->Stop();
 		// 攻撃終了待ち状態へ移行
 		mState = EState::eAttackWait;
 	}
@@ -555,8 +572,16 @@ void CDragon::UpdateRoar()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eRoar);
+	if (mAnimationFrame >= 1.0f)
+	{
+		if (!mpRoar->IsThrowing())
+		{
+			mpRoar->Start();
+		}
+	}
 	if (IsAnimationFinished())
 	{
+		mpRoar->Stop();
 		mState = EState::eFlyingStart;
 	}
 }
@@ -896,6 +921,17 @@ void CDragon::Update()
 		else
 		{
 			mpFlamethrower->Stop();
+		}
+	}
+	if (CInput::PushKey('C'))
+	{
+		if (!mpRoar->IsThrowing())
+		{
+			mpRoar->Start();
+		}
+		else
+		{
+			mpRoar->Stop();
 		}
 	}
 }

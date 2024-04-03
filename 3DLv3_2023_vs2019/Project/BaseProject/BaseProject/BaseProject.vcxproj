@@ -90,6 +90,10 @@
     <ClCompile Include="src\Game\CMushroom3.cpp" />
     <ClCompile Include="src\Game\CRay.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
+    <ClCompile Include="src\Game\CRoar.cpp" />
+    <ClCompile Include="src\Game\CRoarEffect.cpp" />
+    <ClCompile Include="src\Game\CSlash.cpp" />
+    <ClCompile Include="src\Game\CSlashing.cpp" />
     <ClCompile Include="src\Game\CSlime.cpp" />
     <ClCompile Include="src\Game\CMushroom.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
@@ -213,6 +217,10 @@
     <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CRay.h" />
     <ClInclude Include="src\Game\CRich.h" />
+    <ClInclude Include="src\Game\CRoar.h" />
+    <ClInclude Include="src\Game\CRoarEffect.h" />
+    <ClInclude Include="src\Game\CSlash.h" />
+    <ClInclude Include="src\Game\CSlashing.h" />
     <ClInclude Include="src\Game\CSlime.h" />
     <ClInclude Include="src\Game\CMushroom.h" />
     <ClInclude Include="src\Game\CField.h" />

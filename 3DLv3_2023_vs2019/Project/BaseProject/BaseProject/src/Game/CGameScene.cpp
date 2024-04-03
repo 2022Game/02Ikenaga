@@ -122,13 +122,21 @@ void CGameScene::Load()
 
 	CPlayer* player = new CPlayer();
 
-	CCamera* mainCamera = new CCamera
+	/*CCamera* mainCamera = new CCamera
 	(
 		DEFAULT_CAMERA_POS,
 		player->Position()
 	);
-	mainCamera->SetFollowTargetTf(player);
+	mainCamera->SetFollowTargetTf(player);*/
 
+	// CGameCamera2のテスト
+	CVector atPos = player->Position() + CVector(DEFAULT_CAMERA_POS);
+	CGameCamera2* mainCamera = new CGameCamera2
+	(
+		atPos + CVector(DEFAULT_CAMERA_POS),
+		atPos
+	);
+	mainCamera->SetFollowTargetTf(player);
 	player->Position(0.0f, 35.0f, 0.0f);
 
 	// レッドスライム
@@ -209,7 +217,7 @@ void CGameScene::Load()
 	// ドラゴン
 	CDragon* bossEnemy = new CDragon();
 	bossEnemy->Position(0.0f, 21.0f, 90.0f);
-	bossEnemy->Scale(7.0f, 7.0f, 7.0f);
+	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);

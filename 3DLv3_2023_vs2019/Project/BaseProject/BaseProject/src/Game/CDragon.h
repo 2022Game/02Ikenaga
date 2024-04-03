@@ -3,7 +3,9 @@
 #include "CModel.h"
 #include "CEnemy.h"
 #include "CColliderSphere.h"
+#include "CColliderCapsule.h"
 class CFlamethrower;
+class CRoarEffect;
 
 /*
  ボスドラゴン
@@ -185,12 +187,15 @@ private:
 	CColliderSphere* mpDamageCol12;  // ダメージを受けるコライダー(つなぎ3)
 	CColliderSphere* mpDamageCol13;  // ダメージを受けるコライダー(つなぎ4)
 	CColliderSphere* mpDamageCol14;  // ダメージを受けるコライダー(つなぎ5)
-	CColliderSphere* mpDamageCol15;  // ダメージを受けるコライダー(前の左足)
+
+	// カプセルコライダー
+	CColliderCapsule* mpDamageCol15;  // ダメージを受けるコライダー(前の左足)
+
 	CColliderSphere* mpDamageCol16;  // ダメージを受けるコライダー(前の左足2)
 
 	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー(頭)
 	CTransform* mpRideObject;
 
-	// 火炎放射エフェクト
-	CFlamethrower* mpFlamethrower;
+	CFlamethrower* mpFlamethrower;  // 火炎放射エフェクト
+	CRoarEffect* mpRoar;  // 雄叫びエフェクト
 };

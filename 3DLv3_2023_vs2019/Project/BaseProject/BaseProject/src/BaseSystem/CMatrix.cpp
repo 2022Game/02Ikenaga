@@ -5,6 +5,17 @@
 #include "Maths.h"
 #include "CVector.h"
 
+// 零行列
+const CMatrix CMatrix::zero(0.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 0.0f);
+// 単位行列
+const CMatrix CMatrix::identity(1.0f, 0.0f, 0.0f, 0.0f,
+								0.0f, 1.0f, 0.0f, 0.0f,
+								0.0f, 0.0f, 1.0f, 0.0f,
+								0.0f, 0.0f, 0.0f, 1.0f);
+
 // コンストラクタ
 CMatrix::CMatrix()
 {

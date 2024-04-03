@@ -4,19 +4,21 @@
 #include "Maths.h"
 
 // 炎の発射間隔時間
-#define THROW_INTERVAL 0.15f
+#define THROW_INTERVAL 0.03f
 // 炎の発射方向のブレ幅
-#define FLAME_DIR_RAND 0.02f
+#define FLAME_DIR_RAND 0.01f
 // 炎の移動速度
 #define FLAME_MOVE_SPEED 75.0f
 // 炎の色
 #define FLAME_COLOR CColor(1.0f, 0.25f, 0.1f)
 
 // コンストラクタ
-CFlamethrower::CFlamethrower(CObjectBase* owner, const CMatrix* attach, const CVector& offset)
+CFlamethrower::CFlamethrower(CObjectBase* owner, const CMatrix* attach,
+	const CVector& offsetPos, const CMatrix& offsetRot)
 	: mpOwner(owner)
 	, mpAttachMtx(attach)
-	, mThrowOffsetPos(offset)
+	, mThrowOffsetPos(offsetPos)
+	, mThrowOffsetRot(offsetRot)
 	, mElapsedTime(0.0f)
 	, mIsThrowing(false)
 {
@@ -50,6 +52,18 @@ bool CFlamethrower::IsThrowing() const
 	return mIsThrowing;
 }
 
+// 発射時のオフセット位置を設定
+void CFlamethrower::SetThrowOffsetPos(const CVector& pos)
+{
+	mThrowOffsetPos = pos;
+}
+
+// 発射時のオフセット回転値を設定
+void CFlamethrower::SetThrowOffsetRot(const CMatrix& rot)
+{
+	mThrowOffsetRot = rot;
+}
+
 // 炎の発射位置を取得
 CVector CFlamethrower::GetThrowPos() const
 {
@@ -76,16 +90,16 @@ CVector CFlamethrower::GetThrowDir() const
 {
 	// アタッチする行列が設定されている場合は、行列の正面方向ベクトルを返す
 	if (mpAttachMtx != nullptr)
-	{ 
-		return mpAttachMtx->Position() + (mpOwner->Rotation() * mThrowOffsetPos);
+	{
+		return mThrowOffsetRot * mpAttachMtx->VectorZ();
 	}
 	// 持ち主が設定されている場合は、持ち主の正面方向ベクトルを返す
 	else if (mpOwner != nullptr)
 	{
-		return mpOwner->Position() + (mpOwner->Rotation() * mThrowOffsetPos);
+		return mThrowOffsetRot * mpOwner->VectorZ();
 	}
 
-	return CVector::forward;
+	return mThrowOffsetRot * CVector::forward;
 }
 
 // 炎のエフェクトを作成
