@@ -10,8 +10,7 @@ class CHpGauge;
 class CSaGauge;
 class CSword;
 class CShield;
-class CSlash;
-class CFlamethrower;
+class CBeamEffect;
 
 #include <algorithm>
 
@@ -42,6 +41,8 @@ public:
 
 	// HP回復と特殊攻撃(SA)回数を自動回復
 	void AutomaticRecovery();
+	// 攻撃が当たったら特殊攻撃(SA)を回復
+	void AttackRecovery();
 
 	//回避カウント	
 	void RollingCount();
@@ -83,6 +84,7 @@ public:
     float GetDefBuff(const CVector& attackDir) const override;
 
 	static int mHp;
+	static int mSa;
 
 private:
 	// 待機状態
@@ -113,7 +115,7 @@ private:
 	void UpdateJumpEnd();
 	// 移動の更新処理
 	void UpdateMove();
-	//攻撃力アップ
+	// 攻撃力アップ
 	void UpdatePowerUp();
 	// 攻撃力アップ終了
 	void UpdatePowerUpEnd();
@@ -215,7 +217,7 @@ private:
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;
-	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
+	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー
 	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー
 
 	CTransform* mpRideObject;
@@ -231,7 +233,7 @@ private:
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;
-	CSlash* mpSlash;
-	// 火炎放射エフェクト
-	CFlamethrower* mpFlamethrower;
+	bool mIsSpawnedSlashEffect;
+	
+	CBeamEffect* mpBeam;
 };

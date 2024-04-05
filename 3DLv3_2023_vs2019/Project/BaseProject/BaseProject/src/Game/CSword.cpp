@@ -60,6 +60,7 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 
 				// UŒ‚Ï‚ÝƒŠƒXƒg‚É’Ç‰Á
 				AddAttackHitObj(chara);
+				//mpPlayer->AttackRecovery();
 			}
 		}
 	}

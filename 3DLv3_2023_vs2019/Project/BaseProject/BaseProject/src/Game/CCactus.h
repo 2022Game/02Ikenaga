@@ -6,6 +6,7 @@
 
 /*
  サボテン
+ プレイヤーの推定レベル(41～50)
  エネミークラスを継承
 */
 class CCactus : public CEnemy

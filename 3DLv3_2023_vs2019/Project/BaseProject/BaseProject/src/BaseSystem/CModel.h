@@ -28,42 +28,60 @@ public:
 	// アルファ値取得
 	float GetAlpha() const;
 
-	//描画
+	// ライティングの有効状態を設定
+	void SetLighting(bool enable);
+	// ライティングの有効状態を取得
+	bool IsLighting() const;
+
+	// デプス値の書き込みを行うか設定
+	void SetDepthWrite(bool enable);
+	// デプス値の書き込みを行うかどうか
+	bool IsDepthWrite() const;
+
+	// カリングを行うかどうかを設定
+	void SetCullFace(bool enable);
+	// カリングを行うかどうか
+	bool IsCullFace() const;
+
+	// 描画時のブレンド処理を設定
+	void SetBlend(EBlend mode);
+	// 描画時のブレンド処理を取得
+	EBlend GetBlend() const;
+
+	// エフェクト用の設定
+	void SetupEffectSettings();
+
+	// 描画
 	void Render();
-	//描画
-	//Render(行列)
+	// 描画
+	// Render(行列)
 	void Render(const CMatrix& m);
 private:
 	CModel();
 	~CModel();
-	//モデル読み込み
+	// モデル読み込み
 	bool Load(std::string path, bool dontDelete) override;
-	//マテリアル読み込み
+	// マテリアル読み込み
 	bool LoadMaterial(std::string path, bool dontDelete);
 	void CreateVertexBuffer();
 
-	//マテリアルポインタの可変長配列
+	// マテリアルポインタの可変長配列
 	std::vector<CMaterial*> mpMaterials;
-	//三角形の可変長配列
+	// 三角形の可変長配列
 	std::vector<CTriangle> mTriangles;
-	//頂点の配列
+	// 頂点の配列
 	CVertex* mpVertexes;
-	//モデルのカラー
+	// モデルのカラー
 	CColor mColor;
-};
 
-#include "CVertex.h"
-#include <vector>
-
-class CModelTest
-{
-public:
-	CModelTest();
-	void Render();
-
-	CVertex mVertex[6];
-	std::vector<CVertex> mVector;
-
+	// ライティングが有効かどうか
+	bool mIsLighting;
+	// デプス値書き込みを行うかどうか
+	bool mIsDepthWrite;
+	// カリングを行うかどうか
+	bool mIsCullFace;
+	// 描画時のブレンド処理
+	EBlend mBlendMode;
 };
 
 #endif

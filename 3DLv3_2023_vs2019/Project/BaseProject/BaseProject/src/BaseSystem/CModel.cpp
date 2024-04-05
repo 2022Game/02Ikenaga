@@ -1,79 +1,7 @@
 #include "CModel.h"
-//文字列関数のインクルード
-//#include <string.h>
-//CVectorのインクルード
 #include "CVector.h"
 #include "Maths.h"
-
-////文字列s1と文字列s2の比較
-////s1とs2が等しければ0を
-////等しくなければ0以外を返す
-//int strcmp(const char* s1, const char* s2)
-//{
-//	int i = 0;
-//	//文字が同じ間は繰り返し
-//	//どちらかの文字が終わりになるとループの終わり
-//	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
-//	{
-//		i++;
-//	}
-//	//同じなら引いて0
-//	return s1[i] - s2[i];
-//}
-
 #include "glut.h"
-
-//#define V1 CVector(1.0f, 0.0f, 0.0f)
-//#define V2 CVector(0.0f, 1.0f, 0.0f)
-//#define V3 CVector(0.0f, 0.0f, 1.0f)
-//#define V4 CVector(-1.0f, 0.0f, 0.0f)
-//#define N1 CVector(0.5412, 0.7071, 0.5412)
-//#define N2 CVector(-0.5412, 0.7071, 0.5412)
-
-CModelTest::CModelTest()
-{
-	//mVertex[0].mPosition = V1;
-	//mVertex[0].mNormal = N1;
-	//mVertex[1].mPosition = V2;
-	//mVertex[1].mNormal = N1;
-	//mVertex[2].mPosition = V3;
-	//mVertex[2].mNormal = N1;
-
-	//mVertex[3].mPosition = V2;
-	//mVertex[3].mNormal = N2;
-	//mVertex[4].mPosition = V4;
-	//mVertex[4].mNormal = N2;
-	//mVertex[5].mPosition = V3;
-	//mVertex[5].mNormal = N2;
-
-	for (int i = 0; i < 6; i++)
-	{
-		mVector.push_back(mVertex[i]);
-	}
-}
-
-void CModelTest::Render()
-{
-	//頂点座標の位置を設定
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, sizeof(CVertex), (void*)&mVector[0].mPosition);
-	//法線ベクトルの位置を設定
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glNormalPointer(GL_FLOAT, sizeof(CVertex), (void*)&mVector[0].mNormal);
-	//テクスチャマッピングの位置を設定
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(3, GL_FLOAT, sizeof(CVertex), (void*)&mVector[0].mTextureCoords);
-
-	//描画位置からのデータで三角形を描画します
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	//頂点座標の配列を無効にする
-	glDisableClientState(GL_VERTEX_ARRAY);
-	//法線の配列を無効にする
-	glDisableClientState(GL_NORMAL_ARRAY);
-	//テクスチャマッピングの配列を無効にする
-	glDisableClientState(GL_NORMAL_ARRAY);
-}
 
 std::vector<CTriangle> CModel::Triangles() const
 {
@@ -304,6 +232,10 @@ void CModel::Render()
 CModel::CModel()
 	: mpVertexes(nullptr)
 	, mColor(CColor::white)
+	, mIsLighting(true)
+	, mIsDepthWrite(true)
+	, mIsCullFace(true)
+	, mBlendMode(EBlend::eAlpha)
 {
 }
 
@@ -340,12 +272,80 @@ float CModel::GetAlpha() const
 	return mColor.A();
 }
 
+// ライティングの有効状態を設定
+void CModel::SetLighting(bool enable)
+{
+	mIsLighting = enable;
+}
+
+// ライティングの有効状態を取得
+bool CModel::IsLighting() const
+{
+	return mIsLighting;
+}
+
+// デプス値の書き込みを行うか設定
+void CModel::SetDepthWrite(bool enable)
+{
+	mIsDepthWrite = enable;
+}
+
+// デプス値の書き込みを行うかどうか
+bool CModel::IsDepthWrite() const
+{
+	return mIsDepthWrite;
+}
+
+// カリングを行うかどうかを設定
+void CModel::SetCullFace(bool enable)
+{
+	mIsCullFace = enable;
+}
+
+// カリングを行うかどうか
+bool CModel::IsCullFace() const
+{
+	return mIsCullFace;
+}
+
+// 描画時のブレンド処理を設定
+void CModel::SetBlend(EBlend mode)
+{
+	mBlendMode = mode;
+	for (CMaterial* mat : mpMaterials)
+	{
+		mat->SetBlendType(mBlendMode);
+	}
+}
+
+// 描画時のブレンド処理を取得
+EBlend CModel::GetBlend() const
+{
+	return mBlendMode;
+}
+
+// エフェクト用の設定
+void CModel::SetupEffectSettings()
+{
+	SetLighting(false);
+	SetDepthWrite(false);
+	SetCullFace(false);
+	SetBlend(EBlend::eAdd);
+}
+
 //描画
 //Render(行列)
 void CModel::Render(const CMatrix& m)
 {
 	// 完全に透明な状態であれば、描画しない
 	if (mColor.A() == 0.0f) return;
+
+	//デプス値の書き込み設定
+	glDepthMask(mIsDepthWrite);
+	//ライティング設定
+	if (!mIsLighting) glDisable(GL_LIGHTING);
+	//カリング設定
+	if (!mIsCullFace) glDisable(GL_CULL_FACE);
 
 	//行列の退避
 	glPushMatrix();
@@ -383,6 +383,13 @@ void CModel::Render(const CMatrix& m)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	//テクスチャマッピングの配列を無効にする
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	//デプス値の書き込み状態を戻す
+	glDepthMask(true);
+	//ライティング設定
+	glEnable(GL_LIGHTING);
+	//カリング設定
+	glEnable(GL_CULL_FACE);
 }
 
 void CModel::CreateVertexBuffer()

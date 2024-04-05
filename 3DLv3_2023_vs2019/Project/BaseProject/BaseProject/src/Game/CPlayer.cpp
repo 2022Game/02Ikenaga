@@ -8,11 +8,12 @@
 #include "CSword.h"
 #include "CShield.h"
 #include "CSlash.h"
-#include "CFlamethrower.h"
+#include "CBeamEffect.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
 int CPlayer::mHp;
+int CPlayer::mSa;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -84,6 +85,7 @@ CPlayer::CPlayer()
 	, recoverycount(0)
 	, mDefaultPos(CVector::zero)
 	, mIsPlayedSlashSE(false)
+	, mIsSpawnedSlashEffect(false)
 {
 	// インスタンスの設定
 	spInstance = this;
@@ -180,14 +182,7 @@ CPlayer::CPlayer()
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
-	mpSlash = new CSlash
-	(
-		this, nullptr,
-		CVector(0.0f, 10.0f, 5.0f),
-		CQuaternion(0.0f, 0.0f, 0.0f).Matrix()
-	);
-
-	mpFlamethrower = new CFlamethrower
+	mpBeam = new CBeamEffect
 	(
 		this, nullptr,
 		CVector(0.0f, 14.0f, -1.0f)
@@ -306,27 +301,46 @@ void CPlayer::UpdateAttack3()
 // 攻撃4
 void CPlayer::UpdateAttack4()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack4);
 
-	if (mAnimationFrame >= 30.0f)
+	if (mAnimationFrame >= 20.0f)
 	{
 		//剣に攻撃開始を伝える
 		mpSword->AttackStart();
-
-		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
 	}
-	if (mAnimationFrame >= 9.0f)
+	if (mAnimationFrame >= 80.0f)
 	{
-		if (!mpSlash->IsThrowing())
+		mpSword->AttackEnd();
+	}
+	if (mAnimationFrame >= 39.0f)
+	{
+		// 斬撃エフェクトの生成済みフラグを初期化
+		mIsSpawnedSlashEffect = false;
+		// 斬撃エフェクトを生成していないかつ、アニメーションが35%以上進行したら、
+		if (!mIsSpawnedSlashEffect && GetAnimationFrameRatio() >= 0.39f)
 		{
-			mpSlash->Start();
+			// 斬撃エフェクトを生成して、正面方向へ飛ばす
+			CSlash* slash = new CSlash
+			(
+				this,
+				Position() + CVector(0.0f, 10.0f, 0.0f),
+				VectorZ(),
+				100.0f,
+				100.0f
+			);
+			// 斬撃エフェクトの色設定
+			slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
+
+			mIsSpawnedSlashEffect = true;
 		}
 	}
-	if (mAnimationFrame >= 32.0f)
+	if (mIsSpawnedSlashEffect && mAnimationFrame >=42.0f)
 	{
-		mpSlash->Stop();
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
 	}
 }
 
@@ -409,7 +423,6 @@ void CPlayer::UpdateAttackWait()
 	// 攻撃アニメーションが終了したら、
 	if (IsAnimationFinished())
 	{
-		mpSlash->Stop();
 		// 待機状態へ移行
 		mState = EState::eIdle;
 		ChangeAnimation(EAnimType::eIdle);
@@ -745,6 +758,15 @@ void CPlayer::AutomaticRecovery()
 	}
 }
 
+// 攻撃が当たったら特殊攻撃(SA)を回復
+void CPlayer::AttackRecovery()
+{
+	if (mCharaStatus.SpecialAttack < mCharaMaxStatus.SpecialAttack)
+	{
+		mCharaStatus.SpecialAttack++;
+	}
+}
+
 // 回避カウント
 void CPlayer::RollingCount()
 {
@@ -778,6 +800,7 @@ void CPlayer::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
+	mSa = mCharaStatus.SpecialAttack;
 
 	if (mAttackCount >= 1)
 	{
@@ -911,25 +934,13 @@ void CPlayer::Update()
 	// 「E」キーで炎の発射をオンオフする
 	if (CInput::PushKey('E'))
 	{
-		if (!mpFlamethrower->IsThrowing())
+		if (!mpBeam->IsThrowing())
 		{
-			mpFlamethrower->Start();
+			mpBeam->Start();
 		}
 		else
 		{
-			mpFlamethrower->Stop();
-		}
-	}
-
-	if (CInput::PushKey('X'))
-	{
-		if (!mpSlash->IsThrowing())
-		{
-			mpSlash->Start();
-		}
-		else
-		{
-			mpSlash->Stop();
+			mpBeam->Stop();
 		}
 	}
 
@@ -1061,12 +1072,6 @@ void CPlayer::Render()
 //被ダメージ処理
 void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 {
-	//死亡していたら、ダメージは受けない
-	//if (mCharaStatus.hp <= 0)return;
-
-	//HPからダメージを引く
-	//mCharaStatus.hp = max(mCharaStatus.hp - damage, 0);
-	//mCharaStatus.hp -= damage;
 	if (mCharaStatus.hp -= damage)
 	{
 		if (mState == EState::eGuard)

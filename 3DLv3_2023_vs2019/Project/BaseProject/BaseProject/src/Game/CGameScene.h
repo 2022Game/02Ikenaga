@@ -7,6 +7,9 @@ class CSlime3;
 class CMushroom;
 class CMushroom2;
 class CMushroom3;
+class CTurtle;
+class CTurtle2;
+class CTurtle3;
 class CGameMenu;
 class CSound;
 
@@ -37,12 +40,24 @@ private:
 	int MushroomReTime;   // MushroomRevivalTime(マッシュルームの復活時間)
 	int Mushroom2ReTime;  // Mushroom2RevivalTime(マッシュルーム2の復活時間)
 	int Mushroom3ReTime;  // Mushroom3RevivalTime(マッシュルーム3の復活時間)
+	int TurtleReTime;     // TurtleRevivalTime(亀の復活時間)
+	int Turtle2ReTime;     // Turtle2RevivalTime(亀2の復活時間)
+	int Turtle3ReTime;     // Turtle3RevivalTime(亀3の復活時間)
+
+	// プレイヤー
 	CPlayer* mpPlayer;
+	// スライム
 	CSlime* mpSlime;
 	CSlime2* mpSlime2;
 	CSlime3* mpSlime3;
+	// マッシュルーム
 	CMushroom* mpMushroom;
 	CMushroom2* mpMushroom2;
 	CMushroom3* mpMushroom3;
+	// 亀
+	CTurtle* mpTurtle;
+	CTurtle2* mpTurtle2;
+	CTurtle3* mpTurtle3;
+
 	CGameMenu* mpGameMenu;
 };

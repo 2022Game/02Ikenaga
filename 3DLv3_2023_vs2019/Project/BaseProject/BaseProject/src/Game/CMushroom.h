@@ -7,6 +7,7 @@
 
 /*
  マッシュルームクラス
+ プレイヤーの推定レベル(6～10)
  エネミークラスを継承
 */
 class CMushroom : public CEnemy

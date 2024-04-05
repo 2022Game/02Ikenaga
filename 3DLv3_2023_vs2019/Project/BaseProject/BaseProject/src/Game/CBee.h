@@ -6,6 +6,7 @@
 
 /*
  蜂
+ プレイヤーの推定レベル(31～40)
  エネミークラスを継承
 */
 class CBee : public CEnemy

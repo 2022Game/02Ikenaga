@@ -5,19 +5,19 @@
 #include "CColliderSphere.h"
 
 /*
- 亀
+ 亀2
  プレイヤーの推定レベル(11～20)
  エネミークラスを継承
 */
-class CTurtle : public CEnemy
+class CTurtle2 : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
-	static CTurtle* Instance();
+	static CTurtle2* Instance();
 
 	// コンストラクタ
-	CTurtle();
-	~CTurtle();
+	CTurtle2();
+	~CTurtle2();
 
 	// 更新処理
 	void Update();
@@ -117,8 +117,8 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// 亀のインスタンス
-	static CTurtle* spInstance;
+	// 亀2のインスタンス
+	static CTurtle2* spInstance;
 
 	// アニメーションデータ
 	struct AnimData
@@ -130,7 +130,7 @@ private:
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// 亀の状態
+	// 亀2の状態
 	enum class EState
 	{
 		eIdle,		  // 待機
@@ -147,7 +147,7 @@ private:
 		eDizzy,       // めまい(混乱)
 		eRun,         // 走る
 	};
-	EState mState;	  // 亀の状態
+	EState mState;	  // 亀2の状態
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;   // 接地しているかどうか

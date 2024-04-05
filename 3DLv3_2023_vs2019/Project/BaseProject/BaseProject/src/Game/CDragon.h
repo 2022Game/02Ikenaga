@@ -9,6 +9,7 @@ class CRoarEffect;
 
 /*
  ボスドラゴン
+ プレイヤーの推定レベル(91～100)
  エネミークラスを継承
 */
 class CDragon : public CEnemy

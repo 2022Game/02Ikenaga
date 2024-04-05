@@ -1,50 +1,32 @@
 #pragma once
-#include "CTask.h"
 #include "CObjectBase.h"
+#include "CModel.h"
 
-class CSlashing;
-
-// スラッシュクラス
-class CSlash : public CTask
+// 斬撃エフェクト
+class CSlash : public CObjectBase
 {
 public:
-	// コンストラクタ
-	CSlash(CObjectBase* owner, const CMatrix* attach,
-		const CVector& offsetPos = CVector::zero,
-		const CMatrix& offsetRot = CMatrix::identity);
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="owner">エフェクトを発生させたオブジェクト</param>
+	/// <param name="pos">発生位置</param>
+	/// <param name="dir">移動方向</param>
+	/// <param name="speed">移動速度</param>
+	/// <param name="dist">移動したら消える距離</param>
+	CSlash(CObjectBase* owner, const CVector& pos, const CVector& dir, float speed, float dist);
 	// デストラクタ
 	~CSlash();
 
-	// スラッシュを発射開始
-	void Start();
-	// スラッシを発射停止
-	void Stop();
-
-	// スラッシュを発射しているかどうか
-	bool IsThrowing() const;
-
-	// スラッシュの発射時のオフセット位置を設定
-	void SetThrowOffsetPos(const CVector& pos);
-	// スラッシュの発射時のオフセット回転値を設定
-	void SetThrowOffsetRot(const CMatrix& rot);
-
 	// 更新
 	void Update() override;
+	// 描画
+	void Render() override;
 
 private:
-	// スラッシュを作成
-	void CreateSlash();
-
-	// スラッシュの発射位置を取得
-	CVector GetThrowPos() const;
-	// スラッシュの発射方向を取得
-	CVector GetThrowDir() const;
-
-	static CSlash* spInstance;
-	CObjectBase* mpOwner;		// このエフェクトの持ち主
-	const CMatrix* mpAttachMtx;	// エフェクトをアタッチする行列
-	CVector mThrowOffsetPos;	// 発射時のオフセット位置
-	CMatrix mThrowOffsetRot;	// 発射時のオフセット回転値
-	float mElapsedTime;			// 経過時間計測用
-	bool mIsThrowing;			// スラッシュを発射しているか
+	CObjectBase* mpOwner;	// このエフェクトの持ち主
+	CModel* mpModel;		// エフェクトのモデルデータ
+	CVector mMoveSpeed;		// 移動速度
+	float mKillMoveDist;	// 移動したら消える距離
+	float mMovedDist;		// 現在移動した距離
 };

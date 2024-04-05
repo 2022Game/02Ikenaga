@@ -6,6 +6,7 @@
 
 /*
  球体のモンスター
+ プレイヤーの推定レベル(61～70)
  エネミークラスを継承
 */
 class CBeholder : public CEnemy

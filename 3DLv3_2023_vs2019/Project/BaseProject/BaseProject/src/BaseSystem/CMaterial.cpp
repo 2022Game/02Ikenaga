@@ -172,10 +172,11 @@ void CMaterial::Enabled(const CColor& color, bool isModelX) {
 	else
 	{
 		float diffuse[4];
-		diffuse[0] = mDiffuse[0] * color.R();
-		diffuse[1] = mDiffuse[1] * color.G();
-		diffuse[2] = mDiffuse[2] * color.B();
-		diffuse[3] = mDiffuse[3] * color.A();
+		diffuse[0] = mDiffuse[0];// * color.R();
+		diffuse[1] = mDiffuse[1];// * color.G();
+		diffuse[2] = mDiffuse[2];// * color.B();
+		diffuse[3] = mDiffuse[3];// * color.A();
+		glColor4fv((GLfloat*)&color);
 		//ägéUåıÇÃê›íË
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
 	}

@@ -104,6 +104,39 @@
     <Filter Include="ソース ファイル\Game\Effect\Roar">
       <UniqueIdentifier>{e8f06d63-5b64-4fcb-907f-fd4c30e77d46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Beam">
+      <UniqueIdentifier>{38bb1970-3563-4da9-86cd-690d3976e72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Slime">
+      <UniqueIdentifier>{495cfac7-2a55-4088-8db4-a97628feff60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Bee">
+      <UniqueIdentifier>{120df38d-c8ac-4300-aa0e-b8e13ef0bd94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Beholder">
+      <UniqueIdentifier>{62543806-e978-4f28-88c9-8da27658cbb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Boxer">
+      <UniqueIdentifier>{42d7a746-9eef-4b70-84ed-7986ba74f0f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Cactus">
+      <UniqueIdentifier>{95454c3c-7e03-4e80-b492-aae494cdbfdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Chest">
+      <UniqueIdentifier>{86496fe4-1736-4c44-ba88-2945271c8751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Dragon">
+      <UniqueIdentifier>{0218a3d3-cd42-444e-a0bf-f9ce4b18526a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Mushroom">
+      <UniqueIdentifier>{0e7607f9-03af-432b-9f5c-8e165919dbe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Ray">
+      <UniqueIdentifier>{664bf237-756c-4c1f-b9b9-b3b28b29b1e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Turtle">
+      <UniqueIdentifier>{7da67663-a013-4ccd-9898-be6cc3ea7f45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -301,15 +334,6 @@
     <ClCompile Include="src\BaseSystem\Primitive.cpp">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSlime.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CMushroom.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CSlime2.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="src\BaseSystem\CGamePause.cpp">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClCompile>
@@ -355,23 +379,8 @@
     <ClCompile Include="src\Game\CGameOverScene.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSlime3.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CDragon.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CTurtle.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CMushroom3.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CGameCamera.cpp">
       <Filter>ソース ファイル\Game\System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CMushroom2.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\AvoidanceGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
@@ -403,27 +412,6 @@
     <ClCompile Include="src\BaseSystem\CFade.cpp">
       <Filter>ソース ファイル\BaseSystem\Fade</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CCactus.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CBee.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CRay.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CBeholder.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CChest.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CBoxer.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CBoxer2.cpp">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="src\BaseSystem\Easing.cpp">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClCompile>
@@ -453,6 +441,63 @@
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CBounds.cpp">
       <Filter>ソース ファイル\BaseSystem\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBeam.cpp">
+      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBeamEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBee.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBeholder.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Beholder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBoxer.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Boxer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBoxer2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Boxer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCactus.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CChest.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDragon.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Dragon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CMushroom.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Mushroom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CMushroom2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Mushroom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CMushroom3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Mushroom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRay.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlime.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlime2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSlime3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTurtle.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTurtle2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTurtle3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -675,15 +720,6 @@
     <ClInclude Include="src\BaseSystem\Primitive.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSlime.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CMushroom.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CSlime2.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="src\BaseSystem\CGamePause.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
@@ -729,23 +765,8 @@
     <ClInclude Include="src\Game\CGameOverScene.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSlime3.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CDragon.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CTurtle.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CMushroom3.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CGameCamera.h">
       <Filter>ソース ファイル\Game\System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CMushroom2.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CAvoidanceGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
@@ -777,27 +798,6 @@
     <ClInclude Include="src\BaseSystem\CFade.h">
       <Filter>ソース ファイル\BaseSystem\Fade</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CCactus.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CBee.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CRay.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CBeholder.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CChest.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CBoxer.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CBoxer2.h">
-      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="src\BaseSystem\Easing.h">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClInclude>
@@ -827,6 +827,63 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CBounds.h">
       <Filter>ソース ファイル\BaseSystem\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBeam.h">
+      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBeamEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBee.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBeholder.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Beholder</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBoxer.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Boxer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBoxer2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Boxer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCactus.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CChest.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDragon.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Dragon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CMushroom.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Mushroom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CMushroom2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Mushroom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CMushroom3.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Mushroom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRay.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlime.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlime2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlime3.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTurtle.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTurtle2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTurtle3.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

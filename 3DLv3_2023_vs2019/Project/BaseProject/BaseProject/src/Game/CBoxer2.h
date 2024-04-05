@@ -6,6 +6,7 @@
 
 /*
  ボクサー2
+ プレイヤーの推定レベル(81～90)
  エネミークラスを継承
 */
 class CBoxer2 : public CEnemy
