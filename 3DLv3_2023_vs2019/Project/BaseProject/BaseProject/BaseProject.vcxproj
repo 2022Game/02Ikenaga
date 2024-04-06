@@ -76,6 +76,7 @@
     <ClCompile Include="src\Game\CBoxer2.cpp" />
     <ClCompile Include="src\Game\CBullet.cpp" />
     <ClCompile Include="src\Game\CCactus.cpp" />
+    <ClCompile Include="src\Game\CCactus2.cpp" />
     <ClCompile Include="src\Game\CCane.cpp" />
     <ClCompile Include="src\Game\CChest.cpp" />
     <ClCompile Include="src\Game\CDragon.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="src\Game\CMushroom2.cpp" />
     <ClCompile Include="src\Game\CMushroom3.cpp" />
     <ClCompile Include="src\Game\CRay.cpp" />
+    <ClCompile Include="src\Game\CRay2.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
     <ClCompile Include="src\Game\CRoar.cpp" />
     <ClCompile Include="src\Game\CRoarEffect.cpp" />
@@ -119,6 +121,8 @@
     <ClCompile Include="src\Game\CTurtle.cpp" />
     <ClCompile Include="src\Game\CTurtle2.cpp" />
     <ClCompile Include="src\Game\CTurtle3.cpp" />
+    <ClCompile Include="src\Game\CWave.cpp" />
+    <ClCompile Include="src\Game\CWaveEffect.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -207,6 +211,7 @@
     <ClInclude Include="src\Game\CBoxer2.h" />
     <ClInclude Include="src\Game\CBullet.h" />
     <ClInclude Include="src\Game\CCactus.h" />
+    <ClInclude Include="src\Game\CCactus2.h" />
     <ClInclude Include="src\Game\CCane.h" />
     <ClInclude Include="src\Game\CChest.h" />
     <ClInclude Include="src\Game\CDragon.h" />
@@ -222,6 +227,7 @@
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CRay.h" />
+    <ClInclude Include="src\Game\CRay2.h" />
     <ClInclude Include="src\Game\CRich.h" />
     <ClInclude Include="src\Game\CRoar.h" />
     <ClInclude Include="src\Game\CRoarEffect.h" />
@@ -250,6 +256,8 @@
     <ClInclude Include="src\Game\CTurtle.h" />
     <ClInclude Include="src\Game\CTurtle2.h" />
     <ClInclude Include="src\Game\CTurtle3.h" />
+    <ClInclude Include="src\Game\CWave.h" />
+    <ClInclude Include="src\Game\CWaveEffect.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />

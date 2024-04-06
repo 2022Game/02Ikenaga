@@ -1,13 +1,12 @@
-#include "CRay.h"
+#include "CRay2.h"
 #include "CPlayer.h"
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
-#include "CInput.h"
 #include "CWaveEffect.h"
 #include "Maths.h"
 
-// エイのインスタンス
-CRay* CRay::spInstance = nullptr;
+// エイ2のインスタンス
+CRay2* CRay2::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 0.5f
 #define WITHIN_RANGE 40.0f       // 範囲内
@@ -17,8 +16,8 @@ CRay* CRay::spInstance = nullptr;
 #define STOP_RANGE 24.5f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
-// エイのアニメーションデータのテーブル
-const CRay::AnimData CRay::ANIM_DATA[] =
+// エイ2のアニメーションデータのテーブル
+const CRay2::AnimData CRay2::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
 	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	42.0f	},	    // 待機 21.0f
@@ -32,10 +31,10 @@ const CRay::AnimData CRay::ANIM_DATA[] =
 };
 
 // コンストラクタ
-CRay::CRay()
+CRay2::CRay2()
 	: mpRideObject(nullptr)
 	, mAttackTime(0)
-	,mFlyingTime(0)
+	, mFlyingTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -114,7 +113,7 @@ CRay::CRay()
 	);
 }
 
-CRay::~CRay()
+CRay2::~CRay2()
 {
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
@@ -122,13 +121,13 @@ CRay::~CRay()
 	SAFE_DELETE(mpAttackCol);
 }
 
-CRay* CRay::Instance()
+CRay2* CRay2::Instance()
 {
 	return spInstance;
 }
 
 // アニメーション切り替え
-void CRay::ChangeAnimation(EAnimType type)
+void CRay2::ChangeAnimation(EAnimType type)
 {
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
 	AnimData data = ANIM_DATA[(int)type];
@@ -136,7 +135,7 @@ void CRay::ChangeAnimation(EAnimType type)
 }
 
 // 待機状態
-void CRay::UpdateIdle()
+void CRay2::UpdateIdle()
 {
 	ChangeAnimation(EAnimType::eIdle);
 	CPlayer* player = CPlayer::Instance();
@@ -156,7 +155,7 @@ void CRay::UpdateIdle()
 }
 
 // 攻撃
-void CRay::UpdateAttack()
+void CRay2::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -184,7 +183,7 @@ void CRay::UpdateAttack()
 }
 
 // 攻撃終了待ち
-void CRay::UpdateAttackWait()
+void CRay2::UpdateAttackWait()
 {
 	if (IsAnimationFinished())
 	{
@@ -195,7 +194,7 @@ void CRay::UpdateAttackWait()
 }
 
 // ヒット
-void CRay::UpdateHit()
+void CRay2::UpdateHit()
 {
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -208,7 +207,7 @@ void CRay::UpdateHit()
 }
 
 // 死ぬ
-void CRay::UpdateDie()
+void CRay2::UpdateDie()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -222,7 +221,7 @@ void CRay::UpdateDie()
 }
 
 // 移動
-void CRay::UpdateRun()
+void CRay2::UpdateRun()
 {
 	ChangeAnimation(EAnimType::eRun);
 
@@ -251,7 +250,7 @@ void CRay::UpdateRun()
 	}
 	// 範囲内の時、移動し追跡する
 	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
-	{		
+	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
 	// 追跡が止まった時、待機モーションへ
@@ -265,7 +264,7 @@ void CRay::UpdateRun()
 }
 
 // 更新処理
-void CRay::Update()
+void CRay2::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
@@ -305,7 +304,7 @@ void CRay::Update()
 	float vectorp = (player->Position() - Position()).Length();
 
 	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eAttack && mState != EState::eAttackWait
-		&& mState != EState::eHit && mState != EState::eDie && mState !=EState::eRun)
+		&& mState != EState::eHit && mState != EState::eDie && mState != EState::eRun)
 	{
 		mState = EState::eIdle;
 	}
@@ -347,14 +346,14 @@ void CRay::Update()
 
 	if (mState == EState::eIdle || mState == EState::eRun)
 	{
-		if (mFlyingTime <= 200 || mFlyingTime<=0)
+		if (mFlyingTime <= 200 || mFlyingTime <= 0)
 		{
 			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
 		}
 
 		if (mFlyingTime >= 200)
 		{
-			Position(Position().X(),Position().Y() - 0.5f, Position().Z());
+			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 		}
 	}
 
@@ -372,18 +371,6 @@ void CRay::Update()
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
-
-	if (CInput::PushKey('V'))
-	{
-		if (!mpWave->IsThrowing())
-		{
-			mpWave->Start();
-		}
-		else
-		{
-			mpWave->Stop();
-		}
-	}
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -396,7 +383,7 @@ void CRay::Update()
 }
 
 // 衝突処理
-void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+void CRay2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol && mState != EState::eIdle)
@@ -443,7 +430,7 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 }
 
 // 攻撃開始
-void CRay::AttackStart()
+void CRay2::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
@@ -451,7 +438,7 @@ void CRay::AttackStart()
 }
 
 // 攻撃終了
-void CRay::AttackEnd()
+void CRay2::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
@@ -459,20 +446,20 @@ void CRay::AttackEnd()
 }
 
 // 描画
-void CRay::Render()
+void CRay2::Render()
 {
 	CXCharacter::Render();
 }
 
 // 1レベルアップ
-void CRay::LevelUp()
+void CRay2::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
 // レベルを変更
-void CRay::ChangeLevel(int level)
+void CRay2::ChangeLevel(int level)
 {
 	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
@@ -486,7 +473,7 @@ void CRay::ChangeLevel(int level)
 }
 
 // 被ダメージ処理
-void CRay::TakeDamage(int damage, CObjectBase* causedObj)
+void CRay2::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
@@ -515,7 +502,7 @@ void CRay::TakeDamage(int damage, CObjectBase* causedObj)
 
 
 // 死亡処理
-void CRay::Death()
+void CRay2::Death()
 {
 	// 死亡状態へ移行
 	mState = EState::eDie;

@@ -14,8 +14,10 @@
 #include "CTurtle2.h"
 #include "CTurtle3.h"
 #include "CCactus.h"
+#include "CCactus2.h"
 #include "CBee.h"
 #include "CRay.h"
+#include "CRay2.h"
 #include "CBeholder.h"
 #include "CChest.h"
 #include "CBoxer.h"
@@ -78,7 +80,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
-	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
+	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
@@ -141,7 +143,7 @@ void CGameScene::Load()
 	CGameCamera2* mainCamera = new CGameCamera2
 	(
 		atPos + CVector(DEFAULT_CAMERA_POS),
-		atPos
+		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
 	player->Position(0.0f, 35.0f, 0.0f);
@@ -193,18 +195,28 @@ void CGameScene::Load()
 
 	// エイ
 	CRay* enemy10 = new CRay();
-	enemy10->Position(150.0f, 0.0f, 20.0f);
-	enemy10->Scale(30.0f, 30.0f, 30.0f);
+	enemy10->Position(150.0f, 0.0f, -450.0f);
+	enemy10->Scale(35.0f, 35.0f, 35.0f);
+
+	// エイ2
+	CRay2* enemy11 = new CRay2();
+	enemy11->Position(210.0f, 0.0f, -450.0f);
+	enemy11->Scale(35.0f, 35.0f, 35.0f);
 
 	//// 蜂
 	//CBee* enemy13 = new CBee();
 	//enemy13->Position(180.0f, 0.0f, 20.0f);
 	//enemy13->Scale(30.0f, 30.0f, 30.0f);
 
-	//// サボテン
+	// サボテン
 	//CCactus* enemy16 = new CCactus();
-	//enemy16->Position(210.0f, 0.0f, 20.0f);
+	//enemy16->Position(0.0f, 0.0f, 50.0f);
 	//enemy16->Scale(30.0f, 30.0f, 30.0f);
+
+	// サボテン2
+	//CCactus2* enemy17 = new CCactus2();
+	//enemy17->Position(0.0f, 0.0f, 50.0f);
+	//enemy17->Scale(30.0f, 30.0f, 30.0f);
 
 	//// チェストモンスター
 	//CChest* enemy19 = new CChest();
@@ -231,10 +243,10 @@ void CGameScene::Load()
 	enemy8->Rotate(0.0f,90.0f,-70.0f);
 	enemy8->Scale(0.1f, 0.1f, 0.1f);*/
 
-	// ドラゴン
-	CDragon* bossEnemy = new CDragon();
-	bossEnemy->Position(0.0f, 21.0f, 90.0f);
-	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	//// ドラゴン
+	//CDragon* bossEnemy = new CDragon();
+	//bossEnemy->Position(0.0f, 21.0f, 90.0f);
+	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
@@ -413,7 +425,7 @@ void CGameScene::Update()
 			Turtle3ReTime = 0;
 		}
 	}
-	CDebugPrint::Print("時間 %d\n", TurtleReTime);
-	CDebugPrint::Print("時間 %d\n", Turtle2ReTime);
-	CDebugPrint::Print("時間 %d\n", Turtle3ReTime);
+	//CDebugPrint::Print("時間 %d\n", TurtleReTime);
+	//CDebugPrint::Print("時間 %d\n", Turtle2ReTime);
+	//CDebugPrint::Print("時間 %d\n", Turtle3ReTime);
 }

@@ -7,19 +7,19 @@
 class CWaveEffect;
 
 /*
- エイ
+ エイ2
  プレイヤーの推定レベル(21～30)
  エネミークラスを継承
 */
-class CRay : public CEnemy
+class CRay2 : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
-	static CRay* Instance();
+	static CRay2* Instance();
 
 	// コンストラクタ
-	CRay();
-	~CRay();
+	CRay2();
+	~CRay2();
 
 	// 待機状態
 	void UpdateIdle();
@@ -89,8 +89,8 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// エイのインスタンス
-	static CRay* spInstance;
+	// エイ2のインスタンス
+	static CRay2* spInstance;
 
 	// アニメーションデータ
 	struct AnimData
@@ -102,7 +102,7 @@ private:
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// エイの状態
+	// エイ2の状態
 	enum class EState
 	{
 		eIdle,		// 待機
@@ -112,7 +112,7 @@ private:
 		eDie,       // 死ぬ時
 		eRun,		// 移動
 	};
-	EState mState;	// エイの状態
+	EState mState;	// エイ2の状態
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか

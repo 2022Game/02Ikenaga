@@ -21,6 +21,7 @@ enum class ETag
 	eFlame,	 // 炎
 	eSlash,	 // スラッシュ
 	eBeam,   // ビーム
+	eWave,   // 波動
 
 	eCamera, // カメラ
 

@@ -137,6 +137,9 @@
     <Filter Include="ソース ファイル\Game\Character\Enemy\Turtle">
       <UniqueIdentifier>{7da67663-a013-4ccd-9898-be6cc3ea7f45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Wave">
+      <UniqueIdentifier>{b4571025-c6e5-4af3-9d17-2592179ce4a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -498,6 +501,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CTurtle3.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCactus2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CWave.cpp">
+      <Filter>ソース ファイル\Game\Effect\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CWaveEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRay2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -884,6 +899,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CTurtle3.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Turtle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCactus2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CWave.h">
+      <Filter>ソース ファイル\Game\Effect\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CWaveEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRay2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include "CInput.h"
 #include "CCamera.h"
+#include "CGameCamera2.h"
 #include "CHpGauge.h"
 #include "CSaGauge.h"
 #include "Maths.h"
@@ -105,7 +106,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(11);
+	ChangeLevel(21);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -149,7 +150,7 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eEnemy });
+	mpDamageCol->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(-0.05f, 0.3f, 0.0f);
 
@@ -163,7 +164,7 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame });
+	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol2->Position(-0.05f, 0.8f, 0.15f);
 
@@ -713,10 +714,11 @@ void CPlayer::ChangeLevel(int level)
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
 
 	// 現在のレベルのカメラの高さを設定
-	CCamera* mainCamera = CCamera::MainCamera();
+	CCamera* mainCamera = CGameCamera2::MainCamera();
 	if (mainCamera != nullptr)
 	{
 		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
+		diff.Normalize();
 		diff.Y(diff.Y() +   mCharaStatus.cameraHeight);
 		diff.Z(diff.Z() + mCharaStatus.cameraHeight);
 		mainCamera->SetFollowTargetOffset(diff);
