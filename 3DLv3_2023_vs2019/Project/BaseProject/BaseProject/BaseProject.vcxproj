@@ -71,6 +71,7 @@
     <ClCompile Include="src\Game\CBeam.cpp" />
     <ClCompile Include="src\Game\CBeamEffect.cpp" />
     <ClCompile Include="src\Game\CBee2.cpp" />
+    <ClCompile Include="src\Game\CBee3.cpp" />
     <ClCompile Include="src\Game\CBeholder.cpp" />
     <ClCompile Include="src\Game\CBee.cpp" />
     <ClCompile Include="src\Game\CBoxer.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="src\Game\CBeam.h" />
     <ClInclude Include="src\Game\CBeamEffect.h" />
     <ClInclude Include="src\Game\CBee2.h" />
+    <ClInclude Include="src\Game\CBee3.h" />
     <ClInclude Include="src\Game\CBeholder.h" />
     <ClInclude Include="src\Game\CBee.h" />
     <ClInclude Include="src\Game\CBoxer.h" />

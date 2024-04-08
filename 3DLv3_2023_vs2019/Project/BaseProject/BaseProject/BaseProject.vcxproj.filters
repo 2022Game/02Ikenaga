@@ -526,6 +526,9 @@
     <ClCompile Include="src\Game\CBee2.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CBee3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -931,6 +934,9 @@
       <Filter>ソース ファイル\Game\Effect\Needle</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CBee2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBee3.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
     </ClInclude>
   </ItemGroup>
