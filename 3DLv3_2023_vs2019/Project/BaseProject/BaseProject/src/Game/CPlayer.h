@@ -10,6 +10,7 @@ class CHpGauge;
 class CSaGauge;
 class CSword;
 class CShield;
+class CSlash;
 class CBeamEffect;
 
 #include <algorithm>

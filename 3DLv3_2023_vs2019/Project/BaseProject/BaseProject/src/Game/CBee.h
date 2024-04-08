@@ -69,6 +69,7 @@ public:
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔
+	int mFlyingTime;   // 飛行時間
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -113,6 +114,7 @@ private:
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
+	bool mIsSpawnedNeedleEffect;
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;

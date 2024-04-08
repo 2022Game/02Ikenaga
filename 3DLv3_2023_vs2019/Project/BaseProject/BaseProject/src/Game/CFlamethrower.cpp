@@ -71,9 +71,9 @@ CVector CFlamethrower::GetThrowPos() const
 	if (mpAttachMtx != nullptr)
 	{
 		CVector pos = mpAttachMtx->Position();
-		pos += mpAttachMtx->VectorX() * mThrowOffsetPos.X()
-			+ mpAttachMtx->VectorY() * mThrowOffsetPos.Y()
-			+ mpAttachMtx->VectorZ() * mThrowOffsetPos.Z();
+		pos += mpAttachMtx->VectorX().Normalized() * mThrowOffsetPos.X()
+			+ mpAttachMtx->VectorY().Normalized() * mThrowOffsetPos.Y()
+			+ mpAttachMtx->VectorZ().Normalized() * mThrowOffsetPos.Z();
 		return pos;
 	}
 	// 持ち主が設定されている場合は、持ち主の座標を返す

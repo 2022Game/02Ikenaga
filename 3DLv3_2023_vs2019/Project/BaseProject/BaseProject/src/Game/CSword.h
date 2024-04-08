@@ -3,11 +3,10 @@
 #include "CColliderLine.h"
 #include "CModel.h"
 #include "CWeapon.h"
-class CPlayer;
 
 /*
-剣クラス
-オブジェクトベース継承
+ 剣クラス
+ 武器クラス継承
 */
 class CSword : public CWeapon
 {
@@ -38,6 +37,5 @@ private:
 	CModel* mpSword;
 	// 攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;
-	CPlayer* mpPlayer;
 };
 

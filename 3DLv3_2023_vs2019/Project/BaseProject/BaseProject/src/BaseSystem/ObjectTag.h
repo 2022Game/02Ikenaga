@@ -22,6 +22,7 @@ enum class ETag
 	eSlash,	 // スラッシュ
 	eBeam,   // ビーム
 	eWave,   // 波動
+	eNeedle, // 針
 
 	eCamera, // カメラ
 

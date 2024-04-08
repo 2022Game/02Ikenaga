@@ -108,7 +108,7 @@ CRay2::CRay2()
 	mpWave = new CWaveEffect
 	(
 		this, nullptr,
-		CVector(0.0f, 9.0f, 20.0f),
+		CVector(0.0f, 12.0f, 20.0f),
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
 }
@@ -362,7 +362,6 @@ void CRay2::Update()
 		mFlyingTime++;
 	}
 
-	float y = Position().Y();
 	if (Position().Y() <= 0.0f)
 	{
 		mFlyingTime = 0;
@@ -499,7 +498,6 @@ void CRay2::TakeDamage(int damage, CObjectBase* causedObj)
 		Position(Position() - dir * Scale().X() * 0.2f);
 	}
 }
-
 
 // Ž€–Sˆ—
 void CRay2::Death()

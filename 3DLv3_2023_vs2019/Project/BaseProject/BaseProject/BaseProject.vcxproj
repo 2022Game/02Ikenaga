@@ -70,6 +70,7 @@
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBeam.cpp" />
     <ClCompile Include="src\Game\CBeamEffect.cpp" />
+    <ClCompile Include="src\Game\CBee2.cpp" />
     <ClCompile Include="src\Game\CBeholder.cpp" />
     <ClCompile Include="src\Game\CBee.cpp" />
     <ClCompile Include="src\Game\CBoxer.cpp" />
@@ -91,8 +92,10 @@
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CMushroom2.cpp" />
     <ClCompile Include="src\Game\CMushroom3.cpp" />
+    <ClCompile Include="src\Game\CNeedle.cpp" />
     <ClCompile Include="src\Game\CRay.cpp" />
     <ClCompile Include="src\Game\CRay2.cpp" />
+    <ClCompile Include="src\Game\CRay3.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
     <ClCompile Include="src\Game\CRoar.cpp" />
     <ClCompile Include="src\Game\CRoarEffect.cpp" />
@@ -205,6 +208,7 @@
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
     <ClInclude Include="src\Game\CBeam.h" />
     <ClInclude Include="src\Game\CBeamEffect.h" />
+    <ClInclude Include="src\Game\CBee2.h" />
     <ClInclude Include="src\Game\CBeholder.h" />
     <ClInclude Include="src\Game\CBee.h" />
     <ClInclude Include="src\Game\CBoxer.h" />
@@ -226,8 +230,10 @@
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
+    <ClInclude Include="src\Game\CNeedle.h" />
     <ClInclude Include="src\Game\CRay.h" />
     <ClInclude Include="src\Game\CRay2.h" />
+    <ClInclude Include="src\Game\CRay3.h" />
     <ClInclude Include="src\Game\CRich.h" />
     <ClInclude Include="src\Game\CRoar.h" />
     <ClInclude Include="src\Game\CRoarEffect.h" />

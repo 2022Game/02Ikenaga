@@ -49,7 +49,7 @@ CTurtle3::CTurtle3()
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Turtle");
 
-	//最初に1レベルに設定
+	//最初に5レベルに設定
 	ChangeLevel(5);
 
 	// テーブル内のアニメーションデータを読み込み
@@ -187,7 +187,7 @@ void CTurtle3::UpdateAttack()
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
-	// 攻撃2終了待ち状態へ移行
+	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
 

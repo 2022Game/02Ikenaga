@@ -106,7 +106,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(21);
+	ChangeLevel(31);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -150,7 +150,7 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave });
+	mpDamageCol->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(-0.05f, 0.3f, 0.0f);
 
@@ -164,7 +164,7 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave });
+	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol2->Position(-0.05f, 0.8f, 0.15f);
 
@@ -320,7 +320,7 @@ void CPlayer::UpdateAttack4()
 	{
 		// 斬撃エフェクトの生成済みフラグを初期化
 		mIsSpawnedSlashEffect = false;
-		// 斬撃エフェクトを生成していないかつ、アニメーションが35%以上進行したら、
+		// 斬撃エフェクトを生成していないかつ、アニメーションが39%以上進行したら、
 		if (!mIsSpawnedSlashEffect && GetAnimationFrameRatio() >= 0.39f)
 		{
 			// 斬撃エフェクトを生成して、正面方向へ飛ばす
@@ -334,6 +334,7 @@ void CPlayer::UpdateAttack4()
 			);
 			// 斬撃エフェクトの色設定
 			slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
+			slash->SetOwner(this);
 
 			mIsSpawnedSlashEffect = true;
 		}
@@ -469,23 +470,19 @@ void CPlayer::UpdateMove()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	int speed = 1.2f;
-	int speed2 = -1.2f;
+	int speed = 1.5f;
+	int speed2 = -1.5f;
 
 	// 移動処理
     // キーの入力ベクトルを取得
 	CVector input;
 	if (CInput::Key('W'))
 	{
+		input.Z(speed2);
 		// SPACEキーで回避
 		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 		{
 			RollingCount();
-			mMoveSpeed.Z(-0.3f);
-		}
-		else
-		{
-			input.Z(speed2);
 		}
 	}
 	else if (CInput::Key('S'))
@@ -498,26 +495,18 @@ void CPlayer::UpdateMove()
 	}
 	if (CInput::Key('A'))
 	{
+		input.X(speed2);
 		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 		{
 			RollingCount();
-			mMoveSpeed.X(-0.2f);
-		}
-		else
-		{
-			input.X(speed2);
 		}
 	}
 	else if (CInput::Key('D'))
 	{
+		input.X(speed);
 		if (CInput::PushKey(VK_SHIFT) && mRollingCount >= 1)
 		{
 			RollingCount();
-			mMoveSpeed.X(0.2f);
-		}
-		else
-		{
-			input.X(speed);
 		}
 	}
 
@@ -936,14 +925,19 @@ void CPlayer::Update()
 	// 「E」キーで炎の発射をオンオフする
 	if (CInput::PushKey('E'))
 	{
-		if (!mpBeam->IsThrowing())
-		{
-			mpBeam->Start();
-		}
-		else
-		{
-			mpBeam->Stop();
-		}
+
+		// 斬撃エフェクトを生成して、正面方向へ飛ばす
+		CSlash* slash = new CSlash
+		(
+			this,
+			Position() + CVector(0.0f, 10.0f, 0.0f),
+			VectorZ(),
+			100.0f,
+			100.0f
+		);
+		// 斬撃エフェクトの色設定
+		slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
+		slash->SetOwner(this);
 	}
 
 	// キャラクターの更新

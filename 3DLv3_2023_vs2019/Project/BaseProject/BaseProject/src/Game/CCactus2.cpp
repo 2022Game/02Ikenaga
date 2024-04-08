@@ -305,7 +305,7 @@ void CCactus2::UpdateAttack()
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
-	// 攻撃2終了待ち状態へ移行
+	// 攻撃終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
 

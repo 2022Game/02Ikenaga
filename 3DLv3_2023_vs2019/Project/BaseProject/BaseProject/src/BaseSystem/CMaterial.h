@@ -49,7 +49,7 @@ public:
 	CMaterial(CModelX* model, bool dontDelete);
 	~CMaterial();
 	//マテリアルを有効にする
-	void Enabled(const CColor& color, bool isModelX = false);
+	void Enabled(const CColor& color);
 	//マテリアルの名前の取得
 	char* Name();
 	//マテリアルの名前を設定する

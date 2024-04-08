@@ -16,8 +16,10 @@
 #include "CCactus.h"
 #include "CCactus2.h"
 #include "CBee.h"
+#include "CBee2.h"
 #include "CRay.h"
 #include "CRay2.h"
+#include "CRay3.h"
 #include "CBeholder.h"
 #include "CChest.h"
 #include "CBoxer.h"
@@ -81,7 +83,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
-	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
+	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
@@ -113,6 +115,7 @@ void CGameScene::Load()
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
+	CResourceManager::Load<CModel>("Needle", "Effect\\Needle.obj");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
@@ -203,10 +206,20 @@ void CGameScene::Load()
 	enemy11->Position(210.0f, 0.0f, -450.0f);
 	enemy11->Scale(35.0f, 35.0f, 35.0f);
 
-	//// 蜂
-	//CBee* enemy13 = new CBee();
-	//enemy13->Position(180.0f, 0.0f, 20.0f);
-	//enemy13->Scale(30.0f, 30.0f, 30.0f);
+	// エイ3
+	CRay3* enemy12 = new CRay3();
+	enemy12->Position(180.f,0.0f,-520.0f);
+	enemy12->Scale(45.0f, 45.0f, 45.0f);
+
+	// 蜂
+	CBee* enemy13 = new CBee();
+	enemy13->Position(0.0f, 0.0f, -600.0f);
+	enemy13->Scale(30.0f, 30.0f, 30.0f);
+
+	// 蜂2
+	CBee2* enemy14 = new CBee2();
+	enemy14->Position(-60.0f, 0.0f, -600.0f);
+	enemy14->Scale(30.0f, 30.0f, 30.0f);
 
 	// サボテン
 	//CCactus* enemy16 = new CCactus();

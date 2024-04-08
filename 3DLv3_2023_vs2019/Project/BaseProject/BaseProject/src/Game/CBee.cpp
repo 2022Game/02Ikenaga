@@ -1,9 +1,9 @@
 #include "CBee.h"
 #include "CPlayer.h"
 #include "CHpGauge.h"
-#include "CEffect.h"
 #include "CCollisionManager.h"
 #include "Maths.h"
+#include "CNeedle.h"
 
 // 蜂のインスタンス
 CBee* CBee::spInstance = nullptr;
@@ -34,6 +34,8 @@ const CBee::AnimData CBee::ANIM_DATA[] =
 CBee::CBee()
 	: mpRideObject(nullptr)
 	, mAttackTime(0)
+	, mFlyingTime(0)
+	,mIsSpawnedNeedleEffect(false)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -75,7 +77,6 @@ CBee::CBee()
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphere->Position(0.0f, 0.3f, -0.2f);
-	mpColliderSphere->SetEnable(false);
 
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageCol = new CColliderSphere
@@ -131,6 +132,7 @@ CBee::~CBee()
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpDamageCol);
+	SAFE_DELETE(mpDamageCol2);
 	SAFE_DELETE(mpAttackCol);
 }
 
@@ -174,8 +176,38 @@ void CBee::UpdateAttack()
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (mAnimationFrame >= 14.0f)
+	{
+		if (vectorp >= 30.0f)
+		{
+			// 針を生成済みフラグを初期化
+			mIsSpawnedNeedleEffect = false;
+			// 針を生成していない
+			if (!mIsSpawnedNeedleEffect)
+			{
+				CNeedle* needle = new CNeedle
+				(
+					this,
+					Position() + CVector(0.0f, 8.0f, 0.0f),
+					VectorZ(),
+					150.0f,
+					100.0f
+				);
+				needle->SetColor(CColor(1.0f, 0.0f, 1.0f));
+				needle->Scale(5.0f, 5.0f, 5.0f);
+				needle->Rotate(-90.0f, 0.0f, 0.0f);
+				needle->SetOwner(this);
+
+				mIsSpawnedNeedleEffect = true;
+			}
+		}
+
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃終了待ち
@@ -337,27 +369,31 @@ void CBee::Update()
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
 
-	if (mState == EState::eRun)
+	if (mState == EState::eIdle || mState == EState::eRun)
 	{
-		if (Position().Y() < 0.0f)
+		if (mFlyingTime <= 200 && Position().Y() <= 0.0f)
 		{
-			mMoveSpeed += CVector(0.0f, 1.0f, 0.0f);
-		}
-		
-		if (Position().Y() >= 10.0f && Position().Y() < 12.0f)
-		{
-			mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
 		}
 
-		if (Position().Y() >= 20.0f)
+		if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
 		{
-			mMoveSpeed -= CVector(0.0f, 1.0f, 0.0f);
+			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 		}
 	}
 
-	if (Position().Y() >= 90.0f || Position().Y() <= -90.0f)
+	if (Position().Y() >= 0.1f || vectorp >= 24.0f && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eDie;
+		mFlyingTime++;
+	}
+
+	if (Position().Y() <= 0.0f)
+	{
+		mFlyingTime = 0;
+	}
+	if (mState == EState::eHit)
+	{
+		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
 	// キャラクターの更新
@@ -489,7 +525,6 @@ void CBee::TakeDamage(int damage, CObjectBase* causedObj)
 		Position(Position() - dir * Scale().X() * 0.6f);
 	}
 }
-
 
 // 死亡処理
 void CBee::Death()

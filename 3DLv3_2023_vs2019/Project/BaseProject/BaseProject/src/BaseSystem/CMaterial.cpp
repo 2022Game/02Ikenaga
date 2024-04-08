@@ -162,24 +162,11 @@ void CMaterial::DisableBlend()
 }
 
 //マテリアルを有効にする
-void CMaterial::Enabled(const CColor& color, bool isModelX) {
-	if (isModelX)
-	{
-		glColor4fv((GLfloat*)&color);
-		//拡散光の設定
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mDiffuse);
-	}
-	else
-	{
-		float diffuse[4];
-		diffuse[0] = mDiffuse[0];// * color.R();
-		diffuse[1] = mDiffuse[1];// * color.G();
-		diffuse[2] = mDiffuse[2];// * color.B();
-		diffuse[3] = mDiffuse[3];// * color.A();
-		glColor4fv((GLfloat*)&color);
-		//拡散光の設定
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
-	}
+void CMaterial::Enabled(const CColor& color)
+{
+	glColor4fv((GLfloat*)&color);
+	//拡散光の設定
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mDiffuse);
 
 	//ブレンド処理を有効にする
 	EnableBlend();

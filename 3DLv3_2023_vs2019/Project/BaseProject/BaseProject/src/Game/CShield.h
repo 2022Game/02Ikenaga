@@ -4,8 +4,8 @@
 #include "CWeapon.h"
 
 /*
-盾クラス
-オブジェクトベース継承
+ 盾クラス
+ 武器クラス継承
 */
 class CShield : public CWeapon
 {

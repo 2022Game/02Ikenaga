@@ -140,6 +140,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Wave">
       <UniqueIdentifier>{b4571025-c6e5-4af3-9d17-2592179ce4a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Needle">
+      <UniqueIdentifier>{6664dd65-a55a-45a8-a21a-1ba12eeaaed1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -513,6 +516,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\CRay2.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CRay3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CNeedle.cpp">
+      <Filter>ソース ファイル\Game\Effect\Needle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBee2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -911,6 +923,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CRay2.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRay3.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CNeedle.h">
+      <Filter>ソース ファイル\Game\Effect\Needle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBee2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

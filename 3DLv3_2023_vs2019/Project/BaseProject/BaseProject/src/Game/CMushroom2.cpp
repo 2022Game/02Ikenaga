@@ -203,7 +203,7 @@ void CMushroom2::UpdateAttack()
 	if (mAnimationFrame >= 35.0f)
 	{
 		AttackStart();
-		// 攻撃2終了待ち状態へ移行
+		// 攻撃終了待ち状態へ移行
 		mState = EState::eAttackWait;
 	}
 }
@@ -253,7 +253,7 @@ void CMushroom2::UpdateAttack3()
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
-	// 攻撃2終了待ち状態へ移行
+	// 攻撃3終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
 

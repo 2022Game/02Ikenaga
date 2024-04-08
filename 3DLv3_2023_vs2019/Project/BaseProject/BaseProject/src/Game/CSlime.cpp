@@ -102,7 +102,7 @@ CSlime::CSlime()
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
+	mpDamageCol->SetCollisionTags({ ETag::eWeapon,ETag::eSlash });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.0f, 0.3f,0.0f);
 
@@ -478,8 +478,6 @@ void CSlime::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-
-	//CDebugPrint::Print("攻撃 %d", mAttackTime);
 }
 
 // 衝突処理

@@ -12,7 +12,7 @@ CWaveEffect* CWaveEffect::spInstance = nullptr;
 // 波動の移動速度
 #define FLAME_MOVE_SPEED 25.0f
 // 波動の色
-#define FLAME_COLOR CColor(1.0f, 0.0f, 1.0f)
+#define FLAME_COLOR CColor(0.0f, 0.5f, 1.0f)
 
 // コンストラクタ
 CWaveEffect::CWaveEffect(CObjectBase* owner, const CMatrix* attach,
@@ -71,9 +71,9 @@ CVector CWaveEffect::GetThrowPos() const
 	if (mpAttachMtx != nullptr)
 	{
 		CVector pos = mpAttachMtx->Position();
-		pos += mpAttachMtx->VectorX() * mThrowOffsetPos.X()
-			+ mpAttachMtx->VectorY() * mThrowOffsetPos.Y()
-			+ mpAttachMtx->VectorZ() * mThrowOffsetPos.Z();
+		pos += mpAttachMtx->VectorX().Normalized() * mThrowOffsetPos.X()
+			+ mpAttachMtx->VectorY().Normalized() * mThrowOffsetPos.Y()
+			+ mpAttachMtx->VectorZ().Normalized() * mThrowOffsetPos.Z();
 		return pos;
 	}
 	// 持ち主が設定されている場合は、持ち主の座標を返す

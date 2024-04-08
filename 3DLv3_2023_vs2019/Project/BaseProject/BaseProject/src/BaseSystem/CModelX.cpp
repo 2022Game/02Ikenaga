@@ -1116,7 +1116,7 @@ void CMesh::Render(const CColor& color)
 	for (int i = 0; i < mFaceNum; i++)
 	{
 		//マテリアルを適用する
-		mMaterial[mpMaterialIndex[i]]->Enabled(color, true);
+		mMaterial[mpMaterialIndex[i]]->Enabled(color);
 		/*頂点のインデックスの場所を指定して図形を描画する*/
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (mpVertexIndex + i * 3));
 		mMaterial[mpMaterialIndex[i]]->Disabled();
