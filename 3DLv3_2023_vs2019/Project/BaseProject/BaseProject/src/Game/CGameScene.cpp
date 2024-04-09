@@ -214,7 +214,7 @@ void CGameScene::Load()
 
 	// 蜂
 	CBee* enemy13 = new CBee();
-	enemy13->Position(0.0f, 0.0f, -600.0f);
+	enemy13->Position(0.0f, 0.0f, 50.0f);//-600
 	enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	// 蜂2
@@ -224,13 +224,13 @@ void CGameScene::Load()
 
 	// 蜂3
 	CBee3* enemy15 = new CBee3();
-	enemy15->Position(-30.0f, 0.0f, -660.0f);
+	enemy15->Position(-60.0f, 0.0f, -660.0f);//-60,-660
 	enemy15->Scale(40.0f, 40.0f, 40.0f);
 
 	// サボテン
-	CCactus* enemy16 = new CCactus();
+	/*CCactus* enemy16 = new CCactus();
 	enemy16->Position(0.0f, 0.0f, 50.0f);
-	enemy16->Scale(30.0f, 30.0f, 30.0f);
+	enemy16->Scale(30.0f, 30.0f, 30.0f);*/
 
 	// サボテン2
 	//CCactus2* enemy17 = new CCactus2();
