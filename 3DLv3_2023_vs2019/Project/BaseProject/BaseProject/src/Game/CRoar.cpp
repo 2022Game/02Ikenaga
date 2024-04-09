@@ -2,35 +2,23 @@
 #include "CCharaBase.h"
 #include "Easing.h"
 
-// スラッシュのスケール値の最大値
+// 雄叫びのスケール値の最大値
 #define FLAME_SCALE 60.0f
-// スラッシュのスケール値が最大値になるまでの時間
+// 雄叫びのスケール値が最大値になるまでの時間
 #define FLAME_SCALE_ANIM_TIME 3.0f
 
 // コンストラクタ
 CRoar::CRoar(ETag tag)
 	: CBillBoardImage("Effect/ring.png", ETag::eFlame, ETaskPauseType::eGame)
-	, LifeTime(0)
 	, mMoveSpeed(CVector::zero)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 {
-
-	mpCollider = new CColliderCapsule
-	(
-		this, ELayer::eAttackCol,
-		CVector(-5.0f, 11.0f, 0.0f),
-		CVector(5.0f, 11.0f, 0.0f),
-		false, 1.0f
-	);
-	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::eEnemy });
-	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
 }
 
 // デストラクタ
 CRoar::~CRoar()
 {
-	SAFE_DELETE(mpCollider);
 }
 
 // 各パラメータを設定
@@ -73,21 +61,6 @@ void CRoar::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		mMoveSpeed = (mMoveSpeed - n * d).Normalized() * length;
 		Position(Position() + hit.adjust * hit.weight);
 	}
-
-	if (other->Layer() == ELayer::eDamageCol)
-	{
-		// キャラのポインタに変換
-		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
-		// 相手のコライダーの持ち主がキャラであれば、
-		if (chara != nullptr)
-		{
-			// 与えるダメージを計算
-			int damage = CalcDamage(0, chara);
-
-			// ダメージを与える
-			chara->TakeDamage(damage, 0);
-		}
-	}
 }
 
 // 更新
@@ -96,14 +69,14 @@ void CRoar::Update()
 	// 基底クラスの更新処理
 	CBillBoardImage::Update();
 
-	// 斬撃のエフェクトを移動
+	// 雄叫びのエフェクトを移動
 	CVector move = mMoveSpeed * Time::DeltaTime();
 	Position(Position() + move);
 
 	// スケール変更時間を経過していない
 	if (mElapsedTime < FLAME_SCALE_ANIM_TIME)
 	{
-		// 経過時間に合わせて、徐々にスラッシュを大きくする
+		// 経過時間に合わせて、徐々に雄叫びを大きくする
 		float per = mElapsedTime / FLAME_SCALE_ANIM_TIME;
 		if (per < 1.0f)
 		{
@@ -127,6 +100,4 @@ void CRoar::Update()
 	{
 		Kill();
 	}
-
-	CDebugPrint::Print(" 経過時間 %f", mElapsedTime);
 }

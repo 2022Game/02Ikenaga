@@ -117,9 +117,27 @@ private:
 	bool mIsSpawnedNeedleEffect;
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;
-	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー (体)
-	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー2 (尻尾)
-	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー
+
+	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBeak;   // キャラクター押し戻しコライダー(口ばし)
+	CColliderSphere* mpColliderSphereBeak2;  // キャラクター押し戻しコライダー(口ばし2)
+	CColliderSphere* mpColliderSphereBody;   // キャラクター押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereTail;   // キャラクター押し戻しコライダー(尻尾)
+	CColliderSphere* mpColliderSphereTail2;  // キャラクター押し戻しコライダー(尻尾2)
+	CColliderSphere* mpColliderSphereTail3;  // キャラクター押し戻しコライダー(尻尾3)
+	CColliderSphere* mpColliderSphereTail4;  // キャラクター押し戻しコライダー(尻尾4)
+	CColliderSphere* mpColliderSphereTail5;  // キャラクター押し戻しコライダー(尻尾5)
+
+	CColliderSphere* mpDamageColHead;    // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBeak;    // ダメージを受けるコライダー(口ばし)
+	CColliderSphere* mpDamageColBeak2;   // ダメージを受けるコライダー(口ばし2)
+	CColliderSphere* mpDamageColBody;    // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColTail;    // ダメージを受けるコライダー(尻尾)
+	CColliderSphere* mpDamageColTail2;   // ダメージを受けるコライダー(尻尾2)
+	CColliderSphere* mpDamageColTail3;   // ダメージを受けるコライダー(尻尾3)
+	CColliderSphere* mpDamageColTail4;   // ダメージを受けるコライダー(尻尾4)
+	CColliderSphere* mpDamageColTail5;   // ダメージを受けるコライダー(尻尾5)
+	CColliderSphere* mpAttackCol;        // ダメージを与えるコライダー(針)
+
 	CTransform* mpRideObject;
 };

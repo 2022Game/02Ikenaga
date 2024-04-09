@@ -580,6 +580,7 @@ void CBee::Update()
 	mpDamageColTail3->Update();
 	mpDamageColTail4->Update();
 	mpDamageColTail5->Update();
+
 	mpAttackCol->Update();
 
 	mIsGrounded = false;

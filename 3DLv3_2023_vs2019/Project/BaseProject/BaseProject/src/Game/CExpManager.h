@@ -1,6 +1,9 @@
 #pragma once
 #include "CExp.h"
 
+/*
+ ƒŒƒxƒ‹50‚Ü‚Å‚Ì“G‚ª—Ž‚Æ‚·ŒoŒ±’l
+*/
 class CExpManeger :public CTask
 {
 public:

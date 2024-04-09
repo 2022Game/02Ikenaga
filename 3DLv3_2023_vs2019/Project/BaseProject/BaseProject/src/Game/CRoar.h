@@ -1,6 +1,5 @@
 #pragma once
 #include "CBillBoardImage.h"
-#include "CColliderCapsule.h"
 
 // 雄叫び
 class CRoar : public CBillBoardImage
@@ -39,9 +38,7 @@ public:
 	void Update() override;
 
 private:
-	int LifeTime;
 	CVector mMoveSpeed;	// 移動速度
 	float mElapsedTime;	// 経過時間
 	bool mIsDeath;		// 削除フラグ
-	CColliderCapsule* mpCollider;
 };

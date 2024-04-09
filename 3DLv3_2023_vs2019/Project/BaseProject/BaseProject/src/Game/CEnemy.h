@@ -2,7 +2,7 @@
 #include "CXCharacter.h"
 #include "CHpGauge.h"
 
-// エネミーのベースクラス
+// エネミーのベースクラス(レベル50までの敵)
 class  CEnemy :public CXCharacter
 {
 public:

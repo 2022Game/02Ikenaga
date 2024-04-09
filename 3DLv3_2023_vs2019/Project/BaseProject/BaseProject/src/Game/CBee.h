@@ -117,10 +117,10 @@ private:
 	bool mIsSpawnedNeedleEffect;
 
 	CColliderLine* mpColliderLine;
+
 	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
 	CColliderSphere* mpColliderSphereBeak;   // キャラクター押し戻しコライダー(口ばし)
-	CColliderSphere* mpColliderSphereBeak2;   // キャラクター押し戻しコライダー(口ばし2)
-
+	CColliderSphere* mpColliderSphereBeak2;  // キャラクター押し戻しコライダー(口ばし2)
 	CColliderSphere* mpColliderSphereBody;   // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpColliderSphereTail;   // キャラクター押し戻しコライダー(尻尾)
 	CColliderSphere* mpColliderSphereTail2;  // キャラクター押し戻しコライダー(尻尾2)
@@ -138,5 +138,6 @@ private:
 	CColliderSphere* mpDamageColTail4;   // ダメージを受けるコライダー(尻尾4)
 	CColliderSphere* mpDamageColTail5;   // ダメージを受けるコライダー(尻尾5)
 	CColliderSphere* mpAttackCol;        // ダメージを与えるコライダー(針)
+
 	CTransform* mpRideObject;
 };

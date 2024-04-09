@@ -4,6 +4,8 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 
+class CCrackEffect;
+
 /*
  サボテン
  プレイヤーの推定レベル(41～50)
@@ -30,8 +32,6 @@ public:
 	void UpdateAttack();
 	// 攻撃2
 	void UpdateAttack2();
-	// 攻撃3
-	void UpdateAttack3();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
 
@@ -133,20 +133,22 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)
-	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー (体)
-	CColliderSphere* mpColliderSphere3;  // キャラクター押し戻しコライダー (足元)
-	CColliderSphere* mpColliderSphere4;  // キャラクター押し戻しコライダー (左手)
-	CColliderSphere* mpColliderSphere5;  // キャラクター押し戻しコライダー (右手)
+	CColliderSphere* mpColliderSphereHead;      // キャラクター押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;      // キャラクター押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereFeet;      // キャラクター押し戻しコライダー(足元)
+	CColliderSphere* mpColliderSphereLeftHand;  // キャラクター押し戻しコライダー(左手)
+	CColliderSphere* mpColliderSphereRightHand; // キャラクター押し戻しコライダー(右手)
 
-	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー (頭)
-	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー (体)
-	CColliderSphere* mpDamageCol3;  // ダメージを受けるコライダー (足元)
-	CColliderSphere* mpDamageCol4;  // ダメージを受けるコライダー (左手)
-	CColliderSphere* mpDamageCol5;  // ダメージを受けるコライダー (右手)
+	CColliderSphere* mpDamageColHead;       // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColFeet;       // ダメージを受けるコライダー(足元)
+	CColliderSphere* mpDamageColLeftHand;   // ダメージを受けるコライダー(左手)
+	CColliderSphere* mpDamageColRightHand;  // ダメージを受けるコライダー(右手)
 
-	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー (頭)
-	CColliderSphere* mpAttackCol2;  // ダメージを与えるコライダー2 (左手)
+	CColliderSphere* mpAttackColHead;      // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColLeftHand;  // ダメージを与えるコライダー(左手)
 
 	CTransform* mpRideObject;
+
+	CCrackEffect* mpCrack;  // ひび割れ
 };

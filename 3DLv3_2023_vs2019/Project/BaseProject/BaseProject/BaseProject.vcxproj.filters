@@ -143,6 +143,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Needle">
       <UniqueIdentifier>{6664dd65-a55a-45a8-a21a-1ba12eeaaed1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Crack">
+      <UniqueIdentifier>{2a09a2e2-0d06-4bf6-b428-35aaa7b3b660}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -528,6 +531,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CBee3.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCrack.cpp">
+      <Filter>ソース ファイル\Game\Effect\Crack</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCrackEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Crack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -938,6 +947,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBee3.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCrack.h">
+      <Filter>ソース ファイル\Game\Effect\Crack</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCrackEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Crack</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -106,7 +106,7 @@ CVector CRoarEffect::GetThrowDir() const
 void CRoarEffect::CreateSlash()
 {
 	// —Y‹©‚Ñ‚ğì¬
-	CRoar* roar = new CRoar(ETag::eFlame);
+	CRoar* roar = new CRoar(ETag::eNone);
 
 	// ˆÊ’u‚ğæ“¾
 	CVector pos = GetThrowPos();// + CVector(0.0f, 10.0f, 0.0f);
