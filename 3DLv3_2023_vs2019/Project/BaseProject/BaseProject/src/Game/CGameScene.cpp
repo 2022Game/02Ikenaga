@@ -244,7 +244,7 @@ void CGameScene::Load()
 
 	// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();
-	enemy22->Position(270.0f, 0.0f, 20.0f);
+	enemy22->Position(50.0f, 0.0f, 20.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	//// ボクサー
