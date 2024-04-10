@@ -5,7 +5,7 @@
 CCrackEffect* CCrackEffect::spInstance = nullptr;
 
 // ‚Ğ‚ÑŠ„‚ê‚ÌŠÔŠuŠÔ
-#define THROW_INTERVAL 0.6f
+#define THROW_INTERVAL 0.4f
 // ‚Ğ‚ÑŠ„‚ê‚Ì•ûŒü‚ÌƒuƒŒ•
 #define FLAME_DIR_RAND 0.02f
 // ‚Ğ‚ÑŠ„‚ê‚ÌˆÚ“®‘¬“x

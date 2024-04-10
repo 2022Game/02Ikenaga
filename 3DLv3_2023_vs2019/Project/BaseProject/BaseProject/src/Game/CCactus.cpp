@@ -291,6 +291,7 @@ void CCactus::UpdateIdle3()
 // 攻撃
 void CCactus::UpdateAttack()
 {
+	mpAttackColHead->SetEnable(false);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
@@ -298,13 +299,13 @@ void CCactus::UpdateAttack()
 	{
 		mpCrack->Start();
 	}
-	if (mAnimationFrame >= 0.0f && mAnimationFrame < 10.0f)
+	if (mAnimationFrame >= 10.0f && mAnimationFrame < 20.0f)
 	{
 		AttackStart();
 	}
-
-	if (GetAnimationFrameRatio() >= 0.0001f)
+	if (mAnimationFrame >=30.0f && mAnimationFrame < 31.0f)
 	{
+		AttackEnd();
 	}
 
 	if (IsAnimationFinished())
@@ -318,6 +319,7 @@ void CCactus::UpdateAttack()
 // 攻撃2
 void CCactus::UpdateAttack2()
 {
+	mpAttackColLeftHand->SetEnable(false);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
@@ -332,6 +334,7 @@ void CCactus::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
+		mpCrack->Stop();
 		mState = EState::eIdle3;
 	}
 }
@@ -339,6 +342,7 @@ void CCactus::UpdateAttackWait()
 // ヒット
 void CCactus::UpdateHit()
 {
+	mpCrack->Stop();
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -364,6 +368,7 @@ void CCactus::UpdateHit()
 // 死ぬ
 void CCactus::UpdateDie()
 {
+	mpCrack->Stop();
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDie);
@@ -378,6 +383,7 @@ void CCactus::UpdateDie()
 // めまい(混乱)
 void CCactus::UpdateDizzy()
 {
+	mpCrack->Stop();
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDizzy);
@@ -541,6 +547,11 @@ void CCactus::Update()
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
 
+	if (Position().Y() >= 0.1f)
+	{
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	}
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -566,14 +577,7 @@ void CCactus::Update()
 
 	if (CInput::PushKey('Q'))
 	{
-		if (!mpCrack->IsThrowing())
-		{
-			mpCrack->Start();
-		}
-		else
-		{
-			mpCrack->Stop();
-		}
+		mState = EState::eAttack2;
 	}
 }
 
@@ -581,7 +585,7 @@ void CCactus::Update()
 void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackColHead || self == mpAttackColLeftHand && mState != EState::eIdle
+	if (self == mpAttackColLeftHand && mState != EState::eIdle
 		&& mState != EState::eIdle2 && mState != EState::eIdle3)
 	{
 		// キャラのポインタに変換
@@ -593,6 +597,29 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			if (!IsAttackHitObj(chara))
 			{
 				int damage = CalcDamage(this, chara);
+
+				// ダメージを与える
+				chara->TakeDamage(damage, this);
+
+				// 攻撃済みリストに追加
+				AddAttackHitObj(chara);
+			}
+		}
+	}
+	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
+	if (self == mpAttackColHead && mState != EState::eIdle
+		&& mState != EState::eIdle2 && mState != EState::eIdle3)
+	{
+		// キャラのポインタに変換
+		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
+		// 相手のコライダーの持ち主がキャラであれば、
+		if (chara != nullptr)
+		{
+			// 既に攻撃済みのキャラでなければ
+			if (!IsAttackHitObj(chara))
+			{
+				int damage = CalcDamage(this, chara);
+				damage = damage * 2;
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
