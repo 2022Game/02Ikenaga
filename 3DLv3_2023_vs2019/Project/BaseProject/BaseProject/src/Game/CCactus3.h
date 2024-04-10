@@ -7,19 +7,19 @@
 class CCrackEffect;
 
 /*
- サボテン2
- プレイヤーの推定レベル(41～50)
+ サボテン3
+ プレイヤーの推定レベル(50)
  エネミークラスを継承
 */
-class CCactus2 : public CEnemy
+class CCactus3 : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
-	static CCactus2* Instance();
+	static CCactus3* Instance();
 
 	// コンストラクタ
-	CCactus2();
-	~CCactus2();
+	CCactus3();
+	~CCactus3();
 
 	// 戦う前の待機状態
 	void UpdateIdle();
@@ -100,8 +100,8 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// サボテン2のインスタンス
-	static CCactus2* spInstance;
+	// サボテン3のインスタンス
+	static CCactus3* spInstance;
 
 	// アニメーションデータ
 	struct AnimData
@@ -113,7 +113,7 @@ private:
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// サボテン2の状態
+	// サボテン3の状態
 	enum class EState
 	{
 		eIdle,		// 戦う前の待機
@@ -127,13 +127,12 @@ private:
 		eDizzy,     // めまい(混乱)
 		eRun,       // 移動
 	};
-	EState mState;	// サボテン2の状態
+	EState mState;	// サボテン3の状態
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-
 	CColliderSphere* mpColliderSphereHead;      // キャラクター押し戻しコライダー(頭)
 	CColliderSphere* mpColliderSphereBody;      // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpColliderSphereFeet;      // キャラクター押し戻しコライダー(足元)

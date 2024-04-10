@@ -538,6 +538,9 @@
     <ClCompile Include="src\Game\CCrackEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\Crack</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CCactus3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -953,6 +956,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCrackEffect.h">
       <Filter>ソース ファイル\Game\Effect\Crack</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCactus3.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

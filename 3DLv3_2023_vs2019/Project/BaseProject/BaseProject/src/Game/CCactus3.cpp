@@ -1,23 +1,23 @@
-#include "CCactus2.h"
+#include "CCactus3.h"
 #include "CPlayer.h"
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
 #include "Maths.h"
 #include "CCrackEffect.h"
 
-// サボテン2のインスタンス
-CCactus2* CCactus2::spInstance = nullptr;
+// サボテン3のインスタンス
+CCactus3* CCactus3::spInstance = nullptr;
 
 #define ENEMY_HEIGHT 0.3f
-#define WITHIN_RANGE 40.0f       // 範囲内
+#define WITHIN_RANGE 50.0f       // 範囲内
 #define MOVE_SPEED 0.12f         // 移動速度
 #define GRAVITY 0.0625f          // 重力
 #define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.0f         // 追跡を辞める範囲
+#define STOP_RANGE 30.0f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
-// サボテン2のアニメーションデータのテーブル
-const CCactus2::AnimData CCactus2::ANIM_DATA[] =
+// サボテン3のアニメーションデータのテーブル
+const CCactus3::AnimData CCactus3::ANIM_DATA[] =
 {
 	{ "",										true,	0.0f	},// Tポーズ
 	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlant.x",	true,	42.0f	},	         // 植物 21.0f
@@ -35,7 +35,7 @@ const CCactus2::AnimData CCactus2::ANIM_DATA[] =
 };
 
 // コンストラクタ
-CCactus2::CCactus2()
+CCactus3::CCactus3()
 	: mpRideObject(nullptr)
 	, mAttackTime(0)
 {
@@ -45,8 +45,8 @@ CCactus2::CCactus2()
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Cactus");
 
-	//最初に1レベルに設定
-	ChangeLevel(1);
+	//最初に5レベルに設定
+	ChangeLevel(5);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -213,7 +213,7 @@ CCactus2::CCactus2()
 	);
 }
 
-CCactus2::~CCactus2()
+CCactus3::~CCactus3()
 {
 	SAFE_DELETE(mpColliderLine);
 
@@ -233,13 +233,13 @@ CCactus2::~CCactus2()
 	SAFE_DELETE(mpAttackColLeftHand);
 }
 
-CCactus2* CCactus2::Instance()
+CCactus3* CCactus3::Instance()
 {
 	return spInstance;
 }
 
 // アニメーション切り替え
-void CCactus2::ChangeAnimation(EAnimType type)
+void CCactus3::ChangeAnimation(EAnimType type)
 {
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
 	AnimData data = ANIM_DATA[(int)type];
@@ -247,7 +247,7 @@ void CCactus2::ChangeAnimation(EAnimType type)
 }
 
 // 戦う前の待機状態
-void CCactus2::UpdateIdle()
+void CCactus3::UpdateIdle()
 {
 	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
@@ -257,7 +257,7 @@ void CCactus2::UpdateIdle()
 }
 
 // 戦う前の待機状態2
-void CCactus2::UpdateIdle2()
+void CCactus3::UpdateIdle2()
 {
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
@@ -267,7 +267,7 @@ void CCactus2::UpdateIdle2()
 }
 
 // 待機状態3
-void CCactus2::UpdateIdle3()
+void CCactus3::UpdateIdle3()
 {
 	ChangeAnimation(EAnimType::eIdle3);
 	CPlayer* player = CPlayer::Instance();
@@ -287,7 +287,7 @@ void CCactus2::UpdateIdle3()
 }
 
 // 攻撃
-void CCactus2::UpdateAttack()
+void CCactus3::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -315,7 +315,7 @@ void CCactus2::UpdateAttack()
 }
 
 // 攻撃2
-void CCactus2::UpdateAttack2()
+void CCactus3::UpdateAttack2()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -327,7 +327,7 @@ void CCactus2::UpdateAttack2()
 }
 
 // 攻撃終了待ち
-void CCactus2::UpdateAttackWait()
+void CCactus3::UpdateAttackWait()
 {
 	if (IsAnimationFinished())
 	{
@@ -338,7 +338,7 @@ void CCactus2::UpdateAttackWait()
 }
 
 // ヒット
-void CCactus2::UpdateHit()
+void CCactus3::UpdateHit()
 {
 	mpCrack->Stop();
 	// ヒットアニメーションを開始
@@ -364,7 +364,7 @@ void CCactus2::UpdateHit()
 }
 
 // 死ぬ
-void CCactus2::UpdateDie()
+void CCactus3::UpdateDie()
 {
 	mpCrack->Stop();
 	mMoveSpeed.X(0.0f);
@@ -379,7 +379,7 @@ void CCactus2::UpdateDie()
 }
 
 // めまい(混乱)
-void CCactus2::UpdateDizzy()
+void CCactus3::UpdateDizzy()
 {
 	mpCrack->Stop();
 	mMoveSpeed.X(0.0f);
@@ -394,7 +394,7 @@ void CCactus2::UpdateDizzy()
 }
 
 // 移動
-void CCactus2::UpdateRun()
+void CCactus3::UpdateRun()
 {
 	ChangeAnimation(EAnimType::eRun);
 
@@ -403,7 +403,7 @@ void CCactus2::UpdateRun()
 	float vectorp = (player->Position() - Position()).Length();
 
 	// 追跡をやめて止まる
-	if (vectorp <= 20.0f && vectorp >= 23.0f)
+	if (vectorp <= STOP_RANGE && vectorp >= 33.0f)
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
@@ -437,7 +437,7 @@ void CCactus2::UpdateRun()
 }
 
 // 更新処理
-void CCactus2::Update()
+void CCactus3::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
@@ -575,7 +575,7 @@ void CCactus2::Update()
 }
 
 // 衝突処理
-void CCactus2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+void CCactus3::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackColLeftHand && mState != EState::eIdle
@@ -646,7 +646,7 @@ void CCactus2::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 }
 
 // 攻撃開始
-void CCactus2::AttackStart()
+void CCactus3::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
@@ -655,7 +655,7 @@ void CCactus2::AttackStart()
 }
 
 // 攻撃終了
-void CCactus2::AttackEnd()
+void CCactus3::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
@@ -664,20 +664,20 @@ void CCactus2::AttackEnd()
 }
 
 // 描画
-void CCactus2::Render()
+void CCactus3::Render()
 {
 	CXCharacter::Render();
 }
 
 // 1レベルアップ
-void CCactus2::LevelUp()
+void CCactus3::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
 // レベルを変更
-void CCactus2::ChangeLevel(int level)
+void CCactus3::ChangeLevel(int level)
 {
 	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
@@ -691,7 +691,7 @@ void CCactus2::ChangeLevel(int level)
 }
 
 // 被ダメージ処理
-void CCactus2::TakeDamage(int damage, CObjectBase* causedObj)
+void CCactus3::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
@@ -719,7 +719,7 @@ void CCactus2::TakeDamage(int damage, CObjectBase* causedObj)
 }
 
 // 死亡処理
-void CCactus2::Death()
+void CCactus3::Death()
 {
 	// 死亡状態へ移行
 	mState = EState::eDie;

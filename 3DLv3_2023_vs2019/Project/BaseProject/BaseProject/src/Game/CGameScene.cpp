@@ -15,6 +15,7 @@
 #include "CTurtle3.h"
 #include "CCactus.h"
 #include "CCactus2.h"
+#include "CCactus3.h"
 #include "CBee.h"
 #include "CBee2.h"
 #include "CBee3.h"
@@ -87,7 +88,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
-	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
+	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
@@ -229,20 +230,25 @@ void CGameScene::Load()
 
 	// サボテン
 	CCactus* enemy16 = new CCactus();
-	enemy16->Position(0.0f, 0.0f, 50.0f);
+	enemy16->Position(150.0f, 0.0f, -750.0f);
 	enemy16->Scale(30.0f, 30.0f, 30.0f);
 
 	// サボテン2
-	//CCactus2* enemy17 = new CCactus2();
-	//enemy17->Position(0.0f, 0.0f, 50.0f);
-	//enemy17->Scale(30.0f, 30.0f, 30.0f);
+	CCactus2* enemy17 = new CCactus2();
+	enemy17->Position(210.0f, 0.0f, -750.0f);
+	enemy17->Scale(30.0f, 30.0f, 30.0f);
 
-	//// チェストモンスター
-	//CChest* enemy19 = new CChest();
-	//enemy19->Position(240.0f, 0.0f, 20.0f);
-	//enemy19->Scale(30.0f, 30.0f, 30.0f);
+	// サボテン3
+	CCactus3* enemy18 = new CCactus3();
+	enemy18->Position(180.0f, 0.0f, -810.0f);
+	enemy18->Scale(40.0f, 40.0f, 40.0f);
 
-	// 球体のモンスター
+	// チェストモンスター
+	CChest* enemy19 = new CChest();
+	enemy19->Position(0.0f, 0.0f, 50.0f);
+	enemy19->Scale(30.0f, 30.0f, 30.0f);
+
+	//// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();
 	enemy22->Position(50.0f, 0.0f, 20.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);

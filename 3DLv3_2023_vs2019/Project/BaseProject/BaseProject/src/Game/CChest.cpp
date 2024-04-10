@@ -12,8 +12,8 @@ CChest* CChest::spInstance = nullptr;
 #define WITHIN_RANGE 40.0f       // 範囲内
 #define MOVE_SPEED 0.12f         // 移動速度
 #define GRAVITY 0.0625f          // 重力
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.0f         // 追跡を辞める範囲
+#define WALK_RANGE 150.0f        // 追跡する範囲
+#define STOP_RANGE 32.0f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // チェストモンスターのアニメーションデータのテーブル
@@ -56,7 +56,7 @@ CChest::CChest()
 	// CXCharacterの初期化
 	Init(model);
 
-	// 最初は待機2アニメーションを再生
+	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
 	mpColliderLine = new CColliderLine
@@ -350,7 +350,7 @@ void CChest::UpdateRun()
 	float vectorp = (player->Position() - Position()).Length();
 
 	// 追跡をやめて止まる
-	if (vectorp <= 20.0f && vectorp >= 23.0f)
+	if (vectorp <= STOP_RANGE && vectorp >= 35.0f)
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);

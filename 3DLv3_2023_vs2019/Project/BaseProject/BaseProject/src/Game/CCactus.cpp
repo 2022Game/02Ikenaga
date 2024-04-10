@@ -4,7 +4,6 @@
 #include "CCollisionManager.h"
 #include "Maths.h"
 #include "CCrackEffect.h"
-#include "CInput.h"
 
 // サボテンのインスタンス
 CCactus* CCactus::spInstance = nullptr;
@@ -33,7 +32,6 @@ const CCactus::AnimData CCactus::ANIM_DATA[] =
 	{ "Character\\Enemy\\Cactus\\animation\\CactusRun.x",	true,	34.0f	},	        // 走る 17.0f
 	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle.x",	true,	121.0f	},	 // 始まりの待機 121.0f
 	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle2.x",	true,	46.0f	},	 // 始まりの待機2 23.0f
-
 };
 
 // コンストラクタ
@@ -291,7 +289,6 @@ void CCactus::UpdateIdle3()
 // 攻撃
 void CCactus::UpdateAttack()
 {
-	mpAttackColHead->SetEnable(false);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
@@ -302,6 +299,7 @@ void CCactus::UpdateAttack()
 	if (mAnimationFrame >= 10.0f && mAnimationFrame < 20.0f)
 	{
 		AttackStart();
+		mpAttackColHead->SetEnable(false);
 	}
 	if (mAnimationFrame >=30.0f && mAnimationFrame < 31.0f)
 	{
@@ -319,11 +317,11 @@ void CCactus::UpdateAttack()
 // 攻撃2
 void CCactus::UpdateAttack2()
 {
-	mpAttackColLeftHand->SetEnable(false);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
+	mpAttackColLeftHand->SetEnable(false);
 	// 攻撃2終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
@@ -574,11 +572,6 @@ void CCactus::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-
-	if (CInput::PushKey('Q'))
-	{
-		mState = EState::eAttack2;
-	}
 }
 
 // 衝突処理
