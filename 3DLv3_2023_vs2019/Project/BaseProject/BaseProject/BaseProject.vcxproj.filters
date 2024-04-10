@@ -146,6 +146,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Crack">
       <UniqueIdentifier>{2a09a2e2-0d06-4bf6-b428-35aaa7b3b660}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Coin">
+      <UniqueIdentifier>{0b581d3e-4085-4827-84fe-bb3528e81d22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -540,6 +543,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CCactus3.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCoin.cpp">
+      <Filter>ソース ファイル\Game\Effect\Coin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -959,6 +965,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCactus3.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCoin.h">
+      <Filter>ソース ファイル\Game\Effect\Coin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

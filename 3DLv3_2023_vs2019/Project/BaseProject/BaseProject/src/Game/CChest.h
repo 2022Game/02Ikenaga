@@ -129,6 +129,7 @@ private:
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
+	bool mIsSpawnedCoinEffect;
 
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)

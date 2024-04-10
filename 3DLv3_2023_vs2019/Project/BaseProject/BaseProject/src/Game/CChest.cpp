@@ -4,6 +4,8 @@
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "Maths.h"
+#include "CCoin.h"
+#include "CInput.h"
 
 // チェストモンスターのインスタンス
 CChest* CChest::spInstance = nullptr;
@@ -261,9 +263,41 @@ void CChest::UpdateAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
-	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	if (mAnimationFrame >= 5.0f && mAnimationFrame < 10.0f)
+	{
+		AttackStart();
+	}
+
+	if (mAnimationFrame >= 20.0f && mAnimationFrame < 30.0f)
+	{
+		AttackEnd();
+	}
+
+	if (mAnimationFrame >= 10.0f)
+	{
+		// コインを生成済みフラグを初期化
+		mIsSpawnedCoinEffect = false;
+		// コインを生成していない
+		if (!mIsSpawnedCoinEffect)
+		{
+			CCoin* coin = new CCoin
+			(
+				this,
+				Position() + CVector(0.0f, 18.0f, 0.0f),
+				VectorZ(),
+				150.0f,
+				100.0f
+			);
+			coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
+			coin->Scale(10.0f, 10.0f, 10.0f);
+			coin->Rotate(-90.0f, 0.0f, 0.0f);
+			coin->SetOwner(this);
+
+			mIsSpawnedCoinEffect = true;
+		}
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃2
@@ -511,6 +545,30 @@ void CChest::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+
+	if (CInput::PushKey('Q'))
+	{
+		// コインを生成済みフラグを初期化
+		mIsSpawnedCoinEffect = false;
+		// コインを生成していない
+		if (!mIsSpawnedCoinEffect)
+		{
+			CCoin* coin = new CCoin
+			(
+				this,
+				Position() + CVector(0.0f, 20.0f, 0.0f),
+				VectorZ(),
+				150.0f,
+				100.0f
+			);
+			coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
+			coin->Scale(10.0f, 10.0f, 10.0f);
+			coin->Rotate(-90.0f, 0.0f, 0.0f);
+			coin->SetOwner(this);
+
+			mIsSpawnedCoinEffect = true;
+		}
+	}
 }
 
 // 衝突処理

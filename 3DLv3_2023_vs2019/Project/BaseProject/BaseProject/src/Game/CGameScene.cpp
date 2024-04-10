@@ -118,6 +118,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
 	CResourceManager::Load<CModel>("Needle", "Effect\\Needle.obj");
+	CResourceManager::Load<CModel>("Coin", "Effect\\Coin.obj");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
@@ -198,50 +199,50 @@ void CGameScene::Load()
 	enemy9->Position(-30.0f, -0.2f, -360.0f);
 	enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	// エイ
-	CRay* enemy10 = new CRay();
-	enemy10->Position(150.0f, 0.0f, -450.0f);
-	enemy10->Scale(35.0f, 35.0f, 35.0f);
+	//// エイ
+	//CRay* enemy10 = new CRay();
+	//enemy10->Position(150.0f, 0.0f, -450.0f);
+	//enemy10->Scale(35.0f, 35.0f, 35.0f);
 
-	// エイ2
-	CRay2* enemy11 = new CRay2();
-	enemy11->Position(210.0f, 0.0f, -450.0f);
-	enemy11->Scale(35.0f, 35.0f, 35.0f);
+	//// エイ2
+	//CRay2* enemy11 = new CRay2();
+	//enemy11->Position(210.0f, 0.0f, -450.0f);
+	//enemy11->Scale(35.0f, 35.0f, 35.0f);
 
-	// エイ3
-	CRay3* enemy12 = new CRay3();
-	enemy12->Position(180.f,0.0f,-520.0f);
-	enemy12->Scale(45.0f, 45.0f, 45.0f);
+	//// エイ3
+	//CRay3* enemy12 = new CRay3();
+	//enemy12->Position(180.f,0.0f,-520.0f);
+	//enemy12->Scale(45.0f, 45.0f, 45.0f);
 
-	// 蜂
-	CBee* enemy13 = new CBee();
-	enemy13->Position(0.0f, 0.0f, -600.0f);
-	enemy13->Scale(30.0f, 30.0f, 30.0f);
+	//// 蜂
+	//CBee* enemy13 = new CBee();
+	//enemy13->Position(0.0f, 0.0f, -600.0f);
+	//enemy13->Scale(30.0f, 30.0f, 30.0f);
 
-	// 蜂2
-	CBee2* enemy14 = new CBee2();
-	enemy14->Position(-60.0f, 0.0f, -600.0f);
-	enemy14->Scale(30.0f, 30.0f, 30.0f);
+	//// 蜂2
+	//CBee2* enemy14 = new CBee2();
+	//enemy14->Position(-60.0f, 0.0f, -600.0f);
+	//enemy14->Scale(30.0f, 30.0f, 30.0f);
 
-	// 蜂3
-	CBee3* enemy15 = new CBee3();
-	enemy15->Position(-30.0f, 0.0f, -660.0f);
-	enemy15->Scale(40.0f, 40.0f, 40.0f);
+	//// 蜂3
+	//CBee3* enemy15 = new CBee3();
+	//enemy15->Position(-30.0f, 0.0f, -660.0f);
+	//enemy15->Scale(40.0f, 40.0f, 40.0f);
 
-	// サボテン
-	CCactus* enemy16 = new CCactus();
-	enemy16->Position(150.0f, 0.0f, -750.0f);
-	enemy16->Scale(30.0f, 30.0f, 30.0f);
+	//// サボテン
+	//CCactus* enemy16 = new CCactus();
+	//enemy16->Position(150.0f, 0.0f, -750.0f);
+	//enemy16->Scale(30.0f, 30.0f, 30.0f);
 
-	// サボテン2
-	CCactus2* enemy17 = new CCactus2();
-	enemy17->Position(210.0f, 0.0f, -750.0f);
-	enemy17->Scale(30.0f, 30.0f, 30.0f);
+	//// サボテン2
+	//CCactus2* enemy17 = new CCactus2();
+	//enemy17->Position(210.0f, 0.0f, -750.0f);
+	//enemy17->Scale(30.0f, 30.0f, 30.0f);
 
-	// サボテン3
-	CCactus3* enemy18 = new CCactus3();
-	enemy18->Position(180.0f, 0.0f, -810.0f);
-	enemy18->Scale(40.0f, 40.0f, 40.0f);
+	//// サボテン3
+	//CCactus3* enemy18 = new CCactus3();
+	//enemy18->Position(180.0f, 0.0f, -810.0f);
+	//enemy18->Scale(40.0f, 40.0f, 40.0f);
 
 	// チェストモンスター
 	CChest* enemy19 = new CChest();
