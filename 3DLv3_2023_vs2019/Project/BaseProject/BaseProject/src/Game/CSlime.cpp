@@ -289,7 +289,7 @@ void CSlime::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::SlimeDeath();
 	}
 }
 

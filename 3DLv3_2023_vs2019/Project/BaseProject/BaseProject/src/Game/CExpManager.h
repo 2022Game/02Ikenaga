@@ -2,13 +2,25 @@
 #include "CExp.h"
 
 /*
- レベル50までの敵が落とす経験値
+ 敵が落とす経験値
 */
 class CExpManeger :public CTask
 {
 public:
-	// 経験値を作成
+	// 経験値を作成(小さいスライム用)
+	static void SlimeSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きいスライム用)
+	static void SlimeBigSpawnExp(int exp, const CVector& pos);
+
+	// 経験値を作成(小さいマッシュルーム用)
+	static void MushroomSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きいマッシュルーム用)
+	static void MushroomBigSpawnExp(int exp, const CVector& pos);
+
+	// 経験値を作成(レベル50以下の敵用)
 	static void SpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(レベル90以下の敵用)
+	static void SpawnExp2(int exp, const CVector& pos);
 
 private:
 	// コンストラクタ

@@ -5,7 +5,6 @@
 #include "CCollisionManager.h"
 #include "Maths.h"
 #include "CCoin.h"
-#include "CInput.h"
 
 // チェストモンスターのインスタンス
 CChest* CChest::spInstance = nullptr;
@@ -273,27 +272,32 @@ void CChest::UpdateAttack()
 		AttackEnd();
 	}
 
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
 	if (mAnimationFrame >= 10.0f)
 	{
-		// コインを生成済みフラグを初期化
-		mIsSpawnedCoinEffect = false;
-		// コインを生成していない
-		if (!mIsSpawnedCoinEffect)
+		if (vectorp >= 45.0f)
 		{
-			CCoin* coin = new CCoin
-			(
-				this,
-				Position() + CVector(0.0f, 18.0f, 0.0f),
-				VectorZ(),
-				150.0f,
-				100.0f
-			);
-			coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
-			coin->Scale(10.0f, 10.0f, 10.0f);
-			coin->Rotate(-90.0f, 0.0f, 0.0f);
-			coin->SetOwner(this);
+			// コインを生成済みフラグを初期化
+			mIsSpawnedCoinEffect = false;
+			// コインを生成していない
+			if (!mIsSpawnedCoinEffect)
+			{
+				CCoin* coin = new CCoin
+				(
+					this,
+					Position() + CVector(0.0f, 18.0f, 0.0f),
+					VectorZ(),
+					180.0f,
+					150.0f
+				);
+				coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
+				coin->Scale(10.0f, 10.0f, 10.0f);
+				coin->Rotate(-90.0f, 0.0f, 0.0f);
+				coin->SetOwner(this);
 
-			mIsSpawnedCoinEffect = true;
+				mIsSpawnedCoinEffect = true;
+			}
 		}
 		// 攻撃終了待ち状態へ移行
 		mState = EState::eAttackWait;
@@ -324,6 +328,8 @@ void CChest::UpdateAttackWait()
 // ヒット
 void CChest::UpdateHit()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -356,7 +362,7 @@ void CChest::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::Death2();
 	}
 }
 
@@ -545,30 +551,6 @@ void CChest::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-
-	if (CInput::PushKey('Q'))
-	{
-		// コインを生成済みフラグを初期化
-		mIsSpawnedCoinEffect = false;
-		// コインを生成していない
-		if (!mIsSpawnedCoinEffect)
-		{
-			CCoin* coin = new CCoin
-			(
-				this,
-				Position() + CVector(0.0f, 20.0f, 0.0f),
-				VectorZ(),
-				150.0f,
-				100.0f
-			);
-			coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
-			coin->Scale(10.0f, 10.0f, 10.0f);
-			coin->Rotate(-90.0f, 0.0f, 0.0f);
-			coin->SetOwner(this);
-
-			mIsSpawnedCoinEffect = true;
-		}
-	}
 }
 
 // 衝突処理
@@ -686,10 +668,9 @@ void CChest::TakeDamage(int damage, CObjectBase* causedObj)
 		Rotation(CQuaternion::LookRotation(dir));
 
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
-		Position(Position() - dir * Scale().X() * 0.4f);
+		Position(Position() - dir * Scale().X() * 0.2f);
 	}
 }
-
 
 // 死亡処理
 void CChest::Death()

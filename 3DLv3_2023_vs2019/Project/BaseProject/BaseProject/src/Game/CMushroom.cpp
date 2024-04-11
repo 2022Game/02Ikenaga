@@ -303,7 +303,7 @@ void CMushroom::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::MushroomDeath();
 	}
 }
 

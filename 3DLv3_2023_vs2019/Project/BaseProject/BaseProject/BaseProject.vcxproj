@@ -82,6 +82,7 @@
     <ClCompile Include="src\Game\CCactus3.cpp" />
     <ClCompile Include="src\Game\CCane.cpp" />
     <ClCompile Include="src\Game\CChest.cpp" />
+    <ClCompile Include="src\Game\CChest2.cpp" />
     <ClCompile Include="src\Game\CCoin.cpp" />
     <ClCompile Include="src\Game\CCrack.cpp" />
     <ClCompile Include="src\Game\CCrackEffect.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="src\Game\CCactus3.h" />
     <ClInclude Include="src\Game\CCane.h" />
     <ClInclude Include="src\Game\CChest.h" />
+    <ClInclude Include="src\Game\CChest2.h" />
     <ClInclude Include="src\Game\CCoin.h" />
     <ClInclude Include="src\Game\CCrack.h" />
     <ClInclude Include="src\Game\CCrackEffect.h" />

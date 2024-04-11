@@ -149,6 +149,12 @@
     <Filter Include="ソース ファイル\Game\Effect\Coin">
       <UniqueIdentifier>{0b581d3e-4085-4827-84fe-bb3528e81d22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Item\Exp">
+      <UniqueIdentifier>{256cf66e-22d4-43c3-b86f-31ce658ff4c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Item\Portion">
+      <UniqueIdentifier>{7de4ff38-35cb-432b-8589-251108cc2ed3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -286,15 +292,6 @@
     <ClCompile Include="src\Game\CRotateFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPortionRed.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CPortionGreen.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CPortionBlue.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CHpGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
@@ -375,12 +372,6 @@
     </ClCompile>
     <ClCompile Include="src\Game\CEnemy.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CExp.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CExpManager.cpp">
-      <Filter>ソース ファイル\Game\Item</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CResource.cpp">
       <Filter>ソース ファイル\BaseSystem\Resource</Filter>
@@ -547,6 +538,24 @@
     <ClCompile Include="src\Game\CCoin.cpp">
       <Filter>ソース ファイル\Game\Effect\Coin</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CExp.cpp">
+      <Filter>ソース ファイル\Game\Item\Exp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CExpManager.cpp">
+      <Filter>ソース ファイル\Game\Item\Exp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPortionBlue.cpp">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPortionGreen.cpp">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPortionRed.cpp">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CChest2.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -705,15 +714,6 @@
     <ClInclude Include="src\Game\CRotateFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPortionRed.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CPortionGreen.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CPortionBlue.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CHpGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
@@ -797,12 +797,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CEnemy.h">
       <Filter>ソース ファイル\Game\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CExp.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CExpManager.h">
-      <Filter>ソース ファイル\Game\Item</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CResource.h">
       <Filter>ソース ファイル\BaseSystem\Resource</Filter>
@@ -968,6 +962,24 @@
     </ClInclude>
     <ClInclude Include="src\Game\CCoin.h">
       <Filter>ソース ファイル\Game\Effect\Coin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExp.h">
+      <Filter>ソース ファイル\Game\Item\Exp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExpManager.h">
+      <Filter>ソース ファイル\Game\Item\Exp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPortionBlue.h">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPortionGreen.h">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPortionRed.h">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CChest2.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
