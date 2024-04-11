@@ -24,6 +24,7 @@
 #include "CRay3.h"
 #include "CBeholder.h"
 #include "CChest.h"
+#include "CChest2.h"
 #include "CBoxer.h"
 #include "CBoxer2.h"
 #include "CRich.h"
@@ -246,8 +247,13 @@ void CGameScene::Load()
 
 	// チェストモンスター
 	CChest* enemy19 = new CChest();
-	enemy19->Position(0.0f, 0.0f, 50.0f);
+	enemy19->Position(0.0f, 0.0f, -900.0f);
 	enemy19->Scale(30.0f, 30.0f, 30.0f);
+
+	// チェストモンスター2
+	CChest2* enemy20 = new CChest2();
+	enemy20->Position(-60.0f, 0.0f, -960.0f);
+	enemy20->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();

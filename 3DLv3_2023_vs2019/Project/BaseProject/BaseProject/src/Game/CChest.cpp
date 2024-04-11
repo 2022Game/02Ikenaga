@@ -1,7 +1,6 @@
 #include "CChest.h"
 #include "CPlayer.h"
 #include "CHpGauge.h"
-#include "CEffect.h"
 #include "CCollisionManager.h"
 #include "Maths.h"
 #include "CCoin.h"

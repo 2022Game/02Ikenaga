@@ -21,6 +21,11 @@ public:
 	// ‘å‚«‚¢ƒ}ƒbƒVƒ…ƒ‹[ƒ€‚Ì€–Sˆ—
 	virtual void MushroomBigDeath();
 
+	// ¬‚³‚¢‹T‚Ì€–Sˆ—
+	virtual void TurtleDeath();
+	// ‘å‚«‚¢‹T‚Ì€–Sˆ—
+	virtual void TurtleBigDeath();
+
 	// €–Sˆ—(ƒŒƒxƒ‹50ˆÈ‰º‚Ì“G—p)
 	virtual void Death();
 

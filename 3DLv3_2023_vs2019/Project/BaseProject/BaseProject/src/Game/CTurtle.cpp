@@ -302,7 +302,7 @@ void CTurtle::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::TurtleDeath();
 	}
 }
 

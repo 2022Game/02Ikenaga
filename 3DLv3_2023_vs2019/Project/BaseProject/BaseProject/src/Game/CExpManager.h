@@ -17,6 +17,11 @@ public:
 	// 経験値を作成(大きいマッシュルーム用)
 	static void MushroomBigSpawnExp(int exp, const CVector& pos);
 
+	// 経験値を作成(小さい亀用)
+	static void TurtleSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きい亀用)
+	static void TurtleBigSpawnExp(int exp, const CVector& pos);
+
 	// 経験値を作成(レベル50以下の敵用)
 	static void SpawnExp(int exp, const CVector& pos);
 	// 経験値を作成(レベル90以下の敵用)

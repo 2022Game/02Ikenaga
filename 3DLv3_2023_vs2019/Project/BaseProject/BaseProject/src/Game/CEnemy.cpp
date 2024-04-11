@@ -57,6 +57,26 @@ void CEnemy::MushroomBigDeath()
 	);
 }
 
+// ¬‚³‚¢‹T‚Ì€–Sˆ—
+void CEnemy::TurtleDeath()
+{
+	// €–S‚ÉŒoŒ±’l‚ğ¶¬‚·‚é
+	CExpManeger::TurtleSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// ‘å‚«‚¢‹T‚Ì€–Sˆ—
+void CEnemy::TurtleBigDeath()
+{
+	// €–S‚ÉŒoŒ±’l‚ğ¶¬‚·‚é
+	CExpManeger::TurtleBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
 // €–Sˆ—(ƒŒƒxƒ‹50ˆÈ‰º‚Ì“G—p)
 void CEnemy::Death()
 {
