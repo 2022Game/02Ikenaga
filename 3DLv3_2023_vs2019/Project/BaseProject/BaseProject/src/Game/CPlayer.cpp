@@ -335,6 +335,14 @@ void CPlayer::UpdateAttack4()
 			// 斬撃エフェクトの色設定
 			slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
 			slash->SetOwner(this);
+			if (mCharaStatus.level >= 50)
+			{
+				slash->Scale(2.0f, 2.0f, 2.0f);
+			}
+			if (mCharaStatus.level >= 100)
+			{
+				slash->Scale(3.0f, 3.0f, 3.0f);
+			}
 
 			mIsSpawnedSlashEffect = true;
 		}

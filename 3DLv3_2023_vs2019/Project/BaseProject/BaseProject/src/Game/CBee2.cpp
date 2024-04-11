@@ -403,7 +403,7 @@ void CBee2::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::BeeDeath();
 	}
 }
 

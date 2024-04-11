@@ -361,7 +361,7 @@ void CChest2::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death2();
+		CEnemy::ChestDeath();
 	}
 }
 
@@ -529,6 +529,11 @@ void CChest2::Update()
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
+	}
+
+	if (Position().Y() >= 0.1f)
+	{
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 
 	// キャラクターの更新

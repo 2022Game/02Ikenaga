@@ -26,6 +26,26 @@ public:
 	// 大きい亀の死亡処理
 	virtual void TurtleBigDeath();
 
+	// 小さいエイの死亡処理
+	virtual void RayDeath();
+	// 大きいエイの死亡処理
+	virtual void RayBigDeath();
+
+	// 小さい蜂の死亡処理
+	virtual void BeeDeath();
+	// 大きい蜂の死亡処理
+	virtual void BeeBigDeath();
+
+	// 小さいサボテンの死亡処理
+	virtual void CactusDeath();
+	// 大きいサボテンの死亡処理
+	virtual void CactusBigDeath();
+
+	// 小さいチェストモンスターの死亡処理
+	virtual void ChestDeath();
+	// 大きいチェストモンスターの死亡処理
+	virtual void ChestBigDeath();
+
 	// 死亡処理(レベル50以下の敵用)
 	virtual void Death();
 

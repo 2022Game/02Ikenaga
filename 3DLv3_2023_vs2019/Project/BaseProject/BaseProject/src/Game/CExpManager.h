@@ -22,6 +22,26 @@ public:
 	// 経験値を作成(大きい亀用)
 	static void TurtleBigSpawnExp(int exp, const CVector& pos);
 
+	// 経験値を作成(小さいエイ用)
+	static void RaySpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きいエイ用)
+	static void RayBigSpawnExp(int exp, const CVector& pos);
+
+	// 経験値を作成(小さい蜂用)
+	static void BeeSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きい蜂用)
+	static void BeeBigSpawnExp(int exp, const CVector& pos);
+
+	// 経験値を作成(小さいサボテン用)
+	static void CactusSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きいサボテン用)
+	static void CactusBigSpawnExp(int exp, const CVector& pos);
+
+	// 経験値を作成(小さいチェストモンスター用)
+	static void ChestSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きいチェストモンスター用)
+	static void ChestBigSpawnExp(int exp, const CVector& pos);
+
 	// 経験値を作成(レベル50以下の敵用)
 	static void SpawnExp(int exp, const CVector& pos);
 	// 経験値を作成(レベル90以下の敵用)

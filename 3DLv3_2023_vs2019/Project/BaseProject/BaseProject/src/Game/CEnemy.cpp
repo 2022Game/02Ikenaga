@@ -77,6 +77,86 @@ void CEnemy::TurtleBigDeath()
 	);
 }
 
+// 小さいエイの死亡処理
+void CEnemy::RayDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::RaySpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 大きいエイの死亡処理
+void CEnemy::RayBigDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::RayBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 小さい蜂の死亡処理
+void CEnemy::BeeDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::BeeSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 大き蜂の死亡処理
+void CEnemy::BeeBigDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::BeeBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 小さいサボテンの死亡処理
+void CEnemy::CactusDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::CactusSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 大きいサボテンの死亡処理
+void CEnemy::CactusBigDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::CactusBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 小さいチェストモンスターの死亡処理
+void CEnemy::ChestDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::ChestSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 大きいチェストモンスターの死亡処理
+void CEnemy::ChestBigDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::ChestBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
 // 死亡処理(レベル50以下の敵用)
 void CEnemy::Death()
 {

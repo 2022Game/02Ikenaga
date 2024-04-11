@@ -217,7 +217,7 @@ void CRay::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::RayDeath();
 	}
 }
 
