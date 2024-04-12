@@ -132,16 +132,22 @@ private:
 	bool mIsSpawnedCoinEffect;
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)
-	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー (体)
-	CColliderSphere* mpColliderSphere3;  // キャラクター押し戻しコライダー (前の左足)
-	CColliderSphere* mpColliderSphere4;  // キャラクター押し戻しコライダー (前の右足)
-	CColliderSphere* mpColliderSphere5;  // キャラクター押し戻しコライダー (後ろの左足)
-	CColliderSphere* mpColliderSphere6;  // キャラクター押し戻しコライダー (後ろの右足)
+	
+	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;   // キャラクター押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereFeet;   // キャラクター押し戻しコライダー(前の左足)
+	CColliderSphere* mpColliderSphereFeet2;  // キャラクター押し戻しコライダー(前の右足)
+	CColliderSphere* mpColliderSphereFeet3;  // キャラクター押し戻しコライダー(後ろの左足)
+	CColliderSphere* mpColliderSphereFeet4;  // キャラクター押し戻しコライダー(後ろの右足)
 
-	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColHead;    // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;    // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColFeet;    // ダメージを受けるコライダー(前の左足)
+	CColliderSphere* mpDamageColFeet2;   // ダメージを受けるコライダー(前の右足)
+	CColliderSphere* mpDamageColFeet3;   // ダメージを受けるコライダー(後ろの左足)
+	CColliderSphere* mpDamageColFeet4;   // ダメージを受けるコライダー(後ろの右足)
 
-	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColHead;   // ダメージを与えるコライダー(頭)
+
 	CTransform* mpRideObject;
 };

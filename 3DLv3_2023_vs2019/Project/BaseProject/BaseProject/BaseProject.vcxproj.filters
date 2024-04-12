@@ -104,9 +104,6 @@
     <Filter Include="ソース ファイル\Game\Effect\Roar">
       <UniqueIdentifier>{e8f06d63-5b64-4fcb-907f-fd4c30e77d46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Effect\Beam">
-      <UniqueIdentifier>{38bb1970-3563-4da9-86cd-690d3976e72f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Game\Character\Enemy\Slime">
       <UniqueIdentifier>{495cfac7-2a55-4088-8db4-a97628feff60}</UniqueIdentifier>
     </Filter>
@@ -154,6 +151,12 @@
     </Filter>
     <Filter Include="ソース ファイル\Game\Item\Portion">
       <UniqueIdentifier>{7de4ff38-35cb-432b-8589-251108cc2ed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\LightningBall">
+      <UniqueIdentifier>{842c1740-bede-44ec-8363-b4825b06e07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\ElectricShock">
+      <UniqueIdentifier>{38bb1970-3563-4da9-86cd-690d3976e72f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -445,11 +448,11 @@
     <ClCompile Include="src\BaseSystem\CBounds.cpp">
       <Filter>ソース ファイル\BaseSystem\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CBeam.cpp">
-      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    <ClCompile Include="src\Game\CElectricShock.cpp">
+      <Filter>ソース ファイル\Game\Effect\ElectricShock</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CBeamEffect.cpp">
-      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    <ClCompile Include="src\Game\CElectricShockEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\ElectricShock</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CBee.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
@@ -555,6 +558,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\CChest2.cpp">
       <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CChest3.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CLightningBall.cpp">
+      <Filter>ソース ファイル\Game\Effect\LightningBall</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CLightningBallEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\LightningBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -870,11 +882,11 @@
     <ClInclude Include="src\BaseSystem\CBounds.h">
       <Filter>ソース ファイル\BaseSystem\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CBeam.h">
-      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    <ClInclude Include="src\Game\CElectricShock.h">
+      <Filter>ソース ファイル\Game\Effect\ElectricShock</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CBeamEffect.h">
-      <Filter>ソース ファイル\Game\Effect\Beam</Filter>
+    <ClInclude Include="src\Game\CElectricShockEffect.h">
+      <Filter>ソース ファイル\Game\Effect\ElectricShock</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CBee.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Bee</Filter>
@@ -980,6 +992,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CChest2.h">
       <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CChest3.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLightningBall.h">
+      <Filter>ソース ファイル\Game\Effect\LightningBall</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLightningBallEffect.h">
+      <Filter>ソース ファイル\Game\Effect\LightningBall</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

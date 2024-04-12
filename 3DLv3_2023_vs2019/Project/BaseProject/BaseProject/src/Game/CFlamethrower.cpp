@@ -1,6 +1,5 @@
 ﻿#include "CFlamethrower.h"
 #include "CFlame.h"
-#include "CInput.h"
 #include "Maths.h"
 
 // 炎の発射間隔時間

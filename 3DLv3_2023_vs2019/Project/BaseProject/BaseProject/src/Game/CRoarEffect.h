@@ -33,7 +33,7 @@ public:
 
 private:
 	// —Y‹©‚Ñ‚ğì¬
-	void CreateSlash();
+	void CreateRoar();
 
 	// —Y‹©‚Ñ‚ÌˆÊ’u‚ğæ“¾
 	CVector GetThrowPos() const;

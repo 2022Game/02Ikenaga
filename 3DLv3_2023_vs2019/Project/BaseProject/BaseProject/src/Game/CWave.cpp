@@ -102,14 +102,14 @@ void CWave::Update()
 	// 基底クラスの更新処理
 	CBillBoardImage::Update();
 
-	// 斬撃のエフェクトを移動
+	// 波動のエフェクトを移動
 	CVector move = mMoveSpeed * Time::DeltaTime();
 	Position(Position() + move);
 
 	// スケール変更時間を経過していない
 	if (mElapsedTime < FLAME_SCALE_ANIM_TIME)
 	{
-		// 経過時間に合わせて、徐々にスラッシュを大きくする
+		// 経過時間に合わせて、徐々に波動を大きくする
 		float per = mElapsedTime / FLAME_SCALE_ANIM_TIME;
 		if (per < 1.0f)
 		{
@@ -138,6 +138,4 @@ void CWave::Update()
 	{
 		Kill();
 	}
-
-	CDebugPrint::Print(" 経過時間 %f", mElapsedTime);
 }

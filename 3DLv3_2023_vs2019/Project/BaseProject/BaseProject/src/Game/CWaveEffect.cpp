@@ -1,6 +1,5 @@
 #include "CWaveEffect.h"
 #include "CWave.h"
-#include "CInput.h"
 #include "Maths.h"
 
 CWaveEffect* CWaveEffect::spInstance = nullptr;
@@ -103,7 +102,7 @@ CVector CWaveEffect::GetThrowDir() const
 }
 
 // ”g“®‚ðì¬
-void CWaveEffect::CreateSlash()
+void CWaveEffect::CreateWave()
 {
 	// —Y‹©‚Ñ‚ðì¬
 	CWave* wave = new CWave(ETag::eWave);
@@ -135,7 +134,7 @@ void CWaveEffect::Update()
 		// Œo‰ßŽžŠÔ‚É‰ž‚¶‚ÄA”g“®‚ðì¬
 		if (mElapsedTime >= THROW_INTERVAL)
 		{
-			CreateSlash();
+			CreateWave();
 			mElapsedTime -= THROW_INTERVAL;
 		}
 		mElapsedTime += Time::DeltaTime();

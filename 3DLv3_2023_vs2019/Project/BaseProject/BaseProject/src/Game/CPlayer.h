@@ -11,7 +11,7 @@ class CSaGauge;
 class CSword;
 class CShield;
 class CSlash;
-class CBeamEffect;
+class CElectricShockEffect;
 
 #include <algorithm>
 
@@ -236,5 +236,5 @@ private:
 	bool mIsPlayedSlashSE;
 	bool mIsSpawnedSlashEffect;
 	
-	CBeamEffect* mpBeam;
+	CElectricShockEffect* mpElectricShock;
 };

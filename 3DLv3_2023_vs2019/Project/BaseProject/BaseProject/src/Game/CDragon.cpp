@@ -455,7 +455,6 @@ void CDragon::UpdateAttack()
 	}
 	if (IsAnimationFinished())
 	{
-		//mpFlamethrower->Stop();
 		// UŒ‚I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
 		mState = EState::eAttackWait;
 	}

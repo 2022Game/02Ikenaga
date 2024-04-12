@@ -20,9 +20,10 @@ enum class ETag
 	eBullet, // 弾丸
 	eFlame,	 // 炎
 	eSlash,	 // スラッシュ
-	eBeam,   // ビーム
 	eWave,   // 波動
 	eNeedle, // 針
+	eLightningBall,  // 雷球
+	eElectricShock,  // 電撃
 
 	eCamera, // カメラ
 

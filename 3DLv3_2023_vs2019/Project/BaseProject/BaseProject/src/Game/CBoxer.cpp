@@ -658,7 +658,10 @@ void CBoxer::Update()
 		mState = EState::eIdle2;
 	}
 
-	if (vectorp <= WITHIN_RANGE && mState !=EState::eIdle)
+	if (mState == EState::eRun || mState == EState::eIdle || mState == EState::eIdle2 || mState == EState::eAttack
+		|| mState == EState::eAttack2 || mState == EState::eDefense || mState == EState::eHit || mState == EState::eDizzy 
+		|| mState == EState::eAttackWait || mState == EState::eDefenseHit || mState == EState::eSlide
+		|| mState == EState::eJumpStart || mState == EState::eJump || mState == EState::eJumpEnd)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}

@@ -4,11 +4,14 @@
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
 #include "Maths.h"
+#include "CLightningBallEffect.h"
+#include "CElectricShockEffect.h"
+#include "CInput.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 0.3f
+#define ENEMY_HEIGHT 0.5f
 #define WITHIN_RANGE 40.0f       // 範囲内
 #define MOVE_SPEED 0.1f          // 移動速度
 #define GRAVITY 0.0625f          // 重力
@@ -36,6 +39,7 @@ const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 CBeholder::CBeholder()
 	: mpRideObject(nullptr)
 	, mAttackTime(0)
+	, mFlyingTime(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -63,59 +67,69 @@ CBeholder::CBeholder()
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
-		CVector(0.0f, 0.0f, 0.0f),
-		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
+		CVector(0.0f, 0.0f, -0.5f),
+		CVector(0.0f, 0.0f, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColliderLine->Position(0.0f, 20.0f, 0.0f);
+
+	mpColliderLine2 = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, -0.8, 0.0f),
+		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
+	);
+	mpColliderLine2->SetCollisionLayers({ ELayer::eField });
+	mpColliderLine2->Position(0.0f, 20.0f, 0.0f);
 
 	// キャラクター押し戻し処理(体)
-	mpColliderSphere = new CColliderSphere
+	mpColliderSphereBody = new CColliderSphere
 	(
 		this, ELayer::eEnemy,0.41f, false, 2.0f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(左上の触手)
-	mpColliderSphere2 = new CColliderSphere
+	mpColliderSphereTentacle = new CColliderSphere
 	(
 		this, ELayer::eEnemy, 0.087f, false, 1.0f
 	);
-	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereTentacle->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(右上の触手)
-	mpColliderSphere3 = new CColliderSphere
+	mpColliderSphereTentacle2 = new CColliderSphere
 	(
 		this, ELayer::eEnemy, 0.1f, false, 1.0f
 	);
-	mpColliderSphere3->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereTentacle2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(左下の触手)
-	mpColliderSphere4 = new CColliderSphere
+	mpColliderSphereTentacle3 = new CColliderSphere
 	(
 		this, ELayer::eEnemy, 0.087f, false, 1.0f
 	);
-	mpColliderSphere4->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereTentacle3->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(右下の触手)
-	mpColliderSphere5 = new CColliderSphere
+	mpColliderSphereTentacle4 = new CColliderSphere
 	(
 		this, ELayer::eEnemy, 0.087f, false, 1.0f
 	);
-	mpColliderSphere5->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereTentacle4->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(真ん中上の触手)
-	mpColliderSphere6 = new CColliderSphere
+	mpColliderSphereTentacle5 = new CColliderSphere
 	(
 		this, ELayer::eEnemy, 0.08f, false, 1.0f
 	);
-	mpColliderSphere6->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereTentacle5->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(真ん中下の触手)
-	mpColliderSphere7 = new CColliderSphere
+	mpColliderSphereTentacle6 = new CColliderSphere
 	(
 		this, ELayer::eEnemy, 0.087f, false, 1.0f
 	);
-	mpColliderSphere7->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereTentacle6->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageCol = new CColliderSphere
@@ -233,43 +247,43 @@ CBeholder::CBeholder()
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
-	mpColliderSphere->SetAttachMtx(bodyMty);
+	mpColliderSphereBody->SetAttachMtx(bodyMty);
 	mpDamageCol->SetAttachMtx(bodyMty);
 	mpAttackCol->SetAttachMtx(bodyMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの左上の触手の行列にアタッチ
 	const CMatrix* tentacleMty = GetFrameMtx("Armature_TentacleA05");
-	mpColliderSphere2->SetAttachMtx(tentacleMty);
+	mpColliderSphereTentacle->SetAttachMtx(tentacleMty);
 	mpDamageCol2->SetAttachMtx(tentacleMty);
 	mpAttackCol2->SetAttachMtx(tentacleMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの右上の触手の行列にアタッチ
 	const CMatrix* tentacleMty2 = GetFrameMtx("Armature_TentacleE05");
-	mpColliderSphere3->SetAttachMtx(tentacleMty2);
+	mpColliderSphereTentacle2->SetAttachMtx(tentacleMty2);
 	mpDamageCol3->SetAttachMtx(tentacleMty2);
 	mpAttackCol3->SetAttachMtx(tentacleMty2);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの左下の触手の行列にアタッチ
 	const CMatrix * tentacleMty3 = GetFrameMtx("Armature_TentacleB05");
-	mpColliderSphere4->SetAttachMtx(tentacleMty3);
+	mpColliderSphereTentacle3->SetAttachMtx(tentacleMty3);
 	mpDamageCol4->SetAttachMtx(tentacleMty3);
 	mpAttackCol4->SetAttachMtx(tentacleMty3);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの右下の触手の行列にアタッチ
 	const CMatrix* tentacleMty4 = GetFrameMtx("Armature_TentacleD05");
-	mpColliderSphere5->SetAttachMtx(tentacleMty4);
+	mpColliderSphereTentacle4->SetAttachMtx(tentacleMty4);
 	mpDamageCol5->SetAttachMtx(tentacleMty4);
 	mpAttackCol5->SetAttachMtx(tentacleMty4);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの真ん中上の触手の行列にアタッチ
 	const CMatrix* tentacleMty5 = GetFrameMtx("Armature_TentacleF05");
-	mpColliderSphere6->SetAttachMtx(tentacleMty5);
+	mpColliderSphereTentacle5->SetAttachMtx(tentacleMty5);
 	mpDamageCol6->SetAttachMtx(tentacleMty5);
 	mpAttackCol6->SetAttachMtx(tentacleMty5);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの真ん中下の触手の行列にアタッチ
 	const CMatrix* tentacleMty6 = GetFrameMtx("Armature_TentacleC05");
-	mpColliderSphere7->SetAttachMtx(tentacleMty6);
+	mpColliderSphereTentacle6->SetAttachMtx(tentacleMty6);
 	mpDamageCol7->SetAttachMtx(tentacleMty6);
 	mpAttackCol7->SetAttachMtx(tentacleMty6);
 
@@ -281,18 +295,33 @@ CBeholder::CBeholder()
 	mpAttackCol5->SetEnable(false);
 	mpAttackCol6->SetEnable(false);
 	mpAttackCol7->SetEnable(false);
+
+	mpLightningBall = new CLightningBallEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 20.0f, 0.0f),
+		CQuaternion(0.0, 0.f, 0.0f).Matrix()
+	);
+
+	mpElectricShock = new  CElectricShockEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 14.0f, -1.0f)
+	);
 }
 
 CBeholder::~CBeholder()
 {
 	SAFE_DELETE(mpColliderLine);
-	SAFE_DELETE(mpColliderSphere);
-	SAFE_DELETE(mpColliderSphere2);
-	SAFE_DELETE(mpColliderSphere3);
-	SAFE_DELETE(mpColliderSphere4);
-	SAFE_DELETE(mpColliderSphere5);
-	SAFE_DELETE(mpColliderSphere6);
-	SAFE_DELETE(mpColliderSphere7);
+	SAFE_DELETE(mpColliderLine2);
+
+	SAFE_DELETE(mpColliderSphereBody);
+	SAFE_DELETE(mpColliderSphereTentacle);
+	SAFE_DELETE(mpColliderSphereTentacle2);
+	SAFE_DELETE(mpColliderSphereTentacle3);
+	SAFE_DELETE(mpColliderSphereTentacle4);
+	SAFE_DELETE(mpColliderSphereTentacle5);
+	SAFE_DELETE(mpColliderSphereTentacle6);
 
 	SAFE_DELETE(mpDamageCol);
 	SAFE_DELETE(mpDamageCol2);
@@ -361,8 +390,21 @@ void CBeholder::UpdateAttack()
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+
+	if (mAnimationFrame >= 10.0f)
+	{
+		if (!mpLightningBall->IsThrowing())
+		{
+			mpLightningBall->Start();
+		}
+	}
+
+	if (IsAnimationFinished())
+	{
+		mpLightningBall->Stop();
+		// 攻撃終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃2
@@ -372,6 +414,12 @@ void CBeholder::UpdateAttack2()
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
+
+	if (!mpElectricShock->IsThrowing())
+	{
+		mpElectricShock->Start();
+	}
+
 	// 攻撃2終了待ち状態へ移行
 	mState = EState::eAttackWait;
 }
@@ -404,6 +452,7 @@ void CBeholder::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
+		mpElectricShock->Stop();
 		mState = EState::eIdle2;
 	}
 }
@@ -614,15 +663,15 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				mState = EState::eAttack3;
+				//mState = EState::eAttack3;
 			}
 			else if (Attack4)
 			{
-				mState = EState::eAttack4;
+				//mState = EState::eAttack4;
 			}
 			else
 			{
-				mState = EState::eAttack;
+				//mState = EState::eAttack;
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
@@ -636,22 +685,31 @@ void CBeholder::Update()
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
 
-	if (mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (Position().Y() < 2.0f)
+		if (mFlyingTime <= 200 && Position().Y() <= 0.0f)
 		{
-			mMoveSpeed += CVector(0.0f, 0.5f, 0.0f);
+			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
 		}
 
-		if (Position().Y() >= 10.0f && Position().Y() < 12.0f)
+		if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
 		{
-			mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 		}
+	}
 
-		if (Position().Y() >= 20.0f)
-		{
-			mMoveSpeed -= CVector(0.0f, 1.0f, 0.0f);
-		}
+	if (Position().Y() >= 0.1f || vectorp >= 24.0f && vectorp <= WALK_RANGE)
+	{
+		mFlyingTime++;
+	}
+
+	if (Position().Y() <= 0.0f)
+	{
+		mFlyingTime = 0;
+	}
+	if (mState == EState::eHit)
+	{
+		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
@@ -660,13 +718,13 @@ void CBeholder::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
-	mpColliderSphere->Update();
-	mpColliderSphere2->Update();
-	mpColliderSphere3->Update();
-	mpColliderSphere4->Update();
-	mpColliderSphere5->Update();
-	mpColliderSphere6->Update();
-	mpColliderSphere7->Update();
+	mpColliderSphereBody->Update();
+	mpColliderSphereTentacle->Update();
+	mpColliderSphereTentacle2->Update();
+	mpColliderSphereTentacle3->Update();
+	mpColliderSphereTentacle4->Update();
+	mpColliderSphereTentacle5->Update();
+	mpColliderSphereTentacle6->Update();
 
 	mpDamageCol->Update();
 	mpDamageCol2->Update();
@@ -688,6 +746,18 @@ void CBeholder::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+
+	if (CInput::PushKey('Q'))
+	{
+		if (!mpLightningBall->IsThrowing())
+		{
+			mpLightningBall->Start();
+		}
+		else
+		{
+			mpLightningBall->Stop();
+		}
+	}
 }
 
 // 衝突処理
@@ -715,7 +785,7 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColliderLine || self == mpColliderLine2)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -730,8 +800,9 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		}
 	}
 	// キャラクター同士の衝突処理
-	else if (self == mpColliderSphere || self == mpColliderSphere2 || self == mpColliderSphere3
-		|| self == mpColliderSphere4 || self == mpColliderSphere5 || self == mpColliderSphere6 || self == mpColliderSphere7)
+	else if (self == mpColliderSphereBody || self == mpColliderSphereTentacle || self == mpColliderSphereTentacle2
+		|| self == mpColliderSphereTentacle3 || self == mpColliderSphereTentacle4 || self == mpColliderSphereTentacle5
+		|| self == mpColliderSphereTentacle6)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);

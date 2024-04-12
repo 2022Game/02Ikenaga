@@ -56,10 +56,6 @@ void CCrack::Update()
 	// 基底クラスの更新処理
 	CBillBoardImage::Update();
 
-	// ひび割れのエフェクトを移動
-	//CVector move = mMoveSpeed * Time::DeltaTime();
-	//Position(Position() + move);
-
 	// スケール変更時間を経過していない
 	if (mElapsedTime < FLAME_SCALE_ANIM_TIME)
 	{

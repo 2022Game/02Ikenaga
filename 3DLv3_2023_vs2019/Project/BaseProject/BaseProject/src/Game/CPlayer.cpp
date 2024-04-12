@@ -9,7 +9,7 @@
 #include "CSword.h"
 #include "CShield.h"
 #include "CSlash.h"
-#include "CBeamEffect.h"
+#include "CElectricShockEffect.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -47,7 +47,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
 };
 
-#define PLAYER_HEIGHT 2.0f
+#define PLAYER_HEIGHT 1.0f
 
 #define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f
@@ -183,7 +183,7 @@ CPlayer::CPlayer()
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 
-	mpBeam = new CBeamEffect
+	mpElectricShock = new  CElectricShockEffect
 	(
 		this, nullptr,
 		CVector(0.0f, 14.0f, -1.0f)
@@ -1030,6 +1030,18 @@ void CPlayer::Update()
 	else if (CInput::PushKey('3'))
 	{
 		ChangeLevel(100);
+	}
+
+	if (CInput::PushKey('Z'))
+	{
+		if (!mpElectricShock->IsThrowing())
+		{
+			mpElectricShock->Start();
+		}
+		else
+		{
+			mpElectricShock->Stop();
+		}
 	}
 
 	// HPゲージに現在のHPを設定

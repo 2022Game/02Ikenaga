@@ -68,8 +68,8 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\AvoidanceGauge.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
-    <ClCompile Include="src\Game\CBeam.cpp" />
-    <ClCompile Include="src\Game\CBeamEffect.cpp" />
+    <ClCompile Include="src\Game\CElectricShock.cpp" />
+    <ClCompile Include="src\Game\CElectricShockEffect.cpp" />
     <ClCompile Include="src\Game\CBee2.cpp" />
     <ClCompile Include="src\Game\CBee3.cpp" />
     <ClCompile Include="src\Game\CBeholder.cpp" />
@@ -83,6 +83,7 @@
     <ClCompile Include="src\Game\CCane.cpp" />
     <ClCompile Include="src\Game\CChest.cpp" />
     <ClCompile Include="src\Game\CChest2.cpp" />
+    <ClCompile Include="src\Game\CChest3.cpp" />
     <ClCompile Include="src\Game\CCoin.cpp" />
     <ClCompile Include="src\Game\CCrack.cpp" />
     <ClCompile Include="src\Game\CCrackEffect.cpp" />
@@ -96,6 +97,8 @@
     <ClCompile Include="src\Game\CGameCamera2.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
+    <ClCompile Include="src\Game\CLightningBall.cpp" />
+    <ClCompile Include="src\Game\CLightningBallEffect.cpp" />
     <ClCompile Include="src\Game\CMushroom2.cpp" />
     <ClCompile Include="src\Game\CMushroom3.cpp" />
     <ClCompile Include="src\Game\CNeedle.cpp" />
@@ -212,8 +215,8 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
-    <ClInclude Include="src\Game\CBeam.h" />
-    <ClInclude Include="src\Game\CBeamEffect.h" />
+    <ClInclude Include="src\Game\CElectricShock.h" />
+    <ClInclude Include="src\Game\CElectricShockEffect.h" />
     <ClInclude Include="src\Game\CBee2.h" />
     <ClInclude Include="src\Game\CBee3.h" />
     <ClInclude Include="src\Game\CBeholder.h" />
@@ -227,6 +230,7 @@
     <ClInclude Include="src\Game\CCane.h" />
     <ClInclude Include="src\Game\CChest.h" />
     <ClInclude Include="src\Game\CChest2.h" />
+    <ClInclude Include="src\Game\CChest3.h" />
     <ClInclude Include="src\Game\CCoin.h" />
     <ClInclude Include="src\Game\CCrack.h" />
     <ClInclude Include="src\Game\CCrackEffect.h" />
@@ -240,6 +244,8 @@
     <ClInclude Include="src\Game\CGameCamera2.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
+    <ClInclude Include="src\Game\CLightningBall.h" />
+    <ClInclude Include="src\Game\CLightningBallEffect.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CNeedle.h" />

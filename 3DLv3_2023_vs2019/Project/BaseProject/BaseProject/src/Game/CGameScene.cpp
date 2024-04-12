@@ -25,6 +25,7 @@
 #include "CBeholder.h"
 #include "CChest.h"
 #include "CChest2.h"
+#include "CChest3.h"
 #include "CBoxer.h"
 #include "CBoxer2.h"
 #include "CRich.h"
@@ -90,7 +91,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
-	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
+	CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
 	// ボス関連
@@ -245,26 +246,30 @@ void CGameScene::Load()
 	//enemy18->Position(180.0f, 0.0f, -810.0f);
 	//enemy18->Scale(40.0f, 40.0f, 40.0f);
 
-	// チェストモンスター
-	CChest* enemy19 = new CChest();
+	//// チェストモンスター
+	//CChest* enemy19 = new CChest();
 	//enemy19->Position(0.0f, 0.0f, -900.0f);
-	enemy19->Position(0.0f, 0.0f, 50.0f);
-	enemy19->Scale(30.0f, 30.0f, 30.0f);
+	//enemy19->Scale(30.0f, 30.0f, 30.0f);
 
-	// チェストモンスター2
-	CChest2* enemy20 = new CChest2();
-	enemy20->Position(-60.0f, 0.0f, -960.0f);
-	enemy20->Scale(30.0f, 30.0f, 30.0f);
+	//// チェストモンスター2
+	//CChest2* enemy20 = new CChest2();
+	//enemy20->Position(-60.0f, 0.0f, -900.0f);
+	//enemy20->Scale(30.0f, 30.0f, 30.0f);
+
+	//// チェストモンスター3
+	//CChest3* enemy21 = new CChest3();
+	//enemy21->Position(-30.0f, 0.0f, -960.0f);
+	//enemy21->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();
-	enemy22->Position(50.0f, 0.0f, 20.0f);
+	enemy22->Position(50.0f, 0.0f, 50.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	//// ボクサー
 	//CBoxer* enemy25 = new CBoxer();
-	//enemy25->Position(340.0f, 0.0f, 20.0f);
-	//enemy25->Scale(15.0f, 15.0f, 15.0f);
+	//enemy25->Position(0.0f, 0.0f, 50.0f);
+	//enemy25->Scale(20.0f, 20.0f, 20.0f);
 
 	//// ボクサー2
 	//CBoxer2* enemy27 = new CBoxer2();

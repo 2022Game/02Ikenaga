@@ -1,6 +1,5 @@
 #include "CRoarEffect.h"
 #include "CRoar.h"
-#include "CInput.h"
 #include "Maths.h"
 
 CRoarEffect* CRoarEffect::spInstance = nullptr;
@@ -103,7 +102,7 @@ CVector CRoarEffect::GetThrowDir() const
 }
 
 // —Y‹©‚Ñ‚ðì¬
-void CRoarEffect::CreateSlash()
+void CRoarEffect::CreateRoar()
 {
 	// —Y‹©‚Ñ‚ðì¬
 	CRoar* roar = new CRoar(ETag::eNone);
@@ -136,7 +135,7 @@ void CRoarEffect::Update()
 		// Œo‰ßŽžŠÔ‚É‰ž‚¶‚ÄA—Y‹©‚Ñ‚ðì¬
 		if (mElapsedTime >= THROW_INTERVAL)
 		{
-			CreateSlash();
+			CreateRoar();
 			mElapsedTime -= THROW_INTERVAL;
 		}
 		mElapsedTime += Time::DeltaTime();

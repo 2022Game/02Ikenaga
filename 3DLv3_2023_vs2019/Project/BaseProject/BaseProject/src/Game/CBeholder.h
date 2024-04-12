@@ -4,6 +4,9 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 
+class CLightningBallEffect;
+class CElectricShockEffect;
+
 /*
  球体のモンスター
  プレイヤーの推定レベル(61～70)
@@ -79,6 +82,7 @@ public:
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔
+	int mFlyingTime;   // 飛行時間
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -135,14 +139,15 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine2;
 
-	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー (頭)
-	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー (左上の触手)
-	CColliderSphere* mpColliderSphere3;  // ダメージを受けるコライダー(右上の触手)
-	CColliderSphere* mpColliderSphere4;  // ダメージを受けるコライダー(左下の触手)
-	CColliderSphere* mpColliderSphere5;  // ダメージを受けるコライダー(右下の触手)
-	CColliderSphere* mpColliderSphere6;  // ダメージを受けるコライダー(真ん中上の触手)
-	CColliderSphere* mpColliderSphere7;  // ダメージを受けるコライダー(真ん中下の触手)
+	CColliderSphere* mpColliderSphereBody;       // キャラクター押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereTentacle;   // キャラクター押し戻しコライダー(左上の触手)
+	CColliderSphere* mpColliderSphereTentacle2;  // キャラクター押し戻しコライダー(右上の触手)
+	CColliderSphere* mpColliderSphereTentacle3;  // キャラクター押し戻しコライダー(左下の触手)
+	CColliderSphere* mpColliderSphereTentacle4;  // キャラクター押し戻しコライダー(右下の触手)
+	CColliderSphere* mpColliderSphereTentacle5;  // キャラクター押し戻しコライダー(真ん中上の触手)
+	CColliderSphere* mpColliderSphereTentacle6;  // キャラクター押し戻しコライダー(真ん中下の触手)
 
 	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー(体)
 	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー(左上の触手)
@@ -160,4 +165,7 @@ private:
 	CColliderSphere* mpAttackCol6;  // ダメージを与えるコライダー(真ん中上の触手)
 	CColliderSphere* mpAttackCol7;  // ダメージを与えるコライダー(真ん中下の触手)
 	CTransform* mpRideObject;
+
+	CLightningBallEffect* mpLightningBall;
+	CElectricShockEffect* mpElectricShock;
 };

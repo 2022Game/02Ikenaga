@@ -132,6 +132,7 @@ private:
 	bool mIsSpawnedCoinEffect;
 
 	CColliderLine* mpColliderLine;
+
 	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
 	CColliderSphere* mpColliderSphereBody;   // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpColliderSphereFeet;   // キャラクター押し戻しコライダー(前の左足)
