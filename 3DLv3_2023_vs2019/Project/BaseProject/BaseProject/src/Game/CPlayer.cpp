@@ -106,7 +106,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(51);
+	ChangeLevel(61);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -150,7 +150,8 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eWeapon });
+	mpDamageCol->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eLightningBall,
+	                                ETag::eImpact,ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(-0.05f, 0.3f, 0.0f);
 
@@ -164,7 +165,8 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eWeapon });
+	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eLightningBall,
+		                             ETag::eImpact,ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol2->Position(-0.05f, 0.8f, 0.15f);
 

@@ -158,6 +158,9 @@
     <Filter Include="ソース ファイル\Game\Effect\ElectricShock">
       <UniqueIdentifier>{38bb1970-3563-4da9-86cd-690d3976e72f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Impact">
+      <UniqueIdentifier>{4b91aca2-4008-4444-aaf4-540e461b7155}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -567,6 +570,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CLightningBallEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\LightningBall</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CImpact.cpp">
+      <Filter>ソース ファイル\Game\Effect\Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CImpactEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Impact</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1001,6 +1010,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CLightningBallEffect.h">
       <Filter>ソース ファイル\Game\Effect\LightningBall</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CImpact.h">
+      <Filter>ソース ファイル\Game\Effect\Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CImpactEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Impact</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

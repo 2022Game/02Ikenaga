@@ -132,169 +132,169 @@ CBeholder::CBeholder()
 	mpColliderSphereTentacle6->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// ダメージを受けるコライダーを作成(体)
-	mpDamageCol = new CColliderSphere
+	mpDamageColBody = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,0.41f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(左上の触手)
-	mpDamageCol2 = new CColliderSphere
+	mpDamageColTentacle = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,0.087f, false
 	);
-	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTentacle->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTentacle->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(右上の触手)
-	mpDamageCol3 = new CColliderSphere
+	mpDamageColTentacle2 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,0.1f, false
 	);
-	mpDamageCol3->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol3->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTentacle2->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTentacle2->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(左下の触手)
-	mpDamageCol4 = new CColliderSphere
+	mpDamageColTentacle3 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.087f, false
 	);
-	mpDamageCol4->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol4->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTentacle3->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTentacle3->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(右下の触手)
-	mpDamageCol5 = new CColliderSphere
+	mpDamageColTentacle4 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.087f, false
 	);
-	mpDamageCol5->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol5->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTentacle4->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTentacle4->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(真ん中上の触手)
-	mpDamageCol6 = new CColliderSphere
+	mpDamageColTentacle5 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.08f, false
 	);
-	mpDamageCol6->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol6->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTentacle5->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTentacle5->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(真ん中下の触手)
-	mpDamageCol7 = new CColliderSphere
+	mpDamageColTentacle6 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.087f, false
 	);
-	mpDamageCol7->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol7->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTentacle6->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTentacle6->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを与えるコライダー(体)
-	mpAttackCol = new CColliderSphere
+	mpAttackColBody = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.41f, false
 	);
 	// 攻撃コライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColBody->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColBody->SetCollisionTags({ ETag::ePlayer });
 
 	// ダメージを与えるコライダー(左上の触手)
-	mpAttackCol2 = new CColliderSphere
+	mpAttackColTentacle = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.087f, false
 	);
-	mpAttackCol2->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol2->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColTentacle->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColTentacle->SetCollisionTags({ ETag::ePlayer });
 
 	// ダメージを与えるコライダー(右上の触手)
-	mpAttackCol3 = new CColliderSphere
+	mpAttackColTentacle2 = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.1f, false
 	);
-	mpAttackCol3->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol3->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColTentacle2->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColTentacle2->SetCollisionTags({ ETag::ePlayer });
 
 	// ダメージを与えるコライダー(左下の触手)
-	mpAttackCol4 = new CColliderSphere
+	mpAttackColTentacle3 = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.087f, false
 	);
-	mpAttackCol4->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol4->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColTentacle3->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColTentacle3->SetCollisionTags({ ETag::ePlayer });
 
 	// ダメージを与えるコライダー(右下の触手)
-	mpAttackCol5 = new CColliderSphere
+	mpAttackColTentacle4 = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.087f, false
 	);
-	mpAttackCol5->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol5->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColTentacle4->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColTentacle4->SetCollisionTags({ ETag::ePlayer });
 
 	// ダメージを与えるコライダー(真ん中上の触手)
-	mpAttackCol6 = new CColliderSphere
+	mpAttackColTentacle5 = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.08f, false
 	);
-	mpAttackCol6->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol6->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColTentacle5->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColTentacle5->SetCollisionTags({ ETag::ePlayer });
 
 	// ダメージを与えるコライダー(真ん中下の触手)
-	mpAttackCol7 = new CColliderSphere
+	mpAttackColTentacle6 = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.087f, false
 	);
-	mpAttackCol7->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol7->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColTentacle6->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColTentacle6->SetCollisionTags({ ETag::ePlayer });
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
 	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageCol->SetAttachMtx(bodyMty);
-	mpAttackCol->SetAttachMtx(bodyMty);
+	mpDamageColBody->SetAttachMtx(bodyMty);
+	mpAttackColBody->SetAttachMtx(bodyMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの左上の触手の行列にアタッチ
 	const CMatrix* tentacleMty = GetFrameMtx("Armature_TentacleA05");
 	mpColliderSphereTentacle->SetAttachMtx(tentacleMty);
-	mpDamageCol2->SetAttachMtx(tentacleMty);
-	mpAttackCol2->SetAttachMtx(tentacleMty);
+	mpDamageColTentacle->SetAttachMtx(tentacleMty);
+	mpAttackColTentacle->SetAttachMtx(tentacleMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの右上の触手の行列にアタッチ
 	const CMatrix* tentacleMty2 = GetFrameMtx("Armature_TentacleE05");
 	mpColliderSphereTentacle2->SetAttachMtx(tentacleMty2);
-	mpDamageCol3->SetAttachMtx(tentacleMty2);
-	mpAttackCol3->SetAttachMtx(tentacleMty2);
+	mpDamageColTentacle2->SetAttachMtx(tentacleMty2);
+	mpAttackColTentacle2->SetAttachMtx(tentacleMty2);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの左下の触手の行列にアタッチ
 	const CMatrix * tentacleMty3 = GetFrameMtx("Armature_TentacleB05");
 	mpColliderSphereTentacle3->SetAttachMtx(tentacleMty3);
-	mpDamageCol4->SetAttachMtx(tentacleMty3);
-	mpAttackCol4->SetAttachMtx(tentacleMty3);
+	mpDamageColTentacle3->SetAttachMtx(tentacleMty3);
+	mpAttackColTentacle3->SetAttachMtx(tentacleMty3);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの右下の触手の行列にアタッチ
 	const CMatrix* tentacleMty4 = GetFrameMtx("Armature_TentacleD05");
 	mpColliderSphereTentacle4->SetAttachMtx(tentacleMty4);
-	mpDamageCol5->SetAttachMtx(tentacleMty4);
-	mpAttackCol5->SetAttachMtx(tentacleMty4);
+	mpDamageColTentacle4->SetAttachMtx(tentacleMty4);
+	mpAttackColTentacle4->SetAttachMtx(tentacleMty4);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの真ん中上の触手の行列にアタッチ
 	const CMatrix* tentacleMty5 = GetFrameMtx("Armature_TentacleF05");
 	mpColliderSphereTentacle5->SetAttachMtx(tentacleMty5);
-	mpDamageCol6->SetAttachMtx(tentacleMty5);
-	mpAttackCol6->SetAttachMtx(tentacleMty5);
+	mpDamageColTentacle5->SetAttachMtx(tentacleMty5);
+	mpAttackColTentacle5->SetAttachMtx(tentacleMty5);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの真ん中下の触手の行列にアタッチ
 	const CMatrix* tentacleMty6 = GetFrameMtx("Armature_TentacleC05");
 	mpColliderSphereTentacle6->SetAttachMtx(tentacleMty6);
-	mpDamageCol7->SetAttachMtx(tentacleMty6);
-	mpAttackCol7->SetAttachMtx(tentacleMty6);
+	mpDamageColTentacle6->SetAttachMtx(tentacleMty6);
+	mpAttackColTentacle6->SetAttachMtx(tentacleMty6);
 
 	// 最初の攻撃コライダーを無効にしておく
-	mpAttackCol->SetEnable(false);
-	mpAttackCol2->SetEnable(false);
-	mpAttackCol3->SetEnable(false);
-	mpAttackCol4->SetEnable(false);
-	mpAttackCol5->SetEnable(false);
-	mpAttackCol6->SetEnable(false);
-	mpAttackCol7->SetEnable(false);
+	mpAttackColBody->SetEnable(false);
+	mpAttackColTentacle->SetEnable(false);
+	mpAttackColTentacle2->SetEnable(false);
+	mpAttackColTentacle3->SetEnable(false);
+	mpAttackColTentacle4->SetEnable(false);
+	mpAttackColTentacle5->SetEnable(false);
+	mpAttackColTentacle6->SetEnable(false);
 
 	mpLightningBall = new CLightningBallEffect
 	(
@@ -306,7 +306,8 @@ CBeholder::CBeholder()
 	mpElectricShock = new  CElectricShockEffect
 	(
 		this, nullptr,
-		CVector(0.0f, 14.0f, -1.0f)
+		CVector(0.0f, 22.0f, 0.0f),
+		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
 }
 
@@ -323,21 +324,21 @@ CBeholder::~CBeholder()
 	SAFE_DELETE(mpColliderSphereTentacle5);
 	SAFE_DELETE(mpColliderSphereTentacle6);
 
-	SAFE_DELETE(mpDamageCol);
-	SAFE_DELETE(mpDamageCol2);
-	SAFE_DELETE(mpDamageCol3);
-	SAFE_DELETE(mpDamageCol4);
-	SAFE_DELETE(mpDamageCol5);
-	SAFE_DELETE(mpDamageCol6);
-	SAFE_DELETE(mpDamageCol7);
+	SAFE_DELETE(mpDamageColBody);
+	SAFE_DELETE(mpDamageColTentacle);
+	SAFE_DELETE(mpDamageColTentacle2);
+	SAFE_DELETE(mpDamageColTentacle3);
+	SAFE_DELETE(mpDamageColTentacle4);
+	SAFE_DELETE(mpDamageColTentacle5);
+	SAFE_DELETE(mpDamageColTentacle6);
 
-	SAFE_DELETE(mpAttackCol);
-	SAFE_DELETE(mpAttackCol2);
-	SAFE_DELETE(mpAttackCol3);
-	SAFE_DELETE(mpAttackCol4);
-	SAFE_DELETE(mpAttackCol5);
-	SAFE_DELETE(mpAttackCol6);
-	SAFE_DELETE(mpAttackCol7);
+	SAFE_DELETE(mpAttackColBody);
+	SAFE_DELETE(mpAttackColTentacle);
+	SAFE_DELETE(mpAttackColTentacle2);
+	SAFE_DELETE(mpAttackColTentacle3);
+	SAFE_DELETE(mpAttackColTentacle4);
+	SAFE_DELETE(mpAttackColTentacle5);
+	SAFE_DELETE(mpAttackColTentacle6);
 }
 
 CBeholder* CBeholder::Instance()
@@ -389,19 +390,24 @@ void CBeholder::UpdateAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
-	AttackStart();
+	if (mAnimationFrame >= 0.0f && mAnimationFrame < 5.0f)
+	{
+		AttackStart();
+	}
 
 	if (mAnimationFrame >= 10.0f)
 	{
-		if (!mpLightningBall->IsThrowing())
+		if (!mpLightningBall->IsThrowing()&& !mpElectricShock->IsThrowing())
 		{
 			mpLightningBall->Start();
+			mpElectricShock->Start();
 		}
 	}
 
 	if (IsAnimationFinished())
 	{
 		mpLightningBall->Stop();
+		mpElectricShock->Stop();
 		// 攻撃終了待ち状態へ移行
 		mState = EState::eAttackWait;
 	}
@@ -413,15 +419,25 @@ void CBeholder::UpdateAttack2()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
-	AttackStart();
-
-	if (!mpElectricShock->IsThrowing())
+	if (mAnimationFrame >= 0.0f && mAnimationFrame < 5.0f)
 	{
-		mpElectricShock->Start();
+		AttackStart();
 	}
 
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	if (mAnimationFrame >= 1.0f)
+	{
+		if (!mpElectricShock->IsThrowing())
+		{
+			mpElectricShock->Start();
+		}
+	}
+
+	if (IsAnimationFinished())
+	{
+		mpElectricShock->Stop();
+		// 攻撃2終了待ち状態へ移行
+		mState = EState::eAttackWait;
+	}
 }
 
 // 攻撃3
@@ -460,6 +476,8 @@ void CBeholder::UpdateAttackWait()
 // ヒット
 void CBeholder::UpdateHit()
 {
+	mpElectricShock->Stop();
+	mpLightningBall->Stop();
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -492,7 +510,7 @@ void CBeholder::UpdateDie()
 	{
 		Kill();
 		// エネミーの死亡処理
-		CEnemy::Death();
+		CEnemy::BeholderDeath();
 	}
 }
 
@@ -659,7 +677,7 @@ void CBeholder::Update()
 			if (probability4 == 11)Attack4 = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				//mState = EState::eAttack2;
 			}
 			else if (Attack3)
 			{
@@ -671,7 +689,7 @@ void CBeholder::Update()
 			}
 			else
 			{
-				//mState = EState::eAttack;
+				mState = EState::eAttack;
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
@@ -726,21 +744,21 @@ void CBeholder::Update()
 	mpColliderSphereTentacle5->Update();
 	mpColliderSphereTentacle6->Update();
 
-	mpDamageCol->Update();
-	mpDamageCol2->Update();
-	mpDamageCol3->Update();
-	mpDamageCol4->Update();
-	mpDamageCol5->Update();
-	mpDamageCol6->Update();
-	mpDamageCol7->Update();
+	mpDamageColBody->Update();
+	mpDamageColTentacle->Update();
+	mpDamageColTentacle2->Update();
+	mpDamageColTentacle3->Update();
+	mpDamageColTentacle4->Update();
+	mpDamageColTentacle5->Update();
+	mpDamageColTentacle6->Update();
 
-	mpAttackCol->Update();
-	mpAttackCol2->Update();
-	mpAttackCol3->Update();
-	mpAttackCol4->Update();
-	mpAttackCol5->Update();
-	mpAttackCol6->Update();
-	mpAttackCol7->Update();
+	mpAttackColBody->Update();
+	mpAttackColTentacle->Update();
+	mpAttackColTentacle2->Update();
+	mpAttackColTentacle3->Update();
+	mpAttackColTentacle4->Update();
+	mpAttackColTentacle5->Update();
+	mpAttackColTentacle6->Update();
 
 	mIsGrounded = false;
 
@@ -764,8 +782,8 @@ void CBeholder::Update()
 void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackCol || self == mpAttackCol2 || self == mpAttackCol3 || self == mpAttackCol4 || self == mpAttackCol5
-		|| self == mpAttackCol6 || self == mpAttackCol7 && mState != EState::eIdle && mState != EState::eIdle2)
+	if (self == mpAttackColBody || self == mpAttackColTentacle || self == mpAttackColTentacle2 || self == mpAttackColTentacle3 || self == mpAttackColTentacle4
+		|| self == mpAttackColTentacle5 || self == mpAttackColTentacle6 && mState != EState::eIdle && mState != EState::eIdle2)
 	{
 		// キャラのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
@@ -815,13 +833,13 @@ void CBeholder::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackCol->SetEnable(true);
-	mpAttackCol2->SetEnable(true);
-	mpAttackCol3->SetEnable(true);
-	mpAttackCol4->SetEnable(true);
-	mpAttackCol5->SetEnable(true);
-	mpAttackCol6->SetEnable(true);
-	mpAttackCol7->SetEnable(true);
+	mpAttackColBody->SetEnable(true);
+	mpAttackColTentacle->SetEnable(true);
+	mpAttackColTentacle2->SetEnable(true);
+	mpAttackColTentacle3->SetEnable(true);
+	mpAttackColTentacle4->SetEnable(true);
+	mpAttackColTentacle5->SetEnable(true);
+	mpAttackColTentacle6->SetEnable(true);
 }
 
 // 攻撃終了
@@ -829,13 +847,13 @@ void CBeholder::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
-	mpAttackCol->SetEnable(false);
-	mpAttackCol2->SetEnable(false);
-	mpAttackCol3->SetEnable(false);
-	mpAttackCol4->SetEnable(false);
-	mpAttackCol5->SetEnable(false);
-	mpAttackCol6->SetEnable(false);
-	mpAttackCol7->SetEnable(false);
+	mpAttackColBody->SetEnable(false);
+	mpAttackColTentacle->SetEnable(false);
+	mpAttackColTentacle2->SetEnable(false);
+	mpAttackColTentacle3->SetEnable(false);
+	mpAttackColTentacle4->SetEnable(false);
+	mpAttackColTentacle5->SetEnable(false);
+	mpAttackColTentacle6->SetEnable(false);
 }
 
 // 描画

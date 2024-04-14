@@ -157,6 +157,46 @@ void CEnemy::ChestBigDeath()
 	);
 }
 
+// 小さい球体モンスターの死亡処理
+void CEnemy::BeholderDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::BeholderSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 大きい球体モンスターの死亡処理
+void CEnemy::BeholderBigDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::BeholderBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 小さいボクサーの死亡処理
+void CEnemy::BoxerDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::BoxerSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
+// 大きいボクサーの死亡処理
+void CEnemy::BoxerBigDeath()
+{
+	// 死亡時に経験値を生成する
+	CExpManeger::BoxerBigSpawnExp(
+		mCharaStatus.exp,
+		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+}
+
 // 死亡処理(レベル50以下の敵用)
 void CEnemy::Death()
 {

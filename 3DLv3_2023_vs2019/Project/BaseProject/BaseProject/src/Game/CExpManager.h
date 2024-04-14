@@ -42,6 +42,16 @@ public:
 	// 経験値を作成(大きいチェストモンスター用)
 	static void ChestBigSpawnExp(int exp, const CVector& pos);
 
+	// 経験値を作成(小さい球体モンスター用)
+	static void BeholderSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きい球体モンスター用)
+	static void BeholderBigSpawnExp(int exp, const CVector& pos);
+
+	// 経験値を作成(小さいボクサー用)
+	static void BoxerSpawnExp(int exp, const CVector& pos);
+	// 経験値を作成(大きいボクサー用)
+	static void BoxerBigSpawnExp(int exp, const CVector& pos);
+
 	// 経験値を作成(レベル50以下の敵用)
 	static void SpawnExp(int exp, const CVector& pos);
 	// 経験値を作成(レベル90以下の敵用)

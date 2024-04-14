@@ -40,6 +40,8 @@ private:
 	// 雷球発射の方向を取得
 	CVector GetThrowDir() const;
 
+	// 発射した雷のエフェクトのリスト
+	std::list<CLightningBall*> mLightningBall;
 	static CLightningBallEffect* spInstance;
 	CObjectBase* mpOwner;		// このエフェクトの持ち主
 	const CMatrix* mpAttachMtx;	// エフェクトをアタッチする行列

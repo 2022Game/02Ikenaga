@@ -50,6 +50,24 @@
 #define ChestBig_SPAWN_EXP_COUNT_MIN 9   // 生成する経験値オーブの最小数
 #define ChestBig_SPAWN_EXP_COUNT_MAX 10  // 生成する経験値オーブの最大数
 
+// 小さい球体モンスター用
+#define Beholder_SPAWN_EXP_COUNT_MIN 8  // 生成する経験値オーブの最小数
+#define Beholder_SPAWN_EXP_COUNT_MAX 9  // 生成する経験値オーブの最大数
+// 大きい球体モンスター用
+#define BeholderBig_SPAWN_EXP_COUNT_MIN 10   // 生成する経験値オーブの最小数
+#define BeholderBig_SPAWN_EXP_COUNT_MAX 11   // 生成する経験値オーブの最大数
+
+// 小さいボクサー用
+#define Boxer_SPAWN_EXP_COUNT_MIN 9   // 生成する経験値オーブの最小数
+#define Boxer_SPAWN_EXP_COUNT_MAX 10  // 生成する経験値オーブの最大数
+// 大きいボクサー用
+#define BoxerBig_SPAWN_EXP_COUNT_MIN 11   // 生成する経験値オーブの最小数
+#define BoxerBig_SPAWN_EXP_COUNT_MAX 12   // 生成する経験値オーブの最大数
+
+// ドラゴン用
+#define Dragon_SPAWN_EXP_COUNT_MIN 13   // 生成する経験値オーブの最小数
+#define Dragon_SPAWN_EXP_COUNT_MAX 14   // 生成する経験値オーブの最大数
+
 // レベル50以下の敵用
 #define Level50_SPAWN_EXP_COUNT_MIN 2  // 生成する経験値オーブの最小数
 #define Level50_SPAWN_EXP_COUNT_MAX 3  // 生成する経験値オーブの最大数
@@ -586,6 +604,160 @@ void CExpManeger::ChestBigSpawnExp(int exp, const CVector& pos)
 		int maxCount = std::min(spawnCount, ChestBig_SPAWN_EXP_COUNT_MAX);
 		// 生成数を最小数～最大数のランダムで取得
 		spawnCount = Math::Rand(ChestBig_SPAWN_EXP_COUNT_MIN, maxCount);
+	}
+
+	// 開始角度はランダムに決める
+	float startAngle = Math::Rand(0.0f, M_PI * 2.0f);
+	// 加算する経験値のベース値
+	int baseExp = exp / spawnCount;
+	// 割り切れない余りの経験値
+	int remainExp = exp % spawnCount;
+	for (int i = 0; i < spawnCount; i++)
+	{
+		// 余りの経験値が残っている場合は、加算する経験値のベース値+1する
+		CExp* e = new CExp(baseExp + (i < remainExp ? 1 : 0));
+
+		// 等間隔に360度経験値を出現させる
+		float per = (float)i / spawnCount;
+		float angle = startAngle + M_PI * 2.0f * per;
+		CVector dir = CVector(cosf(angle), 0.0f, sinf(angle));
+		CVector epos = pos + dir * 1.0f;
+
+		e->Setup(epos, dir);
+		e->Scale(3.0f, 3.0f, 3.0f);
+		e->SetColor(CColor(0.0f, 1.0f, 0.2, 1.0f));
+	}
+}
+
+// 経験値を作成(小さい球体モンスター用)
+void CExpManeger::BeholderSpawnExp(int exp, const CVector& pos)
+{
+	if (exp == 0)return;
+
+	// 経験値オーブの生成数を設定
+	int spawnCount = exp;
+	// 生成数が最小数より大きい場合は
+	if (spawnCount > Beholder_SPAWN_EXP_COUNT_MIN)
+	{
+		// 生成できる最大数を取得
+		int maxCount = std::min(spawnCount, Beholder_SPAWN_EXP_COUNT_MAX);
+		// 生成数を最小数～最大数のランダムで取得
+		spawnCount = Math::Rand(Beholder_SPAWN_EXP_COUNT_MIN, maxCount);
+	}
+
+	// 開始角度はランダムに決める
+	float startAngle = Math::Rand(0.0f, M_PI * 2.0f);
+	// 加算する経験値のベース値
+	int baseExp = exp / spawnCount;
+	// 割り切れない余りの経験値
+	int remainExp = exp % spawnCount;
+	for (int i = 0; i < spawnCount; i++)
+	{
+		// 余りの経験値が残っている場合は、加算する経験値のベース値+1する
+		CExp* e = new CExp(baseExp + (i < remainExp ? 1 : 0));
+
+		// 等間隔に360度経験値を出現させる
+		float per = (float)i / spawnCount;
+		float angle = startAngle + M_PI * 2.0f * per;
+		CVector dir = CVector(cosf(angle), 0.0f, sinf(angle));
+		CVector epos = pos + dir * 1.0f;
+
+		e->Setup(epos, dir);
+		e->Scale(3.0f, 3.0f, 3.0f);
+		e->SetColor(CColor(0.0f, 1.0f, 0.2, 1.0f));
+	}
+}
+// 経験値を作成(大きい球体モンスター用)
+void CExpManeger::BeholderBigSpawnExp(int exp, const CVector& pos)
+{
+	if (exp == 0)return;
+
+	// 経験値オーブの生成数を設定
+	int spawnCount = exp;
+	// 生成数が最小数より大きい場合は
+	if (spawnCount > BeholderBig_SPAWN_EXP_COUNT_MIN)
+	{
+		// 生成できる最大数を取得
+		int maxCount = std::min(spawnCount, BeholderBig_SPAWN_EXP_COUNT_MAX);
+		// 生成数を最小数～最大数のランダムで取得
+		spawnCount = Math::Rand(BeholderBig_SPAWN_EXP_COUNT_MIN, maxCount);
+	}
+
+	// 開始角度はランダムに決める
+	float startAngle = Math::Rand(0.0f, M_PI * 2.0f);
+	// 加算する経験値のベース値
+	int baseExp = exp / spawnCount;
+	// 割り切れない余りの経験値
+	int remainExp = exp % spawnCount;
+	for (int i = 0; i < spawnCount; i++)
+	{
+		// 余りの経験値が残っている場合は、加算する経験値のベース値+1する
+		CExp* e = new CExp(baseExp + (i < remainExp ? 1 : 0));
+
+		// 等間隔に360度経験値を出現させる
+		float per = (float)i / spawnCount;
+		float angle = startAngle + M_PI * 2.0f * per;
+		CVector dir = CVector(cosf(angle), 0.0f, sinf(angle));
+		CVector epos = pos + dir * 1.0f;
+
+		e->Setup(epos, dir);
+		e->Scale(3.0f, 3.0f, 3.0f);
+		e->SetColor(CColor(0.0f, 1.0f, 0.2, 1.0f));
+	}
+}
+
+// 経験値を作成(小さいボクサー用)
+void CExpManeger::BoxerSpawnExp(int exp, const CVector& pos)
+{
+	if (exp == 0)return;
+
+	// 経験値オーブの生成数を設定
+	int spawnCount = exp;
+	// 生成数が最小数より大きい場合は
+	if (spawnCount > Boxer_SPAWN_EXP_COUNT_MIN)
+	{
+		// 生成できる最大数を取得
+		int maxCount = std::min(spawnCount, Boxer_SPAWN_EXP_COUNT_MAX);
+		// 生成数を最小数～最大数のランダムで取得
+		spawnCount = Math::Rand(Boxer_SPAWN_EXP_COUNT_MIN, maxCount);
+	}
+
+	// 開始角度はランダムに決める
+	float startAngle = Math::Rand(0.0f, M_PI * 2.0f);
+	// 加算する経験値のベース値
+	int baseExp = exp / spawnCount;
+	// 割り切れない余りの経験値
+	int remainExp = exp % spawnCount;
+	for (int i = 0; i < spawnCount; i++)
+	{
+		// 余りの経験値が残っている場合は、加算する経験値のベース値+1する
+		CExp* e = new CExp(baseExp + (i < remainExp ? 1 : 0));
+
+		// 等間隔に360度経験値を出現させる
+		float per = (float)i / spawnCount;
+		float angle = startAngle + M_PI * 2.0f * per;
+		CVector dir = CVector(cosf(angle), 0.0f, sinf(angle));
+		CVector epos = pos + dir * 1.0f;
+
+		e->Setup(epos, dir);
+		e->Scale(3.0f, 3.0f, 3.0f);
+		e->SetColor(CColor(0.0f, 1.0f, 0.2, 1.0f));
+	}
+}
+// 経験値を作成(大きいボクサー用)
+void CExpManeger::BoxerBigSpawnExp(int exp, const CVector& pos)
+{
+	if (exp == 0)return;
+
+	// 経験値オーブの生成数を設定
+	int spawnCount = exp;
+	// 生成数が最小数より大きい場合は
+	if (spawnCount > BoxerBig_SPAWN_EXP_COUNT_MIN)
+	{
+		// 生成できる最大数を取得
+		int maxCount = std::min(spawnCount, BoxerBig_SPAWN_EXP_COUNT_MAX);
+		// 生成数を最小数～最大数のランダムで取得
+		spawnCount = Math::Rand(BoxerBig_SPAWN_EXP_COUNT_MIN, maxCount);
 	}
 
 	// 開始角度はランダムに決める

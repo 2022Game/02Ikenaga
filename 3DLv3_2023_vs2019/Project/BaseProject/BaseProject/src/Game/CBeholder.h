@@ -149,23 +149,23 @@ private:
 	CColliderSphere* mpColliderSphereTentacle5;  // キャラクター押し戻しコライダー(真ん中上の触手)
 	CColliderSphere* mpColliderSphereTentacle6;  // キャラクター押し戻しコライダー(真ん中下の触手)
 
-	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー(左上の触手)
-	CColliderSphere* mpDamageCol3;  // ダメージを受けるコライダー(右上の触手)
-	CColliderSphere* mpDamageCol4;  // ダメージを受けるコライダー(左下の触手)
-	CColliderSphere* mpDamageCol5;  // ダメージを受けるコライダー(右下の触手)
-	CColliderSphere* mpDamageCol6;  // ダメージを受けるコライダー(真ん中上の触手)
-	CColliderSphere* mpDamageCol7;  // ダメージを受けるコライダー(真ん中下の触手)
+	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColTentacle;   // ダメージを受けるコライダー(左上の触手)
+	CColliderSphere* mpDamageColTentacle2;  // ダメージを受けるコライダー(右上の触手)
+	CColliderSphere* mpDamageColTentacle3;  // ダメージを受けるコライダー(左下の触手)
+	CColliderSphere* mpDamageColTentacle4;  // ダメージを受けるコライダー(右下の触手)
+	CColliderSphere* mpDamageColTentacle5;  // ダメージを受けるコライダー(真ん中上の触手)
+	CColliderSphere* mpDamageColTentacle6;  // ダメージを受けるコライダー(真ん中下の触手)
 
-	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー(体)
-	CColliderSphere* mpAttackCol2;  // ダメージを与えるコライダー(左上の触手)
-	CColliderSphere* mpAttackCol3;  // ダメージを与えるコライダー(右上の触手)
-	CColliderSphere* mpAttackCol4;  // ダメージを与えるコライダー(左下の触手)
-	CColliderSphere* mpAttackCol5;  // ダメージを与えるコライダー(右下の触手)
-	CColliderSphere* mpAttackCol6;  // ダメージを与えるコライダー(真ん中上の触手)
-	CColliderSphere* mpAttackCol7;  // ダメージを与えるコライダー(真ん中下の触手)
+	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
+	CColliderSphere* mpAttackColTentacle;   // ダメージを与えるコライダー(左上の触手)
+	CColliderSphere* mpAttackColTentacle2;  // ダメージを与えるコライダー(右上の触手)
+	CColliderSphere* mpAttackColTentacle3;  // ダメージを与えるコライダー(左下の触手)
+	CColliderSphere* mpAttackColTentacle4;  // ダメージを与えるコライダー(右下の触手)
+	CColliderSphere* mpAttackColTentacle5;  // ダメージを与えるコライダー(真ん中上の触手)
+	CColliderSphere* mpAttackColTentacle6;  // ダメージを与えるコライダー(真ん中下の触手)
 	CTransform* mpRideObject;
 
-	CLightningBallEffect* mpLightningBall;
-	CElectricShockEffect* mpElectricShock;
+	CLightningBallEffect* mpLightningBall;  // 雷球
+	CElectricShockEffect* mpElectricShock;  // 電撃
 };

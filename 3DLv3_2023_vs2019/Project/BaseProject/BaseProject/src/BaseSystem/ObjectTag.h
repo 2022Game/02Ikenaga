@@ -24,6 +24,7 @@ enum class ETag
 	eNeedle, // j
 	eLightningBall,  // —‹‹…
 	eElectricShock,  // “dŒ‚
+	eImpact, // ÕŒ‚
 
 	eCamera, // ƒJƒƒ‰
 

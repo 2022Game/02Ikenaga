@@ -46,6 +46,16 @@ public:
 	// 大きいチェストモンスターの死亡処理
 	virtual void ChestBigDeath();
 
+	// 小さい球体モンスターの死亡処理
+	virtual void BeholderDeath();
+	// 大きい球体モンスターの死亡処理
+	virtual void BeholderBigDeath();
+
+	// 小さいボクサーの死亡処理
+	virtual void BoxerDeath();
+	// 大きいボクサーの死亡処理
+	virtual void BoxerBigDeath();
+
 	// 死亡処理(レベル50以下の敵用)
 	virtual void Death();
 

@@ -174,6 +174,7 @@ private:
 
 	CColliderLine* mpColliderLine;
 	//CColliderSphere* mpColliderSphere;
+
 	CColliderSphere* mpDamageCol;    // ダメージを受けるコライダー(頭)
 	CColliderSphere* mpDamageCol2;   // ダメージを受けるコライダー(口)
 	CColliderSphere* mpDamageCol3;   // ダメージを受けるコライダー(口の先端)

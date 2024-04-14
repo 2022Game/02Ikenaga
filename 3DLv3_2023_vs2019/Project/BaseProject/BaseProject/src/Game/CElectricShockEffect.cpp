@@ -3,11 +3,11 @@
 #include "Maths.h"
 
 // 電撃の間隔時間
-#define THROW_INTERVAL 0.6f
+#define THROW_INTERVAL 0.4f
 // 電撃の方向のブレ幅
 #define FLAME_DIR_RAND 0.02f
 // 電撃の移動速度
-#define FLAME_MOVE_SPEED 25.0f
+#define FLAME_MOVE_SPEED 100.0f
 // 電撃の色
 #define FLAME_COLOR CColor(1.0f, 1.0f, 0.0f)
 
@@ -21,12 +21,15 @@ CElectricShockEffect::CElectricShockEffect(CObjectBase* owner, const CMatrix* at
 	, mElapsedTime(0.0f)
 	, mIsThrowing(false)
 {
-	
 }
 
 // デストラクタ
 CElectricShockEffect::~CElectricShockEffect()
 {
+	for (CElectricShock* electricShock :mElectricShock)
+	{
+		electricShock->Kill();
+	}
 }
 
 // 電撃を開始
@@ -120,6 +123,8 @@ void CElectricShockEffect::CreateSlash()
 	electricShock->SetColor(FLAME_COLOR);
 	// 加算ブレンドにして、電撃が発光しているように見せる
 	electricShock->SetBlendType(EBlend::eAdd);
+	// 作成した雷のエフェクトをリストに追加
+	mElectricShock.push_back(electricShock);
 }
 
 // 更新
@@ -135,5 +140,22 @@ void CElectricShockEffect::Update()
 			mElapsedTime -= THROW_INTERVAL;
 		}
 		mElapsedTime += Time::DeltaTime();
+	}
+	// 生成済みの電撃のエフェクトの削除処理
+	auto itr = mElectricShock.begin();
+	auto end = mElectricShock.end();
+	while (itr != end)
+	{
+		CElectricShock* electricShock = *itr;
+		// 削除フラグが立っていたら、削除
+		if (electricShock->IsDeath())
+		{
+			itr = mElectricShock.erase(itr);
+			electricShock->Kill();
+		}
+		else
+		{
+			itr++;
+		}
 	}
 }

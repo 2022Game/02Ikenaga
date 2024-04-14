@@ -3,17 +3,24 @@
 #include "Easing.h"
 
 // 電撃のスケール値の最大値
-#define FLAME_SCALE 10.0f
+#define FLAME_SCALE 8.0f
 // 電撃のスケール値が最大値になるまでの時間
 #define FLAME_SCALE_ANIM_TIME 3.0f
 
+// アニメーションの1コマ表示時間
+#define ANIM_TIME 0.0625f
+// 電撃のエフェクトのアニメーションデータ
+TexAnimData CElectricShock::msAnimData = TexAnimData(2, 5, false, 10, ANIM_TIME);
+
 // コンストラクタ
 CElectricShock::CElectricShock(ETag tag)
-	: CBillBoardImage("Effect/ElectricShock.png", ETag::eElectricShock, ETaskPauseType::eGame)
+	: CBillBoardImage("Effect/Thunder.png", ETag::eElectricShock, ETaskPauseType::eGame)
 	, mMoveSpeed(CVector::zero)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 {
+	SetAnimData(&msAnimData);
+
 	mpCollider = new CColliderLine
 	(
 		this, ELayer::eAttackCol,
@@ -119,9 +126,9 @@ void CElectricShock::Update()
 	{
 		Scale(CVector::one * FLAME_SCALE);
 	}
-
-	if (mElapsedTime >= 2)
+	// アニメーションが終わったら、削除フラグを立てる
+	if (IsEndAnim())
 	{
-		Kill();
+		mIsDeath = true;
 	}
 }

@@ -154,7 +154,7 @@ void CGameScene::Load()
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
-	player->Position(0.0f, 35.0f, 0.0f);
+	player->Position(0.0f, 36.0f, 0.0f);
 
 	// レッドスライム
 	CSlime* enemy = new CSlime();
@@ -263,12 +263,12 @@ void CGameScene::Load()
 
 	//// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();
-	enemy22->Position(50.0f, 0.0f, 50.0f);
+	enemy22->Position(50.0f, 0.0f, 100.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	//// ボクサー
 	//CBoxer* enemy25 = new CBoxer();
-	//enemy25->Position(0.0f, 0.0f, 50.0f);
+	//enemy25->Position(50.0f, 0.0f, 50.0f);
 	//enemy25->Scale(20.0f, 20.0f, 20.0f);
 
 	//// ボクサー2
@@ -283,7 +283,7 @@ void CGameScene::Load()
 
 	//// ドラゴン
 	//CDragon* bossEnemy = new CDragon();
-	//bossEnemy->Position(0.0f, 21.0f, 90.0f);
+	//bossEnemy->Position(0.0f, 21.0f, 120.0f);
 	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	CPortionRed* portionred = new CPortionRed();

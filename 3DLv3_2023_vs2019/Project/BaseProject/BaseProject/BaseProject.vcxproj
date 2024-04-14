@@ -97,6 +97,8 @@
     <ClCompile Include="src\Game\CGameCamera2.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
+    <ClCompile Include="src\Game\CImpact.cpp" />
+    <ClCompile Include="src\Game\CImpactEffect.cpp" />
     <ClCompile Include="src\Game\CLightningBall.cpp" />
     <ClCompile Include="src\Game\CLightningBallEffect.cpp" />
     <ClCompile Include="src\Game\CMushroom2.cpp" />
@@ -244,6 +246,8 @@
     <ClInclude Include="src\Game\CGameCamera2.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
+    <ClInclude Include="src\Game\CImpact.h" />
+    <ClInclude Include="src\Game\CImpactEffect.h" />
     <ClInclude Include="src\Game\CLightningBall.h" />
     <ClInclude Include="src\Game\CLightningBallEffect.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />

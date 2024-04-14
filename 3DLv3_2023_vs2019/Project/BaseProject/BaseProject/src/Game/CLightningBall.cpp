@@ -1,16 +1,20 @@
 #include "CLightningBall.h"
 #include "CCharaBase.h"
 #include "Easing.h"
-#include "CRay.h"
 
 // 雷球のスケール値の最大値
-#define FLAME_SCALE 50.0f
+#define FLAME_SCALE 100.0f
 // 雷球のスケール値が最大値になるまでの時間
 #define FLAME_SCALE_ANIM_TIME 3.0f
 
+// アニメーションの1コマ表示時間
+//#define ANIM_TIME 0.0625f
+// 雷のエフェクトのアニメーションデータ
+//TexAnimData CLightningBall::msAnimData = TexAnimData(7, 2, false, 64, ANIM_TIME);
+
 // コンストラクタ
 CLightningBall::CLightningBall(ETag tag)
-	: CBillBoardImage("Effect/Ball.png", ETag::eWave, ETaskPauseType::eGame)
+	: CBillBoardImage("Effect/Ball.png", ETag::eLightningBall, ETaskPauseType::eGame)
 	, mMoveSpeed(CVector::zero)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
@@ -127,11 +131,6 @@ void CLightningBall::Update()
 	else
 	{
 		Scale(CVector::one * FLAME_SCALE);
-	}
-
-	if (mElapsedTime >= 1)
-	{
-		//mpCollider->SetEnable(false);
 	}
 
 	if (mElapsedTime >= 2)

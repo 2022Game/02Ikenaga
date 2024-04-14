@@ -9,7 +9,7 @@ CLightningBallEffect* CLightningBallEffect::spInstance = nullptr;
 // 雷球発射の方向のブレ幅
 #define FLAME_DIR_RAND 0.02f
 // 雷球発射の移動速度
-#define FLAME_MOVE_SPEED 25.0f
+#define FLAME_MOVE_SPEED 100.0f
 // 雷球の色
 #define FLAME_COLOR CColor(1.0f, 1.0f, 0.0f)
 
@@ -112,9 +112,9 @@ void CLightningBallEffect::CreateLightningBall()
 	// 方向を取得
 	CVector dir = GetThrowDir();// + CVector(0.0f, -1.0f, 0.0f);
 	// 方向をランダムでブラす
-	//dir.X(dir.X() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	//dir.Y(dir.Y() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	//dir.Z(dir.Z() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
+	dir.X(dir.X() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
+	dir.Y(dir.Y() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
+	dir.Z(dir.Z() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
 	dir.Normalize();
 	// 位置、方向、移動速度を設定
 	lightningBall->Setup(pos, dir, FLAME_MOVE_SPEED);
@@ -123,6 +123,9 @@ void CLightningBallEffect::CreateLightningBall()
 	lightningBall->SetColor(FLAME_COLOR);
 	// 加算ブレンドにして、雷球が発光しているように見せる
 	lightningBall->SetBlendType(EBlend::eAdd);
+
+	// 作成した雷のエフェクトをリストに追加
+	//mLightningBall.push_back(lightningBall);
 }
 
 // 更新
