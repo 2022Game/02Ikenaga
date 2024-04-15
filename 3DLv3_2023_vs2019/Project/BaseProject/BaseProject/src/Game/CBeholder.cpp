@@ -424,17 +424,8 @@ void CBeholder::UpdateAttack2()
 		AttackStart();
 	}
 
-	if (mAnimationFrame >= 1.0f)
-	{
-		if (!mpElectricShock->IsThrowing())
-		{
-			mpElectricShock->Start();
-		}
-	}
-
 	if (IsAnimationFinished())
 	{
-		mpElectricShock->Stop();
 		// UŒ‚2I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
 		mState = EState::eAttackWait;
 	}
@@ -677,7 +668,7 @@ void CBeholder::Update()
 			if (probability4 == 11)Attack4 = true;
 			if (Attack2)
 			{
-				//mState = EState::eAttack2;
+				mState = EState::eAttack2;
 			}
 			else if (Attack3)
 			{

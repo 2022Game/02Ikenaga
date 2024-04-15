@@ -175,12 +175,12 @@ private:
 	CColliderLine* mpColliderLine;
 	//CColliderSphere* mpColliderSphere;
 
-	CColliderSphere* mpDamageCol;    // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageCol2;   // ダメージを受けるコライダー(口)
-	CColliderSphere* mpDamageCol3;   // ダメージを受けるコライダー(口の先端)
-	CColliderSphere* mpDamageCol4;   // ダメージを受けるコライダー(首)
-	CColliderSphere* mpDamageCol5;   // ダメージを受けるコライダー(首2)
-	CColliderSphere* mpDamageCol6;   // ダメージを受けるコライダー(首3)
+	CColliderSphere* mpDamageColHead;       // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColMouth;      // ダメージを受けるコライダー(口)
+	CColliderSphere* mpDamageColTipMouth;   // ダメージを受けるコライダー(口の先端)
+	CColliderSphere* mpDamageColNeck;       // ダメージを受けるコライダー(首)
+	CColliderSphere* mpDamageColNeck2;      // ダメージを受けるコライダー(首2)
+	CColliderSphere* mpDamageColNeck3;      // ダメージを受けるコライダー(首3)
 	CColliderSphere* mpDamageCol7;   // ダメージを受けるコライダー(胸)
 	CColliderSphere* mpDamageCol8;   // ダメージを受けるコライダー(脊椎)
 	CColliderSphere* mpDamageCol9;   // ダメージを受けるコライダー(脊椎2)
@@ -191,11 +191,11 @@ private:
 	CColliderSphere* mpDamageCol14;  // ダメージを受けるコライダー(つなぎ5)
 
 	// カプセルコライダー
-	CColliderCapsule* mpDamageCol15;  // ダメージを受けるコライダー(前の左足)
+	CColliderSphere* mpDamageCol15;  // ダメージを受けるコライダー(前の左足)
 
 	CColliderSphere* mpDamageCol16;  // ダメージを受けるコライダー(前の左足2)
 
-	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColHead;  // ダメージを与えるコライダー(頭)
 	CTransform* mpRideObject;
 
 	CFlamethrower* mpFlamethrower;  // 火炎放射エフェクト

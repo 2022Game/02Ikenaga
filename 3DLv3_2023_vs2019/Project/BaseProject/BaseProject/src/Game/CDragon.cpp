@@ -1,6 +1,5 @@
 #include "CDragon.h"
 #include "CPlayer.h"
-#include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
 #include "Maths.h"
@@ -80,7 +79,7 @@ CDragon::CDragon()
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	//mpColliderLine->Position(0.0f, 0.0f,0.0f);
+	mpColliderLine->Position(35.0f, 0.0f,-70.0f);
 
 	//// キャラクター押し戻し処理
 	//mpColliderSphere = new CColliderSphere
@@ -92,64 +91,59 @@ CDragon::CDragon()
 	//mpColliderSphere->Position(0.0f, 0.2f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(頭)
-	mpDamageCol = new CColliderSphere
+	mpDamageColHead = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,0.6f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol->Position(0.1f, 0.0f, 0.0f);
+	mpDamageColHead->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColHead->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColHead->Position(0.1f, 0.0f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(口)
-	mpDamageCol2 = new CColliderSphere
+	mpDamageColMouth = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.4f, false
 	);
-	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol2->Position(-0.2f, 0.1f, 0.15f);
+	mpDamageColMouth->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColMouth->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColMouth->Position(-0.2f, 0.1f, 0.15f);
 
 	// ダメージを受けるコライダーを作成(口の先端)
-	mpDamageCol3 = new CColliderSphere
+	mpDamageColTipMouth = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.3f, false
 	);
-	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol3->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol3->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol3->Position(-0.1f, 0.15f, 0.1f);
+	mpDamageColTipMouth->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColTipMouth->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColTipMouth->Position(-0.1f, 0.15f, 0.1f);
 
 	// ダメージを受けるコライダーを作成(首)
-	mpDamageCol4 = new CColliderSphere
+	mpDamageColNeck = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.6f, false
 	);
-	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol4->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol4->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol4->Position(0.1f, 0.0f, 0.1f);
+	mpDamageColNeck->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColNeck->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColNeck->Position(0.1f, 0.0f, 0.1f);
 
 	// ダメージを受けるコライダーを作成(首2)
-	mpDamageCol5 = new CColliderSphere
+	mpDamageColNeck2 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.6f, false
 	);
-	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol5->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol5->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol5->Position(0.1f, 0.0f, 0.1f);
+	mpDamageColNeck2->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColNeck2->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColNeck2->Position(0.1f, 0.0f, 0.1f);
 
 	// ダメージを受けるコライダーを作成(首3)
-	mpDamageCol6 = new CColliderSphere
+	mpDamageColNeck3 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol, 0.7f, false
 	);
-	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol6->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol6->SetCollisionTags({ ETag::eWeapon });
-	mpDamageCol6->Position(0.1f, 0.0f, 0.1f);
+	mpDamageColNeck3->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColNeck3->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColNeck3->Position(0.1f, 0.0f, 0.1f);
 
 	// ダメージを受けるコライダーを作成(胸)
 	mpDamageCol7 = new CColliderSphere
@@ -231,13 +225,11 @@ CDragon::CDragon()
 	mpDamageCol14->SetCollisionTags({ ETag::eWeapon });
 	mpDamageCol14->Position(0.2f, 0.1f, 0.0f);
 
-	// カプセルコライダー
 	// ダメージを受けるコライダーを作成(前の左足)
-	mpDamageCol15 = new CColliderCapsule
+	mpDamageCol15 = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		CVector(-2.0f,1.0f, 0.0f),CVector(2.0f, 1.0f, 0.0f),
-		2.0f,false,1.0f
+		0.3f,false,1.0f
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageCol15->SetCollisionLayers({ ELayer::eAttackCol });
@@ -256,38 +248,38 @@ CDragon::CDragon()
 	mpDamageCol16->Position(0.1f, 0.0f, 0.15f);
 
 	// ダメージを与えるコライダー(頭)
-	mpAttackCol = new CColliderSphere
+	mpAttackColHead = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,0.6f, false
 	);
-	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
-	mpAttackCol->Position(0.1f, 0.0f, 0.0f);
+	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColHead->Position(0.1f, 0.0f, 0.0f);
 
 	// ダメージを受けるコライダーと攻撃コライダーをドラゴンの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
-	mpDamageCol->SetAttachMtx(headMty);
-	mpAttackCol->SetAttachMtx(headMty);
+	mpDamageColHead->SetAttachMtx(headMty);
+	mpAttackColHead->SetAttachMtx(headMty);
 
 	// ダメージを受けるコライダーと攻撃コライダーをドラゴンの口の行列にアタッチ
 	const CMatrix* mouthMty = GetFrameMtx("Armature_UpperMouth01");
-	mpDamageCol2->SetAttachMtx(mouthMty);
+	mpDamageColMouth->SetAttachMtx(mouthMty);
 
 	// ダメージを受けるコライダーと攻撃コライダーをドラゴンの口の先端の行列にアタッチ
 	const CMatrix* mouthMty2 = GetFrameMtx("Armature_UpperMouth02");
-	mpDamageCol3->SetAttachMtx(mouthMty2);
+	mpDamageColTipMouth->SetAttachMtx(mouthMty2);
 
 	// ダメージを受けるコライダーをドラゴンの首の行列にアタッチ
 	const CMatrix* neckMty = GetFrameMtx("Armature_Neck03");
-	mpDamageCol4->SetAttachMtx(neckMty);
+	mpDamageColNeck->SetAttachMtx(neckMty);
 
 	// ダメージを受けるコライダーをドラゴンの首2の行列にアタッチ
 	const CMatrix* neckMty2 = GetFrameMtx("Armature_Neck02");
-	mpDamageCol5->SetAttachMtx(neckMty2);
+	mpDamageColNeck2->SetAttachMtx(neckMty2);
 
 	// ダメージを受けるコライダーをドラゴンの首3の行列にアタッチ
 	const CMatrix* neckMty3 = GetFrameMtx("Armature_Neck01");
-	mpDamageCol6->SetAttachMtx(neckMty3);
+	mpDamageColNeck3->SetAttachMtx(neckMty3);
 
 	// ダメージを受けるコライダーをドラゴンの胸の行列にアタッチ
 	const CMatrix* chestMty = GetFrameMtx("Armature_Chest");
@@ -330,7 +322,7 @@ CDragon::CDragon()
 	mpDamageCol16->SetAttachMtx(leftFootMty2);
 
 	// 最初の攻撃コライダーを無効にしておく
-	mpAttackCol->SetEnable(false);
+	mpAttackColHead->SetEnable(false);
 
 	const CMatrix* mtx = GetFrameMtx("Armature_Tongue01");
 	mpFlamethrower = new CFlamethrower
@@ -352,12 +344,12 @@ CDragon::~CDragon()
 {
 	SAFE_DELETE(mpColliderLine);
 	//SAFE_DELETE(mpColliderSphere);
-	SAFE_DELETE(mpDamageCol);
-	SAFE_DELETE(mpDamageCol2);
-	SAFE_DELETE(mpDamageCol3);
-	SAFE_DELETE(mpDamageCol4);
-	SAFE_DELETE(mpDamageCol5);
-	SAFE_DELETE(mpDamageCol6);
+	SAFE_DELETE(mpDamageColHead);
+	SAFE_DELETE(mpDamageColMouth);
+	SAFE_DELETE(mpDamageColTipMouth);
+	SAFE_DELETE(mpDamageColNeck);
+	SAFE_DELETE(mpDamageColNeck2);
+	SAFE_DELETE(mpDamageColNeck3);
 	SAFE_DELETE(mpDamageCol7);
 	SAFE_DELETE(mpDamageCol8);
 	SAFE_DELETE(mpDamageCol9);
@@ -369,7 +361,7 @@ CDragon::~CDragon()
 	SAFE_DELETE(mpDamageCol15);
 	SAFE_DELETE(mpDamageCol16);
 
-	SAFE_DELETE(mpAttackCol);
+	SAFE_DELETE(mpAttackColHead);
 }
 
 CDragon* CDragon::Instance()
@@ -888,12 +880,12 @@ void CDragon::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
-	mpDamageCol->Update();
-	mpDamageCol2->Update();
-	mpDamageCol3->Update();
-	mpDamageCol4->Update();
-	mpDamageCol5->Update();
-	mpDamageCol6->Update();
+	mpDamageColHead->Update();
+	mpDamageColMouth->Update();
+	mpDamageColTipMouth->Update();
+	mpDamageColNeck->Update();
+	mpDamageColNeck2->Update();
+	mpDamageColNeck3->Update();
 	mpDamageCol7->Update();
 	mpDamageCol8->Update();
 	mpDamageCol9->Update();
@@ -905,7 +897,7 @@ void CDragon::Update()
 	mpDamageCol15->Update();
 	mpDamageCol16->Update();
 
-	mpAttackCol->Update();
+	mpAttackColHead->Update();
 
 	mIsGrounded = false;
 
@@ -943,7 +935,7 @@ void CDragon::Update()
 void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackCol && mState != EState::eIdle && mState != EState::eIdle2 &&
+	if (self == mpAttackColHead && mState != EState::eIdle && mState != EState::eIdle2 &&
 		mState != EState::eIdle3)
 	{
 		// キャラのポインタに変換
@@ -992,7 +984,7 @@ void CDragon::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackCol->SetEnable(true);
+	mpAttackColHead->SetEnable(true);
 }
 
 // 攻撃終了
@@ -1000,7 +992,7 @@ void CDragon::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
-	mpAttackCol->SetEnable(false);
+	mpAttackColHead->SetEnable(false);
 }
 
 // 描画

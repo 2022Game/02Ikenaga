@@ -86,11 +86,11 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
-	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
+	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
-	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
+	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
-	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
+	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
@@ -216,20 +216,20 @@ void CGameScene::Load()
 	//enemy12->Position(180.f,0.0f,-520.0f);
 	//enemy12->Scale(45.0f, 45.0f, 45.0f);
 
-	//// 蜂
-	//CBee* enemy13 = new CBee();
-	//enemy13->Position(0.0f, 0.0f, -600.0f);
-	//enemy13->Scale(30.0f, 30.0f, 30.0f);
+	// 蜂
+	CBee* enemy13 = new CBee();
+	enemy13->Position(0.0f, 0.0f, -600.0f);
+	enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 蜂2
 	//CBee2* enemy14 = new CBee2();
 	//enemy14->Position(-60.0f, 0.0f, -600.0f);
 	//enemy14->Scale(30.0f, 30.0f, 30.0f);
 
-	// 蜂3
-	CBee3* enemy15 = new CBee3();
-	enemy15->Position(-30.0f, 0.0f, -660.0f);
-	enemy15->Scale(40.0f, 40.0f, 40.0f);
+	//// 蜂3
+	//CBee3* enemy15 = new CBee3();
+	//enemy15->Position(-30.0f, 0.0f, -660.0f);
+	//enemy15->Scale(40.0f, 40.0f, 40.0f);
 
 	//// サボテン
 	//CCactus* enemy16 = new CCactus();
@@ -266,10 +266,10 @@ void CGameScene::Load()
 	enemy22->Position(50.0f, 0.0f, 100.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
-	//// ボクサー
-	//CBoxer* enemy25 = new CBoxer();
-	//enemy25->Position(50.0f, 0.0f, 50.0f);
-	//enemy25->Scale(20.0f, 20.0f, 20.0f);
+	// ボクサー
+	CBoxer* enemy25 = new CBoxer();
+	enemy25->Position(50.0f, 0.0f, 50.0f);
+	enemy25->Scale(20.0f, 20.0f, 20.0f);
 
 	//// ボクサー2
 	//CBoxer2* enemy27 = new CBoxer2();

@@ -129,6 +129,6 @@ void CElectricShock::Update()
 	// アニメーションが終わったら、削除フラグを立てる
 	if (IsEndAnim())
 	{
-		mIsDeath = true;
+		//mIsDeath = true;
 	}
 }
