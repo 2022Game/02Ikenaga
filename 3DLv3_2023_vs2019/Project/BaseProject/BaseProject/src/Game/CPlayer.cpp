@@ -24,13 +24,9 @@ int CPlayer::mSa;
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 {
-	//{ "",										true,	0.0f	},	// Tポーズ
-	//{ "Character\\Player\\anim\\DogAttack.x",		true,	91.0f	},	// 待機
-	//{ "Character\\Player\\anim\\walk.x",		true,	66.0f	},	// 歩行
-
 	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  // 待機 221.0f
 	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  // 歩行
-	{ "Character\\Player\\animation\\DogAttack.x",	true,   90.0f	},  // 攻撃 91.0f
+	{ "Character\\Player\\animation\\DogAttack.x",	true,   91.0f	},  // 攻撃 91.0f
 	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  // ジャンプ
 	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // 攻撃2
 	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // 攻撃3
@@ -45,9 +41,10 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogRolling.x",	true,	43.0f	},      // 回避 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
 	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
+	{ "Character\\Player\\animation\\DogJumpAttack.x",	true,	140.0f	},  // ジャンプ攻撃
 };
 
-#define PLAYER_HEIGHT 1.0f
+#define PLAYER_HEIGHT 1.1f
 
 #define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f
@@ -106,7 +103,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(31);
+	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -125,7 +122,7 @@ CPlayer::CPlayer()
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::ePlayer,
-		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, -0.03f, 0.0f),
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
@@ -262,7 +259,6 @@ void CPlayer::UpdateAttack()
 {
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack);
-
 	if (mAnimationFrame >= 35.0f)
 	{
 		//剣に攻撃開始を伝える
@@ -424,6 +420,7 @@ void CPlayer::UpdateAttack7()
 // 攻撃終了待ち
 void CPlayer::UpdateAttackWait()
 {
+	//SetAnimationSpeed(1.0f);
 	// 斬撃SEを再生していないかつ、アニメーションが25%以上進行したら、
 	if (!mIsPlayedSlashSE && GetAnimationFrameRatio() >= 0.25f)
 	{
@@ -450,16 +447,22 @@ void CPlayer::UpdateJumpStart()
 	ChangeAnimation(EAnimType::eJumpStart);
 	mState = EState::eJump;
 
-	mMoveSpeed += CVector(0.0f, JUMP_SPEED, 0.0f);
+	if (mState != EState::eJumpAttack)
+	{
+		mMoveSpeed += CVector(0.0f, JUMP_SPEED, 0.0f);
+	}
 	mIsGrounded = false;
 }
 
 // ジャンプ中
 void CPlayer::UpdateJump()
 {
-	if (mMoveSpeed.Y() <= 0.0f)
+	if (CInput::PushKey(VK_LBUTTON))
 	{
-		//ChangeAnimation(EAnimType::eJumpEnd);
+		mState = EState::eJumpAttack;
+	}
+	if (IsAnimationFinished())
+	{
 		mState = EState::eJumpEnd;
 	}
 }
@@ -484,7 +487,7 @@ void CPlayer::UpdateMove()
 	int speed2 = -1.5f;
 
 	// 移動処理
-    // キーの入力ベクトルを取得
+	// キーの入力ベクトルを取得
 	CVector input;
 	if (CInput::Key('W'))
 	{
@@ -555,24 +558,28 @@ void CPlayer::UpdateMove()
 		}
 	}
 
-	// 左クリックで攻撃状態へ移行
-	if (CInput::PushKey(VK_LBUTTON))
+	if (mState != EState::eJumpStart && mState != EState::eJump && mState != EState::eJumpAttack && mState != EState::eJumpEnd)
 	{
-		mAttackCount++;
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eAttack;
-		if (mAttackCount == 2)
+		// 左クリックで攻撃状態へ移行
+		if (CInput::PushKey(VK_LBUTTON))
 		{
+			mAttackCount++;
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
-			mState = EState::eAttack5;
-		}
-		if (mAttackCount == 3)
-		{
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-			mState = EState::eAttack4;
+
+			mState = EState::eAttack;
+			if (mAttackCount == 2)
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				mState = EState::eAttack5;
+			}
+			if (mAttackCount == 3)
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				mState = EState::eAttack3;
+			}
 		}
 	}
 }
@@ -586,6 +593,7 @@ void CPlayer::UpdatePowerUp()
 	mState = EState::ePowerUpEnd;
 }
 
+// 攻撃力アップの終了
 void CPlayer::UpdatePowerUpEnd()
 {
 	// 攻撃アップのアニメーションが終了したら、
@@ -667,6 +675,28 @@ void CPlayer::UpdateDei()
 	ChangeAnimation(EAnimType::eDie);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
+}
+
+// ジャンプ攻撃
+void CPlayer::UpdateJumpAttack()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	ChangeAnimation(EAnimType::eJumpAttack);
+	if (mAnimationFrame >= 50.0f)
+	{
+		//剣に攻撃開始を伝える
+		mpSword->AttackStart();
+		mState = EState::eAttackWait;
+	}
+	if (mAnimationFrame >= 10.0f && mAnimationFrame <= 49.0f)
+	{
+		mMoveSpeed.Y(0.0f);
+	}
+	if (mAnimationFrame >= 50.0f)
+	{
+		mMoveSpeed -= CVector(0.0f, 0.0825, 0.0f);
+	}
 }
 
 // 現在の経験値を消費してレベルアップ
@@ -891,6 +921,10 @@ void CPlayer::Update()
 		case EState::eDie:
 			UpdateDei();
 			break;
+		// ジャンプ攻撃
+		case EState::eJumpAttack:
+			UpdateJumpAttack();
+			break;
 	}
 
 	// 待機中とジャンプ中は、移動処理を行う
@@ -902,7 +936,10 @@ void CPlayer::Update()
 		UpdateMove();
 	}
 
-	mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	if (mState != EState::eJumpAttack)
+	{
+		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+	}
 
 	//CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
 	//CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
@@ -1034,16 +1071,9 @@ void CPlayer::Update()
 		ChangeLevel(100);
 	}
 
-	if (CInput::PushKey('Z'))
+	if (CInput::PushKey('N'))
 	{
-		if (!mpElectricShock->IsThrowing())
-		{
-			mpElectricShock->Start();
-		}
-		else
-		{
-			mpElectricShock->Stop();
-		}
+		mState = EState::eJumpAttack;
 	}
 
 	// HPゲージに現在のHPを設定

@@ -78,20 +78,20 @@ void CGameScene::Load()
 
 	// プレイヤー関連
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
-	CResourceManager::Load<CModelX>("Player2", "Character\\Rich.x");
+	//CResourceManager::Load<CModelX>("Player2", "Character\\Rich.x");
 
 	// エネミー関連
 	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
-	CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
-	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
-	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
-	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
+	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
+	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
+	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
+	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
-	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
+	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
-	CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
+	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
 	// ボス関連
@@ -103,9 +103,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Cane", "Character\\Cane.obj");
 
 	// アイテム関連
-	CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
-	CResourceManager::Load<CModel>("Portion2", "Item\\Portion\\PortionGreen.obj");
-	CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
+	//CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
+	//CResourceManager::Load<CModel>("Portion2", "Item\\Portion\\PortionGreen.obj");
+	//CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
 
 	// UI関連
 	CResourceManager::Load<CTexture>("HpFrame", "Character\\Player\\HP\\Frame.png");
@@ -161,45 +161,45 @@ void CGameScene::Load()
 	enemy->Position(0.0f, 0.0f, -40.0f);
 	enemy->Scale(25.0f, 25.0f, 25.0f);
 
-	// オレンジスライム
-	CSlime2* enemy2 = new CSlime2();
-	enemy2->Position(-40.0f, 0.0f, -40.0f);
-	enemy2->Scale(25.0f, 25.0f, 25.0f);
+	//// オレンジスライム
+	//CSlime2* enemy2 = new CSlime2();
+	//enemy2->Position(-40.0f, 0.0f, -40.0f);
+	//enemy2->Scale(25.0f, 25.0f, 25.0f);
 
-	// ブルースライム
-	CSlime3* enemy3 = new CSlime3();
-	enemy3->Position(-20.0f, 0.0f, -90.0f);
-	enemy3->Scale(35.0f, 35.0f, 35.0f);
+	//// ブルースライム
+	//CSlime3* enemy3 = new CSlime3();
+	//enemy3->Position(-20.0f, 0.0f, -90.0f);
+	//enemy3->Scale(35.0f, 35.0f, 35.0f);
 
-	// マッシュルーム
-	CMushroom* enemy4 = new CMushroom();
-	enemy4->Position(150.0f, 0.0f, -150.0f);
-	enemy4->Scale(25.0f, 25.0f, 25.0f);
+	//// マッシュルーム
+	//CMushroom* enemy4 = new CMushroom();
+	//enemy4->Position(150.0f, 0.0f, -150.0f);
+	//enemy4->Scale(25.0f, 25.0f, 25.0f);
 
-	// マッシュルーム2
-	CMushroom2* enemy5 = new CMushroom2();
-	enemy5->Position(210.0f, 0.0f, -150.0f);
-	enemy5->Scale(25.0f, 25.0f, 25.0f);
+	//// マッシュルーム2
+	//CMushroom2* enemy5 = new CMushroom2();
+	//enemy5->Position(210.0f, 0.0f, -150.0f);
+	//enemy5->Scale(25.0f, 25.0f, 25.0f);
 
-	// マッシュルーム3
-	CMushroom3* enemy6 = new CMushroom3();
-	enemy6->Position(180.0f, 0.0f, -210.0f);
-	enemy6->Scale(35.0f, 35.0f, 35.0f);
+	//// マッシュルーム3
+	//CMushroom3* enemy6 = new CMushroom3();
+	//enemy6->Position(180.0f, 0.0f, -210.0f);
+	//enemy6->Scale(35.0f, 35.0f, 35.0f);
 
-	// 亀
-	CTurtle* enemy7 = new CTurtle();
-	enemy7->Position(0.0f, -0.2f, -300.0f);
-	enemy7->Scale(25.0f, 25.0f, 25.0f);
+	//// 亀
+	//CTurtle* enemy7 = new CTurtle();
+	//enemy7->Position(0.0f, -0.2f, -300.0f);
+	//enemy7->Scale(25.0f, 25.0f, 25.0f);
 
-	// 亀2
-	CTurtle2* enemy8 = new CTurtle2();
-	enemy8->Position(-60.0f, -0.2f, -300.0f);
-	enemy8->Scale(25.0f, 25.0f, 25.0f);
+	//// 亀2
+	//CTurtle2* enemy8 = new CTurtle2();
+	//enemy8->Position(-60.0f, -0.2f, -300.0f);
+	//enemy8->Scale(25.0f, 25.0f, 25.0f);
 
-	// 亀3
-	CTurtle3* enemy9 = new CTurtle3();
-	enemy9->Position(-30.0f, -0.2f, -360.0f);
-	enemy9->Scale(35.0f, 35.0f, 35.0f);
+	//// 亀3
+	//CTurtle3* enemy9 = new CTurtle3();
+	//enemy9->Position(-30.0f, -0.2f, -360.0f);
+	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ
 	//CRay* enemy10 = new CRay();
@@ -216,10 +216,10 @@ void CGameScene::Load()
 	//enemy12->Position(180.f,0.0f,-520.0f);
 	//enemy12->Scale(45.0f, 45.0f, 45.0f);
 
-	// 蜂
-	CBee* enemy13 = new CBee();
-	enemy13->Position(0.0f, 0.0f, -600.0f);
-	enemy13->Scale(30.0f, 30.0f, 30.0f);
+	//// 蜂
+	//CBee* enemy13 = new CBee();
+	//enemy13->Position(0.0f, 0.0f, -600.0f);
+	//enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 蜂2
 	//CBee2* enemy14 = new CBee2();
@@ -266,10 +266,10 @@ void CGameScene::Load()
 	enemy22->Position(50.0f, 0.0f, 100.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
-	// ボクサー
-	CBoxer* enemy25 = new CBoxer();
-	enemy25->Position(50.0f, 0.0f, 50.0f);
-	enemy25->Scale(20.0f, 20.0f, 20.0f);
+	//// ボクサー
+	//CBoxer* enemy25 = new CBoxer();
+	//enemy25->Position(50.0f, 0.0f, 50.0f);
+	//enemy25->Scale(20.0f, 20.0f, 20.0f);
 
 	//// ボクサー2
 	//CBoxer2* enemy27 = new CBoxer2();
@@ -281,12 +281,12 @@ void CGameScene::Load()
 	enemy8->Rotate(0.0f,90.0f,-70.0f);
 	enemy8->Scale(0.1f, 0.1f, 0.1f);*/
 
-	//// ドラゴン
-	//CDragon* bossEnemy = new CDragon();
-	//bossEnemy->Position(0.0f, 21.0f, 120.0f);
-	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	// ドラゴン
+	CDragon* bossEnemy = new CDragon();
+	bossEnemy->Position(0.0f, 21.0f, 120.0f);
+	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
-	CPortionRed* portionred = new CPortionRed();
+	/*CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
 	portionred->Scale(70.0f, 70.0f, 70.0f);
 
@@ -296,7 +296,7 @@ void CGameScene::Load()
 
 	CPortionBlue* portionblue = new CPortionBlue();
 	portionblue->Position(70.0f, 10.0f, 0.0f);
-	portionblue->Scale(70.0f, 70.0f, 70.0f);
+	portionblue->Scale(70.0f, 70.0f, 70.0f);*/
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
@@ -338,131 +338,131 @@ void CGameScene::Update()
 		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
 	}
 
-	// レッドスライムの復活
-	if (mpSlime->mHp <= 0)
-	{
-		(SlimeReTime++/100);
-		if (SlimeReTime > 500)
-		{
-			// レッドスライム
-			CSlime* enemy = new CSlime();
-			enemy->Position(0.0f, 0.0f, -40.0f);
-			enemy->Scale(25.0f, 25.0f, 25.0f);
-			SlimeReTime = 0;
-		}
-	}
+	//// レッドスライムの復活
+	//if (mpSlime->mHp <= 0)
+	//{
+	//	(SlimeReTime++/100);
+	//	if (SlimeReTime > 500)
+	//	{
+	//		// レッドスライム
+	//		CSlime* enemy = new CSlime();
+	//		enemy->Position(0.0f, 0.0f, -40.0f);
+	//		enemy->Scale(25.0f, 25.0f, 25.0f);
+	//		SlimeReTime = 0;
+	//	}
+	//}
 
-	// オレンジスライムの復活
-	if (mpSlime2->mHp <= 0)
-	{
-		(Slime2ReTime++ / 100);
-		if (Slime2ReTime > 500)
-		{
-			// オレンジスライム
-			CSlime2* enemy2 = new CSlime2();
-			enemy2->Position(-40.0f, 0.0f, -40.0f);
-			enemy2->Scale(25.0f, 25.0f, 25.0f);
-			Slime2ReTime = 0;
-		}
-	}
+	//// オレンジスライムの復活
+	//if (mpSlime2->mHp <= 0)
+	//{
+	//	(Slime2ReTime++ / 100);
+	//	if (Slime2ReTime > 500)
+	//	{
+	//		// オレンジスライム
+	//		CSlime2* enemy2 = new CSlime2();
+	//		enemy2->Position(-40.0f, 0.0f, -40.0f);
+	//		enemy2->Scale(25.0f, 25.0f, 25.0f);
+	//		Slime2ReTime = 0;
+	//	}
+	//}
 
-	//	ブルースライムの復活
-	if (mpSlime3->mHp <= 0)
-	{
-		(Slime3ReTime++ / 100);
-		if (Slime3ReTime > 1000)
-		{
-			// ブルースライム
-			CSlime3* enemy3 = new CSlime3();
-			enemy3->Position(-20.0f, 0.0f, -90.0f);
-			enemy3->Scale(35.0f, 35.0f, 35.0f);
-			Slime3ReTime = 0;
-		}
-	}
+	////	ブルースライムの復活
+	//if (mpSlime3->mHp <= 0)
+	//{
+	//	(Slime3ReTime++ / 100);
+	//	if (Slime3ReTime > 1000)
+	//	{
+	//		// ブルースライム
+	//		CSlime3* enemy3 = new CSlime3();
+	//		enemy3->Position(-20.0f, 0.0f, -90.0f);
+	//		enemy3->Scale(35.0f, 35.0f, 35.0f);
+	//		Slime3ReTime = 0;
+	//	}
+	//}
 
-	// マッシュルームの復活
-	if (mpMushroom->mHp <= 0)
-	{
-		(MushroomReTime++ / 100);
-		if (MushroomReTime > 500)
-		{
-			// マッシュルーム
-			CMushroom* enemy4 = new CMushroom();
-			enemy4->Position(150.0f, 0.0f, -150.0f);
-			enemy4->Scale(25.0f, 25.0f, 25.0f);
-			MushroomReTime = 0;
-		}
-	}
+	//// マッシュルームの復活
+	//if (mpMushroom->mHp <= 0)
+	//{
+	//	(MushroomReTime++ / 100);
+	//	if (MushroomReTime > 500)
+	//	{
+	//		// マッシュルーム
+	//		CMushroom* enemy4 = new CMushroom();
+	//		enemy4->Position(150.0f, 0.0f, -150.0f);
+	//		enemy4->Scale(25.0f, 25.0f, 25.0f);
+	//		MushroomReTime = 0;
+	//	}
+	//}
 
-	// マッシュルーム2の復活
-	if (mpMushroom2->mHp <= 0)
-	{
-		(Mushroom2ReTime++ / 100);
-		if (Mushroom2ReTime > 500)
-		{
-			// マッシュルーム2
-			CMushroom2* enemy5 = new CMushroom2();
-			enemy5->Position(210.0f, 0.0f, -150.0f);
-			enemy5->Scale(25.0f, 25.0f, 25.0f);
-			Mushroom2ReTime = 0;
-		}
-	}
+	//// マッシュルーム2の復活
+	//if (mpMushroom2->mHp <= 0)
+	//{
+	//	(Mushroom2ReTime++ / 100);
+	//	if (Mushroom2ReTime > 500)
+	//	{
+	//		// マッシュルーム2
+	//		CMushroom2* enemy5 = new CMushroom2();
+	//		enemy5->Position(210.0f, 0.0f, -150.0f);
+	//		enemy5->Scale(25.0f, 25.0f, 25.0f);
+	//		Mushroom2ReTime = 0;
+	//	}
+	//}
 
-	// マッシュルーム3の復活
-	if (mpMushroom3->mHp <= 0)
-	{
-		(Mushroom3ReTime++ / 100);
-		if (Mushroom3ReTime > 1000)
-		{
-			// マッシュルーム3
-			CMushroom3* enemy6 = new CMushroom3();
-			enemy6->Position(180.0f, 0.0f, -210.0f);
-			enemy6->Scale(35.0f, 35.0f, 35.0f);
-			Mushroom3ReTime = 0;
-		}
-	}
+	//// マッシュルーム3の復活
+	//if (mpMushroom3->mHp <= 0)
+	//{
+	//	(Mushroom3ReTime++ / 100);
+	//	if (Mushroom3ReTime > 1000)
+	//	{
+	//		// マッシュルーム3
+	//		CMushroom3* enemy6 = new CMushroom3();
+	//		enemy6->Position(180.0f, 0.0f, -210.0f);
+	//		enemy6->Scale(35.0f, 35.0f, 35.0f);
+	//		Mushroom3ReTime = 0;
+	//	}
+	//}
 
-	// 亀の復活
-	if (mpTurtle->mHp <=0)
-	{
-		TurtleReTime++;
-		if (TurtleReTime > 500)
-		{
-			// 亀
-			CTurtle* enemy7 = new CTurtle();
-			enemy7->Position(0.0f, -0.2f, -300.0f);
-			enemy7->Scale(25.0f, 25.0f, 25.0f);
-			TurtleReTime = 0;
-		}
-	}
+	//// 亀の復活
+	//if (mpTurtle->mHp <=0)
+	//{
+	//	TurtleReTime++;
+	//	if (TurtleReTime > 500)
+	//	{
+	//		// 亀
+	//		CTurtle* enemy7 = new CTurtle();
+	//		enemy7->Position(0.0f, -0.2f, -300.0f);
+	//		enemy7->Scale(25.0f, 25.0f, 25.0f);
+	//		TurtleReTime = 0;
+	//	}
+	//}
 
-	// 亀2の復活
-	if (mpTurtle2->mHp <= 0)
-	{
-		Turtle2ReTime++;
-		if (Turtle2ReTime > 500)
-		{
-			// 亀2
-			CTurtle2* enemy8 = new CTurtle2();
-			enemy8->Position(-60.0f, -0.2f, -300.0f);
-			enemy8->Scale(25.0f, 25.0f, 25.0f);
-			Turtle2ReTime = 0;
-		}
-	}
+	//// 亀2の復活
+	//if (mpTurtle2->mHp <= 0)
+	//{
+	//	Turtle2ReTime++;
+	//	if (Turtle2ReTime > 500)
+	//	{
+	//		// 亀2
+	//		CTurtle2* enemy8 = new CTurtle2();
+	//		enemy8->Position(-60.0f, -0.2f, -300.0f);
+	//		enemy8->Scale(25.0f, 25.0f, 25.0f);
+	//		Turtle2ReTime = 0;
+	//	}
+	//}
 
-	// 亀3の復活
-	if (mpTurtle3->mHp <= 0)
-	{
-		Turtle3ReTime++;
-		if (Turtle3ReTime > 1000)
-		{
-			// 亀3
-			CTurtle3* enemy9 = new CTurtle3();
-			enemy9->Position(-30.0f, -0.2f, -360.0f);
-			enemy9->Scale(35.0f, 35.0f, 35.0f);
-			Turtle3ReTime = 0;
-		}
-	}
+	//// 亀3の復活
+	//if (mpTurtle3->mHp <= 0)
+	//{
+	//	Turtle3ReTime++;
+	//	if (Turtle3ReTime > 1000)
+	//	{
+	//		// 亀3
+	//		CTurtle3* enemy9 = new CTurtle3();
+	//		enemy9->Position(-30.0f, -0.2f, -360.0f);
+	//		enemy9->Scale(35.0f, 35.0f, 35.0f);
+	//		Turtle3ReTime = 0;
+	//	}
+	//}
 	//CDebugPrint::Print("時間 %d\n", TurtleReTime);
 	//CDebugPrint::Print("時間 %d\n", Turtle2ReTime);
 	//CDebugPrint::Print("時間 %d\n", Turtle3ReTime);

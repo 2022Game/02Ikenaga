@@ -37,6 +37,11 @@ public:
 	//指定したボーンの行列を取得
 	const CMatrix* GetFrameMtx(std::string name) const;
 
+	// アニメーションの再生速度を設定
+	void SetAnimationSpeed(float speed);
+	// アニメーションの再生速度を取得
+	float GetAnimationSpeed() const;
+
 	//攻撃開始
 	virtual void AttackStart();
 
@@ -52,6 +57,7 @@ protected:
 
 	float mAnimationFrame;		//アニメーションの再生フレーム
 	float mAnimationFrameSize;	//アニメーションの再生フレーム数
+	float mAnimationSpeed;			//アニメーションの再生速度
 
 	// 攻撃がヒットしたオブジェクトを追加
 	void AddAttackHitObj(CObjectBase* obj);

@@ -4,6 +4,8 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 
+class CImpactEffect;
+
 /*
  ボクサー2
  プレイヤーの推定レベル(81～90)
@@ -160,25 +162,28 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphere2;  // キャラクター押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphere3;  // キャラクター押し戻しコライダー(右手)
-	CColliderSphere* mpColliderSphere4;  // キャラクター押し戻しコライダー(左手)
-	CColliderSphere* mpColliderSphere5;  // キャラクター押し戻しコライダー(右足)
-	CColliderSphere* mpColliderSphere6;  // キャラクター押し戻しコライダー(左足)
 
-	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageCol3;  // ダメージを受けるコライダー(右手)
-	CColliderSphere* mpDamageCol4;  // ダメージを受けるコライダー(左手)
-	CColliderSphere* mpDamageCol5;  // ダメージを受けるコライダー(右足)
-	CColliderSphere* mpDamageCol6;  // ダメージを受けるコライダー(左足)
+	CColliderSphere* mpColliderSphereHead;    // キャラクター押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;    // キャラクター押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereHandR;   // キャラクター押し戻しコライダー(右手)
+	CColliderSphere* mpColliderSphereHandL;   // キャラクター押し戻しコライダー(左手)
+	CColliderSphere* mpColliderSphereFeetR;   // キャラクター押し戻しコライダー(右足)
+	CColliderSphere* mpColliderSphereFeetL;   // キャラクター押し戻しコライダー(左足)
 
-	CColliderSphere* mpAttackCol;   // ダメージを与えるコライダー(右手)
-	CColliderSphere* mpAttackCol2;  // ダメージを与えるコライダー(右足)
-	CColliderSphere* mpAttackCol3;  // ダメージを与えるコライダー(左足)
-	CColliderSphere* mpAttackCol4;  // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackCol5;  // ダメージを与えるコライダー(体)
-	
+	CColliderSphere* mpDamageColHead;   // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;   // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColHandR;  // ダメージを受けるコライダー(右手)
+	CColliderSphere* mpDamageColHandL;  // ダメージを受けるコライダー(左手)
+	CColliderSphere* mpDamageColFeetR;  // ダメージを受けるコライダー(右足)
+	CColliderSphere* mpDamageColFeetL;  // ダメージを受けるコライダー(左足)
+
+	CColliderSphere* mpAttackColHead;    // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColBody;    // ダメージを与えるコライダー(体)
+	CColliderSphere* mpAttackColHandR;   // ダメージを与えるコライダー(右手)
+	CColliderSphere* mpAttackColFeetR;   // ダメージを与えるコライダー(右足)
+	CColliderSphere* mpAttackColFeetL;   // ダメージを与えるコライダー(左足)
+
 	CTransform* mpRideObject;
+
+	CImpactEffect* mpImpact;
 };

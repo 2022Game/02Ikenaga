@@ -522,10 +522,10 @@ bool CCollider::CollisionSphereCapsule(
 {
 	CVector nearest;
 	float length = CalcDistancePointToLine(sp, cs, ce, &nearest);
-	if (length < sr)
+	if (length < sr + cr)
 	{
 		CVector n = (sp - nearest).Normalized() * (isLeftMain ? 1.0f : -1.0f);
-		hit->adjust = n * (sr - length);
+		hit->adjust = n * ((sr + cr) - length);
 
 		CVector v = (ce - cs).Normalized();
 		CVector p = (sp - cs).Normalized();
@@ -623,6 +623,22 @@ bool CCollider::CollisionCapsuleLine(
 
 	if (length < cr)
 	{
+		CVector n = CVector::zero;
+		if (CD.LengthSqr() == 0.0f)
+		{
+			n = CVector::Cross(V0, CVector::forward);
+			if (n.LengthSqr() == 0.0f)
+			{
+				n = CVector::Cross(V0, CVector::up);
+			}
+		}
+		else
+		{
+			n = CD;
+		}
+
+		n = (n.Normalized() * S1S2.Dot(n)).Normalized();
+		hit->adjust = n * (cr - length);
 		return true;
 	}
 
@@ -665,6 +681,22 @@ bool CCollider::CollisionCapsule(const CVector& cs0, const CVector& ce0, float c
 
 	if (length < cr0 + cr1)
 	{
+		CVector n = CVector::zero;
+		if (CD.LengthSqr() == 0.0f)
+		{
+			n = CVector::Cross(V0, CVector::forward);
+			if (n.LengthSqr() == 0.0f)
+			{
+				n = CVector::Cross(V0, CVector::up);
+			}
+		}
+		else
+		{
+			n = CD;
+		}
+
+		n = -(n.Normalized() * S1S2.Dot(n)).Normalized();
+		hit->adjust = n * ((cr0 + cr1) - length);
 		return true;
 	}
 

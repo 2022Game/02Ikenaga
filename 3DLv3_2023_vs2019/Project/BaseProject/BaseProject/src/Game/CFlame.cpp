@@ -8,7 +8,7 @@
 #define FLAME_SCALE_ANIM_TIME 3.0f
 
 // アニメーションの1コマ表示時間
-#define ANIM_TIME 0.0625f
+#define ANIM_TIME 0.0825f
 // 炎のエフェクトのアニメーションデータ
 TexAnimData CFlame::msAnimData = TexAnimData(8,8, false, 64, ANIM_TIME);
 
@@ -25,7 +25,7 @@ CFlame::CFlame(ETag tag)
 	(
 		this,
 		ELayer::eAttackCol,
-		1.0f
+		1.0f,1.0f
 	);
 	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer});
 	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });

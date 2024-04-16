@@ -173,29 +173,23 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	//CColliderSphere* mpColliderSphere;
+	CColliderSphere* mpColliderSphereFeet;   // キャラクター押し戻しコライダー(前の左足)
+	CColliderSphere* mpColliderSphereFeet2;  // キャラクター押し戻しコライダー(前の右足)
 
 	CColliderSphere* mpDamageColHead;       // ダメージを受けるコライダー(頭)
 	CColliderSphere* mpDamageColMouth;      // ダメージを受けるコライダー(口)
 	CColliderSphere* mpDamageColTipMouth;   // ダメージを受けるコライダー(口の先端)
 	CColliderSphere* mpDamageColNeck;       // ダメージを受けるコライダー(首)
-	CColliderSphere* mpDamageColNeck2;      // ダメージを受けるコライダー(首2)
-	CColliderSphere* mpDamageColNeck3;      // ダメージを受けるコライダー(首3)
-	CColliderSphere* mpDamageCol7;   // ダメージを受けるコライダー(胸)
-	CColliderSphere* mpDamageCol8;   // ダメージを受けるコライダー(脊椎)
-	CColliderSphere* mpDamageCol9;   // ダメージを受けるコライダー(脊椎2)
-	CColliderSphere* mpDamageCol10;  // ダメージを受けるコライダー(つなぎ)
-	CColliderSphere* mpDamageCol11;  // ダメージを受けるコライダー(つなぎ2)
-	CColliderSphere* mpDamageCol12;  // ダメージを受けるコライダー(つなぎ3)
-	CColliderSphere* mpDamageCol13;  // ダメージを受けるコライダー(つなぎ4)
-	CColliderSphere* mpDamageCol14;  // ダメージを受けるコライダー(つなぎ5)
+	CColliderSphere* mpDamageColChest;      // ダメージを受けるコライダー(胸)
+	CColliderSphere* mpDamageColFeet;       // ダメージを受けるコライダー(前の左足)
+	CColliderSphere* mpDamageColFeet2;      // ダメージを受けるコライダー(前の右足)
+	CColliderSphere* mpDamageColFeet3;      // ダメージを受けるコライダー(後ろの左足)
+	CColliderSphere* mpDamageColFeet4;      // ダメージを受けるコライダー(後ろの右足)
 
-	// カプセルコライダー
-	CColliderSphere* mpDamageCol15;  // ダメージを受けるコライダー(前の左足)
+	CColliderSphere* mpAttackColHead;     // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColMouth;    // ダメージを与えるコライダー(口)
+	CColliderSphere* mpAttackColTipMouth; // ダメージを与えるコライダー(口の先端)
 
-	CColliderSphere* mpDamageCol16;  // ダメージを受けるコライダー(前の左足2)
-
-	CColliderSphere* mpAttackColHead;  // ダメージを与えるコライダー(頭)
 	CTransform* mpRideObject;
 
 	CFlamethrower* mpFlamethrower;  // 火炎放射エフェクト

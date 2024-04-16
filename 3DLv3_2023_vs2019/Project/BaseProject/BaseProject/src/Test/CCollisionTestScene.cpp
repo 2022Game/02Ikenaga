@@ -38,10 +38,10 @@ void CCollisionTestScene::Load()
 	new CMeasure(100);
 
 	// ãÖÇê∂ê¨
-	CColSphere* cs = new CColSphere(10.0f, CColor::gray);
-	cs->Scale(2.0f, 2.0f, 2.0f);
-	cs->Position(10.0f, 10.0f, 0.0f);
-	mColList.push_back(cs);
+	//CColSphere* cs = new CColSphere(10.0f, CColor::gray);
+	//cs->Scale(2.0f, 2.0f, 2.0f);
+	//cs->Position(10.0f, 10.0f, 0.0f);
+	//mColList.push_back(cs);
 
 	//CColSphere* cs2 = new CColSphere(1.0f, CColor::gray);
 	//cs2->Scale(5.0f, 5.0f, 5.0f);
@@ -61,12 +61,20 @@ void CCollisionTestScene::Load()
 	// ÉJÉvÉZÉãÇê∂ê¨
 	CColCapsule* cc = new CColCapsule
 	(
-		CVector(-5.0f, 11.0f, 0.0f),
-		CVector(5.0f, 11.0f, 0.0f),
+		CVector(5.0f, 15.0f, -5.0f),
+		CVector(5.0f, 11.0f, 5.0f),
 		2.0f,
 		CColor::gray
 	);
 	mColList.push_back(cc);
+
+	CColLine* cl2 = new CColLine
+	(
+		CVector(-10.0f, 15.0f, -5.0f),
+		CVector(-10.0f, 11.0f, 5.0f),
+		CColor::gray
+	);
+	mColList.push_back(cl2);
 
 	//mpColTriangle = new CColTriangle
 	//(

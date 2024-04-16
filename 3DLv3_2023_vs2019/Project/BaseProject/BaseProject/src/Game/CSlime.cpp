@@ -97,7 +97,7 @@ CSlime::CSlime()
 	mpDamageCol = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.4f,false
+		0.5f,false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
@@ -475,6 +475,7 @@ void CSlime::Update()
 	mpAttackCol->Update();
 
 	mIsGrounded = false;
+	CDebugPrint::Print("HP %d\n", mCharaStatus.hp);
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);

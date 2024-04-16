@@ -7,7 +7,7 @@
 // 炎の発射方向のブレ幅
 #define FLAME_DIR_RAND 0.01f
 // 炎の移動速度
-#define FLAME_MOVE_SPEED 75.0f
+#define FLAME_MOVE_SPEED 100.0f
 // 炎の色
 #define FLAME_COLOR CColor(1.0f, 0.25f, 0.1f)
 

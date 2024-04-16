@@ -10,6 +10,7 @@ CXCharacter::CXCharacter(ETag tag, ETaskPriority prio, int sortOrder, ETaskPause
 	, mAnimationIndex(0)
 	, mAnimationFrame(0.0f)
 	, mAnimationFrameSize(0.0f)
+	, mAnimationSpeed(1.0f)
 {
 }
 
@@ -194,4 +195,16 @@ const CMatrix* CXCharacter::GetFrameMtx(std::string name) const
 	CModelXFrame* frame = mpModel->FinedFrame(name.c_str());
 	if (frame == nullptr) return nullptr;
 	return &frame->CombinedMatrix();
+}
+
+// アニメーションの再生速度を設定
+void CXCharacter::SetAnimationSpeed(float speed)
+{
+	mAnimationSpeed = speed;
+}
+
+// アニメーションの再生速度を取得
+float CXCharacter::GetAnimationSpeed() const
+{
+	return mAnimationSpeed;
 }

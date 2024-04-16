@@ -20,21 +20,11 @@ CElectricShock::CElectricShock(ETag tag)
 	, mIsDeath(false)
 {
 	SetAnimData(&msAnimData);
-
-	mpCollider = new CColliderLine
-	(
-		this, ELayer::eAttackCol,
-		CVector(0.0f, 1.4f, 0.0f),
-		CVector(0.0f, 0.0f, 0.0f)
-	);
-	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::eEnemy });
-	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
 }
 
 // デストラクタ
 CElectricShock::~CElectricShock()
 {
-	SAFE_DELETE(mpCollider);
 }
 
 // 各パラメータを設定
@@ -129,6 +119,6 @@ void CElectricShock::Update()
 	// アニメーションが終わったら、削除フラグを立てる
 	if (IsEndAnim())
 	{
-		//mIsDeath = true;
+		mIsDeath = true;
 	}
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "CBillBoardImage.h"
-#include "CColliderLine.h"
 
 // 電撃
 class CElectricShock : public CBillBoardImage
@@ -44,5 +43,4 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	float mElapsedTime;	// 経過時間
 	bool mIsDeath;		// 削除フラグ
-	CColliderLine* mpCollider;
 };
