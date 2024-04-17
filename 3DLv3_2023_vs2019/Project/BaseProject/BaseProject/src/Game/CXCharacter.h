@@ -48,15 +48,15 @@ public:
 	//攻撃終了
 	virtual void AttackEnd();
 protected:
-	CModelX* mpModel;			//モデルデータ
-	CMatrix* mpCombinedMatrix;	//合成行列退避
+	CModelX* mpModel;			    //モデルデータ
+	CMatrix* mpCombinedMatrix;	    //合成行列退避
 
-	bool mAnimationLoopFlg;		//true:アニメーションを繰り返す
+	bool mAnimationLoopFlg;		    //true:アニメーションを繰り返す
 
-	int mAnimationIndex;		//アニメーション番号
+	int mAnimationIndex;		    //アニメーション番号
 
-	float mAnimationFrame;		//アニメーションの再生フレーム
-	float mAnimationFrameSize;	//アニメーションの再生フレーム数
+	float mAnimationFrame;		    //アニメーションの再生フレーム
+	float mAnimationFrameSize;	    //アニメーションの再生フレーム数
 	float mAnimationSpeed;			//アニメーションの再生速度
 
 	// 攻撃がヒットしたオブジェクトを追加

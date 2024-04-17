@@ -100,7 +100,6 @@ CModelX::CModelX()
 	, mLoaded(false)
 	, mFilePath("")
 	, mDirPath("")
-	, mColor(CColor::white)
 {
 	//mTokenÇèâä˙âª
 	memset(mToken, 0, sizeof(mToken));
@@ -1307,7 +1306,12 @@ void CAnimationSet::AnimateMarix(CModelX* model)
 
 void CAnimationSet::Time(float time)
 {
-	mTime = time;
+	mTime = Math::Clamp(time, 0.0f, mMaxTime);
+}
+
+void CAnimationSet::TimeProgress(float progress)
+{
+	mTime = mMaxTime * Math::Clamp01(progress);
 }
 
 void CAnimationSet::Weight(float weight)

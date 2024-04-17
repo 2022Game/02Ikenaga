@@ -240,7 +240,18 @@ public:
 	float MaxTime();
 	std::vector<CAnimation*>& Animation();
 	void AnimateMarix(CModelX* model);
-	void Time(float time);		//時間の設定
+
+	/// <summary>
+	/// アニメーションの再生時間を設定
+	/// </summary>
+	/// <param name="time">設定する時間</param>
+	void Time(float time);
+	/// <summary>
+	/// アニメーションの再生時間を進行度で設定
+	/// </summary>
+	/// <param name="progress">再生時間の進行度（0～1）</param>
+	void TimeProgress(float progress);
+
 	void Weight(float weight);	//重みの設定
 };
 
