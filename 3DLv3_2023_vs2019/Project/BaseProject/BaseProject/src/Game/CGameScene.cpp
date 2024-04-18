@@ -45,17 +45,16 @@
 // コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
-	,SlimeReTime(0)
-	,Slime2ReTime(0)
-	,Slime3ReTime(0)
-	,MushroomReTime(0)
-	,Mushroom2ReTime(0)
-	,Mushroom3ReTime(0)
-	,TurtleReTime(0)
-	,Turtle2ReTime(0)
-	,Turtle3ReTime(0)
-
-	,mpGameMenu(nullptr)
+	, SlimeReTime(0)
+	, Slime2ReTime(0)
+	, Slime3ReTime(0)
+	, MushroomReTime(0)
+	, Mushroom2ReTime(0)
+	, Mushroom3ReTime(0)
+	, TurtleReTime(0)
+	, Turtle2ReTime(0)
+	, Turtle3ReTime(0)  
+	, mpGameMenu(nullptr)
 {
 }
 
@@ -89,13 +88,13 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
-	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
+	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
 	// ボス関連
-	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
+	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
 
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
@@ -124,6 +123,7 @@ void CGameScene::Load()
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
+	CResourceManager::Load<CSound>("SlimeRun", "Sound\\EnemySE\\Slime\\SlimeRun.wav");
 
 	// その他
 	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
@@ -262,9 +262,9 @@ void CGameScene::Load()
 	//enemy21->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 球体のモンスター
-	CBeholder* enemy22 = new CBeholder();
-	enemy22->Position(50.0f, 0.0f, 100.0f);
-	enemy22->Scale(15.0f, 15.0f, 15.0f);
+	//CBeholder* enemy22 = new CBeholder();
+	//enemy22->Position(50.0f, 0.0f, 100.0f);
+	//enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	//// ボクサー
 	//CBoxer* enemy25 = new CBoxer();
@@ -281,10 +281,10 @@ void CGameScene::Load()
 	enemy8->Rotate(0.0f,90.0f,-70.0f);
 	enemy8->Scale(0.1f, 0.1f, 0.1f);*/
 
-	// ドラゴン
-	CDragon* bossEnemy = new CDragon();
-	bossEnemy->Position(0.0f, 21.0f, 120.0f);
-	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	//// ドラゴン
+	//CDragon* bossEnemy = new CDragon();
+	//bossEnemy->Position(0.0f, 21.0f, 120.0f);
+	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	/*CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);

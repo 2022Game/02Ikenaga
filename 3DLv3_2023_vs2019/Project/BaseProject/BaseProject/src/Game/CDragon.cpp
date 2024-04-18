@@ -20,22 +20,22 @@ CDragon* CDragon::spInstance = nullptr;
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	true,	162.0f	},	    // 寝る 81.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	true,	81.0f	},	    // 待機 41.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	true,	202.0f	},	    // 待機 101.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	true,	162.0f	},	    // 攻撃 81.0f
-    { "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	true,	182.0f	},	    // 攻撃2 91.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	true,	72.0f	},	    // 攻撃3 36.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	182.0f	},	    // フライフレーム 91.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonGetHit.x",	true,	82.0f	},	    // ヒット 41.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	122.0f	},	    // 防御 61.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	true,	150.0f	},	        // 死ぬ 65.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	true,	202.0f	},	    // 雄叫び 101.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	true,	242.0f	},	    // 飛行開始する前 121.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyIdle.x",	true,	62.0f	},	    // フライアイドル 31.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	true,	242.0f	},	        // 着地 121.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	true,	42.0f	},	        // 走る 21.0f
+	{ "",										                true,	0.0f },// Tポーズ
+	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	    true,	81.0f,  0.5f },	    // 寝る 81.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	    true,	41.0f,  0.5f },	    // 待機 41.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	    true,	101.0f, 0.5f },	    // 待機 101.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	false,	81.0f,  0.5f },	    // 攻撃 81.0f
+    { "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	false,	91.0f,  0.5f },	    // 攻撃2 91.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	false,	36.0f,	0.5f },	    // 攻撃3 36.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	91.0f,	0.5f },	    // フライフレーム 91.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonGetHit.x",	true,	41.0f,	0.5f },	    // ヒット 41.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	61.0f,	0.5f },	    // 防御 61.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	    true,	65.0f,	0.5f },	    // 死ぬ 65.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	true,	101.0f,	0.5f },	    // 雄叫び 101.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	true,	121.0f, 0.5f },	    // 飛行開始する前 121.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyIdle.x",	true,	31.0f,	0.5f },	    // フライアイドル 31.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	    true,	121.0f,	0.5f },	    // 着地 121.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	    true,	21.0f,	0.5f },	    // 走る 21.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x",	true,	62.0f	},	// フライフォワード 31.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyGlide.x",	true,	51.0f	},	// フライグライド 51.0f
 	//{ "Character\\Enemy\\Dragon\\animation\\DragonWalk.x",	true,	82.0f	},	        // 歩く 41.0f
@@ -43,11 +43,14 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 
 // コンストラクタ
 CDragon::CDragon()
-	: mpRideObject(nullptr)
-	,mFlyingTime(0)
-	,mDefenseTime(0)
+    : mState(EState::eIdle2)
+	, mpRideObject(nullptr)
+	, mFlyingTime(0)
+	, mDefenseTime(0)
 	, mAttackTime(0)
-	,mFlyingAttackTime(0)
+	, mFlyingAttackTime(0)
+	, mStateStep(0)
+	, mIsGrounded(false)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -306,10 +309,10 @@ CDragon::CDragon()
 CDragon::~CDragon()
 {
 	SAFE_DELETE(mpColliderLine);
-
+	// キャラ押し戻しコライダーを削除
 	SAFE_DELETE(mpColliderSphereFeet);
 	SAFE_DELETE(mpColliderSphereFeet2);
-
+	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColMouth);
 	SAFE_DELETE(mpDamageColTipMouth);
@@ -319,12 +322,13 @@ CDragon::~CDragon()
 	SAFE_DELETE(mpDamageColFeet2);
 	SAFE_DELETE(mpDamageColFeet3);
 	SAFE_DELETE(mpDamageColFeet4);
-
+	// 攻撃コライダーを削除
 	SAFE_DELETE(mpAttackColHead);
 	SAFE_DELETE(mpAttackColMouth);
 	SAFE_DELETE(mpAttackColTipMouth);
 }
 
+// ドラゴンのインスタンス
 CDragon* CDragon::Instance()
 {
 	return spInstance;
@@ -336,6 +340,15 @@ void CDragon::ChangeAnimation(EAnimType type)
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
 	AnimData data = ANIM_DATA[(int)type];
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
+	SetAnimationSpeed(data.animSpeed);
+}
+
+// 状態の切り替え
+void CDragon::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateStep = 0;
 }
 
 // 待機状態
@@ -344,7 +357,7 @@ void CDragon::UpdateIdle()
 	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -356,14 +369,14 @@ void CDragon::UpdateIdle2()
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
 	else
 	{
 		ChangeAnimation(EAnimType::eIdle2);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -374,7 +387,7 @@ void CDragon::UpdateIdle3()
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -383,8 +396,6 @@ void CDragon::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack);
-	AttackStart();
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp <= ROTATE_RANGE)
@@ -395,21 +406,38 @@ void CDragon::UpdateAttack()
 		dir.Normalize();
 		Rotation(CQuaternion::LookRotation(dir));
 	}
-	if (mAnimationFrame >= 35.0f)
+
+	// ステップごとに処理を分ける
+	switch (mStateStep)
 	{
-		if (!mpFlamethrower->IsThrowing())
+	// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		AttackStart();
+		mStateStep++;
+		break;
+	// ステップ1　: 火炎放射開始
+	case 1:
+		if (mAnimationFrame >= 17.5f)
 		{
-			mpFlamethrower->Start();
+			if (!mpFlamethrower->IsThrowing())
+			{
+				mpFlamethrower->Start();
+				SetAnimationSpeed(0.25f);
+				mStateStep++;
+			}
 		}
-	}
-	if (mAnimationFrame >=140.0f)
-	{
-		mpFlamethrower->Stop();
-	}
-	if (IsAnimationFinished())
-	{
-		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		break;
+	// ステップ2 : 火炎放射終了待ち
+	case 2:
+		if (mAnimationFrame >= 70.0f)
+		{
+			mpFlamethrower->Stop();
+			SetAnimationSpeed(0.5f);
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -421,7 +449,7 @@ void CDragon::UpdateAttack2()
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 
@@ -433,7 +461,7 @@ void CDragon::UpdateAttack3()
 	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
 	// 攻撃3終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 // 攻撃終了待ち
@@ -443,11 +471,11 @@ void CDragon::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
-// 飛行時の攻撃
+// 飛行中の攻撃
 void CDragon::UpdateFlyingAttack()
 {
 	ChangeAnimation(EAnimType::eFlyingAttack);
@@ -466,18 +494,18 @@ void CDragon::UpdateFlyingAttack()
 	{
 		mpFlamethrower->Stop();
 		// 飛行時の攻撃終了待ち状態へ移行
-		mState = EState::eFlyingAttackWait;
+		ChangeState(EState::eFlyingAttackWait);
 	}
 }
 
-// 飛行時の攻撃終了待ち
+// 飛行中の攻撃終了待ち
 void CDragon::UpdateFlyingAttackWait()
 {
 	mpFlamethrower->Stop();
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eFlyingIdle;
+		ChangeState(EState::eFlyingIdle);
 	}
 }
 
@@ -490,7 +518,7 @@ void CDragon::UpdateHit()
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 		ChangeAnimation(EAnimType::eIdle2);
 	}
 }
@@ -504,7 +532,7 @@ void CDragon::UpdateDefense()
 
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -517,7 +545,7 @@ void CDragon::UpdateDie()
 	if (IsAnimationFinished())
 	{
 		Kill();
-		// エネミーの死亡処理
+		// エネミーの死亡処理へ
 		CEnemy::Death();
 	}
 }
@@ -538,7 +566,7 @@ void CDragon::UpdateRoar()
 	if (IsAnimationFinished())
 	{
 		mpRoar->Stop();
-		mState = EState::eFlyingStart;
+		ChangeState(EState::eFlyingStart);
 	}
 }
 
@@ -550,11 +578,11 @@ void CDragon::UpdateFlyingStart()
 	ChangeAnimation(EAnimType::eFlyingStart);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eFlyingIdle;
+		ChangeState(EState::eFlyingIdle);
 	}
 }
 
-// 飛行時の待機
+// 飛行中の待機
 void CDragon::UpdateFlyingIdle()
 {
 	mMoveSpeed.X(0.0f);
@@ -562,7 +590,7 @@ void CDragon::UpdateFlyingIdle()
 	ChangeAnimation(EAnimType::eFlyingIdle);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eFlyingIdle;
+		ChangeState(EState::eFlyingIdle);
 	}
 }
 
@@ -574,7 +602,7 @@ void CDragon::UpdateFlyingEnd()
 	ChangeAnimation(EAnimType::eFlyingEnd);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -616,7 +644,7 @@ void CDragon::UpdateRun()
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 		ChangeAnimation(EAnimType::eIdle2);
 	}
 }
@@ -708,7 +736,7 @@ void CDragon::Update()
 		&& mState != EState::eFlyingStart && mState != EState::eFlyingIdle && mState != EState::eFlyingAttack && mState != EState::eFlyingAttackWait
 		&& mState != EState::eFlyingEnd && mState != EState::eRun)
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
@@ -743,19 +771,19 @@ void CDragon::Update()
 			if (probability4 == 8)Defense = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				ChangeState(EState::eAttack2);
 			}
 			else if (Attack)
 			{
-				mState = EState::eAttack;
+				ChangeState(EState::eAttack);
 			}
 			else if (Defense)
 			{
-				mState = EState::eDefense;
+				ChangeState(EState::eDefense);
 			}
 			else
 			{
-				mState = EState::eAttack3;
+				ChangeState(EState::eAttack3);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3
@@ -789,11 +817,11 @@ void CDragon::Update()
 	{
 		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime ==0)
 		{
-			mState = EState::eRoar;
+			ChangeState(EState::eRoar);
 		}
 		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >=400)
 		{
-			mState = EState::eFlyingStart;
+			ChangeState(EState::eFlyingStart);
 		}
 	}
 
@@ -804,7 +832,7 @@ void CDragon::Update()
 
 		if (mFlyingAttackTime > 400)
 		{
-			mState = EState::eFlyingAttack;
+			ChangeState(EState::eFlyingAttack);
 		}
 	}
 	if (mState == EState::eFlyingAttack || mState == EState::eFlyingEnd)
@@ -814,7 +842,7 @@ void CDragon::Update()
 
 	if (mFlyingTime >= 600)
 	{
-		mState = EState::eFlyingEnd;
+		ChangeState(EState::eFlyingEnd);
 	}
 	if (mState == EState::eFlyingEnd || mState == EState::eFlyingStart && mFlyingTime >=400)
 	{
@@ -841,9 +869,11 @@ void CDragon::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	 // キャラ押し戻しコライダー
 	mpColliderSphereFeet->Update();
 	mpColliderSphereFeet2->Update();
 
+	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColMouth->Update();
 	mpDamageColTipMouth->Update();
@@ -854,6 +884,7 @@ void CDragon::Update()
 	mpDamageColFeet3->Update();
 	mpDamageColFeet4->Update();
 
+	// 攻撃コライダー
 	mpAttackColHead->Update();
 	mpAttackColMouth->Update();
 	mpAttackColTipMouth->Update();
@@ -862,7 +893,7 @@ void CDragon::Update()
 
 	if (CInput::PushKey(('Q')))
 	{
-		mState = EState::eAttack2;
+		ChangeState(EState::eAttack2);
 	}
 
 	// 「E」キーで炎の発射をオンオフする
@@ -922,7 +953,6 @@ void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		{
 			Position(Position() + hit.adjust * hit.weight);
 			mIsGrounded = true;
-			//mMoveSpeed.Y(0.0f);
 
 			if (other->Tag() == ETag::eRideableObject)
 			{
@@ -944,9 +974,16 @@ void CDragon::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackColHead->SetEnable(true);
-	mpAttackColMouth->SetEnable(true);
-	mpAttackColTipMouth->SetEnable(true);
+	if (mState == EState::eAttack2)
+	{
+
+	}
+	else if (mState == EState::eAttack3)
+	{
+		mpAttackColHead->SetEnable(true);
+		mpAttackColMouth->SetEnable(true);
+		mpAttackColTipMouth->SetEnable(true);
+	}
 }
 
 // 攻撃終了
@@ -993,7 +1030,7 @@ void CDragon::TakeDamage(int damage, CObjectBase* causedObj)
 	if (mCharaStatus.hp -= damage)
 	{
 		mpFlamethrower->Stop();
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -1017,5 +1054,5 @@ float CDragon::GetDefBuff(const CVector& attackDir)const
 void CDragon::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

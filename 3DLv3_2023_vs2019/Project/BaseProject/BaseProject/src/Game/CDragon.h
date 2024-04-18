@@ -102,10 +102,11 @@ public:
 	void Death() override;
 
 private:
-	int mFlyingTime;   // 飛行時間
-	int mDefenseTime;  // 防御時間の間隔
-	int mAttackTime;   // 攻撃時間の間隔
+	int mFlyingTime;        // 飛行時間
+	int mDefenseTime;       // 防御時間の間隔
+	int mAttackTime;        // 攻撃時間の間隔
 	int mFlyingAttackTime;  // 飛行時の攻撃時間の間隔
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -142,6 +143,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -167,7 +169,11 @@ private:
 		eFlyingEnd,        // 飛行終了
 		eRun,              // 移動
 	};
-	EState mState;	// ドラゴンの状態
+	EState mState;	  // ドラゴンの状態
+	int mStateStep;  // State内でのステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
@@ -186,12 +192,12 @@ private:
 	CColliderSphere* mpDamageColFeet3;      // ダメージを受けるコライダー(後ろの左足)
 	CColliderSphere* mpDamageColFeet4;      // ダメージを受けるコライダー(後ろの右足)
 
-	CColliderSphere* mpAttackColHead;     // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackColMouth;    // ダメージを与えるコライダー(口)
-	CColliderSphere* mpAttackColTipMouth; // ダメージを与えるコライダー(口の先端)
+	CColliderSphere* mpAttackColHead;       // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColMouth;      // ダメージを与えるコライダー(口)
+	CColliderSphere* mpAttackColTipMouth;   // ダメージを与えるコライダー(口の先端)
 
 	CTransform* mpRideObject;
 
 	CFlamethrower* mpFlamethrower;  // 火炎放射エフェクト
-	CRoarEffect* mpRoar;  // 雄叫びエフェクト
+	CRoarEffect* mpRoar;            // 雄叫びエフェクト
 };

@@ -5,6 +5,7 @@
 #include "CRideableObject.h"
 #include <algorithm>
 #include "CEnemy.h"
+#include "CSound.h"
 
 /*
  レッドスライム(エネミー)のクラス
@@ -83,6 +84,7 @@ public:
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -119,6 +121,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -147,8 +150,11 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;
-	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderSphere* mpColliderSphereBody;  // キャラ押し戻しコライダー(体)
+	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
+	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
+
+	CSound* mpSlimeRunSE;
+	bool mIsSlimeRunSE;
 };

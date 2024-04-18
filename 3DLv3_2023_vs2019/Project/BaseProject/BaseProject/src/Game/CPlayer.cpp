@@ -75,10 +75,10 @@ CPlayer::CPlayer()
 	: CXCharacter(ETag::ePlayer, ETaskPriority::ePlayer)
 	, mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	,mRollingTime(0)
-	,mRollingCount(1)
-	,mAttackTime(0)
-	,mAttackCount(0)
+	, mRollingTime(0)
+	, mRollingCount(1)
+	, mAttackTime(0)
+	, mAttackCount(0)
 	, healcount(0)
 	, recoverycount(0)
 	, mDefaultPos(CVector::zero)
@@ -683,7 +683,7 @@ void CPlayer::UpdateJumpAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eJumpAttack);
-	if (mAnimationFrame >= 50.0f)
+	if (mAnimationFrame >= 40.0f)
 	{
 		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
 		mpSword->AttackStart();
