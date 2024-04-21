@@ -683,7 +683,7 @@ void CPlayer::UpdateJumpAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eJumpAttack);
-	if (mAnimationFrame >= 40.0f)
+	if (mAnimationFrame >= 60.0f)
 	{
 		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
 		mpSword->AttackStart();

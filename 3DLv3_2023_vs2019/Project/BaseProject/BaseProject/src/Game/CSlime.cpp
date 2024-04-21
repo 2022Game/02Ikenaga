@@ -15,7 +15,7 @@ CSlime* CSlime::spInstance = nullptr;
 #define GRAVITY 0.0625f          // 重力
 
 #define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.5f         // 追跡を辞める範囲
+#define STOP_RANGE 21.0f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
@@ -53,7 +53,16 @@ CSlime::CSlime()
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mIsGrounded(false)
+	, mStateAttackStep(0)
+	, mStateAttack2Step(0)
+	, mStateDizzyStep(0)
+	, mStateHitStep(0)
+	, mStateDieStep(0)
 	, mIsSlimeRunSE(false)
+	, mIsSlimeAttackSE(false)
+	, mIsSlimeDizzySE(false)
+	, mIsSlimeHitSE(false)
+	, mIsSlimeDieSE(false)
 {
 	// インスタンスの設定
 	spInstance = this;
@@ -94,7 +103,7 @@ CSlime::CSlime()
 		0.5f,false,5.0f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
-	mpColliderSphereBody->Position(0.0f, 0.3f, 0.0f);
+	mpColliderSphereBody->Position(0.06f, 0.3f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageColBody = new CColliderSphere
@@ -107,7 +116,7 @@ CSlime::CSlime()
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eWeapon,ETag::eSlash });
 	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageColBody->Position(0.0f, 0.3f,0.0f);
+	mpDamageColBody->Position(0.1f, 0.3f,0.0f);
 
 	// ダメージを与えるコライダー(体)
 	mpAttackColBody = new CColliderSphere
@@ -117,7 +126,7 @@ CSlime::CSlime()
 	);
 	mpAttackColBody->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColBody->SetCollisionTags({ ETag::ePlayer });
-	mpAttackColBody->Position(0.0f, 0.3f, 0.0f);
+	mpAttackColBody->Position(0.1f, 0.3f, 0.0f);
 	
 	// キャラクター押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをスライムの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
@@ -129,6 +138,10 @@ CSlime::CSlime()
 	mpAttackColBody->SetEnable(false);
 
 	mpSlimeRunSE = CResourceManager::Get<CSound>("SlimeRun");
+	mpSlimeAttackSE = CResourceManager::Get<CSound>("SlimeAttack");
+	mpSlimeDizzySE = CResourceManager::Get<CSound>("SlimeDizzy");
+	mpSlimeHitSE = CResourceManager::Get<CSound>("SlimeHit");
+	mpSlimeDieSE = CResourceManager::Get<CSound>("SlimeDie");
 }
 
 CSlime::~CSlime()
@@ -156,13 +169,25 @@ void CSlime::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CSlime::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateAttackStep = 0;
+	mStateAttack2Step = 0;
+	mStateDizzyStep = 0;
+	mStateHitStep = 0;
+	mStateDieStep = 0;
+}
+
 // 待機状態
 void CSlime::UpdateIdle()
 {
 	SetAnimationSpeed(0.7f);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -174,7 +199,7 @@ void CSlime::UpdateIdle2()
 	if (IsAnimationFinished())
 	{
 		ChangeAnimation(EAnimType::eIdle3);
-		mState = EState::eIdleWait;
+		ChangeState(EState::eIdleWait);
 	}
 }
 
@@ -185,13 +210,16 @@ void CSlime::UpdateIdle3()
 	ChangeAnimation(EAnimType::eIdle4);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if ( vectorp >=STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		if (player->Position().Y() <= Position().Y())
+		{
+			ChangeState(EState::eRun);
+		}
 	}
 	else
 	{
@@ -199,7 +227,7 @@ void CSlime::UpdateIdle3()
 		ChangeAnimation(EAnimType::eIdle4);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle3;
+			ChangeState(EState::eIdle3);
 		}
 	}
 }
@@ -214,7 +242,7 @@ void CSlime::UpdateIdleWait()
 	if (IsAnimationFinished())
 	{
 		// 待機状態へ移行
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -224,11 +252,34 @@ void CSlime::UpdateAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
-	// 攻撃アニメーションを開始
-	ChangeAnimation(EAnimType::eAttack);
-	AttackStart();
-	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
+
+	// ステップごとに処理を分ける
+	switch (mStateAttackStep)
+	{
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		AttackStart();
+		mStateAttackStep++;
+		break;
+		// ステップ1　: 効果音開始	
+	case 1:
+		if (mAnimationFrame >= 1.0f)
+		{
+			mpSlimeAttackSE->Play();
+			mIsSlimeAttackSE = true;
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ2 : 攻撃終了待ち
+	case 2:
+		if (mAnimationFrame >= 25.0f)
+		{
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
+	}
 }
 
 // 攻撃2
@@ -237,14 +288,37 @@ void CSlime::UpdateAttack2()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
-	// 攻撃2アニメーションを開始
-	ChangeAnimation(EAnimType::eAttack2);
-	if (mAnimationFrame >= 13.0f)
+
+	// ステップごとに処理を分ける
+	switch (mStateAttack2Step)
 	{
-		AttackStart();
-		mpColliderSphereBody->SetEnable(false);
-		// 攻撃2終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		// ステップ0 : 攻撃2アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack2);
+		if (mAnimationFrame >= 10.0f)
+		{
+			AttackStart();
+			mpColliderSphereBody->SetEnable(false);
+			mStateAttack2Step++;
+		}
+		break;
+		// ステップ1　: 効果音開始	
+	case 1:
+		if (mAnimationFrame >= 1.0f)
+		{
+			mpSlimeAttackSE->Play();
+			mIsSlimeAttackSE = true;
+			mStateAttack2Step++;
+		}
+		break;
+		// ステップ2 : 攻撃終了待ち
+	case 2:
+		if (mAnimationFrame >= 25.0f)
+		{
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -258,15 +332,18 @@ void CSlime::UpdateAttackWait()
 		mpColliderSphereBody->SetEnable(true);
 		CPlayer* player = CPlayer::Instance();
 		float vectorp = (player->Position() - Position()).Length();
-		if (vectorp >=STOP_RANGE && vectorp <= WALK_RANGE)
+		if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 		{
-			mState = EState::eRun;
+			if (player->Position().Y() <= Position().Y())
+			{
+				ChangeState(EState::eRun);
+			}
 		}
 		else
 		{
 			SetAnimationSpeed(0.5f);
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle3;
+			ChangeState(EState::eIdle3);
 			ChangeAnimation(EAnimType::eIdle4);
 		}
 	}
@@ -277,55 +354,124 @@ void CSlime::UpdateHit()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-
 	SetAnimationSpeed(0.5f);
-	// ヒットアニメーションを開始
-	ChangeAnimation(EAnimType::eHit);
-	if (IsAnimationFinished())
+
+	// ステップごとに処理を分ける
+	switch (mStateHitStep)
 	{
-		// めまいをfalseにする
-		bool stan = false;
-		// 確率を最小に0最大20
-		int probability = Math::Rand(0, 20);
-		if (probability == 1)stan = true;
-		if (stan)
+		// ステップ0 :ヒットアニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eHit);
+		mStateHitStep++;
+		break;
+		// ステップ1　: 効果音開始	
+	case 1:
+		if (mAnimationFrame >= 0.0f)
 		{
-			mState = EState::eDizzy;
+			mpSlimeHitSE->Play(3.0f);
+			mIsSlimeHitSE = true;
+			mStateHitStep++;
 		}
-		else
+		break;
+		// ステップ2 : ヒットモーション終了待ち
+	case 2:
+		if (IsAnimationFinished())
 		{
-			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle3;
-			ChangeAnimation(EAnimType::eIdle4);
+			// めまいをfalseにする
+			bool stan = false;
+			// 確率を最小に0最大20
+			int probability = Math::Rand(0, 20);
+			if (probability == 1)stan = true;
+			if (stan)
+			{
+				ChangeState(EState::eDizzy);
+			}
+			else
+			{
+				// プレイヤーの攻撃がヒットした時の待機状態へ移行
+				ChangeState(EState::eIdle3);
+				ChangeAnimation(EAnimType::eIdle4);
+			}
 		}
+		break;
 	}
 }
 
 // 死ぬ時
 void CSlime::UpdateDie()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
-	// 死ぬ時のアニメーションを開始
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	// ステップごとに処理を分ける
+	switch (mStateDieStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::SlimeDeath();
+		// ステップ0 :死亡アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mStateDieStep++;
+		break;
+		// ステップ1　: 効果音開始	
+	case 1:
+		if (mAnimationFrame >= 0.0f)
+		{
+			mpSlimeHitSE->Play(3.0f);
+			mIsSlimeHitSE = true;
+		}
+		if (mAnimationFrame >= 15.0f)
+		{
+			mpSlimeDieSE->Play(5.0f);
+			mIsSlimeDieSE = true;
+			mStateDieStep++;
+		}
+		break;
+		// ステップ2 : 死亡モーション終了待ち
+	case 2:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::SlimeDeath();
+		}
+		break;
 	}
 }
 
 // めまい(混乱)
 void CSlime::UpdateDizzy()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
-	// めまい(混乱)アニメーションを開始
-	ChangeAnimation(EAnimType::eDizzy);
-	if (IsAnimationFinished())
+
+	// ステップごとに処理を分ける
+	switch (mStateDizzyStep)
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle3;
-		ChangeAnimation(EAnimType::eIdle4);
+		// ステップ0 :めまいアニメーション開始
+	case 0:
+		// めまいアニメーションを開始
+		ChangeAnimation(EAnimType::eDizzy);
+		mStateDizzyStep++;
+		break;
+		// ステップ1　: 効果音開始	
+	case 1:
+		if (mAnimationFrame >= 0.0f)
+		{
+			mpSlimeDizzySE->Play();
+			mIsSlimeDizzySE = true;
+			mStateDizzyStep++;
+		}
+		break;
+		// ステップ2 : めまいモーション終了待ち
+	case 2:
+		if (IsAnimationFinished())
+		{
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			ChangeState(EState::eIdle3);
+			ChangeAnimation(EAnimType::eIdle4);
+		}
+		break;
 	}
 }
 
@@ -338,13 +484,11 @@ void CSlime::UpdateRun()
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
-	// 追跡をやめて止まる
-	if (vectorp <= 22.0f && vectorp >= 24.0f)
+	
+	// 範囲内の時、移動し追跡する
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() <= Position().Y())
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
-		// 回転する範囲であれば
+		mMoveSpeed += nowPos * MOVE_SPEED;
 		if (vectorp <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
@@ -352,23 +496,15 @@ void CSlime::UpdateRun()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
 		}
 	}
-	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
-	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
-	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	if (vectorp <= STOP_RANGE ||vectorp >= WALK_RANGE)
+	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
-		SetAnimationSpeed(0.5f);
-		mState = EState::eIdle3;
+		SetAnimationSpeed(0.8f);
+		ChangeState(EState::eIdle3);
 		ChangeAnimation(EAnimType::eIdle4);
 	}
 	if (mAnimationFrame >= 5.0f)
@@ -456,11 +592,11 @@ void CSlime::Update()
 
 			if (BigAttack)
 			{
-				mState = EState::eAttack2;
+				ChangeState(EState::eAttack2);
 			}
 			else
 			{
-				mState = EState::eAttack;
+				ChangeState(EState::eAttack);
 			}
 		}
 		else if (mCharaStatus.hp <= 0)
@@ -608,7 +744,7 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -634,5 +770,5 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 void CSlime::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

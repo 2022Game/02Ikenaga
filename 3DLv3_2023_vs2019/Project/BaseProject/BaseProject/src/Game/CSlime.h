@@ -145,6 +145,14 @@ private:
 		eJumpEnd,	// ジャンプ終了
 	};
 	EState mState;	// レッドスライム(エネミー)の状態
+	int mStateAttackStep;  // State内の攻撃でのステップ処理
+	int mStateAttack2Step;
+	int mStateDizzyStep;
+	int mStateHitStep;
+	int mStateDieStep;
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
@@ -155,6 +163,15 @@ private:
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
 
-	CSound* mpSlimeRunSE;
+	CSound* mpSlimeRunSE;     // 走るの音
+	CSound* mpSlimeAttackSE;  // 攻撃の音
+	CSound* mpSlimeDizzySE;   // 混乱の音
+	CSound* mpSlimeHitSE;     // ヒットの音
+	CSound* mpSlimeDieSE;     // 死亡の音
+
 	bool mIsSlimeRunSE;
+	bool mIsSlimeAttackSE;
+	bool mIsSlimeDizzySE;
+	bool mIsSlimeHitSE;
+	bool mIsSlimeDieSE;
 };

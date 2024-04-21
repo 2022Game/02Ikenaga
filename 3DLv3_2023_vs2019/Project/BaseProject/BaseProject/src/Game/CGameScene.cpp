@@ -123,7 +123,14 @@ void CGameScene::Load()
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
+
+	// スライム関連の効果音
 	CResourceManager::Load<CSound>("SlimeRun", "Sound\\EnemySE\\Slime\\SlimeRun.wav");
+	CResourceManager::Load<CSound>("SlimeAttack", "Sound\\EnemySE\\Slime\\SlimeAttack.wav");
+	CResourceManager::Load<CSound>("SlimeAttack2", "Sound\\EnemySE\\Slime\\SlimeAttack2.wav");
+	CResourceManager::Load<CSound>("SlimeDizzy", "Sound\\EnemySE\\Slime\\SlimeDizzy.wav");
+	CResourceManager::Load<CSound>("SlimeHit", "Sound\\EnemySE\\Slime\\SlimeHit.wav");
+	CResourceManager::Load<CSound>("SlimeDie", "Sound\\EnemySE\\Slime\\SlimeDie.wav");
 
 	// その他
 	//CResourceManager::Load<CImage>("Exp", "Item\\exp.png");
