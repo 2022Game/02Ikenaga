@@ -475,7 +475,7 @@ void CSlime::UpdateDizzy()
 	}
 }
 
-// ‘–‚é
+// ‘–‚é 
 void CSlime::UpdateRun() 
 {
 	SetAnimationSpeed(0.6f);
