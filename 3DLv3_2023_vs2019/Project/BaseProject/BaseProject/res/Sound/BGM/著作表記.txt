@@ -8,3 +8,6 @@ https://maou.audio/bgm_fantasy08/
 
 ■title.wav
 https://maou.audio/bgm_healing17/
+
+■b.wav
+BGM：Springin’ Sound Stock

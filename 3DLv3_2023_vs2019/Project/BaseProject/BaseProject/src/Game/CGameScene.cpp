@@ -125,7 +125,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
 
 	// ƒXƒ‰ƒCƒ€ŠÖ˜A‚ÌŒø‰Ê‰¹
-	CResourceManager::Load<CSound>("SlimeRun", "Sound\\EnemySE\\Slime\\SlimeRun.wav");
+	CResourceManager::Load<CSound>("SlimeRun", "Sound\\EnemySE\\Slime\\SlimeRun1.wav");
 	CResourceManager::Load<CSound>("SlimeAttack", "Sound\\EnemySE\\Slime\\SlimeAttack.wav");
 	CResourceManager::Load<CSound>("SlimeAttack2", "Sound\\EnemySE\\Slime\\SlimeAttack2.wav");
 	CResourceManager::Load<CSound>("SlimeDizzy", "Sound\\EnemySE\\Slime\\SlimeDizzy.wav");
