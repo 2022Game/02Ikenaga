@@ -683,12 +683,6 @@ void CPlayer::UpdateJumpAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eJumpAttack);
-	if (mAnimationFrame >= 60.0f)
-	{
-		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
-		mpSword->AttackStart();
-		mState = EState::eAttackWait;
-	}
 	if (mAnimationFrame >= 10.0f && mAnimationFrame <= 49.0f)
 	{
 		mMoveSpeed.Y(0.0f);
@@ -696,6 +690,12 @@ void CPlayer::UpdateJumpAttack()
 	if (mAnimationFrame >= 50.0f)
 	{
 		mMoveSpeed -= CVector(0.0f, 0.0825, 0.0f);
+	}
+	if (mAnimationFrame >= 60.0f)
+	{
+		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
+		mpSword->AttackStart();
+		mState = EState::eAttackWait;
 	}
 }
 

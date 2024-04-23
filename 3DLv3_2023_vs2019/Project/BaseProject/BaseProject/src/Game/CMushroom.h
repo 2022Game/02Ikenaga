@@ -4,6 +4,7 @@
 #include "CModel.h"
 #include "CEnemy.h"
 #include "CColliderSphere.h"
+#include "CColliderCapsule.h"
 
 /*
  マッシュルームクラス
@@ -152,7 +153,8 @@ private:
 	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphere;   // 体
 	CColliderSphere* mpColliderSphere2;  // 頭
-	CColliderSphere* mpDamageCol;        // ダメージを受けるコライダー
+	CColliderCapsule* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColRoot;        // ダメージを与えるコライダー(根)
 	CTransform* mpRideObject;
 };

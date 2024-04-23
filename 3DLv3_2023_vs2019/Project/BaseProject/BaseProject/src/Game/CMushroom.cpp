@@ -102,18 +102,20 @@ CMushroom::CMushroom()
 	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
 	mpColliderSphere2->Position(0.0f, 0.8f, 0.0f);
 
-	// ダメージを受けるコライダーを作成
-	mpDamageCol = new CColliderSphere
+	// ダメージを受けるコライダーを作成(体)
+	mpDamageColBody = new CColliderCapsule
 	(
 		this, ELayer::eDamageCol,
-		0.4f, false
+		CVector(5.0f, 10.0f, -5.0f),
+		CVector(5.0f, 5.0f, 5.0f),
+		2.0f,false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol->Position(0.0f, 0.3f, 0.0f);
+	//mpDamageColBody->Position(0.0f, 0.3f, 0.0f);
 
 	// ダメージを与えるコライダー(頭)
 	mpAttackColHead = new CColliderSphere
@@ -125,12 +127,30 @@ CMushroom::CMushroom()
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColHead->Position(0.0f, -0.1f, 0.0f);
 
+	// ダメージを与えるコライダー(根)
+	mpAttackColRoot = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		0.25f, false
+	);
+	mpAttackColRoot->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColRoot->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColRoot->Position(0.05f, 0.23f, 0.0f);
+
 	// 攻撃コライダーをマッシュルームの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_mushroom_spine03");
 	mpAttackColHead->SetAttachMtx(headMty);
 
+	// 攻撃コライダーをマッシュルームの根の行列にアタッチ
+	const CMatrix* rootMty = GetFrameMtx("Armature_mushroom_root");
+	mpAttackColRoot->SetAttachMtx(rootMty);
+
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
+	mpAttackColRoot->SetEnable(false);
+	mpColliderSphere->SetEnable(false);
+	mpColliderSphere2->SetEnable(false);
+	mpDamageColBody->SetEnable(true);
 }
 
 CMushroom::~CMushroom()
@@ -138,8 +158,9 @@ CMushroom::~CMushroom()
 	SAFE_DELETE(mpColliderLine);
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpColliderSphere2);
-	SAFE_DELETE(mpDamageCol);
+	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpAttackColHead);
+	SAFE_DELETE(mpAttackColRoot);
 }
 
 CMushroom* CMushroom::Instance()
@@ -317,7 +338,7 @@ void CMushroom::UpdateAttack3()
 		{
 			if (vectorp <= 25.0f)
 			{
-				mMoveSpeed += nowPos * 2.0f;
+				mMoveSpeed += nowPos * 7.0f;
 				mStateAttack3Step++;
 			}
 			else if (vectorp >= 26.0f)
@@ -570,6 +591,7 @@ void CMushroom::Update()
 	CXCharacter::Update();
 
 	mpAttackColHead->Update();
+	mpAttackColRoot->Update();
 
 	mIsGrounded = false;
 
@@ -582,7 +604,7 @@ void CMushroom::Update()
 void CMushroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackColHead && mState != EState::eIdle && mState != EState::eIdle2 &&
+	if (self == mpAttackColHead || self == mpAttackColRoot&& mState != EState::eIdle && mState != EState::eIdle2 &&
 		mState != EState::eIdle3)
 	{
 		// キャラのポインタに変換
@@ -635,6 +657,10 @@ void CMushroom::AttackStart()
 	{
 		mpAttackColHead->SetEnable(true);
 	}
+	if (mState == EState::eAttack3)
+	{
+		mpAttackColRoot->SetEnable(true);
+	}
 }
 
 // 攻撃終了
@@ -643,6 +669,7 @@ void CMushroom::AttackEnd()
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
 	mpAttackColHead->SetEnable(false);
+	mpAttackColRoot->SetEnable(false);
 }
 
 // 描画
