@@ -496,6 +496,8 @@ void CSlime::UpdateRun()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
+			CQuaternion p = player->Rotation();
+			CQuaternion r = Rotation();
 		}
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ

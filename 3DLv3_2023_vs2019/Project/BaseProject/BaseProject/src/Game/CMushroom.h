@@ -116,6 +116,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -139,14 +140,19 @@ private:
 		eJumpEnd,	// ジャンプ終了
 	};
 	EState mState;	// マッシュルームの状態
+	int mStateAttack2Step;  // State内の攻撃2でのステップ処理
+	int mStateAttack3Step;  // State内の攻撃3でのステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;  // 体
+	CColliderSphere* mpColliderSphere;   // 体
 	CColliderSphere* mpColliderSphere2;  // 頭
-	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderSphere* mpDamageCol;        // ダメージを受けるコライダー
+	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
 	CTransform* mpRideObject;
 };

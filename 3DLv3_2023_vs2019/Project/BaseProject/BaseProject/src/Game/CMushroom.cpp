@@ -14,24 +14,24 @@ CMushroom* CMushroom::spInstance = nullptr;
 #define GRAVITY 0.0625f          // 重力
 
 #define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.5f         // 追跡を辞める範囲
+#define STOP_RANGE 20.0f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // マッシュルームのアニメーションデータのテーブル
 const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	true,	21.0f	},	        // 植物 21.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	80.0f	},	// 植物からきのこ 21.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	true,	41.0f	},	// 待機2 18.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	true,	41.0f	},	// 待機 18.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	true,	80.0f	},	// 攻撃 26.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	true,	70.0f	},	// 攻撃 26.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	true,	70.0f	},	// 攻撃 26.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	true,	70.0f	},	// ヒット 23.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	true,	70.0f	},	    //  死ぬ26.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	true,	70.0f	},	// めまい 41.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	true,	40.0f	},	//走る 17.0f
+	{ "",										                            true,	0.0f,	0.0f},// Tポーズ
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlant.x",	        true,	21.0f,	0.3f},	// 植物 21.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	21.0f,	0.3},	// 植物からきのこ 21.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	    true,	18.0f,	0.5f},	// 待機2 18.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	    true,	18.0f,	0.5f},	// 待機 18.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	        true,	26.0f,	0.4f},	// 攻撃 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	        true,	26.0f,	0.6f},	// 攻撃 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	        true,	26.0f,	0.5f},	// 攻撃 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	        true,	23.0f	},	// ヒット 23.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	            true,	26.0f	},	    //  死ぬ26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	            true,	41.0f	},	// めまい 41.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	            true,	17.0f, 	0.4f},	//走る 17.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//見回す 121.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingStart.x",	true,	25.0f	},	//開始の見回す 25.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomTaunting.x",	true,	80.0f	},	//挑発 41.0f
@@ -46,8 +46,12 @@ int CMushroom::mHp;
 
 // コンストラクタ
 CMushroom::CMushroom()
-	: mpRideObject(nullptr)
-	,mAttackTime(0)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
+	, mAttackTime(0)
+	, mIsGrounded(false)
+	, mStateAttack2Step(0)
+	, mStateAttack3Step(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -69,6 +73,7 @@ CMushroom::CMushroom()
 	// CXCharacterの初期化
 	Init(model);
 
+	SetAnimationSpeed(0.3f);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
@@ -110,22 +115,22 @@ CMushroom::CMushroom()
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageCol->Position(0.0f, 0.3f, 0.0f);
 
-	// ダメージを与えるコライダー
-	mpAttackCol = new CColliderSphere
+	// ダメージを与えるコライダー(頭)
+	mpAttackColHead = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
 		0.55f, false
 	);
-	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
-	mpAttackCol->Position(0.0f, -0.1f, 0.0f);
+	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColHead->Position(0.0f, -0.1f, 0.0f);
 
 	// 攻撃コライダーをマッシュルームの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_mushroom_spine03");
-	mpAttackCol->SetAttachMtx(headMty);
+	mpAttackColHead->SetAttachMtx(headMty);
 
 	// 最初の攻撃コライダーを無効にしておく
-	mpAttackCol->SetEnable(false);
+	mpAttackColHead->SetEnable(false);
 }
 
 CMushroom::~CMushroom()
@@ -134,7 +139,7 @@ CMushroom::~CMushroom()
 	SAFE_DELETE(mpColliderSphere);
 	SAFE_DELETE(mpColliderSphere2);
 	SAFE_DELETE(mpDamageCol);
-	SAFE_DELETE(mpAttackCol);
+	SAFE_DELETE(mpAttackColHead);
 }
 
 CMushroom* CMushroom::Instance()
@@ -150,45 +155,63 @@ void CMushroom::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CMushroom::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateAttack2Step = 0;
+	mStateAttack3Step = 0;
+}
+
 // 戦う前の待機状態
 void CMushroom::UpdateIdle()
 {
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp <= WITHIN_RANGE)
 	{
-		mState = EState::eIdle2;
+		if (IsAnimationFinished())
+		{
+			ChangeState(EState::eIdle2);
+		}
 	}
 }
 
 // 戦う前の待機状態2
 void CMushroom::UpdateIdle2()
 {
+	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
 // 待機状態3
 void CMushroom::UpdateIdle3()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
 	else
 	{
 		ChangeAnimation(EAnimType::eIdle3);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle3;
+			ChangeState(EState::eIdle3);
 		}
 	}
 }
@@ -196,14 +219,15 @@ void CMushroom::UpdateIdle3()
 // 攻撃
 void CMushroom::UpdateAttack()
 {
+	SetAnimationSpeed(0.4f);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack);
-	if (mAnimationFrame >= 35.0f)
+	if (mAnimationFrame >= 13.0f)
 	{
 		AttackStart();
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
@@ -212,35 +236,55 @@ void CMushroom::UpdateAttack2()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack2);
-	if (mAnimationFrame >= 10.0f && mAnimationFrame <= 11.0f)
+	SetAnimationSpeed(0.6f);
+
+	// ステップごとに処理を分ける
+	switch (mStateAttack2Step)
 	{
-		AttackStart();
-	}
-	if (mAnimationFrame >= 20.0f && mAnimationFrame <= 21.0f)
-	{
-		AttackEnd();
-	}
-	if (mAnimationFrame >= 30.0f && mAnimationFrame <= 31.0f)
-	{
-		AttackStart();
-	}
-	if (mAnimationFrame >= 31.0f && mAnimationFrame <= 32.0f)
-	{
-		AttackEnd();
-	}
-	if (mAnimationFrame >= 50.0f && mAnimationFrame <= 51.0f)
-	{
-		AttackStart();
-	}
-	if (mAnimationFrame >= 60.0f && mAnimationFrame <= 61.0f)
-	{
-		AttackEnd();
-	}
-	if(IsAnimationFinished())
-	{
-		// 攻撃2終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		// ステップ0 : 攻撃2アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack2);
+		if (mAnimationFrame >= 5.0f && mAnimationFrame <= 10.0f)
+		{
+			AttackStart();
+			mStateAttack2Step++;
+		}
+		break;
+	case 1:
+		if (mAnimationFrame >= 11.0f && mAnimationFrame <= 12.0f)
+		{
+			AttackEnd();
+			mStateAttack2Step++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 13.0f && mAnimationFrame <= 17.0f)
+		{
+			AttackStart();
+			mStateAttack2Step++;
+		}
+		break;
+	case 3:
+		if (mAnimationFrame >= 18.0f && mAnimationFrame <= 20.0f)
+		{
+			AttackEnd();
+			mStateAttack2Step++;
+		}
+		break;
+	case 4:
+		if (mAnimationFrame >= 21.0f && mAnimationFrame < 25.0f)
+		{
+			AttackStart();
+			mStateAttack2Step++;
+		}
+		break;
+	case 5:
+		if (mAnimationFrame >= 25.0f)
+		{
+			// 攻撃2終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -248,12 +292,50 @@ void CMushroom::UpdateAttack2()
 // 攻撃3
 void CMushroom::UpdateAttack3()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack3);
-	AttackStart();
-	// 攻撃3終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	CPlayer* player = CPlayer::Instance();
+	CVector nowPos = (player->Position() - Position()).Normalized();
+	float vectorp = (player->Position() - Position()).Length();
+	SetAnimationSpeed(0.5f);
+	mpAttackColHead->SetEnable(false);
+	// ステップごとに処理を分ける
+	switch (mStateAttack3Step)
+	{
+		// ステップ0 : 攻撃3アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack3);
+		mStateAttack3Step++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 10.0f)
+		{
+			AttackStart();
+			mStateAttack3Step++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 0.0f)
+		{
+			if (vectorp <= 25.0f)
+			{
+				mMoveSpeed += nowPos * 2.0f;
+				mStateAttack3Step++;
+			}
+			else if (vectorp >= 26.0f)
+			{
+				mMoveSpeed.X(0.0f);
+				mMoveSpeed.Z(0.0f);
+				mStateAttack3Step++;
+			}
+		}
+		break;
+	case 3:
+		if (mAnimationFrame >= 25.0f)
+		{
+			// 攻撃3終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
+	}
 }
 
 // 攻撃終了待ち
@@ -262,7 +344,7 @@ void  CMushroom::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -283,12 +365,12 @@ void CMushroom::UpdateHit()
 		if (probability == 20)stan = true;
 		if (stan)
 		{
-			mState = EState::eDizzy;
+			ChangeState(EState::eDizzy);
 		}
 		else
 		{
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle3;
+			ChangeState(EState::eIdle3);
 			ChangeAnimation(EAnimType::eIdle3);
 		}
 	}
@@ -297,6 +379,8 @@ void CMushroom::UpdateHit()
 // 死ぬ
 void CMushroom::UpdateDie()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// 死ぬ時のアニメーションを開始
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
@@ -310,12 +394,14 @@ void CMushroom::UpdateDie()
 // めまい(混乱)
 void CMushroom::UpdateDizzy()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	// めまい(混乱)アニメーションを開始
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 		ChangeAnimation(EAnimType::eIdle4);
 	}
 }
@@ -323,31 +409,23 @@ void CMushroom::UpdateDizzy()
 // 走る
 void CMushroom::UpdateRun()
 {
+	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eRun);
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
-	// 追跡をやめて止まる
-	if (vectorp <= 22.0f && vectorp >= 24.0f)
+
+	// 回転する範囲であれば
+	if (vectorp <= ROTATE_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
-		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
-		{
-			// プレイヤーのいる方向へ向く
-			CVector dir = player->Position() - Position();
-			dir.Y(0.0f);
-			dir.Normalize();
-			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-		}
+		// プレイヤーのいる方向へ向く
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
 	}
 	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
+	if (vectorp >= 20.0f && vectorp <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
@@ -355,8 +433,8 @@ void CMushroom::UpdateRun()
 	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
 	{
 		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle3;
+	    mMoveSpeed.Z(0.0f);
+		ChangeState(EState::eIdle3);
 		ChangeAnimation(EAnimType::eIdle4);
 	}
 }
@@ -419,11 +497,11 @@ void CMushroom::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle3 && mState != EState::eAttack &&
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdle3 && mState != EState::eAttack &&
 		mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait && mState != EState::eHit
 		&& mState != EState::eDizzy && mState != EState::eDie && mState != EState::eRun)
 	{
-		UpdateIdle();
+		ChangeState(EState::eIdle);
 	}
 
 	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
@@ -461,24 +539,24 @@ void CMushroom::Update()
 			if (probability3 == 6)Attack3 = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				//ChangeState(EState::eAttack2);
 			}
 			else if (Attack3)
 			{
-				mState = EState::eAttack3;
+				ChangeState(EState::eAttack3);
 			}
 			else
 			{
-				mState = EState::eAttack;
+				//ChangeState(EState::eAttack);
 			}
 		}
-		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3)
+		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttackWait)
 		{
 			mAttackTime = 0;
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE || mState==EState::eAttack3)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
@@ -491,19 +569,20 @@ void CMushroom::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
-	mpAttackCol->Update();
+	mpAttackColHead->Update();
 
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print("攻撃 %d\n",mAttackTime);
 }
 
 // 衝突処理
 void CMushroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackCol && mState != EState::eIdle && mState != EState::eIdle2 &&
+	if (self == mpAttackColHead && mState != EState::eIdle && mState != EState::eIdle2 &&
 		mState != EState::eIdle3)
 	{
 		// キャラのポインタに変換
@@ -552,7 +631,10 @@ void CMushroom::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackCol->SetEnable(true);
+	if (mState == EState::eAttack || mState==EState::eAttack2)
+	{
+		mpAttackColHead->SetEnable(true);
+	}
 }
 
 // 攻撃終了
@@ -560,7 +642,7 @@ void CMushroom::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
-	mpAttackCol->SetEnable(false);
+	mpAttackColHead->SetEnable(false);
 }
 
 // 描画
@@ -596,7 +678,7 @@ void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -623,5 +705,5 @@ void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
 void CMushroom::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

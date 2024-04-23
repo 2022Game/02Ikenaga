@@ -83,7 +83,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
-	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
+	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
@@ -178,10 +178,10 @@ void CGameScene::Load()
 	//enemy3->Position(-20.0f, 0.0f, -90.0f);
 	//enemy3->Scale(35.0f, 35.0f, 35.0f);
 
-	//// マッシュルーム
-	//CMushroom* enemy4 = new CMushroom();
-	//enemy4->Position(150.0f, 0.0f, -150.0f);
-	//enemy4->Scale(25.0f, 25.0f, 25.0f);
+	// マッシュルーム
+	CMushroom* enemy4 = new CMushroom();
+	enemy4->Position(150.0f, 0.0f, -150.0f);
+	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	//// マッシュルーム2
 	//CMushroom2* enemy5 = new CMushroom2();
