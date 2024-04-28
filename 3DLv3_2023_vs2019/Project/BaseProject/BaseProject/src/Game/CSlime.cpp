@@ -63,6 +63,7 @@ CSlime::CSlime()
 	, mIsSlimeDizzySE(false)
 	, mIsSlimeHitSE(false)
 	, mIsSlimeDieSE(false)
+	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
 	spInstance = this;
@@ -128,7 +129,8 @@ CSlime::CSlime()
 	mpAttackColBody->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColBody->Position(0.1f, 0.3f, 0.0f);
 	
-	// キャラクター押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをスライムの体の行列にアタッチ
+	// キャラクター押し戻しコライダーと
+	// ダメージを受けるコライダーと攻撃コライダーをスライムの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
 	mpColliderSphereBody->SetAttachMtx(bodyMty);
 	mpDamageColBody->SetAttachMtx(bodyMty);
@@ -206,6 +208,8 @@ void CSlime::UpdateIdle2()
 // 攻撃した時の待機状態
 void CSlime::UpdateIdle3()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.8f);
 	ChangeAnimation(EAnimType::eIdle4);
 	if (IsAnimationFinished())
@@ -214,20 +218,16 @@ void CSlime::UpdateIdle3()
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.5f)
 	{
-		if (player->Position().Y() <= Position().Y())
-		{
-			ChangeState(EState::eRun);
-		}
+		ChangeState(EState::eRun);
 	}
-	else
+	else 
 	{
-		SetAnimationSpeed(0.8f);
-		ChangeAnimation(EAnimType::eIdle4);
-		if (IsAnimationFinished())
+		if (vectorp <= 25.0f && player->Position().Y() >= 6.0f)
 		{
-			ChangeState(EState::eIdle3);
+			mMoveSpeed.X(0.0f);
+			mMoveSpeed.Z(0.0f);
 		}
 	}
 }
@@ -334,10 +334,7 @@ void CSlime::UpdateAttackWait()
 		float vectorp = (player->Position() - Position()).Length();
 		if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 		{
-			if (player->Position().Y() <= Position().Y())
-			{
-				ChangeState(EState::eRun);
-			}
+			ChangeState(EState::eRun);
 		}
 		else
 		{
@@ -476,7 +473,7 @@ void CSlime::UpdateDizzy()
 }
 
 // 走る 
-void CSlime::UpdateRun() 
+void CSlime::UpdateRun()
 {
 	SetAnimationSpeed(0.6f);
 	ChangeAnimation(EAnimType::eRun);
@@ -484,9 +481,15 @@ void CSlime::UpdateRun()
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
-	
+
+	if (mAnimationFrame >= 5.0f)
+	{
+		mpSlimeRunSE->Play();
+		mIsSlimeRunSE = true;
+	}
+
 	// 範囲内の時、移動し追跡する
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() <= Position().Y())
+	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		if (vectorp <= ROTATE_RANGE)
@@ -496,23 +499,16 @@ void CSlime::UpdateRun()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-			CQuaternion p = player->Rotation();
-			CQuaternion r = Rotation();
 		}
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
 	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		SetAnimationSpeed(0.8f);
 		ChangeState(EState::eIdle3);
-		ChangeAnimation(EAnimType::eIdle4);
 	}
-	if (mAnimationFrame >= 5.0f)
+    if (vectorp <= 25.0f && player->Position().Y() >= 6.0f)
 	{
-		mpSlimeRunSE->Play();
-		mIsSlimeRunSE = true;
+		ChangeState(EState::eIdle3);
 	}
 }
 

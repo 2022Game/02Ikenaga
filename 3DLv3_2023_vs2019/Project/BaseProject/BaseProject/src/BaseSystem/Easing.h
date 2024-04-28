@@ -29,7 +29,7 @@ namespace Easing
 	float BackIn(float t, float total, float min, float max, float s);
 	float BackOut(float t, float total, float min, float max, float s);
 	float BackInOut(float t, float total, float min, float max, float s);
-	float BounceIn(float t, float total, float min, float max, float s);
-	float BounceOut(float t, float total, float min, float max, float s);
-	float BounceInOut(float t, float total, float min, float max, float s);
+	float BounceIn(float t, float total, float min, float max);
+	float BounceOut(float t, float total, float min, float max);
+	float BounceInOut(float t, float total, float min, float max);
 }

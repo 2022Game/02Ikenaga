@@ -132,6 +132,8 @@ private:
 	void UpdateDei();
 	// ジャンプ攻撃
 	void UpdateJumpAttack();
+	// ジャンプ攻撃終了待ち
+	void UpdateJumpAttackWait();
 
 	// 回避回数を増やす時間
 	int mRollingTime;
@@ -213,6 +215,7 @@ private:
 		eRolling,   // 回避
 		eDie,       // 死ぬ
 		eJumpAttack,// ジャンプ攻撃
+		eJumpAttackWait,  //ジャンプ攻撃終了待ち
 		eStop,      // 停止
 	};
 	EState mState;	// プレイヤーの状態

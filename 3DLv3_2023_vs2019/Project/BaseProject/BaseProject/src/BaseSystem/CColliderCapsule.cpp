@@ -2,6 +2,7 @@
 #include <glut.h>
 #include "Maths.h"
 #include "CColor.h"
+#include "Primitive.h"
 
 // コンストラクタ
 CColliderCapsule::CColliderCapsule(CObjectBase* owner, ELayer layer,
@@ -45,40 +46,17 @@ float CColliderCapsule::Radius() const
 // コライダー描画
 void CColliderCapsule::Render()
 {
-	// 現在の行列を退避しておく
-	glPushMatrix();
-
-	// 自身の行列を適用
-	glMultMatrixf(Matrix().M());
-	// アルファブレンドを有効にする
-	glEnable(GL_BLEND);
-	// ブレンド方法を指定
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	// ライトオフ
-	glDisable(GL_LIGHTING);
-
 	// DIFFUSE赤色設定
 	CColor col = CColor::red;
 	if (!IsEnable()) col = CColor::gray;
-	float* c = (float*)&col;
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, c);
-	glColor4fv(c);
 
-	glLineWidth(3.0f);
-	// 線分を描画
-	glBegin(GL_LINES);
-	glVertex3f(mV[0].X(), mV[0].Y(), mV[0].Z());
-	glVertex3f(mV[1].X(), mV[1].Y(), mV[1].Z());
-	glEnd();
-	glLineWidth(1.0f);
-
-	// ライトオン
-	glEnable(GL_LIGHTING);
-	// アルファブレンド無効
-	glDisable(GL_ALPHA);
-
-	// 描画前の行列に戻す
-	glPopMatrix();
+	CMatrix m = Matrix();
+	CVector s = mV[0] * m;
+	CVector e = mV[1] * m;
+	Primitive::DrawWireCapsule
+	(
+		s, e, mRadius, col
+	);
 }
 
 // コライダーの情報を更新

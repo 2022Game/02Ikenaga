@@ -151,9 +151,15 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;   // 体
-	CColliderSphere* mpColliderSphere2;  // 頭
+
+	CColliderSphere* mpColliderSphereHead;   // キャラ押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;   // キャラ押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereRoot;   // キャラ押し戻しコライダー(根)
+
 	CColliderCapsule* mpDamageColBody;       // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColUmbrella;    // ダメージを受けるコライダー(かさ)
+	CColliderSphere* mpDamageColRoot;        // ダメージを受けるコライダー(根)
+
 	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
 	CColliderSphere* mpAttackColRoot;        // ダメージを与えるコライダー(根)
 	CTransform* mpRideObject;

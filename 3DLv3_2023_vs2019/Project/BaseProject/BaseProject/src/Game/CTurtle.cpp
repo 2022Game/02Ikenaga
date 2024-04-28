@@ -20,12 +20,12 @@ int CTurtle::mHp;
 // 亀のアニメーションデータのテーブル
 const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	102.0f	},  // 待機 51.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	35.0f	},  // 待機2 25.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	true,	142.0f	},          // 見回す待機 71.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",	true,	122.0f	},          // 見回す待機2 61.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	true,	52.0f	},	    // 攻撃 26.0f
+	{ "",										                    true,	 0.0f,	0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	51.0f,	0.5f},  // 待機 51.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	25.0f,	0.5f},  // 待機2 25.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	        true,	71.0f,	0.5f},  // 見回す待機 71.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",     	true,	61.0f,	0.5f},  // 見回す待機2 61.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	    true,	26.0f,	0.5f},	// 攻撃 26.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	true,	52.0f	},	    // 攻撃2 26.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	true,	52.0f	},	    // ヒット 26.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	false,	36.0f	},	    // 防御 18.0f
@@ -39,9 +39,12 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 
 // コンストラクタ
 CTurtle::CTurtle()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mDefenseTime(0)
+	, mIsGrounded(false)
+	, mMoveSpeed(CVector::zero)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -122,6 +125,7 @@ CTurtle::~CTurtle()
 	SAFE_DELETE(mpAttackCol);
 }
 
+// インスタンス
 CTurtle* CTurtle::Instance()
 {
 	return spInstance;
@@ -135,37 +139,45 @@ void CTurtle::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CTurtle::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+}
+
 // 待機状態
 void CTurtle::UpdateIdle()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 待機状態2
 void CTurtle::UpdateIdle2()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
 	else
 	{
-		ChangeAnimation(EAnimType::eIdle2);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -173,10 +185,11 @@ void CTurtle::UpdateIdle2()
 // 待機状態3
 void CTurtle::UpdateIdle3()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -185,10 +198,11 @@ void CTurtle::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
 	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 // 攻撃2
@@ -199,7 +213,7 @@ void CTurtle::UpdateAttack2()
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 // 攻撃終了待ち
@@ -208,7 +222,7 @@ void CTurtle::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -226,12 +240,12 @@ void CTurtle::UpdateHit()
 		if (probability == 1)stan = true;
 		if (stan)
 		{
-			mState = EState::eDizzy;
+			ChangeState(EState::eDizzy);
 		}
 		else
 		{
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 			ChangeAnimation(EAnimType::eIdle2);
 		}
 	}
@@ -245,7 +259,7 @@ void CTurtle::UpdateDefense()
 	ChangeAnimation(EAnimType::eDefense);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eDefenseIdle;
+		ChangeState(EState::eDefenseIdle);
 	}
 }
 
@@ -257,7 +271,7 @@ void CTurtle::UpdateDefenseHit()
 	ChangeAnimation(EAnimType::eDefenseHit);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eDefenseIdle;
+		ChangeState(EState::eDefenseIdle);
 	}
 }
 
@@ -283,11 +297,11 @@ void CTurtle::UpdateDefenseIdle()
 	{
 		if (mDefenseTime >= 800)
 		{
-			mState = EState::eAttack2;
+			ChangeState(EState::eAttack2);
 		}
 		else
 		{
-			mState = EState::eDefenseIdle;
+			ChangeState(EState::eDefenseIdle);
 		}
 	}
 }
@@ -313,8 +327,7 @@ void CTurtle::UpdateDizzy()
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle2;
-		ChangeAnimation(EAnimType::eIdle2);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -356,7 +369,7 @@ void CTurtle::UpdateRun()
 	{
 		mMoveSpeed.X(0.0f);
 		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 		ChangeAnimation(EAnimType::eIdle4);
 	}
 }
@@ -367,6 +380,7 @@ void CTurtle::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
+	mMoveSpeed.Y(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -434,7 +448,7 @@ void CTurtle::Update()
 		&& mState != EState::eDefense && mState != EState::eDefenseHit && mState != EState::eDefenseIdle && mState != EState::eDie && mState != EState::eDizzy
 		&& mState != EState::eRun)
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 
 	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
@@ -476,15 +490,15 @@ void CTurtle::Update()
 
 				if (Attack2)
 				{
-					mState = EState::eAttack2;
+					ChangeState(EState::eAttack2);
 				}
 				else if (Defense)
 				{
-					mState = EState::eDefense;
+					ChangeState(EState::eDefense);
 				}
 				else
 				{
-					mState = EState::eAttack;
+					ChangeState(EState::eAttack);
 				}
 			}
 			if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDefense)
@@ -625,11 +639,11 @@ void CTurtle::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		if (mState == EState::eDefense || mState == EState::eDefenseIdle)
 		{
-			mState = EState::eDefenseHit;
+			ChangeState(EState::eDefenseHit);
 		}
 		else
 		{
-			mState = EState::eHit;
+			ChangeState(EState::eHit);
 		}
 	}
 	// HPが0以下になったら、
@@ -667,5 +681,5 @@ float CTurtle::GetDefBuff(const CVector& attackDir)const
 void CTurtle::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

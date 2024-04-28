@@ -41,10 +41,10 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogRolling.x",	true,	43.0f	},      // 回避 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // 衝撃
 	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // 死ぬ
-	{ "Character\\Player\\animation\\DogJumpAttack.x",	true,	140.0f	},  // ジャンプ攻撃
+	{ "Character\\Player\\animation\\DogJumpAttack.x",	true,	172.0f	},  // ジャンプ攻撃
 };
 
-#define PLAYER_HEIGHT 1.1f
+#define PLAYER_HEIGHT 1.2f
 
 #define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f
@@ -84,6 +84,8 @@ CPlayer::CPlayer()
 	, mDefaultPos(CVector::zero)
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
+	, mIsGrounded(false)
+	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
 	spInstance = this;
@@ -126,7 +128,7 @@ CPlayer::CPlayer()
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine->Position(0.0f, 1.0f, 0.0f)
+	mpColliderLine->Position(0.0f, 0.2f, 0.0f)
 		;
 	// キャラクター同士の押し戻しコライダー
 	mpColliderSphere = new CColliderSphere
@@ -683,19 +685,62 @@ void CPlayer::UpdateJumpAttack()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eJumpAttack);
-	if (mAnimationFrame >= 10.0f && mAnimationFrame <= 49.0f)
+	if (mAnimationFrame >= 10.0f && mAnimationFrame < 45.0f)
 	{
 		mMoveSpeed.Y(0.0f);
 	}
-	if (mAnimationFrame >= 50.0f)
+	else if (mAnimationFrame >= 45.0f)
 	{
+		//SetAnimationSpeed(0.25f);
 		mMoveSpeed -= CVector(0.0f, 0.0825, 0.0f);
 	}
-	if (mAnimationFrame >= 60.0f)
+
+	if (mAnimationFrame >= 50.0f)
 	{
 		//剣に攻撃開始を伝える
 		mpSword->AttackStart();
-		mState = EState::eAttackWait;
+	}
+	if (mAnimationFrame >= 51.0f)
+	{
+		mpSword->AttackEnd();
+	}
+	if (mAnimationFrame >= 70.0f)
+	{
+		//剣に攻撃開始を伝える
+		mpSword->AttackStart();
+	}
+	if (mAnimationFrame >= 71.0f)
+	{
+		mpSword->AttackEnd();
+	}
+
+	if (mAnimationFrame >= 150.0f)
+	{
+		mState = EState::eJumpAttackWait;
+	}
+}
+
+// ジャンプ攻撃終了待ち
+void CPlayer::UpdateJumpAttackWait()
+{
+	//SetAnimationSpeed(1.0f);
+	// 斬撃SEを再生していないかつ、アニメーションが25%以上進行したら、
+	if (!mIsPlayedSlashSE && GetAnimationFrameRatio() >= 0.25f)
+	{
+		// 斬撃SEを再生
+		mpSlashSE->Play();
+		mIsPlayedSlashSE = true;
+	}
+
+	// 攻撃アニメーションが終了したら、
+	if (IsAnimationFinished()|| mIsGrounded==false)
+	{
+		// 待機状態へ移行
+		mState = EState::eIdle;
+		ChangeAnimation(EAnimType::eIdle);
+
+		//剣に攻撃終了を伝える
+		mpSword->AttackEnd();
 	}
 }
 
@@ -925,6 +970,10 @@ void CPlayer::Update()
 		case EState::eJumpAttack:
 			UpdateJumpAttack();
 			break;
+		// ジャンプ攻撃終了待ち
+		case EState::eJumpAttackWait:
+			UpdateJumpAttackWait();
+			break;
 	}
 
 	// 待機中とジャンプ中は、移動処理を行う
@@ -1080,6 +1129,9 @@ void CPlayer::Update()
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+
+	float y = Position().Y();
+	CDebugPrint::Print("高さ %f\n", y);
 }
 
 // 衝突処理

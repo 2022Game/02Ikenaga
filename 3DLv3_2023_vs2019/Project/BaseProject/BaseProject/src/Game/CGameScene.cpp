@@ -80,11 +80,11 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Player2", "Character\\Rich.x");
 
 	// エネミー関連
-	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	//CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
-	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
-	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
+	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
+	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
@@ -163,10 +163,10 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(player);
 	player->Position(0.0f, 36.0f, 0.0f);
 
-	// レッドスライム
-	CSlime* enemy = new CSlime();
-	enemy->Position(0.0f, 0.0f, -40.0f);
-	enemy->Scale(25.0f, 25.0f, 25.0f);
+	//// レッドスライム
+	//CSlime* enemy = new CSlime();
+	//enemy->Position(0.0f, 0.0f, -40.0f);
+	//enemy->Scale(25.0f, 25.0f, 25.0f);
 
 	//// オレンジスライム
 	//CSlime2* enemy2 = new CSlime2();
@@ -178,10 +178,10 @@ void CGameScene::Load()
 	//enemy3->Position(-20.0f, 0.0f, -90.0f);
 	//enemy3->Scale(35.0f, 35.0f, 35.0f);
 
-	// マッシュルーム
-	CMushroom* enemy4 = new CMushroom();
-	enemy4->Position(150.0f, 0.0f, -150.0f);
-	enemy4->Scale(25.0f, 25.0f, 25.0f);
+	//// マッシュルーム
+	//CMushroom* enemy4 = new CMushroom();
+	//enemy4->Position(150.0f, 0.0f, -150.0f);
+	//enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	//// マッシュルーム2
 	//CMushroom2* enemy5 = new CMushroom2();
@@ -193,10 +193,10 @@ void CGameScene::Load()
 	//enemy6->Position(180.0f, 0.0f, -210.0f);
 	//enemy6->Scale(35.0f, 35.0f, 35.0f);
 
-	//// 亀
-	//CTurtle* enemy7 = new CTurtle();
-	//enemy7->Position(0.0f, -0.2f, -300.0f);
-	//enemy7->Scale(25.0f, 25.0f, 25.0f);
+	// 亀
+	CTurtle* enemy7 = new CTurtle();
+	enemy7->Position(0.0f, -0.2f, -300.0f);
+	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
 	//// 亀2
 	//CTurtle2* enemy8 = new CTurtle2();

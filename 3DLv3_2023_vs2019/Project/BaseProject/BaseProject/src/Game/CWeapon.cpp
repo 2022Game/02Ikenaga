@@ -4,6 +4,7 @@
 CWeapon::CWeapon()
 	: CObjectBase(ETag::eWeapon, ETaskPriority::eWeapon)
 	, mpAttachMtx(nullptr)
+	, mOwner(nullptr)
 {
 }
 
