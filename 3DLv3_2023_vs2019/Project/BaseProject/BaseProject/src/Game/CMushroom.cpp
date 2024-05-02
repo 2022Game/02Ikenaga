@@ -25,9 +25,9 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdlePlantToBattle.x",	true,	21.0f,	0.3},	// A•¨‚©‚ç‚«‚Ì‚± 21.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle2.x",	    true,	18.0f,	0.5f},	// ‘Ò‹@2 18.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomIdleBattle.x",	    true,	18.0f,	0.5f},	// ‘Ò‹@ 18.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	        true,	26.0f,	0.4f},	// UŒ‚ 26.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	        true,	26.0f,	0.6f},	// UŒ‚ 26.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	        true,	26.0f,	0.5f},	// UŒ‚ 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack.x",	        false,	26.0f,	0.4f},	// UŒ‚ 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	        false,	26.0f,	0.6f},	// UŒ‚ 26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	        false,	26.0f,	0.5f},	// UŒ‚ 26.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	        true,	23.0f,	0.4f},	// ƒqƒbƒg 23.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	            true,	26.0f,	0.25f},	//  €‚Ê26.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	            true,	41.0f,  0.4f},	// ‚ß‚Ü‚¢ 41.0f
@@ -274,13 +274,10 @@ void CMushroom::UpdateIdle3()
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
 		ChangeState(EState::eRun);
-
-		if (vectorp <= 25.0f && player->Position().Y() >= 0.7f)
-		{
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-			ChangeState(EState::eIdle3);
-		}
+	}
+	if (vectorp <= 30.0f && player->Position().Y() >= 0.7f)
+	{
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -429,9 +426,9 @@ void CMushroom::UpdateHit()
 	{
 		// ‚ß‚Ü‚¢‚ğfalse‚É‚·‚é
 		bool stan = false;
-		// Šm—¦‚ğÅ¬‚É5Å‘å20
-		int probability = Math::Rand(5, 20);
-		if (probability == 20)stan = true;
+		// Šm—¦‚ğÅ¬‚É0Å‘å20
+		int probability = Math::Rand(0, 20);
+		if (probability == 1)stan = true;
 		if (stan)
 		{
 			ChangeState(EState::eDizzy);

@@ -1,6 +1,7 @@
 #pragma once
 #include "CBillBoard.h"
 #include "CRect.h"
+class CCharaBase;
 
 // 常にカメラの方向を向くイメージ
 class CBillBoardImage : public CBillBoard
@@ -33,6 +34,12 @@ public:
 	// 描画
 	void Render() override;
 
+	// エフェクトの発射キャラクターを設定
+	void SetOwner(CCharaBase* owner);
+
+	// エフェクトの発射キャラクターを取得
+	CCharaBase* GetOwner() const;
+
 private:
 	// アニメーションを再生できるかどうか
 	bool IsEnableAnim() const;
@@ -43,4 +50,16 @@ private:
 	int mAnimNo;
 	// アニメーション用の経過時間計測変数
 	float mElapsedTime;
+
+protected:
+	// 攻撃がヒットしたオブジェクトを追加
+	void AddAttackHitObj(CObjectBase* obj);
+	// 既に攻撃がヒットしているオブジェクトかどうか
+	bool IsAttackHitObj(CObjectBase* obj) const;
+
+	// 攻撃がヒット済みのオブジェクトリスト
+	std::list<CObjectBase*> mAttackHitObjects;
+
+	// エフェクトの所持キャラクター
+	CCharaBase* mOwner;
 };

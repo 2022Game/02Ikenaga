@@ -3,6 +3,7 @@
 #include "CModel.h"
 #include "CEnemy.h"
 #include "CColliderSphere.h"
+#include "CColliderCapsule.h"
 
 class CWaveEffect;
 
@@ -23,6 +24,8 @@ public:
 
 	// 待機状態
 	void UpdateIdle();
+	// 待機状態2
+	void UpdateIdle2();
 
 	// 攻撃
 	void UpdateAttack();
@@ -98,6 +101,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -106,6 +110,7 @@ private:
 	enum class EState
 	{
 		eIdle,		// 待機
+		eIdle2,		// 待機2
 		eAttack,	// 攻撃
 		eAttackWait,// 攻撃終了待ち
 		eHit,       // ヒット
@@ -113,14 +118,19 @@ private:
 		eRun,		// 移動
 	};
 	EState mState;	// エイの状態
+	int mStateAttackStep;  // State内の攻撃でのステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;  // キャラクター押し戻しコライダー
-	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー
+	CColliderCapsule* mpDamageColBody;   // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColBody2;   // ダメージを受けるコライダー(体2)
+	CColliderSphere* mpAttackColHead;    // 攻撃コライダー(頭)
 	CTransform* mpRideObject;
 
 	CWaveEffect* mpWave;

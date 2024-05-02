@@ -84,10 +84,10 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
-	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
+	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
+	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
-	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
@@ -193,10 +193,10 @@ void CGameScene::Load()
 	//enemy6->Position(180.0f, 0.0f, -210.0f);
 	//enemy6->Scale(35.0f, 35.0f, 35.0f);
 
-	// 亀
-	CTurtle* enemy7 = new CTurtle();
-	enemy7->Position(0.0f, -0.2f, -300.0f);
-	enemy7->Scale(25.0f, 25.0f, 25.0f);
+	//// 亀
+	//CTurtle* enemy7 = new CTurtle();
+	//enemy7->Position(0.0f, -0.2f, -300.0f);
+	//enemy7->Scale(25.0f, 25.0f, 25.0f);
 
 	//// 亀2
 	//CTurtle2* enemy8 = new CTurtle2();
@@ -208,15 +208,17 @@ void CGameScene::Load()
 	//enemy9->Position(-30.0f, -0.2f, -360.0f);
 	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	//// エイ
-	//CRay* enemy10 = new CRay();
+	// エイ
+	CRay* enemy10 = new CRay();
 	//enemy10->Position(150.0f, 0.0f, -450.0f);
-	//enemy10->Scale(35.0f, 35.0f, 35.0f);
+	enemy10->Position(0.0f, 0.0f, -120.0f);
+	enemy10->Scale(35.0f, 35.0f, 35.0f);
 
-	//// エイ2
-	//CRay2* enemy11 = new CRay2();
+	// エイ2
+	CRay2* enemy11 = new CRay2();
 	//enemy11->Position(210.0f, 0.0f, -450.0f);
-	//enemy11->Scale(35.0f, 35.0f, 35.0f);
+	enemy11->Position(60.0f, 0.0f, -120.0f);
+	enemy11->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ3
 	//CRay3* enemy12 = new CRay3();

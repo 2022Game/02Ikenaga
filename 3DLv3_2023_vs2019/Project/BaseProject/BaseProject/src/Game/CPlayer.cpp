@@ -24,24 +24,24 @@ int CPlayer::mSa;
 // ƒvƒŒƒCƒ„[‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚Ìƒe[ƒuƒ‹
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 {
-	{ "Character\\Player\\animation\\DogIdle.x",	true,	221.0f	},  // ‘Ò‹@ 221.0f
-	{ "Character\\Player\\animation\\DogWalk.x",	true,	69.0f	},  // •às
-	{ "Character\\Player\\animation\\DogAttack.x",	true,   91.0f	},  // UŒ‚ 91.0f
-	{ "Character\\Player\\animation\\DogJump.x",	true,	49.0f	},  // ƒWƒƒƒ“ƒv
-	{ "Character\\Player\\animation\\DogAttack2.x",	true,	140.0f	},  // UŒ‚2
-	{ "Character\\Player\\animation\\DogAttack3.x",	true,	91.0f	},  // UŒ‚3
-	{ "Character\\Player\\animation\\DogAttack4.x",	true,	105.0f	},  // UŒ‚4 105.0f
-	{ "Character\\Player\\animation\\DogAttack5.x",	true,	101.0f	},  // UŒ‚5 101.0f
-	{ "Character\\Player\\animation\\DogAttack6.x",	true,	219.0f	},  // UŒ‚6
-	{ "Character\\Player\\animation\\DogAttack7.x",	true,	190.0f	},  // UŒ‚7 213.0f
-	{ "Character\\Player\\animation\\DogPowerUp.x",	true,	143.0f	},  // UŒ‚—ÍƒAƒbƒv
-	{ "Character\\Player\\animation\\DogHit.x",	true,	43.0f	},      // ƒqƒbƒg 43.0f
-	{ "Character\\Player\\animation\\DogGuard.x",	false,	47.0f	},      // ƒK[ƒh 47.0f
-	{ "Character\\Player\\animation\\DogGuardHit.x",	false,	47.0f	},  // ƒK[ƒhƒqƒbƒg 47.0f
-	{ "Character\\Player\\animation\\DogRolling.x",	true,	43.0f	},      // ‰ñ”ð 43.0f
-	//{ "Character\\Player\\animation\\DogImpact.x",	true,	43.0f	},  // ÕŒ‚
-	{ "Character\\Player\\animation\\DogDie.x",	true,	235.0f	},  // Ž€‚Ê
-	{ "Character\\Player\\animation\\DogJumpAttack.x",	true,	172.0f	},  // ƒWƒƒƒ“ƒvUŒ‚
+	{ "Character\\Player\\animation\\DogIdle.x",	   true,	221.0f	},  // ‘Ò‹@ 221.0f
+	{ "Character\\Player\\animation\\DogWalk.x",	   true,	69.0f	},  // •às
+	{ "Character\\Player\\animation\\DogAttack.x",	   false,   91.0f	},  // UŒ‚ 91.0f
+	{ "Character\\Player\\animation\\DogJump.x",	   true,	49.0f	},  // ƒWƒƒƒ“ƒv
+	{ "Character\\Player\\animation\\DogAttack2.x",	   false,	140.0f	},  // UŒ‚2
+	{ "Character\\Player\\animation\\DogAttack3.x",	   false,	91.0f	},  // UŒ‚3
+	{ "Character\\Player\\animation\\DogAttack4.x",	   false,	105.0f	},  // UŒ‚4 105.0f
+	{ "Character\\Player\\animation\\DogAttack5.x",	   false,	101.0f	},  // UŒ‚5 101.0f
+	{ "Character\\Player\\animation\\DogAttack6.x",	   false,	219.0f	},  // UŒ‚6
+	{ "Character\\Player\\animation\\DogAttack7.x",	   false,	190.0f	},  // UŒ‚7 213.0f
+	{ "Character\\Player\\animation\\DogPowerUp.x",	   true,	143.0f	},  // UŒ‚—ÍƒAƒbƒv
+	{ "Character\\Player\\animation\\DogHit.x",	       true,	43.0f	},  // ƒqƒbƒg 43.0f
+	{ "Character\\Player\\animation\\DogGuard.x",	   false,	47.0f	},  // ƒK[ƒh 47.0f
+	{ "Character\\Player\\animation\\DogGuardHit.x",   false,	47.0f	},  // ƒK[ƒhƒqƒbƒg 47.0f
+	{ "Character\\Player\\animation\\DogRolling.x",	   true,	43.0f	},  // ‰ñ”ð 43.0f
+	//{ "Character\\Player\\animation\\DogImpact.x",   true,	43.0f	},  // ÕŒ‚
+	{ "Character\\Player\\animation\\DogDie.x",	       true,	235.0f	},  // Ž€‚Ê
+	{ "Character\\Player\\animation\\DogJumpAttack.x", false,	172.0f	},  // ƒWƒƒƒ“ƒvUŒ‚
 };
 
 #define PLAYER_HEIGHT 1.2f
@@ -105,7 +105,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// Å‰‚É1ƒŒƒxƒ‹‚ÉÝ’è
-	ChangeLevel(1);
+	ChangeLevel(21);
 
 	// ƒe[ƒuƒ‹“à‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚ð“Ç‚Ýž‚Ý
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -312,7 +312,7 @@ void CPlayer::UpdateAttack4()
 		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
 		mpSword->AttackStart();
 	}
-	if (mAnimationFrame >= 80.0f)
+	if (mAnimationFrame >= 21.0f)
 	{
 		mpSword->AttackEnd();
 	}
@@ -691,19 +691,9 @@ void CPlayer::UpdateJumpAttack()
 	}
 	else if (mAnimationFrame >= 45.0f)
 	{
-		//SetAnimationSpeed(0.25f);
 		mMoveSpeed -= CVector(0.0f, 0.0825, 0.0f);
 	}
 
-	if (mAnimationFrame >= 50.0f)
-	{
-		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
-		mpSword->AttackStart();
-	}
-	if (mAnimationFrame >= 51.0f)
-	{
-		mpSword->AttackEnd();
-	}
 	if (mAnimationFrame >= 70.0f)
 	{
 		//Œ•‚ÉUŒ‚ŠJŽn‚ð“`‚¦‚é
@@ -714,7 +704,7 @@ void CPlayer::UpdateJumpAttack()
 		mpSword->AttackEnd();
 	}
 
-	if (mAnimationFrame >= 150.0f)
+	if (mAnimationFrame >= 170.0f)
 	{
 		mState = EState::eJumpAttackWait;
 	}

@@ -14,18 +14,18 @@ CRay* CRay::spInstance = nullptr;
 #define MOVE_SPEED 0.1f         // 移動速度
 #define GRAVITY 0.06f            // 重力
 #define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.5f         // 追跡を辞める範囲
+#define STOP_RANGE 28.0f         // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f     // 回転する範囲
 
 // エイのアニメーションデータのテーブル
 const CRay::AnimData CRay::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	42.0f	},	    // 待機 21.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	true,	60.0f	},	    // 攻撃 17.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	true,	60.0f	},	    // ヒット 13.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	true,	90.0f	},	        // 死ぬ 20.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	42.0f	},	    // 移動 21.0f
+	{ "",										        true,	0.0f,	0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	0.5f},	// 待機 21.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	true,	17.0f,	0.4f},  // 攻撃 17.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	true,	13.0f,	0.25f},	// ヒット 13.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    true,	20.0f,	0.2f},	// 死ぬ 20.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	0.5f},	// 移動 21.0f
 	//{ "Character\\Enemy\\Ray\\animation\\RayMoveFWD.x",	true,	42.0f	},	    // 移動2 21.0f
 	//{ "Character\\Enemy\\Ray\\animation\\RayMoveLFT.x",	true,	42.0f	},	    // 左移動 21.0f
 	//{ "Character\\Enemy\\Ray\\animation\\RayMoveRGT.x",	true,	42.0f	},	    // 右移動 21.0f
@@ -33,9 +33,13 @@ const CRay::AnimData CRay::ANIM_DATA[] =
 
 // コンストラクタ
 CRay::CRay()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
-	,mFlyingTime(0)
+	, mFlyingTime(0)
+	, mIsGrounded(false)
+	, mMoveSpeed(CVector::zero)
+	, mStateAttackStep(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -57,6 +61,7 @@ CRay::CRay()
 	// CXCharacterの初期化
 	Init(model);
 
+	SetAnimationSpeed(0.5f);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
@@ -77,49 +82,70 @@ CRay::CRay()
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphere->Position(0.0f, 0.3f, 0.15f);
 
-	// ダメージを受けるコライダーを作成
-	mpDamageCol = new CColliderSphere
+	// ダメージを受けるコライダーを作成(体)
+	mpDamageColBody = new CColliderCapsule
 	(
 		this, ELayer::eDamageCol,
-		0.3f, false
+		CVector(0.0f, -0.1f, 0.0f),
+		CVector(0.0f, 0.32f, 0.0f),
+		6.0f, false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eWeapon });
-	// ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol->Position(0.0f, 0.35f, 0.2f);
+	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
 
-	// ダメージを与えるコライダー
-	mpAttackCol = new CColliderSphere
+	// ダメージを受けるコライダーを作成(体2)
+	mpDamageColBody2 = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.4f, false, 5.0f
+	);
+	mpDamageColBody2->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColBody2->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColBody2->Position(0.0f, 0.3f, 0.14f);
+
+	// 攻撃コライダー(頭)
+	mpAttackColHead = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
 		0.19f, false
 	);
-	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
-	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
 
 	// 攻撃コライダーをエイの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
-	mpAttackCol->SetAttachMtx(headMty);
+	mpAttackColHead->SetAttachMtx(headMty);
+
+	// キャラの押し戻しコライダーと
+	// ダメージを受けるコライダーをエイの体の行列にアタッチ
+	const CMatrix* bodyMty = GetFrameMtx("Armature_Spine");
+	mpDamageColBody->SetAttachMtx(bodyMty);
 
 	// 最初の攻撃コライダーを無効にしておく
-	mpAttackCol->SetEnable(false);
-
+	mpAttackColHead->SetEnable(false);
+	//mpColliderSphere->SetEnable(false);
+	
 	mpWave = new CWaveEffect
 	(
 		this, nullptr,
 		CVector(0.0f, 12.0f, 20.0f),
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
+	//mpWave->SetOwner(this);
 }
 
 CRay::~CRay()
 {
 	SAFE_DELETE(mpColliderLine);
+	// キャラの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphere);
-	SAFE_DELETE(mpDamageCol);
-	SAFE_DELETE(mpAttackCol);
+	// ダメージを受けるコライダー
+	SAFE_DELETE(mpDamageColBody);
+	SAFE_DELETE(mpDamageColBody2);
+	// 攻撃コライダー
+	SAFE_DELETE(mpAttackColHead);
 }
 
 CRay* CRay::Instance()
@@ -135,23 +161,44 @@ void CRay::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CRay::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateAttackStep = 0;
+}
+
 // 待機状態
 void CRay::UpdateIdle()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
+}
+
+// 待機状態2
+void CRay::UpdateIdle2()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
+	ChangeAnimation(EAnimType::eIdle);
+	if (IsAnimationFinished())
+	{
+		ChangeState(EState::eIdle2);
+	}
+
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
-	else
+	else if (vectorp < 26.0f)
 	{
-		ChangeAnimation(EAnimType::eIdle);
-		if (IsAnimationFinished())
-		{
-			mState = EState::eIdle;
-		}
+		//ChangeState(EState::eIdle2);
 	}
 }
 
@@ -160,26 +207,40 @@ void CRay::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack);
-	if (mAnimationFrame >= 20.0f && mAnimationFrame <= 21.0f)
-	{
-		AttackStart();
-	}
-	if (mAnimationFrame >= 30.0f && mAnimationFrame <= 31.0f)
-	{
-		AttackEnd();
-	}
-
+	SetAnimationSpeed(0.4f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (!mpWave->IsThrowing() && vectorp >= 30.0f)
 	{
 		mpWave->Start();
 	}
-	if (IsAnimationFinished())
+
+	// ステップごとに処理を分ける
+	switch (mStateAttackStep)
 	{
-		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		// ステップ0 : 攻撃アニメーション開始＋攻撃コライダー開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		if (mAnimationFrame >= 10.0f && mAnimationFrame <= 11.0f)
+		{
+			AttackStart();
+			mStateAttackStep++;
+		}
+		break;
+	case 1:  // ステップ1 : 攻撃コライダー終了
+		if (mAnimationFrame >= 12.0f && mAnimationFrame < 15.0f)
+		{
+			AttackEnd();
+			mStateAttackStep++;
+		}
+		break;
+	case 2:  // ステップ2 : 攻撃終了待ち
+		if (mAnimationFrame >= 15.0f)
+		{
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -190,20 +251,20 @@ void CRay::UpdateAttackWait()
 	{
 		mpWave->Stop();
 		AttackEnd();
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // ヒット
 void CRay::UpdateHit()
 {
+	SetAnimationSpeed(0.25f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle;
-		ChangeAnimation(EAnimType::eIdle);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -212,6 +273,7 @@ void CRay::UpdateDie()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.2f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -224,18 +286,17 @@ void CRay::UpdateDie()
 // 移動
 void CRay::UpdateRun()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
 
-	// 追跡をやめて止まる
-	if (vectorp <= 22.0f && vectorp >= 24.0f)
+	// 範囲内の時、移動し追跡する
+	if (vectorp > 28.0f && vectorp < WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
+		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
 		if (vectorp <= ROTATE_RANGE)
 		{
@@ -244,23 +305,12 @@ void CRay::UpdateRun()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
 		}
 	}
-	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
-	{		
-		mMoveSpeed += nowPos * MOVE_SPEED;
-	}
 	// 追跡が止まった時、待機モーションへ
-	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle;
-		ChangeAnimation(EAnimType::eIdle);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -276,6 +326,10 @@ void CRay::Update()
 		// 待機状態
 	case EState::eIdle:
 		UpdateIdle();
+		break;
+		// 待機状態2
+	case EState::eIdle2:
+		UpdateIdle2();
 		break;
 		// 攻撃
 	case EState::eAttack:
@@ -304,19 +358,19 @@ void CRay::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eAttack && mState != EState::eAttackWait
-		&& mState != EState::eHit && mState != EState::eDie && mState !=EState::eRun)
+	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack
+		&& mState != EState::eAttackWait && mState != EState::eHit && mState != EState::eDie && mState !=EState::eRun)
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle2);
 	}
 
-	if (mState == EState::eAttack || mState == EState::eAttackWait || mState == EState::eDie
-		|| mState == EState::eHit || mState == EState::eIdle || mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eAttack || mState == EState::eAttackWait
+		|| mState == EState::eHit || mState == EState::eRun)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle && vectorp <= 60.0f || mState == EState::eHit || mState == EState::eRun
+	if (mState == EState::eIdle2 && vectorp <= 70.0f || mState == EState::eHit || mState == EState::eRun
 		|| mState == EState::eAttack || mState == EState::eAttackWait)
 	{
 		mAttackTime++;
@@ -332,7 +386,7 @@ void CRay::Update()
 
 		if (mAttackTime > 200)
 		{
-			mState = EState::eAttack;
+			ChangeState(EState::eAttack);
 		}
 		if (mState == EState::eAttack)
 		{
@@ -340,65 +394,63 @@ void CRay::Update()
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
 
-	if (mState == EState::eIdle || mState == EState::eRun)
-	{
-		if (mFlyingTime <= 200 || mFlyingTime<=0)
-		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
-		}
-
-		if (mFlyingTime >= 200)
-		{
-			Position(Position().X(),Position().Y() - 0.5f, Position().Z());
-		}
-	}
-
-	if (Position().Y() >= 0.1f || vectorp >= 24.0f && vectorp <= WALK_RANGE)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
 		mFlyingTime++;
+	}
+
+	if (mState == EState::eIdle2 || mState == EState::eRun)
+	{
+		if (mFlyingTime < 100 && mFlyingTime >= 10)
+		{
+			mMoveSpeed.Y(mMoveSpeed.Y() + 0.04f);
+		}
+
+		else if (mFlyingTime > 100)
+		{
+			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
+		}
 	}
 
 	if (Position().Y() <= 0.0f)
 	{
 		mFlyingTime = 0;
 	}
+
 	if (mState == EState::eHit)
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
-	if (CInput::PushKey('V'))
-	{
-		if (!mpWave->IsThrowing())
-		{
-			mpWave->Start();
-		}
-		else
-		{
-			mpWave->Stop();
-		}
-	}
 	// キャラクターの更新
 	CXCharacter::Update();
 
-	mpAttackCol->Update();
+	// ダメージを受けるコライダー
+	mpDamageColBody->Update();
+
+	// 攻撃コライダー
+	mpAttackColHead->Update();
 
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print("飛行 %d", mFlyingTime);
+	CDebugPrint::Print("距離 %f", vectorp);
+	float y = Position().Y();
+	CDebugPrint::Print("高さ %f", y);
 }
 
 // 衝突処理
 void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackCol && mState != EState::eIdle)
+	if (self == mpAttackColHead && mState != EState::eIdle)
 	{
 		// キャラのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
@@ -424,7 +476,6 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		{
 			Position(Position() + hit.adjust * hit.weight);
 			mIsGrounded = true;
-			//mMoveSpeed.Y(0.0f);
 
 			if (other->Tag() == ETag::eRideableObject)
 			{
@@ -446,7 +497,10 @@ void CRay::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackCol->SetEnable(true);
+	if (mState == EState::eAttack)
+	{
+		mpAttackColHead->SetEnable(true);
+	}
 }
 
 // 攻撃終了
@@ -454,7 +508,7 @@ void CRay::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
-	mpAttackCol->SetEnable(false);
+	mpAttackColHead->SetEnable(false);
 }
 
 // 描画
@@ -490,7 +544,7 @@ void CRay::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -516,5 +570,5 @@ void CRay::TakeDamage(int damage, CObjectBase* causedObj)
 void CRay::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

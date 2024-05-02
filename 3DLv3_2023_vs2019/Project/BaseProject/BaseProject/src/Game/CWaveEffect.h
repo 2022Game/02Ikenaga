@@ -1,8 +1,10 @@
 #pragma once
 #include "CTask.h"
 #include "CObjectBase.h"
+#include "CColliderSphere.h"
 
 class CWave;
+class CCharaBase;
 
 // 波動エフェクトクラス
 class CWaveEffect : public CTask

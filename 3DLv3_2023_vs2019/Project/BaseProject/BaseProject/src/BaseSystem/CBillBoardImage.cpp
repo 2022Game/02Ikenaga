@@ -6,6 +6,7 @@ CBillBoardImage::CBillBoardImage(std::string path, ETag tag, ETaskPauseType paus
 	, mpAnimData(nullptr)
 	, mAnimNo(0)
 	, mElapsedTime(0.0f)
+	, mOwner(nullptr)
 {
 	// テクスチャ読み込み
 	mMaterial.LoadTexture("", path, false);
@@ -141,4 +142,35 @@ void CBillBoardImage::Update()
 void CBillBoardImage::Render()
 {
 	CBillBoard::Render();
+}
+
+// エフェクトの所持キャラクターを設定
+void CBillBoardImage::SetOwner(CCharaBase* owner)
+{
+	mOwner = owner;
+}
+
+// エフェクトの所持キャラクターを取得
+CCharaBase* CBillBoardImage::GetOwner() const
+{
+	return mOwner;
+}
+
+// 攻撃がヒットしたオブジェクトを追加
+void CBillBoardImage::AddAttackHitObj(CObjectBase* obj)
+{
+	mAttackHitObjects.push_back(obj);
+}
+
+// 既に攻撃がヒットしているオブジェクトかどうか
+bool CBillBoardImage::IsAttackHitObj(CObjectBase* obj) const
+{
+	// 既にリストに追加されているかを確認する
+	auto find = std::find
+	(
+		mAttackHitObjects.begin(),
+		mAttackHitObjects.end(),
+		obj
+	);
+	return find != mAttackHitObjects.end();
 }

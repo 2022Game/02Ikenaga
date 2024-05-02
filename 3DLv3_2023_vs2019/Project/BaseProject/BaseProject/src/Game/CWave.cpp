@@ -2,11 +2,22 @@
 #include "CCharaBase.h"
 #include "Easing.h"
 #include "CRay.h"
+#include "Maths.h"
 
 // 波動のスケール値の最大値
 #define FLAME_SCALE 40.0f
 // 波動のスケール値が最大値になるまでの時間
 #define FLAME_SCALE_ANIM_TIME 3.0f
+
+// 波動の間隔時間
+#define THROW_INTERVAL 0.2f
+// 波動の方向のブレ幅
+#define FLAME_DIR_RAND 0.02f
+// 波動の移動速度
+#define FLAME_MOVE_SPEED 25.0f
+// 波動の色
+#define FLAME_COLOR CColor(0.0f, 0.5f, 1.0f)
+
 
 // コンストラクタ
 CWave::CWave(ETag tag)
@@ -15,7 +26,6 @@ CWave::CWave(ETag tag)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 {
-
 	mpCollider = new CColliderSphere
 	(
 		this,
@@ -72,7 +82,6 @@ void CWave::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		mMoveSpeed = (mMoveSpeed - n * d).Normalized() * length;
 		Position(Position() + hit.adjust * hit.weight);
 	}
-
 	if (other->Layer() == ELayer::eDamageCol)
 	{
 		// キャラのポインタに変換
@@ -81,17 +90,17 @@ void CWave::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (chara != nullptr)
 		{
 			// 既に攻撃済みのキャラでなければ
-			//if (!IsAttackHitObj(chara))
-			//{
+			if (!IsAttackHitObj(chara))
+			{
 				// 与えるダメージを計算
-				int damage = CalcDamage(0, chara);
+				int damage = CalcDamage(mOwner, chara);
 
 				// ダメージを与える
-				chara->TakeDamage(damage, 0);
+				chara->TakeDamage(damage, mOwner);
 
 				// 攻撃済みリストに追加
-			   // AddAttackHitObj(chara);
-			//}
+				AddAttackHitObj(chara);
+			}
 		}
 	}
 }
@@ -127,11 +136,6 @@ void CWave::Update()
 	else
 	{
 		Scale(CVector::one * FLAME_SCALE);
-	}
-
-	if (mElapsedTime >= 1)
-	{
-		mpCollider->SetEnable(false);
 	}
 
 	if (mElapsedTime >= 2)
