@@ -118,6 +118,7 @@ private:
 		eRun,		// 移動
 	};
 	EState mState;	// エイの状態
+
 	int mStateAttackStep;  // State内の攻撃でのステップ処理
 
 	// 状態を切り替え
@@ -126,12 +127,17 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;   // キャラクター押し戻しコライダー
-	CColliderCapsule* mpDamageColBody;   // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColBody2;   // ダメージを受けるコライダー(体2)
-	CColliderSphere* mpAttackColHead;    // 攻撃コライダー(頭)
+	CColliderLine* mpColliderLine;          // キャラクターの軸
+
+	CColliderSphere* mpColliderSphereHead;  // キャラクターの押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
+
+	CColliderCapsule* mpDamageColSpine;     // ダメージを受けるコライダー(脊椎)
+	CColliderSphere* mpDamageColFinLeft;    // ダメージを受けるコライダー(ヒレの左)
+	CColliderSphere* mpDamageColFinRight;   // ダメージを受けるコライダー(ヒレの右)
+
+	CColliderSphere* mpAttackColHead;       // 攻撃コライダー(頭)
 	CTransform* mpRideObject;
 
-	CWaveEffect* mpWave;
+	CWaveEffect* mpWave;  // 気泡
 };

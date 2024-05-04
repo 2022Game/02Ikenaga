@@ -73,17 +73,25 @@ CRay::CRay()
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
-	// キャラクター押し戻し処理
-	mpColliderSphere = new CColliderSphere
+	// キャラクター押し戻し処理(頭)
+	mpColliderSphereHead = new CColliderSphere
 	(
 		this, ELayer::eEnemy,
-		0.4f, false, 5.0f
+		0.18f, false, 5.0f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
-	mpColliderSphere->Position(0.0f, 0.3f, 0.15f);
+	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
-	// ダメージを受けるコライダーを作成(体)
-	mpDamageColBody = new CColliderCapsule
+	// キャラクター押し戻し処理(体)
+	mpColliderSphereBody = new CColliderSphere
+	(
+		this, ELayer::eEnemy,
+		0.2f, false, 5.0f
+	);
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereBody->Position(0.0f, 0.3f, 0.0f);
+
+	// ダメージを受けるコライダーを作成(脊椎)
+	mpDamageColSpine = new CColliderCapsule
 	(
 		this, ELayer::eDamageCol,
 		CVector(0.0f, -0.1f, 0.0f),
@@ -92,40 +100,63 @@ CRay::CRay()
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColSpine->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColSpine->SetCollisionTags({ ETag::eWeapon });
 
-	// ダメージを受けるコライダーを作成(体2)
-	mpDamageColBody2 = new CColliderSphere
+	// ダメージを受けるコライダーを作成(ヒレの左)
+	mpDamageColFinLeft = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.4f, false, 5.0f
+		0.13f, false, 5.0f
 	);
-	mpDamageColBody2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageColBody2->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColBody2->Position(0.0f, 0.3f, 0.14f);
+	mpDamageColFinLeft->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColFinLeft->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColFinLeft->Position(-0.05f, 0.1f, 0.0f);
+
+	// ダメージを受けるコライダーを作成(ヒレの右)
+	mpDamageColFinRight = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.13f, false, 5.0f
+	);
+	mpDamageColFinRight->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColFinRight->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColFinRight->Position(-0.05f, 0.1f, 0.0f);
 
 	// 攻撃コライダー(頭)
 	mpAttackColHead = new CColliderSphere
 	(
 		this, ELayer::eAttackCol,
-		0.19f, false
+		0.2f, false
 	);
 	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
 
 	// 攻撃コライダーをエイの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
+	mpColliderSphereHead->SetAttachMtx(headMty);
 	mpAttackColHead->SetAttachMtx(headMty);
 
+	// キャラの押し戻しコライダーをエイの体の行列にアタッチ
+	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
+	mpColliderSphereBody->SetAttachMtx(bodyMty);
+
+	// ダメージを受けるコライダーをエイの脊椎の行列にアタッチ
+	const CMatrix* spineMty = GetFrameMtx("Armature_Spine");
+	mpDamageColSpine->SetAttachMtx(spineMty);
+
 	// キャラの押し戻しコライダーと
-	// ダメージを受けるコライダーをエイの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Spine");
-	mpDamageColBody->SetAttachMtx(bodyMty);
+	// ダメージを受けるコライダーをエイのヒレの左の行列にアタッチ
+	const CMatrix* finLeftMty = GetFrameMtx("Armature_WingLeft01");
+	mpDamageColFinLeft->SetAttachMtx(finLeftMty);
+
+	// キャラの押し戻しコライダーと
+	// ダメージを受けるコライダーをエイのヒレの右の行列にアタッチ
+	const CMatrix* finRightMty = GetFrameMtx("Armature_WingRight01");
+	mpDamageColFinRight->SetAttachMtx(finRightMty);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
-	//mpColliderSphere->SetEnable(false);
 	
 	mpWave = new CWaveEffect
 	(
@@ -140,10 +171,12 @@ CRay::~CRay()
 {
 	SAFE_DELETE(mpColliderLine);
 	// キャラの押し戻しコライダー
-	SAFE_DELETE(mpColliderSphere);
+	SAFE_DELETE(mpColliderSphereHead);
+	SAFE_DELETE(mpColliderSphereBody);
 	// ダメージを受けるコライダー
-	SAFE_DELETE(mpDamageColBody);
-	SAFE_DELETE(mpDamageColBody2);
+	SAFE_DELETE(mpDamageColSpine);
+	SAFE_DELETE(mpDamageColFinLeft);
+	SAFE_DELETE(mpDamageColFinRight);
 	// 攻撃コライダー
 	SAFE_DELETE(mpAttackColHead);
 }
@@ -192,13 +225,9 @@ void CRay::UpdateIdle2()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		ChangeState(EState::eRun);
-	}
-	else if (vectorp < 26.0f)
-	{
-		//ChangeState(EState::eIdle2);
 	}
 }
 
@@ -210,7 +239,7 @@ void CRay::UpdateAttack()
 	SetAnimationSpeed(0.4f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (!mpWave->IsThrowing() && vectorp >= 30.0f)
+	if (!mpWave->IsThrowing() && vectorp >= 30.0f && mAnimationFrame <=5.0f)
 	{
 		mpWave->Start();
 	}
@@ -221,14 +250,14 @@ void CRay::UpdateAttack()
 		// ステップ0 : 攻撃アニメーション開始＋攻撃コライダー開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
-		if (mAnimationFrame >= 10.0f && mAnimationFrame <= 11.0f)
+		if (mAnimationFrame >= 5.0f)
 		{
 			AttackStart();
 			mStateAttackStep++;
 		}
 		break;
 	case 1:  // ステップ1 : 攻撃コライダー終了
-		if (mAnimationFrame >= 12.0f && mAnimationFrame < 15.0f)
+		if (mAnimationFrame >= 13.0f)
 		{
 			AttackEnd();
 			mStateAttackStep++;
@@ -258,6 +287,7 @@ void CRay::UpdateAttackWait()
 // ヒット
 void CRay::UpdateHit()
 {
+	mpWave->Stop();
 	SetAnimationSpeed(0.25f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -308,7 +338,7 @@ void CRay::UpdateRun()
 		}
 	}
 	// 追跡が止まった時、待機モーションへ
-	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorp < STOP_RANGE || vectorp >= WALK_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -430,8 +460,14 @@ void CRay::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクターの押し戻しコライダ-
+	mpColliderSphereHead->Update();
+	mpColliderSphereBody->Update();
+
 	// ダメージを受けるコライダー
-	mpDamageColBody->Update();
+	mpDamageColSpine->Update();
+	mpDamageColFinLeft->Update();
+	mpDamageColFinRight->Update();
 
 	// 攻撃コライダー
 	mpAttackColHead->Update();
@@ -440,6 +476,7 @@ void CRay::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print("HP %d", mCharaStatus.hp);
 	CDebugPrint::Print("飛行 %d", mFlyingTime);
 	CDebugPrint::Print("距離 %f", vectorp);
 	float y = Position().Y();
@@ -452,7 +489,7 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackColHead && mState != EState::eIdle)
 	{
-		// キャラのポインタに変換
+		// キャラクターのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
 		// 相手のコライダーの持ち主がキャラであれば、
 		if (chara != nullptr)
@@ -484,7 +521,7 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		}
 	}
 	// キャラクター同士の衝突処理
-	else if (self == mpColliderSphere)
+	else if ( self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);

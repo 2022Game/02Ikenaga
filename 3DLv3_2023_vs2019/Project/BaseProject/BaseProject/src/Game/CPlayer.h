@@ -219,6 +219,10 @@ private:
 		eStop,      // 停止
 	};
 	EState mState;	// プレイヤーの状態
+	int mStateJumpAttackStep;
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか

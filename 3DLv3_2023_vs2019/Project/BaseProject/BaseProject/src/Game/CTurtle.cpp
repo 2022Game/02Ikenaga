@@ -124,7 +124,7 @@ CTurtle::CTurtle()
 CTurtle::~CTurtle()
 {
 	SAFE_DELETE(mpColliderLine);
-	//　キャラの押し戻しコライダー
+	//　キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereBody);
 	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColBody);
@@ -231,6 +231,7 @@ void CTurtle::UpdateAttack2()
 		AttackStart();
 		mStateAttack2Step++;
 		break;
+		// ステップ1 : 押し戻しコライダをオフ
 	case 1:
 		if (mAnimationFrame >= 10.0f)
 		{
@@ -238,10 +239,10 @@ void CTurtle::UpdateAttack2()
 			mStateAttack2Step++;
 		}
 		break;
+		// ステップ2 : 攻撃終了待ち
 	case 2:
 		if (mAnimationFrame >= 20.0f)
 		{
-			// 攻撃2終了待ち状態へ移行
 			ChangeState(EState::eAttackWait);
 		}
 		break;

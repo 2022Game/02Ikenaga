@@ -306,7 +306,7 @@ void CMushroom::UpdateAttack2()
 	// ステップごとに処理を分ける
 	switch (mStateAttack2Step)
 	{
-		// ステップ0 : 攻撃2アニメーション開始
+		// ステップ0 : 攻撃2アニメーション開始＋攻撃開始(一回目)
 	case 0:
 		ChangeAnimation(EAnimType::eAttack2);
 		if (mAnimationFrame >= 5.0f && mAnimationFrame <= 10.0f)
@@ -315,6 +315,7 @@ void CMushroom::UpdateAttack2()
 			mStateAttack2Step++;
 		}
 		break;
+		// ステップ1 : 攻撃終了
 	case 1:
 		if (mAnimationFrame >= 11.0f && mAnimationFrame <= 12.0f)
 		{
@@ -322,6 +323,7 @@ void CMushroom::UpdateAttack2()
 			mStateAttack2Step++;
 		}
 		break;
+		// ステップ2 : 攻撃開始(二回目)
 	case 2:
 		if (mAnimationFrame >= 13.0f && mAnimationFrame <= 17.0f)
 		{
@@ -329,6 +331,7 @@ void CMushroom::UpdateAttack2()
 			mStateAttack2Step++;
 		}
 		break;
+		// ステップ3 : 攻撃終了
 	case 3:
 		if (mAnimationFrame >= 18.0f && mAnimationFrame <= 20.0f)
 		{
@@ -336,6 +339,7 @@ void CMushroom::UpdateAttack2()
 			mStateAttack2Step++;
 		}
 		break;
+		// ステップ4 : 攻撃開始(三回目)
 	case 4:
 		if (mAnimationFrame >= 21.0f && mAnimationFrame < 25.0f)
 		{
@@ -343,10 +347,10 @@ void CMushroom::UpdateAttack2()
 			mStateAttack2Step++;
 		}
 		break;
+		// ステップ5 : 攻撃終了
 	case 5:
 		if (mAnimationFrame >= 25.0f)
 		{
-			// 攻撃2終了待ち状態へ移行
 			ChangeState(EState::eAttackWait);
 		}
 		break;

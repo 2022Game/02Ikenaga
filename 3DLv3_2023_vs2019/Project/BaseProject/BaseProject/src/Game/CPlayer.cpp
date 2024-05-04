@@ -81,6 +81,7 @@ CPlayer::CPlayer()
 	, mAttackCount(0)
 	, healcount(0)
 	, recoverycount(0)
+	, mStateJumpAttackStep(0)
 	, mDefaultPos(CVector::zero)
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
@@ -212,6 +213,13 @@ void CPlayer::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CPlayer::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateJumpAttackStep = 0;
+}
 
 // 待機
 void CPlayer::UpdateIdle()
@@ -230,18 +238,18 @@ void CPlayer::UpdateIdle()
 		{
 			if (CInput::PushKey(VK_MBUTTON))
 			{
-				mState = EState::eAttack4;
+				ChangeState(EState::eAttack4);
 				mCharaStatus.SpecialAttack -= 4;
 			}
 		}
 
 		if (CInput::Key(VK_RBUTTON))
 		{
-			mState = EState::eGuard;
+			ChangeState(EState::eGuard);
 		}
 		if (CInput::PushKey(VK_SPACE))
 		{
-			mState = EState::eJumpStart;
+			ChangeState(EState::eJumpStart);
 		}
 	}
 }
@@ -252,7 +260,7 @@ void CPlayer::UpadateWalk()
 	ChangeAnimation(EAnimType::eWalk);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -267,7 +275,7 @@ void CPlayer::UpdateAttack()
 		mpSword->AttackStart();
 
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 
 	// 斬撃SEの再生済みフラグを初期化
@@ -281,7 +289,7 @@ void CPlayer::UpdateAttack2()
 	ChangeAnimation(EAnimType::eAttack2);
 
 	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 
 	//剣に攻撃開始を伝える
 	mpSword->AttackStart();
@@ -293,7 +301,7 @@ void CPlayer::UpdateAttack3()
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack3);
 	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 
 	//剣に攻撃開始を伝える
 	mpSword->AttackStart();
@@ -350,7 +358,7 @@ void CPlayer::UpdateAttack4()
 	if (mIsSpawnedSlashEffect && mAnimationFrame >=42.0f)
 	{
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
@@ -366,7 +374,7 @@ void CPlayer::UpdateAttack5()
 		mpSword->AttackStart();
 
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
@@ -376,7 +384,7 @@ void CPlayer::UpdateAttack6()
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack6);
 	// 攻撃終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 
 	//剣に攻撃開始を伝える
 	mpSword->AttackStart();
@@ -407,7 +415,7 @@ void CPlayer::UpdateAttack7()
 	if (mAnimationFrame >= 80.0f)
 	{
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 
 		//剣に攻撃開始を伝える
 		mpSword->AttackStart();
@@ -435,7 +443,7 @@ void CPlayer::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		// 待機状態へ移行
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 		ChangeAnimation(EAnimType::eIdle);
 
 		//剣に攻撃終了を伝える
@@ -447,7 +455,7 @@ void CPlayer::UpdateAttackWait()
 void CPlayer::UpdateJumpStart()
 {
 	ChangeAnimation(EAnimType::eJumpStart);
-	mState = EState::eJump;
+	ChangeState(EState::eJump);
 
 	if (mState != EState::eJumpAttack)
 	{
@@ -461,11 +469,11 @@ void CPlayer::UpdateJump()
 {
 	if (CInput::PushKey(VK_LBUTTON))
 	{
-		mState = EState::eJumpAttack;
+		ChangeState(EState::eJumpAttack);
 	}
 	if (IsAnimationFinished())
 	{
-		mState = EState::eJumpEnd;
+		ChangeState(EState::eJumpEnd);
 	}
 }
 
@@ -476,7 +484,7 @@ void CPlayer::UpdateJumpEnd()
 	// 地面に接地したら、待機状態へ戻す
 	if (IsAnimationFinished() && mIsGrounded)
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -569,18 +577,18 @@ void CPlayer::UpdateMove()
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 
-			mState = EState::eAttack;
+			ChangeState(EState::eAttack);
 			if (mAttackCount == 2)
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
-				mState = EState::eAttack5;
+				ChangeState(EState::eAttack5);
 			}
 			if (mAttackCount == 3)
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
-				mState = EState::eAttack3;
+				ChangeState(EState::eAttack3);
 			}
 		}
 	}
@@ -592,7 +600,7 @@ void CPlayer::UpdatePowerUp()
 {
 	ChangeAnimation(EAnimType::ePowerUp);
 	// 攻撃力アップ終了
-	mState = EState::ePowerUpEnd;
+	ChangeState(EState::ePowerUpEnd);
 }
 
 // 攻撃力アップの終了
@@ -602,8 +610,7 @@ void CPlayer::UpdatePowerUpEnd()
 	if (IsAnimationFinished())
 	{
 		// 待機状態へ移行
-		mState = EState::eIdle;
-		ChangeAnimation(EAnimType::eIdle);
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -615,11 +622,11 @@ void CPlayer::UpdateHit()
 	{
 		if (mCharaStatus.hp <= 0)
 		{
-			mState = EState::eDie;
+			ChangeState(EState::eDie);
 		}
 		else
 		{
-			mState = EState::eIdle;
+			ChangeState(EState::eIdle);
 		}
 	}
 }
@@ -635,7 +642,7 @@ void CPlayer::UpdateGuard()
 	}
 	else
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -646,11 +653,11 @@ void CPlayer::UpdateGuardHit()
 
 	if (CInput::Key('G'))
 	{
-		mState = EState::eGuard;
+		ChangeState(EState::eGuard);
 	}
 	else
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -662,7 +669,7 @@ void CPlayer::UpdateRolling()
 	RollingCount();
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle);
 	}
 	else
 	{
@@ -694,43 +701,43 @@ void CPlayer::UpdateJumpAttack()
 		mMoveSpeed -= CVector(0.0f, 0.0825, 0.0f);
 	}
 
-	if (mAnimationFrame >= 70.0f)
+	switch (mStateJumpAttackStep)
 	{
-		//剣に攻撃開始を伝える
-		mpSword->AttackStart();
-	}
-	if (mAnimationFrame >= 71.0f)
-	{
-		mpSword->AttackEnd();
-	}
-
-	if (mAnimationFrame >= 170.0f)
-	{
-		mState = EState::eJumpAttackWait;
+	case 0:
+		if (mAnimationFrame >= 50.0f)
+		{
+			//剣に攻撃開始を伝える
+			mpSword->AttackStart();
+			mStateJumpAttackStep++;
+		}
+		break;
+	case 1:
+		if (mAnimationFrame > 70.0f)
+		{
+			mpSword->AttackEnd();
+			mStateJumpAttackStep++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 170.0f)
+		{
+			ChangeState(EState::eJumpAttackWait);
+		}
+		break;
 	}
 }
 
 // ジャンプ攻撃終了待ち
 void CPlayer::UpdateJumpAttackWait()
 {
-	//SetAnimationSpeed(1.0f);
-	// 斬撃SEを再生していないかつ、アニメーションが25%以上進行したら、
-	if (!mIsPlayedSlashSE && GetAnimationFrameRatio() >= 0.25f)
-	{
-		// 斬撃SEを再生
-		mpSlashSE->Play();
-		mIsPlayedSlashSE = true;
-	}
-
 	// 攻撃アニメーションが終了したら、
 	if (IsAnimationFinished()|| mIsGrounded==false)
 	{
-		// 待機状態へ移行
-		mState = EState::eIdle;
-		ChangeAnimation(EAnimType::eIdle);
-
 		//剣に攻撃終了を伝える
 		mpSword->AttackEnd();
+
+		// 待機状態へ移行
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -839,7 +846,7 @@ void CPlayer::RollingCount()
 	if (mRollingCount >= 1)
 	{
 		mRollingCount--;
-		mState = EState::eRolling;
+		ChangeState(EState::eRolling);
 	}
 	if (mRollingCount <= 0)
 	{
@@ -1044,12 +1051,12 @@ void CPlayer::Update()
 	{
 		if (mCharaStatus.hp <= 0)
 		{
-			mState = EState::eDie;
+			ChangeState(EState::eDie);
 		}
 	}
 	if (mCharaStatus.hp <= 0)
 	{
-		mState = EState::eDie;
+		ChangeState(EState::eDie);
 	}
 
 	// プレイヤーのデバック表示
@@ -1094,7 +1101,7 @@ void CPlayer::Update()
 		else if (CInput::PushKey(VK_DOWN))
 		{
 			mCharaStatus.hp--;
-			mState = EState::eHit;
+			ChangeState(EState::eHit);
 		}
 	}
 	else if (CInput::Key('2'))
@@ -1112,7 +1119,7 @@ void CPlayer::Update()
 
 	if (CInput::PushKey('N'))
 	{
-		mState = EState::eJumpAttack;
+		ChangeState(EState::eJumpAttack);
 	}
 
 	// HPゲージに現在のHPを設定
@@ -1166,11 +1173,11 @@ void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		if (mState == EState::eGuard)
 		{
-			mState = EState::eGuardHit;
+			ChangeState(EState::eGuardHit);
 		}
 		else
 		{
-			mState = EState::eHit;
+			ChangeState(EState::eHit);
 		}
 	}
 
@@ -1182,12 +1189,13 @@ void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 	mpSword->AttackEnd();
 }
 
-
+// 攻撃力の強化割合を取得
 float CPlayer::GetAtkBuff()const
 {
 	return mBaseAttackBuffRatio;
 }
 
+// 防御力の強化割合を取得
 float CPlayer::GetDefBuff(const CVector& attackDir)const
 {
 	// ガード状態であれば、防御2倍
