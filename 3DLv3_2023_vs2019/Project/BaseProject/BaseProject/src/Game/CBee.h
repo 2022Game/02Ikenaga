@@ -21,6 +21,8 @@ public:
 
 	// 待機状態
 	void UpdateIdle();
+	// 待機状態2
+	void UpdateIdle2();
 
 	// 攻撃
 	void UpdateAttack();
@@ -70,6 +72,7 @@ public:
 private:
 	int mAttackTime;   // 攻撃時間の間隔
 	int mFlyingTime;   // 飛行時間
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -96,6 +99,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -104,6 +108,7 @@ private:
 	enum class EState
 	{
 		eIdle,		// 待機
+		eIdle2,		// 待機2
 		eAttack,	// 攻撃
 		eAttackWait,// 攻撃終了待ち
 		eHit,       // ヒット
@@ -111,6 +116,10 @@ private:
 		eRun,       // 移動
 	};
 	EState mState;	// 蜂の状態
+	int mStateAttackStep;  // State内の攻撃でのステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
@@ -137,6 +146,7 @@ private:
 	CColliderSphere* mpDamageColTail3;   // ダメージを受けるコライダー(尻尾3)
 	CColliderSphere* mpDamageColTail4;   // ダメージを受けるコライダー(尻尾4)
 	CColliderSphere* mpDamageColTail5;   // ダメージを受けるコライダー(尻尾5)
+
 	CColliderSphere* mpAttackCol;        // ダメージを与えるコライダー(針)
 
 	CTransform* mpRideObject;

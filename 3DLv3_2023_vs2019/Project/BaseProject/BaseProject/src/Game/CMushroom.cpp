@@ -366,6 +366,7 @@ void CMushroom::UpdateAttack3()
 	float vectorp = (player->Position() - Position()).Length();
 	SetAnimationSpeed(0.5f);
 	mpAttackColHead->SetEnable(false);
+
 	// ステップごとに処理を分ける
 	switch (mStateAttack3Step)
 	{
@@ -374,6 +375,7 @@ void CMushroom::UpdateAttack3()
 		ChangeAnimation(EAnimType::eAttack3);
 		mStateAttack3Step++;
 		break;
+		// ステップ1 : 攻撃開始
 	case 1:
 		if (mAnimationFrame >= 10.0f)
 		{
@@ -381,6 +383,7 @@ void CMushroom::UpdateAttack3()
 			mStateAttack3Step++;
 		}
 		break;
+		// ステップ2 : 攻撃の時に前に移動するか止まるか
 	case 2:
 		if (mAnimationFrame >= 0.0f)
 		{
@@ -397,10 +400,10 @@ void CMushroom::UpdateAttack3()
 			}
 		}
 		break;
+		// ステップ3 : 攻撃終了待ち
 	case 3:
 		if (mAnimationFrame >= 25.0f)
 		{
-			// 攻撃3終了待ち状態へ移行
 			ChangeState(EState::eAttackWait);
 		}
 		break;
@@ -441,7 +444,6 @@ void CMushroom::UpdateHit()
 		{
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
 			ChangeState(EState::eIdle3);
-			ChangeAnimation(EAnimType::eIdle3);
 		}
 	}
 }

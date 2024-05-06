@@ -8,34 +8,42 @@
 // 蜂のインスタンス
 CBee* CBee::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 0.3f
-#define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.12f         // 移動速度
-#define GRAVITY 0.0625f          // 重力
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 18.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT  0.3f    // 線分コライダー
+#define WITHIN_RANGE  40.0f   // 範囲内
+#define WALK_RANGE    100.0f  // 追跡する範囲
+#define STOP_RANGE    22.0f   // 追跡を辞める範囲
+#define STOP_RANGE_Y  20.0f   // 追跡を辞める高さ
+#define ROTATE_RANGE  250.0f  // 回転する範囲
+#define MOVE_SPEED    0.12f   // 移動速度
+#define MOVE_SPEED_Y  0.027f  // Yのスピード
+#define HEIGHT        0.5f    // 高さ
+#define PLAYER_HEIGHT 0.25f   // プレイヤーの高さ
+
 
 // 蜂のアニメーションデータのテーブル
 const CBee::AnimData CBee::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	40.0f	},	    // 待機 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	true,	40.0f	},	    // 攻撃 17.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	true,	50.0f	},	    // ヒット 13.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	true,	90.0f	},	        // 死ぬ 20.0f
+	{ "",										        true,	0.0f,	0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	0.5f},	// 待機 20.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	true,	17.0f,	0.3f},	// 攻撃 17.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	true,	13.0f,	0.25f},	// ヒット 13.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    true,	20.0f,	0.2f},	// 死ぬ 20.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	0.5f},	// 移動2 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveBWD.x",	true,	42.0f	},	    // 移動 21.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	42.0f	},	    // 移動2 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveLFT.x",	true,	42.0f	},	    // 左移動 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveRGT.x",	true,	42.0f	},	    // 右移動 21.0f
 };
 
 // コンストラクタ
 CBee::CBee()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mFlyingTime(0)
-	,mIsSpawnedNeedleEffect(false)
+	, mMoveSpeed(CVector::zero)
+	, mIsSpawnedNeedleEffect(false)
+	, mIsGrounded(false)
+	, mStateAttackStep(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -74,7 +82,7 @@ CBee::CBee()
 	(
 		this, ELayer::eEnemy, 0.08f, false, 2.0f
 	);
-	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer, ELayer::eEnemy, ELayer::eField});
 	mpColliderSphereHead->Position(-0.1f, 0.0f, 0.03f);
 
 	// キャラクター押し戻し処理(口ばし)
@@ -98,7 +106,7 @@ CBee::CBee()
 	(
 		this, ELayer::eEnemy,0.25f, false, 2.0f
 	);
-	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy,ELayer::eField });
 	mpColliderSphereBody->Position(0.0f, 0.18f, 0.0f);
 
 	// キャラクター押し戻し処理(尻尾)
@@ -239,19 +247,22 @@ CBee::CBee()
 	mpDamageColBeak->SetAttachMtx(headMty);
 	mpDamageColBeak2->SetAttachMtx(headMty);
 
-	// キャラクター押し戻しとダメージを受けるコライダーを体の行列にアタッチ
+	// キャラクター押し戻しと
+	// ダメージを受けるコライダーを体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
 	mpColliderSphereBody->SetAttachMtx(bodyMty);
 	mpDamageColBody->SetAttachMtx(bodyMty);
 
-	// キャラクター押し戻しとダメージを受けるコライダーを尻尾の行列にアタッチ
+	// キャラクター押し戻しと
+	// ダメージを受けるコライダーを尻尾の行列にアタッチ
 	const CMatrix* tailMty = GetFrameMtx("Armature_Tail01");
 	mpColliderSphereTail->SetAttachMtx(tailMty);
 	mpColliderSphereTail2->SetAttachMtx(tailMty);
 	mpDamageColTail->SetAttachMtx(tailMty);
 	mpDamageColTail2->SetAttachMtx(tailMty);
 
-	// キャラクター押し戻しとダメージを受けるコライダーと攻撃コライダーを蜂の針の行列にアタッチ
+	// キャラクター押し戻しとダメージを受けるコライダーと
+	// 攻撃コライダーを蜂の針の行列にアタッチ
 	const CMatrix* needleMty = GetFrameMtx("Armature_Tail02");
 	mpColliderSphereTail3->SetAttachMtx(needleMty);
 	mpColliderSphereTail4->SetAttachMtx(needleMty);
@@ -263,11 +274,13 @@ CBee::CBee()
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackCol->SetEnable(false);
+	mpColliderSphereBeak2->SetEnable(false);
 }
 
 CBee::~CBee()
 {
 	SAFE_DELETE(mpColliderLine);
+	// キャラクター押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBeak);
 	SAFE_DELETE(mpColliderSphereBeak2);
@@ -277,7 +290,7 @@ CBee::~CBee()
 	SAFE_DELETE(mpColliderSphereTail3);
 	SAFE_DELETE(mpColliderSphereTail4);
 	SAFE_DELETE(mpColliderSphereTail5);
-
+	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBeak);
 	SAFE_DELETE(mpDamageColBeak2);
@@ -287,9 +300,11 @@ CBee::~CBee()
 	SAFE_DELETE(mpDamageColTail3);
 	SAFE_DELETE(mpDamageColTail4);
 	SAFE_DELETE(mpDamageColTail5);
+	// 攻撃コライダー
 	SAFE_DELETE(mpAttackCol);
 }
 
+// インスタンス
 CBee* CBee::Instance()
 {
 	return spInstance;
@@ -303,22 +318,51 @@ void CBee::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CBee::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateAttackStep = 0;
+}
+
 // 待機状態
 void CBee::UpdateIdle()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (IsAnimationFinished())
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eIdle);
 	}
-	else
+}
+
+// 待機状態2
+void CBee::UpdateIdle2()
+{
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
+	ChangeAnimation(EAnimType::eIdle);
+	mFlyingTime++;
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		ChangeAnimation(EAnimType::eIdle);
-		if (IsAnimationFinished())
+		ChangeState(EState::eRun);
+	}
+	else if (vectorPos > WALK_RANGE)
+	{
+		ChangeState(EState::eIdle2);
+		if (vectorPos <= ROTATE_RANGE)
 		{
-			mState = EState::eIdle;
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
 }
@@ -328,47 +372,71 @@ void CBee::UpdateAttack()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack);
-
-	if (mAnimationFrame >= 5.0f)
-	{
-		AttackStart();
-	}
-	if (mAnimationFrame >= 15.0f)
-	{
-		AttackEnd();
-	}
-
+	SetAnimationSpeed(0.3f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (mAnimationFrame >= 14.0f)
-	{
-		if (vectorp >= 30.0f)
-		{
-			// 針を生成済みフラグを初期化
-			mIsSpawnedNeedleEffect = false;
-			// 針を生成していない
-			if (!mIsSpawnedNeedleEffect)
-			{
-				CNeedle* needle = new CNeedle
-				(
-					this,
-					Position() + CVector(0.0f, 8.0f, 0.0f),
-					VectorZ(),
-					150.0f,
-					100.0f
-				);
-				needle->SetColor(CColor(1.0f, 0.0f, 1.0f));
-				needle->Scale(5.0f, 5.0f, 5.0f);
-				needle->Rotate(-90.0f, 0.0f, 0.0f);
-				needle->SetOwner(this);
+	float vectorPos = (player->Position() - Position()).Length();
 
-				mIsSpawnedNeedleEffect = true;
+	// ステップごとに処理を分ける
+	switch (mStateAttackStep)
+	{
+		// ステップ0 : 攻撃アニメーション開始＋攻撃開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		if (mAnimationFrame >= 5.0f)
+		{
+			AttackStart();
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ1 : 
+	case 1:
+		if (vectorPos >= 30.0f)
+		{
+			if (mAnimationFrame >= 7.5f)
+			{
+				// 針を生成済みフラグを初期化
+				mIsSpawnedNeedleEffect = false;
+				// 針を生成していない
+				if (!mIsSpawnedNeedleEffect)
+				{
+					CNeedle* needle = new CNeedle
+					(
+						this,
+						Position() + CVector(0.0f, 8.0f, 0.0f),
+						VectorZ(),
+						150.0f,
+						100.0f
+					);
+					needle->SetColor(CColor(1.0f, 0.0f, 1.0f));
+					needle->Scale(5.0f, 5.0f, 5.0f);
+					needle->Rotate(-90.0f, 0.0f, 0.0f);
+					needle->SetOwner(this);
+
+					mIsSpawnedNeedleEffect = true;
+					mStateAttackStep++;
+				}
 			}
 		}
-
-		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		else
+		{
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ2 : 攻撃終了
+	case 2:
+		if (mAnimationFrame >= 13.0f)
+		{
+			AttackEnd();
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ3 : 攻撃終了待ち
+	case 3: 
+		if (mAnimationFrame >= 15.0f)
+		{
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -378,26 +446,29 @@ void CBee::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // ヒット
 void CBee::UpdateHit()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.25f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle;
-		ChangeAnimation(EAnimType::eIdle);
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // 死ぬ
 void CBee::UpdateDie()
 {
+	SetAnimationSpeed(0.2f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -410,43 +481,32 @@ void CBee::UpdateDie()
 // 移動
 void CBee::UpdateRun()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
+	mFlyingTime++;
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
-	// 追跡をやめて止まる
-	if (vectorp <= 20.0f && vectorp >= 23.0f)
+	// 範囲内の時、移動し追跡する
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
+		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
 		}
 	}
-	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
-	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
-	}
 	// 追跡が止まった時、待機モーションへ
-	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorPos <= STOP_RANGE || vectorPos > WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle;
-		ChangeAnimation(EAnimType::eIdle);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -462,6 +522,10 @@ void CBee::Update()
 		// 待機状態
 	case EState::eIdle:
 		UpdateIdle();
+		break;
+		// 待機状態2
+	case EState::eIdle2:
+		UpdateIdle2();
 		break;
 		// 攻撃
 	case EState::eAttack:
@@ -488,26 +552,27 @@ void CBee::Update()
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 	
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eAttack && mState != EState::eAttackWait
-		&& mState != EState::eHit && mState != EState::eDie && mState != EState::eRun)
+	if (vectorPos <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack 
+		&& mState != EState::eAttackWait && mState != EState::eHit
+		&& mState != EState::eDie && mState != EState::eRun)
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle2);
 	}
 
-	if (mState == EState::eRun || mState == EState::eIdle || mState == EState::eAttack ||
+	if (mState == EState::eRun || mState == EState::eIdle2 || mState == EState::eAttack ||
 		mState == EState::eDie || mState == EState::eHit || mState == EState::eAttackWait)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle && vectorp <= 40.0f || mState == EState::eHit || mState == EState::eRun
+	if (mState == EState::eIdle2 && vectorPos <= WITHIN_RANGE || mState == EState::eHit || mState == EState::eRun
 		|| mState == EState::eAttack || mState == EState::eAttackWait)
 	{
 		mAttackTime++;
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -518,7 +583,7 @@ void CBee::Update()
 
 		if (mAttackTime > 200)
 		{
-			mState = EState::eAttack;
+			ChangeState(EState::eAttack);
 		}
 		if (mState == EState::eAttack)
 		{
@@ -526,41 +591,46 @@ void CBee::Update()
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (mState == EState::eRun)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
-	}
-
-	if (mState == EState::eIdle || mState == EState::eRun)
-	{
-		if (mFlyingTime <= 200 && Position().Y() <= 0.0f)
+		if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
-		}
-
-		if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
-		{
-			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
+			Position(Position() + mMoveSpeed * MOVE_SPEED);
 		}
 	}
 
-	if (Position().Y() >= 0.1f || vectorp >= 24.0f && vectorp <= WALK_RANGE)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		mFlyingTime++;
+		if (mFlyingTime <= 200 && mFlyingTime > 0)
+		{
+			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
+		}
+	}
+
+	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
+	{
+		Position(Position().X(), Position().Y() - HEIGHT, Position().Z());
+	}
+
+	if (mState == EState::eHit)
+	{
+		Position(Position().X(), Position().Y() - HEIGHT, Position().Z());
+	}
+
+	if (vectorPos <= STOP_RANGE_Y && player->Position().Y() > PLAYER_HEIGHT)
+	{
+		ChangeState(EState::eIdle2);
 	}
 
 	if (Position().Y() <= 0.0f)
 	{
 		mFlyingTime = 0;
 	}
-	if (mState == EState::eHit)
-	{
-		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
-	}
 
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクター押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBeak->Update();
 	mpColliderSphereBeak2->Update();
@@ -570,7 +640,7 @@ void CBee::Update()
 	mpColliderSphereTail3->Update();
 	mpColliderSphereTail4->Update();
 	mpColliderSphereTail5->Update();
-
+	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColBeak->Update();
 	mpDamageColBeak2->Update();
@@ -580,13 +650,17 @@ void CBee::Update()
 	mpDamageColTail3->Update();
 	mpDamageColTail4->Update();
 	mpDamageColTail5->Update();
-
+	// 攻撃コライダー
 	mpAttackCol->Update();
 
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print(" 飛行 %d\n", mFlyingTime);
+	float y = Position().Y();
+	CDebugPrint::Print(" 高さ %f\n", y);
+	CDebugPrint::Print(" 長さ %f\n", vectorPos);
 }
 
 // 衝突処理
@@ -595,7 +669,7 @@ void CBee::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackCol && mState != EState::eIdle)
 	{
-		// キャラのポインタに変換
+		// キャラクターのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
 		// 相手のコライダーの持ち主がキャラであれば、
 		if (chara != nullptr)
@@ -613,7 +687,7 @@ void CBee::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColliderLine || self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -642,7 +716,10 @@ void CBee::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackCol->SetEnable(true);
+	if (mState == EState::eAttack)
+	{
+		mpAttackCol->SetEnable(true);
+	}
 }
 
 // 攻撃終了
@@ -686,7 +763,7 @@ void CBee::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -712,5 +789,5 @@ void CBee::TakeDamage(int damage, CObjectBase* causedObj)
 void CBee::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }
