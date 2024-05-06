@@ -17,6 +17,7 @@ public:
 
 	// コンストラクタ
 	CBee();
+	// デストラクタ
 	~CBee();
 
 	// 待機状態
@@ -116,6 +117,7 @@ private:
 		eRun,       // 移動
 	};
 	EState mState;	// 蜂の状態
+
 	int mStateAttackStep;  // State内の攻撃でのステップ処理
 
 	// 状態を切り替え
@@ -125,7 +127,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 	bool mIsSpawnedNeedleEffect;
 
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;           // キャラクターの線分コライダー
 
 	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
 	CColliderSphere* mpColliderSphereBeak;   // キャラクター押し戻しコライダー(口ばし)

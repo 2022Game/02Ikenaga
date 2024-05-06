@@ -70,6 +70,7 @@ CTurtle::CTurtle()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// キャラクターの線分コライダー
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
@@ -121,8 +122,10 @@ CTurtle::CTurtle()
 	mpAttackColBody->SetEnable(false);
 }
 
+// デストラクタ
 CTurtle::~CTurtle()
 {
+	// キャラクターの線分コライダー
 	SAFE_DELETE(mpColliderLine);
 	//　キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereBody);
@@ -159,7 +162,14 @@ void CTurtle::UpdateIdle()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp <= WITHIN_RANGE)
+	{
+		ChangeState(EState::eIdle2);
+	}
+	else if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle);
 	}
@@ -179,7 +189,7 @@ void CTurtle::UpdateIdle2()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -383,7 +393,7 @@ void CTurtle::UpdateRun()
 	float vectorp = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
-	if (vectorp >= 24.5f && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
@@ -401,7 +411,7 @@ void CTurtle::UpdateRun()
 		ChangeState(EState::eIdle2);
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorp <= STOP_RANGE || vectorp > WALK_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -414,6 +424,12 @@ void CTurtle::Update()
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
 	mMoveSpeed.Y(0.0f);
+
+	if (mState != EState::eRun)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+	}
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -477,75 +493,58 @@ void CTurtle::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttack2)
-	{
-		if (mState != EState::eAttackWait && mState != EState::eHit && mState != EState::eDefense && mState != EState::eDefenseHit)
-		{
-			if (mState != EState::eDefenseIdle && mState != EState::eDie && mState != EState::eDizzy && mState != EState::eRun)
-			{
-				ChangeState(EState::eIdle2);
-			}
-		}
-	}
-
-	if (mState == EState::eRun || mState == EState::eIdle2 || mState == EState::eAttack || mState == EState::eAttack2 ||
-		mState == EState::eDefense || mState == EState::eHit || mState == EState::eDizzy || mState == EState::eAttackWait
-		|| mState == EState::eDefenseHit || mState == EState::eDefenseIdle)
+	if (mState != EState::eIdle && mState != EState::eDie)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState != EState::eDefense || mState == EState::eDefenseIdle)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefenseIdle)
 	{
-		if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefense
-			|| mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttackWait)
+		mAttackTime++;
+
+		if (vectorp <= ROTATE_RANGE)
 		{
-			mAttackTime++;
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
 
-			if (vectorp <= ROTATE_RANGE)
+		if (mAttackTime > 200)
+		{
+			// 攻撃2
+			bool Attack2 = false;
+			// 防御
+			bool Defense = false;
+			// 攻撃2の確率を最小に2最大5
+			int probability2 = Math::Rand(2, 4);
+			// 防御の確率を最小に5最大7
+			int probability3 = Math::Rand(4, 6);
+
+			if (probability2 == 2)Attack2 = true;
+			if (probability3 == 4)Defense = true;
+
+			if (Attack2)
 			{
-				// プレイヤーのいる方向へ向く
-				CVector dir = player->Position() - Position();
-				dir.Y(0.0f);
-				dir.Normalize();
-				Rotation(CQuaternion::LookRotation(dir));
+				ChangeState(EState::eAttack2);
 			}
-
-			if (mAttackTime > 200)
+			else if (Defense && mState != EState::eDefenseIdle)
 			{
-				// 攻撃2
-				bool Attack2 = false;
-				// 防御
-				bool Defense = false;
-				// 攻撃2の確率を最小に2最大5
-				int probability2 = Math::Rand(2, 4);
-				// 防御の確率を最小に5最大7
-				int probability3 = Math::Rand(4, 6);
-
-				if (probability2 == 2)Attack2 = true;
-				if (probability3 == 4)Defense = true;
-
-				if (Attack2)
-				{
-					ChangeState(EState::eAttack2);
-				}
-				else if (Defense && mState != EState::eDefenseIdle)
-				{
-					ChangeState(EState::eDefense);
-				}
-				else
-				{
-					ChangeState(EState::eAttack);
-				}
+				ChangeState(EState::eDefense);
 			}
-			if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDefense)
+			else
 			{
-				mAttackTime = 0;
+				ChangeState(EState::eAttack);
 			}
+		}
+		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDefense)
+		{
+			mAttackTime = 0;
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
@@ -579,7 +578,6 @@ void CTurtle::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print("HP %d\n", mCharaStatus.hp);
 }
 
 // 衝突処理

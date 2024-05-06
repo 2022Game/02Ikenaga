@@ -21,6 +21,7 @@ public:
 
 	// コンストラクタ
 	CSlime();
+	// デストラクタ
 	~CSlime();
 
 	// 待機状態
@@ -103,9 +104,6 @@ private:
 		eRun,		// 走る
 		eLeftWalk,  // 右に歩行
 		eRightWalk, // 左に歩行
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
 
 		Num
 	};
@@ -140,9 +138,6 @@ private:
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
 		eRun,       // 走る
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
 	};
 	EState mState;	// レッドスライム(エネミー)の状態
 	int mStateAttackStep;  // State内の攻撃でのステップ処理
@@ -157,8 +152,8 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphereBody;  // キャラ押し戻しコライダー(体)
+	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
+	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
 	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;

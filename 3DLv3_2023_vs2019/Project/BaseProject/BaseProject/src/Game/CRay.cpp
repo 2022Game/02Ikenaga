@@ -65,6 +65,7 @@ CRay::CRay()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// キャラクターの線分コライダー
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
@@ -79,7 +80,7 @@ CRay::CRay()
 		this, ELayer::eEnemy,
 		0.18f, false, 5.0f
 	);
-	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy,ELayer::eField });
 
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
@@ -87,7 +88,7 @@ CRay::CRay()
 		this, ELayer::eEnemy,
 		0.2f, false, 5.0f
 	);
-	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy,ELayer::eField });
 	mpColliderSphereBody->Position(0.0f, 0.3f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(脊椎)
@@ -167,10 +168,12 @@ CRay::CRay()
 	//mpWave->SetOwner(this);
 }
 
+// デストラクタ
 CRay::~CRay()
 {
+	// キャラクターの線分コライダー
 	SAFE_DELETE(mpColliderLine);
-	// キャラの押し戻しコライダー
+	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
 	// ダメージを受けるコライダー
@@ -507,7 +510,7 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColliderLine || self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eField)
 		{

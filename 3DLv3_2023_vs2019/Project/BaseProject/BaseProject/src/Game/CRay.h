@@ -20,6 +20,7 @@ public:
 
 	// コンストラクタ
 	CRay();
+	// デストラクタ
 	~CRay();
 
 	// 待機状態
@@ -127,7 +128,7 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;          // キャラクターの軸
+	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
 
 	CColliderSphere* mpColliderSphereHead;  // キャラクターの押し戻しコライダー(頭)
 	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)

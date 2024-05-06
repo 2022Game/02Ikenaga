@@ -17,6 +17,7 @@ public:
 
 	// コンストラクタ
 	CTurtle();
+	// デストラクタ
 	~CTurtle();
 
 	// 更新処理
@@ -152,12 +153,13 @@ private:
 
 	// 状態を切り替え
 	void ChangeState(EState state);
+
 	int mStateAttack2Step;  // 攻撃2の時のステップ
 
-	CVector mMoveSpeed;	// 移動速度
-	bool mIsGrounded;   // 接地しているかどうか
+	CVector mMoveSpeed;	    // 移動速度
+	bool mIsGrounded;       // 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
 	CColliderSphere* mpColliderSphereBody;  // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)

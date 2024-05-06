@@ -85,9 +85,9 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
-	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
-	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
-	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
+	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
+	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
+	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
@@ -208,10 +208,10 @@ void CGameScene::Load()
 	//enemy9->Position(-30.0f, -0.2f, -360.0f);
 	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	//// エイ
-	//CRay* enemy10 = new CRay();
-	//enemy10->Position(150.0f, 0.0f, -450.0f);
-	//enemy10->Scale(35.0f, 35.0f, 35.0f);
+	// エイ
+	CRay* enemy10 = new CRay();
+	enemy10->Position(150.0f, 0.0f, -450.0f);
+	enemy10->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ2
 	//CRay2* enemy11 = new CRay2();
@@ -223,11 +223,10 @@ void CGameScene::Load()
 	//enemy12->Position(180.f,0.0f,-520.0f);
 	//enemy12->Scale(45.0f, 45.0f, 45.0f);
 
-	// 蜂
-	CBee* enemy13 = new CBee();
+	//// 蜂
+	//CBee* enemy13 = new CBee();
 	//enemy13->Position(0.0f, 0.0f, -600.0f);
-	enemy13->Position(-60.0f, 0.0f, 0.0f);
-	enemy13->Scale(30.0f, 30.0f, 30.0f);
+	//enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 蜂2
 	//CBee2* enemy14 = new CBee2();
@@ -239,10 +238,11 @@ void CGameScene::Load()
 	//enemy15->Position(-30.0f, 0.0f, -660.0f);
 	//enemy15->Scale(40.0f, 40.0f, 40.0f);
 
-	//// サボテン
-	//CCactus* enemy16 = new CCactus();
+	// サボテン
+	CCactus* enemy16 = new CCactus();
 	//enemy16->Position(150.0f, 0.0f, -750.0f);
-	//enemy16->Scale(30.0f, 30.0f, 30.0f);
+	enemy16->Position(-60.0f, 0.0f, 0.0f);
+	enemy16->Scale(30.0f, 30.0f, 30.0f);
 
 	//// サボテン2
 	//CCactus2* enemy17 = new CCactus2();

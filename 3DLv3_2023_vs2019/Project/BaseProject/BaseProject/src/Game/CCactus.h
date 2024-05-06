@@ -19,6 +19,7 @@ public:
 
 	// コンストラクタ
 	CCactus();
+	// デストラクタ
 	~CCactus();
 
 	// 戦う前の待機状態
@@ -109,6 +110,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -129,24 +131,30 @@ private:
 	};
 	EState mState;	// サボテンの状態
 
+	int mStateAttackStep;   // State内の攻撃でのステップ処理
+	int mStateAttack2Step;  // State内の攻撃2でのステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
+
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphereHead;      // キャラクター押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;      // キャラクター押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereFeet;      // キャラクター押し戻しコライダー(足元)
-	CColliderSphere* mpColliderSphereLeftHand;  // キャラクター押し戻しコライダー(左手)
-	CColliderSphere* mpColliderSphereRightHand; // キャラクター押し戻しコライダー(右手)
+	CColliderLine* mpColliderLine;              // キャラクターの線分コライダー
+	CColliderSphere* mpColliderSphereHead;      // キャラクターの押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;      // キャラクターの押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereFeet;      // キャラクターの押し戻しコライダー(足元)
+	CColliderSphere* mpColliderSphereLeftHand;  // キャラクターの押し戻しコライダー(左手)
+	CColliderSphere* mpColliderSphereRightHand; // キャラクターの押し戻しコライダー(右手)
 
-	CColliderSphere* mpDamageColHead;       // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColFeet;       // ダメージを受けるコライダー(足元)
-	CColliderSphere* mpDamageColLeftHand;   // ダメージを受けるコライダー(左手)
-	CColliderSphere* mpDamageColRightHand;  // ダメージを受けるコライダー(右手)
+	CColliderSphere* mpDamageColHead;           // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;           // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColFeet;           // ダメージを受けるコライダー(足元)
+	CColliderSphere* mpDamageColLeftHand;       // ダメージを受けるコライダー(左手)
+	CColliderSphere* mpDamageColRightHand;      // ダメージを受けるコライダー(右手)
 
-	CColliderSphere* mpAttackColHead;      // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackColLeftHand;  // ダメージを与えるコライダー(左手)
+	CColliderSphere* mpAttackColHead;           // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColLeftHand;       // ダメージを与えるコライダー(左手)
 
 	CTransform* mpRideObject;
 

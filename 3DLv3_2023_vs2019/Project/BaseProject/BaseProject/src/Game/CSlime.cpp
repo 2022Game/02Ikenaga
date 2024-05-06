@@ -89,6 +89,7 @@ CSlime::CSlime()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// キャラクターの線分コライダー
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eEnemy,
@@ -146,10 +147,12 @@ CSlime::CSlime()
 	mpSlimeDieSE = CResourceManager::Get<CSound>("SlimeDie");
 }
 
+// デストラクタ
 CSlime::~CSlime()
 {
+	// キャラクターの線分コライダー
 	SAFE_DELETE(mpColliderLine);
-	// キャラ押し戻しコライダーを削除
+	// キャラクターの押し戻しコライダーを削除
 	SAFE_DELETE(mpColliderSphereBody);
 	// ダメージを受けるコライダーを削除
 	SAFE_DELETE(mpDamageColBody);
@@ -208,8 +211,6 @@ void CSlime::UpdateIdle2()
 // 攻撃した時の待機状態
 void CSlime::UpdateIdle3()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.8f);
 	ChangeAnimation(EAnimType::eIdle4);
 	if (IsAnimationFinished())
@@ -249,8 +250,6 @@ void CSlime::UpdateIdleWait()
 // 攻撃
 void CSlime::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
@@ -285,8 +284,6 @@ void CSlime::UpdateAttack()
 // 攻撃2
 void CSlime::UpdateAttack2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
@@ -349,8 +346,6 @@ void CSlime::UpdateAttackWait()
 // ヒット
 void CSlime::UpdateHit()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
@@ -397,8 +392,6 @@ void CSlime::UpdateHit()
 // 死ぬ時
 void CSlime::UpdateDie()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
@@ -438,8 +431,6 @@ void CSlime::UpdateDie()
 // めまい(混乱)
 void CSlime::UpdateDizzy()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
@@ -519,7 +510,14 @@ void CSlime::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.Y(0.0f);
 	mHp = mCharaStatus.hp;
+
+	if (mState != EState::eRun)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+	}
 	
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -605,8 +603,6 @@ void CSlime::Update()
 		{
 			mAttackTime = 0;
 		}
-		CPlayer* player = CPlayer::Instance();
-		float vectorp = (player->Position() - Position()).Length();
 		if (vectorp >= WALK_RANGE)
 		{
 			mAttackTime = 0;
@@ -633,12 +629,14 @@ void CSlime::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクターの押し戻しコライダー
 	mpColliderSphereBody->Update();
+	// ダメージを受けるコライダー
 	mpDamageColBody->Update();
+	// 攻撃コライダー
 	mpAttackColBody->Update();
 
 	mIsGrounded = false;
-	CDebugPrint::Print("HP %d\n", mCharaStatus.hp);
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);

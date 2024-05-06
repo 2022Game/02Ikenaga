@@ -68,6 +68,7 @@ CBee::CBee()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// キャラクターの線分コライダー
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
@@ -277,8 +278,10 @@ CBee::CBee()
 	mpColliderSphereBeak2->SetEnable(false);
 }
 
+// デストラクタ
 CBee::~CBee()
 {
+	// キャラクターの線分コライダー
 	SAFE_DELETE(mpColliderLine);
 	// キャラクター押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);

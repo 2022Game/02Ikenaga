@@ -19,6 +19,7 @@ public:
 
 	// コンストラクタ
 	CMushroom();
+	// デストラクタ
 	~CMushroom();
 
 	// 戦う前の待機状態
@@ -99,9 +100,6 @@ private:
 		eDie,       // 死ぬ
 		eDizzy,     // めまい(混乱)
 		eRun,		// 走る
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
 
 		Num
 	};
@@ -136,9 +134,6 @@ private:
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
 		eRun,       // 走る
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
 	};
 	EState mState;	// マッシュルームの状態
 	int mStateAttack2Step;  // State内の攻撃2でのステップ処理
@@ -150,11 +145,11 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;           // キャラクターの線分コライダー
 
-	CColliderSphere* mpColliderSphereHead;   // キャラ押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;   // キャラ押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereRoot;   // キャラ押し戻しコライダー(根)
+	CColliderSphere* mpColliderSphereHead;   // キャラクターの押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;   // キャラクターの押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereRoot;   // キャラクターの押し戻しコライダー(根)
 
 	CColliderCapsule* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpDamageColUmbrella;    // ダメージを受けるコライダー(かさ)

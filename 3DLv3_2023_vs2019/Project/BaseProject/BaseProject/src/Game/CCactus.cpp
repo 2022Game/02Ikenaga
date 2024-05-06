@@ -8,36 +8,41 @@
 // サボテンのインスタンス
 CCactus* CCactus::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 0.3f
-#define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.12f         // 移動速度
-#define GRAVITY 0.0625f          // 重力
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT 0.3f     // 線分コライダー
+#define WITHIN_RANGE 40.0f    // 範囲内
+#define MOVE_SPEED 0.12f      // 移動速度
+#define GRAVITY 0.0625f       // 重力
+#define WALK_RANGE 100.0f     // 追跡する範囲
+#define STOP_RANGE 24.0f      // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f  // 回転する範囲
 
 // サボテンのアニメーションデータのテーブル
 const CCactus::AnimData CCactus::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlant.x",	true,	42.0f	},	         // 植物 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlantToBattle.x",	true,	63.0f	},	 // 植物2 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleBattle.x",	true,	36.0f	},	// 待機 18.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleNormal.x",	true,	82.0f	},	// 待機2 41.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack.x",	true,	42.0f	},	    // 攻撃 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack2.x",	true,	52.0f	},	    // 攻撃2 26.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusGetHit.x",	true,	46.0f	},	    // ヒット 23.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusDie.x",	true,	90.0f	},	        // 死ぬ 23.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusDizzy.x",	true,	82.0f	},	        // めまい 41.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusRun.x",	true,	34.0f	},	        // 走る 17.0f
+	{ "",										                        true,  0.0f,   0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlant.x",	        true,  21.0f,  0.5f},  // 植物 21.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlantToBattle.x",	true,  21.0f,  0.3f},  // 植物2 21.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleBattle.x",	    true,  18.0f,  0.4f},  // 待機 18.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleNormal.x",	    true,  41.0f,  0.5f},  // 待機2 41.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack.x",	        true,  21.0f,  0.5f},  // 攻撃 21.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack2.x",	        true,  26.0f,  0.5f},  // 攻撃2 26.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusGetHit.x",	        true,  23.0f,  0.3f},  // ヒット 23.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusDie.x",	            true,  23.0f,  0.2f},  // 死ぬ 23.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusDizzy.x",          	true,  41.0f,  0.5f},  // めまい 41.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusRun.x",	            true,  17.0f,  0.4f},  // 走る 17.0f
 	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle.x",	true,	121.0f	},	 // 始まりの待機 121.0f
 	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle2.x",	true,	46.0f	},	 // 始まりの待機2 23.0f
 };
 
 // コンストラクタ
 CCactus::CCactus()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
+	, mStateAttackStep(0)
+	, mStateAttack2Step(0)
+	, mMoveSpeed(CVector::zero)
+	, mIsGrounded(false)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -59,9 +64,11 @@ CCactus::CCactus()
 	// CXCharacterの初期化
 	Init(model);
 
+	SetAnimationSpeed(0.5f);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
+	// キャラクターの線分コライダー
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
@@ -205,6 +212,7 @@ CCactus::CCactus()
 	mpAttackColHead->SetEnable(false);
 	mpAttackColLeftHand->SetEnable(false);
 
+	// ひび割れエフェクト作成
 	mpCrack = new CCrackEffect
 	(
 		this, leftHandMty,
@@ -213,26 +221,29 @@ CCactus::CCactus()
 	);
 }
 
+// デストラクタ
 CCactus::~CCactus()
 {
+	// キャラクターの線分コライダー
 	SAFE_DELETE(mpColliderLine);
-
+	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
 	SAFE_DELETE(mpColliderSphereFeet);
 	SAFE_DELETE(mpColliderSphereLeftHand);
 	SAFE_DELETE(mpColliderSphereRightHand);
-
+	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColFeet);
 	SAFE_DELETE(mpDamageColLeftHand);
 	SAFE_DELETE(mpDamageColRightHand);
-
+	// 攻撃コライダー
 	SAFE_DELETE(mpAttackColHead);
 	SAFE_DELETE(mpAttackColLeftHand);
 }
 
+// インスタンス
 CCactus* CCactus::Instance()
 {
 	return spInstance;
@@ -246,42 +257,60 @@ void CCactus::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CCactus::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateAttackStep = 0;
+	mStateAttack2Step = 0;
+}
+
 // 戦う前の待機状態
 void CCactus::UpdateIdle()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorp = (player->Position() - Position()).Length();
+	if (vectorp <= WITHIN_RANGE)
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
+	}
+	else
+	{
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 戦う前の待機状態2
 void CCactus::UpdateIdle2()
 {
+	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
 // 待機状態3
 void CCactus::UpdateIdle3()
 {
+	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eIdle3);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
 	else
 	{
 		ChangeAnimation(EAnimType::eIdle3);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle3;
+			ChangeState(EState::eIdle3);
 		}
 	}
 }
@@ -289,41 +318,77 @@ void CCactus::UpdateIdle3()
 // 攻撃
 void CCactus::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack);
+	SetAnimationSpeed(0.5f);
+	mpAttackColHead->SetEnable(false);
 	if (!mpCrack->IsThrowing())
 	{
 		mpCrack->Start();
 	}
-	if (mAnimationFrame >= 10.0f && mAnimationFrame < 20.0f)
-	{
-		AttackStart();
-		mpAttackColHead->SetEnable(false);
-	}
-	if (mAnimationFrame >=30.0f && mAnimationFrame < 31.0f)
-	{
-		AttackEnd();
-	}
 
-	if (IsAnimationFinished())
+	// ステップごとに処理を分ける
+	switch (mStateAttackStep)
 	{
-		mpCrack->Stop();
-		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		mStateAttackStep++;
+		break;
+		// ステップ1 : 攻撃開始
+	case 1:
+		if (mAnimationFrame >= 5.0f && mAnimationFrame < 15.0f)
+		{
+			AttackStart();
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ2 : 攻撃終了
+	case 2:
+		if (mAnimationFrame >= 15.0f)
+		{
+			AttackEnd();
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ3 : 攻撃終了待ち＋ひび割れを辞める
+	case 3:
+		if (mAnimationFrame >= 19.0f)
+		{
+			mpCrack->Stop();
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
 // 攻撃2
 void CCactus::UpdateAttack2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack2);
-	AttackStart();
+	SetAnimationSpeed(0.5f);
 	mpAttackColLeftHand->SetEnable(false);
-	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+
+	// ステップごとに処理を分ける
+	switch (mStateAttack2Step)
+	{
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack2);
+		mStateAttack2Step++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 10.0f)
+		{
+			AttackStart();
+			mStateAttack2Step++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 24.0f)
+		{
+			// 攻撃2終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
+	}
 }
 
 // 攻撃終了待ち
@@ -333,7 +398,7 @@ void CCactus::UpdateAttackWait()
 	{
 		AttackEnd();
 		mpCrack->Stop();
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -341,24 +406,24 @@ void CCactus::UpdateAttackWait()
 void CCactus::UpdateHit()
 {
 	mpCrack->Stop();
+	SetAnimationSpeed(0.3f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
-	if (IsAnimationFinished())
+
+	// めまいをfalseにする
+	bool stan = false;
+	if (GetAnimationFrameRatio() >= 0.8f)
 	{
-		// めまいをfalseにする
-		bool stan = false;
-		// 確率を最小に0最大40
+		// 確率を最小に0最大20
 		int probability = Math::Rand(0, 20);
 		if (probability == 1)stan = true;
 		if (stan)
 		{
-			mState = EState::eDizzy;
+			ChangeState(EState::eDizzy);
 		}
-		else
+		else 
 		{
-			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle3;
-			ChangeAnimation(EAnimType::eIdle3);
+			ChangeState(EState::eIdle3);
 		}
 	}
 }
@@ -367,8 +432,7 @@ void CCactus::UpdateHit()
 void CCactus::UpdateDie()
 {
 	mpCrack->Stop();
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.2f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -382,32 +446,29 @@ void CCactus::UpdateDie()
 void CCactus::UpdateDizzy()
 {
 	mpCrack->Stop();
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle3;
-		ChangeAnimation(EAnimType::eIdle3);
+		ChangeState(EState::eIdle3);
 	}
 }
 
 // 移動
 void CCactus::UpdateRun()
 {
+	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorp = (player->Position() - Position()).Length();
 
-	// 追跡をやめて止まる
-	if (vectorp <= 20.0f && vectorp >= 23.0f)
+	// 範囲内の時、移動し追跡する
+	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
+		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
 		if (vectorp <= ROTATE_RANGE)
 		{
@@ -416,23 +477,12 @@ void CCactus::UpdateRun()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
 		}
 	}
-	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
-	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
-	}
 	// 追跡が止まった時、待機モーションへ
-	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	if (vectorp <= STOP_RANGE || vectorp > WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle3;
-		ChangeAnimation(EAnimType::eIdle3);
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -441,6 +491,13 @@ void CCactus::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.Y(0.0f);
+
+	if (mState != EState::eRun)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+	}
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -488,24 +545,16 @@ void CCactus::Update()
 	}
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
+	CVector gaugePos = Position() + CVector(0.0f, 37.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdle3
-		&& mState != EState::eAttack && mState != EState::eAttackWait && mState != EState::eHit && mState != EState::eDie
-		&& mState != EState::eDizzy && mState != EState::eRun)
-	{
-		UpdateIdle();
-	}
-
-	if (mState == EState::eRun || mState == EState::eIdle3 || mState == EState::eAttack || mState == EState::eAttack2 ||
-		mState == EState::eHit || mState == EState::eDie || mState == EState::eDizzy || mState == EState::eAttackWait)
+	if (mState != EState::eIdle && mState != EState::eIdle2)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle3 && mState != EState::eDizzy || mState == EState::eRun)
+	if (mState == EState::eIdle3 || mState == EState::eRun)
 	{
 		mAttackTime++;
 
@@ -527,11 +576,11 @@ void CCactus::Update()
 			if (probability2 == 2)Attack2 = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				ChangeState(EState::eAttack2);
 			}
 			else
 			{
-				mState = EState::eAttack;
+				ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2)
@@ -540,9 +589,12 @@ void CCactus::Update()
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (mState == EState::eRun)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
+		{
+			Position(Position() + mMoveSpeed * MOVE_SPEED);
+		}
 	}
 
 	if (Position().Y() >= 0.1f)
@@ -553,18 +605,19 @@ void CCactus::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBody->Update();
 	mpColliderSphereFeet->Update();
 	mpColliderSphereLeftHand->Update();
 	mpColliderSphereRightHand->Update();
-
+	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColBody->Update();
 	mpDamageColFeet->Update();
 	mpDamageColLeftHand->Update();
 	mpDamageColRightHand->Update();
-
+	// 攻撃コライダー
 	mpAttackColHead->Update();
 	mpAttackColLeftHand->Update();
 
@@ -581,7 +634,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	if (self == mpAttackColLeftHand && mState != EState::eIdle
 		&& mState != EState::eIdle2 && mState != EState::eIdle3)
 	{
-		// キャラのポインタに変換
+		// キャラクターのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
 		// 相手のコライダーの持ち主がキャラであれば、
 		if (chara != nullptr)
@@ -603,7 +656,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	if (self == mpAttackColHead && mState != EState::eIdle
 		&& mState != EState::eIdle2 && mState != EState::eIdle3)
 	{
-		// キャラのポインタに変換
+		// キャラクターのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
 		// 相手のコライダーの持ち主がキャラであれば、
 		if (chara != nullptr)
@@ -650,8 +703,14 @@ void CCactus::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackColHead->SetEnable(true);
-	mpAttackColLeftHand->SetEnable(true);
+	if (mState == EState::eAttack2)
+	{
+		mpAttackColHead->SetEnable(true);
+	}
+	if (mState == EState::eAttack)
+	{
+		mpAttackColLeftHand->SetEnable(true);
+	}
 }
 
 // 攻撃終了
@@ -696,7 +755,7 @@ void CCactus::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -722,5 +781,5 @@ void CCactus::TakeDamage(int damage, CObjectBase* causedObj)
 void CCactus::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }
