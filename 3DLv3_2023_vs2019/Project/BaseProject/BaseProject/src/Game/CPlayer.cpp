@@ -429,7 +429,7 @@ void CPlayer::UpdateAttack7()
 // 攻撃終了待ち
 void CPlayer::UpdateAttackWait()
 {
-	//SetAnimationSpeed(1.0f);
+	SetAnimationSpeed(1.0f);
 	// 斬撃SEを再生していないかつ、アニメーションが25%以上進行したら、
 	if (!mIsPlayedSlashSE && GetAnimationFrameRatio() >= 0.25f)
 	{
@@ -616,6 +616,7 @@ void CPlayer::UpdatePowerUpEnd()
 // ヒット
 void CPlayer::UpdateHit()
 {
+	SetAnimationSpeed(1.0f);
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
@@ -718,6 +719,13 @@ void CPlayer::UpdateJumpAttack()
 		}
 		break;
 	case 2:
+		if (mAnimationFrame >= 90.0f)
+		{
+			SetAnimationSpeed(2.0f);
+			mStateJumpAttackStep++;
+		}
+		break;
+	case 3:
 		if (mAnimationFrame >= 170.0f)
 		{
 			ChangeState(EState::eJumpAttackWait);
@@ -732,6 +740,7 @@ void CPlayer::UpdateJumpAttackWait()
 	// 攻撃アニメーションが終了したら、
 	if (IsAnimationFinished()|| mIsGrounded==false)
 	{
+		SetAnimationSpeed(1.0f);
 		//剣に攻撃終了を伝える
 		mpSword->AttackEnd();
 

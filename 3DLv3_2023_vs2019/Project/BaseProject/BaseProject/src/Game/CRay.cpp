@@ -216,7 +216,7 @@ void CRay::UpdateIdle()
 	{
 		ChangeState(EState::eIdle2);
 	}
-	else
+	else if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle);
 	}
@@ -234,9 +234,13 @@ void CRay::UpdateIdle2()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE && player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
+	}
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -460,7 +464,7 @@ void CRay::Update()
 		mFlyingTime = 0;
 	}
 
-	if (mState == EState::eHit)
+	if (mState == EState::eHit || mState ==EState::eDie)
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
@@ -484,6 +488,7 @@ void CRay::Update()
 
 	// HPƒQ[ƒW‚ÉŒ»İ‚ÌHP‚ğİ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print(" ’·‚³ %f\n", vectorPos);
 }
 
 // Õ“Ëˆ—
