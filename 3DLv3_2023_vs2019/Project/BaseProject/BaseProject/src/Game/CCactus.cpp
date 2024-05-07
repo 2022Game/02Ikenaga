@@ -113,7 +113,7 @@ CCactus::CCactus()
 	(
 		this, ELayer::eEnemy,0.16f, false, 1.0f
 	);
-	mpColliderSphereRightHand->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereRightHand->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy, ELayer::eField });
 	mpColliderSphereRightHand->Position(0.12f, 0.01f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(頭)
@@ -272,8 +272,8 @@ void CCactus::UpdateIdle()
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -299,19 +299,19 @@ void CCactus::UpdateIdle3()
 {
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eIdle3);
+	if (IsAnimationFinished())
+	{
+		ChangeState(EState::eIdle3);
+	}
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
 	}
-	else
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
 	{
-		ChangeAnimation(EAnimType::eIdle3);
-		if (IsAnimationFinished())
-		{
-			ChangeState(EState::eIdle3);
-		}
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -463,14 +463,14 @@ void CCactus::UpdateRun()
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -479,8 +479,12 @@ void CCactus::UpdateRun()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle3);
+	}
 	// 追跡が止まった時、待機モーションへ
-	if (vectorp <= STOP_RANGE || vectorp > WALK_RANGE)
+	else if (vectorPos <= STOP_RANGE || vectorPos > WALK_RANGE)
 	{
 		ChangeState(EState::eIdle3);
 	}
@@ -554,7 +558,7 @@ void CCactus::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle3 || mState == EState::eRun)
+	if (mState == EState::eIdle3 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
 
@@ -675,7 +679,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColliderLine || self == mpColliderSphereRightHand)
 	{
 		if (other->Layer() == ELayer::eField)
 		{

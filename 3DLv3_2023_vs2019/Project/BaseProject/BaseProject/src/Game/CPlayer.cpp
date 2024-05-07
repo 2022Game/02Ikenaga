@@ -105,7 +105,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(31);
+	ChangeLevel(21);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -124,7 +124,7 @@ CPlayer::CPlayer()
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::ePlayer,
-		CVector(0.0f, -0.03f, 0.0f),
+		CVector(0.0f, -0.01f, 0.0f),
 		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
@@ -233,12 +233,12 @@ void CPlayer::UpdateIdle()
 		}
 		
 		// スペシャル攻撃
-		if (mCharaStatus.SpecialAttack >= 4)
+		if (mCharaStatus.level >= 10 && mCharaStatus.SpecialAttack >= 5)
 		{
 			if (CInput::PushKey(VK_MBUTTON))
 			{
 				ChangeState(EState::eAttack4);
-				mCharaStatus.SpecialAttack -= 4;
+				mCharaStatus.SpecialAttack -= 5;
 			}
 		}
 
@@ -1087,7 +1087,7 @@ void CPlayer::Update()
 		CDebugPrint::Print(" 右クリック: ガード\n");
 		CDebugPrint::Print(" 左クリック: 攻撃\n");
 		CDebugPrint::Print(" マウスホイール\n");
-		CDebugPrint::Print(" (レベル5以降:使用可) : スペシャル攻撃\n");
+		CDebugPrint::Print(" (レベル10以降:使用可) : スペシャル攻撃\n");
 		CDebugPrint::Print(" スペース: ジャンプ\n");
 		CDebugPrint::Print(" WASD+Sfift: 回避\n");
 		CDebugPrint::Print(" 回避のクールタイム: %d\n", mRollingTime);

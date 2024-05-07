@@ -581,7 +581,7 @@ void CMushroom::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle3 || mState == EState::eRun)
+	if (mState == EState::eIdle3 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
 

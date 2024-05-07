@@ -23,12 +23,12 @@ CBee* CBee::spInstance = nullptr;
 // 蜂のアニメーションデータのテーブル
 const CBee::AnimData CBee::ANIM_DATA[] =
 {
-	{ "",										        true,	0.0f,	0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	0.5f},	// 待機 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	true,	17.0f,	0.3f},	// 攻撃 17.0f
+	{ "",										        true,	0.0f,	 0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	 0.5f},	// 待機 20.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	true,	17.0f,	 0.3f},	// 攻撃 17.0f
 	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	true,	13.0f,	0.25f},	// ヒット 13.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    true,	20.0f,	0.2f},	// 死ぬ 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	0.5f},	// 移動2 21.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    true,	20.0f,	0.15f},	// 死ぬ 20.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	 0.5f},	// 移動2 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveBWD.x",	true,	42.0f	},	    // 移動 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveLFT.x",	true,	42.0f	},	    // 左移動 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveRGT.x",	true,	42.0f	},	    // 右移動 21.0f
@@ -336,7 +336,13 @@ void CBee::UpdateIdle()
 	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
+	{
+		ChangeState(EState::eIdle2);
+	}
+	else if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle);
 	}
@@ -352,9 +358,13 @@ void CBee::UpdateIdle2()
 	mFlyingTime++;
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
+	}
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle2);
 	}
 	else if (vectorPos > WALK_RANGE)
 	{
@@ -407,8 +417,8 @@ void CBee::UpdateAttack()
 						this,
 						Position() + CVector(0.0f, 8.0f, 0.0f),
 						VectorZ(),
-						150.0f,
-						100.0f
+						200.0f,
+						150.0f
 					);
 					needle->SetColor(CColor(1.0f, 0.0f, 1.0f));
 					needle->Scale(5.0f, 5.0f, 5.0f);
@@ -471,7 +481,7 @@ void CBee::UpdateHit()
 // 死ぬ
 void CBee::UpdateDie()
 {
-	SetAnimationSpeed(0.2f);
+	SetAnimationSpeed(0.15f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -486,7 +496,6 @@ void CBee::UpdateRun()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
-	mFlyingTime++;
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
@@ -505,6 +514,10 @@ void CBee::UpdateRun()
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
 		}
+	}
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle2);
 	}
 	// 追跡が止まった時、待機モーションへ
 	else if (vectorPos <= STOP_RANGE || vectorPos > WALK_RANGE)
@@ -557,21 +570,12 @@ void CBee::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (vectorPos <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack
-		&& mState != EState::eAttackWait && mState != EState::eHit
-		&& mState != EState::eDie && mState != EState::eRun)
-	{
-		ChangeState(EState::eIdle2);
-	}
-
-	if (mState == EState::eRun || mState == EState::eIdle2 || mState == EState::eAttack ||
-		mState == EState::eDie || mState == EState::eHit || mState == EState::eAttackWait)
+	if (mState != EState::eIdle)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 && vectorPos <= WITHIN_RANGE || mState == EState::eHit || mState == EState::eRun
-		|| mState == EState::eAttack || mState == EState::eAttackWait)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
 
@@ -584,11 +588,15 @@ void CBee::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime > 150)
 		{
 			ChangeState(EState::eAttack);
 		}
 		if (mState == EState::eAttack)
+		{
+			mAttackTime = 0;
+		}
+		if (vectorPos >= WALK_RANGE)
 		{
 			mAttackTime = 0;
 		}
@@ -604,6 +612,7 @@ void CBee::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
+		mFlyingTime++;
 		if (mFlyingTime <= 200 && mFlyingTime > 0)
 		{
 			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
@@ -663,6 +672,7 @@ void CBee::Update()
 	CDebugPrint::Print(" 飛行 %d\n", mFlyingTime);
 	float y = Position().Y();
 	CDebugPrint::Print(" 高さ %f\n", y);
+	CDebugPrint::Print(" 高さ %f\n", vectorPos);
 }
 
 // 衝突処理

@@ -410,7 +410,7 @@ void CRay::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
 

@@ -480,7 +480,8 @@ void CTurtle::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefenseIdle)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefenseIdle
+		|| mState == EState::eHit)
 	{
 		mAttackTime++;
 

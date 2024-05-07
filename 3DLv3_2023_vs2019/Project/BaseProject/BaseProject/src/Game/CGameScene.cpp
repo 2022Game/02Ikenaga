@@ -85,8 +85,8 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
-	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
-	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
+	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
+	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
@@ -208,10 +208,11 @@ void CGameScene::Load()
 	//enemy9->Position(-30.0f, -0.2f, -360.0f);
 	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	//// ƒGƒC
-	//CRay* enemy10 = new CRay();
+	// ƒGƒC
+	CRay* enemy10 = new CRay();
 	//enemy10->Position(150.0f, 0.0f, -450.0f);
-	//enemy10->Scale(35.0f, 35.0f, 35.0f);
+	enemy10->Position(0.0f, 0.0f, 50.0f);
+	enemy10->Scale(35.0f, 35.0f, 35.0f);
 
 	//// ƒGƒC2
 	//CRay2* enemy11 = new CRay2();
@@ -223,11 +224,10 @@ void CGameScene::Load()
 	//enemy12->Position(180.f,0.0f,-520.0f);
 	//enemy12->Scale(45.0f, 45.0f, 45.0f);
 
-	// –I
-	CBee* enemy13 = new CBee();
+	//// –I
+	//CBee* enemy13 = new CBee();
 	//enemy13->Position(0.0f, 0.0f, -600.0f);
-	enemy13->Position(0.0f, 0.0f, 60.0f);
-	enemy13->Scale(30.0f, 30.0f, 30.0f);
+	//enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	//// –I2
 	//CBee2* enemy14 = new CBee2();
