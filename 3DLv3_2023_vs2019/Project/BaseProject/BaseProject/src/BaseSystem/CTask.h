@@ -65,6 +65,7 @@ public:
 private:
 	ETaskPriority mPriority;	//優先度
 	int mSortOrder;		//優先度内での順番
+	bool mIsSort;		//ソートの必要があるか
 	bool mIsKill;		//削除フラグ
 	bool mIsEnable;		//有効フラグ
 	bool mIsShow;		//表示フラグ

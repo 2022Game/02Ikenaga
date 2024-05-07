@@ -7,6 +7,7 @@ CTask::CTask(ETaskPriority prio, int sortOrder,
 	ETaskPauseType pause, bool dontDelete, bool addTaskList)
 	: mPriority(prio)
 	, mSortOrder(sortOrder)
+	, mIsSort(false)
 	, mIsKill(false)
 	, mIsEnable(true)
 	, mIsShow(true)
@@ -54,11 +55,9 @@ void CTask::SetPriority(ETaskPriority prio)
 	//既に設定されている優先度であれば処理しない
 	if (mPriority == prio) return;
 
-	//一度タスクリストから取り除き、再度追加することで、
-	//新しい優先度の場所にタスクを差し込む
+	//優先度を変更して、並び替えフラグを立てる
 	mPriority = prio;
-	CTaskManager::Instance()->Remove(this, true);
-	CTaskManager::Instance()->Add(this, true);
+	mIsSort = true;
 }
 
 //優先度を取得
@@ -73,11 +72,9 @@ void CTask::SetSortOrder(int sortOder)
 	//既に設定されている順番であれば処理しない
 	if (mSortOrder == sortOder) return;
 
-	//一度タスクリストから取り除き、再度追加することで、
-	//新しい優先度の場所にタスクを差し込む
+	//順番を変更し、並び替えフラグを立てる
 	mSortOrder = sortOder;
-	CTaskManager::Instance()->Remove(this, true);
-	CTaskManager::Instance()->Add(this, true);
+	mIsSort = true;
 }
 
 //優先度内の順番を取得

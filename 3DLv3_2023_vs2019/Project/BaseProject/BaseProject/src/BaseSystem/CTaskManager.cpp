@@ -171,6 +171,53 @@ void CTaskManager::DeleteInScene(EScene scene)
 	}
 }
 
+// タスクの並び替え
+void CTaskManager::Sort()
+{
+	// タスクリストに追加しなおすタスクのリスト
+	std::list<CTask*> addTasks;
+
+	// 3Dタスクリスト内で並び替えるタスクを検索
+	auto itr = m3dTasks.begin();
+	auto end = m3dTasks.end();
+	while (itr != end)
+	{
+		CTask* task = *itr;
+		itr++;
+
+		// 並び替えフラグが立っていたら、
+		if (task->mIsSort)
+		{
+			Remove(task, true);
+			task->mIsSort = false;
+			addTasks.push_back(task);
+		}
+	}
+	// 2Dタスクリスト内で並び替えるタスクを検索
+	itr = m2dTasks.begin();
+	end = m2dTasks.end();
+	while (itr != end)
+	{
+		CTask* task = *itr;
+		itr++;
+
+		// 並び替えフラグが立っていたら、
+		if (task->mIsSort)
+		{
+			Remove(task, true);
+			task->mIsSort = false;
+			addTasks.push_back(task);
+		}
+	}
+
+	// タスクリストから取り除いたタスクを、
+	// タスクリストに追加しなおす
+	for (CTask* task : addTasks)
+	{
+		Add(task, true);
+	}
+}
+
 // 3Dタスクのリストを取得
 const std::list<CTask*>& CTaskManager::Get3dTasks() const
 {
@@ -220,6 +267,9 @@ bool CTaskManager::IsUpdate(CTask* task) const
 // 更新
 void CTaskManager::Update()
 {
+	// タスクの更新前にタスクの並び替えを行う
+	Sort();
+
 	// 3Dタスクリスト内のタスクを順番に更新
 	for (CTask* task : m3dTasks)
 	{
