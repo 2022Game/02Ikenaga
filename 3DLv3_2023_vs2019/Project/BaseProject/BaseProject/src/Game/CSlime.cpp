@@ -218,14 +218,14 @@ void CSlime::UpdateIdle3()
 		ChangeState(EState::eIdle3);
 	}
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.5f)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.5f)
 	{
 		ChangeState(EState::eRun);
 	}
 	else 
 	{
-		if (vectorp <= 25.0f && player->Position().Y() >= 6.0f)
+		if (vectorPos <= 25.0f && player->Position().Y() >= 6.0f)
 		{
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
@@ -328,8 +328,8 @@ void CSlime::UpdateAttackWait()
 		AttackEnd();
 		mpColliderSphereBody->SetEnable(true);
 		CPlayer* player = CPlayer::Instance();
-		float vectorp = (player->Position() - Position()).Length();
-		if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+		float vectorPos = (player->Position() - Position()).Length();
+		if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 		{
 			ChangeState(EState::eRun);
 		}
@@ -471,7 +471,7 @@ void CSlime::UpdateRun()
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mAnimationFrame >= 5.0f)
 	{
@@ -480,10 +480,10 @@ void CSlime::UpdateRun()
 	}
 
 	// 範囲内の時、移動し追跡する
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -493,11 +493,11 @@ void CSlime::UpdateRun()
 		}
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
 	{
 		ChangeState(EState::eIdle3);
 	}
-    if (vectorp <= 25.0f && player->Position().Y() >= 6.0f)
+    if (vectorPos <= 25.0f && player->Position().Y() >= 6.0f)
 	{
 		ChangeState(EState::eIdle3);
 	}
@@ -569,7 +569,7 @@ void CSlime::Update()
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
@@ -603,7 +603,7 @@ void CSlime::Update()
 		{
 			mAttackTime = 0;
 		}
-		if (vectorp >= WALK_RANGE)
+		if (vectorPos >= WALK_RANGE)
 		{
 			mAttackTime = 0;
 		}
@@ -611,7 +611,7 @@ void CSlime::Update()
 
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
 	{
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -620,7 +620,7 @@ void CSlime::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);

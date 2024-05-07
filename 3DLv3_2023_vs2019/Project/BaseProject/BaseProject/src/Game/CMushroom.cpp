@@ -243,8 +243,8 @@ void CMushroom::UpdateIdle()
 	ChangeAnimation(EAnimType::eIdle);
 
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -275,12 +275,12 @@ void CMushroom::UpdateIdle3()
 		ChangeState(EState::eIdle3);
 	}
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		ChangeState(EState::eRun);
 	}
-	if (vectorp <= 30.0f && player->Position().Y() >= 0.7f)
+	if (vectorPos <= 30.0f && player->Position().Y() >= 0.7f)
 	{
 		ChangeState(EState::eIdle3);
 	}
@@ -364,7 +364,7 @@ void CMushroom::UpdateAttack3()
 {
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 	SetAnimationSpeed(0.5f);
 	mpAttackColHead->SetEnable(false);
 
@@ -388,12 +388,12 @@ void CMushroom::UpdateAttack3()
 	case 2:
 		if (mAnimationFrame >= 0.0f)
 		{
-			if (vectorp <= 25.0f)
+			if (vectorPos <= 25.0f)
 			{
 				mMoveSpeed += nowPos * 7.0f;
 				mStateAttack3Step++;
 			}
-			else if (vectorp >= 26.0f)
+			else if (vectorPos >= 26.0f)
 			{
 				mMoveSpeed.X(0.0f);
 				mMoveSpeed.Z(0.0f);
@@ -480,14 +480,14 @@ void CMushroom::UpdateRun()
 	ChangeAnimation(EAnimType::eRun);
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -496,12 +496,12 @@ void CMushroom::UpdateRun()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	if (vectorp <= 30.0f && player->Position().Y() >= 0.7f)
+	if (vectorPos <= 30.0f && player->Position().Y() >= 0.7f)
 	{
 		ChangeState(EState::eIdle3);
 	}
-	// 追跡が止まった時、攻撃用の待機モーションへ
-	else if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	// 攻撃用の待機モーションへ
+	else if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
 	{
 		ChangeState(EState::eIdle3);
 	}
@@ -571,7 +571,7 @@ void CMushroom::Update()
 	}
 
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mState !=EState::eIdle && mState != EState::eIdle2 && mState != EState::eDie)
 	{
@@ -585,7 +585,7 @@ void CMushroom::Update()
 	{
 		mAttackTime++;
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -623,13 +623,13 @@ void CMushroom::Update()
 		{
 			mAttackTime = 0;
 		}
-		if (vectorp >= WALK_RANGE)
+		if (vectorPos >= WALK_RANGE)
 		{
 			mAttackTime = 0;
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE || mState == EState::eAttack3)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE || mState == EState::eAttack3)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);

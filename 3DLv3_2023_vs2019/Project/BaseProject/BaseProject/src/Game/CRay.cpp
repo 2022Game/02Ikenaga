@@ -208,17 +208,23 @@ void CRay::ChangeState(EState state)
 // 待機状態
 void CRay::UpdateIdle()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
+	{
+		ChangeState(EState::eIdle2);
+	}
+	else
+	{
+		ChangeState(EState::eIdle);
+	}
 }
 
 // 待機状態2
 void CRay::UpdateIdle2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
 	if (IsAnimationFinished())
@@ -227,8 +233,8 @@ void CRay::UpdateIdle2()
 	}
 
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -237,12 +243,10 @@ void CRay::UpdateIdle2()
 // 攻撃
 void CRay::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.4f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (!mpWave->IsThrowing() && vectorp >= 30.0f && mAnimationFrame <=5.0f)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (!mpWave->IsThrowing() && vectorPos >= 30.0f && mAnimationFrame <=5.0f)
 	{
 		mpWave->Start();
 	}
@@ -250,26 +254,31 @@ void CRay::UpdateAttack()
 	// ステップごとに処理を分ける
 	switch (mStateAttackStep)
 	{
-		// ステップ0 : 攻撃アニメーション開始＋攻撃コライダー開始
+		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
+		mStateAttackStep++;
+		break;
+		// ステップ1 : 攻撃開始
+	case 1:
 		if (mAnimationFrame >= 5.0f)
 		{
 			AttackStart();
 			mStateAttackStep++;
 		}
 		break;
-	case 1:  // ステップ1 : 攻撃コライダー終了
+		// ステップ2 : 攻撃終了
+	case 2:
 		if (mAnimationFrame >= 13.0f)
 		{
 			AttackEnd();
 			mStateAttackStep++;
 		}
 		break;
-	case 2:  // ステップ2 : 攻撃終了待ち
+		// ステップ3 : 攻撃終了待ち
+	case 3:
 		if (mAnimationFrame >= 15.0f)
 		{
-			// 攻撃終了待ち状態へ移行
 			ChangeState(EState::eAttackWait);
 		}
 		break;
@@ -304,8 +313,7 @@ void CRay::UpdateHit()
 // 死ぬ
 void CRay::UpdateDie()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	mpWave->Stop();
 	SetAnimationSpeed(0.2f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
@@ -324,14 +332,14 @@ void CRay::UpdateRun()
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
-	if (vectorp > 28.0f && vectorp < WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -341,7 +349,7 @@ void CRay::UpdateRun()
 		}
 	}
 	// 追跡が止まった時、待機モーションへ
-	else if (vectorp < STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorPos < STOP_RANGE || vectorPos >= WALK_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -352,6 +360,12 @@ void CRay::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+
+	if (mState != EState::eRun)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+	}
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -389,26 +403,18 @@ void CRay::Update()
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 27.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack
-		&& mState != EState::eAttackWait && mState != EState::eHit && mState != EState::eDie && mState !=EState::eRun)
-	{
-		ChangeState(EState::eIdle2);
-	}
-
-	if (mState == EState::eIdle2 || mState == EState::eAttack || mState == EState::eAttackWait
-		|| mState == EState::eHit || mState == EState::eRun)
+	if (mState != EState::eIdle)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 && vectorp <= 70.0f || mState == EState::eHit || mState == EState::eRun
-		|| mState == EState::eAttack || mState == EState::eAttackWait)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
 		mAttackTime++;
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -421,13 +427,17 @@ void CRay::Update()
 		{
 			ChangeState(EState::eAttack);
 		}
-		if (mState == EState::eAttack)
+		if (mState == EState::eAttack || mState == EState::eAttackWait)
+		{
+			mAttackTime = 0;
+		}
+		if (vectorPos >= WALK_RANGE)
 		{
 			mAttackTime = 0;
 		}
 	}
 
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
@@ -435,22 +445,17 @@ void CRay::Update()
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
 		mFlyingTime++;
-	}
-
-	if (mState == EState::eIdle2 || mState == EState::eRun)
-	{
 		if (mFlyingTime < 100 && mFlyingTime >= 10)
 		{
 			mMoveSpeed.Y(mMoveSpeed.Y() + 0.04f);
 		}
-
 		else if (mFlyingTime > 100)
 		{
 			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 		}
 	}
 
-	if (Position().Y() <= 0.0f)
+	if (Position().Y() <= -0.4f)
 	{
 		mFlyingTime = 0;
 	}
@@ -479,18 +484,13 @@ void CRay::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print("HP %d", mCharaStatus.hp);
-	CDebugPrint::Print("飛行 %d", mFlyingTime);
-	CDebugPrint::Print("距離 %f", vectorp);
-	float y = Position().Y();
-	CDebugPrint::Print("高さ %f", y);
 }
 
 // 衝突処理
 void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackColHead && mState != EState::eIdle)
+	if (self == mpAttackColHead && mState != EState::eIdle && mState != EState::eIdle2)
 	{
 		// キャラクターのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());

@@ -556,8 +556,8 @@ void CBee::Update()
 	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	
-	if (vectorPos <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack 
+
+	if (vectorPos <= WITHIN_RANGE && mState != EState::eIdle2 && mState != EState::eAttack
 		&& mState != EState::eAttackWait && mState != EState::eHit
 		&& mState != EState::eDie && mState != EState::eRun)
 	{
@@ -663,7 +663,6 @@ void CBee::Update()
 	CDebugPrint::Print(" ”òs %d\n", mFlyingTime);
 	float y = Position().Y();
 	CDebugPrint::Print(" ‚‚³ %f\n", y);
-	CDebugPrint::Print(" ’·‚³ %f\n", vectorPos);
 }
 
 // Õ“Ëˆ—

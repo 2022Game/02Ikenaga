@@ -164,8 +164,8 @@ void CTurtle::UpdateIdle()
 	ChangeAnimation(EAnimType::eIdle);
 	
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -178,8 +178,6 @@ void CTurtle::UpdateIdle()
 // 待機状態2
 void CTurtle::UpdateIdle2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
 	if (IsAnimationFinished())
@@ -188,13 +186,13 @@ void CTurtle::UpdateIdle2()
 	}
 
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
 		ChangeState(EState::eRun);
 	}
 
-	if (vectorp <= 30.0f && player->Position().Y() >= 0.7f)
+	if (vectorPos <= 30.0f && player->Position().Y() >= 0.7f)
 	{
 		ChangeAnimation(EAnimType::eIdle2);
 	}
@@ -203,8 +201,6 @@ void CTurtle::UpdateIdle2()
 // 待機状態3
 void CTurtle::UpdateIdle3()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
@@ -216,8 +212,6 @@ void CTurtle::UpdateIdle3()
 // 攻撃
 void CTurtle::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack);
 	AttackStart();
@@ -228,8 +222,6 @@ void CTurtle::UpdateAttack()
 // 攻撃2
 void CTurtle::UpdateAttack2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
@@ -298,8 +290,6 @@ void CTurtle::UpdateHit()
 // 防御
 void CTurtle::UpdateDefense()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDefense);
 	if (IsAnimationFinished())
@@ -311,8 +301,6 @@ void CTurtle::UpdateDefense()
 // 防御中のヒット
 void CTurtle::UpdateDefenseHit()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDefenseHit);
 	if (IsAnimationFinished())
@@ -324,14 +312,12 @@ void CTurtle::UpdateDefenseHit()
 // 防御中の待機
 void CTurtle::UpdateDefenseIdle()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDefenseIdle);
 
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= ROTATE_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= ROTATE_RANGE)
 	{
 		// プレイヤーのいる方向へ向く
 		CVector dir = player->Position() - Position();
@@ -356,8 +342,6 @@ void CTurtle::UpdateDefenseIdle()
 // 死ぬ
 void CTurtle::UpdateDie()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
@@ -371,8 +355,6 @@ void CTurtle::UpdateDie()
 // めまい(混乱)
 void CTurtle::UpdateDizzy()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
@@ -390,14 +372,14 @@ void CTurtle::UpdateRun()
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE && player->Position().Y() < 0.7f)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -406,12 +388,12 @@ void CTurtle::UpdateRun()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	if (vectorp <= 30.0f && player->Position().Y() >= 0.7f)
+	if (vectorPos <= 30.0f && player->Position().Y() >= 0.7f)
 	{
 		ChangeState(EState::eIdle2);
 	}
 	// 追跡が止まった時、攻撃用の待機モーションへ
-	else if (vectorp <= STOP_RANGE || vectorp > WALK_RANGE)
+	else if (vectorPos <= STOP_RANGE || vectorPos > WALK_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -491,7 +473,7 @@ void CTurtle::Update()
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 32.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
@@ -502,7 +484,7 @@ void CTurtle::Update()
 	{
 		mAttackTime++;
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -542,9 +524,13 @@ void CTurtle::Update()
 		{
 			mAttackTime = 0;
 		}
+		if (vectorPos >= WALK_RANGE)
+		{
+			mAttackTime = 0;
+		}
 	}
 
-	if (vectorp > STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 	}
