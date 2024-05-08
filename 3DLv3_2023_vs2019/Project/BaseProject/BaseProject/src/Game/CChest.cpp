@@ -8,33 +8,37 @@
 // チェストモンスターのインスタンス
 CChest* CChest::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 0.3f
-#define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.12f         // 移動速度
-#define GRAVITY 0.0625f          // 重力
-#define WALK_RANGE 150.0f        // 追跡する範囲
-#define STOP_RANGE 32.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT  0.3f     // 線分コライダー
+#define WITHIN_RANGE  40.0f    // 範囲内
+#define MOVE_SPEED    0.12f    // 移動速度
+#define GRAVITY       0.0625f  // 重力
+#define WALK_RANGE    150.0f   // 追跡する範囲
+#define STOP_RANGE    32.0f    // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f   // 回転する範囲
 
 // チェストモンスターのアニメーションデータのテーブル
 const CChest::AnimData CChest::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f	},	    // 待機 21.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	46.0f	},	    // 待機2 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	82.0f	},	    // 待機3 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	true,	50.0f	},	    // 攻撃 25.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	true,	46.0f	},	    // 攻撃 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	true,	60.0f	},	    // ヒット 19.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	true,	90.0f	},	        // 死ぬ 29.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	true,	82.0f	},	    // めまい 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	true,	34.0f	},	        // 走る 17.0f
+	{ "",										            true,	0.0f,	0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f,	1.0f},	// 待機 21.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	23.0f,	0.5f},	// 待機2 23.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	41.0f,	0.5f},	// 待機3 41.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	true,	25.0f,	0.5f},	// 攻撃 25.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	true,	46.0f,	0.0f},	// 攻撃 23.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	true,	60.0f,	0.0f},	// ヒット 19.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    true,	90.0f,	0.0f},  // 死ぬ 29.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	true,	82.0f,	0.0f},	// めまい 41.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	34.0f,	0.0f},	// 走る 17.0f
 };
 
 // コンストラクタ
 CChest::CChest()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
+	, mStateAttackStep(0)
+	, mMoveSpeed(CVector::zero)
+	, mIsGrounded(false)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -56,6 +60,7 @@ CChest::CChest()
 	// CXCharacterの初期化
 	Init(model);
 
+	SetAnimationSpeed(1.0f);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
@@ -70,7 +75,8 @@ CChest::CChest()
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.55f, false, 5.0f
+		this, ELayer::eEnemy,
+		0.55f, false, 5.0f
 	);
 	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereHead->Position(0.27f, 0.0f, 0.0f);
@@ -78,7 +84,8 @@ CChest::CChest()
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.55f, false, 5.0f
+		this, ELayer::eEnemy,
+		0.55f, false, 5.0f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereBody->Position(0.05f, 0.0f, 0.0f);
@@ -86,7 +93,8 @@ CChest::CChest()
 	// キャラクター押し戻し処理(前の左足)
 	mpColliderSphereFeet = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.08f, false, 5.0f
+		this, ELayer::eEnemy,
+		0.08f, false, 5.0f
 	);
 	mpColliderSphereFeet->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeet->Position(0.0f, 0.1f, 0.0f);
@@ -94,7 +102,8 @@ CChest::CChest()
 	// キャラクター押し戻し処理(前の右足)
 	mpColliderSphereFeet2 = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.08f, false, 5.0f
+		this, ELayer::eEnemy,
+		0.08f, false, 5.0f
 	);
 	mpColliderSphereFeet2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeet2->Position(0.0f, 0.1f, 0.0f);
@@ -102,7 +111,8 @@ CChest::CChest()
 	// キャラクター押し戻し処理(後ろの左足)
 	mpColliderSphereFeet3 = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.08f, false, 5.0f
+		this, ELayer::eEnemy,
+		0.08f, false, 5.0f
 	);
 	mpColliderSphereFeet3->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeet3->Position(0.0f, 0.1f, 0.0f);
@@ -110,7 +120,8 @@ CChest::CChest()
 	// キャラクター押し戻し処理(後ろの右足)
 	mpColliderSphereFeet4 = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.08f, false, 5.0f
+		this, ELayer::eEnemy,
+		0.08f, false, 5.0f
 	);
 	mpColliderSphereFeet4->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeet4->Position(0.0f, 0.1f, 0.0f);
@@ -118,7 +129,8 @@ CChest::CChest()
 	// ダメージを受けるコライダーを作成(頭)
 	mpDamageColHead = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.55f, false
+		this, ELayer::eDamageCol,
+		0.55f, false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
@@ -130,7 +142,8 @@ CChest::CChest()
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageColBody = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.55f, false
+		this, ELayer::eDamageCol,
+		0.55f, false
 	);
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
@@ -139,7 +152,8 @@ CChest::CChest()
 	// ダメージを受けるコライダーを作成(前の左足)
 	mpDamageColFeet = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.08f, false
+		this, ELayer::eDamageCol,
+		0.08f, false
 	);
 	mpDamageColFeet->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet->SetCollisionTags({ ETag::eWeapon });
@@ -148,7 +162,8 @@ CChest::CChest()
 	// ダメージを受けるコライダーを作成(前の右足)
 	mpDamageColFeet2 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.08f, false
+		this, ELayer::eDamageCol,
+		0.08f, false
 	);
 	mpDamageColFeet2->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet2->SetCollisionTags({ ETag::eWeapon });
@@ -157,7 +172,8 @@ CChest::CChest()
 	// ダメージを受けるコライダーを作成(後ろの左足)
 	mpDamageColFeet3 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.08f, false
+		this, ELayer::eDamageCol,
+		0.08f, false
 	);
 	mpDamageColFeet3->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet3->SetCollisionTags({ ETag::eWeapon });
@@ -166,7 +182,8 @@ CChest::CChest()
 	// ダメージを受けるコライダーを作成(後ろの右足)
 	mpDamageColFeet4 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.08f, false
+		this, ELayer::eDamageCol,
+		0.08f, false
 	);
 	mpDamageColFeet4->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet4->SetCollisionTags({ ETag::eWeapon });
@@ -182,33 +199,39 @@ CChest::CChest()
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColHead->Position(0.27f, 0.0f, 0.0f);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをチェストモンスターの頭の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをチェストモンスターの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
 	mpColliderSphereHead->SetAttachMtx(headMty);
 	mpDamageColHead->SetAttachMtx(headMty);
 	mpAttackColHead->SetAttachMtx(headMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをチェストモンスターの体の行列にアタッチ
+	// 押し戻しコライダーと
+	// ダメージを受けるコライダーをチェストモンスターの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
 	mpColliderSphereBody->SetAttachMtx(bodyMty);
 	mpDamageColBody->SetAttachMtx(bodyMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをチェストモンスターの前の左足の行列にアタッチ
+	// 押し戻しコライダーと
+	// ダメージを受けるコライダーをチェストモンスターの前の左足の行列にアタッチ
 	const CMatrix* leftFeetMty = GetFrameMtx("Armature_FrontLeftLeg02");
 	mpColliderSphereFeet->SetAttachMtx(leftFeetMty);
 	mpDamageColFeet->SetAttachMtx(leftFeetMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをチェストモンスターの前の右足の行列にアタッチ
+	// 押し戻しコライダーと
+	// ダメージを受けるコライダーをチェストモンスターの前の右足の行列にアタッチ
 	const CMatrix* rightFeetMty = GetFrameMtx("Armature_FrontRightLeg02");
 	mpColliderSphereFeet2->SetAttachMtx(rightFeetMty);
 	mpDamageColFeet2->SetAttachMtx(rightFeetMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをチェストモンスターの後ろの左足の行列にアタッチ
+	// 押し戻しコライダーと
+	// ダメージを受けるコライダーをチェストモンスターの後ろの左足の行列にアタッチ
 	const CMatrix* leftFeetMty2 = GetFrameMtx("Armature_RearLeftLeg02");
 	mpColliderSphereFeet3->SetAttachMtx(leftFeetMty2);
 	mpDamageColFeet3->SetAttachMtx(leftFeetMty2);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをチェストモンスターの後ろの右足の行列にアタッチ
+	// 押し戻しコライダーと
+	// ダメージを受けるコライダーをチェストモンスターの後ろの右足の行列にアタッチ
 	const CMatrix* rightFeetMty2 = GetFrameMtx("Armature_RearRightLeg02");
 	mpColliderSphereFeet4->SetAttachMtx(rightFeetMty2);
 	mpDamageColFeet4->SetAttachMtx(rightFeetMty2);
@@ -220,24 +243,25 @@ CChest::CChest()
 CChest::~CChest()
 {
 	SAFE_DELETE(mpColliderLine);
-
+	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
 	SAFE_DELETE(mpColliderSphereFeet);
 	SAFE_DELETE(mpColliderSphereFeet2);
 	SAFE_DELETE(mpColliderSphereFeet3);
 	SAFE_DELETE(mpColliderSphereFeet4);
-
+	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColFeet);
 	SAFE_DELETE(mpDamageColFeet2);
 	SAFE_DELETE(mpDamageColFeet3);
 	SAFE_DELETE(mpDamageColFeet4);
-
+	// 攻撃コライダー
 	SAFE_DELETE(mpAttackColHead);
 }
 
+// インスタンス
 CChest* CChest::Instance()
 {
 	return spInstance;
@@ -251,32 +275,48 @@ void CChest::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CChest::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+	mStateAttackStep = 0;
+}
+
 // 戦う前の待機状態
 void CChest::UpdateIdle()
 {
+	SetAnimationSpeed(1.0f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
+	}
+	else
+	{
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 待機状態2
 void CChest::UpdateIdle2()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
 	else
 	{
 		ChangeAnimation(EAnimType::eIdle2);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -284,70 +324,89 @@ void CChest::UpdateIdle2()
 // 待機状態3
 void CChest::UpdateIdle3()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle3;
+		ChangeState(EState::eIdle3);
 	}
 }
 
 // 攻撃
 void CChest::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
-	ChangeAnimation(EAnimType::eAttack);
-	if (mAnimationFrame >= 5.0f && mAnimationFrame < 10.0f)
-	{
-		AttackStart();
-	}
-
-	if (mAnimationFrame >= 20.0f && mAnimationFrame < 30.0f)
-	{
-		AttackEnd();
-	}
-
+	SetAnimationSpeed(0.5f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (mAnimationFrame >= 10.0f)
-	{
-		if (vectorp >= 45.0f)
-		{
-			// コインを生成済みフラグを初期化
-			mIsSpawnedCoinEffect = false;
-			// コインを生成していない
-			if (!mIsSpawnedCoinEffect)
-			{
-				CCoin* coin = new CCoin
-				(
-					this,
-					Position() + CVector(0.0f, 18.0f, 0.0f),
-					VectorZ(),
-					180.0f,
-					150.0f
-				);
-				coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
-				coin->Scale(10.0f, 10.0f, 10.0f);
-				coin->Rotate(-90.0f, 0.0f, 0.0f);
-				coin->SetOwner(this);
 
-				mIsSpawnedCoinEffect = true;
+	// ステップごとに処理を分ける
+	switch (mStateAttackStep)
+	{
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		mStateAttackStep++;
+		break;
+		// ステップ1 : 攻撃開始
+	case 1:
+		if (mAnimationFrame >= 5.0f && mAnimationFrame < 10.0f)
+		{
+			AttackStart();
+			mStateAttackStep++;
+		}
+		break;
+		// ステップ2 : 攻撃終了＆プレイヤーとの距離が45.0f以上の時、コイン生成
+	case 2:
+		if (mAnimationFrame >= 10.0f)
+		{
+			AttackEnd();
+			if (vectorp >= 50.0f)
+			{
+				// コインを生成済みフラグを初期化
+				mIsSpawnedCoinEffect = false;
+				// コインを生成していない
+				if (!mIsSpawnedCoinEffect)
+				{
+					CCoin* coin = new CCoin
+					(
+						this,
+						Position() + CVector(0.0f, 18.0f, 0.0f),
+						VectorZ(),
+						180.0f,
+						150.0f
+					);
+					coin->SetColor(CColor(1.0f, 1.0f, 0.0f));
+					coin->Scale(10.0f, 10.0f, 10.0f);
+					coin->Rotate(-90.0f, 0.0f, 0.0f);
+					coin->SetOwner(this);
+
+					mIsSpawnedCoinEffect = true;
+					mStateAttackStep++;
+				}
+			}
+			else
+			{
+				mStateAttackStep++;
 			}
 		}
-		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		break;
+		// ステップ3 : 攻撃終了待ち
+	case 3:
+		if (mAnimationFrame >= 23.0f)
+		{
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
 // 攻撃2
 void CChest::UpdateAttack2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 // 攻撃終了待ち
@@ -356,15 +415,13 @@ void CChest::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // ヒット
 void CChest::UpdateHit()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -376,13 +433,12 @@ void CChest::UpdateHit()
 		if (probability == 1)stan = true;
 		if (stan)
 		{
-			mState = EState::eDizzy;
+			ChangeState(EState::eDizzy);
 		}
 		else
 		{
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle2;
-			ChangeAnimation(EAnimType::eIdle2);
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -390,8 +446,6 @@ void CChest::UpdateHit()
 // 死ぬ
 void CChest::UpdateDie()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -404,14 +458,11 @@ void CChest::UpdateDie()
 // めまい(混乱)
 void CChest::UpdateDizzy()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle2;
-		ChangeAnimation(EAnimType::eIdle2);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -438,9 +489,6 @@ void CChest::UpdateRun()
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
 		}
 	}
 	// 範囲内の時、移動し追跡する
@@ -451,10 +499,7 @@ void CChest::UpdateRun()
 	// 追跡が止まった時、待機モーションへ
 	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle2;
-		ChangeAnimation(EAnimType::eIdle2);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -463,6 +508,13 @@ void CChest::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.Y(0.0f);
+
+	if (mState != EState::eRun)
+	{
+		mMoveSpeed.X(0.0f);
+		mMoveSpeed.Z(0.0f);
+	}
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -514,15 +566,7 @@ void CChest::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eAttack
-		&& mState != EState::eAttack2 && mState != EState::eAttackWait && mState != EState::eHit
-		&& mState != EState::eDie && mState != EState::eDizzy && mState != EState::eRun)
-	{
-		UpdateIdle();
-	}
-
-	if (mState == EState::eRun || mState == EState::eIdle2 || mState == EState::eAttack || mState == EState::eAttack2 ||
-		mState == EState::eHit || mState == EState::eDie || mState == EState::eDizzy || mState == EState::eAttackWait)
+	if (mState != EState::eIdle && mState != EState::eDie)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
@@ -549,11 +593,11 @@ void CChest::Update()
 			if (probability2 == 2)Attack2 = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				ChangeState(EState::eAttack2);
 			}
 			else
 			{
-				mState = EState::eAttack;
+				ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2)
@@ -574,21 +618,21 @@ void CChest::Update()
 
 	// キャラクターの更新
 	CXCharacter::Update();
-
+	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBody->Update();
 	mpColliderSphereFeet->Update();
 	mpColliderSphereFeet2->Update();
 	mpColliderSphereFeet3->Update();
 	mpColliderSphereFeet4->Update();
-
+	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColBody->Update();
 	mpDamageColFeet->Update();
 	mpDamageColFeet2->Update();
 	mpDamageColFeet3->Update();
 	mpDamageColFeet4->Update();
-
+	// 攻撃コライダー
 	mpAttackColHead->Update();
 
 	mIsGrounded = false;
@@ -694,7 +738,7 @@ void CChest::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -720,5 +764,5 @@ void CChest::TakeDamage(int damage, CObjectBase* causedObj)
 void CChest::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

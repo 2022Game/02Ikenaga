@@ -107,6 +107,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -127,18 +128,23 @@ private:
 	};
 	EState mState;	// チェストモンスターの状態
 
+	int mStateAttackStep;   // State内の攻撃でのステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
+
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 	bool mIsSpawnedCoinEffect;
 
 	CColliderLine* mpColliderLine;
 
-	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;   // キャラクター押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereFeet;   // キャラクター押し戻しコライダー(前の左足)
-	CColliderSphere* mpColliderSphereFeet2;  // キャラクター押し戻しコライダー(前の右足)
-	CColliderSphere* mpColliderSphereFeet3;  // キャラクター押し戻しコライダー(後ろの左足)
-	CColliderSphere* mpColliderSphereFeet4;  // キャラクター押し戻しコライダー(後ろの右足)
+	CColliderSphere* mpColliderSphereHead;   // キャラクターの押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;   // キャラクターの押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereFeet;   // キャラクターの押し戻しコライダー(前の左足)
+	CColliderSphere* mpColliderSphereFeet2;  // キャラクターの押し戻しコライダー(前の右足)
+	CColliderSphere* mpColliderSphereFeet3;  // キャラクターの押し戻しコライダー(後ろの左足)
+	CColliderSphere* mpColliderSphereFeet4;  // キャラクターの押し戻しコライダー(後ろの右足)
 
 	CColliderSphere* mpDamageColHead;    // ダメージを受けるコライダー(頭)
 	CColliderSphere* mpDamageColBody;    // ダメージを受けるコライダー(体)

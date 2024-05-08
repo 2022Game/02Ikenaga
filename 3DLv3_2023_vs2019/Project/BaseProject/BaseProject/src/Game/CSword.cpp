@@ -1,6 +1,7 @@
 #include "CSword.h"
 #include "CCollisionManager.h"
 #include "CCharaBase.h"
+#include "CPlayer.h"
 
 CSword::CSword()
 {
@@ -59,6 +60,9 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 
 				// UŒ‚Ï‚ÝƒŠƒXƒg‚É’Ç‰Á
 				AddAttackHitObj(chara);
+				CPlayer* player = player->Instance();
+				player->AttackRecovery();
+
 			}
 		}
 	}

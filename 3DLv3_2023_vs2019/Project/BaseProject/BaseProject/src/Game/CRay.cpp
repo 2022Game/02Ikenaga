@@ -20,15 +20,15 @@ CRay* CRay::spInstance = nullptr;
 // エイのアニメーションデータのテーブル
 const CRay::AnimData CRay::ANIM_DATA[] =
 {
-	{ "",										        true,	0.0f,	0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	0.5f},	// 待機 21.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	true,	17.0f,	0.4f},  // 攻撃 17.0f
+	{ "",										        true,	0.0f,	 0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	 0.5f},	// 待機 21.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	true,	17.0f,	 0.4f},  // 攻撃 17.0f
 	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	true,	13.0f,	0.25f},	// ヒット 13.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    true,	20.0f,	0.2f},	// 死ぬ 20.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	0.5f},	// 移動 21.0f
-	//{ "Character\\Enemy\\Ray\\animation\\RayMoveFWD.x",	true,	42.0f	},	    // 移動2 21.0f
-	//{ "Character\\Enemy\\Ray\\animation\\RayMoveLFT.x",	true,	42.0f	},	    // 左移動 21.0f
-	//{ "Character\\Enemy\\Ray\\animation\\RayMoveRGT.x",	true,	42.0f	},	    // 右移動 21.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    true,	20.0f,	0.15f},	// 死ぬ 20.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	 0.5f},	// 移動 21.0f
+	//{ "Character\\Enemy\\Ray\\animation\\RayMoveFWD.x",	true,	42.0f	 },	    // 移動2 21.0f
+	//{ "Character\\Enemy\\Ray\\animation\\RayMoveLFT.x",	true,	42.0f	 },	    // 左移動 21.0f
+	//{ "Character\\Enemy\\Ray\\animation\\RayMoveRGT.x",	true,	42.0f	 },	    // 右移動 21.0f
 };
 
 // コンストラクタ
@@ -318,7 +318,7 @@ void CRay::UpdateHit()
 void CRay::UpdateDie()
 {
 	mpWave->Stop();
-	SetAnimationSpeed(0.2f);
+	SetAnimationSpeed(0.15f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{

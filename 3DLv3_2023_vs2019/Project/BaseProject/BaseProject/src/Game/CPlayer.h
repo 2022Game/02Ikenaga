@@ -43,7 +43,7 @@ public:
 	// HP回復と特殊攻撃(SA)回数を自動回復
 	void AutomaticRecovery();
 	// 攻撃が当たったら特殊攻撃(SA)を回復
-	void AttackRecovery();
+	virtual void AttackRecovery();
 
 	//回避カウント	
 	void RollingCount();
@@ -86,6 +86,7 @@ public:
 
 	static int mHp;
 	static int mSa;
+	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
 
 private:
 	// 待機状態
@@ -144,9 +145,7 @@ private:
 	//	攻撃回数
 	int mAttackCount;
 	// 回復までのカウント
-	int healcount;
-	// 特殊攻撃の回数の回復までのカウント
-	int recoverycount;
+	int mHealCount;
 	// アニメーションの種類
 	enum class EAnimType
 	{

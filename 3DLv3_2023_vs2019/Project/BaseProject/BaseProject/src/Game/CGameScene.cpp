@@ -88,7 +88,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
-	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
+	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
@@ -255,10 +255,11 @@ void CGameScene::Load()
 	//enemy18->Position(180.0f, 0.0f, -810.0f);
 	//enemy18->Scale(40.0f, 40.0f, 40.0f);
 
-	//// チェストモンスター
-	//CChest* enemy19 = new CChest();
+	// チェストモンスター
+	CChest* enemy19 = new CChest();
 	//enemy19->Position(0.0f, 0.0f, -900.0f);
-	//enemy19->Scale(30.0f, 30.0f, 30.0f);
+	enemy19->Position(50.0f, 0.0f, 0.0f);
+	enemy19->Scale(30.0f, 30.0f, 30.0f);
 
 	//// チェストモンスター2
 	//CChest2* enemy20 = new CChest2();

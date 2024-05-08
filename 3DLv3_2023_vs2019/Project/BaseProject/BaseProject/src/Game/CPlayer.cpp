@@ -15,6 +15,7 @@
 CPlayer* CPlayer::spInstance = nullptr;
 int CPlayer::mHp;
 int CPlayer::mSa;
+int CPlayer::mRecoveryCount;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -78,8 +79,7 @@ CPlayer::CPlayer()
 	, mRollingCount(1)
 	, mAttackTime(0)
 	, mAttackCount(0)
-	, healcount(0)
-	, recoverycount(0)
+	, mHealCount(0)
 	, mStateJumpAttackStep(0)
 	, mDefaultPos(CVector::zero)
 	, mIsPlayedSlashSE(false)
@@ -89,6 +89,7 @@ CPlayer::CPlayer()
 {
 	// インスタンスの設定
 	spInstance = this;
+	mRecoveryCount = 0;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Player");
@@ -105,7 +106,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(21);
+	ChangeLevel(51);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -807,35 +808,35 @@ void CPlayer::ChangeLevel(int level)
 // HP回復と特殊攻撃(SA)の自動回復
 void CPlayer::AutomaticRecovery()
 {
-	healcount++;
-	recoverycount++;
+	mHealCount++;
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		if (healcount > 700)
+		if (mHealCount > 700)
 		{
 			mCharaStatus.hp++;
-			healcount = 0;
+			mHealCount = 0;
 		}
 	}
 	if (mCharaStatus.hp <= 0)
 	{
-		healcount = 0;
+		mHealCount = 0;
 	}
 	if (mCharaStatus.hp == mCharaMaxStatus.hp)
 	{
-		healcount = 0;
+		mHealCount = 0;
 	}
 	if (mCharaStatus.SpecialAttack < mCharaMaxStatus.SpecialAttack)
 	{
-		if (recoverycount > 400)
+		mRecoveryCount++;
+		if (mRecoveryCount > 400)
 		{
 			mCharaStatus.SpecialAttack++;
-			recoverycount = 0;
+			mRecoveryCount = 0;
 		}
 	}
 	if (mCharaStatus.SpecialAttack == mCharaMaxStatus.SpecialAttack)
 	{
-		recoverycount = 0;
+		mRecoveryCount = 0;
 	}
 }
 
@@ -1137,6 +1138,7 @@ void CPlayer::Update()
 
 	float y = Position().Y();
 	CDebugPrint::Print("高さ %f\n", y);
+	CDebugPrint::Print("回復 %d\n", mRecoveryCount);
 }
 
 // 衝突処理
