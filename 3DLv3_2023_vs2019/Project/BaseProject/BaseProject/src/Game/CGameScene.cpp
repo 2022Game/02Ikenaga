@@ -342,12 +342,6 @@ void CGameScene::Update()
 		}
 	}
 
-	// プレイヤーのHPが0以下になったら
-	if (mpPlayer->mHp <= 0)
-	{
-		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
-	}
-
 	//// レッドスライムの復活
 	//if (mpSlime->mHp <= 0)
 	//{

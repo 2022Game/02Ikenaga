@@ -227,6 +227,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;
+
 	CColliderSphere* mpColliderSphere;
 	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー
 	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー

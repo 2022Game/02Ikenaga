@@ -10,6 +10,7 @@
 #include "CShield.h"
 #include "CSlash.h"
 #include "CElectricShockEffect.h"
+#include "CSceneManager.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -106,7 +107,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(51);
+	ChangeLevel(41);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -137,7 +138,7 @@ CPlayer::CPlayer()
 		this,ELayer::ePlayer,
 		0.5f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy,ELayer::eEnemy2 });
+	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy });
 	mpColliderSphere->Position(0.0f,0.4f,0.1f);
 
 	///ダメージを受けるコライダーを作成
@@ -685,6 +686,10 @@ void CPlayer::UpdateDei()
 	ChangeAnimation(EAnimType::eDie);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
+	if (IsAnimationFinished())
+	{
+		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+	}
 }
 
 // ジャンプ攻撃
