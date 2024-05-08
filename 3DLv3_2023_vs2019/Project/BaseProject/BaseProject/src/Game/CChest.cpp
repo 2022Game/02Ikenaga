@@ -19,16 +19,16 @@ CChest* CChest::spInstance = nullptr;
 // チェストモンスターのアニメーションデータのテーブル
 const CChest::AnimData CChest::ANIM_DATA[] =
 {
-	{ "",										            true,	0.0f,	0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f,	1.0f},	// 待機 21.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	23.0f,	0.5f},	// 待機2 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	41.0f,	0.5f},	// 待機3 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	true,	25.0f,	0.5f},	// 攻撃 25.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	true,	46.0f,	0.0f},	// 攻撃 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	true,	60.0f,	0.0f},	// ヒット 19.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    true,	90.0f,	0.0f},  // 死ぬ 29.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	true,	82.0f,	0.0f},	// めまい 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	34.0f,	0.0f},	// 走る 17.0f
+	{ "",										            true,	0.0f,	 0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f,	 1.0f},	 // 待機 21.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	23.0f,	 0.5f},	 // 待機2 23.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	41.0f,	 0.5f},	 // 待機3 41.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	true,	25.0f,	 0.5f},	 // 攻撃 25.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	true,	23.0f,	 0.5f},	 // 攻撃2 23.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	true,	19.0f,	 0.4f},	 // ヒット 19.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    true,	29.0f,	0.25f},  // 死ぬ 29.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	true,	41.0f,	 0.5f},	 // めまい 41.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	17.0f,	 0.5f},	 // 走る 17.0f
 };
 
 // コンストラクタ
@@ -403,6 +403,7 @@ void CChest::UpdateAttack()
 // 攻撃2
 void CChest::UpdateAttack2()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
@@ -422,13 +423,14 @@ void CChest::UpdateAttackWait()
 // ヒット
 void CChest::UpdateHit()
 {
+	SetAnimationSpeed(0.4f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
 		// めまいをfalseにする
 		bool stan = false;
-		// 確率を最小に0最大40
+		// 確率を最小に0最大20
 		int probability = Math::Rand(0, 20);
 		if (probability == 1)stan = true;
 		if (stan)
@@ -446,6 +448,7 @@ void CChest::UpdateHit()
 // 死ぬ
 void CChest::UpdateDie()
 {
+	SetAnimationSpeed(0.25f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -458,6 +461,7 @@ void CChest::UpdateDie()
 // めまい(混乱)
 void CChest::UpdateDizzy()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
@@ -469,6 +473,7 @@ void CChest::UpdateDizzy()
 // 移動
 void CChest::UpdateRun()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
@@ -694,7 +699,10 @@ void CChest::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackColHead->SetEnable(true);
+	if (mState == EState::eAttack || mState == EState::eAttack2)
+	{
+		mpAttackColHead->SetEnable(true);
+	}
 }
 
 // 攻撃終了
