@@ -11,35 +11,38 @@
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 0.5f
-#define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.1f          // 移動速度
-#define GRAVITY 0.0625f          // 重力
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT  0.5f     // 線分コライダー
+#define WITHIN_RANGE  40.0f    // 範囲内
+#define MOVE_SPEED    0.6f     // 移動速度
+#define GRAVITY       0.0625f  // 重力
+#define WALK_RANGE    100.0f   // 追跡する範囲
+#define STOP_RANGE    24.0f    // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f   // 回転する範囲
 
 // 球体のモンスターのアニメーションデータのテーブル
 const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle.x",	true,	82.0f	},	    // 待機 41.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle2.x",	true,	46.0f	},	    // 待機2 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack.x",	true,	50.0f	},	    // 攻撃 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",	true,	50.0f	},	    // 攻撃2 21.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",	true,	42.0f	},	    // 攻撃3 17.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",	true,	50.0f	},	    // 攻撃4 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",	true,	46.0f	},	    // ヒット 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	true,	76.0f	},	        // 死ぬ 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	true,	82.0f	},	    // めまい 41.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	true,	34.0f	},	    // 走る 17.0f
+	{ "",										                   true,    0.0f,  0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle.x",	   true,   41.0f,  0.5f},  // 待機 41.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle2.x",    true,   23.0f,  0.5f},  // 待機2 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack.x",   false,  23.0f,  0.5f},  // 攻撃 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",  false,  50.0f,  0.0f},  // 攻撃2 21.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",  false,  42.0f,  0.0f},  // 攻撃3 17.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  50.0f,  0.0f},  // 攻撃4 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   true,   23.0f,  0.5f},  // ヒット 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   true,   76.0f,  0.0f},  // 死ぬ 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   82.0f,  0.0f},  // めまい 41.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	   true,   17.0f,  0.5f},  // 走る 17.0f
 };
 
 // コンストラクタ
 CBeholder::CBeholder()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mFlyingTime(0)
+	, mMoveSpeed(CVector::zero)
+	, mIsGrounded(false)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -61,6 +64,7 @@ CBeholder::CBeholder()
 	// CXCharacterの初期化
 	Init(model);
 
+	SetAnimationSpeed(0.5f);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
@@ -73,68 +77,67 @@ CBeholder::CBeholder()
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 	mpColliderLine->Position(0.0f, 20.0f, 0.0f);
 
-	mpColliderLine2 = new CColliderLine
-	(
-		this, ELayer::eField,
-		CVector(0.0f, -0.8, 0.0f),
-		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
-	);
-	mpColliderLine2->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine2->Position(0.0f, 20.0f, 0.0f);
-
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.41f, false, 2.0f
+		this, ELayer::eEnemy,
+		0.41f, false, 2.0f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(左上の触手)
 	mpColliderSphereTentacle = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.087f, false, 1.0f
+		this, ELayer::eEnemy, 
+		0.087f, false, 1.0f
 	);
 	mpColliderSphereTentacle->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(右上の触手)
 	mpColliderSphereTentacle2 = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.1f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.1f, false, 1.0f
 	);
 	mpColliderSphereTentacle2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(左下の触手)
 	mpColliderSphereTentacle3 = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.087f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.087f, false, 1.0f
 	);
 	mpColliderSphereTentacle3->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(右下の触手)
 	mpColliderSphereTentacle4 = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.087f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.087f, false, 1.0f
 	);
 	mpColliderSphereTentacle4->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(真ん中上の触手)
 	mpColliderSphereTentacle5 = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.08f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.08f, false, 1.0f
 	);
 	mpColliderSphereTentacle5->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(真ん中下の触手)
 	mpColliderSphereTentacle6 = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.087f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.087f, false, 1.0f
 	);
 	mpColliderSphereTentacle6->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageColBody = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.41f, false
+		this, ELayer::eDamageCol,
+		0.41f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
@@ -143,7 +146,8 @@ CBeholder::CBeholder()
 	// ダメージを受けるコライダーを作成(左上の触手)
 	mpDamageColTentacle = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.087f, false
+		this, ELayer::eDamageCol,
+		0.087f, false
 	);
 	mpDamageColTentacle->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTentacle->SetCollisionTags({ ETag::eWeapon });
@@ -151,7 +155,8 @@ CBeholder::CBeholder()
 	// ダメージを受けるコライダーを作成(右上の触手)
 	mpDamageColTentacle2 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.1f, false
+		this, ELayer::eDamageCol,
+		0.1f, false
 	);
 	mpDamageColTentacle2->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTentacle2->SetCollisionTags({ ETag::eWeapon });
@@ -159,7 +164,8 @@ CBeholder::CBeholder()
 	// ダメージを受けるコライダーを作成(左下の触手)
 	mpDamageColTentacle3 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.087f, false
+		this, ELayer::eDamageCol, 
+		0.087f, false
 	);
 	mpDamageColTentacle3->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTentacle3->SetCollisionTags({ ETag::eWeapon });
@@ -167,7 +173,8 @@ CBeholder::CBeholder()
 	// ダメージを受けるコライダーを作成(右下の触手)
 	mpDamageColTentacle4 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.087f, false
+		this, ELayer::eDamageCol,
+		0.087f, false
 	);
 	mpDamageColTentacle4->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTentacle4->SetCollisionTags({ ETag::eWeapon });
@@ -175,7 +182,8 @@ CBeholder::CBeholder()
 	// ダメージを受けるコライダーを作成(真ん中上の触手)
 	mpDamageColTentacle5 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.08f, false
+		this, ELayer::eDamageCol,
+		0.08f, false
 	);
 	mpDamageColTentacle5->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTentacle5->SetCollisionTags({ ETag::eWeapon });
@@ -183,7 +191,8 @@ CBeholder::CBeholder()
 	// ダメージを受けるコライダーを作成(真ん中下の触手)
 	mpDamageColTentacle6 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.087f, false
+		this, ELayer::eDamageCol,
+		0.087f, false
 	);
 	mpDamageColTentacle6->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTentacle6->SetCollisionTags({ ETag::eWeapon });
@@ -191,7 +200,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(体)
 	mpAttackColBody = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.41f, false
+		this, ELayer::eAttackCol,
+		0.41f, false
 	);
 	// 攻撃コライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpAttackColBody->SetCollisionLayers({ ELayer::eDamageCol });
@@ -200,7 +210,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(左上の触手)
 	mpAttackColTentacle = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.087f, false
+		this, ELayer::eAttackCol,
+		0.087f, false
 	);
 	mpAttackColTentacle->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle->SetCollisionTags({ ETag::ePlayer });
@@ -208,7 +219,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(右上の触手)
 	mpAttackColTentacle2 = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.1f, false
+		this, ELayer::eAttackCol,
+		0.1f, false
 	);
 	mpAttackColTentacle2->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle2->SetCollisionTags({ ETag::ePlayer });
@@ -216,7 +228,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(左下の触手)
 	mpAttackColTentacle3 = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.087f, false
+		this, ELayer::eAttackCol,
+		0.087f, false
 	);
 	mpAttackColTentacle3->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle3->SetCollisionTags({ ETag::ePlayer });
@@ -224,7 +237,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(右下の触手)
 	mpAttackColTentacle4 = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.087f, false
+		this, ELayer::eAttackCol,
+		0.087f, false
 	);
 	mpAttackColTentacle4->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle4->SetCollisionTags({ ETag::ePlayer });
@@ -232,7 +246,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(真ん中上の触手)
 	mpAttackColTentacle5 = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.08f, false
+		this, ELayer::eAttackCol,
+		0.08f, false
 	);
 	mpAttackColTentacle5->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle5->SetCollisionTags({ ETag::ePlayer });
@@ -240,7 +255,8 @@ CBeholder::CBeholder()
 	// ダメージを与えるコライダー(真ん中下の触手)
 	mpAttackColTentacle6 = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.087f, false
+		this, ELayer::eAttackCol,
+		0.087f, false
 	);
 	mpAttackColTentacle6->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle6->SetCollisionTags({ ETag::ePlayer });
@@ -313,9 +329,9 @@ CBeholder::CBeholder()
 
 CBeholder::~CBeholder()
 {
+	// 線分コライダー
 	SAFE_DELETE(mpColliderLine);
-	SAFE_DELETE(mpColliderLine2);
-
+	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereBody);
 	SAFE_DELETE(mpColliderSphereTentacle);
 	SAFE_DELETE(mpColliderSphereTentacle2);
@@ -323,7 +339,7 @@ CBeholder::~CBeholder()
 	SAFE_DELETE(mpColliderSphereTentacle4);
 	SAFE_DELETE(mpColliderSphereTentacle5);
 	SAFE_DELETE(mpColliderSphereTentacle6);
-
+	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColTentacle);
 	SAFE_DELETE(mpDamageColTentacle2);
@@ -331,7 +347,7 @@ CBeholder::~CBeholder()
 	SAFE_DELETE(mpDamageColTentacle4);
 	SAFE_DELETE(mpDamageColTentacle5);
 	SAFE_DELETE(mpDamageColTentacle6);
-
+	// 攻撃コライダー
 	SAFE_DELETE(mpAttackColBody);
 	SAFE_DELETE(mpAttackColTentacle);
 	SAFE_DELETE(mpAttackColTentacle2);
@@ -341,6 +357,7 @@ CBeholder::~CBeholder()
 	SAFE_DELETE(mpAttackColTentacle6);
 }
 
+// インスタンス
 CBeholder* CBeholder::Instance()
 {
 	return spInstance;
@@ -354,41 +371,55 @@ void CBeholder::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CBeholder::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+}
+
 // 待機状態
 void CBeholder::UpdateIdle()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle2);
+	}
+	else if (IsAnimationFinished())
+	{
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 待機状態2
 void CBeholder::UpdateIdle2()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
-	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (IsAnimationFinished())
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eIdle2);
 	}
-	else
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		ChangeAnimation(EAnimType::eIdle2);
-		if (IsAnimationFinished())
-		{
-			mState = EState::eIdle2;
-		}
+		ChangeState(EState::eRun);
+	}
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // 攻撃
 void CBeholder::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack);
 	if (mAnimationFrame >= 0.0f && mAnimationFrame < 5.0f)
 	{
@@ -409,15 +440,13 @@ void CBeholder::UpdateAttack()
 		mpLightningBall->Stop();
 		mpElectricShock->Stop();
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
 // 攻撃2
 void CBeholder::UpdateAttack2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack2);
 	if (mAnimationFrame >= 0.0f && mAnimationFrame < 5.0f)
 	{
@@ -427,30 +456,26 @@ void CBeholder::UpdateAttack2()
 	if (IsAnimationFinished())
 	{
 		// 攻撃2終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
 // 攻撃3
 void CBeholder::UpdateAttack3()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 // 攻撃4
 void CBeholder::UpdateAttack4()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eAttack4);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
-	mState = EState::eAttackWait;
+	ChangeState(EState::eAttackWait);
 }
 
 // 攻撃終了待ち
@@ -460,13 +485,14 @@ void CBeholder::UpdateAttackWait()
 	{
 		AttackEnd();
 		mpElectricShock->Stop();
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // ヒット
 void CBeholder::UpdateHit()
 {
+	SetAnimationSpeed(0.5f);
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
 	// ヒットアニメーションを開始
@@ -480,13 +506,12 @@ void CBeholder::UpdateHit()
 		if (probability == 1)stan = true;
 		if (stan)
 		{
-			mState = EState::eDizzy;
+			ChangeState(EState::eDizzy);
 		}
 		else
 		{
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle2;
-			ChangeAnimation(EAnimType::eIdle2);
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -494,8 +519,6 @@ void CBeholder::UpdateHit()
 // 死ぬ
 void CBeholder::UpdateDie()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -508,57 +531,42 @@ void CBeholder::UpdateDie()
 // めまい(混乱)
 void CBeholder::UpdateDizzy()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle2;
-		ChangeAnimation(EAnimType::eIdle2);
+		ChangeState(EState::eIdle2);
 	}
 }
 
 // 移動
 void CBeholder::UpdateRun()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
-	// 追跡をやめて止まる
-	if (vectorp <= 20.0f && vectorp >= 23.0f)
+	// 範囲内の時、移動し追跡する
+	if (vectorPos >= 24.0f && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
+		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
 			dir.Y(0.0f);
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
 		}
 	}
-	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
-	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
-	}
 	// 追跡が止まった時、待機モーションへ
-	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-		mState = EState::eIdle2;
-		ChangeAnimation(EAnimType::eIdle2);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -567,6 +575,9 @@ void CBeholder::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
+	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -620,17 +631,9 @@ void CBeholder::Update()
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eAttack 
-		&& mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttack4  && mState != EState::eAttackWait
-		&& mState != EState::eHit && mState != EState::eDie && mState != EState::eDizzy && mState != EState::eRun)
-	{
-		mState = EState::eIdle2;
-	}
-
-	if (mState == EState::eRun || mState == EState::eIdle2 || mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3
-		|| mState == EState::eAttack4 || mState == EState::eHit || mState == EState::eDie || mState == EState::eDizzy || mState == EState::eAttackWait)
+	if (mState != EState::eIdle && mState != EState::eDie)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
@@ -639,7 +642,7 @@ void CBeholder::Update()
 	{
 		mAttackTime++;
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -668,19 +671,19 @@ void CBeholder::Update()
 			if (probability4 == 11)Attack4 = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				ChangeState(EState::eAttack2);
 			}
 			else if (Attack3)
 			{
-				//mState = EState::eAttack3;
+				//ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
-				//mState = EState::eAttack4;
+				//ChangeState(EState::eAttack4);
 			}
 			else
 			{
-				mState = EState::eAttack;
+				ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
@@ -689,9 +692,9 @@ void CBeholder::Update()
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		Position(Position() + mMoveSpeed);
 	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
@@ -707,7 +710,7 @@ void CBeholder::Update()
 		}
 	}
 
-	if (Position().Y() >= 0.1f || vectorp >= 24.0f && vectorp <= WALK_RANGE)
+	if (Position().Y() >= 0.1f || vectorPos >= 24.0f && vectorPos <= WALK_RANGE)
 	{
 		mFlyingTime++;
 	}
@@ -794,7 +797,7 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			}
 		}
 	}
-	else if (self == mpColliderLine || self == mpColliderLine2)
+	else if (self == mpColliderLine)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -880,7 +883,7 @@ void CBeholder::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		mState = EState::eHit;
+		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -902,10 +905,9 @@ void CBeholder::TakeDamage(int damage, CObjectBase* causedObj)
 	}
 }
 
-
 // 死亡処理
 void CBeholder::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

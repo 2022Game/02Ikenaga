@@ -114,6 +114,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -121,25 +122,27 @@ private:
 	// 球体のモンスターの状態
 	enum class EState
 	{
-		eIdle,		// 待機
-		eIdle2,		// 待機2
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
-		eAttack4,	// 攻撃4
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eDizzy,     // めまい(混乱)
-		eRun,       // 移動
+		eIdle,		  // 待機
+		eIdle2,		  // 待機2
+		eAttack,	  // 攻撃
+		eAttack2,	  // 攻撃2
+		eAttack3,	  // 攻撃3
+		eAttack4,	  // 攻撃4
+		eAttackWait,  // 攻撃終了待ち
+		eHit,         // ヒット
+		eDie,         // 死ぬ時
+		eDizzy,       // めまい(混乱)
+		eRun,         // 移動
 	};
 	EState mState;	// 球体のモンスターの状態
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
-	CColliderLine* mpColliderLine2;
+	CColliderLine* mpColliderLine;               // 線分コライダー
 
 	CColliderSphere* mpColliderSphereBody;       // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpColliderSphereTentacle;   // キャラクター押し戻しコライダー(左上の触手)
@@ -149,21 +152,21 @@ private:
 	CColliderSphere* mpColliderSphereTentacle5;  // キャラクター押し戻しコライダー(真ん中上の触手)
 	CColliderSphere* mpColliderSphereTentacle6;  // キャラクター押し戻しコライダー(真ん中下の触手)
 
-	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColTentacle;   // ダメージを受けるコライダー(左上の触手)
-	CColliderSphere* mpDamageColTentacle2;  // ダメージを受けるコライダー(右上の触手)
-	CColliderSphere* mpDamageColTentacle3;  // ダメージを受けるコライダー(左下の触手)
-	CColliderSphere* mpDamageColTentacle4;  // ダメージを受けるコライダー(右下の触手)
-	CColliderSphere* mpDamageColTentacle5;  // ダメージを受けるコライダー(真ん中上の触手)
-	CColliderSphere* mpDamageColTentacle6;  // ダメージを受けるコライダー(真ん中下の触手)
+	CColliderSphere* mpDamageColBody;            // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColTentacle;        // ダメージを受けるコライダー(左上の触手)
+	CColliderSphere* mpDamageColTentacle2;       // ダメージを受けるコライダー(右上の触手)
+	CColliderSphere* mpDamageColTentacle3;       // ダメージを受けるコライダー(左下の触手)
+	CColliderSphere* mpDamageColTentacle4;       // ダメージを受けるコライダー(右下の触手)
+	CColliderSphere* mpDamageColTentacle5;       // ダメージを受けるコライダー(真ん中上の触手)
+	CColliderSphere* mpDamageColTentacle6;       // ダメージを受けるコライダー(真ん中下の触手)
 
-	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
-	CColliderSphere* mpAttackColTentacle;   // ダメージを与えるコライダー(左上の触手)
-	CColliderSphere* mpAttackColTentacle2;  // ダメージを与えるコライダー(右上の触手)
-	CColliderSphere* mpAttackColTentacle3;  // ダメージを与えるコライダー(左下の触手)
-	CColliderSphere* mpAttackColTentacle4;  // ダメージを与えるコライダー(右下の触手)
-	CColliderSphere* mpAttackColTentacle5;  // ダメージを与えるコライダー(真ん中上の触手)
-	CColliderSphere* mpAttackColTentacle6;  // ダメージを与えるコライダー(真ん中下の触手)
+	CColliderSphere* mpAttackColBody;            // ダメージを与えるコライダー(体)
+	CColliderSphere* mpAttackColTentacle;        // ダメージを与えるコライダー(左上の触手)
+	CColliderSphere* mpAttackColTentacle2;       // ダメージを与えるコライダー(右上の触手)
+	CColliderSphere* mpAttackColTentacle3;       // ダメージを与えるコライダー(左下の触手)
+	CColliderSphere* mpAttackColTentacle4;       // ダメージを与えるコライダー(右下の触手)
+	CColliderSphere* mpAttackColTentacle5;       // ダメージを与えるコライダー(真ん中上の触手)
+	CColliderSphere* mpAttackColTentacle6;       // ダメージを与えるコライダー(真ん中下の触手)
 	CTransform* mpRideObject;
 
 	CLightningBallEffect* mpLightningBall;  // 雷球

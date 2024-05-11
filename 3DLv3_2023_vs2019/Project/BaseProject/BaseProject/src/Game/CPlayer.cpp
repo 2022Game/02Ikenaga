@@ -107,7 +107,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(41);
+	ChangeLevel(51);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -132,17 +132,40 @@ CPlayer::CPlayer()
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 	mpColliderLine->Position(0.0f, 0.2f, 0.0f)
 		;
-	// キャラクター同士の押し戻しコライダー
-	mpColliderSphere = new CColliderSphere
+	// キャラクター同士の押し戻しコライダー(頭)
+	mpColliderSphereHead = new CColliderSphere
 	(
 		this,ELayer::ePlayer,
-		0.5f
+		0.35f
 	);
-	mpColliderSphere->SetCollisionLayers({ ELayer::eEnemy });
-	mpColliderSphere->Position(0.0f,0.4f,0.1f);
+	mpColliderSphereHead->SetCollisionLayers({ ELayer::eEnemy });
+	mpColliderSphereHead->Position(0.0f, 0.1f, 0.03f);
 
-	///ダメージを受けるコライダーを作成
-	mpDamageCol = new CColliderSphere
+	// キャラクター同士の押し戻しコライダー(体)
+	mpColliderSphereBody = new CColliderSphere
+	(
+		this, ELayer::ePlayer,
+		0.35f
+	);
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::eEnemy });
+
+	///ダメージを受けるコライダーを作成(頭)
+	mpDamageColHead = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.38f,
+		false
+	);
+	//ダメージを受けるコライダーと
+	//衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageColHead->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColHead->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eLightningBall,
+	                                ETag::eImpact,ETag::eWeapon });
+	//ダメージを受けるコライダーを少し上へずらす
+	mpDamageColHead->Position(0.0f, 0.1f, 0.03f);
+
+	///ダメージを受けるコライダーを作成(体)
+	mpDamageColBody = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
 		0.37f,
@@ -150,29 +173,24 @@ CPlayer::CPlayer()
 	);
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eLightningBall,
-	                                ETag::eImpact,ETag::eWeapon });
-	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol->Position(-0.05f, 0.3f, 0.0f);
-
-	///ダメージを受けるコライダーを作成
-	mpDamageCol2 = new CColliderSphere
-	(
-		this, ELayer::eDamageCol,
-		0.35f,
-		false
-	);
-	//ダメージを受けるコライダーと
-	//衝突判定を行うコライダーのレイヤーとタグを設定
-	mpDamageCol2->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageCol2->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eLightningBall,
+	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColBody->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eLightningBall,
 		                             ETag::eImpact,ETag::eWeapon });
-	//ダメージを受けるコライダーを少し上へずらす
-	mpDamageCol2->Position(-0.05f, 0.8f, 0.15f);
 
 	//デフォルト座標を設定
 	mDefaultPos = Position();
+
+	// キャラクターの押し戻しコライダーと
+	// ダメージを受けるコライダーをプレイヤーの頭の行列にアタッチ
+	const CMatrix* headMty = GetFrameMtx("Armature_mixamorig_Head");
+	mpColliderSphereHead->SetAttachMtx(headMty);
+	mpDamageColHead->SetAttachMtx(headMty);
+
+	// キャラクターの押し戻しコライダーと
+	// ダメージを受けるコライダーをプレイヤーの体の行列にアタッチ
+	const CMatrix* bodyMty = GetFrameMtx("Armature_mixamorig_Spine");
+	mpColliderSphereBody->SetAttachMtx(bodyMty);
+	mpDamageColBody->SetAttachMtx(bodyMty);
 
 	//剣を生成して右手に持たせる
 	mpSword = new CSword();
@@ -195,10 +213,14 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
+	// 線分コライダー
 	SAFE_DELETE(mpColliderLine);
-	SAFE_DELETE(mpColliderSphere);
-	SAFE_DELETE(mpDamageCol);
-	SAFE_DELETE(mpDamageCol2);
+	// キャラクターの押し戻しコライダー
+	SAFE_DELETE(mpColliderSphereHead);
+	SAFE_DELETE(mpColliderSphereBody);
+	// ダメージを受けるコライダー
+	SAFE_DELETE(mpDamageColHead);
+	SAFE_DELETE(mpDamageColBody);
 }
 
 CPlayer* CPlayer::Instance()
@@ -460,6 +482,8 @@ void CPlayer::UpdateJumpStart()
 
 	if (mState != EState::eJumpAttack)
 	{
+		mpDamageColHead->SetEnable(true);
+		mpDamageColBody->SetEnable(true);
 		mMoveSpeed += CVector(0.0f, JUMP_SPEED, 0.0f);
 	}
 	mIsGrounded = false;
@@ -552,8 +576,8 @@ void CPlayer::UpdateMove()
 		{
 			// 歩行アニメーションに切り替え
 			ChangeAnimation(EAnimType::eWalk);
-			mpDamageCol->SetEnable(true);
-			mpDamageCol2->SetEnable(true);
+			mpDamageColHead->SetEnable(true);
+			mpDamageColBody->SetEnable(true);
 		}
 	}
 	// 移動キーを入力していない
@@ -564,8 +588,8 @@ void CPlayer::UpdateMove()
 		{
 			// 待機アニメーションに切り替え
 			ChangeAnimation(EAnimType::eIdle);
-			mpDamageCol->SetEnable(true);
-			mpDamageCol2->SetEnable(true);
+			mpDamageColHead->SetEnable(true);
+			mpDamageColBody->SetEnable(true);
 		}
 	}
 
@@ -675,8 +699,8 @@ void CPlayer::UpdateRolling()
 	}
 	else
 	{
-		mpDamageCol->SetEnable(false);
-		mpDamageCol2->SetEnable(false);
+		mpDamageColHead->SetEnable(false);
+		mpDamageColBody->SetEnable(false);
 	}
 }
 
@@ -1136,6 +1160,14 @@ void CPlayer::Update()
 		ChangeState(EState::eJumpAttack);
 	}
 
+	// キャラクターの押し戻しコライダー
+	mpColliderSphereHead->Update();
+	mpColliderSphereBody->Update();
+
+	// ダメージを受けるコライダー
+	mpDamageColHead->Update();
+	mpDamageColBody->Update();
+
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
@@ -1164,7 +1196,7 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		}
 	}
 	// 他のキャラクターとの押し戻し処理
-	else if (self == mpColliderSphere)
+	else if (self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eEnemy || other->Layer() == ELayer::eEnemy2)
 		{

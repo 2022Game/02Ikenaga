@@ -3,6 +3,7 @@
 #include "CModel.h"
 #include "CEnemy.h"
 #include "CColliderSphere.h"
+#include "CColliderCapsule.h"
 
 class CCrackEffect;
 
@@ -118,18 +119,18 @@ private:
 	// サボテンの状態
 	enum class EState
 	{
-		eIdle,		// 戦う前の待機
-		eIdle2,		// 戦う前の待機2
-		eIdle3,     // 待機状態3
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eDizzy,     // めまい(混乱)
-		eRun,       // 移動
-	};
-	EState mState;	// サボテンの状態
+		eHit,         // ヒット
+		eIdle,		  // 戦う前の待機
+		eIdle2,		  // 戦う前の待機2
+		eIdle3,       // 待機状態3
+		eAttack,	  // 攻撃
+		eAttack2,	  // 攻撃2
+		eAttackWait,  // 攻撃終了待ち
+		eDie,         // 死ぬ時
+		eDizzy,       // めまい(混乱)
+		eRun,         // 移動
+	};				  
+	EState mState;	  // サボテンの状態
 
 	int mStateAttackStep;   // State内の攻撃でのステップ処理
 	int mStateAttack2Step;  // State内の攻撃2でのステップ処理
@@ -150,8 +151,8 @@ private:
 	CColliderSphere* mpDamageColHead;           // ダメージを受けるコライダー(頭)
 	CColliderSphere* mpDamageColBody;           // ダメージを受けるコライダー(体)
 	CColliderSphere* mpDamageColFeet;           // ダメージを受けるコライダー(足元)
-	CColliderSphere* mpDamageColLeftHand;       // ダメージを受けるコライダー(左手)
-	CColliderSphere* mpDamageColRightHand;      // ダメージを受けるコライダー(右手)
+	CColliderCapsule* mpDamageColLeftHand;      // ダメージを受けるコライダー(左手)
+	CColliderCapsule* mpDamageColRightHand;     // ダメージを受けるコライダー(右手)
 
 	CColliderSphere* mpAttackColHead;           // ダメージを与えるコライダー(頭)
 	CColliderSphere* mpAttackColLeftHand;       // ダメージを与えるコライダー(左手)

@@ -87,9 +87,9 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
-	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
-	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
-	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
+	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
+	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
+	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
@@ -239,11 +239,10 @@ void CGameScene::Load()
 	//enemy15->Position(-30.0f, 0.0f, -660.0f);
 	//enemy15->Scale(40.0f, 40.0f, 40.0f);
 
-	// サボテン
-	CCactus* enemy16 = new CCactus();
+	//// サボテン
+	//CCactus* enemy16 = new CCactus();
 	//enemy16->Position(150.0f, 0.0f, -750.0f);
-	enemy16->Position(-60.0f, 0.0f, 0.0f);
-	enemy16->Scale(30.0f, 30.0f, 30.0f);
+	//enemy16->Scale(30.0f, 30.0f, 30.0f);
 
 	//// サボテン2
 	//CCactus2* enemy17 = new CCactus2();
@@ -255,11 +254,10 @@ void CGameScene::Load()
 	//enemy18->Position(180.0f, 0.0f, -810.0f);
 	//enemy18->Scale(40.0f, 40.0f, 40.0f);
 
-	// チェストモンスター
-	CChest* enemy19 = new CChest();
+	//// チェストモンスター
+	//CChest* enemy19 = new CChest();
 	//enemy19->Position(0.0f, 0.0f, -900.0f);
-	enemy19->Position(50.0f, 0.0f, 0.0f);
-	enemy19->Scale(30.0f, 30.0f, 30.0f);
+	//enemy19->Scale(30.0f, 30.0f, 30.0f);
 
 	//// チェストモンスター2
 	//CChest2* enemy20 = new CChest2();
@@ -271,10 +269,11 @@ void CGameScene::Load()
 	//enemy21->Position(-30.0f, 0.0f, -960.0f);
 	//enemy21->Scale(30.0f, 30.0f, 30.0f);
 
-	//// 球体のモンスター
-	//CBeholder* enemy22 = new CBeholder();
+	// 球体のモンスター
+	CBeholder* enemy22 = new CBeholder();
 	//enemy22->Position(50.0f, 0.0f, 100.0f);
-	//enemy22->Scale(15.0f, 15.0f, 15.0f);
+	enemy22->Position(50.0f, 0.0f, 0.0f);
+	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	//// ボクサー
 	//CBoxer* enemy25 = new CBoxer();

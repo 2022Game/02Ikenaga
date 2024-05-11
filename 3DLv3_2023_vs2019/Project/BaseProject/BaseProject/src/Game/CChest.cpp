@@ -9,8 +9,9 @@
 CChest* CChest::spInstance = nullptr;
 
 #define ENEMY_HEIGHT  0.3f     // 線分コライダー
-#define WITHIN_RANGE  40.0f    // 範囲内
-#define MOVE_SPEED    0.12f    // 移動速度
+#define WITHIN_RANGE  30.0f    // 範囲内
+#define ATTACK_RANGE  40.0f    // 攻撃の範囲内
+#define MOVE_SPEED    0.64f    // 移動速度
 #define GRAVITY       0.0625f  // 重力
 #define WALK_RANGE    150.0f   // 追跡する範囲
 #define STOP_RANGE    32.0f    // 追跡を辞める範囲
@@ -28,7 +29,7 @@ const CChest::AnimData CChest::ANIM_DATA[] =
 	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	true,	19.0f,	 0.4f},	 // ヒット 19.0f
 	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    true,	29.0f,	0.25f},  // 死ぬ 29.0f
 	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	true,	41.0f,	 0.5f},	 // めまい 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	17.0f,	 0.5f},	 // 走る 17.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	17.0f,	 0.4f},	 // 走る 17.0f
 };
 
 // コンストラクタ
@@ -108,24 +109,6 @@ CChest::CChest()
 	mpColliderSphereFeet2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeet2->Position(0.0f, 0.1f, 0.0f);
 
-	// キャラクター押し戻し処理(後ろの左足)
-	mpColliderSphereFeet3 = new CColliderSphere
-	(
-		this, ELayer::eEnemy,
-		0.08f, false, 5.0f
-	);
-	mpColliderSphereFeet3->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
-	mpColliderSphereFeet3->Position(0.0f, 0.1f, 0.0f);
-
-	// キャラクター押し戻し処理(後ろの右足)
-	mpColliderSphereFeet4 = new CColliderSphere
-	(
-		this, ELayer::eEnemy,
-		0.08f, false, 5.0f
-	);
-	mpColliderSphereFeet4->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
-	mpColliderSphereFeet4->Position(0.0f, 0.1f, 0.0f);
-
 	// ダメージを受けるコライダーを作成(頭)
 	mpDamageColHead = new CColliderSphere
 	(
@@ -150,44 +133,26 @@ CChest::CChest()
 	mpDamageColBody->Position(0.05f, 0.0f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(前の左足)
-	mpDamageColFeet = new CColliderSphere
+	mpDamageColFeet = new CColliderCapsule
 	(
 		this, ELayer::eDamageCol,
-		0.08f, false
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.2f, 0.0f),
+		3.0f, false
 	);
 	mpDamageColFeet->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColFeet->Position(0.0f, 0.1f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(前の右足)
-	mpDamageColFeet2 = new CColliderSphere
+	mpDamageColFeet2 = new CColliderCapsule
 	(
 		this, ELayer::eDamageCol,
-		0.08f, false
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.2f, 0.0f),
+		3.0f, false
 	);
 	mpDamageColFeet2->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet2->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColFeet2->Position(0.0f, 0.1f, 0.0f);
-
-	// ダメージを受けるコライダーを作成(後ろの左足)
-	mpDamageColFeet3 = new CColliderSphere
-	(
-		this, ELayer::eDamageCol,
-		0.08f, false
-	);
-	mpDamageColFeet3->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageColFeet3->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColFeet3->Position(0.0f, 0.1f, 0.0f);
-
-	// ダメージを受けるコライダーを作成(後ろの右足)
-	mpDamageColFeet4 = new CColliderSphere
-	(
-		this, ELayer::eDamageCol,
-		0.08f, false
-	);
-	mpDamageColFeet4->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageColFeet4->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColFeet4->Position(0.0f, 0.1f, 0.0f);
 
 	// ダメージを与えるコライダー(頭)
 	mpAttackColHead = new CColliderSphere
@@ -224,39 +189,24 @@ CChest::CChest()
 	mpColliderSphereFeet2->SetAttachMtx(rightFeetMty);
 	mpDamageColFeet2->SetAttachMtx(rightFeetMty);
 
-	// 押し戻しコライダーと
-	// ダメージを受けるコライダーをチェストモンスターの後ろの左足の行列にアタッチ
-	const CMatrix* leftFeetMty2 = GetFrameMtx("Armature_RearLeftLeg02");
-	mpColliderSphereFeet3->SetAttachMtx(leftFeetMty2);
-	mpDamageColFeet3->SetAttachMtx(leftFeetMty2);
-
-	// 押し戻しコライダーと
-	// ダメージを受けるコライダーをチェストモンスターの後ろの右足の行列にアタッチ
-	const CMatrix* rightFeetMty2 = GetFrameMtx("Armature_RearRightLeg02");
-	mpColliderSphereFeet4->SetAttachMtx(rightFeetMty2);
-	mpDamageColFeet4->SetAttachMtx(rightFeetMty2);
-
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
 }
 
 CChest::~CChest()
 {
+	// 線分コライダー
 	SAFE_DELETE(mpColliderLine);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
 	SAFE_DELETE(mpColliderSphereFeet);
 	SAFE_DELETE(mpColliderSphereFeet2);
-	SAFE_DELETE(mpColliderSphereFeet3);
-	SAFE_DELETE(mpColliderSphereFeet4);
 	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColFeet);
 	SAFE_DELETE(mpDamageColFeet2);
-	SAFE_DELETE(mpDamageColFeet3);
-	SAFE_DELETE(mpDamageColFeet4);
 	// 攻撃コライダー
 	SAFE_DELETE(mpAttackColHead);
 }
@@ -306,18 +256,15 @@ void CChest::UpdateIdle2()
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (GetAnimationFrame() >= 10.0f && vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE
+		&& player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
 	}
-	else
+	if (vectorPos <= 36.0f && player->Position().Y() >= 1.0f)
 	{
-		ChangeAnimation(EAnimType::eIdle2);
-		if (IsAnimationFinished())
-		{
-			ChangeState(EState::eIdle2);
-		}
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -337,7 +284,16 @@ void CChest::UpdateAttack()
 {
 	SetAnimationSpeed(0.5f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
+
+	if (mAnimationFrame <= 30.0f)
+	{
+		// プレイヤーのいる方向へ向く
+		CVector dir = CPlayer::Instance()->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
 
 	// ステップごとに処理を分ける
 	switch (mStateAttackStep)
@@ -360,7 +316,7 @@ void CChest::UpdateAttack()
 		if (mAnimationFrame >= 10.0f)
 		{
 			AttackEnd();
-			if (vectorp >= 50.0f)
+			if (vectorPos >= ATTACK_RANGE)
 			{
 				// コインを生成済みフラグを初期化
 				mIsSpawnedCoinEffect = false;
@@ -473,21 +429,19 @@ void CChest::UpdateDizzy()
 // 移動
 void CChest::UpdateRun()
 {
-	SetAnimationSpeed(0.5f);
+	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
-	// 追跡をやめて止まる
-	if (vectorp <= STOP_RANGE && vectorp >= 35.0f)
+	// 範囲内の時、移動し追跡する
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
+		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -496,13 +450,13 @@ void CChest::UpdateRun()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	// 範囲内の時、移動し追跡する
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
+
+	if (vectorPos <= 36.0f && player->Position().Y() >= 1.0f)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		ChangeState(EState::eIdle2);
 	}
 	// 追跡が止まった時、待機モーションへ
-	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	else if (vectorPos <= STOP_RANGE || vectorPos > WALK_RANGE)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -513,13 +467,9 @@ void CChest::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Y(0.0f);
-
-	if (mState != EState::eRun)
-	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-	}
+	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -569,18 +519,21 @@ void CChest::Update()
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 && mState != EState::eDizzy || mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mAttackTime++;
+		if (vectorPos <= 45.0f)
+		{
+			mAttackTime++;
+		}
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
@@ -605,20 +558,20 @@ void CChest::Update()
 				ChangeState(EState::eAttack);
 			}
 		}
-		if (mState == EState::eAttack || mState == EState::eAttack2)
+		if (mState == EState::eAttack || mState == EState::eAttack2 || vectorPos >= WALK_RANGE)
 		{
 			mAttackTime = 0;
 		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		Position(Position() + mMoveSpeed);
 	}
 
 	if (Position().Y() >= 0.1f)
 	{
-		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+		Position(Position().X(), Position().Y() - 1.0f, Position().Z());
 	}
 
 	// キャラクターの更新
@@ -628,15 +581,11 @@ void CChest::Update()
 	mpColliderSphereBody->Update();
 	mpColliderSphereFeet->Update();
 	mpColliderSphereFeet2->Update();
-	mpColliderSphereFeet3->Update();
-	mpColliderSphereFeet4->Update();
 	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColBody->Update();
 	mpDamageColFeet->Update();
 	mpDamageColFeet2->Update();
-	mpDamageColFeet3->Update();
-	mpDamageColFeet4->Update();
 	// 攻撃コライダー
 	mpAttackColHead->Update();
 
@@ -644,6 +593,7 @@ void CChest::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print("攻撃 %d", mAttackTime);
 }
 
 // 衝突処理
@@ -685,8 +635,8 @@ void CChest::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		}
 	}
 	// キャラクター同士の衝突処理
-	else if (self == mpColliderSphereHead || self == mpColliderSphereBody || self == mpColliderSphereFeet
-		|| self == mpColliderSphereFeet2 || self == mpColliderSphereFeet3 || self == mpColliderSphereFeet4)
+	else if (self == mpColliderSphereHead || self == mpColliderSphereBody
+		|| self == mpColliderSphereFeet || self == mpColliderSphereFeet2)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
 		pushBack.Y(0.0f);

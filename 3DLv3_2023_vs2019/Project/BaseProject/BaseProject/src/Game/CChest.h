@@ -3,6 +3,7 @@
 #include "CModel.h"
 #include "CEnemy.h"
 #include "CColliderSphere.h"
+#include "CColliderCapsule.h"
 
 /*
  チェストモンスター
@@ -77,6 +78,7 @@ public:
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -115,44 +117,40 @@ private:
 	// チェストモンスターの状態
 	enum class EState
 	{
-		eIdle,		// 戦う前の待機
-		eIdle2,		// 戦う前の待機2
-		eIdle3,     // 待機状態3
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eDizzy,     // めまい(混乱)
-		eRun        // 移動
+		eIdle,		  // 戦う前の待機
+		eIdle2,		  // 戦う前の待機2
+		eIdle3,       // 待機状態3
+		eAttack,	  // 攻撃
+		eAttack2,	  // 攻撃2
+		eAttackWait,  // 攻撃終了待ち
+		eHit,         // ヒット
+		eDie,         // 死ぬ時
+		eDizzy,       // めまい(混乱)
+		eRun          // 移動
 	};
-	EState mState;	// チェストモンスターの状態
+	EState mState;	  // チェストモンスターの状態
 
 	int mStateAttackStep;   // State内の攻撃でのステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	CVector mMoveSpeed;	// 移動速度
-	bool mIsGrounded;	// 接地しているかどうか
-	bool mIsSpawnedCoinEffect;
+	CVector mMoveSpeed;  // 移動速度
+	bool mIsGrounded;	 // 接地しているかどうか
+	bool mIsSpawnedCoinEffect;  // コイン発射
 
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;           // 線分コライダー
 
 	CColliderSphere* mpColliderSphereHead;   // キャラクターの押し戻しコライダー(頭)
 	CColliderSphere* mpColliderSphereBody;   // キャラクターの押し戻しコライダー(体)
 	CColliderSphere* mpColliderSphereFeet;   // キャラクターの押し戻しコライダー(前の左足)
 	CColliderSphere* mpColliderSphereFeet2;  // キャラクターの押し戻しコライダー(前の右足)
-	CColliderSphere* mpColliderSphereFeet3;  // キャラクターの押し戻しコライダー(後ろの左足)
-	CColliderSphere* mpColliderSphereFeet4;  // キャラクターの押し戻しコライダー(後ろの右足)
 
-	CColliderSphere* mpDamageColHead;    // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBody;    // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColFeet;    // ダメージを受けるコライダー(前の左足)
-	CColliderSphere* mpDamageColFeet2;   // ダメージを受けるコライダー(前の右足)
-	CColliderSphere* mpDamageColFeet3;   // ダメージを受けるコライダー(後ろの左足)
-	CColliderSphere* mpDamageColFeet4;   // ダメージを受けるコライダー(後ろの右足)
+	CColliderSphere* mpDamageColHead;        // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;        // ダメージを受けるコライダー(体)
+	CColliderCapsule* mpDamageColFeet;       // ダメージを受けるコライダー(前の左足)
+	CColliderCapsule* mpDamageColFeet2;      // ダメージを受けるコライダー(前の右足)
 
-	CColliderSphere* mpAttackColHead;   // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
 	CTransform* mpRideObject;
 };

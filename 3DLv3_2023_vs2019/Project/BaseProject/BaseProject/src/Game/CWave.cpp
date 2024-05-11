@@ -30,7 +30,7 @@ CWave::CWave(ETag tag)
 	(
 		this,
 		ELayer::eAttackCol,
-		0.22
+		0.2
 	);
 	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer });
 	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });

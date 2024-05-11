@@ -80,7 +80,8 @@ CCactus::CCactus()
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.27f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.25f, false, 1.0f
 	);
 	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereHead->Position(0.0f, 0.0f, -0.02f);
@@ -88,7 +89,8 @@ CCactus::CCactus()
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.3f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.3f, false, 1.0f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereBody->Position(0.0f, -0.055f, 0.0f);
@@ -96,14 +98,16 @@ CCactus::CCactus()
 	// キャラクター押し戻し処理(足元)
 	mpColliderSphereFeet = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.3f, false, 3.0f
+		this, ELayer::eEnemy,
+		0.3f, false, 3.0f
 	);
 	mpColliderSphereFeet->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 
 	// キャラクター押し戻し処理(左手)
 	mpColliderSphereLeftHand = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.16f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.16f, false, 1.0f
 	);
 	mpColliderSphereLeftHand->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereLeftHand->Position(-0.12f, 0.01f, 0.0f);
@@ -111,7 +115,8 @@ CCactus::CCactus()
 	// キャラクター押し戻し処理(右手)
 	mpColliderSphereRightHand = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.16f, false, 1.0f
+		this, ELayer::eEnemy,
+		0.16f, false, 1.0f
 	);
 	mpColliderSphereRightHand->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy, ELayer::eField });
 	mpColliderSphereRightHand->Position(0.12f, 0.01f, 0.0f);
@@ -119,7 +124,8 @@ CCactus::CCactus()
 	// ダメージを受けるコライダーを作成(頭)
 	mpDamageColHead = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.27f, false
+		this, ELayer::eDamageCol,
+		0.27f, false
 	);
 	//　ダメージを受けるコライダーと
 	//　衝突判定を行うコライダーのレイヤーとタグを設定
@@ -131,7 +137,8 @@ CCactus::CCactus()
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageColBody = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.3f, false
+		this, ELayer::eDamageCol,
+		0.3f, false
 	);
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
@@ -140,24 +147,31 @@ CCactus::CCactus()
 	// ダメージを受けるコライダーを作成(足元)
 	mpDamageColFeet = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.3f, false
+		this, ELayer::eDamageCol,
+		0.3f, false
 	);
 	mpDamageColFeet->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet->SetCollisionTags({ ETag::eWeapon });
 
 	// ダメージを受けるコライダーを作成(左手)
-	mpDamageColLeftHand = new CColliderSphere
+	mpDamageColLeftHand = new CColliderCapsule
 	(
-		this, ELayer::eDamageCol,0.16f, false
+		this, ELayer::eDamageCol,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.3f, 0.0f, 0.0f),
+		4.3f, false
 	);
 	mpDamageColLeftHand->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColLeftHand->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColLeftHand->Position(-0.12f, 0.01f, 0.0f);
+	mpDamageColLeftHand->Position(0.0f, 0.0f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(右手)
-	mpDamageColRightHand = new CColliderSphere
+	mpDamageColRightHand = new CColliderCapsule
 	(
-		this, ELayer::eDamageCol,0.16f, false
+		this, ELayer::eDamageCol,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.3f, 0.0f, 0.0f),
+		4.3f, false
 	);
 	mpDamageColRightHand->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColRightHand->SetCollisionTags({ ETag::eWeapon });
@@ -166,7 +180,8 @@ CCactus::CCactus()
 	// ダメージを与えるコライダー(頭)
 	mpAttackColHead = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.27f, false
+		this, ELayer::eAttackCol,
+		0.27f, false
 	);
 	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
@@ -175,7 +190,8 @@ CCactus::CCactus()
 	// ダメージを与えるコライダー(左手)
 	mpAttackColLeftHand = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.16f, false
+		this, ELayer::eAttackCol,
+		0.16f, false
 	);
 	mpAttackColLeftHand->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColLeftHand->SetCollisionTags({ ETag::ePlayer });
@@ -197,16 +213,22 @@ CCactus::CCactus()
 	mpDamageColHead->SetAttachMtx(headMty);
 	mpAttackColHead->SetAttachMtx(headMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをサボテンの左手の行列にアタッチ
+	// 押し戻しコライダーと攻撃コライダーをサボテンの左手の行列にアタッチ
 	const CMatrix* leftHandMty = GetFrameMtx("Armature_cactus_leftHandTip");
 	mpColliderSphereLeftHand->SetAttachMtx(leftHandMty);
-	mpDamageColLeftHand->SetAttachMtx(leftHandMty);
 	mpAttackColLeftHand->SetAttachMtx(leftHandMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをサボテンの右手の行列にアタッチ
+	// ダメージを受けるコライダーをサボテンの左腕の行列にアタッチ
+    const CMatrix* leftArmMty = GetFrameMtx("Armature_cactus_leftLowerArm");
+	mpDamageColLeftHand->SetAttachMtx(leftArmMty);
+
+	// 押し戻しコライダーをサボテンの右手の行列にアタッチ
 	const CMatrix* rightHandMty = GetFrameMtx("Armature_cactus_rightHandTip");
 	mpColliderSphereRightHand->SetAttachMtx(rightHandMty);
-	mpDamageColRightHand->SetAttachMtx(rightHandMty);
+
+	// メージを受けるコライダーをサボテンの右腕の行列にアタッチ
+	const CMatrix* rightArmMty = GetFrameMtx("Armature_cactus_rightLowerArm");
+	mpDamageColRightHand->SetAttachMtx(rightArmMty);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
@@ -297,6 +319,9 @@ void CCactus::UpdateIdle2()
 // 待機状態3
 void CCactus::UpdateIdle3()
 {
+	mpColliderSphereHead->SetEnable(true);
+	mpColliderSphereBody->SetEnable(true);
+	mpColliderSphereFeet->SetEnable(true);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
@@ -389,6 +414,15 @@ void CCactus::UpdateAttack2()
 	SetAnimationSpeed(0.5f);
 	mpAttackColLeftHand->SetEnable(false);
 
+	if (mAnimationFrame <= 30.0f)
+	{
+		// プレイヤーのいる方向へ向く
+		CVector dir = CPlayer::Instance()->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
+
 	// ステップごとに処理を分ける
 	switch (mStateAttack2Step)
 	{
@@ -430,6 +464,9 @@ void CCactus::UpdateAttackWait()
 void CCactus::UpdateHit()
 {
 	mpCrack->Stop();
+	mpColliderSphereHead->SetEnable(false);
+	mpColliderSphereBody->SetEnable(false);
+	mpColliderSphereFeet->SetEnable(false);
 	SetAnimationSpeed(0.3f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -805,7 +842,7 @@ void CCactus::TakeDamage(int damage, CObjectBase* causedObj)
 		Rotation(CQuaternion::LookRotation(dir));
 
 		// ノックバックでダメージを与えた相手の方向から後ろにズラす
-		Position(Position() - dir * Scale().X() * 0.2f);
+		Position(Position() - dir * Scale().X() * 0.1f);
 	}
 }
 

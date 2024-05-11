@@ -226,11 +226,13 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColliderLine;          // 線分コライダー
 
-	CColliderSphere* mpColliderSphere;
-	CColliderSphere* mpDamageCol;   // ダメージを受けるコライダー
-	CColliderSphere* mpDamageCol2;  // ダメージを受けるコライダー
+	CColliderSphere* mpColliderSphereHead;  // キャラクターの押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
+
+	CColliderSphere* mpDamageColHead;       // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 
 	CTransform* mpRideObject;
 
