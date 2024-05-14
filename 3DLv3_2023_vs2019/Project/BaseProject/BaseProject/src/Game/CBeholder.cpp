@@ -26,12 +26,12 @@ const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle.x",	   true,   41.0f,  0.5f},  // 待機 41.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle2.x",    true,   23.0f,  0.5f},  // 待機2 23.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack.x",   false,  23.0f,  0.5f},  // 攻撃 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",  false,  50.0f,  0.0f},  // 攻撃2 21.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",  false,  21.0f,  0.4f},  // 攻撃2 21.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",  false,  42.0f,  0.0f},  // 攻撃3 17.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  50.0f,  0.0f},  // 攻撃4 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  23.0f,  0.4f},  // 攻撃4 23.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   true,   23.0f,  0.5f},  // ヒット 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   true,   76.0f,  0.0f},  // 死ぬ 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   82.0f,  0.0f},  // めまい 41.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   true,   23.0f,  0.2f},  // 死ぬ 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   41.0f,  0.5f},  // めまい 41.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	   true,   17.0f,  0.5f},  // 走る 17.0f
 };
 
@@ -41,6 +41,8 @@ CBeholder::CBeholder()
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mFlyingTime(0)
+	, mStateAttackStep(0)
+	, mStateAttack2Step(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
@@ -71,8 +73,8 @@ CBeholder::CBeholder()
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
-		CVector(0.0f, 0.0f, -0.5f),
-		CVector(0.0f, 0.0f, 0.0f)
+		CVector(0.0f, -0.8, 0.0f),
+		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 	mpColliderLine->Position(0.0f, 20.0f, 0.0f);
@@ -83,7 +85,7 @@ CBeholder::CBeholder()
 		this, ELayer::eEnemy,
 		0.41f, false, 2.0f
 	);
-	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy, ELayer::eField });
 
 	// キャラクター押し戻し処理(左上の触手)
 	mpColliderSphereTentacle = new CColliderSphere
@@ -376,6 +378,8 @@ void CBeholder::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
+	mStateAttackStep = 0;
+	mStateAttack2Step = 0;
 }
 
 // 待機状態
@@ -406,7 +410,8 @@ void CBeholder::UpdateIdle2()
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
+	if (GetAnimationFrame() >=10.0f && vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE
+		&& player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -420,43 +425,76 @@ void CBeholder::UpdateIdle2()
 void CBeholder::UpdateAttack()
 {
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eAttack);
-	if (mAnimationFrame >= 0.0f && mAnimationFrame < 5.0f)
+
+	if (mAnimationFrame <= 30.0f)
 	{
-		AttackStart();
+		// プレイヤーのいる方向へ向く
+		CVector dir = CPlayer::Instance()->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
 	}
 
-	if (mAnimationFrame >= 10.0f)
+	// ステップごとに処理を分ける
+	switch (mStateAttackStep)
 	{
-		if (!mpLightningBall->IsThrowing()&& !mpElectricShock->IsThrowing())
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		mStateAttackStep++;
+		break;
+		// ステップ1 : 攻撃開始＋電気ボール生成
+	case 1:
+		if (mAnimationFrame >= 3.0f)
 		{
-			mpLightningBall->Start();
-			mpElectricShock->Start();
+			AttackStart();
+			if (!mpLightningBall->IsThrowing() && !mpElectricShock->IsThrowing())
+			{
+				mpLightningBall->Start();
+				mpElectricShock->Start();
+				mStateAttackStep++;
+			}
 		}
-	}
-
-	if (IsAnimationFinished())
-	{
-		mpLightningBall->Stop();
-		mpElectricShock->Stop();
-		// 攻撃終了待ち状態へ移行
-		ChangeState(EState::eAttackWait);
+		break;
+		// ステップ2 : 攻撃終了＋電気ボール削除＋攻撃アニメーション終了待ち
+	case 2:
+		if (mAnimationFrame >=23.0f)
+		{
+			AttackEnd();
+			mpLightningBall->Stop();
+			mpElectricShock->Stop();
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
 // 攻撃2
 void CBeholder::UpdateAttack2()
 {
-	ChangeAnimation(EAnimType::eAttack2);
-	if (mAnimationFrame >= 0.0f && mAnimationFrame < 5.0f)
-	{
-		AttackStart();
-	}
+	SetAnimationSpeed(0.4f);
 
-	if (IsAnimationFinished())
+	// ステップごとに処理を分ける
+	switch (mStateAttack2Step)
 	{
-		// 攻撃2終了待ち状態へ移行
-		ChangeState(EState::eAttackWait);
+		// ステップ0 : 攻撃アニメーション開始＋攻撃開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack2);
+		if (mAnimationFrame >= 3.0f)
+		{
+			AttackStart();
+			mStateAttack2Step++;
+		}
+		break;
+		// ステップ1 : 攻撃アニメーション終了待ち
+	case 1:
+		if (mAnimationFrame >= 20.0f)
+		{
+			AttackEnd();
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -472,6 +510,7 @@ void CBeholder::UpdateAttack3()
 // 攻撃4
 void CBeholder::UpdateAttack4()
 {
+	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eAttack4);
 	AttackStart();
 	// 攻撃2終了待ち状態へ移行
@@ -484,6 +523,7 @@ void CBeholder::UpdateAttackWait()
 	if (IsAnimationFinished())
 	{
 		AttackEnd();
+		mpLightningBall->Stop();
 		mpElectricShock->Stop();
 		ChangeState(EState::eIdle2);
 	}
@@ -501,7 +541,7 @@ void CBeholder::UpdateHit()
 	{
 		// めまいをfalseにする
 		bool stan = false;
-		// 確率を最小に0最大40
+		// 確率を最小に0最大20
 		int probability = Math::Rand(0, 20);
 		if (probability == 1)stan = true;
 		if (stan)
@@ -519,6 +559,7 @@ void CBeholder::UpdateHit()
 // 死ぬ
 void CBeholder::UpdateDie()
 {
+	SetAnimationSpeed(0.2f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -531,6 +572,7 @@ void CBeholder::UpdateDie()
 // めまい(混乱)
 void CBeholder::UpdateDizzy()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
 	if (IsAnimationFinished())
 	{
@@ -550,7 +592,7 @@ void CBeholder::UpdateRun()
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
-	if (vectorPos >= 24.0f && vectorPos <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 		// 回転する範囲であれば
@@ -562,6 +604,11 @@ void CBeholder::UpdateRun()
 			dir.Normalize();
 			Rotation(CQuaternion::LookRotation(dir));
 		}
+	}
+
+	if (vectorPos <= 28.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle2);
 	}
 	// 追跡が止まった時、待機モーションへ
 	if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
@@ -638,7 +685,7 @@ void CBeholder::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
 
@@ -671,7 +718,7 @@ void CBeholder::Update()
 			if (probability4 == 11)Attack4 = true;
 			if (Attack2)
 			{
-				ChangeState(EState::eAttack2);
+				//ChangeState(EState::eAttack2);
 			}
 			else if (Attack3)
 			{
@@ -692,30 +739,26 @@ void CBeholder::Update()
 		}
 	}
 
-	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		Position(Position() + mMoveSpeed);
 	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime <= 200 && Position().Y() <= 0.0f)
+		mFlyingTime++;
+		if (mFlyingTime <= 200 && mFlyingTime > 0)
 		{
 			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
 		}
-
-		if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
-		{
-			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
-		}
 	}
 
-	if (Position().Y() >= 0.1f || vectorPos >= 24.0f && vectorPos <= WALK_RANGE)
+	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
 	{
-		mFlyingTime++;
+		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
-	if (Position().Y() <= 0.0f)
+	if (Position().Y() <= -0.05f)
 	{
 		mFlyingTime = 0;
 	}
@@ -725,7 +768,9 @@ void CBeholder::Update()
 	}
 
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	//CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
+	CDebugPrint::Print(" 飛行: %d\n", mFlyingTime);
+	float y = Position().Y();
+	CDebugPrint::Print(" 高さ: %f\n", y);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -797,7 +842,7 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColliderLine || self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eField)
 		{

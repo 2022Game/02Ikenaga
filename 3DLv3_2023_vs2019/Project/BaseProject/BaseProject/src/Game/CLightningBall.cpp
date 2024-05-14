@@ -3,7 +3,7 @@
 #include "Easing.h"
 
 // 雷球のスケール値の最大値
-#define FLAME_SCALE 100.0f
+#define FLAME_SCALE 80.0f
 // 雷球のスケール値が最大値になるまでの時間
 #define FLAME_SCALE_ANIM_TIME 3.0f
 

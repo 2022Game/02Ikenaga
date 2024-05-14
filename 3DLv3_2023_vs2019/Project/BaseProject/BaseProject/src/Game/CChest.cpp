@@ -262,7 +262,7 @@ void CChest::UpdateIdle2()
 	{
 		ChangeState(EState::eRun);
 	}
-	if (vectorPos <= 36.0f && player->Position().Y() >= 1.0f)
+	if (vectorPos <= 28.0f && player->Position().Y() >= 1.0f)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -593,7 +593,6 @@ void CChest::Update()
 
 	// HPƒQ[ƒW‚ÉŒ»İ‚ÌHP‚ğİ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print("UŒ‚ %d", mAttackTime);
 }
 
 // Õ“Ëˆ—

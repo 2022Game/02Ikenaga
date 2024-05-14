@@ -2,19 +2,13 @@
 #include "CImage.h"
 #include "Maths.h"
 #include "CCamera.h"
-
-// ゲージのフレーム画像のファイルパス
-//#define FRAME_IMAGE "Character\\Player\\HP\\Frame.png"
-//ゲージのバー画像のファイルパス
-//#define BAR_IMAGE "UI\\white.png"
-// ゲージのふち
-//#define EDGE_IMAGE "Character\\Player\\HP\\FrameEdge.png"
+#include "CPlayer.h"
 
 // フレームの横のサイズ
 #define FRAME_SIZE_X (450.0f)
 // フレームの縦のサイズ
 #define FRAME_SIZE_Y (40.0f)
-// 緑の幅
+// ゲージの幅
 #define FRAME_BORDER (2.0f)
 // バーの横のサイズ
 #define BAR_SIZE_X (FRAME_SIZE_X - FRAME_BORDER*2.0f)
@@ -36,10 +30,14 @@ CHpGauge::CHpGauge(bool is3dGauge)
 	, mValue(100)
 	, mCenterRatio(0.0f, 0.0f)
 	, mScale(1.0f)
-	,mIs3dGauge(is3dGauge)
+	, mIs3dGauge(is3dGauge)
+	, mDamageBarTime(0)
 {
 	mpFrameImage = new CImage("HpFrame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
+
+	mpDamagaBarImage = new CImage("HpGauge");
+	mpDamagaBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
 	mpBarImage = new CImage("HpGauge");
 	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
@@ -61,6 +59,7 @@ void CHpGauge::Kill()
 {
 	CTask::Kill();
 	mpFrameImage->Kill();
+	mpDamagaBarImage->Kill();
 	mpBarImage->Kill();
 	mpEdgeImage->Kill();
 }
@@ -70,9 +69,8 @@ void CHpGauge::SetShow(bool isShow)
 {
 	// ベースクラスの表示設定処理
 	CTask::SetShow(isShow);
-
-	//
 	mpFrameImage->SetShow(isShow);
+	mpDamagaBarImage->SetShow(isShow);
 	mpBarImage->SetShow(isShow);
 	mpEdgeImage->SetShow(isShow);
 }
@@ -142,6 +140,7 @@ void CHpGauge::Update()
 	mpFrameImage->SetPos(mPosition);
 	CVector2 barPos = mPosition;
 	barPos.X(barPos.X() - FRAME_SIZE_X * mCenterRatio.X() * mScale);
+	mpDamagaBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
 	mpBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
 	mpEdgeImage->SetPos(mPosition);
 
@@ -152,24 +151,54 @@ void CHpGauge::Update()
 	// バーのサイズを最大値と現在値から求める
 	float percent = Math::Clamp01((float)mValue / mMaxValue);
 	CVector2 size = CVector2(BAR_SIZE_X * percent, BAR_SIZE_Y) * mScale;
+
+	// プレイヤー
+	if (mValue < mMaxValue)
+	{
+		mDamageBarTime++;
+	}
+
+	if (mDamageBarTime > 100)
+	{
+		mpDamagaBarImage->SetSize(size);
+		mDamageBarTime = 0;
+	}
+
+	// 敵
+	if (mIs3dGauge)
+	{
+		mpDamagaBarImage->SetSize(size);
+	}
 	mpBarImage->SetSize(size);
+
+	CDebugPrint::Print("時間 %d\n", mDamageBarTime);
 
     // フレームとバーの中心位置を設定
 	mpFrameImage->SetCenter
 	(
-		FRAME_SIZE_X * mCenterRatio.X()*mScale,
+		FRAME_SIZE_X * mCenterRatio.X()* mScale,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
+
+	mpDamagaBarImage->SetCenter
+	(
+		0.0f,
+		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
+	);
+
 	mpBarImage->SetCenter
 	(
 		0.0f,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
+
 	mpEdgeImage->SetCenter
 	(
 		FRAME_SIZE_X * mCenterRatio.X() * mScale,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
+	
+	mpDamagaBarImage->SetColor(CColor::red);
 
 	// HPの割合でバーの色を変更
 	CColor color;

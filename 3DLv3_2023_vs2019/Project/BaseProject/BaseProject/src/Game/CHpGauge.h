@@ -8,16 +8,6 @@ HPゲージ
 */
 class CHpGauge : public CUIBase
 {
-private:
-	CImage* mpFrameImage;  // ゲージのフレームのイメージ
-	CImage* mpBarImage;    // ゲージのバーのイメージ	
-	CImage* mpEdgeImage;   // ゲージのふち
-	int mMaxValue;         // ポイントの最大値
-	int mValue;            // ポイントの現在値
-	CVector2 mCenterRatio; // 中心位置の割合
-	float mScale;          // HPゲージのスケール値
-	bool mIs3dGauge;       // #D空間に配置するゲージかどうか
-
 public:
 	// コンストラクタ
 	CHpGauge(bool is3dGauge);
@@ -43,4 +33,15 @@ public:
 
 	// 更新
 	void Update();
+private:
+	CImage* mpFrameImage;      // ゲージのフレームのイメージ
+	CImage* mpDamagaBarImage;  // ダメージバーのイメージ
+	CImage* mpBarImage;        // ゲージのバーのイメージ
+	CImage* mpEdgeImage;       // ゲージのふち
+	int mMaxValue;             // ポイントの最大値
+	int mValue;                // ポイントの現在値
+	CVector2 mCenterRatio;     // 中心位置の割合
+	float mScale;              // HPゲージのスケール値
+	bool mIs3dGauge;           // 3D空間に配置するゲージかどうか
+	int mDamageBarTime;        // ダメージバーの時間
 };

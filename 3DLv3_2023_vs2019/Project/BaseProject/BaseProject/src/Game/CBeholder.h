@@ -136,6 +136,9 @@ private:
 	};
 	EState mState;	// 球体のモンスターの状態
 
+	int mStateAttackStep;    // State内の攻撃でのステップ処理
+	int mStateAttack2Step;   // State内の攻撃2でのステップ処理
+
 	// 状態を切り替え
 	void ChangeState(EState state);
 
