@@ -30,7 +30,7 @@ const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",  false,  42.0f,  0.0f},  // UŒ‚3 17.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  23.0f,  0.4f},  // UŒ‚4 23.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   true,   23.0f,  0.5f},  // ƒqƒbƒg 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   true,   23.0f,  0.2f},  // €‚Ê 23.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   false,   23.0f,  0.2f},  // €‚Ê 23.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   41.0f,  0.5f},  // ‚ß‚Ü‚¢ 41.0f
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	   true,   17.0f,  0.5f},  // ‘–‚é 17.0f
 };

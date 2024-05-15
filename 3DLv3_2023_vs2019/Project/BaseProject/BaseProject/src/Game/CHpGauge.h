@@ -36,12 +36,17 @@ public:
 private:
 	CImage* mpFrameImage;      // ゲージのフレームのイメージ
 	CImage* mpDamagaBarImage;  // ダメージバーのイメージ
-	CImage* mpBarImage;        // ゲージのバーのイメージ
+	CImage* mpHpBarImage;      // Hpゲージのバーのイメージ
 	CImage* mpEdgeImage;       // ゲージのふち
+
 	int mMaxValue;             // ポイントの最大値
 	int mValue;                // ポイントの現在値
+
 	CVector2 mCenterRatio;     // 中心位置の割合
 	float mScale;              // HPゲージのスケール値
 	bool mIs3dGauge;           // 3D空間に配置するゲージかどうか
-	int mDamageBarTime;        // ダメージバーの時間
+
+	int mDamageValue;          // ダメージバー表示用のポイント
+	float mDamageWaitTime;     // ダメージバーが減少するまでの残り時間
+	float mDamageElapsedTime;  // ダメージバーの減少時の経過時間
 };

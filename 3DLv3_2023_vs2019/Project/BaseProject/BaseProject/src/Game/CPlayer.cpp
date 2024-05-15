@@ -42,7 +42,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogGuardHit.x",   false,	47.0f	},  // ガードヒット 47.0f
 	{ "Character\\Player\\animation\\DogRolling.x",	   true,	43.0f	},  // 回避 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",   true,	43.0f	},  // 衝撃
-	{ "Character\\Player\\animation\\DogDie.x",	       true,	235.0f	},  // 死ぬ
+	{ "Character\\Player\\animation\\DogDie.x",	       false,	235.0f	},  // 死ぬ
 	{ "Character\\Player\\animation\\DogJumpAttack.x", false,	172.0f	},  // ジャンプ攻撃
 };
 
@@ -1216,16 +1216,17 @@ void CPlayer::Render()
 //被ダメージ処理
 void CPlayer::TakeDamage(int damage, CObjectBase* causedObj)
 {
-	if (mCharaStatus.hp -= damage)
+	if (mCharaStatus.hp <= 0)return;
+
+	mCharaStatus.hp -= damage;
+	
+	if (mState == EState::eGuard)
 	{
-		if (mState == EState::eGuard)
-		{
-			ChangeState(EState::eGuardHit);
-		}
-		else
-		{
-			ChangeState(EState::eHit);
-		}
+		ChangeState(EState::eGuardHit);
+	}
+	else
+	{
+		ChangeState(EState::eHit);
 	}
 
 	// ダメージを受けたら、移動を停止

@@ -24,11 +24,11 @@ const CChest::AnimData CChest::ANIM_DATA[] =
 	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f,	 1.0f},	 // ‘Ò‹@ 21.0f
 	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	23.0f,	 0.5f},	 // ‘Ò‹@2 23.0f
 	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	41.0f,	 0.5f},	 // ‘Ò‹@3 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	true,	25.0f,	 0.5f},	 // UŒ‚ 25.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	true,	23.0f,	 0.5f},	 // UŒ‚2 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	true,	19.0f,	 0.4f},	 // ƒqƒbƒg 19.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    true,	29.0f,	0.25f},  // €‚Ê 29.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	true,	41.0f,	 0.5f},	 // ‚ß‚Ü‚¢ 41.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	false,	25.0f,	 0.5f},	 // UŒ‚ 25.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	false,	23.0f,	 0.5f},	 // UŒ‚2 23.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	false,	19.0f,	 0.4f},	 // ƒqƒbƒg 19.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    false,	29.0f,	0.25f},  // €‚Ê 29.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	false,	41.0f,	 0.5f},	 // ‚ß‚Ü‚¢ 41.0f
 	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	17.0f,	 0.4f},	 // ‘–‚é 17.0f
 };
 

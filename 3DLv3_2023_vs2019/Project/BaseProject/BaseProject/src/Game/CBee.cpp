@@ -24,11 +24,11 @@ CBee* CBee::spInstance = nullptr;
 const CBee::AnimData CBee::ANIM_DATA[] =
 {
 	{ "",										        true,	0.0f,	 0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	 0.5f},	// 待機 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	true,	17.0f,	 0.3f},	// 攻撃 17.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	true,	13.0f,	0.25f},	// ヒット 13.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    true,	20.0f,	0.15f},	// 死ぬ 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	 0.5f},	// 移動2 21.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	 0.5f},	 // 待機 20.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	false,	17.0f,	 0.3f},	 // 攻撃 17.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	true,	13.0f,	0.25f},	 // ヒット 13.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    false,	20.0f,	0.15f},	 // 死ぬ 20.0f
+	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	 0.5f},	 // 移動2 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveBWD.x",	true,	42.0f	},	    // 移動 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveLFT.x",	true,	42.0f	},	    // 左移動 21.0f
 	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveRGT.x",	true,	42.0f	},	    // 右移動 21.0f

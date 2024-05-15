@@ -24,14 +24,21 @@
 // スケール値の最大値
 #define SCALE_MAX 1.5f
 
+// ダメージバーが減少を始めるまでの待ち時間
+#define DAMAGE_WAIT_TIME 1.0f
+// ダメージポイントが1減少するのにかかる時間
+#define DAMAGE_SUB_TIME 0.001f
+
 // コンストラクタ
 CHpGauge::CHpGauge(bool is3dGauge)
-	:mMaxValue(100)
+	: mMaxValue(100)
 	, mValue(100)
+	, mDamageValue(100)
 	, mCenterRatio(0.0f, 0.0f)
 	, mScale(1.0f)
 	, mIs3dGauge(is3dGauge)
-	, mDamageBarTime(0)
+	, mDamageWaitTime(0.0f)
+	, mDamageElapsedTime(0.0f)
 {
 	mpFrameImage = new CImage("HpFrame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
@@ -39,8 +46,8 @@ CHpGauge::CHpGauge(bool is3dGauge)
 	mpDamagaBarImage = new CImage("HpGauge");
 	mpDamagaBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
-	mpBarImage = new CImage("HpGauge");
-	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
+	mpHpBarImage = new CImage("HpGauge");
+	mpHpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
 	mpEdgeImage = new CImage("FrameEdge");
 	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
@@ -60,7 +67,7 @@ void CHpGauge::Kill()
 	CTask::Kill();
 	mpFrameImage->Kill();
 	mpDamagaBarImage->Kill();
-	mpBarImage->Kill();
+	mpHpBarImage->Kill();
 	mpEdgeImage->Kill();
 }
 
@@ -71,7 +78,7 @@ void CHpGauge::SetShow(bool isShow)
 	CTask::SetShow(isShow);
 	mpFrameImage->SetShow(isShow);
 	mpDamagaBarImage->SetShow(isShow);
-	mpBarImage->SetShow(isShow);
+	mpHpBarImage->SetShow(isShow);
 	mpEdgeImage->SetShow(isShow);
 }
 
@@ -84,6 +91,20 @@ void CHpGauge::SetMaxValue(int value)
 // 現在値
 void CHpGauge::SetValue(int value)
 {
+	// ダメージを受けた場合は、ダメージ関連のタイマーをリセット
+	if (value < mValue)
+	{
+		mDamageWaitTime = DAMAGE_WAIT_TIME;
+		mDamageElapsedTime = 0.0f;
+	}
+	else
+	{
+		if (value > mDamageValue)
+		{
+			mDamageValue = value;
+		}
+	}
+
 	mValue = value;
 }
 
@@ -136,80 +157,94 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 // 更新
 void CHpGauge::Update()
 {
+	// 現在HPがダメージバー表示用のHPより小さい場合は
+	if (mValue < mDamageValue)
+	{
+		// ダメージポイント減少までの待ち時間
+		if (mDamageWaitTime > 0.0f)
+		{
+			mDamageWaitTime -= Time::DeltaTime();
+		}
+		// ダメージポイント減少中
+		else
+		{
+			// DAMAGE_SUB_TIMEの時間を経過する度に、ダメージポイント1減少させる
+			if (mDamageElapsedTime >= DAMAGE_SUB_TIME)
+			{
+				mDamageValue -= 5;
+				if (mDamageValue < mValue)
+				{
+					mDamageValue = mValue;
+				}
+				mDamageElapsedTime -= DAMAGE_SUB_TIME;
+			}
+			mDamageElapsedTime += Time::DeltaTime();
+		}
+	}
+
+	// ダメージバーのサイズをダメージポイントとHPの最大値で判断する
+	float damageBer = Math::Clamp01((float)mDamageValue / mMaxValue);
+	CVector2 damageSize = CVector2(BAR_SIZE_X * damageBer, BAR_SIZE_Y) * mScale;	
+	mpDamagaBarImage->SetSize(damageSize);
+
 	// ゲージのフレームバーの位置を設定
 	mpFrameImage->SetPos(mPosition);
 	CVector2 barPos = mPosition;
 	barPos.X(barPos.X() - FRAME_SIZE_X * mCenterRatio.X() * mScale);
 	mpDamagaBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
-	mpBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
+	mpHpBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
 	mpEdgeImage->SetPos(mPosition);
 
 	// フレームサイズを変更
 	mpFrameImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
 	mpEdgeImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
 
-	// バーのサイズを最大値と現在値から求める
+	// HPバーのサイズを最大値と現在値から求める
 	float percent = Math::Clamp01((float)mValue / mMaxValue);
 	CVector2 size = CVector2(BAR_SIZE_X * percent, BAR_SIZE_Y) * mScale;
+	mpHpBarImage->SetSize(size);
 
-	// プレイヤー
-	if (mValue < mMaxValue)
-	{
-		mDamageBarTime++;
-	}
-
-	if (mDamageBarTime > 100)
-	{
-		mpDamagaBarImage->SetSize(size);
-		mDamageBarTime = 0;
-	}
-
-	// 敵
-	if (mIs3dGauge)
-	{
-		mpDamagaBarImage->SetSize(size);
-	}
-	mpBarImage->SetSize(size);
-
-	CDebugPrint::Print("時間 %d\n", mDamageBarTime);
-
-    // フレームとバーの中心位置を設定
+    // フレームの中心位置を設定
 	mpFrameImage->SetCenter
 	(
 		FRAME_SIZE_X * mCenterRatio.X()* mScale,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
 
+	// ダメージバーの中心位置を設定
 	mpDamagaBarImage->SetCenter
 	(
 		0.0f,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
 
-	mpBarImage->SetCenter
+	// Hpバーの中心位置を設定
+	mpHpBarImage->SetCenter
 	(
 		0.0f,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
 
+	// ふちの中心位置を設定
 	mpEdgeImage->SetCenter
 	(
 		FRAME_SIZE_X * mCenterRatio.X() * mScale,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
 	
+	// ダメージバーを赤色に設定
 	mpDamagaBarImage->SetColor(CColor::red);
 
 	// HPの割合でバーの色を変更
 	CColor color;
-	// 10%以下は赤色
-	if (percent <= 0.1f) color = CColor(1.0f, 0.0f, 0.0f);
+	// 10%以下は橙色
+	if (percent <= 0.1f) color = CColor(1.0f, 0.6f, 0.0f);
 	// 30%以下は黄色
 	else if (percent <= 0.3f)color = CColor(1.0f, 1.0f, 0.0f);
 	// それ以外は緑色
 	else color = CColor(0.0f, 1.0f,0.0f);
 	// バーに色を設定
-	mpBarImage->SetColor(color);
+	mpHpBarImage->SetColor(color);
 
 	// 3D空間に配置するゲージは、残りのHPが0なら非表示にする
 	if (mIs3dGauge && mValue <= 0)
