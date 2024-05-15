@@ -1,6 +1,7 @@
 #include "CLightningBall.h"
 #include "CCharaBase.h"
 #include "Easing.h"
+#include "Maths.h"
 
 // 雷球のスケール値の最大値
 #define FLAME_SCALE 80.0f
@@ -12,6 +13,14 @@
 // 雷のエフェクトのアニメーションデータ
 //TexAnimData CLightningBall::msAnimData = TexAnimData(7, 2, false, 64, ANIM_TIME);
 
+CLightningBall* CLightningBall::spInstance = nullptr;
+
+// インスタンス
+CLightningBall* CLightningBall::Instance()
+{
+	return spInstance;
+}
+
 // コンストラクタ
 CLightningBall::CLightningBall(ETag tag)
 	: CBillBoardImage("Effect/Ball.png", ETag::eLightningBall, ETaskPauseType::eGame)
@@ -19,6 +28,8 @@ CLightningBall::CLightningBall(ETag tag)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 {
+	//インスタンスの設定
+	spInstance = this;
 
 	mpCollider = new CColliderSphere
 	(
@@ -85,17 +96,17 @@ void CLightningBall::Collision(CCollider* self, CCollider* other, const CHitInfo
 		if (chara != nullptr)
 		{
 			// 既に攻撃済みのキャラでなければ
-			//if (!IsAttackHitObj(chara))
-			//{
+			if (!IsAttackHitObj(chara))
+			{
 				// 与えるダメージを計算
-			int damage = CalcDamage(0, chara);
+				int damage = CalcDamage(mOwner, chara);
 
-			// ダメージを与える
-			chara->TakeDamage(damage, 0);
+				// ダメージを与える
+				chara->TakeDamage(damage, mOwner);
 
-			// 攻撃済みリストに追加
-		   // AddAttackHitObj(chara);
-		//}
+				// 攻撃済みリストに追加
+				AddAttackHitObj(chara);
+			}
 		}
 	}
 }

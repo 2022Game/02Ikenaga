@@ -54,7 +54,10 @@ bool CSound::Load(std::string path, bool dontDelete)
 	MMCKINFO mmckinfo; PCMWAVEFORMAT pcmwf; MMRESULT mmret;
 	memset(&g_mmioinfo, 0x00, sizeof(g_mmioinfo));
 	g_hmmio = mmioOpen(const_cast<TCHAR*>(filePath.c_str()), &g_mmioinfo, MMIO_READ);
-	if (g_hmmio == NULL) return false;
+	if (g_hmmio == NULL)
+	{
+		return false;
+	}
 
 	memset(&g_riffchunkinfo, 0x00, sizeof(g_riffchunkinfo));
 	g_riffchunkinfo.fccType = mmioFOURCC('W', 'A', 'V', 'E');
@@ -131,7 +134,10 @@ bool CSound::Load(std::string path, bool dontDelete)
 
 	// 1つ目の音声再生用の情報データを生成しておく
 	bool success = CreateAudioSource();
-	if (!success) return false;
+	if (!success)
+	{
+		return false;
+	}
 
 	mSampleCount = g_datachunkinfo.cksize / g_wfx.nBlockAlign;
 
@@ -142,7 +148,10 @@ bool CSound::Load(std::string path, bool dontDelete)
 bool CSound::CreateAudioSource()
 {
 	IXAudio2SourceVoice* sv = CSoundManager::Instance()->CreateSourceVoice(&g_wfx);
-	if (sv == nullptr) return false;
+	if (sv == nullptr)
+	{
+		return false;
+	}
 
 	CAudioSource source;
 	source.voice = sv;
@@ -155,6 +164,8 @@ bool CSound::CreateAudioSource()
 
 	// リストに追加
 	mAudioSources.push_back(source);
+
+	return true;
 }
 
 // 音声を再生していないインデックスを取得

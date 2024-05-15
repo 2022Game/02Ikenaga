@@ -6,6 +6,9 @@
 class CLightningBall : public CBillBoardImage
 {
 public:
+	//インスタンスのポインタの取得
+	static CLightningBall* Instance();
+
 	// コンストラクタ
 	CLightningBall(ETag tag);
 	// デストラクタ
@@ -39,6 +42,7 @@ public:
 	void Update() override;
 
 private:
+	static CLightningBall* spInstance;
 	// アニメーションデータ
 	//static TexAnimData msAnimData;
 	CVector mMoveSpeed;	// 移動速度

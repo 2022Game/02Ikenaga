@@ -123,9 +123,6 @@ void CLightningBallEffect::CreateLightningBall()
 	lightningBall->SetColor(FLAME_COLOR);
 	// 加算ブレンドにして、雷球が発光しているように見せる
 	lightningBall->SetBlendType(EBlend::eAdd);
-
-	// 作成した雷のエフェクトをリストに追加
-	//mLightningBall.push_back(lightningBall);
 }
 
 // 更新

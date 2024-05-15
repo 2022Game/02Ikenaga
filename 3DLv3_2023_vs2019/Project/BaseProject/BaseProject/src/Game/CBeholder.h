@@ -4,6 +4,7 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 
+class CLightningBall;
 class CLightningBallEffect;
 class CElectricShockEffect;
 
@@ -172,6 +173,7 @@ private:
 	CColliderSphere* mpAttackColTentacle6;       // ダメージを与えるコライダー(真ん中下の触手)
 	CTransform* mpRideObject;
 
+	CLightningBall* mpLightning;
 	CLightningBallEffect* mpLightningBall;  // 雷球
 	CElectricShockEffect* mpElectricShock;  // 電撃
 };

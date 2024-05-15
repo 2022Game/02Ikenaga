@@ -223,6 +223,7 @@ CPlayer::~CPlayer()
 	SAFE_DELETE(mpDamageColBody);
 }
 
+// インスタンス
 CPlayer* CPlayer::Instance()
 {
 	return spInstance;

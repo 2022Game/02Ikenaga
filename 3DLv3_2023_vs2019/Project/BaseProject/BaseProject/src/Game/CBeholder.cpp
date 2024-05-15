@@ -7,6 +7,7 @@
 #include "CLightningBallEffect.h"
 #include "CElectricShockEffect.h"
 #include "CInput.h"
+#include "CLightningBall.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
@@ -313,6 +314,12 @@ CBeholder::CBeholder()
 	mpAttackColTentacle4->SetEnable(false);
 	mpAttackColTentacle5->SetEnable(false);
 	mpAttackColTentacle6->SetEnable(false);
+
+	mpLightning = new CLightningBall
+	(
+		ETag::eLightningBall
+	);
+	mpLightning->SetOwner(this);
 
 	mpLightningBall = new CLightningBallEffect
 	(
