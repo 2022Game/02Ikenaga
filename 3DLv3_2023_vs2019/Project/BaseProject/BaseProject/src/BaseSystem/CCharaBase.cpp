@@ -42,14 +42,14 @@ float CCharaBase::GetDefBuff(const CVector& attackDir)const
 }
 
 //　ダメージ量を算出
-int CalcDamage(const CCharaBase* attaker, const CCharaBase* defender)
+int CalcDamage(float atkRatio,const CCharaBase* attaker, const CCharaBase* defender)
 {
 	if (attaker == nullptr || defender == nullptr)return 1;
 
 	// 攻撃方向()
 	CVector attackDir = (attaker->Position() - defender->Position()).Normalized();
 
-	float atk = attaker->Status().power * attaker->GetAtkBuff();
+	float atk = attaker->Status().power * attaker->GetAtkBuff() * atkRatio;
 	float def = defender->Status().defense * defender->GetDefBuff(attackDir);
 
 	// ダメージ量 =（攻撃力÷2）-（防御÷4）

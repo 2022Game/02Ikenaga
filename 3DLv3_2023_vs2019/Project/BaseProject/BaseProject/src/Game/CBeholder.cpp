@@ -24,16 +24,16 @@ CBeholder* CBeholder::spInstance = nullptr;
 const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 {
 	{ "",										                   true,    0.0f,  0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle.x",	   true,   41.0f,  0.5f},  // 待機 41.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle2.x",    true,   23.0f,  0.5f},  // 待機2 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack.x",   false,  23.0f,  0.5f},  // 攻撃 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",  false,  21.0f,  0.4f},  // 攻撃2 21.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",  false,  42.0f,  0.0f},  // 攻撃3 17.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  23.0f,  0.4f},  // 攻撃4 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   true,   23.0f,  0.5f},  // ヒット 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   false,   23.0f,  0.2f},  // 死ぬ 23.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   41.0f,  0.5f},  // めまい 41.0f
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	   true,   17.0f,  0.5f},  // 走る 17.0f
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle.x",	   true,   41.0f,  0.5f},  // 待機
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderIdle2.x",    true,   23.0f,  0.5f},  // 待機2
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack.x",   false,  23.0f,  0.5f},  // 攻撃(電気ボール)
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",  false,  21.0f,  0.4f},  // 攻撃2(電流)
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",  false,  17.0f,  0.5f},  // 攻撃3(電気ボールのホーミング)
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  23.0f,  0.4f},  // 攻撃4(回転攻撃＋エフェクト)
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   true,   23.0f,  0.5f},  // ヒット
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   false,  23.0f,  0.2f},  // 死ぬ
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   41.0f,  0.5f},  // めまい
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	   true,   17.0f,  0.5f},  // 走る
 };
 
 // コンストラクタ
@@ -428,7 +428,7 @@ void CBeholder::UpdateIdle2()
 	}
 }
 
-// 攻撃
+// 攻撃(電気ボール)
 void CBeholder::UpdateAttack()
 {
 	SetAnimationSpeed(0.5f);
@@ -454,7 +454,6 @@ void CBeholder::UpdateAttack()
 	case 1:
 		if (mAnimationFrame >= 3.0f)
 		{
-			AttackStart();
 			if (!mpLightningBall->IsThrowing() && !mpElectricShock->IsThrowing())
 			{
 				mpLightningBall->Start();
@@ -467,7 +466,6 @@ void CBeholder::UpdateAttack()
 	case 2:
 		if (mAnimationFrame >=23.0f)
 		{
-			AttackEnd();
 			mpLightningBall->Stop();
 			mpElectricShock->Stop();
 			// 攻撃終了待ち状態へ移行
@@ -477,7 +475,7 @@ void CBeholder::UpdateAttack()
 	}
 }
 
-// 攻撃2
+// // 攻撃2(電流)
 void CBeholder::UpdateAttack2()
 {
 	SetAnimationSpeed(0.4f);
@@ -490,7 +488,6 @@ void CBeholder::UpdateAttack2()
 		ChangeAnimation(EAnimType::eAttack2);
 		if (mAnimationFrame >= 3.0f)
 		{
-			AttackStart();
 			mStateAttack2Step++;
 		}
 		break;
@@ -498,14 +495,13 @@ void CBeholder::UpdateAttack2()
 	case 1:
 		if (mAnimationFrame >= 20.0f)
 		{
-			AttackEnd();
 			ChangeState(EState::eAttackWait);
 		}
 		break;
 	}
 }
 
-// 攻撃3
+// 攻撃3(電気ボールのホーミング)
 void CBeholder::UpdateAttack3()
 {
 	ChangeAnimation(EAnimType::eAttack3);
@@ -514,7 +510,7 @@ void CBeholder::UpdateAttack3()
 	ChangeState(EState::eAttackWait);
 }
 
-// 攻撃4
+// 攻撃4(回転攻撃＋エフェクト)
 void CBeholder::UpdateAttack4()
 {
 	SetAnimationSpeed(0.4f);
@@ -567,6 +563,8 @@ void CBeholder::UpdateHit()
 void CBeholder::UpdateDie()
 {
 	SetAnimationSpeed(0.2f);
+	mpElectricShock->Stop();
+	mpLightningBall->Stop();
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -644,19 +642,19 @@ void CBeholder::Update()
 	case EState::eIdle2:
 		UpdateIdle2();
 		break;
-		// 攻撃
+		// 攻撃(電気ボール)
 	case EState::eAttack:
 		UpdateAttack();
 		break;
-		// 攻撃2
+		// 攻撃2(電流)
 	case EState::eAttack2:
 		UpdateAttack2();
 		break;
-		// 攻撃3
+		// 攻撃3(電気ボールのホーミング)
 	case EState::eAttack3:
 		UpdateAttack3();
 		break;
-		// 攻撃4
+		// 攻撃4(回転攻撃＋エフェクト)
 	case EState::eAttack4:
 		UpdateAttack4();
 		break;
@@ -666,6 +664,7 @@ void CBeholder::Update()
 		break;
 		// ヒット
 	case EState::eHit:
+		mAttackTime += 1;
 		UpdateHit();
 		break;
 		// 死ぬ
@@ -775,6 +774,7 @@ void CBeholder::Update()
 	}
 
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
+	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
 	CDebugPrint::Print(" 飛行: %d\n", mFlyingTime);
 	float y = Position().Y();
 	CDebugPrint::Print(" 高さ: %f\n", y);
@@ -839,7 +839,7 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(this, chara);
+				int damage = CalcDamage(1.0f,this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -879,13 +879,16 @@ void CBeholder::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
-	mpAttackColBody->SetEnable(true);
-	mpAttackColTentacle->SetEnable(true);
-	mpAttackColTentacle2->SetEnable(true);
-	mpAttackColTentacle3->SetEnable(true);
-	mpAttackColTentacle4->SetEnable(true);
-	mpAttackColTentacle5->SetEnable(true);
-	mpAttackColTentacle6->SetEnable(true);
+	if (mState == EState::eAttack4)
+	{
+		mpAttackColBody->SetEnable(true);
+		mpAttackColTentacle->SetEnable(true);
+		mpAttackColTentacle2->SetEnable(true);
+		mpAttackColTentacle3->SetEnable(true);
+		mpAttackColTentacle4->SetEnable(true);
+		mpAttackColTentacle5->SetEnable(true);
+		mpAttackColTentacle6->SetEnable(true);
+	}
 }
 
 // 攻撃終了

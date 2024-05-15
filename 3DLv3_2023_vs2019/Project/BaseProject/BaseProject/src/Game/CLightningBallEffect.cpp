@@ -1,6 +1,7 @@
 #include "CLightningBallEffect.h"
 #include "CLightningBall.h"
 #include "Maths.h"
+#include "CCharaBase.h"
 
 CLightningBallEffect* CLightningBallEffect::spInstance = nullptr;
 
@@ -106,6 +107,11 @@ void CLightningBallEffect::CreateLightningBall()
 {
 	// —‹‹…‚ğì¬
 	CLightningBall* lightningBall = new CLightningBall(ETag::eLightningBall);
+	CCharaBase* owner = dynamic_cast<CCharaBase*>(mpOwner);
+	if (owner != nullptr)
+	{
+		lightningBall->SetOwner(owner);
+	}
 
 	// ˆÊ’u‚ğæ“¾
 	CVector pos = GetThrowPos();// + CVector(0.0f, 10.0f, 0.0f);

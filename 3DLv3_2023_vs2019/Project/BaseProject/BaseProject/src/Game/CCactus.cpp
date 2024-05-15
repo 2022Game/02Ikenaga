@@ -711,7 +711,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(this, chara);
+				int damage = CalcDamage(1.0f,this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -733,7 +733,7 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(this, chara);
+				int damage = CalcDamage(1.0f,this, chara);
 				damage = damage * 2;
 
 				// ダメージを与える

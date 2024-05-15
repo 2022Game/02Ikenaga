@@ -339,15 +339,6 @@ void CPlayer::UpdateAttack4()
 	// 攻撃アニメーションを開始
 	ChangeAnimation(EAnimType::eAttack4);
 
-	if (mAnimationFrame >= 20.0f)
-	{
-		//剣に攻撃開始を伝える
-		mpSword->AttackStart();
-	}
-	if (mAnimationFrame >= 21.0f)
-	{
-		mpSword->AttackEnd();
-	}
 	if (mAnimationFrame >= 39.0f)
 	{
 		// 斬撃エフェクトの生成済みフラグを初期化

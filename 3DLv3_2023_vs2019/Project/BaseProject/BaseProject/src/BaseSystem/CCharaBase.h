@@ -45,7 +45,8 @@ protected:
 /// <summary>
 /// ダメージ量を算出
 /// </summary>
+/// <param name="atkRatio">攻撃力の倍率</param>
 /// <param name="attaker">攻撃側のキャラ</param>
 /// <param name="defender">防御力のキャラ</param>
 /// <returns>ダメージ量</returns>
-extern int CalcDamage(const CCharaBase* attaker, const CCharaBase* defender);
+extern int CalcDamage(float atkRatio, const CCharaBase* attaker, const CCharaBase* defender);

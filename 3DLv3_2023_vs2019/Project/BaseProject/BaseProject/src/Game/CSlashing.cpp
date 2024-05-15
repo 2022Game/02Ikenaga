@@ -84,7 +84,7 @@ void CSlashing::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		if (chara != nullptr)
 		{
 			// 与えるダメージを計算
-			int damage = CalcDamage(0, chara);
+			int damage = CalcDamage(1.0f,0, chara);
 
 			// ダメージを与える
 			chara->TakeDamage(damage, 0);

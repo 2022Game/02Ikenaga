@@ -93,7 +93,7 @@ void CWave::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			if (!IsAttackHitObj(chara))
 			{
 				// 与えるダメージを計算
-				int damage = CalcDamage(mOwner, chara);
+				int damage = CalcDamage(1.0f,mOwner, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, mOwner);

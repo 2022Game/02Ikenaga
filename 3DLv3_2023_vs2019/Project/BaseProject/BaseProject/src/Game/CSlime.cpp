@@ -657,7 +657,7 @@ void CSlime::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// Šù‚ÉUŒ‚Ï‚Ý‚ÌƒLƒƒƒ‰‚Å‚È‚¯‚ê‚Î
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(this,chara);
+				int damage = CalcDamage(1.0f,this,chara);
 
 				// ƒ_ƒ[ƒW‚ð—^‚¦‚é
 				chara->TakeDamage(damage, this);

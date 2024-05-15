@@ -28,13 +28,13 @@ public:
 	// 戦う前の待機状態2
 	void UpdateIdle2();
 
-	// 攻撃
+	// 攻撃(電気ボール)
 	void UpdateAttack();
-	// 攻撃2
+	// 攻撃2(電流)
 	void UpdateAttack2();
-	// 攻撃3
+	// 攻撃3(電気ボールのホーミング)
 	void UpdateAttack3();
-	// 攻撃4
+	// 攻撃4(回転攻撃＋エフェクト)
 	void UpdateAttack4();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
@@ -92,10 +92,10 @@ private:
 		eTPose,		// Tポーズ
 		eIdle,		// 待機
 		eIdle2,		// 待機2
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
-		eAttack4,	// 攻撃4
+		eAttack,	// 攻撃(電気ボール)
+		eAttack2,	// 攻撃2(電流)
+		eAttack3,	// 攻撃3(電気ボールのホーミング)
+		eAttack4,	// 攻撃4(回転攻撃＋エフェクト)
 		eHit,       // ヒット
 		eDie,       // 死ぬ
 		eDizzy,     // めまい(混乱)
@@ -125,10 +125,10 @@ private:
 	{
 		eIdle,		  // 待機
 		eIdle2,		  // 待機2
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
-		eAttack3,	  // 攻撃3
-		eAttack4,	  // 攻撃4
+		eAttack,	  // 攻撃(電気ボール)
+		eAttack2,	  // 攻撃2(電流)
+		eAttack3,	  // 攻撃3(電気ボールのホーミング)
+		eAttack4,	  // 攻撃4(回転攻撃＋エフェクト)
 		eAttackWait,  // 攻撃終了待ち
 		eHit,         // ヒット
 		eDie,         // 死ぬ時
