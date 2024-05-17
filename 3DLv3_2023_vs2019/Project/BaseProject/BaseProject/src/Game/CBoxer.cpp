@@ -10,42 +10,45 @@
 // ボクサーのインスタンス
 CBoxer* CBoxer::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 1.0f
-#define WITHIN_RANGE 60.0f       // 範囲内
-#define MOVE_SPEED 0.13f         // 移動速度
-#define JUMP_SPEED 1.5f
-#define GRAVITY 0.0625f          // 重力
-#define JUMP_END_Y 1.0f
-#define WALK_RANGE 150.0f        // 追跡する範囲
-#define STOP_RANGE 30.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT  1.0f
+#define WITHIN_RANGE  60.0f    // 範囲内
+#define MOVE_SPEED    0.13f    // 移動速度
+#define JUMP_SPEED    1.5f
+#define GRAVITY       0.0625f  // 重力
+#define JUMP_END_Y    1.0f	   
+#define WALK_RANGE    150.0f   // 追跡する範囲
+#define STOP_RANGE    30.0f    // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f   // 回転する範囲
 
 // ボクサーのアニメーションデータのテーブル
 const CBoxer::AnimData CBoxer::ANIM_DATA[] =
 {
-	{ "",										true,	0.0f	},// Tポーズ
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDance.x",	true,	170.0f	},	    // ダンス 85.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerIdle.x",	true,	42.0f	},	    // 待機 21.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack.x",	true,	35.0f	},	    // 攻撃 19.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack2.x",	true,	52.0f	},	    // 攻撃2 26.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerGetHit.x",	true,	36.0f	},	    // ヒット 17.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefense.x",	true,	42.0f	},	    // 防御 21.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefenseHit.x",	true,	42.0f	},  // 防御中のヒット 21.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDie.x",	true,	90.0f	},	        // 死ぬ 24.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDizzy.x",	true,	66.0f	},	    // めまい 24.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpStart.x",	true,	12.0f	},	// ジャンプの開始 9.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerJump.x",	true,	46.0f	},	    // ジャンプ 23.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpEnd.x",	true,	26.0f	},	    // ジャンプの終了 26.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerRun.x",	true,	42.0f	},	        // 走る 21.0
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerSlide.x",	true,	72.0f	},	    // 滑る 36.0
+	{ "",										                true,	 0.0f,	0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDance.x",	    true,	85.0f,	0.5f},	// ダンス 85.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerIdle.x",	    true,	21.0f,	0.5f},  // 待機 21.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack.x",	    false,	19.0f,  0.5f},	// 攻撃 19.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerAttack2.x",	    false,	52.0f	},	    // 攻撃2 26.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerGetHit.x",	    false,	36.0f	},	    // ヒット 17.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefense.x",	    true,	42.0f	},	    // 防御 21.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefenseHit.x",	false,	42.0f	},      // 防御中のヒット 21.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDie.x",	        false,	90.0f	},	    // 死ぬ 24.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDizzy.x",	    false,	66.0f	},	    // めまい 24.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpStart.x",	false,	12.0f	},	    // ジャンプの開始 9.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJump.x",	    false,	46.0f	},	    // ジャンプ 23.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpEnd.x",	    false,	26.0f	},	    // ジャンプの終了 26.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerRun.x",	        true,	42.0f	},	    // 走る 21.0
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerSlide.x",	    false,	72.0f	},	    // 滑る 36.0
 	//{ "Character\\Enemy\\Boxer\\animation\\BoxerDieRecover.x",	true,	48.0f	},	// 起き上がる 24.0f
 };
 
 // コンストラクタ
 CBoxer::CBoxer()
-	: mpRideObject(nullptr)
+	: mState(EState::eIdle)
+	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mDefenseTime(0)
+	, mMoveSpeed(CVector::zero)
+	, mIsGrounded(false)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -67,6 +70,7 @@ CBoxer::CBoxer()
 	// CXCharacterの初期化
 	Init(model);
 
+	SetAnimationSpeed(0.5f);
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
@@ -81,7 +85,8 @@ CBoxer::CBoxer()
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
 	(
-		this, ELayer::eEnemy,0.4f, false, 2.0f
+		this, ELayer::eEnemy,
+		0.4f, false, 2.0f
 	);
 	mpColliderSphereHead->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereHead->Position(0.04f, 0.1f, 0.0f);
@@ -89,7 +94,8 @@ CBoxer::CBoxer()
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.5f, false, 4.0f
+		this, ELayer::eEnemy,
+		0.5f, false, 4.0f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereBody->Position(0.07f, 0.1f, 0.0f);
@@ -97,7 +103,8 @@ CBoxer::CBoxer()
 	// キャラクター押し戻し処理(右手)
 	mpColliderSphereHandR = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.27f, false, 3.0f
+		this, ELayer::eEnemy,
+		0.27f, false, 3.0f
 	);
 	mpColliderSphereHandR->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereHandR->Position(0.0f, -0.1f, 0.0f);
@@ -105,7 +112,8 @@ CBoxer::CBoxer()
 	// キャラクター押し戻し処理(左手)
 	mpColliderSphereHandL = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.27f, false, 3.0f
+		this, ELayer::eEnemy,
+		0.27f, false, 3.0f
 	);
 	mpColliderSphereHandL->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereHandL->Position(0.0f, -0.1f, 0.0f);
@@ -113,7 +121,8 @@ CBoxer::CBoxer()
 	// キャラクター押し戻し処理(右足)
 	mpColliderSphereFeetR = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.06f, false, 3.0f
+		this, ELayer::eEnemy,
+		0.06f, false, 3.0f
 	);
 	mpColliderSphereFeetR->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeetR->Position(0.0f, 0.03f, 0.0f);
@@ -121,7 +130,8 @@ CBoxer::CBoxer()
 	// キャラクター押し戻し処理(左足)
 	mpColliderSphereFeetL = new CColliderSphere
 	(
-		this, ELayer::eEnemy, 0.06f, false, 3.0f
+		this, ELayer::eEnemy,
+		0.06f, false, 3.0f
 	);
 	mpColliderSphereFeetL->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeetL->Position(0.0f, 0.03f, 0.0f);
@@ -129,7 +139,8 @@ CBoxer::CBoxer()
 	// ダメージを受けるコライダーを作成(頭)
 	mpDamageColHead = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.4f, false
+		this, ELayer::eDamageCol,
+		0.4f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColHead->SetCollisionLayers({ ELayer::eAttackCol });
@@ -140,7 +151,8 @@ CBoxer::CBoxer()
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageColBody = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.5f, false
+		this, ELayer::eDamageCol,
+		0.5f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
@@ -150,7 +162,8 @@ CBoxer::CBoxer()
 	// ダメージを受けるコライダーを作成(右手)
 	mpDamageColHandR = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.27f, false
+		this, ELayer::eDamageCol,
+		0.27f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColHandR->SetCollisionLayers({ ELayer::eAttackCol });
@@ -160,7 +173,8 @@ CBoxer::CBoxer()
 	// ダメージを受けるコライダーを作成(左手)
 	mpDamageColHandL = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.27f, false
+		this, ELayer::eDamageCol,
+		0.27f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColHandL->SetCollisionLayers({ ELayer::eAttackCol });
@@ -170,7 +184,8 @@ CBoxer::CBoxer()
 	// ダメージを受けるコライダーを作成(右足)
 	mpDamageColFeetR = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.1f, false
+		this, ELayer::eDamageCol,
+		0.1f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColFeetR->SetCollisionLayers({ ELayer::eAttackCol });
@@ -180,7 +195,8 @@ CBoxer::CBoxer()
 	// ダメージを受けるコライダーを作成(左足)
 	mpDamageColFeetL = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.1f, false
+		this, ELayer::eDamageCol,
+		0.1f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColFeetL->SetCollisionLayers({ ELayer::eAttackCol });
@@ -190,7 +206,8 @@ CBoxer::CBoxer()
 	// ダメージを与えるコライダー(頭)
 	mpAttackColHead = new CColliderSphere
 	(
-		this, ELayer::eAttackCol, 0.4f, false
+		this, ELayer::eAttackCol,
+		0.4f, false
 	);
 	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
@@ -199,7 +216,8 @@ CBoxer::CBoxer()
 	// ダメージを与えるコライダー(体)
 	mpAttackColBody = new CColliderSphere
 	(
-		this, ELayer::eAttackCol, 0.5f, false
+		this, ELayer::eAttackCol,
+		0.5f, false
 	);
 	mpAttackColBody->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColBody->SetCollisionTags({ ETag::ePlayer });
@@ -208,7 +226,8 @@ CBoxer::CBoxer()
 	// ダメージを与えるコライダー(右手)
 	mpAttackColHandR = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.27f, false
+		this, ELayer::eAttackCol,
+		0.27f, false
 	);
 	mpAttackColHandR->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColHandR->SetCollisionTags({ ETag::ePlayer });
@@ -217,7 +236,8 @@ CBoxer::CBoxer()
 	// ダメージを与えるコライダー(右足)
 	mpAttackColFeetR = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.06f, false
+		this, ELayer::eAttackCol,
+		0.06f, false
 	);
 	mpAttackColFeetR->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColFeetR->SetCollisionTags({ ETag::ePlayer });
@@ -226,7 +246,8 @@ CBoxer::CBoxer()
 	// ダメージを与えるコライダー(左足)
 	mpAttackColFeetL = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.06f, false
+		this, ELayer::eAttackCol,
+		0.06f, false
 	);
 	mpAttackColFeetL->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColFeetL->SetCollisionTags({ ETag::ePlayer });
@@ -291,21 +312,23 @@ CBoxer::CBoxer()
 
 CBoxer::~CBoxer()
 {
+	// 線分コライダー
 	SAFE_DELETE(mpColliderLine);
+	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
 	SAFE_DELETE(mpColliderSphereHandR);
 	SAFE_DELETE(mpColliderSphereHandL);
 	SAFE_DELETE(mpColliderSphereFeetR);
 	SAFE_DELETE(mpColliderSphereFeetL);
-
+	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColHandR);
 	SAFE_DELETE(mpDamageColHandL);
 	SAFE_DELETE(mpDamageColFeetR);
 	SAFE_DELETE(mpDamageColFeetL);
-
+	// 攻撃コライダー
 	SAFE_DELETE(mpAttackColHead);
 	SAFE_DELETE(mpAttackColBody);
 	SAFE_DELETE(mpAttackColHandR);
@@ -313,6 +336,7 @@ CBoxer::~CBoxer()
 	SAFE_DELETE(mpAttackColFeetL);
 }
 
+// インスタンス
 CBoxer* CBoxer::Instance()
 {
 	return spInstance;
@@ -326,32 +350,47 @@ void CBoxer::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 状態の切り替え
+void CBoxer::ChangeState(EState state)
+{
+	if (mState == state) return;
+	mState = state;
+}
+
 // 待機状態
 void CBoxer::UpdateIdle()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
-		mState = EState::eIdle;
+		ChangeState(EState::eIdle2);
+	}
+	else if (IsAnimationFinished())
+	{
+		ChangeState(EState::eIdle);
 	}
 }
 
 // 待機状態2
 void CBoxer::UpdateIdle2()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
 	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
 	{
-		mState = EState::eRun;
+		ChangeState(EState::eRun);
 	}
 	else
 	{
 		ChangeAnimation(EAnimType::eIdle2);
 		if (IsAnimationFinished())
 		{
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -377,7 +416,7 @@ void CBoxer::UpdateAttack()
 	if (IsAnimationFinished())
 	{
 		// 攻撃終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
@@ -399,7 +438,7 @@ void CBoxer::UpdateAttack2()
 	if (IsAnimationFinished())
 	{
 		// 攻撃2終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
@@ -420,11 +459,11 @@ void CBoxer::UpdateAttackWait()
 		if (percent == 1) continuousz = true;
 		if (continuousz)
 		{
-			mState = EState::eAttack;
+			ChangeState(EState::eAttack);
 		}
 		else
 		{
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -437,7 +476,7 @@ void CBoxer::UpdateJumpStart()
 	ChangeAnimation(EAnimType::eJumpStart);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eJump;
+		ChangeState(EState::eJump);
 
 		mMoveSpeed += CVector(0.0f, JUMP_SPEED, 0.0f);
 		mIsGrounded = false;
@@ -452,7 +491,7 @@ void CBoxer::UpdateJump()
 	ChangeAnimation(EAnimType::eJump);
 	if (mMoveSpeed.Y() <= 0.0f || IsAnimationFinished())
 	{
-		mState = EState::eJumpEnd;
+		ChangeState(EState::eJumpEnd);
 	}
 }
 
@@ -464,7 +503,7 @@ void CBoxer::UpdateJumpEnd()
 	// ジャンプアニメーションが待機状態へ戻す
 	if (IsAnimationFinished())
 	{
-		mState = EState::eIdle2;
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -483,13 +522,12 @@ void CBoxer::UpdateHit()
 		if (probability == 1)stan = true;
 		if (stan)
 		{
-			mState = EState::eDizzy;
+			ChangeState(EState::eDizzy);
 		}
 		else
 		{
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			mState = EState::eIdle2;
-			ChangeAnimation(EAnimType::eIdle2);
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -517,11 +555,11 @@ void CBoxer::UpdateDefense()
 	{
 		if (mDefenseTime >= 300)
 		{
-			mState = EState::eAttack;
+			ChangeState(EState::eAttack);
 		}
 		else
 		{
-			mState = EState::eDefense;
+			ChangeState(EState::eDefense);
 		}
 	}
 }
@@ -534,7 +572,7 @@ void CBoxer::UpdateDefenseHit()
 	ChangeAnimation(EAnimType::eDefenseHit);
 	if (IsAnimationFinished())
 	{
-		mState = EState::eDefense;
+		ChangeState(EState::eDefense);
 	}
 }
 
@@ -561,8 +599,7 @@ void CBoxer::UpdateDizzy()
 	if (IsAnimationFinished())
 	{
 		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		mState = EState::eIdle2;
-		ChangeAnimation(EAnimType::eIdle2);
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -578,10 +615,6 @@ void CBoxer::UpdateRun()
 	// 追跡をやめて止まる
 	if (vectorp <= STOP_RANGE && vectorp >= 33.0f)
 	{
-
-		//mMoveSpeed.X(0.0f);
-		//mMoveSpeed.Z(0.0f);
-
 		// 回転する範囲であれば
 		if (vectorp <= ROTATE_RANGE)
 		{
@@ -605,7 +638,7 @@ void CBoxer::UpdateRun()
 			mMoveSpeed.X(0.0f);
 			mMoveSpeed.Z(0.0f);
 			ChangeAnimation(EAnimType::eIdle2);
-			mState = EState::eIdle2;
+			ChangeState(EState::eIdle2);
 		}
 	}
 }
@@ -628,7 +661,7 @@ void CBoxer::UpdateSlide()
 	if (IsAnimationFinished())
 	{
 		// 滑る終了待ち状態へ移行
-		mState = EState::eAttackWait;
+		ChangeState(EState::eAttackWait);
 	}
 }
 
@@ -707,18 +740,8 @@ void CBoxer::Update()
 	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eAttack && mState != EState::eAttack2
-		&& mState != EState::eAttackWait && mState != EState::eHit && mState != EState::eDefense && mState != EState::eDefenseHit
-		&& mState != EState::eDie && mState != EState::eDizzy && mState != EState::eJumpStart && mState != EState::eJump 
-		&& mState != EState::eJumpEnd && mState != EState::eRun && mState != EState::eSlide)
-	{
-		mState = EState::eIdle2;
-	}
 
-	if (mState == EState::eRun || mState == EState::eIdle || mState == EState::eIdle2 || mState == EState::eAttack
-		|| mState == EState::eAttack2 || mState == EState::eDefense || mState == EState::eHit || mState == EState::eDizzy 
-		|| mState == EState::eAttackWait || mState == EState::eDefenseHit || mState == EState::eSlide
-		|| mState == EState::eJumpStart || mState == EState::eJump || mState == EState::eJumpEnd)
+	if (mState != EState::eIdle && mState != EState::eDie)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
@@ -762,23 +785,23 @@ void CBoxer::Update()
 			if (probability5 == 11)Slide = true;
 			if (Attack2)
 			{
-				mState = EState::eAttack2;
+				//ChangeState(EState::eAttack2);
 			}
 			else if (Defense)
 			{
-				mState = EState::eDefense;
+				//ChangeState(EState::eDefense);
 			}
 			else if (Jump)
 			{
-				mState = EState::eJump;
+				//ChangeState(EState::eJump);
 			}
 			else if (Slide)
 			{
-				mState = EState::eSlide;
+				//ChangeState(EState::eSlide);
 			}
 			else
 			{
-				mState = EState::eAttack;
+				ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eSlide
@@ -813,20 +836,21 @@ void CBoxer::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBody->Update();
 	mpColliderSphereHandR->Update();
 	mpColliderSphereHandL->Update();
 	mpColliderSphereFeetR->Update();
 	mpColliderSphereFeetL->Update();
-
+	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColBody->Update();
 	mpDamageColHandR->Update();
 	mpDamageColHandL->Update();
 	mpDamageColFeetR->Update();
 	mpDamageColFeetL->Update();
-
+	// 攻撃コライダー
 	mpAttackColHead->Update();
 	mpAttackColBody->Update();
 	mpAttackColHandR->Update();
@@ -837,26 +861,6 @@ void CBoxer::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-
-	if (CInput::PushKey('V'))
-	{
-		mState = EState::eAttack2;
-	}
-	if (CInput::PushKey('B'))
-	{
-		mState = EState::eAttack;
-	}
-	if (CInput::PushKey('N'))
-	{
-		if (!mpImpact->IsThrowing())
-		{
-			mpImpact->Start();
-		}
-		else
-		{
-			mpImpact->Stop();
-		}
-	}
 }
 
 // 衝突処理
@@ -890,7 +894,6 @@ void CBoxer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		{
 			Position(Position() + hit.adjust * hit.weight);
 			mIsGrounded = true;
-			//mMoveSpeed.Y(0.0f);
 
 			if (other->Tag() == ETag::eRideableObject)
 			{
@@ -967,11 +970,11 @@ void CBoxer::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		if (mState == EState::eDefense)
 		{
-			mState = EState::eDefenseHit;
+			ChangeState(EState::eDefenseHit);
 		}
 		else
 		{
-			mState = EState::eHit;
+			ChangeState(EState::eHit);
 		}
 	}
 	// HPが0以下になったら、
@@ -1009,5 +1012,5 @@ float CBoxer::GetDefBuff(const CVector& attackDir)const
 void CBoxer::Death()
 {
 	// 死亡状態へ移行
-	mState = EState::eDie;
+	ChangeState(EState::eDie);
 }

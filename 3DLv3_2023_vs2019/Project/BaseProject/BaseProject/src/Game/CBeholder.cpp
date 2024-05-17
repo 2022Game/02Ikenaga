@@ -14,10 +14,10 @@ CBeholder* CBeholder::spInstance = nullptr;
 
 #define ENEMY_HEIGHT  0.5f     // 線分コライダー
 #define WITHIN_RANGE  40.0f    // 範囲内
-#define MOVE_SPEED    0.6f     // 移動速度
+#define MOVE_SPEED    0.65f     // 移動速度
 #define GRAVITY       0.0625f  // 重力
-#define WALK_RANGE    100.0f   // 追跡する範囲
-#define STOP_RANGE    24.0f    // 追跡を辞める範囲
+#define WALK_RANGE    150.0f   // 追跡する範囲
+#define STOP_RANGE    26.0f    // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f   // 回転する範囲
 
 // 球体のモンスターのアニメーションデータのテーブル
@@ -140,11 +140,12 @@ CBeholder::CBeholder()
 	mpDamageColBody = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.41f, false
+		0.7f, false
 	);
 	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
+	mpColliderSphereBody->Position(0.0f, 0.2f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(左上の触手)
 	mpDamageColTentacle = new CColliderSphere
@@ -402,7 +403,7 @@ void CBeholder::UpdateIdle()
 	}
 	else if (IsAnimationFinished())
 	{
-		ChangeState(EState::eIdle);
+		//ChangeState(EState::eIdle);
 	}
 }
 
@@ -422,7 +423,7 @@ void CBeholder::UpdateIdle2()
 	{
 		ChangeState(EState::eRun);
 	}
-	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	if (vectorPos <= 30.0f && player->Position().Y() >= 1.0f)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -611,7 +612,7 @@ void CBeholder::UpdateRun()
 		}
 	}
 
-	if (vectorPos <= 28.0f && player->Position().Y() >= 1.0f)
+	if (vectorPos <= 30.0f && player->Position().Y() >= 1.0f)
 	{
 		ChangeState(EState::eIdle2);
 	}
@@ -628,7 +629,6 @@ void CBeholder::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
@@ -664,7 +664,6 @@ void CBeholder::Update()
 		break;
 		// ヒット
 	case EState::eHit:
-		mAttackTime += 1;
 		UpdateHit();
 		break;
 		// 死ぬ
@@ -704,7 +703,7 @@ void CBeholder::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime > 160)
 		{
 			// 攻撃2
 			bool Attack2 = false;
@@ -745,26 +744,36 @@ void CBeholder::Update()
 		}
 	}
 
-	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
-	{
-		Position(Position() + mMoveSpeed);
-	}
-
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	if (mState == EState::eRun)
 	{
 		mFlyingTime++;
-		if (mFlyingTime <= 200 && mFlyingTime > 0)
+		if (mFlyingTime < 200 && mFlyingTime > 0 && player->Position().Y() < 1.0f)
 		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + 0.02f);
+			mMoveSpeed.Y(mMoveSpeed.Y() + 0.05f);
+		}
+		else if(player->Position().Y() < 1.0f)
+		{
+			//Position(Position().X(), Position().Y() - 0.1f, Position().Z());
+		}
+	}
+	if (mState == EState::eIdle2 && vectorPos > WALK_RANGE)
+	{
+		Position(Position().X(), Position().Y() - 0.05f, Position().Z());
+	}
+	else if(mState == EState::eIdle2 && vectorPos <= STOP_RANGE)
+	{
+		Position(Position().X(), Position().Y() - 0.05f, Position().Z());
+	}
+
+	if (mState == EState::eRun)
+	{
+		if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
+		{
+			Position(Position() + mMoveSpeed);
 		}
 	}
 
-	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
-	{
-		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
-	}
-
-	if (Position().Y() <= -0.05f)
+	if (Position().Y() <= 0.0f)
 	{
 		mFlyingTime = 0;
 	}
@@ -774,7 +783,7 @@ void CBeholder::Update()
 	}
 
 	CDebugPrint::Print(" 攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
+	CDebugPrint::Print(" 距離: %f\n", vectorPos);
 	CDebugPrint::Print(" 飛行: %d\n", mFlyingTime);
 	float y = Position().Y();
 	CDebugPrint::Print(" 高さ: %f\n", y);

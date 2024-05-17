@@ -20,7 +20,7 @@ CDragon* CDragon::spInstance = nullptr;
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
 {
-	{ "",										                true,	0.0f },// Tポーズ
+	{ "",										                true,	 0.0f,  0.0f },     // Tポーズ
 	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	    true,	81.0f,  0.5f },	    // 寝る 81.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	    true,	41.0f,  0.5f },	    // 待機 41.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	    true,	101.0f, 0.5f },	    // 待機 101.0f
@@ -30,7 +30,7 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	91.0f,	0.5f },	    // フライフレーム 91.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonGetHit.x",	true,	41.0f,	0.5f },	    // ヒット 41.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	61.0f,	0.5f },	    // 防御 61.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	    true,	65.0f,	0.5f },	    // 死ぬ 65.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	    false,	65.0f,	0.5f },	    // 死ぬ 65.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	true,	101.0f,	0.5f },	    // 雄叫び 101.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	true,	121.0f, 0.5f },	    // 飛行開始する前 121.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyIdle.x",	true,	31.0f,	0.5f },	    // フライアイドル 31.0f

@@ -133,6 +133,7 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
@@ -157,6 +158,9 @@ private:
 		eSlide,       // 滑る
 	};
 	EState mState;	// ボクサーの状態
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか

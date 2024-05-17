@@ -14,7 +14,7 @@ TexAnimData CImpact::msAnimData = TexAnimData(3, 5, false, 64, ANIM_TIME);
 
 // コンストラクタ
 CImpact::CImpact(ETag tag)
-	: CBillBoardImage("Effect/Impact.png", ETag::eImpact, ETaskPauseType::eGame)
+	: CBillBoardImage("Effect/Impact1.png", ETag::eImpact, ETaskPauseType::eGame)
 	, mMoveSpeed(CVector::zero)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
