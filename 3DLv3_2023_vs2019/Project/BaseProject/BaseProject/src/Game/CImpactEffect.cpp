@@ -1,6 +1,7 @@
 #include "CImpactEffect.h"
 #include "CImpact.h"
 #include "Maths.h"
+#include "CCharaBase.h"
 
 // 衝撃の間隔時間
 #define THROW_INTERVAL 0.4f
@@ -102,6 +103,11 @@ void CImpactEffect::CreateImpact()
 {
 	// 衝撃を作成
 	CImpact* impact = new CImpact(ETag::eImpact);
+	CCharaBase* owner = dynamic_cast<CCharaBase*>(mpOwner);
+	if (owner != nullptr)
+	{
+		impact->SetOwner(owner);
+	}
 
 	// 位置を取得
 	CVector pos = GetThrowPos();// + CVector(0.0f, 10.0f, 0.0f);
@@ -111,7 +117,7 @@ void CImpactEffect::CreateImpact()
 	//dir.X(dir.X() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
 	//dir.Y(dir.Y() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
 	//dir.Z(dir.Z() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	//dir.Normalize();
+	dir.Normalize();
 	// 位置、方向、移動速度を設定
 	impact->Setup(pos, dir, FLAME_MOVE_SPEED);
 

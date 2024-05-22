@@ -197,22 +197,17 @@ void CEnemy::BoxerBigDeath()
 	);
 }
 
-// 死亡処理(レベル50以下の敵用)
-void CEnemy::Death()
+// ボス(ドラゴン)の死亡処理
+void CEnemy::DragonDeath()
 {
 	// 死亡時に経験値を生成する
-	CExpManeger::SpawnExp(
-		mCharaStatus.exp,
-		Position()+CVector(0.0f,2.0f,0.0f)
-	);
-}
-
-// 死亡処理(レベル90以下の敵用)
-void CEnemy::Death2()
-{
-	// 死亡時に経験値を生成する
-	CExpManeger::SpawnExp2(
+	CExpManeger::DragonSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+}
+
+// 死亡処理
+void CEnemy::Death()
+{
 }

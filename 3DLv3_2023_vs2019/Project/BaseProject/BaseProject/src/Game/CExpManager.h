@@ -52,10 +52,8 @@ public:
 	// 経験値を作成(大きいボクサー用)
 	static void BoxerBigSpawnExp(int exp, const CVector& pos);
 
-	// 経験値を作成(レベル50以下の敵用)
-	static void SpawnExp(int exp, const CVector& pos);
-	// 経験値を作成(レベル90以下の敵用)
-	static void SpawnExp2(int exp, const CVector& pos);
+	// 経験値を作成(ボスのドラゴン用)
+	static void DragonSpawnExp(int exp, const CVector& pos);
 
 private:
 	// コンストラクタ

@@ -2,79 +2,71 @@
 #include "Maths.h"
 
 // 小さいスライム用
-#define Slime_SPAWN_EXP_COUNT_MIN 1  // 生成する経験値オーブの最小数
-#define Slime_SPAWN_EXP_COUNT_MAX 2  // 生成する経験値オーブの最大数
+#define Slime_SPAWN_EXP_COUNT_MIN 1     // 生成する経験値オーブの最小数
+#define Slime_SPAWN_EXP_COUNT_MAX 2     // 生成する経験値オーブの最大数
 // 大きいスライム用
 #define SlimeBig_SPAWN_EXP_COUNT_MIN 3  // 生成する経験値オーブの最小数
 #define SlimeBig_SPAWN_EXP_COUNT_MAX 4  // 生成する経験値オーブの最大数
 
 // 小さいマッシュルーム用
-#define Mushroom_SPAWN_EXP_COUNT_MIN 2  // 生成する経験値オーブの最小数
-#define Mushroom_SPAWN_EXP_COUNT_MAX 3  // 生成する経験値オーブの最大数
+#define Mushroom_SPAWN_EXP_COUNT_MIN 2     // 生成する経験値オーブの最小数
+#define Mushroom_SPAWN_EXP_COUNT_MAX 3     // 生成する経験値オーブの最大数
 // 大きいマッシュルーム用
 #define MushroomBig_SPAWN_EXP_COUNT_MIN 4  // 生成する経験値オーブの最小数
 #define MushroomBig_SPAWN_EXP_COUNT_MAX 5  // 生成する経験値オーブの最大数
 
 // 小さい亀用
-#define Turtle_SPAWN_EXP_COUNT_MIN 3  // 生成する経験値オーブの最小数
-#define Turtle_SPAWN_EXP_COUNT_MAX 4  // 生成する経験値オーブの最大数
+#define Turtle_SPAWN_EXP_COUNT_MIN 3     // 生成する経験値オーブの最小数
+#define Turtle_SPAWN_EXP_COUNT_MAX 4     // 生成する経験値オーブの最大数
 // 大きい亀用
 #define TurtleBig_SPAWN_EXP_COUNT_MIN 5  // 生成する経験値オーブの最小数
 #define TurtleBig_SPAWN_EXP_COUNT_MAX 6  // 生成する経験値オーブの最大数
 
 // 小さいエイ用
-#define Ray_SPAWN_EXP_COUNT_MIN 4  // 生成する経験値オーブの最小数
-#define Ray_SPAWN_EXP_COUNT_MAX 5  // 生成する経験値オーブの最大数
+#define Ray_SPAWN_EXP_COUNT_MIN 4     // 生成する経験値オーブの最小数
+#define Ray_SPAWN_EXP_COUNT_MAX 5     // 生成する経験値オーブの最大数
 // 大きいエイ用
 #define RayBig_SPAWN_EXP_COUNT_MIN 6  // 生成する経験値オーブの最小数
 #define RayBig_SPAWN_EXP_COUNT_MAX 7  // 生成する経験値オーブの最大数
 
 // 小さい蜂用
-#define Bee_SPAWN_EXP_COUNT_MIN 5  // 生成する経験値オーブの最小数
-#define Bee_SPAWN_EXP_COUNT_MAX 6  // 生成する経験値オーブの最大数
+#define Bee_SPAWN_EXP_COUNT_MIN 5     // 生成する経験値オーブの最小数
+#define Bee_SPAWN_EXP_COUNT_MAX 6     // 生成する経験値オーブの最大数
 // 大きい蜂用
 #define BeeBig_SPAWN_EXP_COUNT_MIN 7  // 生成する経験値オーブの最小数
 #define BeeBig_SPAWN_EXP_COUNT_MAX 8  // 生成する経験値オーブの最大数
 
 // 小さいサボテン用
-#define Cactus_SPAWN_EXP_COUNT_MIN 6  // 生成する経験値オーブの最小数
-#define Cactus_SPAWN_EXP_COUNT_MAX 7  // 生成する経験値オーブの最大数
+#define Cactus_SPAWN_EXP_COUNT_MIN 6     // 生成する経験値オーブの最小数
+#define Cactus_SPAWN_EXP_COUNT_MAX 7     // 生成する経験値オーブの最大数
 // 大きいサボテン用
 #define CactusBig_SPAWN_EXP_COUNT_MIN 8  // 生成する経験値オーブの最小数
 #define CactusBig_SPAWN_EXP_COUNT_MAX 9  // 生成する経験値オーブの最大数
 
 // 小さいチェストモンスター用
-#define Chest_SPAWN_EXP_COUNT_MIN 7  // 生成する経験値オーブの最小数
-#define Chest_SPAWN_EXP_COUNT_MAX 8  // 生成する経験値オーブの最大数
+#define Chest_SPAWN_EXP_COUNT_MIN 7      // 生成する経験値オーブの最小数
+#define Chest_SPAWN_EXP_COUNT_MAX 8      // 生成する経験値オーブの最大数
 // 大きいチェストモンスター用
 #define ChestBig_SPAWN_EXP_COUNT_MIN 9   // 生成する経験値オーブの最小数
 #define ChestBig_SPAWN_EXP_COUNT_MAX 10  // 生成する経験値オーブの最大数
 
 // 小さい球体モンスター用
-#define Beholder_SPAWN_EXP_COUNT_MIN 8  // 生成する経験値オーブの最小数
-#define Beholder_SPAWN_EXP_COUNT_MAX 9  // 生成する経験値オーブの最大数
+#define Beholder_SPAWN_EXP_COUNT_MIN 8      // 生成する経験値オーブの最小数
+#define Beholder_SPAWN_EXP_COUNT_MAX 9      // 生成する経験値オーブの最大数
 // 大きい球体モンスター用
-#define BeholderBig_SPAWN_EXP_COUNT_MIN 10   // 生成する経験値オーブの最小数
-#define BeholderBig_SPAWN_EXP_COUNT_MAX 11   // 生成する経験値オーブの最大数
+#define BeholderBig_SPAWN_EXP_COUNT_MIN 10  // 生成する経験値オーブの最小数
+#define BeholderBig_SPAWN_EXP_COUNT_MAX 11  // 生成する経験値オーブの最大数
 
 // 小さいボクサー用
-#define Boxer_SPAWN_EXP_COUNT_MIN 9   // 生成する経験値オーブの最小数
-#define Boxer_SPAWN_EXP_COUNT_MAX 10  // 生成する経験値オーブの最大数
+#define Boxer_SPAWN_EXP_COUNT_MIN 9      // 生成する経験値オーブの最小数
+#define Boxer_SPAWN_EXP_COUNT_MAX 10     // 生成する経験値オーブの最大数
 // 大きいボクサー用
-#define BoxerBig_SPAWN_EXP_COUNT_MIN 11   // 生成する経験値オーブの最小数
-#define BoxerBig_SPAWN_EXP_COUNT_MAX 12   // 生成する経験値オーブの最大数
+#define BoxerBig_SPAWN_EXP_COUNT_MIN 11  // 生成する経験値オーブの最小数
+#define BoxerBig_SPAWN_EXP_COUNT_MAX 12  // 生成する経験値オーブの最大数
 
 // ドラゴン用
-#define Dragon_SPAWN_EXP_COUNT_MIN 13   // 生成する経験値オーブの最小数
-#define Dragon_SPAWN_EXP_COUNT_MAX 14   // 生成する経験値オーブの最大数
-
-// レベル50以下の敵用
-#define Level50_SPAWN_EXP_COUNT_MIN 2  // 生成する経験値オーブの最小数
-#define Level50_SPAWN_EXP_COUNT_MAX 3  // 生成する経験値オーブの最大数
-
-// レベル90以下の敵用
-#define Level90_SPAWN_EXP_COUNT_MIN 5  // 生成する経験値オーブの最小数
-#define Level90_SPAWN_EXP_COUNT_MAX 7  // 生成する経験値オーブの最大数
+#define Dragon_SPAWN_EXP_COUNT_MIN 30   // 生成する経験値オーブの最小数
+#define Dragon_SPAWN_EXP_COUNT_MAX 31   // 生成する経験値オーブの最大数
 
 CExpManeger* CExpManeger::spInstance = nullptr;
 
@@ -783,61 +775,22 @@ void CExpManeger::BoxerBigSpawnExp(int exp, const CVector& pos)
 	}
 }
 
-// 経験値を作成(レベル50以下の敵用)
-void CExpManeger::SpawnExp(int exp, const CVector& pos)
+// 経験値を作成(ボスのドラゴン用)
+void CExpManeger::DragonSpawnExp(int exp, const CVector& pos)
 {
 	if (exp == 0)return;
 
 	// 経験値オーブの生成数を設定
 	int spawnCount = exp;
 	// 生成数が最小数より大きい場合は、
-	if (spawnCount > Level50_SPAWN_EXP_COUNT_MIN)
+	if (spawnCount > Dragon_SPAWN_EXP_COUNT_MIN)
 	{
 		// 生成できる最大数を取得
-		int maxCount = std::min(spawnCount, Level50_SPAWN_EXP_COUNT_MAX);
+		int maxCount = std::min(spawnCount, Dragon_SPAWN_EXP_COUNT_MAX);
 		// 生成数を最小数～最大数のランダムで取得
-		spawnCount = Math::Rand(Level50_SPAWN_EXP_COUNT_MIN, maxCount);
+		spawnCount = Math::Rand(Dragon_SPAWN_EXP_COUNT_MIN, maxCount);
 	}
 	
-	// 開始角度はランダムに決める
-	float startAngle = Math::Rand(0.0f, M_PI * 2.0f);
-	// 加算する経験値のベース値
-	int baseExp = exp / spawnCount;
-	// 割り切れない余りの経験値
-	int remainExp = exp % spawnCount;
-	for (int i = 0; i < spawnCount; i++)
-	{
-		// 余りの経験値が残っている場合は、加算する経験値のベース値+1する
-		CExp* e = new CExp(baseExp + (i < remainExp ? 1 : 0));
-
-		// 等間隔に360度経験値を出現させる
-		float per = (float)i / spawnCount;
-		float angle = startAngle + M_PI * 2.0f * per;
-		CVector dir = CVector(cosf(angle), 0.0f, sinf(angle));
-		CVector epos = pos + dir * 1.0f;
-
-		e->Setup(epos, dir);
-		e->Scale(3.0f, 3.0f, 3.0f);
-		e->SetColor(CColor(0.0f, 1.0f, 0.2, 1.0f));
-	}
-}
-
-// 経験値を作成(レベル90以下の敵用)
-void CExpManeger::SpawnExp2(int exp, const CVector& pos)
-{
-	if (exp == 0)return;
-
-	// 経験値オーブの生成数を設定
-	int spawnCount = exp;
-	// 生成数が最小数より大きい場合は、
-	if (spawnCount > Level90_SPAWN_EXP_COUNT_MIN)
-	{
-		// 生成できる最大数を取得
-		int maxCount = std::min(spawnCount, Level90_SPAWN_EXP_COUNT_MAX);
-		// 生成数を最小数～最大数のランダムで取得
-		spawnCount = Math::Rand(Level90_SPAWN_EXP_COUNT_MIN, maxCount);
-	}
-
 	// 開始角度はランダムに決める
 	float startAngle = Math::Rand(0.0f, M_PI * 2.0f);
 	// 加算する経験値のベース値

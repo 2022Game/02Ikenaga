@@ -26,19 +26,12 @@ public:
 	// 待機状態2
 	void UpdateIdle2();
 
-	// 攻撃
+	// 攻撃(パンチ)
 	void UpdateAttack();
-	// 攻撃2
+	// 攻撃2(蹴り)
 	void UpdateAttack2();
 	// 攻撃終了待ち
 	void UpdateAttackWait();
-
-	// ジャンプ開始
-	void UpdateJumpStart();
-	// ジャンプ中
-	void UpdateJump();
-	// ジャンプ終了
-	void UpdateJumpEnd();
 
 	//ヒット
 	void UpdateHit();
@@ -51,6 +44,12 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
+
+	// ジャンプ中
+	void UpdateJump();
+	// ジャンプ終了
+	void UpdateJumpEnd();
+
 	// 移動
 	void UpdateRun();
 	// 滑る
@@ -98,6 +97,7 @@ public:
 private:
 	int mDefenseTime;  // 防御時間の間隔
 	int mAttackTime;   // 攻撃時間の間隔
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -106,14 +106,13 @@ private:
 		eTPose,		  // Tポーズ
 		eIdle,		  // 待機
 		eIdle2,		  // 待機2
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
+		eAttack,	  // 攻撃(パンチ)
+		eAttack2,	  // 攻撃2(蹴り)
 		eHit,         // ヒット
 		eDefense,     // 防御
 		eDefenseHit,  // 防御中のヒット
 		eDie,         // 死ぬ
 		eDizzy,       // めまい(混乱)
-		eJumpStart,	  // ジャンプ開始
 		eJump,		  // ジャンプ中
 		eJumpEnd,	  // ジャンプ終了
 		eRun,		  // 移動
@@ -143,21 +142,24 @@ private:
 	{
 		eIdle,		  // 待機
 		eIdle2,		  // 待機2
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
+		eAttack,	  // 攻撃(パンチ)
+		eAttack2,	  // 攻撃2(蹴り)
 		eAttackWait,  // 攻撃終了待ち
 		eHit,         // ヒット
 		eDefense,     // 防御
 		eDefenseHit,  // 防御中のヒット
 		eDie,         // 死ぬ時
 		eDizzy,       // めまい(混乱)
-		eJumpStart,	  // ジャンプ開始
 		eJump,		  // ジャンプ中
 		eJumpEnd,	  // ジャンプ終了
 		eRun,         // 移動
 		eSlide,       // 滑る
 	};
 	EState mState;	// ボクサーの状態
+
+	int mStateAttackStep;     // State内の攻撃のステップ処理
+	int mStateAttack2Step;    // State内の攻撃2のステップ処理
+	int mStateSlideStep;      // State内の滑るステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -174,18 +176,18 @@ private:
 	CColliderSphere* mpColliderSphereFeetR;   // キャラクター押し戻しコライダー(右足)
 	CColliderSphere* mpColliderSphereFeetL;   // キャラクター押し戻しコライダー(左足)
 
-	CColliderSphere* mpDamageColHead;   // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBody;   // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColHandR;  // ダメージを受けるコライダー(右手)
-	CColliderSphere* mpDamageColHandL;  // ダメージを受けるコライダー(左手)
-	CColliderSphere* mpDamageColFeetR;  // ダメージを受けるコライダー(右足)
-	CColliderSphere* mpDamageColFeetL;  // ダメージを受けるコライダー(左足)
+	CColliderSphere* mpDamageColHead;         // ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColBody;         // ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColHandR;        // ダメージを受けるコライダー(右手)
+	CColliderSphere* mpDamageColHandL;        // ダメージを受けるコライダー(左手)
+	CColliderSphere* mpDamageColFeetR;        // ダメージを受けるコライダー(右足)
+	CColliderSphere* mpDamageColFeetL;        // ダメージを受けるコライダー(左足)
 
-	CColliderSphere* mpAttackColHead;    // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackColBody;    // ダメージを与えるコライダー(体)
-	CColliderSphere* mpAttackColHandR;   // ダメージを与えるコライダー(右手)
-	CColliderSphere* mpAttackColFeetR;   // ダメージを与えるコライダー(右足)
-	CColliderSphere* mpAttackColFeetL;   // ダメージを与えるコライダー(左足)
+	CColliderSphere* mpAttackColHead;         // ダメージを与えるコライダー(頭)
+	CColliderSphere* mpAttackColBody;         // ダメージを与えるコライダー(体)
+	CColliderSphere* mpAttackColHandR;        // ダメージを与えるコライダー(右手)
+	CColliderSphere* mpAttackColFeetR;        // ダメージを与えるコライダー(右足)
+	CColliderSphere* mpAttackColFeetL;        // ダメージを与えるコライダー(左足)
 
 	CTransform* mpRideObject;
 

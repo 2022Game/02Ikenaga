@@ -25,7 +25,7 @@ CFlame::CFlame(ETag tag)
 	(
 		this,
 		ELayer::eAttackCol,
-		1.0f,1.0f
+		1.0f, 1.0f
 	);
 	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer});
 	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
@@ -85,11 +85,18 @@ void CFlame::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		// 相手のコライダーの持ち主がキャラであれば、
 		if (chara != nullptr)
 		{
-			// 与えるダメージを計算
-			int damage = CalcDamage(1.0f,0, chara);
+			// 既に攻撃済みのキャラでなければ
+			if (!IsAttackHitObj(chara))
+			{
+				// 与えるダメージを計算
+				int damage = CalcDamage(1.0f, mOwner, chara);
 
-			// ダメージを与える
-			chara->TakeDamage(damage,0);
+				// ダメージを与える
+				chara->TakeDamage(damage, 0);
+
+				// 攻撃済みリストに追加
+				AddAttackHitObj(chara);
+			}
 		}
 	}
 }

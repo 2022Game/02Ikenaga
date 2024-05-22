@@ -56,11 +56,11 @@ public:
 	// 大きいボクサーの死亡処理
 	virtual void BoxerBigDeath();
 
-	// 死亡処理(レベル50以下の敵用)
-	virtual void Death();
+	// ボス(ドラゴン)の死亡処理
+	virtual void DragonDeath();
 
-	// 死亡処理(レベル90以下の敵用)
-	virtual void Death2();
+	// 死亡処理
+	virtual void Death();
 protected:
 	CHpGauge* mpHpGauge;      // HPゲージ
 private:

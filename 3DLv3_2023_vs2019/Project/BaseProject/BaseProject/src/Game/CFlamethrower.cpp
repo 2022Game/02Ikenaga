@@ -113,7 +113,7 @@ void CFlamethrower::CreateFlame()
 	CVector dir = GetThrowDir();// + CVector(0.0f, -1.0f, 0.0f);
 	// 発射方向をランダムでブラす
 	dir.X(dir.X() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	dir.Y(dir.Y() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
+	dir.Y(dir.Y() + Math::Rand(-0.07f, 0.01f));
 	dir.Z(dir.Z() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
 	dir.Normalize();
 	// 発射位置、方向、移動速度を設定

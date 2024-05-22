@@ -94,7 +94,7 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 
 	// ボス関連
-	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
+	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
 
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
@@ -161,7 +161,7 @@ void CGameScene::Load()
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
-	player->Position(0.0f, 45.0f, 0.0f);
+	player->Position(0.0f, 40.0f, 0.0f);
 
 	//// レッドスライム
 	//CSlime* enemy = new CSlime();
@@ -290,10 +290,10 @@ void CGameScene::Load()
 	enemy8->Rotate(0.0f,90.0f,-70.0f);
 	enemy8->Scale(0.1f, 0.1f, 0.1f);*/
 
-	//// ドラゴン
-	//CDragon* bossEnemy = new CDragon();
-	//bossEnemy->Position(0.0f, 21.0f, 120.0f);
-	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	// ドラゴン
+	CDragon* bossEnemy = new CDragon();
+	bossEnemy->Position(-200.0f, 21.0f, 120.0f);
+	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	/*CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);

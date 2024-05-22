@@ -107,7 +107,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(71);
+	ChangeLevel(91);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -821,7 +821,7 @@ void CPlayer::ChangeLevel(int level)
 		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
 		diff.Normalize();
 		diff.Y(diff.Y() +   mCharaStatus.cameraHeight);
-		diff.Z(diff.Z() + mCharaStatus.cameraHeight);
+		//diff.Z(diff.Z() + mCharaStatus.cameraHeight);
 		mainCamera->SetFollowTargetOffset(diff);
 	}
 }

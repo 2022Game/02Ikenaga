@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "CColliderLine.h"
 #include "CModel.h"
 #include "CEnemy.h"
@@ -8,196 +8,205 @@ class CFlamethrower;
 class CRoarEffect;
 
 /*
- ƒ{ƒXƒhƒ‰ƒSƒ“
- ƒvƒŒƒCƒ„[‚Ì„’èƒŒƒxƒ‹(91`100)
- ƒGƒlƒ~[ƒNƒ‰ƒX‚ğŒp³
+ ãƒœã‚¹ãƒ‰ãƒ©ã‚´ãƒ³
+ ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ¨å®šãƒ¬ãƒ™ãƒ«(91ï½100)
+ ã‚¨ãƒãƒŸãƒ¼ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿
 */
 class CDragon : public CEnemy
 {
 public:
-	//ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒ|ƒCƒ“ƒ^‚Ìæ“¾
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 	static CDragon* Instance();
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	CDragon();
+	// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~CDragon();
 
-	// ‘Ò‹@ó‘Ô
+	// å¾…æ©ŸçŠ¶æ…‹
 	void UpdateIdle();
-	// ‘Ò‹@ó‘Ô2
+	// å¾…æ©ŸçŠ¶æ…‹2
 	void UpdateIdle2();
-	// ‘Ò‹@ó‘Ô3
+	// å¾…æ©ŸçŠ¶æ…‹3
 	void UpdateIdle3();
 
-	// UŒ‚
+	// æ”»æ’ƒ(ç«ç‚æ”¾å°„)
 	void UpdateAttack();
-	// UŒ‚2
+	// æ”»æ’ƒ2(å‰ã«é£›ã‚“ã§å¾Œã‚ã«ä¸‹ãŒã‚‹)
 	void UpdateAttack2();
-	// UŒ‚3
+	// æ”»æ’ƒ3(åš™ã¿ã¤ã)
 	void UpdateAttack3();
-	// UŒ‚I—¹‘Ò‚¿
+	// æ”»æ’ƒçµ‚äº†å¾…ã¡
 	void UpdateAttackWait();
-	// ”òs‚ÌUŒ‚
+	// é£›è¡Œæ™‚ã®æ”»æ’ƒ
 	void UpdateFlyingAttack();
-	// ”òs‚ÌUŒ‚I—¹‘Ò‚¿
+	// é£›è¡Œæ™‚ã®æ”»æ’ƒçµ‚äº†å¾…ã¡
 	void UpdateFlyingAttackWait();
 
-	//ƒqƒbƒg
+	//ãƒ’ãƒƒãƒˆ
 	void UpdateHit();
-	// –hŒä
+	// é˜²å¾¡
 	void UpdateDefense();
-	// €‚Ê
+	// æ­»ã¬æ™‚
 	void UpdateDie();
 
-	// —Y‹©‚Ñ
+	// é›„å«ã³
 	void UpdateRoar();
 
-	// ”òsŠJn
+	// é£›è¡Œé–‹å§‹
 	void UpdateFlyingStart();
-	// ”òs‚Ì‘Ò‹@
+	// é£›è¡Œã®å¾…æ©Ÿ
 	void UpdateFlyingIdle();
-	// ”òsI—¹
+	// é£›è¡Œçµ‚äº†
 	void UpdateFlyingEnd();
 
-	// ˆÚ“®
+	// ç§»å‹•
 	void UpdateRun();
 
-	// XVˆ—
+	//ã€€é£›è¡Œä¸­ã®ç§»å‹•
+	void UpdateFlyForward();
+
+	// æ›´æ–°å‡¦ç†
 	void Update();
 
-	/// Õ“Ëˆ—
+	/// è¡çªå‡¦ç†
 	/// </summary>
-	/// <param name="self">Õ“Ë‚µ‚½©g‚ÌƒRƒ‰ƒCƒ_[</param>
-	/// <param name="other">Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[</param>
+	/// <param name="self">è¡çªã—ãŸè‡ªèº«ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼</param>
+	/// <param name="other">è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
-	// UŒ‚ŠJn
+	// æ”»æ’ƒé–‹å§‹
 	void AttackStart() override;
-	// UŒ‚I—¹
+	// æ”»æ’ƒçµ‚äº†
 	void AttackEnd() override;
 
-	// •`‰æ
+	// æç”»
 	void Render();
 
-	// 1ƒŒƒxƒ‹ƒAƒbƒv
+	// 1ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—
 	void LevelUp();
-	// ƒŒƒxƒ‹‚Ì•ÏX
+	// ãƒ¬ãƒ™ãƒ«ã®å¤‰æ›´
 	void ChangeLevel(int level);
 
 	/// <summary>
-	/// ”íƒ_ƒ[ƒWˆ—
+	/// è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
-	/// <param name="damage">ó‚¯‚éƒ_ƒ[ƒW</param>
-	//ƒ_ƒ[ƒW‚ğ—^‚¦‚½ƒIƒuƒWƒFƒNƒg
+	/// <param name="damage">å—ã‘ã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸</param>
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
 	/// <summary>
-	/// –hŒä—Í‚Ì‹­‰»Š„‡‚ğæ“¾
+	/// é˜²å¾¡åŠ›ã®å¼·åŒ–å‰²åˆã‚’å–å¾—
 	/// </summary>
 	/// <param name="attackDir"></param>
 	/// <returns></returns>
 	float GetDefBuff(const CVector& attackDir) const override;
 
-	// €–Sˆ—
+	// æ­»äº¡å‡¦ç†
 	void Death() override;
 
 private:
-	int mFlyingTime;        // ”òsŠÔ
-	int mDefenseTime;       // –hŒäŠÔ‚ÌŠÔŠu
-	int mAttackTime;        // UŒ‚ŠÔ‚ÌŠÔŠu
-	int mFlyingAttackTime;  // ”òs‚ÌUŒ‚ŠÔ‚ÌŠÔŠu
+	int mFlyingTime;        // é£›è¡Œæ™‚é–“
+	int mDefenseTime;       // é˜²å¾¡æ™‚é–“ã®é–“éš”
+	int mAttackTime;        // æ”»æ’ƒæ™‚é–“ã®é–“éš”
+	int mFlyingAttackTime;  // é£›è¡Œæ™‚ã®æ”»æ’ƒæ™‚é–“ã®é–“éš”
+	bool mRoarCount;        // é›„å«ã³ã®ã‚«ã‚¦ãƒ³ãƒˆ
 
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìí—Ş
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç¨®é¡
 	enum class EAnimType
 	{
 		None = -1,
 
-		eTPose,		   // Tƒ|[ƒY
-		eIdle,		   // ‘Ò‹@
-		eIdle2,		   // ‘Ò‹@2
-		eIdle3,        // ‘Ò‹@ó‘Ô3
-		eAttack,	   // UŒ‚
-		eAttack2,	   // UŒ‚2
-		eAttack3,	   // UŒ‚3
-		eFlyingAttack, // ”òs‚ÌUŒ‚
-		eHit,          // ƒqƒbƒgWait
-		eDefense,      // –hŒä
-		eDie,          // €‚Ê
-		eRoar,         // —Y‹©‚Ñ
-		eFlyingStart,  // ”òsŠJn
-		eFlyingIdle,   // ”òs‚Ì‘Ò‹@
-		eFlyingEnd,    // ”òsI—¹
-		eRun,		   // ˆÚ“®
+		eTPose,		   // Tãƒãƒ¼ã‚º
+		eIdle,		   // å¾…æ©Ÿ
+		eIdle2,		   // å¾…æ©Ÿ2
+		eIdle3,        // å¾…æ©ŸçŠ¶æ…‹3
+		eAttack,	   // æ”»æ’ƒ(ç«ç‚æ”¾å°„)
+		eAttack2,	   // æ”»æ’ƒ2(å‰ã«é£›ã‚“ã§å¾Œã‚ã«ä¸‹ãŒã‚‹)
+		eAttack3,	   // æ”»æ’ƒ3(åš™ã¿ã¤ã)
+		eFlyingAttack, // é£›è¡Œæ™‚ã®æ”»æ’ƒ
+		eHit,          // ãƒ’ãƒƒãƒˆWait
+		eDefense,      // é˜²å¾¡
+		eDie,          // æ­»ã¬
+		eRoar,         // é›„å«ã³
+		eFlyingStart,  // é£›è¡Œé–‹å§‹
+		eFlyingIdle,   // é£›è¡Œã®å¾…æ©Ÿ
+		eFlyingEnd,    // é£›è¡Œçµ‚äº†
+		eRun,		   // ç§»å‹•
+		eFlyForward,   // é£›è¡Œä¸­ã®ç§»å‹•
 
 		Num
 	};
-	// ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 	void ChangeAnimation(EAnimType type);
 
-	// ƒhƒ‰ƒSƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+	// ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 	static CDragon* spInstance;
 
-	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿
 	struct AnimData
 	{
-		std::string path;	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚ÌƒpƒX
-		bool loop;			// ƒ‹[ƒv‚·‚é‚©‚Ç‚¤‚©
-		float frameLength;	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒtƒŒ[ƒ€”
-		float animSpeed;    // ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶‘¬“x
+		std::string path;	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã®ãƒ‘ã‚¹
+		bool loop;			// ãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‹ã©ã†ã‹
+		float frameLength;	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
+		float animSpeed;    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿé€Ÿåº¦
 	};
-	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚Ìƒe[ƒuƒ‹
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã®ãƒ†ãƒ¼ãƒ–ãƒ«
 	static const AnimData ANIM_DATA[];
 
-	// ƒhƒ‰ƒSƒ“‚Ìó‘Ô
+	// ãƒ‰ãƒ©ã‚´ãƒ³ã®çŠ¶æ…‹
 	enum class EState
 	{
-		eIdle,		       // ‘Ò‹@
-		eIdle2,		       // ‘Ò‹@2
-		eIdle3,            // ‘Ò‹@ó‘Ô3
-		eAttack,	       // UŒ‚
-		eAttack2,	       // UŒ‚2
-		eAttack3,	       // UŒ‚3
-		eAttackWait,       // UŒ‚I—¹‘Ò‚¿
-		eFlyingAttack,     // ”òs‚ÌUŒ‚
-		eFlyingAttackWait, // ”òs‚ÌUŒ‚I—¹‘Ò‚¿
-		eHit,              // ƒqƒbƒg
-		eDefense,          // –hŒä
-		eDie,              // €‚Ê
-		eRoar,             // —Y‹©‚Ñ
-		eFlyingStart,      // ”òsŠJn
-		eFlyingIdle,       // ”òs‚Ì‘Ò‹@
-		eFlyingEnd,        // ”òsI—¹
-		eRun,              // ˆÚ“®
+		eIdle,		       // å¾…æ©Ÿ
+		eIdle2,		       // å¾…æ©Ÿ2
+		eIdle3,            // å¾…æ©ŸçŠ¶æ…‹3
+		eAttack,	       // æ”»æ’ƒ(ç«ç‚æ”¾å°„)
+		eAttack2,	       // æ”»æ’ƒ2(å‰ã«é£›ã‚“ã§å¾Œã‚ã«ä¸‹ãŒã‚‹)
+		eAttack3,	       // æ”»æ’ƒ3(åš™ã¿ã¤ã)
+		eAttackWait,       // æ”»æ’ƒçµ‚äº†å¾…ã¡
+		eFlyingAttack,     // é£›è¡Œæ™‚ã®æ”»æ’ƒ(ç«ç‚æ”¾å°„)
+		eFlyingAttackWait, // é£›è¡Œæ™‚ã®æ”»æ’ƒçµ‚äº†å¾…ã¡
+		eHit,              // ãƒ’ãƒƒãƒˆ
+		eDefense,          // é˜²å¾¡
+		eDie,              // æ­»ã¬æ™‚
+		eRoar,             // é›„å«ã³
+		eFlyingStart,      // é£›è¡Œé–‹å§‹
+		eFlyingIdle,       // é£›è¡Œã®å¾…æ©Ÿ
+		eFlyingEnd,        // é£›è¡Œçµ‚äº†
+		eRun,              // ç§»å‹•
+		eFlyForward,       // é£›è¡Œä¸­ã®ç§»å‹•
 	};
-	EState mState;	  // ƒhƒ‰ƒSƒ“‚Ìó‘Ô
-	int mStateStep;  // State“à‚Å‚ÌƒXƒeƒbƒvˆ—
+	EState mState;	  // ãƒ‰ãƒ©ã‚´ãƒ³ã®çŠ¶æ…‹
+	int mStateAttackStep;        // Stateå†…ã®æ”»æ’ƒã‚¹ãƒ†ãƒƒãƒ—å‡¦ç†
+	int mStateFlyingAttackStep;  // Stateå†…ã®é£›è¡Œä¸­ã®æ”»æ’ƒã‚¹ãƒ†ãƒƒãƒ—å‡¦ç†
 
-	// ó‘Ô‚ğØ‚è‘Ö‚¦
+	// çŠ¶æ…‹ã‚’åˆ‡ã‚Šæ›¿ãˆ
 	void ChangeState(EState state);
 
-	CVector mMoveSpeed;	// ˆÚ“®‘¬“x
-	bool mIsGrounded;	// Ú’n‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	CVector mMoveSpeed;	// ç§»å‹•é€Ÿåº¦
+	bool mIsGrounded;	// æ¥åœ°ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 
-	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphereFeet;   // ƒLƒƒƒ‰ƒNƒ^[‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[(‘O‚Ì¶‘«)
-	CColliderSphere* mpColliderSphereFeet2;  // ƒLƒƒƒ‰ƒNƒ^[‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[(‘O‚Ì‰E‘«)
+	CColliderLine* mpColliderLine;           // ç·šåˆ†ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 
-	CColliderSphere* mpDamageColHead;       // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(“ª)
-	CColliderSphere* mpDamageColMouth;      // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(Œû)
-	CColliderSphere* mpDamageColTipMouth;   // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(Œû‚Ìæ’[)
-	CColliderSphere* mpDamageColNeck;       // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(ñ)
-	CColliderSphere* mpDamageColChest;      // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(‹¹)
-	CColliderSphere* mpDamageColFeet;       // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(‘O‚Ì¶‘«)
-	CColliderSphere* mpDamageColFeet2;      // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(‘O‚Ì‰E‘«)
-	CColliderSphere* mpDamageColFeet3;      // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(Œã‚ë‚Ì¶‘«)
-	CColliderSphere* mpDamageColFeet4;      // ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[(Œã‚ë‚Ì‰E‘«)
+	CColliderSphere* mpColliderSphereFeet;   // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å‰ã®å·¦è¶³)
+	CColliderSphere* mpColliderSphereFeet2;  // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å‰ã®å³è¶³)
 
-	CColliderSphere* mpAttackColHead;       // ƒ_ƒ[ƒW‚ğ—^‚¦‚éƒRƒ‰ƒCƒ_[(“ª)
-	CColliderSphere* mpAttackColMouth;      // ƒ_ƒ[ƒW‚ğ—^‚¦‚éƒRƒ‰ƒCƒ_[(Œû)
-	CColliderSphere* mpAttackColTipMouth;   // ƒ_ƒ[ƒW‚ğ—^‚¦‚éƒRƒ‰ƒCƒ_[(Œû‚Ìæ’[)
+	CColliderSphere* mpDamageColHead;        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(é ­)
+	CColliderSphere* mpDamageColMouth;       // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å£)
+	CColliderSphere* mpDamageColTipMouth;    // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å£ã®å…ˆç«¯)
+	CColliderSphere* mpDamageColNeck;        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(é¦–)
+	CColliderSphere* mpDamageColChest;       // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(èƒ¸)
+	CColliderSphere* mpDamageColFeet;        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å‰ã®å·¦è¶³)
+	CColliderSphere* mpDamageColFeet2;       // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å‰ã®å³è¶³)
+	CColliderSphere* mpDamageColFeet3;       // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å¾Œã‚ã®å·¦è¶³)
+	CColliderSphere* mpDamageColFeet4;       // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å¾Œã‚ã®å³è¶³)
+
+	CColliderSphere* mpAttackColHead;        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(é ­)
+	CColliderSphere* mpAttackColMouth;       // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å£)
+	CColliderSphere* mpAttackColTipMouth;    // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å£ã®å…ˆç«¯)
 
 	CTransform* mpRideObject;
 
-	CFlamethrower* mpFlamethrower;  // ‰Î‰Š•úËƒGƒtƒFƒNƒg
-	CRoarEffect* mpRoar;            // —Y‹©‚ÑƒGƒtƒFƒNƒg
+	CFlamethrower* mpFlamethrower;  // ç«ç‚æ”¾å°„ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+	CRoarEffect* mpRoar;            // é›„å«ã³ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 };

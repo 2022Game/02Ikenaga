@@ -15,7 +15,8 @@ class CElectricShockEffect;
 
 #include <algorithm>
 
-#define DEFAULT_CAMERA_POS CVector(0.0f, 10.0f, 35.0f)
+#define DEFAULT_CAMERA_POS CVector(0.0f, 10.0f, 50.0f)
+
 /*
 プレイヤークラス
 キャラクタクラスを継承

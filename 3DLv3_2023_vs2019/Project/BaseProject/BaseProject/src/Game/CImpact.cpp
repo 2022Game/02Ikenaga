@@ -86,17 +86,17 @@ void CImpact::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (chara != nullptr)
 		{
 			// 既に攻撃済みのキャラでなければ
-			//if (!IsAttackHitObj(chara))
-			//{
+			if (!IsAttackHitObj(chara))
+			{
 				// 与えるダメージを計算
-			int damage = CalcDamage(1.0f,0, chara);
+				int damage = CalcDamage(0.6f, mOwner, chara);
 
-			// ダメージを与える
-			chara->TakeDamage(damage, 0);
+				// ダメージを与える
+				chara->TakeDamage(damage, mOwner);
 
-			// 攻撃済みリストに追加
-		   // AddAttackHitObj(chara);
-		//}
+				// 攻撃済みリストに追加
+			    AddAttackHitObj(chara);
+			}
 		}
 	}
 }

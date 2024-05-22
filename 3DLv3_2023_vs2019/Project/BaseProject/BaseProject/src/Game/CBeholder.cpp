@@ -7,14 +7,13 @@
 #include "CLightningBallEffect.h"
 #include "CElectricShockEffect.h"
 #include "CInput.h"
-#include "CLightningBall.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
 
 #define ENEMY_HEIGHT  0.5f     // 線分コライダー
 #define WITHIN_RANGE  40.0f    // 範囲内
-#define MOVE_SPEED    0.65f     // 移動速度
+#define MOVE_SPEED    0.65f    // 移動速度
 #define GRAVITY       0.0625f  // 重力
 #define WALK_RANGE    150.0f   // 追跡する範囲
 #define STOP_RANGE    26.0f    // 追跡を辞める範囲
@@ -316,12 +315,6 @@ CBeholder::CBeholder()
 	mpAttackColTentacle5->SetEnable(false);
 	mpAttackColTentacle6->SetEnable(false);
 
-	mpLightning = new CLightningBall
-	(
-		ETag::eLightningBall
-	);
-	mpLightning->SetOwner(this);
-
 	mpLightningBall = new CLightningBallEffect
 	(
 		this, nullptr,
@@ -403,7 +396,7 @@ void CBeholder::UpdateIdle()
 	}
 	else if (IsAnimationFinished())
 	{
-		//ChangeState(EState::eIdle);
+		ChangeState(EState::eIdle);
 	}
 }
 
@@ -692,7 +685,10 @@ void CBeholder::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mAttackTime++;
+		if (vectorPos <= 70.0f)
+		{
+			mAttackTime++;
+		}
 
 		if (vectorPos <= ROTATE_RANGE)
 		{

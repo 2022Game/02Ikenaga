@@ -1,4 +1,4 @@
-#include "CDragon.h"
+ï»¿#include "CDragon.h"
 #include "CPlayer.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
@@ -6,62 +6,65 @@
 #include "CFlamethrower.h"
 #include "CRoarEffect.h"
 
-// ƒhƒ‰ƒSƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+// ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 CDragon* CDragon::spInstance = nullptr;
 
-#define ENEMY_HEIGHT -2.9f
-#define WITHIN_RANGE 40.0f       // ”ÍˆÍ“à
-#define MOVE_SPEED 0.08f         // ˆÚ“®‘¬“x
-#define GRAVITY 0.0625f          // d—Í
-#define WALK_RANGE 100.0f        // ’ÇÕ‚·‚é”ÍˆÍ
-#define STOP_RANGE 24.0f         // ’ÇÕ‚ğ«‚ß‚é”ÍˆÍ
-#define ROTATE_RANGE  50.0f      // ‰ñ“]‚·‚é”ÍˆÍ
+#define ENEMY_HEIGHT  -2.9f    // ç·šåˆ†ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
+#define WITHIN_RANGE  70.0f    // ç¯„å›²å†…
+#define MOVE_SPEED    0.8f     // ç§»å‹•é€Ÿåº¦
+#define GRAVITY       0.0625f  // é‡åŠ›
+#define WALK_RANGE    500.0f   // è¿½è·¡ã™ã‚‹ç¯„å›²
+#define STOP_RANGE    55.0f    // è¿½è·¡ã‚’è¾ã‚ã‚‹ç¯„å›²
+#define ROTATE_RANGE  250.0f   // å›è»¢ã™ã‚‹ç¯„å›²
 
-// ƒhƒ‰ƒSƒ“‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚Ìƒe[ƒuƒ‹
+// ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã®ãƒ†ãƒ¼ãƒ–ãƒ«
 const CDragon::AnimData CDragon::ANIM_DATA[] =
 {
-	{ "",										                true,	 0.0f,  0.0f },     // Tƒ|[ƒY
-	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	    true,	81.0f,  0.5f },	    // Q‚é 81.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	    true,	41.0f,  0.5f },	    // ‘Ò‹@ 41.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	    true,	101.0f, 0.5f },	    // ‘Ò‹@ 101.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	false,	81.0f,  0.5f },	    // UŒ‚ 81.0f
-    { "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	false,	91.0f,  0.5f },	    // UŒ‚2 91.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	false,	36.0f,	0.5f },	    // UŒ‚3 36.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	true,	91.0f,	0.5f },	    // ƒtƒ‰ƒCƒtƒŒ[ƒ€ 91.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonGetHit.x",	true,	41.0f,	0.5f },	    // ƒqƒbƒg 41.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	true,	61.0f,	0.5f },	    // –hŒä 61.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	    false,	65.0f,	0.5f },	    // €‚Ê 65.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	true,	101.0f,	0.5f },	    // —Y‹©‚Ñ 101.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	true,	121.0f, 0.5f },	    // ”òsŠJn‚·‚é‘O 121.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyIdle.x",	true,	31.0f,	0.5f },	    // ƒtƒ‰ƒCƒAƒCƒhƒ‹ 31.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	    true,	121.0f,	0.5f },	    // ’…’n 121.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	    true,	21.0f,	0.5f },	    // ‘–‚é 21.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x",	true,	62.0f	},	// ƒtƒ‰ƒCƒtƒHƒ[ƒh 31.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyGlide.x",	true,	51.0f	},	// ƒtƒ‰ƒCƒOƒ‰ƒCƒh 51.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonWalk.x",	true,	82.0f	},	        // •à‚­ 41.0f
+	{ "",										                 true,	  0.0f,  0.0f},  // Tãƒãƒ¼ã‚º
+	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	     true,	 81.0f,  0.5f},  // å¯ã‚‹ 81.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	     true,	 41.0f,  0.5f},  // å¾…æ©Ÿ 41.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	     true,	101.0f,  0.5f},  // å¾…æ©Ÿ 101.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	 false,	 81.0f,  0.5f},  // æ”»æ’ƒ(ç«ç‚æ”¾å°„) 81.0f
+    { "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	 false,	 91.0f,  0.5f},  // æ”»æ’ƒ2(å‰ã«é£›ã‚“ã§å¾Œã‚ã«ä¸‹ãŒã‚‹) 91.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	 false,	 36.0f,	 0.5f},  // æ”»æ’ƒ3(å™›ã¿ã¤ã) 36.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyFlame.x",	 false,	 91.0f,	 0.5f},  // ãƒ•ãƒ©ã‚¤ãƒ•ãƒ¬ãƒ¼ãƒ  91.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonGetHit.x",	 false,	 41.0f,	 0.5f},  // ãƒ’ãƒƒãƒˆ 41.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonDefend.x",	 false,	 61.0f,	 0.5f},  // é˜²å¾¡ 61.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonDie.x",	     false,	 65.0f,	 0.4f},  // æ­»ã¬ 65.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonScream.x",	 false,	101.0f,  0.5f},  // é›„å«ã³ 101.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonTakeOff.x",	 false,	121.0f,  0.5f},  // é£›è¡Œé–‹å§‹ã™ã‚‹å‰ 121.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyIdle.x",	 true,	 31.0f,	 0.5f},  // ãƒ•ãƒ©ã‚¤ã‚¢ã‚¤ãƒ‰ãƒ« 31.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	     false,	121.0f,  0.5f},  // ç€åœ° 121.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	     true,	 21.0f,	 0.5f},  // èµ°ã‚‹ 21.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x", true,	 31.0f,	 0.5f},	 // ãƒ•ãƒ©ã‚¤ãƒ•ã‚©ãƒ¯ãƒ¼ãƒ‰ 31.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyGlide.x",	true,	51.0f	},	// ãƒ•ãƒ©ã‚¤ã‚°ãƒ©ã‚¤ãƒ‰ 51.0f
+	//{ "Character\\Enemy\\Dragon\\animation\\DragonWalk.x",	true,	82.0f	},	        // æ­©ã 41.0f
 };
 
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 CDragon::CDragon()
-    : mState(EState::eIdle2)
+    : mState(EState::eIdle3)
 	, mpRideObject(nullptr)
 	, mFlyingTime(0)
 	, mDefenseTime(0)
 	, mAttackTime(0)
 	, mFlyingAttackTime(0)
-	, mStateStep(0)
+	, mRoarCount(false)
+	, mStateAttackStep(0)
+	, mStateFlyingAttackStep(0)
+	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
-	//ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìİ’è
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®è¨­å®š
 	spInstance = this;
 
-	// ƒ‚ƒfƒ‹ƒf[ƒ^“Ç‚İ‚İ
+	// ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
 	CModelX* model = CResourceManager::Get<CModelX>("Dragon");
 
-	//Å‰‚É1ƒŒƒxƒ‹‚Éİ’è
+	//æœ€åˆã«1ãƒ¬ãƒ™ãƒ«ã«è¨­å®š
 	ChangeLevel(1);
 
-	// ƒe[ƒuƒ‹“à‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚ğ“Ç‚İ‚İ
+	// ãƒ†ãƒ¼ãƒ–ãƒ«å†…ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿
 	int size = ARRAY_SIZE(ANIM_DATA);
 	for (int i = 0; i < size; i++)
 	{
@@ -69,11 +72,12 @@ CDragon::CDragon()
 		if (data.path.empty()) continue;
 		model->AddAnimationSet(data.path.c_str());
 	}
-	// CXCharacter‚Ì‰Šú‰»
+	// CXCharacterã®åˆæœŸåŒ–
 	Init(model);
 
-	// Å‰‚Í‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
-	ChangeAnimation(EAnimType::eIdle2);
+	SetAnimationSpeed(0.5f);
+	// æœ€åˆã¯å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+	ChangeAnimation(EAnimType::eIdle3);
 
 	mpColliderLine = new CColliderLine
 	(
@@ -82,18 +86,18 @@ CDragon::CDragon()
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine->Position(35.0f, 0.0f,-70.0f);
+	//mpColliderLine->Position(35.0f, 0.0f,-70.0f);
 
-	// ƒLƒƒƒ‰ƒNƒ^[‰Ÿ‚µ–ß‚µˆ—(‘O‚Ì¶‘«)
+	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æŠ¼ã—æˆ»ã—å‡¦ç†(å‰ã®å·¦è¶³)
 	mpColliderSphereFeet = new CColliderSphere
 	(
 		this, ELayer::eEnemy,
 		0.7f, false, 20.0f
 	);
-	mpColliderSphereFeet->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColliderSphereFeet->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy});
 	mpColliderSphereFeet->Position(0.0f, 0.0f, 0.2f);
 
-	// ƒLƒƒƒ‰ƒNƒ^[‰Ÿ‚µ–ß‚µˆ—(‘O‚Ì‰E‘«)
+	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æŠ¼ã—æˆ»ã—å‡¦ç†(å‰ã®å³è¶³)
 	mpColliderSphereFeet2 = new CColliderSphere
 	(
 		this, ELayer::eEnemy,
@@ -102,190 +106,202 @@ CDragon::CDragon()
 	mpColliderSphereFeet2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphereFeet2->Position(0.0f, 0.0f, 0.2f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(“ª)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(é ­)
 	mpDamageColHead = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.6f, false
+		this, ELayer::eDamageCol,
+		0.6f, false
 	);
-	//@ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ÆÕ“Ë”»’è‚ğs‚¤ƒRƒ‰ƒCƒ_[‚ÌƒŒƒCƒ„[‚Æƒ^ƒO‚ğİ’è
+	//ã€€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨è¡çªåˆ¤å®šã‚’è¡Œã†ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã‚¿ã‚°ã‚’è¨­å®š
 	mpDamageColHead->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColHead->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColHead->Position(0.1f, 0.0f, 0.0f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(Œû)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(å£)
 	mpDamageColMouth = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.5f, false
+		this, ELayer::eDamageCol,
+		0.5f, false
 	);
 	mpDamageColMouth->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColMouth->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColMouth->Position(-0.2f, 0.1f, 0.15f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(Œû‚Ìæ’[)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(å£ã®å…ˆç«¯)
 	mpDamageColTipMouth = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.4f, false
+		this, ELayer::eDamageCol,
+		0.4f, false
 	);
 	mpDamageColTipMouth->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColTipMouth->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColTipMouth->Position(-0.1f, 0.15f, 0.1f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(ñ)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(é¦–)
 	mpDamageColNeck = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.6f, false
+		this, ELayer::eDamageCol,
+		0.6f, false
 	);
 	mpDamageColNeck->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColNeck->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColNeck->Position(0.1f, 0.0f, 0.1f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(‹¹)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(èƒ¸)
 	mpDamageColChest = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 3.0f, false
+		this, ELayer::eDamageCol,
+		3.0f, false
 	);
-	//@ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ÆÕ“Ë”»’è‚ğs‚¤ƒRƒ‰ƒCƒ_[‚ÌƒŒƒCƒ„[‚Æƒ^ƒO‚ğİ’è
+	//ã€€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨è¡çªåˆ¤å®šã‚’è¡Œã†ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã‚¿ã‚°ã‚’è¨­å®š
 	mpDamageColChest->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColChest->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColChest->Position(-0.2f, 0.0f, 0.1f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(‘O‚Ì¶‘«)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(å‰ã®å·¦è¶³)
 	mpDamageColFeet = new CColliderSphere
 	(
-		this, ELayer::eDamageCol,0.8f,false,1.0f
+		this, ELayer::eDamageCol,
+		0.8f,false,1.0f
 	);
-	//@ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ÆÕ“Ë”»’è‚ğs‚¤ƒRƒ‰ƒCƒ_[‚ÌƒŒƒCƒ„[‚Æƒ^ƒO‚ğİ’è
+	//ã€€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨è¡çªåˆ¤å®šã‚’è¡Œã†ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã‚¿ã‚°ã‚’è¨­å®š
 	mpDamageColFeet->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColFeet->Position(0.0f, 0.0f, 0.2f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(‘O‚Ì‰E‘«)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(å‰ã®å³è¶³)
 	mpDamageColFeet2 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.8f, false, 1.0f
+		this, ELayer::eDamageCol,
+		0.8f, false, 1.0f
 	);
 	mpDamageColFeet2->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet2->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColFeet2->Position(0.0f, 0.0f, 0.2f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(Œã‚ë‚Ì¶‘«)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(å¾Œã‚ã®å·¦è¶³)
 	mpDamageColFeet3 = new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.8f, false, 1.0f
+		this, ELayer::eDamageCol,
+		0.8f, false, 1.0f
 	);
 	mpDamageColFeet3->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet3->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColFeet3->Position(0.0f, 0.0f, 0.2f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğì¬(Œã‚ë‚Ì‰E‘«)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆ(å¾Œã‚ã®å³è¶³)
 	mpDamageColFeet4= new CColliderSphere
 	(
-		this, ELayer::eDamageCol, 0.8f, false, 1.0f
+		this, ELayer::eDamageCol,
+		0.8f, false, 1.0f
 	);
 	mpDamageColFeet4->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColFeet4->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColFeet4->Position(0.0f, 0.0f, 0.2f);
 
-	// ƒ_ƒ[ƒW‚ğ—^‚¦‚éƒRƒ‰ƒCƒ_[(“ª)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(é ­)
 	mpAttackColHead = new CColliderSphere
 	(
-		this, ELayer::eAttackCol,0.6f, false
+		this, ELayer::eAttackCol,
+		0.6f, false
 	);
 	mpAttackColHead->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColHead->Position(0.1f, 0.0f, 0.0f);
 
-	// ƒ_ƒ[ƒW‚ğ—^‚¦‚éƒRƒ‰ƒCƒ_[(Œû)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å£)
 	mpAttackColMouth = new CColliderSphere
 	(
-		this, ELayer::eAttackCol, 0.5f, false
+		this, ELayer::eAttackCol,
+		0.5f, false
 	);
 	mpAttackColMouth->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColMouth->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColMouth->Position(-0.2f, 0.1f, 0.15f);
 
-	// ƒ_ƒ[ƒW‚ğ—^‚¦‚éƒRƒ‰ƒCƒ_[(Œû‚Ìæ’[)
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼(å£ã®å…ˆç«¯)
 	mpAttackColTipMouth = new CColliderSphere
 	(
-		this, ELayer::eAttackCol, 0.4f, false
+		this, ELayer::eAttackCol,
+		0.4f, false
 	);
 	mpAttackColTipMouth->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTipMouth->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColTipMouth->Position(-0.1f, 0.15f, 0.1f);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ÆUŒ‚ƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì“ª‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨æ”»æ’ƒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®é ­ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
 	mpDamageColHead->SetAttachMtx(headMty);
 	mpAttackColHead->SetAttachMtx(headMty);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ÆUŒ‚ƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚ÌŒû‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨æ”»æ’ƒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®å£ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* mouthMty = GetFrameMtx("Armature_UpperMouth01");
 	mpDamageColMouth->SetAttachMtx(mouthMty);
 	mpAttackColMouth->SetAttachMtx(mouthMty);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ÆUŒ‚ƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚ÌŒû‚Ìæ’[‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨æ”»æ’ƒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®å£ã®å…ˆç«¯ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* mouthMty2 = GetFrameMtx("Armature_UpperMouth02");
 	mpDamageColTipMouth->SetAttachMtx(mouthMty2);
 	mpAttackColTipMouth->SetAttachMtx(mouthMty2);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ìñ‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®é¦–ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* neckMty = GetFrameMtx("Armature_Neck03");
 	mpDamageColNeck->SetAttachMtx(neckMty);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‹¹‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®èƒ¸ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* chestMty = GetFrameMtx("Armature_Chest");
 	mpDamageColChest->SetAttachMtx(chestMty);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ìè‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®æ‰‹ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* handMty = GetFrameMtx("Armature_Hand_L");
 	//mpColliderLine->SetAttachMtx(handMty);
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚ÌÒ’Å2‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®è„Šæ¤2ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* spineMty2 = GetFrameMtx("Armature_Spine01");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ìñ2‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®é¦–2ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* neckMty2 = GetFrameMtx("Armature_Neck02");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ìñ3‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®é¦–3ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* neckMty3 = GetFrameMtx("Armature_Neck01");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚ÌÒ’Å‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®è„Šæ¤ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* spineMty = GetFrameMtx("Armature_Spine02");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‚Â‚È‚¬‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®ã¤ãªãã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* jointMty = GetFrameMtx("Armature_joint19");
 	
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‚Â‚È‚¬2‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®ã¤ãªã2ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* jointMty2 = GetFrameMtx("Armature_joint20");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‚Â‚È‚¬3‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®ã¤ãªã3ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* jointMty3 = GetFrameMtx("Armature_joint21");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‚Â‚È‚¬4‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®ã¤ãªã4ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* jointMty4 = GetFrameMtx("Armature_joint22");
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‚Â‚È‚¬5‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®ã¤ãªã5ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* jointMty5 = GetFrameMtx("Armature_joint23");
 
-	// ‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[‚Æƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‘O‚Ì¶‘«‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®å‰ã®å·¦è¶³ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* leftFootMty = GetFrameMtx("Armature_Middle01_L");
 	mpColliderSphereFeet->SetAttachMtx(leftFootMty);
 	mpDamageColFeet->SetAttachMtx(leftFootMty);
 
-	// ‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[‚Æƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚Ì‘O‚Ì‰E‘«‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®å‰ã®å³è¶³ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* rightFootMty = GetFrameMtx("Armature_Middle01_R");
 	mpColliderSphereFeet2->SetAttachMtx(rightFootMty);
 	mpDamageColFeet2->SetAttachMtx(rightFootMty);
 
-	// ‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[‚Æƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚ÌŒã‚ë‚Ì¶‘«‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®å¾Œã‚ã®å·¦è¶³ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* leftFootMty2 = GetFrameMtx("Armature_MiddleToe01_L");
 	mpDamageColFeet3->SetAttachMtx(leftFootMty2);
 
-	// ‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[‚Æƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğƒhƒ‰ƒSƒ“‚ÌŒã‚ë‚Ì‰E‘«‚Ìs—ñ‚ÉƒAƒ^ƒbƒ`
+	// æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ©ã‚´ãƒ³ã®å¾Œã‚ã®å³è¶³ã®è¡Œåˆ—ã«ã‚¢ã‚¿ãƒƒãƒ
 	const CMatrix* rightFootMty2 = GetFrameMtx("Armature_MiddleToe01_R");
 	mpDamageColFeet4->SetAttachMtx(rightFootMty2);
 
-	// Å‰‚ÌUŒ‚ƒRƒ‰ƒCƒ_[‚ğ–³Œø‚É‚µ‚Ä‚¨‚­
+	// æœ€åˆã®æ”»æ’ƒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ç„¡åŠ¹ã«ã—ã¦ãŠã
 	mpAttackColHead->SetEnable(false);
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColTipMouth->SetEnable(false);
@@ -306,13 +322,15 @@ CDragon::CDragon()
 	);
 }
 
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 CDragon::~CDragon()
 {
+	// ç·šåˆ†ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’å‰Šé™¤
 	SAFE_DELETE(mpColliderLine);
-	// ƒLƒƒƒ‰‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[‚ğíœ
+	// ã‚­ãƒ£ãƒ©æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’å‰Šé™¤
 	SAFE_DELETE(mpColliderSphereFeet);
 	SAFE_DELETE(mpColliderSphereFeet2);
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[‚ğíœ
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’å‰Šé™¤
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColMouth);
 	SAFE_DELETE(mpDamageColTipMouth);
@@ -322,19 +340,19 @@ CDragon::~CDragon()
 	SAFE_DELETE(mpDamageColFeet2);
 	SAFE_DELETE(mpDamageColFeet3);
 	SAFE_DELETE(mpDamageColFeet4);
-	// UŒ‚ƒRƒ‰ƒCƒ_[‚ğíœ
+	// æ”»æ’ƒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’å‰Šé™¤
 	SAFE_DELETE(mpAttackColHead);
 	SAFE_DELETE(mpAttackColMouth);
 	SAFE_DELETE(mpAttackColTipMouth);
 }
 
-// ƒhƒ‰ƒSƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+// ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 CDragon* CDragon::Instance()
 {
 	return spInstance;
 }
 
-// ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦
+// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 void CDragon::ChangeAnimation(EAnimType type)
 {
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
@@ -343,31 +361,36 @@ void CDragon::ChangeAnimation(EAnimType type)
 	SetAnimationSpeed(data.animSpeed);
 }
 
-// ó‘Ô‚ÌØ‚è‘Ö‚¦
+// çŠ¶æ…‹ã®åˆ‡ã‚Šæ›¿ãˆ
 void CDragon::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateStep = 0;
+	mStateAttackStep = 0;
+	mStateFlyingAttackStep = 0;
 }
 
-// ‘Ò‹@ó‘Ô
+// å¾…æ©ŸçŠ¶æ…‹(å¯ã¦ã„ã‚‹æ™‚)
 void CDragon::UpdateIdle()
 { 
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
-	if (IsAnimationFinished())
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
 	{
-		ChangeState(EState::eIdle);
+		ChangeState(EState::eIdle2);
 	}
 }
 
-// ‘Ò‹@ó‘Ô2
+// å¾…æ©ŸçŠ¶æ…‹2
 void CDragon::UpdateIdle2()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -381,42 +404,48 @@ void CDragon::UpdateIdle2()
 	}
 }
 
-// ‘Ò‹@ó‘Ô3
+// å¾…æ©ŸçŠ¶æ…‹3
 void CDragon::UpdateIdle3()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle3);
 	}
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= WITHIN_RANGE)
+	{
+		ChangeState(EState::eIdle2);
+	}
 }
 
-// UŒ‚
+// æ”»æ’ƒ(ç«ç‚æ”¾å°„)
 void CDragon::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= ROTATE_RANGE)
+	float vectorPos = (player->Position() - Position()).Length();
+	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
 	{
-		// ƒvƒŒƒCƒ„[‚Ì‚¢‚é•ûŒü‚ÖŒü‚­
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
 		CVector dir = player->Position() - Position();
 		dir.Y(0.0f);
 		dir.Normalize();
 		Rotation(CQuaternion::LookRotation(dir));
 	}
 
-	// ƒXƒeƒbƒv‚²‚Æ‚Éˆ—‚ğ•ª‚¯‚é
-	switch (mStateStep)
+	// ã‚¹ãƒ†ãƒƒãƒ—ã”ã¨ã«å‡¦ç†ã‚’åˆ†ã‘ã‚‹
+	switch (mStateAttackStep)
 	{
-	// ƒXƒeƒbƒv0 : UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“ŠJn
+	// ã‚¹ãƒ†ãƒƒãƒ—0 : æ”»æ’ƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
 		AttackStart();
-		mStateStep++;
+		mStateAttackStep++;
 		break;
-	// ƒXƒeƒbƒv1@: ‰Î‰Š•úËŠJn
+	// ã‚¹ãƒ†ãƒƒãƒ—1ã€€: ç«ç‚æ”¾å°„é–‹å§‹
 	case 1:
 		if (mAnimationFrame >= 17.5f)
 		{
@@ -424,47 +453,43 @@ void CDragon::UpdateAttack()
 			{
 				mpFlamethrower->Start();
 				SetAnimationSpeed(0.25f);
-				mStateStep++;
+				mStateAttackStep++;
 			}
 		}
 		break;
-	// ƒXƒeƒbƒv2 : ‰Î‰Š•úËI—¹‘Ò‚¿
+	// ã‚¹ãƒ†ãƒƒãƒ—2 : ç«ç‚æ”¾å°„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†å¾…ã¡
 	case 2:
 		if (mAnimationFrame >= 70.0f)
 		{
 			mpFlamethrower->Stop();
-			SetAnimationSpeed(0.5f);
-			// UŒ‚I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
 			ChangeState(EState::eAttackWait);
 		}
 		break;
 	}
 }
 
-// UŒ‚2
+// æ”»æ’ƒ2(å‰ã«é£›ã‚“ã§å¾Œã‚ã«ä¸‹ãŒã‚‹)
 void CDragon::UpdateAttack2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack2);
 	AttackStart();
-	// UŒ‚2I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
+	// æ”»æ’ƒ2çµ‚äº†å¾…ã¡çŠ¶æ…‹ã¸ç§»è¡Œ
 	ChangeState(EState::eAttackWait);
 }
 
 
-// UŒ‚3
+// æ”»æ’ƒ3(åš™ã¿ã¤ã)
 void CDragon::UpdateAttack3()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack3);
 	AttackStart();
-	// UŒ‚3I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
+	// æ”»æ’ƒ3çµ‚äº†å¾…ã¡çŠ¶æ…‹ã¸ç§»è¡Œ
 	ChangeState(EState::eAttackWait);
 }
 
-// UŒ‚I—¹‘Ò‚¿
+// æ”»æ’ƒçµ‚äº†å¾…ã¡
 void CDragon::UpdateAttackWait()
 {
 	mpFlamethrower->Stop();
@@ -475,30 +500,46 @@ void CDragon::UpdateAttackWait()
 	}
 }
 
-// ”òs’†‚ÌUŒ‚
+// é£›è¡Œä¸­ã®æ”»æ’ƒ
 void CDragon::UpdateFlyingAttack()
 {
-	ChangeAnimation(EAnimType::eFlyingAttack);
-	if (mAnimationFrame >= 35.0f)
+	SetAnimationSpeed(0.5f);
+
+	// ã‚¹ãƒ†ãƒƒãƒ—ã”ã¨ã«å‡¦ç†ã‚’åˆ†ã‘ã‚‹
+	switch (mStateFlyingAttackStep)
 	{
-		if (!mpFlamethrower->IsThrowing())
+		// ã‚¹ãƒ†ãƒƒãƒ—0 : æ”»æ’ƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹
+	case 0:
+		ChangeAnimation(EAnimType::eFlyingAttack);
+		mStateFlyingAttackStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 30.0f)
 		{
-			mpFlamethrower->Start();
+			if (!mpFlamethrower->IsThrowing())
+			{
+				mpFlamethrower->Start();
+				mStateFlyingAttackStep++;
+			}
 		}
-	}
-	if (mAnimationFrame >= 140.0f)
-	{
-		mpFlamethrower->Stop();
-	}
-	if (IsAnimationFinished())
-	{
-		mpFlamethrower->Stop();
-		// ”òs‚ÌUŒ‚I—¹‘Ò‚¿ó‘Ô‚ÖˆÚs
-		ChangeState(EState::eFlyingAttackWait);
+		break;
+	case 2:
+		if (mAnimationFrame >= 85.0f)
+		{
+			mpFlamethrower->Stop();
+			mStateFlyingAttackStep++;
+		}
+		break;
+	case 3:
+		if (mAnimationFrame >= 89.0f)
+		{
+			ChangeState(EState::eFlyingAttackWait);
+		}
+		break;
 	}
 }
 
-// ”òs’†‚ÌUŒ‚I—¹‘Ò‚¿
+// é£›è¡Œä¸­ã®æ”»æ’ƒçµ‚äº†å¾…ã¡
 void CDragon::UpdateFlyingAttackWait()
 {
 	mpFlamethrower->Stop();
@@ -509,21 +550,22 @@ void CDragon::UpdateFlyingAttackWait()
 	}
 }
 
-// ƒqƒbƒg
+// ãƒ’ãƒƒãƒˆ
 void CDragon::UpdateHit()
 {
+	SetAnimationSpeed(0.5f);
 	mpFlamethrower->Stop();
-	// ƒqƒbƒgƒAƒjƒ[ƒVƒ‡ƒ“‚ğŠJn
+	// ãƒ’ãƒƒãƒˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é–‹å§‹
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
 	{
-		// ƒvƒŒƒCƒ„[‚ÌUŒ‚‚ªƒqƒbƒg‚µ‚½‚Ì‘Ò‹@ó‘Ô‚ÖˆÚs
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒãŒãƒ’ãƒƒãƒˆã—ãŸæ™‚ã®å¾…æ©ŸçŠ¶æ…‹ã¸ç§»è¡Œ
 		ChangeState(EState::eIdle2);
 		ChangeAnimation(EAnimType::eIdle2);
 	}
 }
 
-// –hŒä
+// é˜²å¾¡
 void CDragon::UpdateDefense()
 {
 	mMoveSpeed.X(0.0f);
@@ -536,25 +578,24 @@ void CDragon::UpdateDefense()
 	}
 }
 
-// €‚Ê
+// æ­»ã¬
 void CDragon::UpdateDie()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
 		Kill();
-		// ƒGƒlƒ~[‚Ì€–Sˆ—‚Ö
-		CEnemy::Death();
+		// ã‚¨ãƒãƒŸãƒ¼ã®æ­»äº¡å‡¦ç†ã¸
+		CEnemy::DragonDeath();
 	}
 }
 
-// —Y‹©‚Ñ
+// é›„å«ã³
 void CDragon::UpdateRoar()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	mRoarCount = true;
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRoar);
 	if (mAnimationFrame >= 1.0f)
 	{
@@ -570,181 +611,239 @@ void CDragon::UpdateRoar()
 	}
 }
 
-// ”òsŠJn
+// é£›è¡Œé–‹å§‹
 void CDragon::UpdateFlyingStart()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eFlyingStart);
+
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+
+	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
+	{
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
+
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eFlyingIdle);
 	}
 }
 
-// ”òs’†‚Ì‘Ò‹@
+// é£›è¡Œä¸­ã®å¾…æ©Ÿ
 void CDragon::UpdateFlyingIdle()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eFlyingIdle);
-	if (IsAnimationFinished())
+
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+
+	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
+	{
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
+
+	if (GetAnimationFrame() >= 10.0f && vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+	{
+		ChangeState(EState::eFlyForward);
+	}
+	else if (IsAnimationFinished())
 	{
 		ChangeState(EState::eFlyingIdle);
 	}
 }
 
-// ”òsI—¹
+// é£›è¡Œçµ‚äº†(ç€åœ°)
 void CDragon::UpdateFlyingEnd()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eFlyingEnd);
+
+	CPlayer* player = CPlayer::Instance();
+	float vectorPos = (player->Position() - Position()).Length();
+
+	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
+	{
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
+
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle2);
 	}
 }
 
-// ˆÚ“®
+// ç§»å‹•
 void CDragon::UpdateRun()
 {
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
 	CVector nowPos = (player->Position() - Position()).Normalized();
-	float vectorp = (player->Position() - Position()).Length();
+	float vectorPos = (player->Position() - Position()).Length();
 
-	// ’ÇÕ‚ğ‚â‚ß‚Ä~‚Ü‚é
-	if (vectorp <= 20.0f && vectorp >= 23.0f)
+	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-
-		 // ‰ñ“]‚·‚é”ÍˆÍ‚Å‚ ‚ê‚Î
-		if (vectorp <= ROTATE_RANGE)
-		{
-			// ƒvƒŒƒCƒ„[‚Ì‚¢‚é•ûŒü‚ÖŒü‚­
-			CVector dir = player->Position() - Position();
-			dir.Y(0.0f);
-			dir.Normalize();
-			Rotation(CQuaternion::LookRotation(dir));
-
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-		}
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
 	}
-	// ”ÍˆÍ“à‚ÌAˆÚ“®‚µ’ÇÕ‚·‚é
-	else if (vectorp >= 24.0f && vectorp <= WALK_RANGE)
+
+	// ç¯„å›²å†…ã®æ™‚ã€ç§»å‹•ã—è¿½è·¡ã™ã‚‹
+	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		mMoveSpeed += nowPos * MOVE_SPEED;
 	}
-	// ’ÇÕ‚ª~‚Ü‚Á‚½A‘Ò‹@ƒ‚[ƒVƒ‡ƒ“‚Ö
-	if (vectorp <= STOP_RANGE || vectorp >= WALK_RANGE)
+	// è¿½è·¡ãŒæ­¢ã¾ã£ãŸæ™‚ã€å¾…æ©Ÿãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸
+	if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
 	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
 		ChangeState(EState::eIdle2);
-		ChangeAnimation(EAnimType::eIdle2);
 	}
 }
 
-// XVˆ—
+// é£›è¡Œä¸­ã®ç§»å‹•
+void CDragon::UpdateFlyForward()
+{
+	SetAnimationSpeed(0.5f);
+	ChangeAnimation(EAnimType::eFlyForward);
+
+	CPlayer* player = CPlayer::Instance();
+	CVector nowPos = (player->Position() - Position()).Normalized();
+	float vectorPos = (player->Position() - Position()).Length();
+
+	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
+	{
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
+
+	// ç¯„å›²å†…ã®æ™‚ã€ç§»å‹•ã—è¿½è·¡ã™ã‚‹
+	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+	{
+		mMoveSpeed += nowPos * MOVE_SPEED;
+	}
+	// è¿½è·¡ãŒæ­¢ã¾ã£ãŸæ™‚ã€å¾…æ©Ÿãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸
+	if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
+	{
+		ChangeState(EState::eFlyingIdle);
+	}
+}
+
+// æ›´æ–°å‡¦ç†
 void CDragon::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
+	mMoveSpeed.Z(0.0f);
 
-	// ó‘Ô‚É‡‚í‚¹‚ÄAXVˆ—‚ğØ‚è‘Ö‚¦‚é
+	// çŠ¶æ…‹ã«åˆã‚ã›ã¦ã€æ›´æ–°å‡¦ç†ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
 	switch (mState)
 	{
-		// ‘Ò‹@ó‘Ô
+		// å¾…æ©ŸçŠ¶æ…‹
 	case EState::eIdle:
 		UpdateIdle();
 		break;
-		// ‘Ò‹@ó‘Ô2
+		// å¾…æ©ŸçŠ¶æ…‹2
 	case EState::eIdle2:
 		UpdateIdle2();
 		break;
-		// ‘Ò‹@ó‘Ô3
+		// å¾…æ©ŸçŠ¶æ…‹3
 	case EState::eIdle3:
 		UpdateIdle3();
 		break;
-		// UŒ‚
+		// æ”»æ’ƒ(ç«ç‚æ”¾å°„)
 	case EState::eAttack:
 		UpdateAttack();
 		break;
-		// UŒ‚2
+		// æ”»æ’ƒ2(å‰ã«é£›ã‚“ã§å¾Œã‚ã«ä¸‹ãŒã‚‹)
 	case EState::eAttack2:
 		UpdateAttack2();
 		break;
-		// UŒ‚3
+		// æ”»æ’ƒ3(åš™ã¿ã¤ã)
 	case EState::eAttack3:
 		UpdateAttack3();
 		break;
-		// UŒ‚I—¹‘Ò‚¿
+		// æ”»æ’ƒçµ‚äº†å¾…ã¡
 	case EState::eAttackWait:
 		UpdateAttackWait();
 		break;
-		// ”òs’†‚ÌUŒ‚
+		// é£›è¡Œä¸­ã®æ”»æ’ƒ(ç«ç‚æ”¾å°„)
 	case EState::eFlyingAttack:
 		UpdateFlyingAttack();
 		break;
-		// ”òs’†‚ÌUŒ‚I—¹‘Ò‚¿
+		// é£›è¡Œä¸­ã®æ”»æ’ƒçµ‚äº†å¾…ã¡
 	case EState::eFlyingAttackWait:
 		UpdateFlyingAttackWait();
 		break;
-		// ƒqƒbƒg
+		// ãƒ’ãƒƒãƒˆ
 	case EState::eHit:
 		UpdateHit();
 		break;
-		// –hŒä
+		// é˜²å¾¡
 	case EState::eDefense:
 		UpdateDefense();
 		break;
-		// €‚Ê
+		// æ­»ã¬
 	case EState::eDie:
 		UpdateDie();
 		break;
-		// —Y‹©‚Ñ
+		// é›„å«ã³
 	case EState::eRoar:
 		UpdateRoar();
 		break;
-		// ”òsŠJn
+		// é£›è¡Œé–‹å§‹
 	case EState::eFlyingStart:
 		UpdateFlyingStart();
 		break;
-		// ”òs‚Ì‘Ò‹@
+		// é£›è¡Œã®å¾…æ©Ÿ
 	case EState::eFlyingIdle:
 		UpdateFlyingIdle();
 		break;
-		// ”òsI—¹
+		// é£›è¡Œçµ‚äº†(ç€åœ°)
 	case EState::eFlyingEnd:
 		UpdateFlyingEnd();
 		break;
-		// ˆÚ“®
+		// ç§»å‹•
 	case EState::eRun:
 		UpdateRun();
+		break;
+		// é£›è¡Œä¸­ã®ç§»å‹•
+	case EState::eFlyForward:
+		UpdateFlyForward();
 		break;
 	}
 
 	CPlayer* player = CPlayer::Instance();
-	float vectorp = (player->Position() - Position()).Length();
-	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdle3
-		&& mState != EState::eAttack && mState != EState::eAttack2 && mState != EState::eAttack3 && mState != EState::eAttackWait
-		&& mState != EState::eHit && mState != EState::eDefense && mState != EState::eDie && mState != EState::eRoar
-		&& mState != EState::eFlyingStart && mState != EState::eFlyingIdle && mState != EState::eFlyingAttack && mState != EState::eFlyingAttackWait
-		&& mState != EState::eFlyingEnd && mState != EState::eRun)
-	{
-		ChangeState(EState::eIdle2);
-	}
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	float vectorPos = (player->Position() - Position()).Length();
+	
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
 
-		if (vectorp <= ROTATE_RANGE)
+		if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
 		{
-			// ƒvƒŒƒCƒ„[‚Ì‚¢‚é•ûŒü‚ÖŒü‚­
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ã‚‹æ–¹å‘ã¸å‘ã
 			CVector dir = player->Position() - Position();
 			dir.Y(0.0f);
 			dir.Normalize();
@@ -753,17 +852,17 @@ void CDragon::Update()
 
 		if (mAttackTime > 200)
 		{
-			// UŒ‚2
+			// æ”»æ’ƒ2
 			bool Attack2 = false;
-			// UŒ‚
+			// æ”»æ’ƒ
 			bool Attack = false;
-			// –hŒä
+			// é˜²å¾¡
 			bool Defense = false;
-			// Šm—¦‚ğÅ¬‚É2Å‘å5
+			// ç¢ºç‡ã‚’æœ€å°ã«2æœ€å¤§5
 			int probability2 = Math::Rand(2, 4);
-			// Šm—¦‚ğÅ¬‚É5Å‘å7
+			// ç¢ºç‡ã‚’æœ€å°ã«5æœ€å¤§7
 			int probability3 = Math::Rand(5, 7);
-			// Šm—¦‚ğÅ¬‚É8Å‘å10
+			// ç¢ºç‡ã‚’æœ€å°ã«8æœ€å¤§10
 			int probability4 = Math::Rand(8, 10);
 
 			if (probability2 == 2)Attack2 = true;
@@ -771,7 +870,7 @@ void CDragon::Update()
 			if (probability4 == 8)Defense = true;
 			if (Attack2)
 			{
-				ChangeState(EState::eAttack2);
+				//ChangeState(EState::eAttack2);
 			}
 			else if (Attack)
 			{
@@ -779,11 +878,11 @@ void CDragon::Update()
 			}
 			else if (Defense)
 			{
-				ChangeState(EState::eDefense);
+				//ChangeState(EState::eDefense);
 			}
 			else
 			{
-				ChangeState(EState::eAttack3);
+				//ChangeState(EState::eAttack3);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3
@@ -802,7 +901,7 @@ void CDragon::Update()
 		}
 	}
 
-	// –hŒäŠÔŒv‘ª
+	// é˜²å¾¡æ™‚é–“è¨ˆæ¸¬
 	if (mState == EState::eDefense)
 	{
 		mDefenseTime++;
@@ -813,19 +912,19 @@ void CDragon::Update()
 	}
 
 	if (mState != EState::eFlyingStart && mState != EState::eFlyingIdle && mState != EState::eFlyingAttack
-		&& mState != EState::eFlyingAttackWait && mState != EState::eFlyingEnd)
+		&& mState != EState::eFlyingAttackWait && mState != EState::eFlyingEnd && mState != EState::eFlyForward)
 	{
-		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime ==0)
+		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime==0 && mRoarCount !=true)
 		{
 			ChangeState(EState::eRoar);
 		}
-		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >=400)
+		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >= 400)
 		{
 			ChangeState(EState::eFlyingStart);
 		}
 	}
 
-	if (mState == EState::eFlyingIdle)
+	if (mState == EState::eFlyingIdle || mState==EState::eFlyForward)
 	{
 		mFlyingTime++;
 		mFlyingAttackTime++;
@@ -844,36 +943,33 @@ void CDragon::Update()
 	{
 		ChangeState(EState::eFlyingEnd);
 	}
-	if (mState == EState::eFlyingEnd || mState == EState::eFlyingStart && mFlyingTime >=400)
+	if (mState == EState::eFlyingEnd || mState == EState::eFlyingStart && mFlyingTime >= 400)
 	{
 		mFlyingTime = 1;
 	}
 
-	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çA
-	if (mCharaStatus.hp <= 0)
+	if (mState == EState::eRun || mState == EState::eFlyForward)
 	{
-		// €–Sˆ—
-		Death();
+		if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+		{
+			Position(Position() + mMoveSpeed);
+		}
 	}
 
-	if (vectorp >= STOP_RANGE && vectorp <= WALK_RANGE)
-	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
-	}
+	CDebugPrint::Print(" (åœ°)æ”»æ’ƒæ™‚é–“: %d\n", mAttackTime);
+	CDebugPrint::Print(" æ”»æ’ƒæ™‚é–“: %d",mFlyingAttackTime);
+	CDebugPrint::Print(" ç©ºä¸­æ™‚é–“: %d", mFlyingTime);
+	CDebugPrint::Print(" HP: %d", mCharaStatus.hp);
+	CDebugPrint::Print(" è·é›¢: %f", vectorPos);
 
-	CDebugPrint::Print(" (’n)UŒ‚ŠÔ: %d\n", mAttackTime);
-	CDebugPrint::Print(" UŒ‚ŠÔ: %d\n",mFlyingAttackTime);
-	CDebugPrint::Print(" ‹ó’†ŠÔ: %d\n", mFlyingTime);
-	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
-
-	// ƒLƒƒƒ‰ƒNƒ^[‚ÌXV
+	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®æ›´æ–°
 	CXCharacter::Update();
 
-	 // ƒLƒƒƒ‰‰Ÿ‚µ–ß‚µƒRƒ‰ƒCƒ_[
+	 // ã‚­ãƒ£ãƒ©æŠ¼ã—æˆ»ã—ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	mpColliderSphereFeet->Update();
 	mpColliderSphereFeet2->Update();
 
-	// ƒ_ƒ[ƒW‚ğó‚¯‚éƒRƒ‰ƒCƒ_[
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	mpDamageColHead->Update();
 	mpDamageColMouth->Update();
 	mpDamageColTipMouth->Update();
@@ -884,7 +980,7 @@ void CDragon::Update()
 	mpDamageColFeet3->Update();
 	mpDamageColFeet4->Update();
 
-	// UŒ‚ƒRƒ‰ƒCƒ_[
+	// æ”»æ’ƒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	mpAttackColHead->Update();
 	mpAttackColMouth->Update();
 	mpAttackColTipMouth->Update();
@@ -893,10 +989,10 @@ void CDragon::Update()
 
 	if (CInput::PushKey(('Q')))
 	{
-		ChangeState(EState::eAttack2);
+		ChangeState(EState::eFlyForward);
 	}
 
-	// uEvƒL[‚Å‰Š‚Ì”­Ë‚ğƒIƒ“ƒIƒt‚·‚é
+	// ã€ŒEã€ã‚­ãƒ¼ã§ç‚ã®ç™ºå°„ã‚’ã‚ªãƒ³ã‚ªãƒ•ã™ã‚‹
 	if (CInput::PushKey('Z'))
 	{
 		if (!mpFlamethrower->IsThrowing())
@@ -908,41 +1004,30 @@ void CDragon::Update()
 			mpFlamethrower->Stop();
 		}
 	}
-	if (CInput::PushKey('C'))
-	{
-		if (!mpRoar->IsThrowing())
-		{
-			mpRoar->Start();
-		}
-		else
-		{
-			mpRoar->Stop();
-		}
-	}
 }
 
-// Õ“Ëˆ—
+// è¡çªå‡¦ç†
 void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	// Õ“Ë‚µ‚½©•ª‚ÌƒRƒ‰ƒCƒ_[‚ªUŒ‚”»’è—p‚ÌƒRƒ‰ƒCƒ_[‚Å‚ ‚ê‚ÎA
+	// è¡çªã—ãŸè‡ªåˆ†ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒæ”»æ’ƒåˆ¤å®šç”¨ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã§ã‚ã‚Œã°ã€
 	if (self == mpAttackColHead || self == mpAttackColMouth || self == mpAttackColTipMouth
 		&& mState != EState::eIdle && mState != EState::eIdle2 &&
 		mState != EState::eIdle3)
 	{
-		// ƒLƒƒƒ‰‚Ìƒ|ƒCƒ“ƒ^‚É•ÏŠ·
+		// ã‚­ãƒ£ãƒ©ã®ãƒã‚¤ãƒ³ã‚¿ã«å¤‰æ›
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
-		// ‘Šè‚ÌƒRƒ‰ƒCƒ_[‚Ì‚¿å‚ªƒLƒƒƒ‰‚Å‚ ‚ê‚ÎA
+		// ç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®æŒã¡ä¸»ãŒã‚­ãƒ£ãƒ©ã§ã‚ã‚Œã°ã€
 		if (chara != nullptr)
 		{
-			// Šù‚ÉUŒ‚Ï‚İ‚ÌƒLƒƒƒ‰‚Å‚È‚¯‚ê‚Î
+			// æ—¢ã«æ”»æ’ƒæ¸ˆã¿ã®ã‚­ãƒ£ãƒ©ã§ãªã‘ã‚Œã°
 			if (!IsAttackHitObj(chara))
 			{
 				int damage = CalcDamage(1.0f,this, chara);
 
-				// ƒ_ƒ[ƒW‚ğ—^‚¦‚é
+				// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
 				chara->TakeDamage(damage, this);
 
-				// UŒ‚Ï‚İƒŠƒXƒg‚É’Ç‰Á
+				// æ”»æ’ƒæ¸ˆã¿ãƒªã‚¹ãƒˆã«è¿½åŠ 
 				AddAttackHitObj(chara);
 			}
 		}
@@ -960,7 +1045,7 @@ void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	// ƒLƒƒƒ‰ƒNƒ^[“¯m‚ÌÕ“Ëˆ—
+	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åŒå£«ã®è¡çªå‡¦ç†
 	else if (self == mpColliderSphereFeet || self == mpColliderSphereFeet2)
 	{
 		CVector pushBack = hit.adjust * hit.weight;
@@ -969,16 +1054,15 @@ void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	}
 }
 
-// UŒ‚ŠJn
+// æ”»æ’ƒé–‹å§‹
 void CDragon::AttackStart()
 {
 	CXCharacter::AttackStart();
-	// UŒ‚‚ªn‚Ü‚Á‚½‚çAUŒ‚”»’è—p‚ÌƒRƒ‰ƒCƒ_[‚ğƒIƒ“‚É‚·‚é
+	// æ”»æ’ƒãŒå§‹ã¾ã£ãŸã‚‰ã€æ”»æ’ƒåˆ¤å®šç”¨ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ã‚ªãƒ³ã«ã™ã‚‹
 	if (mState == EState::eAttack2)
 	{
-
 	}
-	else if (mState == EState::eAttack3)
+	if (mState == EState::eAttack3)
 	{
 		mpAttackColHead->SetEnable(true);
 		mpAttackColMouth->SetEnable(true);
@@ -986,73 +1070,79 @@ void CDragon::AttackStart()
 	}
 }
 
-// UŒ‚I—¹
+// æ”»æ’ƒçµ‚äº†
 void CDragon::AttackEnd()
 {
 	CXCharacter::AttackEnd();
-	// UŒ‚‚ªI‚í‚ê‚ÎAUŒ‚”»’è—p‚ÌƒRƒ‰ƒCƒ_[‚ğƒIƒt‚É‚·‚é
+	// æ”»æ’ƒãŒçµ‚ã‚ã‚Œã°ã€æ”»æ’ƒåˆ¤å®šç”¨ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ã‚ªãƒ•ã«ã™ã‚‹
 	mpAttackColHead->SetEnable(false);
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColTipMouth->SetEnable(false);
 }
 
-// •`‰æ
+// æç”»
 void CDragon::Render()
 {
 	CXCharacter::Render();
 }
 
-// 1ƒŒƒxƒ‹ƒAƒbƒv
+// 1ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—
 void CDragon::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
-// ƒŒƒxƒ‹‚ğ•ÏX
+// ãƒ¬ãƒ™ãƒ«ã‚’å¤‰æ›´
 void CDragon::ChangeLevel(int level)
 {
-	// ƒXƒe[ƒ^ƒX‚Ìƒe[ƒuƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX’l‚É•ÏŠ·
+	// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å€¤ã«å¤‰æ›
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
-	// Å‘åƒXƒe[ƒ^ƒX‚Éİ’è
+	// æœ€å¤§ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã«è¨­å®š
 	mCharaMaxStatus = ENEMY10_STATUS[index];
-	// Œ»İ‚ÌƒXƒe[ƒ^ƒX‚ğÅ‘å’l‚É‚·‚é‚±‚Æ‚ÅAHP‰ñ•œ
+	// ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’æœ€å¤§å€¤ã«ã™ã‚‹ã“ã¨ã§ã€HPå›å¾©
 	mCharaStatus = mCharaMaxStatus;
 
 	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
 	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
-// ”íƒ_ƒ[ƒWˆ—
+// è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 void CDragon::TakeDamage(int damage, CObjectBase* causedObj)
 {
-	//HP‚©‚çƒ_ƒ[ƒW‚ğˆø‚­
+	//HPã‹ã‚‰ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å¼•ã
 	if (mCharaStatus.hp -= damage)
 	{
 		mpFlamethrower->Stop();
-		ChangeState(EState::eHit);
+		if (mState != EState::eRoar && mState != EState::eFlyingStart &&  mState != EState::eFlyingAttack
+			&& mState != EState::eFlyingIdle && mState != EState::eFlyingEnd
+			&& mState != EState::eAttack)
+		{
+			ChangeState(EState::eHit);
+		}
 	}
-	// HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çA
+	// HPãŒ0ä»¥ä¸‹ã«ãªã£ãŸã‚‰ã€
 	if (mCharaStatus.hp <= 0)
 	{
-		// €–Sˆ—
+		// æ­»äº¡å‡¦ç†
 		Death();
 	}
 }
 
-// –hŒä—Í‚Ì‹­‰»Š„‡‚ğæ“¾
+// é˜²å¾¡åŠ›ã®å¼·åŒ–å‰²åˆã‚’å–å¾—
 float CDragon::GetDefBuff(const CVector& attackDir)const
 {
-	// –hŒäó‘Ô‚Å‚ ‚ê‚ÎA–hŒä2”{
+	// é˜²å¾¡çŠ¶æ…‹ã§ã‚ã‚Œã°ã€é˜²å¾¡2å€
 	if (mState == EState::eDefense) return 2.0f;
+	if (mState == EState::eRoar) return 20.0f;
 
-	// ’Êí‚Ì–hŒä‚ÌŠ„‡
+	// é€šå¸¸æ™‚ã®é˜²å¾¡ã®å‰²åˆ
 	return mBaseDefenseBuffRatio;
 }
 
-// €–Sˆ—
+// æ­»äº¡å‡¦ç†
 void CDragon::Death()
 {
-	// €–Só‘Ô‚ÖˆÚs
+	// æ­»äº¡çŠ¶æ…‹ã¸ç§»è¡Œ
 	ChangeState(EState::eDie);
 }
