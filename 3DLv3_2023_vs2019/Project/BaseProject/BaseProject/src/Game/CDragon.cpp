@@ -421,7 +421,7 @@ void CDragon::UpdateIdle3()
 	}
 }
 
-// 攻撃(火炎放射)
+// 攻撃(火炎放射) 
 void CDragon::UpdateAttack()
 {
 	SetAnimationSpeed(0.5f);
