@@ -14,8 +14,8 @@ CDragon* CDragon::spInstance = nullptr;
 #define MOVE_SPEED    0.8f     // 移動速度
 #define GRAVITY       0.0625f  // 重力
 #define WALK_RANGE    500.0f   // 追跡する範囲
-#define STOP_RANGE    55.0f    // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f   // 回転する範囲
+#define STOP_RANGE    150.0f   // 追跡を辞める範囲
+#define ROTATE_RANGE  500.0f   // 回転する範囲
 
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
@@ -23,7 +23,7 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	{ "",										                 true,	  0.0f,  0.0f},  // Tポーズ
 	{ "Character\\Enemy\\Dragon\\animation\\DragonSleep.x",	     true,	 81.0f,  0.5f},  // 寝る 81.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle.x",	     true,	 41.0f,  0.5f},  // 待機 41.0f
-	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	     true,	101.0f,  0.5f},  // 待機 101.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonIdle2.x",	     true,	101.0f,  0.5f},  // 待機2 101.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack.x",	 false,	 81.0f,  0.5f},  // 攻撃(火炎放射) 81.0f
     { "Character\\Enemy\\Dragon\\animation\\DragonAttack2.x",	 false,	 91.0f,  0.5f},  // 攻撃2(前に飛んで後ろに下がる) 91.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonAttack3.x",	 false,	 36.0f,	 0.5f},  // 攻撃3(噛みつき) 36.0f
@@ -37,8 +37,6 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	     false,	121.0f,  0.5f},  // 着地 121.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	     true,	 21.0f,	 0.5f},  // 走る 21.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x", true,	 31.0f,	 0.5f},	 // フライフォワード 31.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonFlyGlide.x",	true,	51.0f	},	// フライグライド 51.0f
-	//{ "Character\\Enemy\\Dragon\\animation\\DragonWalk.x",	true,	82.0f	},	        // 歩く 41.0f
 };
 
 // コンストラクタ
@@ -390,7 +388,7 @@ void CDragon::UpdateIdle2()
 	ChangeAnimation(EAnimType::eIdle2);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+	if (GetAnimationFrame() >= 10.0f && vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -568,8 +566,7 @@ void CDragon::UpdateHit()
 // 防御
 void CDragon::UpdateDefense()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDefense);
 
 	if (IsAnimationFinished())
@@ -690,6 +687,7 @@ void CDragon::UpdateFlyingEnd()
 // 移動
 void CDragon::UpdateRun()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
@@ -874,11 +872,11 @@ void CDragon::Update()
 			}
 			else if (Attack)
 			{
-				ChangeState(EState::eAttack);
+				//ChangeState(EState::eAttack);
 			}
 			else if (Defense)
 			{
-				//ChangeState(EState::eDefense);
+				ChangeState(EState::eDefense);
 			}
 			else
 			{
