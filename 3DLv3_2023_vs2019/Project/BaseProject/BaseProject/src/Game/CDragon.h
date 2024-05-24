@@ -66,6 +66,9 @@ public:
 	//　飛行中の移動
 	void UpdateFlyForward();
 
+	// バックステップ
+	void UpdateBackStep();
+
 	// 更新処理
 	void Update();
 
@@ -134,6 +137,7 @@ private:
 		eFlyingEnd,    // 飛行終了
 		eRun,		   // 移動
 		eFlyForward,   // 飛行中の移動
+		eBackStep,     // バックステップ
 
 		Num
 	};
@@ -175,6 +179,7 @@ private:
 		eFlyingEnd,        // 飛行終了
 		eRun,              // 移動
 		eFlyForward,       // 飛行中の移動
+		eBackStep,     // バックステップ
 	};
 	EState mState;	  // ドラゴンの状態
 	int mStateAttackStep;        // State内の攻撃ステップ処理

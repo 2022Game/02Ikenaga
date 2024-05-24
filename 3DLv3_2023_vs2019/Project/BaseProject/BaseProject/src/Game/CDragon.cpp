@@ -37,6 +37,7 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 	{ "Character\\Enemy\\Dragon\\animation\\DragonLand.x",	     false,	121.0f,  0.5f},  // 着地 121.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonRun.x",	     true,	 21.0f,	 0.5f},  // 走る 21.0f
 	{ "Character\\Enemy\\Dragon\\animation\\DragonFlyForward.x", true,	 31.0f,	 0.5f},	 // フライフォワード 31.0f
+	{ "Character\\Enemy\\Dragon\\animation\\DragonBackStep.x",   false,	 24.0f,	 0.5f},	 // バックステップ
 };
 
 // コンストラクタ
@@ -746,6 +747,31 @@ void CDragon::UpdateFlyForward()
 	}
 }
 
+// バックステップ
+void CDragon::UpdateBackStep()
+{
+	SetAnimationSpeed(0.5f);
+	ChangeAnimation(EAnimType::eBackStep);
+	CPlayer* player = CPlayer::Instance();
+	CVector nowPos = (player->Position() - Position()).Normalized();
+	float vectorPos = (player->Position() - Position()).Length();
+
+	if (vectorPos >= 50.0f && mAnimationFrame >= 10.0f)
+	{
+		mMoveSpeed -= -nowPos * 3.5f;
+		//Position(Position().X(), Position().Y() + 0.5f, Position().Z());
+		//mMoveSpeed.Y(-0.1f);
+	}
+	if (mAnimationFrame >= 11.0f)
+	{
+		Position(Position().X(), Position().Y() - 3.5f, Position().Z());
+	}
+	if (mAnimationFrame >= 24.0f)
+	{
+		ChangeState(EState::eIdle2);
+	}
+}
+
 // 更新処理
 void CDragon::Update()
 {
@@ -830,6 +856,10 @@ void CDragon::Update()
 	case EState::eFlyForward:
 		UpdateFlyForward();
 		break;
+		// バックステップ
+	case EState::eBackStep:
+		UpdateBackStep();
+		break;
 	}
 
 	CPlayer* player = CPlayer::Instance();
@@ -868,7 +898,7 @@ void CDragon::Update()
 			if (probability4 == 8)Defense = true;
 			if (Attack2)
 			{
-				//ChangeState(EState::eAttack2);
+				ChangeState(EState::eAttack2);
 			}
 			else if (Attack)
 			{
@@ -876,7 +906,7 @@ void CDragon::Update()
 			}
 			else if (Defense)
 			{
-				ChangeState(EState::eDefense);
+				//ChangeState(EState::eDefense);
 			}
 			else
 			{
@@ -912,7 +942,7 @@ void CDragon::Update()
 	if (mState != EState::eFlyingStart && mState != EState::eFlyingIdle && mState != EState::eFlyingAttack
 		&& mState != EState::eFlyingAttackWait && mState != EState::eFlyingEnd && mState != EState::eFlyForward)
 	{
-		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime==0 && mRoarCount !=true)
+		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime == 0 && mRoarCount != true)
 		{
 			ChangeState(EState::eRoar);
 		}
@@ -922,7 +952,7 @@ void CDragon::Update()
 		}
 	}
 
-	if (mState == EState::eFlyingIdle || mState==EState::eFlyForward)
+	if (mState == EState::eFlyingIdle || mState == EState::eFlyForward)
 	{
 		mFlyingTime++;
 		mFlyingAttackTime++;
@@ -952,6 +982,12 @@ void CDragon::Update()
 		{
 			Position(Position() + mMoveSpeed);
 		}
+	}
+
+	if (mState == EState::eBackStep)
+	{
+		Position(Position() - mMoveSpeed);
+		//Position(Position().X(), Position().Y() - 1.0f, Position().Z());
 	}
 
 	CDebugPrint::Print(" (地)攻撃時間: %d\n", mAttackTime);
@@ -985,9 +1021,9 @@ void CDragon::Update()
 
 	mIsGrounded = false;
 
-	if (CInput::PushKey(('Q')))
+	if (CInput::PushKey(('T')))
 	{
-		ChangeState(EState::eFlyForward);
+		ChangeState(EState::eBackStep);
 	}
 
 	// 「E」キーで炎の発射をオンオフする
