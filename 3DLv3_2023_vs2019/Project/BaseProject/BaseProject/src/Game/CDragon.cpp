@@ -764,7 +764,7 @@ void CDragon::UpdateBackStep()
 	}
 	if (mAnimationFrame >= 11.0f)
 	{
-		Position(Position().X(), Position().Y() - 3.5f, Position().Z());
+		//Position(Position().X(), Position().Y() - 3.5f, Position().Z());
 	}
 	if (mAnimationFrame >= 24.0f)
 	{
