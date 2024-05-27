@@ -71,7 +71,6 @@ public:
 	/// <param name="damage">受けるダメージ</param>
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
-
 	/// <summary>
 	/// 攻撃力の強化割合を取得
 	/// </summary>
@@ -194,29 +193,28 @@ private:
 	// プレイヤーの状態
 	enum class EState
 	{
-		eIdle,		// 待機
-		eWalk,      // 歩行
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
-		eAttack4,	// 攻撃4
-		eAttack5,	// 攻撃5
-		eAttack6,	// 攻撃6
-		eAttack7,	// 攻撃7
-		eAttackWait,// 攻撃終了待ち
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
-		ePowerUp,   // 攻撃力アップ
-		ePowerUpEnd,  // 攻撃力アップ終了
-		eHit,       // ヒット
-		eGuard,     // ガード
-		eGuardHit,  // ガードヒット
-		eRolling,   // 回避
-		eDie,       // 死ぬ
-		eJumpAttack,// ジャンプ攻撃
-		eJumpAttackWait,  //ジャンプ攻撃終了待ち
-		eStop,      // 停止
+		eIdle,		      // 待機
+		eWalk,            // 歩行
+		eAttack,	      // 攻撃
+		eAttack2,	      // 攻撃2
+		eAttack3,	      // 攻撃3
+		eAttack4,	      // 攻撃4
+		eAttack5,	      // 攻撃5
+		eAttack6,	      // 攻撃6
+		eAttack7,	      // 攻撃7
+		eAttackWait,      // 攻撃終了待ち
+		eJumpStart,	      // ジャンプ開始
+		eJump,		      // ジャンプ中
+		eJumpEnd,	      // ジャンプ終了
+		ePowerUp,         // 攻撃力アップ
+		ePowerUpEnd,      // 攻撃力アップ終了
+		eHit,             // ヒット
+		eGuard,           // ガード
+		eGuardHit,        // ガードヒット
+		eRolling,         // 回避
+		eDie,             // 死ぬ
+		eJumpAttack,      // ジャンプ攻撃
+		eJumpAttackWait,  // ジャンプ攻撃終了待ち
 	};
 	EState mState;	// プレイヤーの状態
 	int mStateJumpAttackStep;
@@ -224,8 +222,10 @@ private:
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	CVector mMoveSpeed;	// 移動速度
-	bool mIsGrounded;	// 接地しているかどうか
+	CVector mMoveSpeed;	 // 移動速度
+	bool mIsGrounded;	 // 接地しているかどうか
+	bool mDefenseUp;     // 防御力
+	float mElapsedTime;	 // 経過時間
 
 	CColliderLine* mpColliderLine;          // 線分コライダー
 

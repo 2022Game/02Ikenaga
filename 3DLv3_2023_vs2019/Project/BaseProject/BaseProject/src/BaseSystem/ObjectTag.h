@@ -8,10 +8,10 @@ enum class ETag
 
 	eField,	 // フィールドを構成するオブジェクト
 	eExp,    // 経験値
-	eRideableObject,	// 乗ることができるオブジェクト
+	eRideableObject,  // 乗ることができるオブジェクト
 	eItem,	 // アイテムの攻撃力アップ
-	eItem2,  // アイテムの回復
-	eItem3,  // アイテムの移動速度アップ
+	ePortionGreen,    // アイテムの回復
+	ePortionBlue,     // アイテムの防御力アップ
 
 	eWeapon, // 武器
 

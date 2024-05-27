@@ -781,6 +781,11 @@ void CDragon::Update()
 	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 
+	if (CInput::PushKey(('T')))
+	{
+		ChangeState(EState::eBackStep);
+	}
+
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
@@ -1020,11 +1025,6 @@ void CDragon::Update()
 	mpAttackColTipMouth->Update();
 
 	mIsGrounded = false;
-
-	if (CInput::PushKey(('T')))
-	{
-		ChangeState(EState::eBackStep);
-	}
 
 	// 「E」キーで炎の発射をオンオフする
 	if (CInput::PushKey('Z'))

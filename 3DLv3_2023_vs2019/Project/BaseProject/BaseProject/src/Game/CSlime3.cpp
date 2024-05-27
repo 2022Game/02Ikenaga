@@ -78,7 +78,7 @@ CSlime3::CSlime3()
 
 	mpColliderLine = new CColliderLine
 	(
-		this, ELayer::eEnemy2,
+		this, ELayer::eEnemy,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);

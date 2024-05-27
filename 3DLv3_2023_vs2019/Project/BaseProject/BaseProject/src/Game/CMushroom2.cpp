@@ -91,10 +91,10 @@ CMushroom2::CMushroom2()
 
 	mpColliderSphere2 = new CColliderSphere
 	(
-		this, ELayer::eEnemy2,
+		this, ELayer::eEnemy,
 		0.55f, false, 5.0f
 	);
-	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy2 });
+	mpColliderSphere2->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColliderSphere2->Position(0.0f, 0.8f, 0.0f);
 
 	// ダメージを受けるコライダーを作成

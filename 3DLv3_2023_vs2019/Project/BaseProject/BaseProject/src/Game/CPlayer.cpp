@@ -86,6 +86,8 @@ CPlayer::CPlayer()
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
+	, mDefenseUp(false)
+	, mElapsedTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
@@ -107,7 +109,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(91);
+	ChangeLevel(71);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -138,7 +140,8 @@ CPlayer::CPlayer()
 		this,ELayer::ePlayer,
 		0.35f
 	);
-	mpColliderSphereHead->SetCollisionLayers({ ELayer::eEnemy });
+	mpColliderSphereHead->SetCollisionLayers({ ELayer::eEnemy, ELayer::ePortion });
+	mpColliderSphereHead->SetCollisionTags({ ETag::eEnemy, ETag::ePortionBlue });
 	mpColliderSphereHead->Position(0.0f, 0.1f, 0.03f);
 
 	// キャラクター同士の押し戻しコライダー(体)
@@ -147,7 +150,8 @@ CPlayer::CPlayer()
 		this, ELayer::ePlayer,
 		0.35f
 	);
-	mpColliderSphereBody->SetCollisionLayers({ ELayer::eEnemy });
+	mpColliderSphereBody->SetCollisionLayers({ ELayer::eEnemy, ELayer::ePortion });
+	mpColliderSphereBody->SetCollisionTags({ ETag::eEnemy, ETag::ePortionBlue });
 
 	///ダメージを受けるコライダーを作成(頭)
 	mpDamageColHead = new CColliderSphere
@@ -1063,6 +1067,16 @@ void CPlayer::Update()
 		slash->SetOwner(this);
 	}
 
+	if (mDefenseUp == true)
+	{
+		mElapsedTime += Time::DeltaTime();
+		if (mElapsedTime >= 10)
+		{
+			mElapsedTime = 0;
+			mDefenseUp = false;
+		}
+	}
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -1167,7 +1181,8 @@ void CPlayer::Update()
 
 	float y = Position().Y();
 	CDebugPrint::Print("高さ %f\n", y);
-	CDebugPrint::Print("回復 %d\n", mRecoveryCount);
+	CDebugPrint::Print("経過時間 %f\n", mElapsedTime);
+	CDebugPrint::Print("防御 %d\n", mDefenseUp);
 }
 
 // 衝突処理
@@ -1190,11 +1205,15 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// 他のキャラクターとの押し戻し処理
 	else if (self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
-		if (other->Layer() == ELayer::eEnemy || other->Layer() == ELayer::eEnemy2)
+		if (other->Layer() == ELayer::eEnemy)
 		{
 			CVector pushBack = hit.adjust * hit.weight;
 			pushBack.Y(0.0f);
 			Position(Position() + pushBack);
+		}
+		if (other->Tag() == ETag::ePortionBlue)
+		{
+			mDefenseUp = true;
 		}
 	}
 }
@@ -1241,7 +1260,27 @@ float CPlayer::GetDefBuff(const CVector& attackDir)const
 	// ガード状態であれば、防御2倍
 	if (mState == EState::eGuard)
 	{
-		float dot = CVector::Dot(attackDir.Normalized(),VectorZ());
+		if (mDefenseUp == true)
+		{
+			float dot = CVector::Dot(attackDir.Normalized(), VectorZ());
+			if (dot >= cosf(Math::DegreeToRadian(30.0f)))
+			{
+				return 4.0f;
+			}
+		}
+		else
+		{
+			float dot = CVector::Dot(attackDir.Normalized(), VectorZ());
+			if (dot >= cosf(Math::DegreeToRadian(30.0f)))
+			{
+				return 2.0f;
+			}
+		}
+	}
+
+	if (mDefenseUp == true)
+	{
+		float dot = CVector::Dot(attackDir.Normalized(), VectorZ());
 		if (dot >= cosf(Math::DegreeToRadian(30.0f)))
 		{
 			return 2.0f;

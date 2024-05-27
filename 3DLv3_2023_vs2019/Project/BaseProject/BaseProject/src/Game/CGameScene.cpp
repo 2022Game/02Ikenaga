@@ -103,8 +103,8 @@ void CGameScene::Load()
 
 	// アイテム関連
 	//CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
-	//CResourceManager::Load<CModel>("Portion2", "Item\\Portion\\PortionGreen.obj");
-	//CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
+	CResourceManager::Load<CModel>("Portion2", "Item\\Portion\\PortionGreen.obj");
+	CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
 
 	// UI関連
 	CResourceManager::Load<CTexture>("HpFrame", "Character\\Player\\HP\\Frame.png");
@@ -297,15 +297,15 @@ void CGameScene::Load()
 
 	/*CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
-	portionred->Scale(70.0f, 70.0f, 70.0f);
+	portionred->Scale(70.0f, 70.0f, 70.0f);*/
 
 	CPortionGreen* portiongreen = new CPortionGreen();
-	portiongreen->Position(80.0f, 10.0f, 0.0f);
+	portiongreen->Position(50.0f, 10.0f, 0.0f);
 	portiongreen->Scale(70.0f, 70.0f, 70.0f);
 
 	CPortionBlue* portionblue = new CPortionBlue();
-	portionblue->Position(70.0f, 10.0f, 0.0f);
-	portionblue->Scale(70.0f, 70.0f, 70.0f);*/
+	portionblue->Position(0.0f, 10.0f, 50.0f);
+	portionblue->Scale(200.0f, 200.0f, 200.0f);
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

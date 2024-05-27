@@ -63,7 +63,7 @@ public:
 	// 移動
 	void UpdateRun();
 
-	//　飛行中の移動
+	// 飛行中の移動
 	void UpdateFlyForward();
 
 	// バックステップ

@@ -5,12 +5,12 @@
 enum class ELayer
 {
 	eNone = -1,
-	eField,
-	eTest,
-	ePlayer,
-	eEnemy,
-	eEnemy2,
-	eExp,        // 経験値
+	eField,    // フィールド
+	eTest,     // テスト
+	ePlayer,   // プレイヤー
+	eEnemy,    // 敵
+	eExp,      // 経験値
+	ePortion,  // ポーション
 
 	eDamageCol,  // ダメージを受ける時のコライダー
 	eAttackCol,  // 攻撃を与える時のコライダー
