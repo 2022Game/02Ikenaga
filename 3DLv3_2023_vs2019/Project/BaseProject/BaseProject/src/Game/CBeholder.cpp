@@ -778,8 +778,6 @@ void CBeholder::Update()
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
-	CDebugPrint::Print(" UŒ‚ŠÔ: %d\n", mAttackTime);
-	CDebugPrint::Print(" ‹——£: %f\n", vectorPos);
 	CDebugPrint::Print(" ”òs: %d\n", mFlyingTime);
 	float y = Position().Y();
 	CDebugPrint::Print(" ‚‚³: %f\n", y);

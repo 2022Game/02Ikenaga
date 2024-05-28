@@ -577,6 +577,9 @@
     <ClCompile Include="src\Game\CImpactEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\Impact</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CPortionManager.cpp">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1016,6 +1019,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CImpactEffect.h">
       <Filter>ソース ファイル\Game\Effect\Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPortionManager.h">
+      <Filter>ソース ファイル\Game\Item\Portion</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

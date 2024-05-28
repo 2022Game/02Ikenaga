@@ -3,8 +3,10 @@
 #include "CCharaBase.h"
 #include "CPlayer.h"
 
+// コンストラク
 CSword::CSword()
 	: mPowerUp(false)
+	, mElapsedPowerUpTime(0.0f)
 {
 	mpSword = CResourceManager::Get<CModel>("Sword");
 
@@ -25,15 +27,32 @@ CSword::CSword()
 	mpAttackCol->SetEnable(false);
 }
 
+// デストラクタ
 CSword::~CSword()
 {
 	SAFE_DELETE(mpAttackCol);
 }
 
+// 更新
 void CSword::Update()
 {
+	if (mPowerUp == true)
+	{
+		mElapsedPowerUpTime += Time::DeltaTime();
+		if (mElapsedPowerUpTime >= 10)
+		{
+			mElapsedPowerUpTime = 0;
+			mPowerUp = false;
+		}
+	}
+	else
+	{
+		mElapsedPowerUpTime = 0;
+	}
+	CDebugPrint::Print("時間 %f\n", mElapsedPowerUpTime);
 }
 
+// 描画
 void CSword::Render()
 {
 	mpSword->Render(Matrix());
@@ -108,4 +127,9 @@ void CSword:: AttackEnd()
 	CWeapon::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
 	mpAttackCol->SetEnable(false);
+}
+
+void CSword::PowerUp()
+{
+	mPowerUp = true;
 }

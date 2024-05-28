@@ -89,7 +89,9 @@ CPlayer::CPlayer()
 	, mIsGrounded(false)
 	, mDefenseUp(false)
 	, mHeel(false)
-	, mElapsedTime(0.0f)
+	, mPowerUp(false)
+	, mElapsedDefenseUpTime(0.0f)
+	, mElapsedPowerUpTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
@@ -213,12 +215,6 @@ CPlayer::CPlayer()
 	mpShield->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
-
-	mpElectricShock = new  CElectricShockEffect
-	(
-		this, nullptr,
-		CVector(0.0f, 14.0f, -1.0f)
-	);
 }
 
 CPlayer::~CPlayer()
@@ -1072,12 +1068,16 @@ void CPlayer::Update()
 	// 防御力アップ中(ポーション効果)
 	if (mDefenseUp == true)
 	{
-		mElapsedTime += Time::DeltaTime();
-		if (mElapsedTime >= 10)
+		mElapsedDefenseUpTime += Time::DeltaTime();
+		if (mElapsedDefenseUpTime >= 20)
 		{
-			mElapsedTime = 0;
+			mElapsedDefenseUpTime = 0;
 			mDefenseUp = false;
 		}
+	}
+	else
+	{
+		mElapsedDefenseUpTime = 0;
 	}
 
 	// 回復時(ポーション効果)
@@ -1098,6 +1098,21 @@ void CPlayer::Update()
 		{
 			mHeel = false;
 		}
+	}
+
+	// 攻撃力アップ(ポーション効果)
+	if (mPowerUp == true)
+	{
+		mElapsedPowerUpTime += Time::DeltaTime();
+		if (mElapsedPowerUpTime >= 10)
+		{
+			mElapsedPowerUpTime = 0;
+			mPowerUp = false;
+		}
+	}
+	else
+	{
+		mElapsedPowerUpTime = 0;
 	}
 
 	// キャラクターの更新
@@ -1140,7 +1155,14 @@ void CPlayer::Update()
 		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
 		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
 		CDebugPrint::Print("    Hp:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
-		CDebugPrint::Print(" 攻撃力:    %d\n",mCharaStatus.power/2);
+		if (mPowerUp != true)
+		{
+			CDebugPrint::Print(" 攻撃力:    %d\n", mCharaStatus.power / 2);
+		}
+		else
+		{
+			CDebugPrint::Print(" 攻撃力:    %d×2\n", mCharaStatus.power / 2);
+		}
 		if (mDefenseUp != true)
 		{
 			CDebugPrint::Print(" 防御力:    %d\n", mCharaStatus.defense);
@@ -1215,11 +1237,6 @@ void CPlayer::Update()
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
-
-	float y = Position().Y();
-	CDebugPrint::Print("高さ %f\n", y);
-	CDebugPrint::Print("経過時間 %f\n", mElapsedTime);
-	CDebugPrint::Print("防御 %d\n", mDefenseUp);
 }
 
 // 衝突処理
@@ -1259,6 +1276,11 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		if (other->Tag() == ETag::ePortionGreen)
 		{
 			mHeel = true;
+		}
+		if (other->Tag() == ETag::ePortionRed)
+		{
+			mpSword->PowerUp();
+			mPowerUp = true;
 		}
 	}
 }

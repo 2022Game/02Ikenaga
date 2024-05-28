@@ -80,7 +80,7 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Player2", "Character\\Rich.x");
 
 	// エネミー関連
-	//CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
@@ -163,10 +163,10 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(player);
 	player->Position(0.0f, 50.0f, 0.0f);
 
-	//// レッドスライム
-	//CSlime* enemy = new CSlime();
-	//enemy->Position(0.0f, 0.0f, -40.0f);
-	//enemy->Scale(25.0f, 25.0f, 25.0f);
+	// レッドスライム
+	CSlime* enemy = new CSlime();
+	enemy->Position(0.0f, 0.0f, -40.0f);
+	enemy->Scale(25.0f, 25.0f, 25.0f);
 
 	//// オレンジスライム
 	//CSlime2* enemy2 = new CSlime2();

@@ -11,7 +11,6 @@ class CSaGauge;
 class CSword;
 class CShield;
 class CSlash;
-class CElectricShockEffect;
 
 #include <algorithm>
 
@@ -147,12 +146,12 @@ private:
 	int mAttackCount;
 	// 回復までのカウント
 	int mHealCount;
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
 		None = -1,
 
-		//eTPose,		// Tポーズ
 		eIdle,		// 待機
 		eWalk,		// 歩行
 		eAttack,	// 攻撃
@@ -217,40 +216,46 @@ private:
 		eJumpAttack,      // ジャンプ攻撃
 		eJumpAttackWait,  // ジャンプ攻撃終了待ち
 	};
-	EState mState;	// プレイヤーの状態
+	// プレイヤーの状態
+	EState mState;
 	int mStateJumpAttackStep;
 
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	CVector mMoveSpeed;	 // 移動速度
-	bool mIsGrounded;	 // 接地しているかどうか
+	CVector mMoveSpeed;  // 移動速度
+	bool mIsGrounded;    // 接地しているかどうか
 	bool mDefenseUp;     // 防御力アップ(ポーション効果)
 	bool mHeel;          // 回復(ポーション効果)
-	float mElapsedTime;	 // 経過時間
+	bool mPowerUp;       // 攻撃力アップ(ポーション効果)
 
-	CColliderLine* mpColliderLine;          // 線分コライダー
+	// 経過時間(防御力アップ用)
+	float mElapsedDefenseUpTime;
+	// 経過時間(攻撃力アップ用)
+	float mElapsedPowerUpTime;
 
-	CColliderSphere* mpColliderSphereHead;  // キャラクターの押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
+	// 線分コライダー
+	CColliderLine* mpColliderLine;
+	// キャラクターの押し戻しコライダー(頭)
+	CColliderSphere* mpColliderSphereHead;
+	// キャラクターの押し戻しコライダー(体)
+	CColliderSphere* mpColliderSphereBody;
 
-	CColliderSphere* mpDamageColHead;       // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
+	// ダメージを受けるコライダー(頭)
+	CColliderSphere* mpDamageColHead;
+	// ダメージを受けるコライダー(体)
+	CColliderSphere* mpDamageColBody;
 
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  // HPゲージ
 	CSaGauge* mpSaGauge;  // SAゲージ(スペシャルアタック)
-
 	CVector mDefaultPos;  // デフォルトの座標
 	CVector current;
-
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;
 	bool mIsSpawnedSlashEffect;
-	
-	CElectricShockEffect* mpElectricShock;
 };

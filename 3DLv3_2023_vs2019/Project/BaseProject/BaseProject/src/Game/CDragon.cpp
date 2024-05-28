@@ -758,9 +758,8 @@ void CDragon::UpdateBackStep()
 
 	if (vectorPos >= 50.0f && mAnimationFrame >= 10.0f)
 	{
-		mMoveSpeed -= -nowPos * 3.5f;
-		//Position(Position().X(), Position().Y() + 0.5f, Position().Z());
-		//mMoveSpeed.Y(-0.1f);
+		mMoveSpeed -= -nowPos * 1.5f;
+		mMoveSpeed.Y(0.0f);
 	}
 	if (mAnimationFrame >= 11.0f)
 	{

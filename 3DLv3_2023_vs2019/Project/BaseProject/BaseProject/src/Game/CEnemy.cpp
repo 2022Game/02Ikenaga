@@ -1,5 +1,6 @@
 #include "CEnemy.h"
 #include "CExpManager.h"
+#include "CPortionManager.h"
 
 // コンストラクタ
 CEnemy::CEnemy()
@@ -24,6 +25,9 @@ void CEnemy::SlimeDeath()
 	CExpManeger::SlimeSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 

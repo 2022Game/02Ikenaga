@@ -11,10 +11,14 @@
 class CSword : public CWeapon
 {
 public:
+	// コンストラク
 	CSword();
+	// デストラクタ
 	~CSword();
 
+	// 更新
 	void Update();
+	// 描画
 	void Render();
 
 	/// <summary>
@@ -33,9 +37,14 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
+	void PowerUp();
+
 private:
 	CModel* mpSword;
+	// 攻撃力アップ
 	bool mPowerUp;
+	// 経過時間(攻撃力アップ用)
+	float mElapsedPowerUpTime;
 	// 攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;
 };

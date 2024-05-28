@@ -889,9 +889,6 @@ void CBoxer::Update()
 		mDefenseTime = 0;
 	}
 
-	//CDebugPrint::Print(" HP: %f\n", boxer->Position().Y());
-	CDebugPrint::Print(" UŒ‚: %d\n", mAttackTime);
-
 	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE ||mState == EState::eAttack2 ||mState ==EState::eSlide)
 	{
 		Position(Position() + mMoveSpeed);
