@@ -35,6 +35,7 @@ public:
 
 private:
 	CModel* mpSword;
+	bool mPowerUp;
 	// 攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;
 };

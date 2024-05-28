@@ -15,6 +15,7 @@
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
 int CPlayer::mHp;
+int CPlayer::mMaxHp;
 int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
 
@@ -87,12 +88,15 @@ CPlayer::CPlayer()
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
 	, mDefenseUp(false)
+	, mHeel(false)
 	, mElapsedTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
 	spInstance = this;
 	mRecoveryCount = 0;
+	mHp = 0;
+	mMaxHp = 0;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Player");
@@ -109,7 +113,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(71);
+	ChangeLevel(91);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -141,7 +145,8 @@ CPlayer::CPlayer()
 		0.35f
 	);
 	mpColliderSphereHead->SetCollisionLayers({ ELayer::eEnemy, ELayer::ePortion });
-	mpColliderSphereHead->SetCollisionTags({ ETag::eEnemy, ETag::ePortionBlue });
+	mpColliderSphereHead->SetCollisionTags({ ETag::eEnemy, ETag::ePortionBlue,
+		                                     ETag::ePortionGreen, ETag::ePortionRed });
 	mpColliderSphereHead->Position(0.0f, 0.1f, 0.03f);
 
 	// キャラクター同士の押し戻しコライダー(体)
@@ -151,7 +156,8 @@ CPlayer::CPlayer()
 		0.35f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::eEnemy, ELayer::ePortion });
-	mpColliderSphereBody->SetCollisionTags({ ETag::eEnemy, ETag::ePortionBlue });
+	mpColliderSphereBody->SetCollisionTags({ ETag::eEnemy, ETag::ePortionBlue,
+		                                     ETag::ePortionGreen, ETag::ePortionRed });
 
 	///ダメージを受けるコライダーを作成(頭)
 	mpDamageColHead = new CColliderSphere
@@ -907,6 +913,7 @@ void CPlayer::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
+	mMaxHp = mCharaMaxStatus.hp;
 	mSa = mCharaStatus.SpecialAttack;
 
 	if (mAttackCount >= 1)
@@ -1021,11 +1028,6 @@ void CPlayer::Update()
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
 
-	//CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
-	//CDebugPrint::Print(" プレイヤーのHP回復時間 %d\n", healcount);
-	//CDebugPrint::Print(" 攻撃計測 %d\n", mAttackTime);
-	//CDebugPrint::Print(" 攻撃した回数 %d\n", mAttackcount);
-
 	// 移動
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
 
@@ -1067,6 +1069,7 @@ void CPlayer::Update()
 		slash->SetOwner(this);
 	}
 
+	// 防御力アップ中(ポーション効果)
 	if (mDefenseUp == true)
 	{
 		mElapsedTime += Time::DeltaTime();
@@ -1074,6 +1077,26 @@ void CPlayer::Update()
 		{
 			mElapsedTime = 0;
 			mDefenseUp = false;
+		}
+	}
+
+	// 回復時(ポーション効果)
+	if (mHeel == true)
+	{
+		if (mCharaStatus.hp < mCharaMaxStatus.hp)
+		{
+			int Heel = 0;
+			Heel = mCharaMaxStatus.hp * 0.5f;
+			mCharaStatus.hp += Heel;
+			mHeel = false;
+			if (mCharaStatus.hp > mCharaMaxStatus.hp)
+			{
+				mCharaStatus.hp = mCharaMaxStatus.hp;
+			}
+		}
+		if (mCharaStatus.hp == mCharaMaxStatus.hp || mCharaStatus.hp <= 0)
+		{
+			mHeel = false;
 		}
 	}
 
@@ -1118,7 +1141,21 @@ void CPlayer::Update()
 		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
 		CDebugPrint::Print("    Hp:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
 		CDebugPrint::Print(" 攻撃力:    %d\n",mCharaStatus.power/2);
-		CDebugPrint::Print(" 防御力:    %d\n", mCharaStatus.defense);
+		if (mDefenseUp != true)
+		{
+			CDebugPrint::Print(" 防御力:    %d\n", mCharaStatus.defense);
+		}
+		else if (mDefenseUp == true)
+		{
+			if (mState != EState::eGuard && mState != EState::eGuard)
+			{
+				CDebugPrint::Print(" 防御力:    %d×2\n", mCharaStatus.defense);
+			}
+			else
+			{
+				CDebugPrint::Print(" 防御力:    %d×4\n", mCharaStatus.defense);
+			}
+		}
 		CDebugPrint::Print("    SA:    %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
 		CVector scale = Scale();
 		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
@@ -1205,15 +1242,23 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 	// 他のキャラクターとの押し戻し処理
 	else if (self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
+		// 敵の時
 		if (other->Layer() == ELayer::eEnemy)
 		{
 			CVector pushBack = hit.adjust * hit.weight;
 			pushBack.Y(0.0f);
 			Position(Position() + pushBack);
 		}
+
+		// ポーション効果(防御力アップ)
 		if (other->Tag() == ETag::ePortionBlue)
 		{
 			mDefenseUp = true;
+		}
+		// ポーション効果(回復)
+		if (other->Tag() == ETag::ePortionGreen)
+		{
+			mHeel = true;
 		}
 	}
 }

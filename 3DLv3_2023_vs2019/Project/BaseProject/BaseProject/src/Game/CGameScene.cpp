@@ -102,7 +102,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Cane", "Character\\Cane.obj");
 
 	// アイテム関連
-	//CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
+	CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
 	CResourceManager::Load<CModel>("Portion2", "Item\\Portion\\PortionGreen.obj");
 	CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
 
@@ -161,7 +161,7 @@ void CGameScene::Load()
 		player->Position()
 	);
 	mainCamera->SetFollowTargetTf(player);
-	player->Position(0.0f, 40.0f, 0.0f);
+	player->Position(0.0f, 50.0f, 0.0f);
 
 	//// レッドスライム
 	//CSlime* enemy = new CSlime();
@@ -295,14 +295,21 @@ void CGameScene::Load()
 	bossEnemy->Position(-200.0f, 21.0f, 120.0f);
 	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
-	/*CPortionRed* portionred = new CPortionRed();
+	// 攻撃力アップポーション
+	CPortionRed* portionred = new CPortionRed();
 	portionred->Position(90.0f, 10.0f, 0.0f);
-	portionred->Scale(70.0f, 70.0f, 70.0f);*/
+	portionred->Scale(200.0f, 200.0f, 200.0f);
 
+	// 回復ポーション
 	CPortionGreen* portiongreen = new CPortionGreen();
-	portiongreen->Position(50.0f, 10.0f, 0.0f);
-	portiongreen->Scale(70.0f, 70.0f, 70.0f);
+	portiongreen->Position(-50.0f, 10.0f, 0.0f);
+	portiongreen->Scale(200.0f, 200.0f, 200.0f);
 
+	CPortionGreen* portiongreen2 = new CPortionGreen();
+	portiongreen2->Position(0.0f, 10.0f, 20.0f);
+	portiongreen2->Scale(200.0f, 200.0f, 200.0f);
+
+	// 防御力アップポーション
 	CPortionBlue* portionblue = new CPortionBlue();
 	portionblue->Position(0.0f, 10.0f, 50.0f);
 	portionblue->Scale(200.0f, 200.0f, 200.0f);

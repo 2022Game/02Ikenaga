@@ -85,6 +85,7 @@ public:
     float GetDefBuff(const CVector& attackDir) const override;
 
 	static int mHp;
+	static int mMaxHp;
 	static int mSa;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
 
@@ -224,7 +225,8 @@ private:
 
 	CVector mMoveSpeed;	 // 移動速度
 	bool mIsGrounded;	 // 接地しているかどうか
-	bool mDefenseUp;     // 防御力
+	bool mDefenseUp;     // 防御力アップ(ポーション効果)
+	bool mHeel;          // 回復(ポーション効果)
 	float mElapsedTime;	 // 経過時間
 
 	CColliderLine* mpColliderLine;          // 線分コライダー

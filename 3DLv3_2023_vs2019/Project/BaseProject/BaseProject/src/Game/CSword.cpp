@@ -4,6 +4,7 @@
 #include "CPlayer.h"
 
 CSword::CSword()
+	: mPowerUp(false)
 {
 	mpSword = CResourceManager::Get<CModel>("Sword");
 
@@ -52,8 +53,16 @@ void CSword::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// Šù‚ÉUŒ‚Ï‚Ý‚ÌƒLƒƒƒ‰‚Å‚È‚¯‚ê‚Î
 			if (!IsAttackHitObj(chara))
 			{
-			    // —^‚¦‚éƒ_ƒ[ƒW‚ðŒvŽZ
-				int damage = CalcDamage(1.0f,mOwner, chara);
+				int damage = 0;
+				if (mPowerUp == true)
+				{
+					damage = CalcDamage(2.0f, mOwner, chara);
+				}
+				else
+				{
+					// —^‚¦‚éƒ_ƒ[ƒW‚ðŒvŽZ
+					damage = CalcDamage(1.0f,mOwner, chara);
+				}
 
 				// ƒ_ƒ[ƒW‚ð—^‚¦‚é
 				chara->TakeDamage(damage,mOwner);

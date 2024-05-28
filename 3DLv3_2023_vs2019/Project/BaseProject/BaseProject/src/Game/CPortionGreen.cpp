@@ -1,6 +1,7 @@
 #include "CPortionGreen.h"
 #include "CCollisionManager.h"
 #include "CColliderSphere.h"
+#include "CPlayer.h"
 
 // コンストラク
 CPortionGreen::CPortionGreen()
@@ -31,7 +32,11 @@ void CPortionGreen::Collision(CCollider* self, CCollider* other, const CHitInfo&
 	{
 		if (other->Layer() == ELayer::ePlayer)
 		{
-			Kill();
+			CPlayer* player = CPlayer::Instance();
+			if (player->mHp < player->mMaxHp)
+			{
+				Kill();
+			}
 		}
 	}
 }
