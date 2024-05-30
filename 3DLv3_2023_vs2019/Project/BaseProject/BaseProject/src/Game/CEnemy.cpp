@@ -169,6 +169,9 @@ void CEnemy::BeholderDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // ‘å‚«‚¢‹…‘Ìƒ‚ƒ“ƒXƒ^[‚Ì€–Sˆ—
@@ -188,6 +191,9 @@ void CEnemy::BoxerDeath()
 	CExpManeger::BoxerSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 

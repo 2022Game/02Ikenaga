@@ -268,8 +268,20 @@ void CPlayer::UpdateIdle()
 		{
 			if (CInput::PushKey(VK_MBUTTON))
 			{
-				ChangeState(EState::eAttack4);
 				mCharaStatus.SpecialAttack -= 5;
+				ChangeState(EState::eAttack4);
+			}
+		}
+
+		if (mCharaStatus.SpecialAttack >= 4)
+		{
+			if (CInput::PushKey('X'))
+			{
+				if (mDefenseUp != true || mPowerUp != true || mCharaStatus.hp < mCharaMaxStatus.hp)
+				{
+					mCharaStatus.SpecialAttack -= 4;
+					ChangeState(EState::ePowerUp);
+				}
 			}
 		}
 
@@ -621,7 +633,36 @@ void CPlayer::UpdateMove()
 // 攻撃力アップ
 void CPlayer::UpdatePowerUp()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	ChangeAnimation(EAnimType::ePowerUp);
+	int rand = Math::Rand(0, 100);
+	if (rand <= 40 || mPowerUp == true && mDefenseUp == true)
+	{
+		mHeel = true;
+	}
+	else if (rand > 40 && rand <=70)
+	{
+		if (mPowerUp == false)
+		{
+			mPowerUp = true;
+		}
+		else
+		{
+			mDefenseUp = true;
+		}
+	}
+	else if (rand > 70)
+	{
+		if (mDefenseUp == false)
+		{
+			mDefenseUp = true;
+		}
+		else
+		{
+			mPowerUp = true;
+		}
+	}
 	// 攻撃力アップ終了
 	ChangeState(EState::ePowerUpEnd);
 }
@@ -1220,11 +1261,6 @@ void CPlayer::Update()
 		ChangeLevel(100);
 	}
 
-	if (CInput::PushKey('N'))
-	{
-		ChangeState(EState::eJumpAttack);
-	}
-
 	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBody->Update();
@@ -1237,6 +1273,7 @@ void CPlayer::Update()
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+	CDebugPrint::Print(" 防御時間: %f\n", mElapsedDefenseUpTime);
 }
 
 // 衝突処理

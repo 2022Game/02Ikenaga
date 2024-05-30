@@ -1,6 +1,7 @@
 ﻿#include "CFlamethrower.h"
 #include "CFlame.h"
 #include "Maths.h"
+#include "CCharaBase.h"
 
 // 炎の発射間隔時間
 #define THROW_INTERVAL 0.03f
@@ -106,6 +107,11 @@ void CFlamethrower::CreateFlame()
 {
 	// 炎のエフェクトを作成
 	CFlame* flame = new CFlame(ETag::eFlame);
+	CCharaBase* owner = dynamic_cast<CCharaBase*>(mpOwner);
+	if (owner != nullptr)
+	{
+		flame->SetOwner(owner);
+	}
 
 	// 発射位置を取得
 	CVector pos = GetThrowPos();// + CVector(0.0f, 10.0f, 0.0f);

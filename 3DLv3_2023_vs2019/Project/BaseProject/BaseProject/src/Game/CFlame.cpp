@@ -89,10 +89,10 @@ void CFlame::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			if (!IsAttackHitObj(chara))
 			{
 				// 与えるダメージを計算
-				int damage = CalcDamage(1.0f, mOwner, chara);
+				int damage = CalcDamage(0.5f, mOwner, chara);
 
 				// ダメージを与える
-				chara->TakeDamage(damage, 0);
+				chara->TakeDamage(damage, mOwner);
 
 				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);

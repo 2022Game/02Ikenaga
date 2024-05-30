@@ -113,6 +113,7 @@ private:
 	int mDefenseTime;       // 防御時間の間隔
 	int mAttackTime;        // 攻撃時間の間隔
 	int mFlyingAttackTime;  // 飛行時の攻撃時間の間隔
+	float mBackStepTime;    // バックステップするまでの時間
 	bool mRoarCount;        // 雄叫びのカウント
 
 	// アニメーションの種類
@@ -179,11 +180,10 @@ private:
 		eFlyingEnd,        // 飛行終了
 		eRun,              // 移動
 		eFlyForward,       // 飛行中の移動
-		eBackStep,     // バックステップ
+		eBackStep,         // バックステップ
 	};
-	EState mState;	  // ドラゴンの状態
-	int mStateAttackStep;        // State内の攻撃ステップ処理
-	int mStateFlyingAttackStep;  // State内の飛行中の攻撃ステップ処理
+	EState mState;	 // ドラゴンの状態
+	int mStateStep;  // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -209,9 +209,12 @@ private:
 	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
 	CColliderSphere* mpAttackColMouth;       // ダメージを与えるコライダー(口)
 	CColliderSphere* mpAttackColTipMouth;    // ダメージを与えるコライダー(口の先端)
+	CColliderSphere* mpAttackColFeet;        // ダメージを与えるコライダー(前の左足)
 
 	CTransform* mpRideObject;
 
-	CFlamethrower* mpFlamethrower;  // 火炎放射エフェクト
-	CRoarEffect* mpRoar;            // 雄叫びエフェクト
+	// 火炎放射エフェクト
+	CFlamethrower* mpFlamethrower;
+	// 雄叫びエフェクト
+	CRoarEffect* mpRoar;
 };

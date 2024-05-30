@@ -3,6 +3,7 @@
 #include "CCollisionManager.h"
 #include "CInput.h"
 #include "Maths.h"
+#include "CHpGauge.h"
 #include "CFlamethrower.h"
 #include "CRoarEffect.h"
 
@@ -48,9 +49,9 @@ CDragon::CDragon()
 	, mDefenseTime(0)
 	, mAttackTime(0)
 	, mFlyingAttackTime(0)
+	, mBackStepTime(0.0f)
 	, mRoarCount(false)
-	, mStateAttackStep(0)
-	, mStateFlyingAttackStep(0)
+	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
@@ -228,6 +229,16 @@ CDragon::CDragon()
 	mpAttackColTipMouth->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColTipMouth->Position(-0.1f, 0.15f, 0.1f);
 
+	// ダメージを与えるコライダー(前の左足)
+	mpAttackColFeet = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		0.8f, false
+	);
+	mpAttackColFeet->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColFeet->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColFeet->Position(0.0f, 0.0f, 0.2f);
+
 	// ダメージを受けるコライダーと攻撃コライダーをドラゴンの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
 	mpDamageColHead->SetAttachMtx(headMty);
@@ -282,10 +293,12 @@ CDragon::CDragon()
 	// ダメージを受けるコライダーをドラゴンのつなぎ5の行列にアタッチ
 	const CMatrix* jointMty5 = GetFrameMtx("Armature_joint23");
 
-	// 押し戻しコライダーとダメージを受けるコライダーをドラゴンの前の左足の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをドラゴンの前の左足の行列にアタッチ
 	const CMatrix* leftFootMty = GetFrameMtx("Armature_Middle01_L");
 	mpColliderSphereFeet->SetAttachMtx(leftFootMty);
 	mpDamageColFeet->SetAttachMtx(leftFootMty);
+	mpAttackColFeet->SetAttachMtx(leftFootMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをドラゴンの前の右足の行列にアタッチ
 	const CMatrix* rightFootMty = GetFrameMtx("Armature_Middle01_R");
@@ -304,6 +317,7 @@ CDragon::CDragon()
 	mpAttackColHead->SetEnable(false);
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColTipMouth->SetEnable(false);
+	mpAttackColFeet->SetEnable(false);
 
 	const CMatrix* mtx = GetFrameMtx("Armature_Tongue01");
 	mpFlamethrower = new CFlamethrower
@@ -343,6 +357,7 @@ CDragon::~CDragon()
 	SAFE_DELETE(mpAttackColHead);
 	SAFE_DELETE(mpAttackColMouth);
 	SAFE_DELETE(mpAttackColTipMouth);
+	SAFE_DELETE(mpAttackColFeet);
 }
 
 // ドラゴンのインスタンス
@@ -365,8 +380,7 @@ void CDragon::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
-	mStateFlyingAttackStep = 0;
+	mStateStep = 0;
 }
 
 // 待機状態(寝ている時)
@@ -387,19 +401,17 @@ void CDragon::UpdateIdle2()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
+
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
+
 	if (GetAnimationFrame() >= 10.0f && vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
 		ChangeState(EState::eRun);
 	}
 	else
 	{
-		ChangeAnimation(EAnimType::eIdle2);
-		if (IsAnimationFinished())
-		{
-			ChangeState(EState::eIdle2);
-		}
+		ChangeState(EState::eIdle2);
 	}
 }
 
@@ -436,15 +448,15 @@ void CDragon::UpdateAttack()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
-	// ステップ0 : 攻撃アニメーション開始
+		// ステップ0 : 攻撃アニメーション開始+攻撃開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
 		AttackStart();
-		mStateAttackStep++;
+		mStateStep++;
 		break;
-	// ステップ1　: 火炎放射開始
+		// ステップ1　: 火炎放射開始
 	case 1:
 		if (mAnimationFrame >= 17.5f)
 		{
@@ -452,11 +464,11 @@ void CDragon::UpdateAttack()
 			{
 				mpFlamethrower->Start();
 				SetAnimationSpeed(0.25f);
-				mStateAttackStep++;
+				mStateStep++;
 			}
 		}
 		break;
-	// ステップ2 : 火炎放射アニメーション終了待ち
+		// ステップ2 : 火炎放射アニメーション終了待ち
 	case 2:
 		if (mAnimationFrame >= 70.0f)
 		{
@@ -482,10 +494,35 @@ void CDragon::UpdateAttack2()
 void CDragon::UpdateAttack3()
 {
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eAttack3);
-	AttackStart();
-	// 攻撃3終了待ち状態へ移行
-	ChangeState(EState::eAttackWait);
+	// ステップごとに処理を分ける
+	switch (mStateStep)
+	{
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack3);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 5.0f)
+		{
+			AttackStart();
+			mStateStep++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 20.0f)
+		{
+			AttackEnd();
+			mStateStep++;
+		}
+		break;
+	case 3:
+		if (mAnimationFrame >= 36.0f)
+		{
+			ChangeState(EState::eAttackWait);
+		}
+		break;
+	}
 }
 
 // 攻撃終了待ち
@@ -505,12 +542,12 @@ void CDragon::UpdateFlyingAttack()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateFlyingAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eFlyingAttack);
-		mStateFlyingAttackStep++;
+		mStateStep++;
 		break;
 	case 1:
 		if (mAnimationFrame >= 30.0f)
@@ -518,7 +555,7 @@ void CDragon::UpdateFlyingAttack()
 			if (!mpFlamethrower->IsThrowing())
 			{
 				mpFlamethrower->Start();
-				mStateFlyingAttackStep++;
+				mStateStep++;
 			}
 		}
 		break;
@@ -526,7 +563,7 @@ void CDragon::UpdateFlyingAttack()
 		if (mAnimationFrame >= 85.0f)
 		{
 			mpFlamethrower->Stop();
-			mStateFlyingAttackStep++;
+			mStateStep++;
 		}
 		break;
 	case 3:
@@ -750,24 +787,40 @@ void CDragon::UpdateFlyForward()
 // バックステップ
 void CDragon::UpdateBackStep()
 {
-	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eBackStep);
+	mMoveSpeed = CVector::zero;
+
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (vectorPos >= 50.0f && mAnimationFrame >= 10.0f)
+	switch (mStateStep)
 	{
-		mMoveSpeed -= -nowPos * 1.5f;
-		mMoveSpeed.Y(0.0f);
-	}
-	if (mAnimationFrame >= 11.0f)
-	{
-		//Position(Position().X(), Position().Y() - 3.5f, Position().Z());
-	}
-	if (mAnimationFrame >= 24.0f)
-	{
-		ChangeState(EState::eIdle2);
+	case 0:
+		SetAnimationSpeed(0.5f);
+		ChangeAnimation(EAnimType::eBackStep);
+
+		Position(Position() - VectorZ() * 150.0f);
+
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 24.0f)
+		{
+			bool mAttack = false;   // 攻撃(火炎放射)
+			bool mAttack2 = false;  // 攻撃2(前に飛んで後ろに下がる)
+			// 確率を最小に2最大5
+			int probability2 = Math::Rand(2, 6);
+
+			if (probability2 == 2)mAttack2 = true;
+			if (mAttack2)
+			{
+				ChangeState(EState::eAttack2);
+			}
+			else
+			{
+				ChangeState(EState::eAttack);
+			}
+		}
+		break;
 	}
 }
 
@@ -866,8 +919,34 @@ void CDragon::Update()
 		break;
 	}
 
+	// HPゲージの座標を更新(敵の座標の少し上の座標)
+	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
+	CVector gaugePos2 = Position() + CVector(0.0f, 150.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
+	
+	if (mState != EState::eIdle3 && mState != EState::eDie)
+	{
+		if (mState == EState::eFlyingIdle)
+		{
+			mpHpGauge->SetWorldPos(gaugePos2);
+		}
+		else
+		{
+			mpHpGauge->SetWorldPos(gaugePos);
+		}
+	}
+
+	if (mState == EState::eIdle2 && vectorPos <= 110.0f)
+	{
+		mBackStepTime += Time::DeltaTime();
+	}
+	if (mBackStepTime >= 3)
+	{
+		mBackStepTime = 0;
+		mAttackTime = 0;
+		ChangeState(EState::eBackStep);
+	}
 	
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
@@ -884,12 +963,9 @@ void CDragon::Update()
 
 		if (mAttackTime > 200)
 		{
-			// 攻撃2
-			bool Attack2 = false;
-			// 攻撃
-			bool Attack = false;
-			// 防御
-			bool Defense = false;
+			bool mAttack = false;   // 攻撃(火炎放射)
+			bool mAttack2 = false;  // 攻撃2(前に飛んで後ろに下がる)
+			bool mDefense = false;  // 防御
 			// 確率を最小に2最大5
 			int probability2 = Math::Rand(2, 4);
 			// 確率を最小に5最大7
@@ -897,28 +973,29 @@ void CDragon::Update()
 			// 確率を最小に8最大10
 			int probability4 = Math::Rand(8, 10);
 
-			if (probability2 == 2)Attack2 = true;
-			if (probability3 == 5)Attack = true;
-			if (probability4 == 8)Defense = true;
-			if (Attack2)
+			if (probability2 == 2)mAttack2 = true;
+			if (probability3 == 5)mAttack = true;
+			if (probability4 == 8)mDefense = true;
+			if (mAttack2)
 			{
 				ChangeState(EState::eAttack2);
 			}
-			else if (Attack)
+			else if (mAttack)
 			{
-				//ChangeState(EState::eAttack);
+				ChangeState(EState::eAttack);
 			}
-			else if (Defense)
+			else if (mDefense)
 			{
-				//ChangeState(EState::eDefense);
+				ChangeState(EState::eDefense);
 			}
 			else
 			{
-				//ChangeState(EState::eAttack3);
+				ChangeState(EState::eAttack3);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3
-			|| mState == EState::eDefense || mState == EState::eFlyingIdle)
+			|| mState == EState::eDefense || mState == EState::eFlyingIdle
+			|| mState == EState::eBackStep)
 		{
 			mAttackTime = 0;
 		}
@@ -961,7 +1038,7 @@ void CDragon::Update()
 		mFlyingTime++;
 		mFlyingAttackTime++;
 
-		if (mFlyingAttackTime > 400)
+		if (mFlyingAttackTime > 200)
 		{
 			ChangeState(EState::eFlyingAttack);
 		}
@@ -971,7 +1048,7 @@ void CDragon::Update()
 		mFlyingAttackTime = 0;
 	}
 
-	if (mFlyingTime >= 600)
+	if (mFlyingTime >= 550)
 	{
 		ChangeState(EState::eFlyingEnd);
 	}
@@ -991,14 +1068,11 @@ void CDragon::Update()
 	if (mState == EState::eBackStep)
 	{
 		Position(Position() - mMoveSpeed);
-		//Position(Position().X(), Position().Y() - 1.0f, Position().Z());
 	}
-
-	CDebugPrint::Print(" (地)攻撃時間: %d\n", mAttackTime);
-	CDebugPrint::Print(" 攻撃時間: %d",mFlyingAttackTime);
+	CDebugPrint::Print(" 攻撃時間: %d", mAttackTime);
 	CDebugPrint::Print(" 空中時間: %d", mFlyingTime);
-	CDebugPrint::Print(" HP: %d", mCharaStatus.hp);
 	CDebugPrint::Print(" 距離: %f", vectorPos);
+	CDebugPrint::Print(" 後ろ: %f", mBackStepTime);
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -1022,21 +1096,12 @@ void CDragon::Update()
 	mpAttackColHead->Update();
 	mpAttackColMouth->Update();
 	mpAttackColTipMouth->Update();
+	mpAttackColFeet->Update();
 
 	mIsGrounded = false;
 
-	// 「E」キーで炎の発射をオンオフする
-	if (CInput::PushKey('Z'))
-	{
-		if (!mpFlamethrower->IsThrowing())
-		{
-			mpFlamethrower->Start();
-		}
-		else
-		{
-			mpFlamethrower->Stop();
-		}
-	}
+	// HPゲージに現在のHPを設定
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -1044,8 +1109,8 @@ void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackColHead || self == mpAttackColMouth || self == mpAttackColTipMouth
-		&& mState != EState::eIdle && mState != EState::eIdle2 &&
-		mState != EState::eIdle3)
+		|| self == mpAttackColFeet
+		&& mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdle3)
 	{
 		// キャラのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
@@ -1094,6 +1159,7 @@ void CDragon::AttackStart()
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
 	if (mState == EState::eAttack2)
 	{
+		mpAttackColFeet->SetEnable(true);
 	}
 	if (mState == EState::eAttack3)
 	{
@@ -1111,6 +1177,7 @@ void CDragon::AttackEnd()
 	mpAttackColHead->SetEnable(false);
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColTipMouth->SetEnable(false);
+	mpAttackColFeet->SetEnable(false);
 }
 
 // 描画
@@ -1136,8 +1203,8 @@ void CDragon::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	//mpHpGauge->SetValue(mCharaStatus.hp);
+	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理
@@ -1167,7 +1234,7 @@ float CDragon::GetDefBuff(const CVector& attackDir)const
 {
 	// 防御状態であれば、防御2倍
 	if (mState == EState::eDefense) return 2.0f;
-	if (mState == EState::eRoar) return 20.0f;
+	if (mState == EState::eRoar || mState == EState::eFlyingStart) return 20.0f;
 
 	// 通常時の防御の割合
 	return mBaseDefenseBuffRatio;

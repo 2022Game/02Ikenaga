@@ -313,6 +313,7 @@ CBoxer::CBoxer()
 	);
 }
 
+// デストラクタ
 CBoxer::~CBoxer()
 {
 	// 線分コライダー
