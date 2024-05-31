@@ -29,6 +29,10 @@ public:
 	void Render();
 
 private:
-	CModel* mpPortionRed;  // モデルデータ読み込み
-	CColliderSphere* mpColliderSphere;  // 球(衝突処理用)
+	// モデルデータ読み込み
+	CModel* mpPortionRed;
+	// 球(衝突処理用)
+	CColliderSphere* mpColliderSphere;
+	// 攻撃力アップ(ポーション効果)
+	bool mPowerUp;
 };

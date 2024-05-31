@@ -1214,9 +1214,7 @@ void CDragon::TakeDamage(int damage, CObjectBase* causedObj)
 	if (mCharaStatus.hp -= damage)
 	{
 		mpFlamethrower->Stop();
-		if (mState != EState::eRoar && mState != EState::eFlyingStart &&  mState != EState::eFlyingAttack
-			&& mState != EState::eFlyingIdle && mState != EState::eFlyingEnd
-			&& mState != EState::eAttack)
+		if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eAttack3)
 		{
 			ChangeState(EState::eHit);
 		}

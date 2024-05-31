@@ -1,9 +1,11 @@
 #include "CPortionRed.h"
 #include "CCollisionManager.h"
+#include "CPlayer.h"
 
 // コンストラク
 CPortionRed::CPortionRed()
 	: CObjectBase(ETag::ePortionRed , ETaskPriority::eItem)
+	, mPowerUp(false)
 {
 	mpPortionRed = CResourceManager::Get<CModel>("Portion");
 
@@ -31,7 +33,10 @@ void CPortionRed::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 	{
 		if (other->Layer() == ELayer::ePlayer)
 		{
-			Kill();
+			if (mPowerUp != true)
+			{
+				Kill();
+			}
 		}
 	}
 }
@@ -40,6 +45,8 @@ void CPortionRed::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 void CPortionRed::Update()
 {
 	Rotate(0.0f, 2.0f, 0.0f);
+	CPlayer* player = CPlayer::Instance();
+	mPowerUp = player->mPowerUp;
 }
 
 // 描画

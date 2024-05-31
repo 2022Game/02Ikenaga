@@ -87,6 +87,8 @@ public:
 	static int mMaxHp;
 	static int mSa;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
+	static bool mDefenseUp;     // 防御力アップ(ポーション効果)
+	static bool mPowerUp;       // 攻撃力アップ(ポーション効果)
 
 private:
 	// 待機状態
@@ -225,9 +227,7 @@ private:
 
 	CVector mMoveSpeed;  // 移動速度
 	bool mIsGrounded;    // 接地しているかどうか
-	bool mDefenseUp;     // 防御力アップ(ポーション効果)
 	bool mHeel;          // 回復(ポーション効果)
-	bool mPowerUp;       // 攻撃力アップ(ポーション効果)
 
 	// 経過時間(防御力アップ用)
 	float mElapsedDefenseUpTime;

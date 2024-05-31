@@ -18,6 +18,8 @@ int CPlayer::mHp;
 int CPlayer::mMaxHp;
 int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
+bool CPlayer::mDefenseUp;
+bool CPlayer::mPowerUp;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -87,9 +89,7 @@ CPlayer::CPlayer()
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
-	, mDefenseUp(false)
 	, mHeel(false)
-	, mPowerUp(false)
 	, mElapsedDefenseUpTime(0.0f)
 	, mElapsedPowerUpTime(0.0f)
 	, mMoveSpeed(CVector::zero)
@@ -99,6 +99,8 @@ CPlayer::CPlayer()
 	mRecoveryCount = 0;
 	mHp = 0;
 	mMaxHp = 0;
+	mDefenseUp = false;
+	mPowerUp = false;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Player");

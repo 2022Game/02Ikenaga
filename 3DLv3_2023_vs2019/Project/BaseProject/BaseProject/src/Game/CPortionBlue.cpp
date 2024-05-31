@@ -1,10 +1,12 @@
 #include "CPortionBlue.h"
 #include "CCollisionManager.h"
 #include "CColliderSphere.h"
+#include "CPlayer.h"
 
 // コンストラク
 CPortionBlue::CPortionBlue()
 	: CObjectBase(ETag::ePortionBlue, ETaskPriority::eItem)
+	, mDefenseUp(false)
 {
 	mpPortionBlue = CResourceManager::Get<CModel>("Portion3");
 
@@ -31,7 +33,10 @@ CPortionBlue::~CPortionBlue()
 	 {
 		 if(other->Layer() == ELayer::ePlayer)
 		 {
-			 Kill();
+			 if (mDefenseUp != true)
+			 {
+				 Kill();
+			 }
 		 }
 	 }
 }
@@ -40,6 +45,9 @@ CPortionBlue::~CPortionBlue()
 void CPortionBlue::Update()
 {
 	Rotate(0.0f, 2.0f, 0.0f);
+	CPlayer* player = CPlayer::Instance();
+	mDefenseUp = player->mDefenseUp;
+	CDebugPrint::Print(" 防御: %d\n", mDefenseUp);
 }
 
 // 描画

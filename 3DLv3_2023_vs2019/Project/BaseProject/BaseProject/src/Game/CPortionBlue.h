@@ -31,4 +31,5 @@ public:
 private:
 	CModel* mpPortionBlue;  // モデルデータ読み込み
 	CColliderSphere* mpColliderSphere;  // 球(衝突処理用)
+	bool mDefenseUp;     // 防御力アップ(ポーション効果)
 };
