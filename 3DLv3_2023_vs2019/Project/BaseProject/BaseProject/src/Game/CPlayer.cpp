@@ -8,6 +8,7 @@
 #include "Maths.h"
 #include "CSword.h"
 #include "CShield.h"
+#include "CShieldRotate.h"
 #include "CSlash.h"
 #include "CElectricShockEffect.h"
 #include "CSceneManager.h"
@@ -20,6 +21,7 @@ int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
 bool CPlayer::mDefenseUp;
 bool CPlayer::mPowerUp;
+float CPlayer::mElapsedDefenseUpTime;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -84,13 +86,13 @@ CPlayer::CPlayer()
 	, mAttackTime(0)
 	, mAttackCount(0)
 	, mHealCount(0)
+	, mStateStep(0)
 	, mStateJumpAttackStep(0)
 	, mDefaultPos(CVector::zero)
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
 	, mHeel(false)
-	, mElapsedDefenseUpTime(0.0f)
 	, mElapsedPowerUpTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 {
@@ -101,6 +103,7 @@ CPlayer::CPlayer()
 	mMaxHp = 0;
 	mDefenseUp = false;
 	mPowerUp = false;
+	mElapsedDefenseUpTime = 0.0f;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Player");
@@ -212,13 +215,45 @@ CPlayer::CPlayer()
 	mpSword->SetOwner(this);
 
 	//盾を生成して左手に持たせる
-	mpShield= new CShield();
+	mpShield = new CShield();
 	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
 	mpShield->SetOwner(this);
+
+	mpShieldRotate = new CShieldRotate
+	(
+		Position() + CVector(10.0f, 6.0f, 0.0f),
+		CColor(0.15f, 0.5f, 0.5f)
+	);
+	mpShieldRotate->SetParent(this);
+
+	mpShieldRotate2 = new CShieldRotate
+	(
+		Position() + CVector(-10.0f, 6.0f, 0.0f),
+		CColor(0.15f, 0.5f, 0.5f)
+	);
+	mpShieldRotate2->Rotation(0.0f, 180.0f, 0.0);
+	mpShieldRotate2->SetParent(this);
+
+	mpShieldRotate3 = new CShieldRotate
+	(
+		Position()+ CVector(0.0f, 6.0f, 10.0f),
+		CColor(0.15f, 0.5f, 0.5f)
+	);
+	mpShieldRotate3->Rotation(0.0f, -270.0f, 0.0);
+	mpShieldRotate3->SetParent(this);
+
+	mpShieldRotate4 = new CShieldRotate
+	(
+		Position() + CVector(0.0f, 6.0f, -10.0f),
+		CColor(0.15f, 0.5f, 0.5f)
+	);
+	mpShieldRotate4->Rotation(0.0f, 270.0f, 0.0);
+	mpShieldRotate4->SetParent(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
 
+// デストラクタ
 CPlayer::~CPlayer()
 {
 	// 線分コライダー
@@ -250,6 +285,7 @@ void CPlayer::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
+	mStateStep = 0;
 	mStateJumpAttackStep = 0;
 }
 
@@ -1112,7 +1148,8 @@ void CPlayer::Update()
 	if (mDefenseUp == true)
 	{
 		mElapsedDefenseUpTime += Time::DeltaTime();
-		if (mElapsedDefenseUpTime >= 20)
+		// 20秒経過したら防御力アップfalseにする||防御力アップ時間を0にする
+		if (mElapsedDefenseUpTime >= 20.0f)
 		{
 			mElapsedDefenseUpTime = 0;
 			mDefenseUp = false;
@@ -1262,7 +1299,10 @@ void CPlayer::Update()
 	{
 		ChangeLevel(100);
 	}
-
+	else if (CInput::PushKey('3'))
+	{
+		mDefenseUp = true;
+	}
 	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBody->Update();
@@ -1275,6 +1315,7 @@ void CPlayer::Update()
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+	CDebugPrint::Print(" 防御: %d\n", mDefenseUp);
 	CDebugPrint::Print(" 防御時間: %f\n", mElapsedDefenseUpTime);
 }
 
@@ -1386,11 +1427,7 @@ float CPlayer::GetDefBuff(const CVector& attackDir)const
 
 	if (mDefenseUp == true)
 	{
-		float dot = CVector::Dot(attackDir.Normalized(), VectorZ());
-		if (dot >= cosf(Math::DegreeToRadian(30.0f)))
-		{
-			return 2.0f;
-		}
+		return 2.0f;
 	}
 
 	// 通常時の防御の割合

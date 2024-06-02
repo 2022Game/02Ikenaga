@@ -36,10 +36,11 @@ public:
 	void AttackStart() override;
 	// 攻撃終了
 	void AttackEnd() override;
-
+	// 攻撃力アップ
 	void PowerUp();
 
 private:
+	// モデルデータ読み込み
 	CModel* mpSword;
 	// 攻撃力アップ
 	bool mPowerUp;

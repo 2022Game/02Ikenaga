@@ -121,8 +121,6 @@ void CImpactEffect::CreateImpact()
 	// 位置、方向、移動速度を設定
 	impact->Setup(pos, dir, FLAME_MOVE_SPEED);
 
-	// 衝撃のカラーを設定
-	//impact->SetColor(FLAME_COLOR);
 	// 加算ブレンドにして、衝撃が発光しているように見せる
 	impact->SetBlendType(EBlend::eAdd);
 

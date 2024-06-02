@@ -978,15 +978,15 @@ void CDragon::Update()
 			if (probability4 == 8)mDefense = true;
 			if (mAttack2)
 			{
-				ChangeState(EState::eAttack2);
+				//ChangeState(EState::eAttack2);
 			}
 			else if (mAttack)
 			{
-				ChangeState(EState::eAttack);
+				//ChangeState(EState::eAttack);
 			}
 			else if (mDefense)
 			{
-				ChangeState(EState::eDefense);
+				//ChangeState(EState::eDefense);
 			}
 			else
 			{

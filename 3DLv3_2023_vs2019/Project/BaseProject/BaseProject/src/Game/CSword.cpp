@@ -129,6 +129,7 @@ void CSword:: AttackEnd()
 	mpAttackCol->SetEnable(false);
 }
 
+// UŒ‚—ÍƒAƒbƒv
 void CSword::PowerUp()
 {
 	mPowerUp = true;

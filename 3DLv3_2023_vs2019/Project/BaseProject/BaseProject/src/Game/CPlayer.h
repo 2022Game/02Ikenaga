@@ -11,6 +11,7 @@ class CSaGauge;
 class CSword;
 class CShield;
 class CSlash;
+class CShieldRotate;
 
 #include <algorithm>
 
@@ -89,6 +90,8 @@ public:
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
 	static bool mDefenseUp;     // 防御力アップ(ポーション効果)
 	static bool mPowerUp;       // 攻撃力アップ(ポーション効果)
+	// 経過時間(防御力アップ用)
+	static float mElapsedDefenseUpTime;
 
 private:
 	// 待機状態
@@ -220,6 +223,7 @@ private:
 	};
 	// プレイヤーの状態
 	EState mState;
+	int mStateStep;
 	int mStateJumpAttackStep;
 
 	// 状態を切り替え
@@ -229,8 +233,6 @@ private:
 	bool mIsGrounded;    // 接地しているかどうか
 	bool mHeel;          // 回復(ポーション効果)
 
-	// 経過時間(防御力アップ用)
-	float mElapsedDefenseUpTime;
 	// 経過時間(攻撃力アップ用)
 	float mElapsedPowerUpTime;
 
@@ -254,6 +256,11 @@ private:
 	CVector current;
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾
+	// 回転するシールド
+	CShieldRotate* mpShieldRotate;
+	CShieldRotate* mpShieldRotate2;
+	CShieldRotate* mpShieldRotate3;
+	CShieldRotate* mpShieldRotate4;
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;

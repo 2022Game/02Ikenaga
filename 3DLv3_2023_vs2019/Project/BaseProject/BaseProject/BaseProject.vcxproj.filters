@@ -580,6 +580,9 @@
     <ClCompile Include="src\Game\CPortionManager.cpp">
       <Filter>ソース ファイル\Game\Item\Portion</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CShieldRotate.cpp">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1022,6 +1025,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPortionManager.h">
       <Filter>ソース ファイル\Game\Item\Portion</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CShieldRotate.h">
+      <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

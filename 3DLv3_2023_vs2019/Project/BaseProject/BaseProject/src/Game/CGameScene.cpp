@@ -99,6 +99,7 @@ void CGameScene::Load()
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
 	CResourceManager::Load<CModel>("Shield", "Item\\Equipment\\Shield\\Shield.obj");
+	CResourceManager::Load<CModel>("ShieldRotate", "Item\\Equipment\\Shield\\ShieldRotate.obj");
 	CResourceManager::Load<CModel>("Cane", "Character\\Cane.obj");
 
 	// アイテム関連
