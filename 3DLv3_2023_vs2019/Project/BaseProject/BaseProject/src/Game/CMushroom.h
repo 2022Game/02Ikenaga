@@ -44,7 +44,7 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
-	// 走る
+	// 移動
 	void UpdateRun();
 
 	// 更新処理
@@ -99,7 +99,7 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ
 		eDizzy,     // めまい(混乱)
-		eRun,		// 走る
+		eRun,		// 移動
 
 		Num
 	};
@@ -133,7 +133,7 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eRun,       // 走る
+		eRun,       // 移動
 	};
 	EState mState;	// マッシュルームの状態
 	int mStateAttack2Step;  // State内の攻撃2でのステップ処理

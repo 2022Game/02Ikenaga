@@ -192,6 +192,7 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	CColliderLine* mpColliderLine;           // 線分コライダー
+	CColliderLine* mpAttackColLine;          // 攻撃用の線分コライダー
 
 	CColliderSphere* mpColliderSphereFeet;   // キャラクター押し戻しコライダー(前の左足)
 	CColliderSphere* mpColliderSphereFeet2;  // キャラクター押し戻しコライダー(前の右足)
@@ -209,7 +210,9 @@ private:
 	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
 	CColliderSphere* mpAttackColMouth;       // ダメージを与えるコライダー(口)
 	CColliderSphere* mpAttackColTipMouth;    // ダメージを与えるコライダー(口の先端)
+	CColliderSphere* mpAttackColBody;        // ダメージを与えるコライダー(体)
 	CColliderSphere* mpAttackColFeet;        // ダメージを与えるコライダー(前の左足)
+	CColliderSphere* mpAttackColFeet2;       // ダメージを与えるコライダー(前の右足)
 
 	CTransform* mpRideObject;
 

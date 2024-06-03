@@ -469,7 +469,7 @@ void CBoxer::UpdateAttack2()
 {
 	SetAnimationSpeed(0.5f);
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mAnimationFrame <= 30.0f)
@@ -483,7 +483,7 @@ void CBoxer::UpdateAttack2()
 
 	if (vectorPos >= 0.0f && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * 1.0f;
+		mMoveSpeed += newPos * 1.0f;
 	}
 
 	// ステップごとに処理を分ける
@@ -657,13 +657,13 @@ void CBoxer::UpdateRun()
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// 範囲内の時、移動し追跡する
 	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 		// 回転する範囲であれば
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -689,7 +689,7 @@ void CBoxer::UpdateSlide()
 {
 	SetAnimationSpeed(0.5f);
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mAnimationFrame <= 30.0f)
@@ -703,7 +703,7 @@ void CBoxer::UpdateSlide()
 
 	if (vectorPos >= 0.0f && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * 1.0f;
+		mMoveSpeed += newPos * 1.0f;
 	}
 
 	// ステップごとに処理を分ける

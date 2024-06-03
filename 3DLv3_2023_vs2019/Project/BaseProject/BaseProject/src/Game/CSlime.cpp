@@ -31,7 +31,7 @@ const CSlime::AnimData CSlime::ANIM_DATA[] =
 	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	             true,	26.0f,	0.5f},  // ヒット 26.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	                 true,	41.0f,	0.5f},  // 死ぬ 41.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	             true,	41.0f,	0.5f},  // めまい 41.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	                 true,	21.0f,	0.5f},  // 走る 21.0f
+	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	                 true,	21.0f,	0.5f},  // 移動 21.0f
 	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	             true,	31.0f,	0.5f},  // 歩く 31.0f
 //	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
 	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
@@ -463,14 +463,14 @@ void CSlime::UpdateDizzy()
 	}
 }
 
-// 走る 
+// 移動
 void CSlime::UpdateRun()
 {
 	SetAnimationSpeed(0.6f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mAnimationFrame >= 5.0f)
@@ -482,7 +482,7 @@ void CSlime::UpdateRun()
 	// 範囲内の時、移動し追跡する
 	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 		if (vectorPos <= ROTATE_RANGE)
 		{
 			// プレイヤーのいる方向へ向く
@@ -560,7 +560,7 @@ void CSlime::Update()
 	case EState::eDizzy:
 		UpdateDizzy();
 		break;
-		// 歩行
+		// 移動
 	case EState::eRun:
 		UpdateRun();
 		break;

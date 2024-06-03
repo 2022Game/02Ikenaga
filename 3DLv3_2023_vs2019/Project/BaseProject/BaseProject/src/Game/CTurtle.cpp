@@ -33,7 +33,7 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendIdle.x",	true,	 8.0f,	0.3f},	// –hŒä’†‚Ì‘Ò‹@ 8.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	        true,	61.0f,	0.5f},	// Ž€‚Ê 61.0f
 	{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	        true,	41.0f,	0.5f},	// ‚ß‚Ü‚¢ 41.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	        true,	17.0f,	0.45f}, // ‘–‚é 17.0f
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	        true,	17.0f,	0.45f}, // ˆÚ“® 17.0f
 
 };
 
@@ -364,20 +364,20 @@ void CTurtle::UpdateDizzy()
 	}
 }
 
-// ‘–‚é
+// ˆÚ“®
 void CTurtle::UpdateRun()
 {
 	SetAnimationSpeed(0.45f);
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// ”ÍˆÍ“à‚ÌŽžAˆÚ“®‚µ’ÇÕ‚·‚é
 	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 		// ‰ñ“]‚·‚é”ÍˆÍ‚Å‚ ‚ê‚Î
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -464,7 +464,7 @@ void CTurtle::Update()
 	case EState::eDizzy:
 		UpdateDizzy();
 		break;
-		// ‘–‚é
+		// ˆÚ“®
 	case EState::eRun:
 		UpdateRun();
 		break;

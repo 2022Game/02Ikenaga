@@ -587,13 +587,13 @@ void CBeholder::UpdateRun()
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// ”ÍˆÍ“à‚ÌŽžAˆÚ“®‚µ’ÇÕ‚·‚é
 	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 		// ‰ñ“]‚·‚é”ÍˆÍ‚Å‚ ‚ê‚Î
 		if (vectorPos <= ROTATE_RANGE)
 		{

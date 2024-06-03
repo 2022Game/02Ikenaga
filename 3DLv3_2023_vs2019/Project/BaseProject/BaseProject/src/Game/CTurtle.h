@@ -88,7 +88,7 @@ private:
 	void UpdateDie();
 	// ‚ß‚Ü‚¢(¬—)
 	void UpdateDizzy();
-	// ‘–‚é
+	// ˆÚ“®
 	void UpdateRun();
 
 	int mDefenseTime;  // –hŒäŠÔ‚ÌŠÔŠu
@@ -111,7 +111,7 @@ private:
 		eDefenseIdle, // –hŒä’†‚Ì‘Ò‹@
 		eDie,         // €‚Ê
 		eDizzy,       // ‚ß‚Ü‚¢(¬—)
-		eRun,		  // ‘–‚é
+		eRun,		  // ˆÚ“®
 
 		Num
 	};
@@ -147,7 +147,7 @@ private:
 		eDefenseIdle, // –hŒä’†‚Ì‘Ò‹@
 		eDie,         // €‚Ê
 		eDizzy,       // ‚ß‚Ü‚¢(¬—)
-		eRun,         // ‘–‚é
+		eRun,         // ˆÚ“®
 	};
 	EState mState;	  // ‹T‚Ìó‘Ô
 

@@ -29,9 +29,9 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack2.x",	        false,	26.0f,	0.6f},	// UŒ‚ 26.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	        false,	26.0f,	0.5f},	// UŒ‚ 26.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	        true,	23.0f,	0.4f},	// ƒqƒbƒg 23.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	            true,	26.0f,	0.25f},	//  Ž€‚Ê26.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	            true,	26.0f,	0.25f},	// Ž€‚Ê26.0f
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	            true,	41.0f,  0.4f},	// ‚ß‚Ü‚¢ 41.0f
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	            true,	17.0f, 	0.4f},	//‘–‚é 17.0f
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	            true,	17.0f, 	0.4f},	// ˆÚ“® 17.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingMaintain.x",	true,	121.0f	},	//Œ©‰ñ‚· 121.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomSenseSomethingStart.x",	true,	25.0f	},	//ŠJŽn‚ÌŒ©‰ñ‚· 25.0f
 	//{ "Character\\Enemy\\Mushroom\\animation\\MushroomTaunting.x",	true,	80.0f	},	//’§”­ 41.0f
@@ -363,7 +363,7 @@ void CMushroom::UpdateAttack2()
 void CMushroom::UpdateAttack3()
 {
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 	SetAnimationSpeed(0.5f);
 	mpAttackColHead->SetEnable(false);
@@ -390,7 +390,7 @@ void CMushroom::UpdateAttack3()
 		{
 			if (vectorPos <= 25.0f)
 			{
-				mMoveSpeed += nowPos * 7.0f;
+				mMoveSpeed += newPos * 7.0f;
 				mStateAttack3Step++;
 			}
 			else if (vectorPos >= 26.0f)
@@ -473,19 +473,19 @@ void CMushroom::UpdateDizzy()
 	}
 }
 
-// ‘–‚é
+// ˆÚ“®
 void CMushroom::UpdateRun()
 {
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eRun);
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// ”ÍˆÍ“à‚ÌŽžAˆÚ“®‚µ’ÇÕ‚·‚é
 	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 		// ‰ñ“]‚·‚é”ÍˆÍ‚Å‚ ‚ê‚Î
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -564,7 +564,7 @@ void CMushroom::Update()
 	case EState::eDizzy:
 		UpdateDizzy();
 		break;
-		// •às
+		// ˆÚ“®
 	case EState::eRun:
 		UpdateRun();
 		break;

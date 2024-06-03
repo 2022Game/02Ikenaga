@@ -79,6 +79,7 @@ CDragon::CDragon()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle3);
 
+	// 線分コライダー
 	mpColliderLine = new CColliderLine
 	(
 		this, ELayer::eField,
@@ -86,7 +87,16 @@ CDragon::CDragon()
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	//mpColliderLine->Position(35.0f, 0.0f,-70.0f);
+
+	// 攻撃用の線分コライダー
+	mpAttackColLine = new CColliderLine
+	(
+		this, ELayer::eAttackCol,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 3.9f, 0.0f)
+	);
+	mpAttackColLine->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColLine->SetCollisionTags({ ETag::ePlayer });
 
 	// キャラクター押し戻し処理(前の左足)
 	mpColliderSphereFeet = new CColliderSphere
@@ -229,6 +239,15 @@ CDragon::CDragon()
 	mpAttackColTipMouth->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColTipMouth->Position(-0.1f, 0.15f, 0.1f);
 
+	// ダメージを与えるコライダー(体)
+	mpAttackColBody = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		2.0f, false
+	);
+	mpAttackColBody->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColBody->SetCollisionTags({ ETag::ePlayer });
+
 	// ダメージを与えるコライダー(前の左足)
 	mpAttackColFeet = new CColliderSphere
 	(
@@ -238,6 +257,16 @@ CDragon::CDragon()
 	mpAttackColFeet->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColFeet->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColFeet->Position(0.0f, 0.0f, 0.2f);
+
+	// ダメージを与えるコライダー(前の右足)
+	mpAttackColFeet2 = new CColliderSphere
+	(
+		this, ELayer::eAttackCol,
+		0.8f, false
+	);
+	mpAttackColFeet2->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColFeet2->SetCollisionTags({ ETag::ePlayer });
+	mpAttackColFeet2->Position(0.0f, 0.0f, 0.2f);
 
 	// ダメージを受けるコライダーと攻撃コライダーをドラゴンの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_Head");
@@ -261,6 +290,7 @@ CDragon::CDragon()
 	// ダメージを受けるコライダーをドラゴンの胸の行列にアタッチ
 	const CMatrix* chestMty = GetFrameMtx("Armature_Chest");
 	mpDamageColChest->SetAttachMtx(chestMty);
+	mpAttackColBody->SetAttachMtx(chestMty);
 
 	// ダメージを受けるコライダーをドラゴンの手の行列にアタッチ
 	const CMatrix* handMty = GetFrameMtx("Armature_Hand_L");
@@ -271,6 +301,7 @@ CDragon::CDragon()
 
 	// ダメージを受けるコライダーをドラゴンの首2の行列にアタッチ
 	const CMatrix* neckMty2 = GetFrameMtx("Armature_Neck02");
+	mpAttackColLine->SetAttachMtx(neckMty2);
 
 	// ダメージを受けるコライダーをドラゴンの首3の行列にアタッチ
 	const CMatrix* neckMty3 = GetFrameMtx("Armature_Neck01");
@@ -300,10 +331,12 @@ CDragon::CDragon()
 	mpDamageColFeet->SetAttachMtx(leftFootMty);
 	mpAttackColFeet->SetAttachMtx(leftFootMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーをドラゴンの前の右足の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをドラゴンの前の右足の行列にアタッチ
 	const CMatrix* rightFootMty = GetFrameMtx("Armature_Middle01_R");
 	mpColliderSphereFeet2->SetAttachMtx(rightFootMty);
 	mpDamageColFeet2->SetAttachMtx(rightFootMty);
+	mpAttackColFeet2->SetAttachMtx(rightFootMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをドラゴンの後ろの左足の行列にアタッチ
 	const CMatrix* leftFootMty2 = GetFrameMtx("Armature_MiddleToe01_L");
@@ -314,11 +347,17 @@ CDragon::CDragon()
 	mpDamageColFeet4->SetAttachMtx(rightFootMty2);
 
 	// 最初の攻撃コライダーを無効にしておく
+	mpAttackColLine->SetEnable(false);
 	mpAttackColHead->SetEnable(false);
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColTipMouth->SetEnable(false);
+	mpAttackColBody->SetEnable(false);
 	mpAttackColFeet->SetEnable(false);
+	mpAttackColFeet2->SetEnable(false);
 
+	mpDamageColChest->SetEnable(false);
+
+	// 火炎放射の生成
 	const CMatrix* mtx = GetFrameMtx("Armature_Tongue01");
 	mpFlamethrower = new CFlamethrower
 	(
@@ -327,6 +366,7 @@ CDragon::CDragon()
 		CQuaternion(0.0,-90.f,0.0f).Matrix()
 	); 
 
+	// 雄叫びの生成
 	mpRoar = new CRoarEffect
 	(
 		this,nullptr,
@@ -340,6 +380,7 @@ CDragon::~CDragon()
 {
 	// 線分コライダーを削除
 	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpAttackColLine);
 	// キャラ押し戻しコライダーを削除
 	SAFE_DELETE(mpColliderSphereFeet);
 	SAFE_DELETE(mpColliderSphereFeet2);
@@ -357,7 +398,9 @@ CDragon::~CDragon()
 	SAFE_DELETE(mpAttackColHead);
 	SAFE_DELETE(mpAttackColMouth);
 	SAFE_DELETE(mpAttackColTipMouth);
+	SAFE_DELETE(mpAttackColBody);
 	SAFE_DELETE(mpAttackColFeet);
+	SAFE_DELETE(mpAttackColFeet2);
 }
 
 // ドラゴンのインスタンス
@@ -483,10 +526,37 @@ void CDragon::UpdateAttack()
 void CDragon::UpdateAttack2()
 {
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eAttack2);
-	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	ChangeState(EState::eAttackWait);
+
+	// ステップごとに処理を分ける
+	switch (mStateStep)
+	{
+		// ステップ0 : 攻撃アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack2);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 37.0f)
+		{
+			AttackStart();
+			mStateStep++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 60.0f)
+		{
+			AttackEnd();
+			mStateStep++;
+		}
+		break;
+	case 3:
+		if (mAnimationFrame >= 90.0f)
+		{
+			// 攻撃2終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
+	}
 }
 
 
@@ -729,7 +799,7 @@ void CDragon::UpdateRun()
 	ChangeAnimation(EAnimType::eRun);
 
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
@@ -744,7 +814,7 @@ void CDragon::UpdateRun()
 	// 範囲内の時、移動し追跡する
 	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 	}
 	// 追跡が止まった時、待機モーションへ
 	if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
@@ -760,7 +830,7 @@ void CDragon::UpdateFlyForward()
 	ChangeAnimation(EAnimType::eFlyForward);
 
 	CPlayer* player = CPlayer::Instance();
-	CVector nowPos = (player->Position() - Position()).Normalized();
+	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
@@ -775,7 +845,7 @@ void CDragon::UpdateFlyForward()
 	// 範囲内の時、移動し追跡する
 	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		mMoveSpeed += nowPos * MOVE_SPEED;
+		mMoveSpeed += newPos * MOVE_SPEED;
 	}
 	// 追跡が止まった時、待機モーションへ
 	if (vectorPos <= STOP_RANGE || vectorPos >= WALK_RANGE)
@@ -978,7 +1048,7 @@ void CDragon::Update()
 			if (probability4 == 8)mDefense = true;
 			if (mAttack2)
 			{
-				//ChangeState(EState::eAttack2);
+				ChangeState(EState::eAttack2);
 			}
 			else if (mAttack)
 			{
@@ -990,7 +1060,7 @@ void CDragon::Update()
 			}
 			else
 			{
-				ChangeState(EState::eAttack3);
+				//ChangeState(EState::eAttack3);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3
@@ -1077,6 +1147,9 @@ void CDragon::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// 線分コライダー
+	mpAttackColLine->Update();
+
 	 // キャラ押し戻しコライダー
 	mpColliderSphereFeet->Update();
 	mpColliderSphereFeet2->Update();
@@ -1096,7 +1169,9 @@ void CDragon::Update()
 	mpAttackColHead->Update();
 	mpAttackColMouth->Update();
 	mpAttackColTipMouth->Update();
+	mpAttackColBody->Update();
 	mpAttackColFeet->Update();
+	mpAttackColFeet2->Update();
 
 	mIsGrounded = false;
 
@@ -1109,7 +1184,8 @@ void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
 	if (self == mpAttackColHead || self == mpAttackColMouth || self == mpAttackColTipMouth
-		|| self == mpAttackColFeet
+		|| self == mpAttackColBody || self == mpAttackColFeet || self == mpAttackColFeet2
+		|| self == mpAttackColLine
 		&& mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdle3)
 	{
 		// キャラのポインタに変換
@@ -1159,7 +1235,10 @@ void CDragon::AttackStart()
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
 	if (mState == EState::eAttack2)
 	{
+		mpAttackColLine->SetEnable(true);
+		mpAttackColBody->SetEnable(true);
 		mpAttackColFeet->SetEnable(true);
+		mpAttackColFeet2->SetEnable(true);
 	}
 	if (mState == EState::eAttack3)
 	{
@@ -1174,10 +1253,14 @@ void CDragon::AttackEnd()
 {
 	CXCharacter::AttackEnd();
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
+	mpAttackColLine->SetEnable(false);
 	mpAttackColHead->SetEnable(false);
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColTipMouth->SetEnable(false);
+	mpAttackColBody->SetEnable(false);
 	mpAttackColFeet->SetEnable(false);
+	mpAttackColFeet2->SetEnable(false);
+
 }
 
 // 描画
