@@ -88,10 +88,7 @@ public:
 	static int mMaxHp;
 	static int mSa;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
-	static bool mDefenseUp;     // 防御力アップ(ポーション効果)
 	static bool mPowerUp;       // 攻撃力アップ(ポーション効果)
-	// 経過時間(防御力アップ用)
-	static float mElapsedDefenseUpTime;
 
 private:
 	// 待機状態

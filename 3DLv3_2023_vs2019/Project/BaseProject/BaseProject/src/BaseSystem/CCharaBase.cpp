@@ -41,6 +41,16 @@ float CCharaBase::GetDefBuff(const CVector& attackDir)const
 	return mBaseDefenseBuffRatio;
 }
 
+bool CCharaBase::IsDefenseUp() const
+{
+	return mDefenseUp;
+}
+
+float CCharaBase::GetElapsedDefenseUpTime() const
+{
+	return mElapsedDefenseUpTime;
+}
+
 //　ダメージ量を算出
 int CalcDamage(float atkRatio,const CCharaBase* attaker, const CCharaBase* defender)
 {

@@ -11,9 +11,11 @@ class CShieldRotate : public CWeapon
 {
 public:
 	// コンストラク
-	CShieldRotate(const CVector& pos, const CColor& col);
+	CShieldRotate(float angle,float dist);
 	// デストラクタ
 	~CShieldRotate();
+
+	void SetOwner(CCharaBase* owner) override;
 
 	// 更新
 	void Update();
@@ -28,6 +30,8 @@ private:
 	CModel* mpShieldRotate;
 	// 経過時間(防御力アップ用)
 	float mElapsedDefenseUpTime;
-	// 移動速度
-	//CVector mMoveSpeed;
+
+	float mAngle;      // 盾の回転角度
+	float mDistance;   // 持ち主からの距離
+	float mBaseScale;  // 持ち主のベーススケール値
 };

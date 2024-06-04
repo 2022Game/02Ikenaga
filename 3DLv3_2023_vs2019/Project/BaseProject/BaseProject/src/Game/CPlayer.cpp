@@ -19,9 +19,7 @@ int CPlayer::mHp;
 int CPlayer::mMaxHp;
 int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
-bool CPlayer::mDefenseUp;
 bool CPlayer::mPowerUp;
-float CPlayer::mElapsedDefenseUpTime;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -219,36 +217,18 @@ CPlayer::CPlayer()
 	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
 	mpShield->SetOwner(this);
 
-	mpShieldRotate = new CShieldRotate
-	(
-		Position() + CVector(10.0f, 6.0f, 0.0f),
-		CColor(0.15f, 0.5f, 0.5f)
-	);
-	mpShieldRotate->SetParent(this);
+	float dist = 8.0f;
+	mpShieldRotate = new CShieldRotate(0.0f, dist);
+	mpShieldRotate->SetOwner(this);
 
-	mpShieldRotate2 = new CShieldRotate
-	(
-		Position() + CVector(-10.0f, 6.0f, 0.0f),
-		CColor(0.15f, 0.5f, 0.5f)
-	);
-	mpShieldRotate2->Rotation(0.0f, 180.0f, 0.0);
-	mpShieldRotate2->SetParent(this);
+	mpShieldRotate2 = new CShieldRotate(180.0, dist);
+	mpShieldRotate2->SetOwner(this);
 
-	mpShieldRotate3 = new CShieldRotate
-	(
-		Position()+ CVector(0.0f, 6.0f, 10.0f),
-		CColor(0.15f, 0.5f, 0.5f)
-	);
-	mpShieldRotate3->Rotation(0.0f, -270.0f, 0.0);
-	mpShieldRotate3->SetParent(this);
+	mpShieldRotate3 = new CShieldRotate(-270.0f, dist);
+	mpShieldRotate3->SetOwner(this);
 
-	mpShieldRotate4 = new CShieldRotate
-	(
-		Position() + CVector(0.0f, 6.0f, -10.0f),
-		CColor(0.15f, 0.5f, 0.5f)
-	);
-	mpShieldRotate4->Rotation(0.0f, 270.0f, 0.0);
-	mpShieldRotate4->SetParent(this);
+	mpShieldRotate4 = new CShieldRotate(270.0f, dist);
+	mpShieldRotate4->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }

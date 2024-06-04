@@ -1,18 +1,20 @@
 #include "CShieldRotate.h"
 #include "CCollisionManager.h"
 #include "CPlayer.h"
-
-#define MOVESPEED 0.5f
+#include "Maths.h"
 
 // コンストラク
-CShieldRotate::CShieldRotate(const CVector& pos,const CColor& col)
+CShieldRotate::CShieldRotate(float angle,float dist)
 	: mStateStep(0)
 	, mDefenseUp(false)
 	, mElapsedDefenseUpTime(0.0f)
+	, mAngle(angle)
+	, mDistance(dist)
+	, mBaseScale(1.0f)
 {
 	mpShieldRotate = CResourceManager::Get<CModel>("ShieldRotate");
-	Position(pos);
-	mpShieldRotate->SetColor(col);
+	mpShieldRotate->SetColor(CColor(0.15f, 0.75f, 0.75f));
+	mpShieldRotate->SetBlend(EBlend::eAdd);
 }
 
 // デストラクタ
@@ -20,12 +22,42 @@ CShieldRotate::~CShieldRotate()
 {
 }
 
+void CShieldRotate::SetOwner(CCharaBase* owner)
+{
+	CWeapon::SetOwner(owner);
+	mBaseScale = owner->Scale().X();
+}
+
 // 更新
 void CShieldRotate::Update()
 {
-	CPlayer* player = CPlayer::Instance();
-	mDefenseUp = player->mDefenseUp;
-	mElapsedDefenseUpTime = player->mElapsedDefenseUpTime;
+	mDefenseUp = mOwner->IsDefenseUp();
+	mElapsedDefenseUpTime = mOwner->GetElapsedDefenseUpTime();
+
+	// 持ち主のベーススケール値から、
+	// 現在の拡大率を求めて、盾にも反映
+	float scale = mOwner->Scale().X() / mBaseScale;
+	Scale(scale, scale, scale);
+
+	// 回転する盾の中心座標
+	CVector center = mOwner->Position();
+	// 中心座標から現在の回転で座標を求める(円運動)
+	CVector pos = CVector::zero;
+	pos.X(cosf(Math::DegreeToRadian(mAngle)) * mDistance);
+	pos.Z(sinf(Math::DegreeToRadian(mAngle)) * mDistance);
+	pos.Y(5.0f);
+	Position(center + pos * scale);
+
+	// 現在位置から中心座標までのベクトルを求めて、
+	// そちらの方向へ向けやる
+	CVector dif = center - Position();
+	dif.Y(0.0f);
+	dif.Normalize();
+	Rotation(CQuaternion::LookRotation(dif));
+
+	// 毎フレーム回転角度を加算して、中心座標を中心に回転させる
+	mAngle += 90.0f * Time::DeltaTime();
+	if (mAngle >= 360.0f)mAngle -= 360.0f;
 
 	if (mDefenseUp == true)
 	{

@@ -6,7 +6,9 @@ class CCharaBase;
 class CWeapon : public CObjectBase
 {
 public:
+	// コンストラク
 	CWeapon();
+	// デストラクタ
 	virtual ~CWeapon();
 
 	void SetAttachMtx(const CMatrix* mtx);
@@ -18,7 +20,7 @@ public:
 	virtual void AttackEnd();
 
 	// 武器の所持キャラクターを設定
-	void SetOwner(CCharaBase* owner);
+	virtual void SetOwner(CCharaBase* owner);
 
 	// 武器の所持キャラクターを取得
 	CCharaBase* GetOwner() const;

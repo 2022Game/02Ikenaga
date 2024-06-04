@@ -1,6 +1,7 @@
 #include "CWeapon.h"
 #include "CCharaBase.h"
 
+// コンストラク
 CWeapon::CWeapon()
 	: CObjectBase(ETag::eWeapon, ETaskPriority::eWeapon)
 	, mpAttachMtx(nullptr)
@@ -8,6 +9,7 @@ CWeapon::CWeapon()
 {
 }
 
+// デストラクタ
 CWeapon::~CWeapon()
 {
 }

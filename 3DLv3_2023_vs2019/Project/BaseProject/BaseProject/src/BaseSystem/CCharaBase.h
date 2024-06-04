@@ -34,12 +34,19 @@ public:
 
 	virtual float GetDefBuff(const CVector&attackDir)const;
 
-protected:
-	CharaStatus mCharaMaxStatus;  //最大ステータス
-	CharaStatus mCharaStatus;  //現在のステータス
+	bool IsDefenseUp() const;
 
-	float mBaseAttackBuffRatio;  // 攻撃力の強化割合 (1.0で等値)
-	float mBaseDefenseBuffRatio; // 防御力の強化割合 (1.0で等値)
+	float GetElapsedDefenseUpTime() const;
+
+protected:
+	CharaStatus mCharaMaxStatus;  // 最大ステータス
+	CharaStatus mCharaStatus;     // 現在のステータス
+
+	float mBaseAttackBuffRatio;   // 攻撃力の強化割合 (1.0で等値)
+	float mBaseDefenseBuffRatio;  // 防御力の強化割合 (1.0で等値)
+
+	bool mDefenseUp;              // 防御力アップ(ポーション効果)
+	float mElapsedDefenseUpTime;  // 経過時間(防御力アップ用)
 };
 
 /// <summary>
