@@ -8,7 +8,7 @@
 // 炎の発射方向のブレ幅
 #define FLAME_DIR_RAND 0.01f
 // 炎の移動速度
-#define FLAME_MOVE_SPEED 100.0f
+#define FLAME_MOVE_SPEED 70.0f
 // 炎の色
 #define FLAME_COLOR CColor(1.0f, 0.25f, 0.1f)
 
@@ -119,7 +119,7 @@ void CFlamethrower::CreateFlame()
 	CVector dir = GetThrowDir();// + CVector(0.0f, -1.0f, 0.0f);
 	// 発射方向をランダムでブラす
 	dir.X(dir.X() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	dir.Y(dir.Y() + Math::Rand(-0.07f, 0.01f));
+	dir.Y(dir.Y() + Math::Rand(-0.03f, -0.02f));
 	dir.Z(dir.Z() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
 	dir.Normalize();
 	// 発射位置、方向、移動速度を設定

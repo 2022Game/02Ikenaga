@@ -120,7 +120,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(91);
+	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);

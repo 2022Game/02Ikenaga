@@ -191,28 +191,34 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;           // 線分コライダー
-	CColliderLine* mpAttackColLine;          // 攻撃用の線分コライダー
+	CColliderLine* mpColliderLine;         // 線分コライダー
+	CColliderLine* mpAttackColLine;        // 攻撃用の線分コライダー
 
-	CColliderSphere* mpColliderSphereFeet;   // キャラクター押し戻しコライダー(前の左足)
-	CColliderSphere* mpColliderSphereFeet2;  // キャラクター押し戻しコライダー(前の右足)
+	// キャラクター押し戻しコライダー
+	CColliderSphere* mpColSphereMouth;     // 口
+	CColliderSphere* mpColSphereTipMouth;  // 口の先端
+	CColliderSphere* mpColSphereNeck;      // 首
+	CColliderSphere* mpColSphereFeet;      // 前の左足
+	CColliderSphere* mpColSphereFeet2;     // 前の右足
 
-	CColliderSphere* mpDamageColHead;        // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColMouth;       // ダメージを受けるコライダー(口)
-	CColliderSphere* mpDamageColTipMouth;    // ダメージを受けるコライダー(口の先端)
-	CColliderSphere* mpDamageColNeck;        // ダメージを受けるコライダー(首)
-	CColliderSphere* mpDamageColChest;       // ダメージを受けるコライダー(胸)
-	CColliderSphere* mpDamageColFeet;        // ダメージを受けるコライダー(前の左足)
-	CColliderSphere* mpDamageColFeet2;       // ダメージを受けるコライダー(前の右足)
-	CColliderSphere* mpDamageColFeet3;       // ダメージを受けるコライダー(後ろの左足)
-	CColliderSphere* mpDamageColFeet4;       // ダメージを受けるコライダー(後ろの右足)
+	// ダメージを受けるコライダー
+	CColliderSphere* mpDamageColHead;      // 頭
+	CColliderSphere* mpDamageColMouth;     // 口
+	CColliderSphere* mpDamageColTipMouth;  // 口の先端
+	CColliderSphere* mpDamageColNeck;      // 首
+	CColliderSphere* mpDamageColChest;     // 胸
+	CColliderSphere* mpDamageColFeet;      // 前の左足
+	CColliderSphere* mpDamageColFeet2;     // 前の右足
+	CColliderSphere* mpDamageColFeet3;     // 後ろの左足
+	CColliderSphere* mpDamageColFeet4;     // 後ろの右足
 
-	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackColMouth;       // ダメージを与えるコライダー(口)
-	CColliderSphere* mpAttackColTipMouth;    // ダメージを与えるコライダー(口の先端)
-	CColliderSphere* mpAttackColBody;        // ダメージを与えるコライダー(体)
-	CColliderSphere* mpAttackColFeet;        // ダメージを与えるコライダー(前の左足)
-	CColliderSphere* mpAttackColFeet2;       // ダメージを与えるコライダー(前の右足)
+	// ダメージを与えるコライダー
+	CColliderSphere* mpAttackColHead;      // 頭
+	CColliderSphere* mpAttackColMouth;     // 口
+	CColliderSphere* mpAttackColTipMouth;  // 口の先端
+	CColliderSphere* mpAttackColBody;      // 体
+	CColliderSphere* mpAttackColFeet;      // 前の左足
+	CColliderSphere* mpAttackColFeet2;     // 前の右足
 
 	CTransform* mpRideObject;
 

@@ -5,7 +5,7 @@
 // 炎のスケール値の最大値
 #define FLAME_SCALE 10.0f
 // 炎のスケール値が最大値になるまでの時間
-#define FLAME_SCALE_ANIM_TIME 3.0f
+#define FLAME_SCALE_ANIM_TIME 5.0f
 
 // アニメーションの1コマ表示時間
 #define ANIM_TIME 0.0625f
@@ -89,7 +89,7 @@ void CFlame::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			if (!IsAttackHitObj(chara))
 			{
 				// 与えるダメージを計算
-				int damage = CalcDamage(0.5f, mOwner, chara);
+				int damage = CalcDamage(0.45f, mOwner, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, mOwner);
