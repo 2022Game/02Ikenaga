@@ -3,14 +3,16 @@
 #include "CharaStatus.h"
 
 
-/// <summary>
-/// キャラクターのベースクラス
-/// </summary>
+/*
+ キャラクターのベースクラス
+*/
 class CCharaBase : public CObjectBase
 {
 public:
+	// コンストラク
 	CCharaBase(ETag tag, ETaskPriority prio, int sortOrder = 0,
 		ETaskPauseType pause = ETaskPauseType::eGame);
+	// デストラクタ
 	virtual ~CCharaBase();
 
 	/// <summary>
@@ -30,12 +32,23 @@ public:
 	/// <returns></returns>
 	const CharaStatus& Status() const;
 
+	/// <summary>
+	/// 攻撃力の強化割合を取得
+	/// </summary>
+	/// <returns></returns>
 	virtual float GetAtkBuff()const;
 
+	/// <summary>
+	/// 防御力の強化割合を取得
+	/// </summary>
+	/// <param name="attackDir"></param>
+	/// <returns></returns>
 	virtual float GetDefBuff(const CVector&attackDir)const;
 
+	// 防御力アップ
 	bool IsDefenseUp() const;
 
+	// 防御力アップ中の経過時間
 	float GetElapsedDefenseUpTime() const;
 
 protected:

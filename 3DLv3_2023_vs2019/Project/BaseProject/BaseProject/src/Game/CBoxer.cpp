@@ -46,9 +46,7 @@ CBoxer::CBoxer()
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mDefenseTime(0)
-	, mStateAttackStep(0)
-	, mStateAttack2Step(0)
-	, mStateSlideStep(0)
+	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
@@ -183,6 +181,28 @@ CBoxer::CBoxer()
 	mpDamageColHandL->SetCollisionTags({ ETag::eWeapon });
 	mpDamageColHandL->Position(0.0f, -0.1f, 0.0f);
 
+	// ダメージを受けるコライダーを作成(右腕)
+	mpDamageColArmR = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.35f, false
+	);
+	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageColArmR->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColArmR->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColArmR->Position(0.0f, -0.04f, 0.0f);
+
+	// ダメージを受けるコライダーを作成(左腕)
+	mpDamageColArmL = new CColliderSphere
+	(
+		this, ELayer::eDamageCol,
+		0.35f, false
+	);
+	//　ダメージを受けるコライダーと衝突判定を行うコライダーのレイヤーとタグを設定
+	mpDamageColArmL->SetCollisionLayers({ ELayer::eAttackCol });
+	mpDamageColArmL->SetCollisionTags({ ETag::eWeapon });
+	mpDamageColArmL->Position(0.0f, -0.04f, 0.0f);
+
 	// ダメージを受けるコライダーを作成(右足)
 	mpDamageColFeetR = new CColliderSphere
 	(
@@ -255,19 +275,22 @@ CBoxer::CBoxer()
 	mpAttackColFeetL->SetCollisionTags({ ETag::ePlayer });
 	mpAttackColFeetL->Position(0.0f, 0.03f, 0.0f);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをボクサーの頭の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをボクサーの頭の行列にアタッチ
 	const CMatrix* headMty = GetFrameMtx("Armature_neck_01");
 	mpColliderSphereHead->SetAttachMtx(headMty);
 	mpDamageColHead->SetAttachMtx(headMty);
 	mpAttackColHead->SetAttachMtx(headMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをボクサーの体の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをボクサーの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_spine_02");
 	mpColliderSphereBody->SetAttachMtx(bodyMty);
 	mpDamageColBody->SetAttachMtx(bodyMty);
 	mpAttackColBody->SetAttachMtx(bodyMty);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをボクサーの右手の行列にアタッチ
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをボクサーの右手の行列にアタッチ
 	const CMatrix* rightHandMty = GetFrameMtx("Armature_drill_r");
 	mpColliderSphereHandR->SetAttachMtx(rightHandMty);
 	mpDamageColHandR->SetAttachMtx(rightHandMty);
@@ -277,6 +300,14 @@ CBoxer::CBoxer()
 	const CMatrix* leftHandMty = GetFrameMtx("Armature_drill_l");
 	mpColliderSphereHandL->SetAttachMtx(leftHandMty);
 	mpDamageColHandL->SetAttachMtx(leftHandMty);
+
+	// ダメージを受けるコライダーをボクサーの右腕の行列にアタッチ
+	const CMatrix* rightArmMty = GetFrameMtx("Armature_lowerarm_r");
+	mpDamageColArmR->SetAttachMtx(rightArmMty);
+
+	// ダメージを受けるコライダーをボクサーの左腕の行列にアタッチ
+	const CMatrix* leftArmMty = GetFrameMtx("Armature_lowerarm_l");
+	mpDamageColArmL->SetAttachMtx(leftArmMty);
 
 	// ダメージを受けるコライダーをボクサーの右足の行列にアタッチ
 	const CMatrix* rightFootMty = GetFrameMtx("Armature_thigh_r");
@@ -330,6 +361,8 @@ CBoxer::~CBoxer()
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColHandR);
 	SAFE_DELETE(mpDamageColHandL);
+	SAFE_DELETE(mpDamageColArmR);
+	SAFE_DELETE(mpDamageColArmL);
 	SAFE_DELETE(mpDamageColFeetR);
 	SAFE_DELETE(mpDamageColFeetL);
 	// 攻撃コライダー
@@ -359,9 +392,7 @@ void CBoxer::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
-	mStateAttack2Step = 0;
-	mStateSlideStep = 0;
+	mStateStep = 0;
 }
 
 // 待機状態
@@ -419,12 +450,12 @@ void CBoxer::UpdateAttack()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
-		mStateAttackStep++;
+		mStateStep++;
 		break;
 		// ステップ1 : 攻撃開始＋インパクト生成
 	case 1:
@@ -436,12 +467,12 @@ void CBoxer::UpdateAttack()
 				if (!mpImpact->IsThrowing())
 				{
 					mpImpact->Start();
-					mStateAttackStep++;
+					mStateStep++;
 				}
 			}
 			else
 			{
-				mStateAttackStep++;
+				mStateStep++;
 			}
 		}
 		break;
@@ -450,7 +481,7 @@ void CBoxer::UpdateAttack()
 		if (mAnimationFrame >= 15.0f)
 		{
 			AttackEnd();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ3 : 攻撃アニメーション終了待ち
@@ -487,19 +518,19 @@ void CBoxer::UpdateAttack2()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttack2Step)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃2アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack2);
-		mStateAttack2Step++;
+		mStateStep++;
 		break;
 		// ステップ1 : 攻撃開始
 	case 1:
 		if (mAnimationFrame >= 5.0f)
 		{
 			AttackStart();
-			mStateAttack2Step++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃2アニメーション終了待ち
@@ -707,18 +738,18 @@ void CBoxer::UpdateSlide()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateSlideStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 滑るアニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eSlide);
-		mStateSlideStep++;
+		mStateStep++;
 		break;
 	case 1:
 		if (mAnimationFrame >= 5.0f)
 		{
 			AttackStart();
-			mStateSlideStep++;
+			mStateStep++;
 		}
 		break;
 	case 2:
@@ -915,6 +946,8 @@ void CBoxer::Update()
 	mpDamageColBody->Update();
 	mpDamageColHandR->Update();
 	mpDamageColHandL->Update();
+	mpDamageColArmR->Update();
+	mpDamageColArmL->Update();
 	mpDamageColFeetR->Update();
 	mpDamageColFeetL->Update();
 	// 攻撃コライダー

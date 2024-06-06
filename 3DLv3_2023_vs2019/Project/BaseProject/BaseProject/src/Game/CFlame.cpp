@@ -8,7 +8,7 @@
 #define FLAME_SCALE_ANIM_TIME 5.0f
 
 // アニメーションの1コマ表示時間
-#define ANIM_TIME 0.0625f
+#define ANIM_TIME 0.0525f
 // 炎のエフェクトのアニメーションデータ
 TexAnimData CFlame::msAnimData = TexAnimData(8,8, false, 64, ANIM_TIME);
 

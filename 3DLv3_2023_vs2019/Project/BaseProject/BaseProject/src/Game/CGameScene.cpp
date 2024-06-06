@@ -296,25 +296,20 @@ void CGameScene::Load()
 	bossEnemy->Position(-200.0f, 21.0f, 120.0f);
 	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
-	// 攻撃力アップポーション
-	CPortionRed* portionred = new CPortionRed();
-	portionred->Position(90.0f, 10.0f, 0.0f);
-	portionred->Scale(200.0f, 200.0f, 200.0f);
+	//// 攻撃力アップポーション
+	//CPortionRed* portionred = new CPortionRed();
+	//portionred->Position(90.0f, 10.0f, 0.0f);
+	//portionred->Scale(200.0f, 200.0f, 200.0f);
 
-	// 回復ポーション
-	CPortionGreen* portiongreen = new CPortionGreen();
-	portiongreen->Position(-50.0f, 10.0f, 0.0f);
-	portiongreen->Scale(200.0f, 200.0f, 200.0f);
+	//// 回復ポーション
+	//CPortionGreen* portiongreen = new CPortionGreen();
+	//portiongreen->Position(-50.0f, 10.0f, 0.0f);
+	//portiongreen->Scale(200.0f, 200.0f, 200.0f);
 
-	// 防御力アップポーション
-	CPortionBlue* portionblue = new CPortionBlue();
-	portionblue->Position(-80.0f, 10.0f, 0.0f);
-	portionblue->Scale(200.0f, 200.0f, 200.0f);
-
-	// 防御力アップポーション
-	CPortionBlue* portionblue2 = new CPortionBlue();
-	portionblue2->Position(-120.0f, 10.0f, 0.0f);
-	portionblue2->Scale(200.0f, 200.0f, 200.0f);
+	//// 防御力アップポーション
+	//CPortionBlue* portionblue = new CPortionBlue();
+	//portionblue->Position(-80.0f, 10.0f, 0.0f);
+	//portionblue->Scale(200.0f, 200.0f, 200.0f);
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

@@ -29,24 +29,24 @@ bool CPlayer::mPowerUp;
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 {
-	{ "Character\\Player\\animation\\DogIdle.x",	   true,	221.0f	},  // 待機 221.0f
-	{ "Character\\Player\\animation\\DogWalk.x",	   true,	69.0f	},  // 歩行
-	{ "Character\\Player\\animation\\DogAttack.x",	   false,   91.0f	},  // 攻撃 91.0f
-	{ "Character\\Player\\animation\\DogJump.x",	   true,	49.0f	},  // ジャンプ
-	{ "Character\\Player\\animation\\DogAttack2.x",	   false,	140.0f	},  // 攻撃2
-	{ "Character\\Player\\animation\\DogAttack3.x",	   false,	91.0f	},  // 攻撃3
-	{ "Character\\Player\\animation\\DogAttack4.x",	   false,	105.0f	},  // 攻撃4 105.0f
-	{ "Character\\Player\\animation\\DogAttack5.x",	   false,	101.0f	},  // 攻撃5 101.0f
-	{ "Character\\Player\\animation\\DogAttack6.x",	   false,	219.0f	},  // 攻撃6
-	{ "Character\\Player\\animation\\DogAttack7.x",	   false,	190.0f	},  // 攻撃7 213.0f
-	{ "Character\\Player\\animation\\DogPowerUp.x",	   true,	143.0f	},  // 攻撃力アップ
-	{ "Character\\Player\\animation\\DogHit.x",	       true,	43.0f	},  // ヒット 43.0f
-	{ "Character\\Player\\animation\\DogGuard.x",	   false,	47.0f	},  // ガード 47.0f
-	{ "Character\\Player\\animation\\DogGuardHit.x",   false,	47.0f	},  // ガードヒット 47.0f
-	{ "Character\\Player\\animation\\DogRolling.x",	   true,	43.0f	},  // 回避 43.0f
-	//{ "Character\\Player\\animation\\DogImpact.x",   true,	43.0f	},  // 衝撃
-	{ "Character\\Player\\animation\\DogDie.x",	       false,	235.0f	},  // 死ぬ
-	{ "Character\\Player\\animation\\DogJumpAttack.x", false,	172.0f	},  // ジャンプ攻撃
+	{ "Character\\Player\\animation\\DogIdle.x",	   true,	221.0f,	 1.0f},  // 待機 221.0f
+	{ "Character\\Player\\animation\\DogWalk.x",	   true,	 69.0f,	 1.0f},  // 歩行
+	{ "Character\\Player\\animation\\DogAttack.x",	   false,    91.0f,	 1.0f},  // 攻撃 91.0f
+	{ "Character\\Player\\animation\\DogJump.x",	   true,	 49.0f,	 1.0f},  // ジャンプ
+	{ "Character\\Player\\animation\\DogAttack2.x",	   false,	140.0f,	 1.0f},  // 攻撃2
+	{ "Character\\Player\\animation\\DogAttack3.x",	   false,	 91.0f,	 1.0f},  // 攻撃3
+	{ "Character\\Player\\animation\\DogAttack4.x",	   false,	105.0f,	 1.0f},  // 攻撃4 105.0f
+	{ "Character\\Player\\animation\\DogAttack5.x",	   false,	101.0f,	 1.0f},  // 攻撃5 101.0f
+	{ "Character\\Player\\animation\\DogAttack6.x",	   false,	219.0f,	 1.0f},  // 攻撃6
+	{ "Character\\Player\\animation\\DogAttack7.x",	   false,	190.0f,	 1.0f},  // 攻撃7 213.0f
+	{ "Character\\Player\\animation\\DogPowerUp.x",	   true,	143.0f,  4.0f},  // 攻撃力アップ
+	{ "Character\\Player\\animation\\DogHit.x",	       true,	 43.0f,	 1.0f},  // ヒット 43.0f
+	{ "Character\\Player\\animation\\DogGuard.x",	   false,	 47.0f,	 1.0f},  // ガード 47.0f
+	{ "Character\\Player\\animation\\DogGuardHit.x",   false,	 47.0f,	 1.0f},  // ガードヒット 47.0f
+	{ "Character\\Player\\animation\\DogRolling.x",	   true,	 43.0f,	 1.0f},  // 回避 43.0f
+	//{ "Character\\Player\\animation\\DogImpact.x",   true,	 43.0f,	 1.0f},  // 衝撃
+	{ "Character\\Player\\animation\\DogDie.x",	       false,	235.0f,	 1.0f},  // 死ぬ
+	{ "Character\\Player\\animation\\DogJumpAttack.x", false,	172.0f,	 1.0f},  // ジャンプ攻撃
 };
 
 #define PLAYER_HEIGHT 1.2f
@@ -118,7 +118,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(1);
+	ChangeLevel(71);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -406,7 +406,7 @@ void CPlayer::UpdateAttack4()
 			mIsSpawnedSlashEffect = true;
 		}
 	}
-	if (mIsSpawnedSlashEffect && mAnimationFrame >=42.0f)
+	if (mIsSpawnedSlashEffect && mAnimationFrame >= 42.0f)
 	{
 		// 攻撃終了待ち状態へ移行
 		ChangeState(EState::eAttackWait);
@@ -416,16 +416,36 @@ void CPlayer::UpdateAttack4()
 // 攻撃5
 void CPlayer::UpdateAttack5()
 {
-	// 攻撃アニメーションを開始
-	ChangeAnimation(EAnimType::eAttack5);
-
-	if (mAnimationFrame >= 50.0f)
+	switch (mStateStep)
 	{
-		//剣に攻撃開始を伝える
-		mpSword->AttackStart();
-
-		// 攻撃終了待ち状態へ移行
-		ChangeState(EState::eAttackWait);
+		// 攻撃アニメーションを開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack5);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 40.0f)
+		{
+			//剣に攻撃開始を伝える
+			mpSword->AttackStart();
+			mStateStep++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 90.0f)
+		{
+			//剣に攻撃開始を伝える
+			mpSword->AttackEnd();
+			mStateStep++;
+		}
+		break;
+	case 3:
+		if (mAnimationFrame >= 99.0f)
+		{
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -653,6 +673,7 @@ void CPlayer::UpdatePowerUp()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
+	SetAnimationSpeed(1.5f);
 	ChangeAnimation(EAnimType::ePowerUp);
 	int rand = Math::Rand(0, 100);
 	if (rand <= 40 || mPowerUp == true && mDefenseUp == true)
@@ -691,6 +712,7 @@ void CPlayer::UpdatePowerUpEnd()
 	// 攻撃アップのアニメーションが終了したら、
 	if (IsAnimationFinished())
 	{
+		SetAnimationSpeed(1.0f);
 		// 待機状態へ移行
 		ChangeState(EState::eIdle);
 	}

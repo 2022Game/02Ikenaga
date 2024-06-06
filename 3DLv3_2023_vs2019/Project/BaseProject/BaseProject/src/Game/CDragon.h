@@ -5,6 +5,7 @@
 #include "CColliderSphere.h"
 #include "CColliderCapsule.h"
 class CFlamethrower;
+class CFlightFlamethrower;
 class CRoarEffect;
 
 /*
@@ -191,39 +192,37 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;         // 線分コライダー
-	CColliderLine* mpAttackColLine;        // 攻撃用の線分コライダー
+	 // 線分コライダー
+	CColliderLine* mpColliderLine;
 
 	// キャラクター押し戻しコライダー
-	CColliderSphere* mpColSphereMouth;     // 口
-	CColliderSphere* mpColSphereTipMouth;  // 口の先端
-	CColliderSphere* mpColSphereNeck;      // 首
-	CColliderSphere* mpColSphereFeet;      // 前の左足
-	CColliderSphere* mpColSphereFeet2;     // 前の右足
-
-	// ダメージを受けるコライダー
-	CColliderSphere* mpDamageColHead;      // 頭
-	CColliderSphere* mpDamageColMouth;     // 口
-	CColliderSphere* mpDamageColTipMouth;  // 口の先端
-	CColliderSphere* mpDamageColNeck;      // 首
-	CColliderSphere* mpDamageColChest;     // 胸
-	CColliderSphere* mpDamageColFeet;      // 前の左足
-	CColliderSphere* mpDamageColFeet2;     // 前の右足
-	CColliderSphere* mpDamageColFeet3;     // 後ろの左足
-	CColliderSphere* mpDamageColFeet4;     // 後ろの右足
-
-	// ダメージを与えるコライダー
-	CColliderSphere* mpAttackColHead;      // 頭
-	CColliderSphere* mpAttackColMouth;     // 口
-	CColliderSphere* mpAttackColTipMouth;  // 口の先端
-	CColliderSphere* mpAttackColBody;      // 体
-	CColliderSphere* mpAttackColFeet;      // 前の左足
-	CColliderSphere* mpAttackColFeet2;     // 前の右足
+	CColliderCapsule* mpColSphereMouth;  // 口
+	CColliderCapsule* mpColSphereNeck;   // 首
+	CColliderSphere* mpColSphereBody;   // 体
+	CColliderSphere* mpColSphereFeet;    // 前の左足
+	CColliderSphere* mpColSphereFeet2;   // 前の右足
+									     
+	// ダメージを受けるコライダー	   	 
+	CColliderCapsule* mpDamageColMouth;  // 口
+	CColliderCapsule* mpDamageColNeck;   // 首
+	CColliderSphere* mpDamageColChest;   // 胸
+	CColliderSphere* mpDamageColFeet;    // 前の左足
+	CColliderSphere* mpDamageColFeet2;   // 前の右足
+	CColliderSphere* mpDamageColFeet3;   // 後ろの左足
+	CColliderSphere* mpDamageColFeet4;   // 後ろの右足
+									     
+	// ダメージを与えるコライダー	   	 
+	CColliderCapsule* mpAttackColMouth;  // 口
+	CColliderSphere* mpAttackColBody;    // 体
+	CColliderSphere* mpAttackColFeet;    // 前の左足
+	CColliderSphere* mpAttackColFeet2;   // 前の右足
 
 	CTransform* mpRideObject;
 
 	// 火炎放射エフェクト
 	CFlamethrower* mpFlamethrower;
+	// 飛行中の火炎放射エフェクト
+	CFlightFlamethrower* mpFlightFlamethrower;
 	// 雄叫びエフェクト
 	CRoarEffect* mpRoar;
 };
