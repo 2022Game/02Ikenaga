@@ -2,7 +2,7 @@
 #include "CPlayer.h"
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
-#include "CWaveEffect.h"
+#include "CWave.h"
 #include "Maths.h"
 
 // エイ3のインスタンス
@@ -104,13 +104,6 @@ CRay3::CRay3()
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackCol->SetEnable(false);
-
-	mpWave = new CWaveEffect
-	(
-		this, nullptr,
-		CVector(0.0f, 12.0f, 20.0f),
-		CQuaternion(0.0, 0.f, 0.0f).Matrix()
-	);
 }
 
 CRay3::~CRay3()
@@ -171,10 +164,10 @@ void CRay3::UpdateAttack()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorp = (player->Position() - Position()).Length();
-	if (!mpWave->IsThrowing() && vectorp >= 30.0f)
+	/*if (!mpWave->IsThrowing() && vectorp >= 30.0f)
 	{
 		mpWave->Start();
-	}
+	}*/
 	if (IsAnimationFinished())
 	{
 		// 攻撃終了待ち状態へ移行
@@ -187,7 +180,6 @@ void CRay3::UpdateAttackWait()
 {
 	if (IsAnimationFinished())
 	{
-		mpWave->Stop();
 		AttackEnd();
 		mState = EState::eIdle;
 	}

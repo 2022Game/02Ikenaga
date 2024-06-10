@@ -5,8 +5,6 @@
 #include "CColliderSphere.h"
 #include "CColliderCapsule.h"
 
-class CWaveEffect;
-
 /*
  エイ
  プレイヤーの推定レベル(21～30)
@@ -93,6 +91,9 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
+	// 波動のエフェクトを作成
+	void CreateWave();
+
 	// エイのインスタンス
 	static CRay* spInstance;
 
@@ -121,6 +122,7 @@ private:
 	EState mState;	// エイの状態
 
 	int mStateAttackStep;  // State内の攻撃でのステップ処理
+	int mStateWave;        // State内の波動のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -128,17 +130,23 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
+	// 線分コライダー
+	CColliderLine* mpColliderLine;
 
-	CColliderSphere* mpColliderSphereHead;  // キャラクターの押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
+	// キャラクターの押し戻しコライダー
+	CColliderSphere* mpColliderSphereHead;  // 頭
+	CColliderSphere* mpColliderSphereBody;  // 体
 
-	CColliderCapsule* mpDamageColSpine;     // ダメージを受けるコライダー(脊椎)
-	CColliderSphere* mpDamageColFinLeft;    // ダメージを受けるコライダー(ヒレの左)
-	CColliderSphere* mpDamageColFinRight;   // ダメージを受けるコライダー(ヒレの右)
+	 // ダメージを受けるコライダー
+	CColliderCapsule* mpDamageColSpine;     // 脊椎
+	CColliderSphere* mpDamageColFinLeft;    // ヒレの左
+	CColliderSphere* mpDamageColFinRight;   // ヒレの右
 
-	CColliderSphere* mpAttackColHead;       // 攻撃コライダー(頭)
+	// 攻撃コライダー
+	CColliderSphere* mpAttackColHead;       //頭
+
 	CTransform* mpRideObject;
 
-	CWaveEffect* mpWave;  // 気泡
+	bool mIsSpawnedWaveEffect;  // 波動エフェクト
+	float mElapsedWaveTime;     // 経過時間計測用(波動)
 };

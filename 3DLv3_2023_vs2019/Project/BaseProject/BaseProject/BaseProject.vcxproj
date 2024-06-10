@@ -115,7 +115,6 @@
     <ClCompile Include="src\Game\CRoarEffect.cpp" />
     <ClCompile Include="src\Game\CShieldRotate.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
-    <ClCompile Include="src\Game\CSlashing.cpp" />
     <ClCompile Include="src\Game\CSlime.cpp" />
     <ClCompile Include="src\Game\CMushroom.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
@@ -140,7 +139,6 @@
     <ClCompile Include="src\Game\CTurtle2.cpp" />
     <ClCompile Include="src\Game\CTurtle3.cpp" />
     <ClCompile Include="src\Game\CWave.cpp" />
-    <ClCompile Include="src\Game\CWaveEffect.cpp" />
     <ClCompile Include="src\Game\CWeapon.cpp" />
     <ClCompile Include="src\Game\CXCharacter.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -268,7 +266,6 @@
     <ClInclude Include="src\Game\CRoarEffect.h" />
     <ClInclude Include="src\Game\CShieldRotate.h" />
     <ClInclude Include="src\Game\CSlash.h" />
-    <ClInclude Include="src\Game\CSlashing.h" />
     <ClInclude Include="src\Game\CSlime.h" />
     <ClInclude Include="src\Game\CMushroom.h" />
     <ClInclude Include="src\Game\CField.h" />
@@ -293,7 +290,6 @@
     <ClInclude Include="src\Game\CTurtle2.h" />
     <ClInclude Include="src\Game\CTurtle3.h" />
     <ClInclude Include="src\Game\CWave.h" />
-    <ClInclude Include="src\Game\CWaveEffect.h" />
     <ClInclude Include="src\Game\CWeapon.h" />
     <ClInclude Include="src\Game\CXCharacter.h" />
     <ClInclude Include="src\Test\CBootMenuScene.h" />

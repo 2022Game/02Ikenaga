@@ -3,19 +3,20 @@
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
 #include "CInput.h"
-#include "CWaveEffect.h"
+#include "CWave.h"
 #include "Maths.h"
 
 // エイのインスタンス
 CRay* CRay::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 0.5f
-#define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.1f         // 移動速度
-#define GRAVITY 0.06f            // 重力
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 28.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT    0.5f  // 線分コライダー
+#define WITHIN_RANGE   40.0f  // 範囲内
+#define MOVE_SPEED      0.1f  // 移動速度
+#define GRAVITY        0.06f  // 重力
+#define WALK_RANGE    100.0f  // 追跡する範囲
+#define STOP_RANGE     28.0f  // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f  // 回転する範囲
+#define THROW_INTERVAL 0.07f  // 波動の発射間隔時間
 
 // エイのアニメーションデータのテーブル
 const CRay::AnimData CRay::ANIM_DATA[] =
@@ -40,6 +41,9 @@ CRay::CRay()
 	, mIsGrounded(false)
 	, mMoveSpeed(CVector::zero)
 	, mStateAttackStep(0)
+	, mStateWave(0)
+	, mIsSpawnedWaveEffect(false)
+	, mElapsedWaveTime(0.0f)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -158,14 +162,6 @@ CRay::CRay()
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
-	
-	mpWave = new CWaveEffect
-	(
-		this, nullptr,
-		CVector(0.0f, 12.0f, 20.0f),
-		CQuaternion(0.0, 0.f, 0.0f).Matrix()
-	);
-	//mpWave->SetOwner(this);
 }
 
 // デストラクタ
@@ -197,12 +193,31 @@ void CRay::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
+// 波動を作成
+void CRay::CreateWave()
+{
+	// 波動エフェクトを生成して、正面方向へ飛ばす
+	CWave* wave = new CWave
+	(
+		this,
+		Position() + CVector(0.0f, 10.0f, 0.0f),
+		VectorZ(),
+		30.0f,
+		80.0f
+	);
+	wave->Scale(1.0f, 1.0f, 1.0f);
+	// 波動エフェクトの色設定
+	wave->SetColor(CColor(0.0f, 0.1f, 1.0f));
+	wave->SetOwner(this);
+}
+
 // 状態の切り替え
 void CRay::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
 	mStateAttackStep = 0;
+	mStateWave = 0;
 }
 
 // 待機状態
@@ -250,10 +265,6 @@ void CRay::UpdateAttack()
 	SetAnimationSpeed(0.4f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (!mpWave->IsThrowing() && vectorPos >= 30.0f && mAnimationFrame <=5.0f)
-	{
-		mpWave->Start();
-	}
 
 	// ステップごとに処理を分ける
 	switch (mStateAttackStep)
@@ -287,6 +298,12 @@ void CRay::UpdateAttack()
 		}
 		break;
 	}
+
+	mIsSpawnedWaveEffect = false;
+	if (!mIsSpawnedWaveEffect && vectorPos >= 30.0f && mAnimationFrame <= 5.0f)
+	{
+		mIsSpawnedWaveEffect = true;
+	}
 }
 
 // 攻撃終了待ち
@@ -294,7 +311,6 @@ void CRay::UpdateAttackWait()
 {
 	if (IsAnimationFinished())
 	{
-		mpWave->Stop();
 		AttackEnd();
 		ChangeState(EState::eIdle2);
 	}
@@ -303,7 +319,6 @@ void CRay::UpdateAttackWait()
 // ヒット
 void CRay::UpdateHit()
 {
-	mpWave->Stop();
 	SetAnimationSpeed(0.25f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -317,7 +332,6 @@ void CRay::UpdateHit()
 // 死ぬ
 void CRay::UpdateDie()
 {
-	mpWave->Stop();
 	SetAnimationSpeed(0.15f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
@@ -469,6 +483,18 @@ void CRay::Update()
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
+	if (mIsSpawnedWaveEffect)
+	{
+		mElapsedWaveTime += Time::DeltaTime();
+		
+			// 経過時間に応じて、波動のエフェクトを作成
+			if (mElapsedWaveTime >= THROW_INTERVAL)
+			{
+				CreateWave();
+				mElapsedWaveTime -= THROW_INTERVAL;
+			}
+	}
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -488,7 +514,6 @@ void CRay::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print(" 長さ %f\n", vectorPos);
 }
 
 // 衝突処理

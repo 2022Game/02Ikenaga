@@ -436,9 +436,6 @@
     <ClCompile Include="src\Test\CColCapsule.cpp">
       <Filter>ソース ファイル\Test</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSlashing.cpp">
-      <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CSlash.cpp">
       <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
     </ClCompile>
@@ -512,9 +509,6 @@
       <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CWave.cpp">
-      <Filter>ソース ファイル\Game\Effect\Wave</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CWaveEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\Wave</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CRay2.cpp">
@@ -888,9 +882,6 @@
     <ClInclude Include="src\Test\CColCapsule.h">
       <Filter>ソース ファイル\Test</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSlashing.h">
-      <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CSlash.h">
       <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
     </ClInclude>
@@ -964,9 +955,6 @@
       <Filter>ソース ファイル\Game\Character\Enemy\Cactus</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CWave.h">
-      <Filter>ソース ファイル\Game\Effect\Wave</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CWaveEffect.h">
       <Filter>ソース ファイル\Game\Effect\Wave</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CRay2.h">
