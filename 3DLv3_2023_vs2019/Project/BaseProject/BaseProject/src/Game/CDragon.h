@@ -6,7 +6,6 @@
 #include "CColliderCapsule.h"
 class CFlamethrower;
 class CFlightFlamethrower;
-class CRoarEffect;
 
 /*
  ボスドラゴン
@@ -146,6 +145,9 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
+	// 雄叫びのエフェクトを作成
+	void CreateRoar();
+
 	// ドラゴンのインスタンス
 	static CDragon* spInstance;
 
@@ -223,6 +225,9 @@ private:
 	CFlamethrower* mpFlamethrower;
 	// 飛行中の火炎放射エフェクト
 	CFlightFlamethrower* mpFlightFlamethrower;
-	// 雄叫びエフェクト
-	CRoarEffect* mpRoar;
+
+	// 波動エフェクト
+	bool mIsSpawnedRoarEffect;
+	// 経過時間計測用(雄叫び)
+	float mElapsedRoarTime;
 };

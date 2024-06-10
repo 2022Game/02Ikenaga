@@ -22,11 +22,11 @@ CRay* CRay::spInstance = nullptr;
 const CRay::AnimData CRay::ANIM_DATA[] =
 {
 	{ "",										        true,	0.0f,	 0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	 0.5f},	// 待機 21.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	true,	17.0f,	 0.4f},  // 攻撃 17.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	true,	13.0f,	0.25f},	// ヒット 13.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    true,	20.0f,	0.15f},	// 死ぬ 20.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	 0.5f},	// 移動 21.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	 0.5f},	 // 待機 21.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	false,	17.0f,	 0.4f},  // 攻撃 17.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	false,	13.0f,	0.25f},	 // ヒット 13.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    false,	20.0f,	0.15f},	 // 死ぬ 20.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	 0.5f},	 // 移動 21.0f
 	//{ "Character\\Enemy\\Ray\\animation\\RayMoveFWD.x",	true,	42.0f	 },	    // 移動2 21.0f
 	//{ "Character\\Enemy\\Ray\\animation\\RayMoveLFT.x",	true,	42.0f	 },	    // 左移動 21.0f
 	//{ "Character\\Enemy\\Ray\\animation\\RayMoveRGT.x",	true,	42.0f	 },	    // 右移動 21.0f
@@ -303,6 +303,16 @@ void CRay::UpdateAttack()
 	if (!mIsSpawnedWaveEffect && vectorPos >= 30.0f && mAnimationFrame <= 5.0f)
 	{
 		mIsSpawnedWaveEffect = true;
+		if (mIsSpawnedWaveEffect)
+		{
+			mElapsedWaveTime += Time::DeltaTime();
+			// 経過時間に応じて、波動のエフェクトを作成
+			if (mElapsedWaveTime >= THROW_INTERVAL)
+			{
+				CreateWave();
+				mElapsedWaveTime -= THROW_INTERVAL;
+			}
+		}
 	}
 }
 
@@ -481,18 +491,6 @@ void CRay::Update()
 	if (mState == EState::eHit || mState ==EState::eDie)
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
-	}
-
-	if (mIsSpawnedWaveEffect)
-	{
-		mElapsedWaveTime += Time::DeltaTime();
-		
-			// 経過時間に応じて、波動のエフェクトを作成
-			if (mElapsedWaveTime >= THROW_INTERVAL)
-			{
-				CreateWave();
-				mElapsedWaveTime -= THROW_INTERVAL;
-			}
 	}
 
 	// キャラクターの更新

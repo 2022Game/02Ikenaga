@@ -439,9 +439,6 @@
     <ClCompile Include="src\Game\CSlash.cpp">
       <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CRoarEffect.cpp">
-      <Filter>ソース ファイル\Game\Effect\Roar</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CRoar.cpp">
       <Filter>ソース ファイル\Game\Effect\Roar</Filter>
     </ClCompile>
@@ -884,9 +881,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSlash.h">
       <Filter>ソース ファイル\Game\Effect\Slashing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CRoarEffect.h">
-      <Filter>ソース ファイル\Game\Effect\Roar</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CRoar.h">
       <Filter>ソース ファイル\Game\Effect\Roar</Filter>

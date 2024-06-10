@@ -112,7 +112,6 @@
     <ClCompile Include="src\Game\CRay3.cpp" />
     <ClCompile Include="src\Game\CRich.cpp" />
     <ClCompile Include="src\Game\CRoar.cpp" />
-    <ClCompile Include="src\Game\CRoarEffect.cpp" />
     <ClCompile Include="src\Game\CShieldRotate.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
     <ClCompile Include="src\Game\CSlime.cpp" />
@@ -263,7 +262,6 @@
     <ClInclude Include="src\Game\CRay3.h" />
     <ClInclude Include="src\Game\CRich.h" />
     <ClInclude Include="src\Game\CRoar.h" />
-    <ClInclude Include="src\Game\CRoarEffect.h" />
     <ClInclude Include="src\Game\CShieldRotate.h" />
     <ClInclude Include="src\Game\CSlash.h" />
     <ClInclude Include="src\Game\CSlime.h" />

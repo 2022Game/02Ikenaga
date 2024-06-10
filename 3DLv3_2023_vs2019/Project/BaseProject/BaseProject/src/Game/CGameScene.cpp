@@ -122,6 +122,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Needle", "Effect\\Needle.obj");
 	CResourceManager::Load<CModel>("Coin", "Effect\\Coin.obj");
 	CResourceManager::Load<CModel>("Wave", "Effect\\Wave.obj");
+	CResourceManager::Load<CModel>("Roar", "Effect\\Roar.obj");
 
 	// BGMŠÖ˜A
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");

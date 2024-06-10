@@ -105,5 +105,6 @@ void CWave::Update()
 void CWave::Render()
 {
 	mpModel->SetColor(mColor);
+	mpModel->SetBlend(EBlend::eAdd);
 	mpModel->Render(Matrix());
 }

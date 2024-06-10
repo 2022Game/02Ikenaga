@@ -6,7 +6,7 @@
 #include "CHpGauge.h"
 #include "CFlamethrower.h"
 #include "CFlightFlamethrower.h"
-#include "CRoarEffect.h"
+#include "CRoar.h"
 
 // ドラゴンのインスタンス
 CDragon* CDragon::spInstance = nullptr;
@@ -18,6 +18,7 @@ CDragon* CDragon::spInstance = nullptr;
 #define WALK_RANGE    500.0f   // 追跡する範囲
 #define STOP_RANGE    155.0f   // 追跡を辞める範囲
 #define ROTATE_RANGE  500.0f   // 回転する範囲
+#define THROW_INTERVAL 0.9f   // 雄叫びの発射間隔時間
 
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
@@ -55,6 +56,8 @@ CDragon::CDragon()
 	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
+	, mIsSpawnedRoarEffect(false)
+	, mElapsedRoarTime(0.0f)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -319,14 +322,6 @@ CDragon::CDragon()
 		CVector(0.0f, 0.0f, 0.0f),
 		CQuaternion(0.0, -90.f, 0.0f).Matrix()
 	);
-
-	// 雄叫びの生成
-	mpRoar = new CRoarEffect
-	(
-		this,nullptr,
-		CVector(0.0f, 0.0f, 0.0f),
-		CQuaternion(0.0, 0.f, 0.0f).Matrix()
-	);
 }
 
 // デストラクタ
@@ -368,6 +363,23 @@ void CDragon::ChangeAnimation(EAnimType type)
 	AnimData data = ANIM_DATA[(int)type];
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 	SetAnimationSpeed(data.animSpeed);
+}
+
+// 雄叫びエフェクトを生成
+void CDragon::CreateRoar()
+{
+	// 雄叫びの生成
+	CRoar* roar = new CRoar
+	(
+		this,
+		Position() + CVector(0.0f, 0.0f, 0.0f),
+		VectorZ(),
+		10.0f,
+		50.0f
+	);
+	roar->Scale(100.0f, 100.0f, 100.0f);
+	// 雄叫びエフェクトの色設定
+	roar->SetColor(CColor(1.0f, 1.0f, 1.0f));
 }
 
 // 状態の切り替え
@@ -655,16 +667,17 @@ void CDragon::UpdateRoar()
 	mRoarCount = true;
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRoar);
+	mIsSpawnedRoarEffect = false;
 	if (mAnimationFrame >= 1.0f)
 	{
-		if (!mpRoar->IsThrowing())
+		if (!mIsSpawnedRoarEffect)
 		{
-			mpRoar->Start();
+			mIsSpawnedRoarEffect = true;
 		}
 	}
 	if (IsAnimationFinished())
 	{
-		mpRoar->Stop();
+		mIsSpawnedRoarEffect = false;
 		ChangeState(EState::eFlyingStart);
 	}
 }
@@ -1109,6 +1122,18 @@ void CDragon::Update()
 	CDebugPrint::Print(" HP: %d", mCharaStatus.hp);
 	CDebugPrint::Print(" 距離: %f", vectorPos);
 	CDebugPrint::Print(" 後ろ: %f", mBackStepTime);
+
+	if (mIsSpawnedRoarEffect)
+	{
+		mElapsedRoarTime += Time::DeltaTime();
+
+		// 経過時間に応じて、雄叫びのエフェクトを作成
+		if (mElapsedRoarTime >= THROW_INTERVAL)
+		{
+			CreateRoar();
+			mElapsedRoarTime -= THROW_INTERVAL;
+		}
+	}
 
 	// キャラクターの更新
 	CXCharacter::Update();
