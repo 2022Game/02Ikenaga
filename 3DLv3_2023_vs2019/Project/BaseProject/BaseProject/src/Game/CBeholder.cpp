@@ -6,6 +6,7 @@
 #include "Maths.h"
 #include "CLightningBallEffect.h"
 #include "CElectricShockEffect.h"
+#include "CHomingBallEffect.h"
 #include "CInput.h"
 
 // 球体のモンスターのインスタンス
@@ -328,6 +329,13 @@ CBeholder::CBeholder()
 		CVector(0.0f, 22.0f, 0.0f),
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
+
+	mpHomingBall = new CHomingBallEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 20.0f, 0.0f),
+		CQuaternion(0.0, 0.f, 0.0f).Matrix()
+	);
 }
 
 CBeholder::~CBeholder()
@@ -498,9 +506,13 @@ void CBeholder::UpdateAttack2()
 // 攻撃3(電気ボールのホーミング)
 void CBeholder::UpdateAttack3()
 {
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack3);
-	AttackStart();
-	// 攻撃2終了待ち状態へ移行
+	if (!mpHomingBall->IsThrowing())
+	{
+		mpHomingBall->Start();
+	}
+	// 攻撃終了待ち状態へ移行
 	ChangeState(EState::eAttackWait);
 }
 
@@ -522,6 +534,7 @@ void CBeholder::UpdateAttackWait()
 		AttackEnd();
 		mpLightningBall->Stop();
 		mpElectricShock->Stop();
+		mpHomingBall->Stop();
 		ChangeState(EState::eIdle2);
 	}
 }
@@ -723,7 +736,7 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				//ChangeState(EState::eAttack3);
+				ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
@@ -731,7 +744,7 @@ void CBeholder::Update()
 			}
 			else
 			{
-				ChangeState(EState::eAttack);
+				//ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)

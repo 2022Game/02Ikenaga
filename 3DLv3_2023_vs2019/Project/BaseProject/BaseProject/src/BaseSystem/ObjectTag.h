@@ -24,6 +24,7 @@ enum class ETag
 	eLightningBall,   // 雷球
 	eElectricShock,   // 電撃
 	eImpact,          // 衝撃
+	eHomingBall,      // ホーミングボール
 
 	eCamera,          // カメラ
 

@@ -161,6 +161,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Impact">
       <UniqueIdentifier>{4b91aca2-4008-4444-aaf4-540e461b7155}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Homing">
+      <UniqueIdentifier>{8402600c-9cf3-4f7d-bb81-2a027a9ad4f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -579,6 +582,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CFlightFlamethrower.cpp">
       <Filter>ソース ファイル\Game\Effect\Flame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHomingBall.cpp">
+      <Filter>ソース ファイル\Game\Effect\Homing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHomingBallEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Homing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1022,6 +1031,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CFlightFlamethrower.h">
       <Filter>ソース ファイル\Game\Effect\Flame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHomingBall.h">
+      <Filter>ソース ファイル\Game\Effect\Homing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHomingBallEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Homing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

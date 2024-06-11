@@ -18,7 +18,7 @@ CDragon* CDragon::spInstance = nullptr;
 #define WALK_RANGE    500.0f   // 追跡する範囲
 #define STOP_RANGE    155.0f   // 追跡を辞める範囲
 #define ROTATE_RANGE  500.0f   // 回転する範囲
-#define THROW_INTERVAL 0.9f   // 雄叫びの発射間隔時間
+#define THROW_INTERVAL 1.0f    // 雄叫びの発射間隔時間
 
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
@@ -374,7 +374,7 @@ void CDragon::CreateRoar()
 		this,
 		Position() + CVector(0.0f, 0.0f, 0.0f),
 		VectorZ(),
-		10.0f,
+		30.0f,
 		50.0f
 	);
 	roar->Scale(100.0f, 100.0f, 100.0f);

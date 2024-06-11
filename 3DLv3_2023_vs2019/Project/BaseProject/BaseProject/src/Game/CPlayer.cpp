@@ -20,6 +20,7 @@ int CPlayer::mMaxHp;
 int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
 bool CPlayer::mPowerUp;
+bool CPlayer::mRolling;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
@@ -102,6 +103,7 @@ CPlayer::CPlayer()
 	mDefenseUp = false;
 	mPowerUp = false;
 	mElapsedDefenseUpTime = 0.0f;
+	mRolling = false;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Player");
@@ -118,7 +120,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(21);
+	ChangeLevel(61);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -175,7 +177,7 @@ CPlayer::CPlayer()
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColHead->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColHead->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eLightningBall,
-	                                ETag::eImpact,ETag::eWeapon });
+	                                ETag::eImpact, ETag::eHomingBall, ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageColHead->Position(0.0f, 0.1f, 0.03f);
 
@@ -190,7 +192,7 @@ CPlayer::CPlayer()
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eLightningBall,
-		                             ETag::eImpact,ETag::eWeapon });
+		                             ETag::eImpact, ETag::eHomingBall, ETag::eWeapon });
 
 	//デフォルト座標を設定
 	mDefaultPos = Position();
@@ -770,10 +772,12 @@ void CPlayer::UpdateGuardHit()
 void CPlayer::UpdateRolling()
 {
 	ChangeAnimation(EAnimType::eRolling);
+	mRolling = true;
 	Position(Position() + mMoveSpeed * 60.0f * Time::DeltaTime());
 	RollingCount();
 	if (IsAnimationFinished())
 	{
+		mRolling = false;
 		ChangeState(EState::eIdle);
 	}
 	else

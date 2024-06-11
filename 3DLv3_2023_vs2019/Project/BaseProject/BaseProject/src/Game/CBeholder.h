@@ -6,6 +6,7 @@
 
 class CLightningBallEffect;
 class CElectricShockEffect;
+class CHomingBallEffect;
 
 /*
  球体のモンスター
@@ -174,4 +175,5 @@ private:
 
 	CLightningBallEffect* mpLightningBall;  // 雷球
 	CElectricShockEffect* mpElectricShock;  // 電撃
+	CHomingBallEffect* mpHomingBall;  // ホーミングボール
 };

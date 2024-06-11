@@ -200,7 +200,7 @@ private:
 	// キャラクター押し戻しコライダー
 	CColliderCapsule* mpColSphereMouth;  // 口
 	CColliderCapsule* mpColSphereNeck;   // 首
-	CColliderSphere* mpColSphereBody;   // 体
+	CColliderSphere* mpColSphereBody;    // 体
 	CColliderSphere* mpColSphereFeet;    // 前の左足
 	CColliderSphere* mpColSphereFeet2;   // 前の右足
 									     

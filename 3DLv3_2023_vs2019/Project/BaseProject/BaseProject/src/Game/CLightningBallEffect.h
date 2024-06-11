@@ -23,9 +23,9 @@ public:
 	// 雷球発射をしているかどうか
 	bool IsThrowing() const;
 
-	// 雷球発射時のオフセット位置を設定
+	// 雷球の発射時のオフセット位置を設定
 	void SetThrowOffsetPos(const CVector& pos);
-	// 雷球発射時のオフセット回転値を設定
+	// 雷球の発射時のオフセット回転値を設定
 	void SetThrowOffsetRot(const CMatrix& rot);
 
 	// 更新

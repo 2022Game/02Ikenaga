@@ -26,9 +26,10 @@ public:
 	void Render() override;
 
 private:
-	CObjectBase* mpOwner;	// このエフェクトの持ち主
-	CModel* mpModel;		// エフェクトのモデルデータ
-	CVector mMoveSpeed;		// 移動速度
-	float mKillMoveDist;	// 移動したら消える距離
-	float mMovedDist;		// 現在移動した距離
+	CObjectBase* mpOwner;  // このエフェクトの持ち主
+	CModel* mpModel;	   // エフェクトのモデルデータ
+	CVector mMoveSpeed;	   // 移動速度
+	float mKillMoveDist;   // 移動したら消える距離
+	float mMovedDist;	   // 現在移動した距離
+	float mElapsedTime;	   // 経過時間
 };

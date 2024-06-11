@@ -205,7 +205,7 @@ void CRay::CreateWave()
 		30.0f,
 		80.0f
 	);
-	wave->Scale(1.0f, 1.0f, 1.0f);
+	//wave->Scale(1.0f, 1.0f, 1.0f);
 	// 波動エフェクトの色設定
 	wave->SetColor(CColor(0.0f, 0.1f, 1.0f));
 	wave->SetOwner(this);

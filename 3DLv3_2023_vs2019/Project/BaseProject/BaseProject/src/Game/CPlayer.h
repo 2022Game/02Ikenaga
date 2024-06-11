@@ -89,6 +89,7 @@ public:
 	static int mSa;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
 	static bool mPowerUp;       // 攻撃力アップ(ポーション効果)
+	static bool mRolling;
 
 private:
 	// 待機状態

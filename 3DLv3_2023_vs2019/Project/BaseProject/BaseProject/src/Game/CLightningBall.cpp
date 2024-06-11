@@ -8,11 +8,6 @@
 // 雷球のスケール値が最大値になるまでの時間
 #define FLAME_SCALE_ANIM_TIME 3.0f
 
-// アニメーションの1コマ表示時間
-//#define ANIM_TIME 0.0625f
-// 雷のエフェクトのアニメーションデータ
-//TexAnimData CLightningBall::msAnimData = TexAnimData(7, 2, false, 64, ANIM_TIME);
-
 CLightningBall* CLightningBall::spInstance = nullptr;
 
 // インスタンス
@@ -31,20 +26,20 @@ CLightningBall::CLightningBall(ETag tag)
 	//インスタンスの設定
 	spInstance = this;
 
-	mpCollider = new CColliderSphere
+	mpAttackCollider = new CColliderSphere
 	(
 		this,
 		ELayer::eAttackCol,
 		0.14
 	);
-	mpCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer });
-	mpCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
+	mpAttackCollider->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer });
+	mpAttackCollider->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
 }
 
 // デストラクタ
 CLightningBall::~CLightningBall()
 {
-	SAFE_DELETE(mpCollider);
+	SAFE_DELETE(mpAttackCollider);
 }
 
 // 各パラメータを設定

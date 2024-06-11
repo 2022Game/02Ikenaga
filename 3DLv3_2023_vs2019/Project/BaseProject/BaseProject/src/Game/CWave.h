@@ -45,5 +45,6 @@ private:
 	CVector mMoveSpeed;	   // ˆÚ“®‘¬“x
 	float mKillMoveDist;   // ˆÚ“®‚µ‚½‚çÁ‚¦‚é‹——£
 	float mMovedDist;	   // Œ»İˆÚ“®‚µ‚½‹——£
+	float mElapsedTime;	   // Œo‰ßŠÔ
 	CColliderSphere* mpAttackCol;
 };
