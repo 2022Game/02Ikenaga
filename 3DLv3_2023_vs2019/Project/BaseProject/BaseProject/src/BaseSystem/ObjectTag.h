@@ -7,6 +7,7 @@ enum class ETag
 	eNone = -1,
 
 	eField,	          // フィールドを構成するオブジェクト
+	eSky,             // 空
 	eExp,             // 経験値
 	eRideableObject,  // 乗ることができるオブジェクト
 	ePortionRed,	  // アイテムの攻撃力アップ

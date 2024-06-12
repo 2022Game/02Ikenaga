@@ -170,7 +170,7 @@ CPlayer::CPlayer()
 	mpDamageColHead = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.38f,
+		0.37f,
 		false
 	);
 	//ダメージを受けるコライダーと
@@ -185,7 +185,7 @@ CPlayer::CPlayer()
 	mpDamageColBody = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		0.37f,
+		0.36f,
 		false
 	);
 	//ダメージを受けるコライダーと
@@ -1124,7 +1124,7 @@ void CPlayer::Update()
 	{
 		mRollingTime++;
 	}
-	if (mRollingTime >= 300)
+	if (mRollingTime >= 200)
 	{
 		mRollingCount++;
 		mRollingTime = 0;

@@ -9,28 +9,19 @@
 // ホーミングボールのスケール値が最大値になるまでの時間
 #define SCALE_ANIM_TIME 3.0f
 // ホーミングボールの発射の移動速度
-#define MOVE_SPEED 0.75f
-
-CHomingBall* CHomingBall::spInstance = nullptr;
-
-// インスタンス
-CHomingBall* CHomingBall::Instance()
-{
-	return spInstance;
-}
+#define MOVE_SPEED 0.8 *60.0f
+// プレイヤーまでの距離
+#define DISTANCE 20.0f
 
 // コンストラクタ
 CHomingBall::CHomingBall(ETag tag)
 	: CBillBoardImage("Effect/Ball.png", ETag::eHomingBall, ETaskPauseType::eGame)
-	, mMoveSpeed(CVector::zero)
+	, mMoveDir(CVector::zero)
 	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 	, mMovedDist(0.0f)
-	, mRolling(false)
+	, mIsHoming(true)
 {
-	//インスタンスの設定
-	spInstance = this;
-
 	mpAttackCollider = new CColliderSphere
 	(
 		this,
@@ -51,7 +42,6 @@ CHomingBall::~CHomingBall()
 void CHomingBall::Setup(const CVector& pos, const CVector& dir, float dist)
 {
 	Position(pos);
-	mMoveSpeed = dir.Normalized() * MOVE_SPEED;
 	mKillMoveDist = dist;
 }
 
@@ -82,11 +72,7 @@ void CHomingBall::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 {
 	if (other->Layer() == ELayer::eField)
 	{
-		float length = mMoveSpeed.Length();
-		CVector n = hit.adjust.Normalized();
-		float d = CVector::Dot(n, mMoveSpeed);
-		mMoveSpeed = (mMoveSpeed - n * d).Normalized() * length;
-		Position(Position() + hit.adjust * hit.weight);
+		Kill();
 	}
 
 	if (other->Layer() == ELayer::eDamageCol)
@@ -100,7 +86,7 @@ void CHomingBall::Collision(CCollider* self, CCollider* other, const CHitInfo& h
 			if (!IsAttackHitObj(chara))
 			{
 				// 与えるダメージを計算
-				int damage = CalcDamage(1.0f, mOwner, chara);
+				int damage = CalcDamage(0.7f, mOwner, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, mOwner);
@@ -118,10 +104,6 @@ void CHomingBall::Update()
 {
 	// 基底クラスの更新処理
 	CBillBoardImage::Update();
-
-	// ホーミングボールのエフェクトを移動
-	CVector move = mMoveSpeed * Time::DeltaTime();
-	Position(Position() + move);
 
 	// スケール変更時間を経過していない
 	if (mElapsedTime < SCALE_ANIM_TIME)
@@ -146,35 +128,46 @@ void CHomingBall::Update()
 		Scale(CVector::one * SCALE);
 	}
 
-	float dist = move.Length();
-	if (mMovedDist + dist >= mKillMoveDist)
+	if (mIsHoming)
 	{
-		dist = mKillMoveDist - mMovedDist;
-		move = move.Normalized() * dist;
-	}
-	CPlayer* player = CPlayer::Instance();
-	mRolling = player->mRolling;
+		CPlayer* player = CPlayer::Instance();
+		bool IsRolling = player->mRolling;
 
-	if (mRolling == false)
-	{
-		CVector newPos = (player->Position() - Position()).Normalized();
-		float vectorPos = (player->Position() - Position()).Length();
+		// 自身からプレイヤーまでのベクトル
+		CVector targetPos = player->Position() + CVector(0.0f, 20.0f, 0.0f);
+		CVector vec = targetPos - Position();
 
-		move.Y(0.3f);
-		if (vectorPos >= 0.0f)
+		float playerDist = vec.Length();
+		if (IsRolling && playerDist <= DISTANCE)
 		{
-			move += newPos * MOVE_SPEED;
+			// ホーミング終了
+			mIsHoming = false;
 		}
-		Position(Position() + move);
-	}
-	else
-	{
-		Position(Position() + move);
+		else
+		{
+			mMoveDir = CVector::Slerp(mMoveDir, vec.Normalized(), 0.05f);
+			//mMoveDir = vec.Normalized();
+		}
 	}
 
-	mMovedDist += dist;
-	if (mMovedDist >= mKillMoveDist)
+	// 移動ベクトルを求める
+	CVector move = mMoveDir * MOVE_SPEED * Time::DeltaTime();
+	
+	float moveDist = move.Length();
+	if (mMovedDist + moveDist >= mKillMoveDist)
 	{
-		Kill();
+		moveDist = mKillMoveDist - mMovedDist;
+		move = move.Normalized() * moveDist;
+	}
+
+	Position(Position() + move);
+	
+	if (mIsHoming == false)
+	{
+		mMovedDist += moveDist;
+		if (mMovedDist >= mKillMoveDist)
+		{
+			Kill();
+		}
 	}
 }

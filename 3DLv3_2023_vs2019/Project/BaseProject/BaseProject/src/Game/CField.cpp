@@ -3,6 +3,7 @@
 #include "CMoveFloor.h"
 #include "CRotateFloor.h"
 
+// コンストラク
 CField::CField()
 	: CObjectBase(ETag::eField, ETaskPriority::eBackground)
 {
@@ -13,6 +14,7 @@ CField::CField()
 	CreateFieldObjects();
 }
 
+// デストラクタ
 CField::~CField()
 {
 	SAFE_DELETE(mpColliderMesh);
@@ -35,10 +37,12 @@ void CField::CreateFieldObjects()
 	//);
 }
 
+// 更新
 void CField::Update()
 {
 }
 
+// 描画
 void CField::Render()
 {
 	mpModel->Render(Matrix());

@@ -1,6 +1,7 @@
 #include "CGameScene.h"
 #include "CSceneManager.h"
 #include "CField.h"
+#include "CSky.h"
 #include "CPlayer.h"
 #include "CSword.h"
 #include "CShield.h"
@@ -74,6 +75,7 @@ void CGameScene::Load()
 
 	// フィールド関連
 	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
+	CResourceManager::Load<CModel>("Sky", "Field\\Sky.obj");
 
 	// プレイヤー関連
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
@@ -146,6 +148,11 @@ void CGameScene::Load()
 	field2->Position(0.0f, 0.0f, -1000.0f);
 	CField* field3 = new CField();
 	field3->Position(0.0f, 0.0f, 1000.0f);
+
+	// 空
+	CSky* sky = new CSky();
+	sky->Scale(10.0f, 10.0f, 10.0f);
+	sky->Position(0.0f, -1.5f, 0.0f);
 
 	CPlayer* player = new CPlayer();
 

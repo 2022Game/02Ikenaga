@@ -2,13 +2,20 @@
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
 
+/*
+ フィールド
+*/
 class CField : public CObjectBase
 {
 public:
+	// コンストラク
 	CField();
+	//　デストラクタ
 	~CField();
 
+	// 更新
 	void Update();
+	// 描画
 	void Render();
 
 private:

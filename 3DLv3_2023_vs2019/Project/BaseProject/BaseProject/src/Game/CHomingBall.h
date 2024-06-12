@@ -6,9 +6,6 @@
 class CHomingBall : public CBillBoardImage
 {
 public:
-	//インスタンスのポインタの取得
-	static CHomingBall* Instance();
-
 	// コンストラクタ
 	CHomingBall(ETag tag);
 	// デストラクタ
@@ -42,12 +39,11 @@ public:
 	void Update() override;
 
 private:
-	static CHomingBall* spInstance;
-	CVector mMoveSpeed;	  // 移動速度
+	CVector mMoveDir;	  // 移動する方向ベクトル
 	float mElapsedTime;	  // 経過時間
 	bool mIsDeath;		  // 削除フラグ
 	float mKillMoveDist;  // 移動したら消える距離
 	float mMovedDist;     // 現在移動した距離
-	bool mRolling;;
+	bool mIsHoming;       // ホーミングするかどうか
 	CColliderSphere* mpAttackCollider;
 };

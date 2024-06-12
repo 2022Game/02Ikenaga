@@ -117,7 +117,7 @@ void CHomingBallEffect::CreateLightningBall()
 	dir.Z(dir.Z() + Math::Rand(-DIR_RAND, DIR_RAND));
 	dir.Normalize();
 	// 位置、方向、移動速度を設定
-	homingBall->Setup(pos, dir, 100.0f);
+	homingBall->Setup(pos, dir, 50.0f);
 
 	// ホーミングボールのカラーを設定
 	homingBall->SetColor(COLOR);
