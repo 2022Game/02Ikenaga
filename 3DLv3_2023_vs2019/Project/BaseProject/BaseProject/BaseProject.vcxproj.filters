@@ -592,6 +592,9 @@
     <ClCompile Include="src\Game\CSky.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CNightSky.cpp">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1042,6 +1045,9 @@
       <Filter>ソース ファイル\Game\Effect\Homing</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CSky.h">
+      <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CNightSky.h">
       <Filter>ソース ファイル\Game\Field</Filter>
     </ClInclude>
   </ItemGroup>

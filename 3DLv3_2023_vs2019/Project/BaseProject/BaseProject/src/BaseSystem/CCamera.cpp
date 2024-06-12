@@ -16,6 +16,7 @@ CCamera::CCamera(const CVector& eye, const CVector& center, bool isMainCamera)
 	, mFovy(CAMERA_FOVY)
 	, mZNear(CAMERA_ZNEAR)
 	, mZFar(CAMERA_ZFAR)
+	, mHitColRatio(1.0f)
 {
 	mTargetEye = eye;
 	LookAt(eye, center, CVector::up);
@@ -300,6 +301,12 @@ void CCamera::RemoveCollider(CCollider* col)
 	mColliders.remove(col);
 }
 
+// コライダーとの衝突判定時に押し戻す距離の割合
+void CCamera::SetHitColliderRatio(float ratio)
+{
+	mHitColRatio = ratio;
+}
+
 // 設定されているコライダーとの衝突結果を反映する
 void CCamera::ApplyCollision()
 {
@@ -331,7 +338,7 @@ void CCamera::ApplyCollision()
 	// 視点を衝突地点より手前に押し戻す
 	if (isHit)
 	{
-		mEye = rayStart + (rayEnd - rayStart).Normalized() * nearDist;
+		mEye = rayStart + (rayEnd - rayStart).Normalized() * nearDist * mHitColRatio;
 	}
 }
 

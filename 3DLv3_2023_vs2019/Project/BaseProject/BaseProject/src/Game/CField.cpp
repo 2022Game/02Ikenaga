@@ -37,6 +37,11 @@ void CField::CreateFieldObjects()
 	//);
 }
 
+CCollider* CField::GetCollider() const
+{
+	return mpColliderMesh;
+}
+
 // XV
 void CField::Update()
 {

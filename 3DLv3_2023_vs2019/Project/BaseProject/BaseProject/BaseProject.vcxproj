@@ -108,6 +108,7 @@
     <ClCompile Include="src\Game\CMushroom2.cpp" />
     <ClCompile Include="src\Game\CMushroom3.cpp" />
     <ClCompile Include="src\Game\CNeedle.cpp" />
+    <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CPortionManager.cpp" />
     <ClCompile Include="src\Game\CRay.cpp" />
     <ClCompile Include="src\Game\CRay2.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CNeedle.h" />
+    <ClInclude Include="src\Game\CNightSky.h" />
     <ClInclude Include="src\Game\CPortionManager.h" />
     <ClInclude Include="src\Game\CRay.h" />
     <ClInclude Include="src\Game\CRay2.h" />

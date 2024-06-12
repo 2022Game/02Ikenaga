@@ -2,6 +2,7 @@
 #include "CSceneManager.h"
 #include "CField.h"
 #include "CSky.h"
+#include "CNightSky.h"
 #include "CPlayer.h"
 #include "CSword.h"
 #include "CShield.h"
@@ -76,6 +77,7 @@ void CGameScene::Load()
 	// フィールド関連
 	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
 	CResourceManager::Load<CModel>("Sky", "Field\\Sky.obj");
+	CResourceManager::Load<CModel>("NightSky", "Field\\NightSky.obj");
 
 	// プレイヤー関連
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
@@ -151,8 +153,13 @@ void CGameScene::Load()
 
 	// 空
 	CSky* sky = new CSky();
-	sky->Scale(10.0f, 10.0f, 10.0f);
+	sky->Scale(200.0f, 200.0f, 200.0f);
 	sky->Position(0.0f, -1.5f, 0.0f);
+
+	// 夜空
+	CNightSky* nightSky = new CNightSky();
+	nightSky->Scale(200.0f, 200.0f, 200.0f);
+	nightSky->Position(0.0f, -1.5f, 0.0f);
 
 	CPlayer* player = new CPlayer();
 
@@ -168,9 +175,13 @@ void CGameScene::Load()
 	CGameCamera2* mainCamera = new CGameCamera2
 	(
 		atPos + CVector(DEFAULT_CAMERA_POS),
-		player->Position()
+		player->Position() + CVector(0.0f, 20.0f, 0.0f)
 	);
 	mainCamera->SetFollowTargetTf(player);
+	mainCamera->AddCollider(field->GetCollider());
+	mainCamera->AddCollider(field2->GetCollider());
+	mainCamera->AddCollider(field3->GetCollider());
+	mainCamera->SetHitColliderRatio(0.98f);
 	player->Position(0.0f, 50.0f, 0.0f);
 
 	// レッドスライム

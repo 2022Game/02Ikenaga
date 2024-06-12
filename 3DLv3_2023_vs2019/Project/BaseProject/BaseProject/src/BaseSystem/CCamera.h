@@ -128,6 +128,12 @@ public:
 	/// <param name="col"></param>
 	void RemoveCollider(CCollider* col);
 
+	/// <summary>
+	/// コライダーとの衝突判定時に押し戻す距離の割合
+	/// </summary>
+	/// <param name="ratio"></param>
+	void SetHitColliderRatio(float ratio);
+
 	// 更新
 	void Update() override;
 
@@ -174,4 +180,6 @@ private:
 
 	// カメラが衝突判定を行うコライダーのリスト
 	std::list<CCollider*> mColliders;
+	// カメラが衝突時に押し戻す割合
+	float mHitColRatio;
 };

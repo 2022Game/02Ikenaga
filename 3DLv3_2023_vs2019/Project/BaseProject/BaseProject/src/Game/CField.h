@@ -13,6 +13,9 @@ public:
 	//　デストラクタ
 	~CField();
 
+	// コライダーを取得
+	CCollider* GetCollider() const;
+
 	// 更新
 	void Update();
 	// 描画

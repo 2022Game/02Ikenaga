@@ -41,8 +41,8 @@ private:
 	int Mushroom2ReTime;  // Mushroom2RevivalTime(マッシュルーム2の復活時間)
 	int Mushroom3ReTime;  // Mushroom3RevivalTime(マッシュルーム3の復活時間)
 	int TurtleReTime;     // TurtleRevivalTime(亀の復活時間)
-	int Turtle2ReTime;     // Turtle2RevivalTime(亀2の復活時間)
-	int Turtle3ReTime;     // Turtle3RevivalTime(亀3の復活時間)
+	int Turtle2ReTime;    // Turtle2RevivalTime(亀2の復活時間)
+	int Turtle3ReTime;    // Turtle3RevivalTime(亀3の復活時間)
 
 	// プレイヤー
 	CPlayer* mpPlayer;
