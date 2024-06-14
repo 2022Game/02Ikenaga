@@ -138,6 +138,7 @@
     <ClCompile Include="src\Game\CSlime3.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
+    <ClCompile Include="src\Game\CTornado.cpp" />
     <ClCompile Include="src\Game\CTurtle.cpp" />
     <ClCompile Include="src\Game\CTurtle2.cpp" />
     <ClCompile Include="src\Game\CTurtle3.cpp" />
@@ -292,6 +293,7 @@
     <ClInclude Include="src\Game\CSlime3.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
+    <ClInclude Include="src\Game\CTornado.h" />
     <ClInclude Include="src\Game\CTurtle.h" />
     <ClInclude Include="src\Game\CTurtle2.h" />
     <ClInclude Include="src\Game\CTurtle3.h" />

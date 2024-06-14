@@ -7,6 +7,7 @@
 #include "CLightningBallEffect.h"
 #include "CElectricShockEffect.h"
 #include "CHomingBallEffect.h"
+#include "CTornado.h"
 #include "CInput.h"
 
 // 球体のモンスターのインスタンス
@@ -42,8 +43,7 @@ CBeholder::CBeholder()
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mFlyingTime(0)
-	, mStateAttackStep(0)
-	, mStateAttack2Step(0)
+	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
@@ -387,8 +387,23 @@ void CBeholder::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
-	mStateAttack2Step = 0;
+	mStateStep = 0;
+}
+
+// トルネードエフェクトを作成
+void CBeholder::CreateTornado()
+{
+	// トルネードエフェクトを生成して、正面方向へ飛ばす
+	CTornado* tornado = new CTornado
+	(
+		this,
+		Position() + CVector(0.0f, 8.0f, 0.0f),
+		VectorZ(),
+		40.0f,
+		80.0f
+	);
+	tornado->SetColor(CColor(1.0f, 1.0f, 1.0f));
+	tornado->SetOwner(this);
 }
 
 // 待機状態
@@ -445,12 +460,12 @@ void CBeholder::UpdateAttack()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
-		mStateAttackStep++;
+		mStateStep++;
 		break;
 		// ステップ1 : 攻撃開始＋電気ボール生成
 	case 1:
@@ -460,7 +475,7 @@ void CBeholder::UpdateAttack()
 			{
 				mpLightningBall->Start();
 				mpElectricShock->Start();
-				mStateAttackStep++;
+				mStateStep++;
 			}
 		}
 		break;
@@ -483,14 +498,14 @@ void CBeholder::UpdateAttack2()
 	SetAnimationSpeed(0.4f);
 
 	// ステップごとに処理を分ける
-	switch (mStateAttack2Step)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始＋攻撃開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack2);
 		if (mAnimationFrame >= 3.0f)
 		{
-			mStateAttack2Step++;
+			mStateStep++;
 		}
 		break;
 		// ステップ1 : 攻撃アニメーション終了待ち
@@ -516,14 +531,39 @@ void CBeholder::UpdateAttack3()
 	ChangeState(EState::eAttackWait);
 }
 
-// 攻撃4(回転攻撃＋エフェクト)
+// 攻撃4(回転攻撃＋トルネード)
 void CBeholder::UpdateAttack4()
 {
 	SetAnimationSpeed(0.4f);
-	ChangeAnimation(EAnimType::eAttack4);
-	AttackStart();
-	// 攻撃2終了待ち状態へ移行
-	ChangeState(EState::eAttackWait);
+	switch (mStateStep)
+	{
+	case 0:
+		ChangeAnimation(EAnimType::eAttack4);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 13.0f)
+		{
+			AttackStart();
+			CreateTornado();
+			mStateStep++;
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 17.0f)
+		{
+			AttackEnd();
+			mStateStep++;
+		}
+		break;
+		// 攻撃アニメーション終了待ち
+	case 3:
+		if (mAnimationFrame >= 23.0f)
+		{
+			ChangeState(EState::eAttackWait);
+		}
+		break;
+	}
 }
 
 // 攻撃終了待ち
@@ -736,11 +776,11 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				ChangeState(EState::eAttack3);
+				//ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
-				//ChangeState(EState::eAttack4);
+				ChangeState(EState::eAttack4);
 			}
 			else
 			{

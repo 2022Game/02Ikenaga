@@ -135,13 +135,14 @@ private:
 		eDizzy,       // めまい(混乱)
 		eRun,         // 移動
 	};
-	EState mState;	// 球体のモンスターの状態
-
-	int mStateAttackStep;    // State内の攻撃でのステップ処理
-	int mStateAttack2Step;   // State内の攻撃2でのステップ処理
+	EState mState;	  // 球体のモンスターの状態
+	int mStateStep;   // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
+
+	// トルネードエフェクトを作成
+	void CreateTornado();
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか

@@ -180,6 +180,7 @@ CRay::~CRay()
 	SAFE_DELETE(mpAttackColHead);
 }
 
+// インスタンス
 CRay* CRay::Instance()
 {
 	return spInstance;
@@ -193,7 +194,7 @@ void CRay::ChangeAnimation(EAnimType type)
 	CXCharacter::ChangeAnimation((int)type, data.loop, data.frameLength);
 }
 
-// 波動を作成
+// 波動エフェクトを作成
 void CRay::CreateWave()
 {
 	// 波動エフェクトを生成して、正面方向へ飛ばす
@@ -205,7 +206,6 @@ void CRay::CreateWave()
 		30.0f,
 		80.0f
 	);
-	//wave->Scale(1.0f, 1.0f, 1.0f);
 	// 波動エフェクトの色設定
 	wave->SetColor(CColor(0.0f, 0.1f, 1.0f));
 	wave->SetOwner(this);

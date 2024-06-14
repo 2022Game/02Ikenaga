@@ -164,6 +164,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Homing">
       <UniqueIdentifier>{8402600c-9cf3-4f7d-bb81-2a027a9ad4f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Tornado">
+      <UniqueIdentifier>{7b21de7d-ee8b-4e4a-9f89-0b8aa9790e32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -594,6 +597,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CNightSky.cpp">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTornado.cpp">
+      <Filter>ソース ファイル\Game\Effect\Tornado</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1049,6 +1055,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CNightSky.h">
       <Filter>ソース ファイル\Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTornado.h">
+      <Filter>ソース ファイル\Game\Effect\Tornado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
