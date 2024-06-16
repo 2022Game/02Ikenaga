@@ -44,4 +44,5 @@ extern const CharaStatus ENEMY6_STATUS[ENEMY__LEVEL_MAX];   // サボテン
 extern const CharaStatus ENEMY7_STATUS[ENEMY__LEVEL_MAX];   // チェストモンスター
 extern const CharaStatus ENEMY8_STATUS[ENEMY__LEVEL_MAX];   // 球体のモンスター
 extern const CharaStatus ENEMY9_STATUS[ENEMY__LEVEL_MAX];   // ボクサー
-extern const CharaStatus ENEMY10_STATUS[ENEMY__LEVEL_MAX];  // ドラゴン
+extern const CharaStatus ENEMY10_STATUS[ENEMY__LEVEL_MAX];  // リッチ
+extern const CharaStatus ENEMY11_STATUS[ENEMY__LEVEL_MAX];  // ドラゴン

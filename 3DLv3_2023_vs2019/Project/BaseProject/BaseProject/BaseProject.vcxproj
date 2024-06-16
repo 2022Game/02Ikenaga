@@ -105,6 +105,7 @@
     <ClCompile Include="src\Game\CImpactEffect.cpp" />
     <ClCompile Include="src\Game\CLightningBall.cpp" />
     <ClCompile Include="src\Game\CLightningBallEffect.cpp" />
+    <ClCompile Include="src\Game\CMagicCircle.cpp" />
     <ClCompile Include="src\Game\CMushroom2.cpp" />
     <ClCompile Include="src\Game\CMushroom3.cpp" />
     <ClCompile Include="src\Game\CNeedle.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="src\Game\CImpactEffect.h" />
     <ClInclude Include="src\Game\CLightningBall.h" />
     <ClInclude Include="src\Game\CLightningBallEffect.h" />
+    <ClInclude Include="src\Game\CMagicCircle.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CNeedle.h" />

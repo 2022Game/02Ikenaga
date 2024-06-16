@@ -81,30 +81,29 @@ void CGameScene::Load()
 
 	// プレイヤー関連
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
-	//CResourceManager::Load<CModelX>("Player2", "Character\\Rich.x");
 
 	// エネミー関連
-	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	//CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
-	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
+	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
+	CResourceManager::Load<CModelX>("Rich", "Character\\Enemy\\Rich\\Rich.x");
 
 	// ボス関連
-	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
+	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
 
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
 	CResourceManager::Load<CModel>("Shield", "Item\\Equipment\\Shield\\Shield.obj");
 	CResourceManager::Load<CModel>("ShieldRotate", "Item\\Equipment\\Shield\\ShieldRotate.obj");
-	CResourceManager::Load<CModel>("Cane", "Character\\Cane.obj");
 
 	// アイテム関連
 	CResourceManager::Load<CModel>("Portion", "Item\\Portion\\PortionRed.obj");
@@ -128,6 +127,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Wave", "Effect\\Wave.obj");
 	CResourceManager::Load<CModel>("Roar", "Effect\\Roar.obj");
 	CResourceManager::Load<CModel>("Tornado", "Effect\\Tornado.obj");
+	CResourceManager::Load<CModel>("MagicCircle", "Effect\\MagicCircle.obj");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
@@ -185,10 +185,10 @@ void CGameScene::Load()
 	mainCamera->SetHitColliderRatio(0.98f);
 	player->Position(0.0f, 50.0f, 0.0f);
 
-	// レッドスライム
-	CSlime* enemy = new CSlime();
-	enemy->Position(0.0f, 0.0f, -40.0f);
-	enemy->Scale(25.0f, 25.0f, 25.0f);
+	//// レッドスライム
+	//CSlime* enemy = new CSlime();
+	//enemy->Position(0.0f, 0.0f, -40.0f);
+	//enemy->Scale(25.0f, 25.0f, 25.0f);
 
 	//// オレンジスライム
 	//CSlime2* enemy2 = new CSlime2();
@@ -230,10 +230,10 @@ void CGameScene::Load()
 	//enemy9->Position(-30.0f, -0.2f, -360.0f);
 	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	// エイ
-	CRay* enemy10 = new CRay();
-	enemy10->Position(150.0f, 0.0f, -450.0f);
-	enemy10->Scale(35.0f, 35.0f, 35.0f);
+	//// エイ
+	//CRay* enemy10 = new CRay();
+	//enemy10->Position(150.0f, 0.0f, -450.0f);
+	//enemy10->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ2
 	//CRay2* enemy11 = new CRay2();
@@ -307,15 +307,15 @@ void CGameScene::Load()
 	//enemy27->Position(370.0f, 0.0f, 20.0f);
 	//enemy27->Scale(15.0f, 15.0f, 15.0f);
 
-	/*CRich* enemy8 = new CRich();
-	enemy8->Position(100.0f, 5.0f, 50.0f);
-	enemy8->Rotate(0.0f,90.0f,-70.0f);
-	enemy8->Scale(0.1f, 0.1f, 0.1f);*/
+	CRich* enemy8 = new CRich();
+	enemy8->Position(100.0f, 8.0f, 50.0f);
+	//enemy8->Rotate(0.0f,90.0f,-70.0f);
+	enemy8->Scale(0.2f, 0.2f, 0.2f);
 
-	// ドラゴン
-	CDragon* bossEnemy = new CDragon();
-	bossEnemy->Position(-200.0f, 21.0f, 120.0f);
-	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	//// ドラゴン
+	//CDragon* bossEnemy = new CDragon();
+	//bossEnemy->Position(-200.0f, 21.0f, 120.0f);
+	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	//// 攻撃力アップポーション
 	//CPortionRed* portionred = new CPortionRed();

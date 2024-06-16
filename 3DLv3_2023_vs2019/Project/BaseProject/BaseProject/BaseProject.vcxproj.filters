@@ -167,6 +167,12 @@
     <Filter Include="ソース ファイル\Game\Effect\Tornado">
       <UniqueIdentifier>{7b21de7d-ee8b-4e4a-9f89-0b8aa9790e32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Character\Enemy\Rich">
+      <UniqueIdentifier>{3d12f532-4649-4a44-a534-9b365a5fddb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\MagicCircle">
+      <UniqueIdentifier>{a5b62ae4-5d41-4283-acea-226b6222e314}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -360,9 +366,6 @@
     </ClCompile>
     <ClCompile Include="src\Game\CPlayer.cpp">
       <Filter>ソース ファイル\Game\Character\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CRich.cpp">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CWeapon.cpp">
       <Filter>ソース ファイル\Game\Weapon</Filter>
@@ -601,6 +604,12 @@
     <ClCompile Include="src\Game\CTornado.cpp">
       <Filter>ソース ファイル\Game\Effect\Tornado</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CRich.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy\Rich</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CMagicCircle.cpp">
+      <Filter>ソース ファイル\Game\Effect\MagicCircle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -818,9 +827,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPlayer.h">
       <Filter>ソース ファイル\Game\Character\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CRich.h">
-      <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CWeapon.h">
       <Filter>ソース ファイル\Game\Weapon</Filter>
@@ -1058,6 +1064,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CTornado.h">
       <Filter>ソース ファイル\Game\Effect\Tornado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CRich.h">
+      <Filter>ソース ファイル\Game\Character\Enemy\Rich</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CMagicCircle.h">
+      <Filter>ソース ファイル\Game\Effect\MagicCircle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

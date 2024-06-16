@@ -397,7 +397,7 @@ void CBeholder::CreateTornado()
 	CTornado* tornado = new CTornado
 	(
 		this,
-		Position() + CVector(0.0f, 8.0f, 0.0f),
+		Position() + CVector(0.0f, 5.0f, 0.0f),
 		VectorZ(),
 		40.0f,
 		80.0f

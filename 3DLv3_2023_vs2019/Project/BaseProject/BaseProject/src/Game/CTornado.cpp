@@ -25,13 +25,13 @@ CTornado::CTornado(CObjectBase* owner, const CVector& pos, const CVector& dir,
 	mpAttackCol = new CColliderCapsule
 	(
 		this, ELayer::eAttackCol,
-		CVector(0.0f, 150.0f, 0.0f),
+		CVector(0.0f, 90.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f),
-		10.0f, false
+		9.5f, false
 	);
 	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
 	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
-	//mpAttackCol->Position(0.0f, 5.0f, 0.0f);
+	mpAttackCol->Position(0.0f, 8.0f, 0.0f);
 }
 
 // デストラクタ
@@ -102,7 +102,7 @@ void CTornado::Update()
 		move = move.Normalized() * dist;
 	}
 	Position(Position() + move);
-	Rotate(0.0f, 2.0f, 0.0f);
+	Rotate(0.0f, 5.0f, 0.0f);
 
 	// スケール変更時間を経過していない
 	if (mElapsedTime < FLAME_SCALE_ANIM_TIME)

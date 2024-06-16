@@ -1264,7 +1264,7 @@ void CDragon::ChangeLevel(int level)
 	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
 	// 最大ステータスに設定
-	mCharaMaxStatus = ENEMY10_STATUS[index];
+	mCharaMaxStatus = ENEMY11_STATUS[index];
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
