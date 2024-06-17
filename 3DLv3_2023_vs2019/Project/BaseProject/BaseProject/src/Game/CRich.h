@@ -113,6 +113,12 @@ private:
 
 	// 線分コライダー
 	CColliderLine* mpColliderLine;
+
+	// キャラクターの押し戻しコライダー
+	CColliderCapsule* mpColCapsuleBody;  // 体
+	CColliderSphere* mpColSphereArmL;    // 左腕
+	CColliderSphere* mpColSphereArmR;    // 右腕
+
 	// ダメージを受けるコライダー
 	CColliderCapsule* mpDamageColBody;  // 体
 	CColliderSphere* mpDamageColArmL;   // 左腕

@@ -183,7 +183,7 @@ void CGameScene::Load()
 	mainCamera->AddCollider(field2->GetCollider());
 	mainCamera->AddCollider(field3->GetCollider());
 	mainCamera->SetHitColliderRatio(0.98f);
-	player->Position(0.0f, 50.0f, 0.0f);
+	player->Position(0.0f, 40.0f, 0.0f);
 
 	//// レッドスライム
 	//CSlime* enemy = new CSlime();

@@ -15,14 +15,14 @@ CRich* CRich::spInstance = nullptr;
 // リッチのアニメーションデータのテーブル
 const CRich::AnimData CRich::ANIM_DATA[] =
 {
-	{ "",								      true,	   0.0f,  0.0f},  // Tポーズ
+	{ "",								                  true,	   0.0f,  0.0f},  // Tポーズ
 	{ "Character\\Enemy\\Rich\\animation\\RichIdle.x",	  true,   41.0f,  0.4f},  // 待機 41.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichAttack.x",   false,  41.0f,  0.4f},  // 攻撃 41.0f
-	//{ "Character\\Enemy\\Rich\\animation\\RichAttack2.x",  false,  71.0f,  0.5f},  // 攻撃 71.0f
-	//{ "Character\\Enemy\\Rich\\animation\\RichGetHit.x",   false,  41.0f,  0.4f},  // ヒット  41.0f
-	//{ "Character\\Enemy\\Rich\\animation\\RichDie.x",	false,	29.0f,  0.5f},	// 死ぬ 29.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichAttack.x",  false,  41.0f,  0.4f},  // 攻撃 41.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichAttack2.x", false,  71.0f,  0.5f},  // 攻撃 71.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichGetHit.x",  false,  41.0f,  0.4f},  // ヒット  41.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichDie.x",	  false,  29.0f,  0.5f},  // 死ぬ 29.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichVictory.x", false,  81.0f,  0.4f},  // 勝利 81.0f
 	//{ "Character\\Enemy\\Rich\\animation\\RichRun.x",	true,	21.0f,  0.5f},	// 走る 21.0f
-	//{ "Character\\Enemy\\Rich\\animation\\RichVictory.x",	true,	81.0f,  0.5f},	// 勝利 81.0f
 };
 
 // コンストラクタ
@@ -61,56 +61,92 @@ CRich::CRich()
 	);
 	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
+	// キャラクターの押し戻しコライダーを作成(体)
+	mpColCapsuleBody = new CColliderCapsule
+	(
+		this, ELayer::eEnemy,
+		CVector(0.0f, 1.0f, 0.0f),
+		CVector(0.0f, 0.0f, 0.0f),
+		10.0f, false, 20.0f
+	);
+	mpColCapsuleBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColCapsuleBody->Position(0.0f, -5.5f, -1.0f);
+
+	// キャラクターの押し戻しコライダーを作成(左腕)
+	mpColSphereArmL = new CColliderSphere
+	(
+		this, ELayer::eEnemy,
+		0.35f, false, 20.0f
+	);
+	mpColSphereArmL->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColSphereArmL->Position(0.0f, -0.15f, 0.0f);
+
+	// キャラクターの押し戻しコライダーを作成(右腕)
+	mpColSphereArmR = new CColliderSphere
+	(
+		this, ELayer::eEnemy,
+		0.35f, false, 20.0f
+	);
+	mpColSphereArmR->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
+	mpColSphereArmR->Position(0.0f, -0.15f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(体)
 	mpDamageColBody = new CColliderCapsule
 	(
 		this, ELayer::eDamageCol,
-		CVector(0.0f, 100.0f, 0.0f),
+		CVector(0.0f, 1.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f),
 		10.0f, false
 	);
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColBody->Position(0.0f, -5.0f, -1.0f);
+	mpDamageColBody->Position(0.0f, -5.5f, -1.0f);
 
 	// ダメージを受けるコライダーを作成(左腕)
 	mpDamageColArmL = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		35.0f, false
+		0.35f, false
 	);
 	mpDamageColArmL->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColArmL->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColArmL->Position(-2.0f, 3.0f, 2.5f);
+	mpDamageColArmL->Position(0.0f, -0.15f, 0.0f);
 
 	// ダメージを受けるコライダーを作成(右腕)
 	mpDamageColArmR = new CColliderSphere
 	(
 		this, ELayer::eDamageCol,
-		40.0f, false
+		0.35f, false
 	);
 	mpDamageColArmR->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColArmR->SetCollisionTags({ ETag::eWeapon });
-	mpDamageColArmR->Position(0.0f, 4.5f, -3.0f);
+	mpDamageColArmR->Position(0.0f, -0.15f, 0.0f);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをリッチの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Hips_Spine");
+	const CMatrix* bodyMty = GetFrameMtx("Armature_Spine");
+	mpColCapsuleBody->SetAttachMtx(bodyMty);
 	mpDamageColBody->SetAttachMtx(bodyMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをリッチの左腕の行列にアタッチ
-	const CMatrix* armLeftMty = GetFrameMtx("Hips_Lower_Arm_L");
+	const CMatrix* armLeftMty = GetFrameMtx("Armature_Hand_L");
+	mpColSphereArmL->SetAttachMtx(armLeftMty);
 	mpDamageColArmL->SetAttachMtx(armLeftMty);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをリッチの右腕の行列にアタッチ
-	const CMatrix* armRightMty = GetFrameMtx("Hips_Hand_R");
+	const CMatrix* armRightMty = GetFrameMtx("Armature_Hand_R");
+	mpColSphereArmR->SetAttachMtx(armRightMty);
 	mpDamageColArmR->SetAttachMtx(armRightMty);
 }
 
 // デストラクタ
 CRich::~CRich()
 {
+	// 線分コライダー
 	SAFE_DELETE(mpColliderLine);
+	// キャラクターの押し戻しコライダー
+	SAFE_DELETE(mpColCapsuleBody);
+	SAFE_DELETE(mpColSphereArmL);
+	SAFE_DELETE(mpColSphereArmR);
 	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColArmL);
@@ -278,6 +314,12 @@ void CRich::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクターの押し戻しコライダー
+	mpColCapsuleBody->Update();
+	mpColSphereArmL->Update();
+	mpColSphereArmR->Update();
+
+	// ダメージを受けるコライダー
 	mpDamageColBody->Update();
 	mpDamageColArmL->Update();
 	mpDamageColArmR->Update();
@@ -287,9 +329,9 @@ void CRich::Update()
 		CMagicCircle* magicCircle = new CMagicCircle
 		(
 			this,
-			Position() + CVector(0.0f, -9.7f, 30.0f)
+			Position() + CVector(0.0f, -9.65f, 0.0f)
 		);
-		magicCircle->SetColor(CColor(0.0f, 1.0f, 1.0f));
+		magicCircle->SetColor(CColor::red);
 		magicCircle->Scale(15.0f, 15.0f, 15.0f);
 	}
 
@@ -312,6 +354,13 @@ void CRich::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				mpRideObject = other->Owner();
 			}
 		}
+	}
+	// キャラクター同士の衝突処理
+	else if (self == mpColCapsuleBody || self == mpColSphereArmL || self == mpColSphereArmR)
+	{
+		CVector pushBack = hit.adjust * hit.weight;
+		pushBack.Y(0.0f);
+		Position(Position() + pushBack);
 	}
 }
 
@@ -351,7 +400,6 @@ void CRich::TakeDamage(int damage, CObjectBase* causedObj)
 		//Death();
 	}
 }
-
 
 // 描画
 void CRich::Render()
