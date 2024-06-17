@@ -22,7 +22,7 @@ const CRich::AnimData CRich::ANIM_DATA[] =
 	{ "Character\\Enemy\\Rich\\animation\\RichGetHit.x",  false,  41.0f,  0.4f},  // ヒット  41.0f
 	{ "Character\\Enemy\\Rich\\animation\\RichDie.x",	  false,  29.0f,  0.5f},  // 死ぬ 29.0f
 	{ "Character\\Enemy\\Rich\\animation\\RichVictory.x", false,  81.0f,  0.4f},  // 勝利 81.0f
-	//{ "Character\\Enemy\\Rich\\animation\\RichRun.x",	true,	21.0f,  0.5f},	// 走る 21.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichRun.x",	true,	21.0f,  0.5f},	// 走る 21.0f
 };
 
 // コンストラクタ
