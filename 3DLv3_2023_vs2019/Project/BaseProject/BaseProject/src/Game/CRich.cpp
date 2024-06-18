@@ -4,10 +4,14 @@
 #include "CPlayer.h"
 #include "Maths.h"
 #include "CMagicCircle.h"
+#include "CSlime.h"
+#include "CBeholder.h"
 #include "CInput.h"
 
 // リッチのインスタンス
 CRich* CRich::spInstance = nullptr;
+
+float CRich::mElapsedTime;
 
 #define ENEMY_HEIGHT    2.0f
 #define ROTATE_RANGE  250.0f  // 回転する範囲
@@ -19,24 +23,28 @@ const CRich::AnimData CRich::ANIM_DATA[] =
 	{ "Character\\Enemy\\Rich\\animation\\RichIdle.x",	  true,   41.0f,  0.4f},  // 待機 41.0f
 	{ "Character\\Enemy\\Rich\\animation\\RichAttack.x",  false,  41.0f,  0.4f},  // 攻撃 41.0f
 	{ "Character\\Enemy\\Rich\\animation\\RichAttack2.x", false,  71.0f,  0.5f},  // 攻撃 71.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichGetHit.x",  false,  41.0f,  0.4f},  // ヒット  41.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichGetHit.x",  false,  41.0f,  0.4f},  // ヒット 41.0f
 	{ "Character\\Enemy\\Rich\\animation\\RichDie.x",	  false,  29.0f,  0.5f},  // 死ぬ 29.0f
 	{ "Character\\Enemy\\Rich\\animation\\RichVictory.x", false,  81.0f,  0.4f},  // 勝利 81.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichRun.x",	true,	21.0f,  0.5f},	// 走る 21.0f
+	{ "Character\\Enemy\\Rich\\animation\\RichRun.x",	  true,	  21.0f,  0.5f},  // 走る 21.0f
 };
 
 // コンストラクタ
 CRich::CRich()
-	: CXCharacter(ETag::eEnemy, ETaskPriority::eDefault)
-	, mState(EState::eIdle)
+	: mState(EState::eIdle)
 	, mAttackTime(0)
+	, mStateStep(0)
 	, mpRideObject(nullptr)
+	, mIsGrounded(false)
+	, mIsSummoning(false)
 {
 	//インスタンスの設定
 	spInstance = this;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Rich");
+
+	mElapsedTime = 0.0f;
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -172,6 +180,7 @@ void CRich::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
+	mStateStep = 0;
 }
 
 // 待機状態
@@ -210,8 +219,6 @@ void CRich::UpdateAttack()
 {
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eAttack);
-	
-	//magicCircle->Position(0.0f, 0.0f, 0.0f);
 
 	if (mAnimationFrame >= 41.0f)
 	{
@@ -250,6 +257,96 @@ void CRich::UpdateHit()
 	}
 }
 
+// 死ぬ
+void CRich::UpdateDie()
+{
+	SetAnimationSpeed(0.5f);
+	ChangeAnimation(EAnimType::eDie);
+}
+
+// 召喚
+void CRich::UpdateSummon()
+{
+	SetAnimationSpeed(0.4f);
+	switch (mStateStep)
+	{
+	case 0:
+		ChangeAnimation(EAnimType::eSummon);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 5.0f)
+		{
+			if (mIsSummoning == false)
+			{
+				RandomSummon();
+				mStateStep++;
+			}
+			else
+			{
+				mStateStep++;
+			}
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 81.0f)
+		{
+			ChangeState(EState::eIdle2);
+		}
+		break;
+	}
+}
+
+// 移動
+void CRich::UpdateRun()
+{
+	SetAnimationSpeed(0.5f);
+	ChangeAnimation(EAnimType::eRun);
+}
+
+// ランダム召喚
+void CRich::RandomSummon()
+{
+
+	bool Beholder = false;
+	int Random = Math::Rand(0, 2);
+
+	if (Random == 2) Beholder = true;
+	if (Beholder)
+	{
+		mpMagicCircle = new CMagicCircle
+		(
+			this,
+			Position() + CVector(0.0f, -9.6f, 40.0f)
+		);
+		mpMagicCircle->SetColor(CColor(1.0f, 0.0f, 1.0f));
+		mpMagicCircle->Scale(15.0f, 15.0f, 15.0f);
+
+		CVector magicPos = mpMagicCircle->Position();
+
+		// 球体のモンスター
+		CBeholder* enemy22 = new CBeholder();
+		enemy22->Position(magicPos);
+		enemy22->Scale(15.0f, 15.0f, 15.0f);
+	}
+	else
+	{
+		mpMagicCircle = new CMagicCircle
+		(
+			this,
+			Position() + CVector(0.0f, -9.6f, 50.0f)
+		);
+		mpMagicCircle->SetColor(CColor::red);
+		mpMagicCircle->Scale(30.0f, 30.0f, 30.0f);
+
+		CVector magicPos = mpMagicCircle->Position() + CVector(0.0f, 0.0f, 0.0f);
+		// レッドスライム
+		mpSlime = new CSlime();
+		mpSlime->Position(magicPos);
+		mpSlime->Scale(25.0f, 25.0f, 25.0f);
+	}
+}
+
 //更新処理
 void CRich::Update()
 {
@@ -282,6 +379,18 @@ void CRich::Update()
 		// ヒット
 	case EState::eHit:
 		UpdateHit();
+		break;
+		// 死ぬ
+	case EState::eDie:
+		UpdateDie();
+		break;
+		// 召喚
+	case EState::eSummon:
+		UpdateSummon();
+		break;
+		// 移動
+	case EState::eRun:
+		UpdateRun();
 		break;
 	}
 
@@ -326,17 +435,20 @@ void CRich::Update()
 
 	if (CInput::PushKey('Z'))
 	{
-		CMagicCircle* magicCircle = new CMagicCircle
-		(
-			this,
-			Position() + CVector(0.0f, -9.65f, 0.0f)
-		);
-		magicCircle->SetColor(CColor::red);
-		magicCircle->Scale(15.0f, 15.0f, 15.0f);
+		ChangeState(EState::eSummon);
+	}
+
+	if (mpSlime->mHp <= 0)
+	{
+		mIsSummoning = false;
+	}
+	if (mpSlime->mHp > 0)
+	{
+		mIsSummoning = true;
 	}
 
 	mIsGrounded = false;
-	CDebugPrint::Print("距離 %f\n", vectorPos);
+	CDebugPrint::Print("false %f\n",mElapsedTime);
 }
 
 // 衝突処理

@@ -61,7 +61,8 @@ public:
 
 	// €–Sˆ—
 	virtual void Death();
+
 protected:
-	CHpGauge* mpHpGauge;      // HPƒQ[ƒW
+	CHpGauge* mpHpGauge;  // HPƒQ[ƒW
 private:
 };

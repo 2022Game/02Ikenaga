@@ -1,17 +1,17 @@
-#ifndef CRICH_H
-#define CRICH_H
-#include "CXCharacter.h"
+#include "CEnemy.h"
 #include "CColliderLine.h"
 #include "CColliderCapsule.h"
 #include "CColliderSphere.h"
 #include "CModel.h"
-class CCane;
+
+class CSlime;
+class CMagicCircle;
 
 /*
-リッチクラス
-キャラクタクラスを継承
+ リッチクラス
+ エネミークラスを継承
 */
-class CRich : public CXCharacter
+class CRich : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
@@ -36,6 +36,15 @@ public:
 
 	// ヒット
 	void UpdateHit();
+	// 死ぬ
+	void UpdateDie();
+	// 召喚
+	void UpdateSummon();
+	// 移動
+	void UpdateRun();
+
+	// ランダム召喚
+	void RandomSummon();
 
 	// 更新処理
 	void Update();
@@ -60,6 +69,9 @@ public:
 
 	// 描画
 	void Render();
+
+	static float mElapsedTime;  // 経過時間
+
 private:
 	int mAttackTime;  // 攻撃時間の間隔
 
@@ -73,7 +85,9 @@ private:
 		eAttack,   // 攻撃
 		eAttack2,  // 攻撃2
 		eHit,      // ヒット
-		eWalk,	   // 歩行
+		eDie,      // 死ぬ
+		eSummon,   // 召喚
+		eRun,	   // 移動
 
 		Num
 	};
@@ -102,14 +116,19 @@ private:
 		eAttack,	  // 攻撃
 		eAttack2,	  // 攻撃2
 		eAttackWait,  // 攻撃終了待ち
-		eHit,         // ヒット	
+		eHit,         // ヒット
+		eDie,         // 死ぬ
+		eSummon,      // 召喚
+		eRun,         // 移動
 	};
 	EState mState;	  // エネミーの状態
+	int mStateStep;   // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	bool mIsGrounded; // 接地しているかどうか
+	bool mIsGrounded;   // 接地しているかどうか
+	bool mIsSummoning;  // 召喚中どうか
 
 	// 線分コライダー
 	CColliderLine* mpColliderLine;
@@ -125,7 +144,7 @@ private:
 	CColliderSphere* mpDamageColArmR;   // 右腕
 
 	CTransform* mpRideObject;
-	CCane* mpCane;  // 杖
-};
 
-#endif
+	CMagicCircle* mpMagicCircle;
+	CSlime* mpSlime;
+};

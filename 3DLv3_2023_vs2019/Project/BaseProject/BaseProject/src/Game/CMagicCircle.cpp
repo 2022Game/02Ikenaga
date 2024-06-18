@@ -27,6 +27,12 @@ CMagicCircle::~CMagicCircle()
 void CMagicCircle::Update()
 {
 	Rotate(0.0f, 0.5f, 0.0f);
+	mElapsedTime += Time::DeltaTime();
+	if (mElapsedTime >= 10)
+	{
+		CTask::Kill();
+		//CTask::SetShow(false);
+	}
 }
 
 // •`‰æ

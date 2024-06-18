@@ -625,7 +625,7 @@ void CSlime::Update()
 		Position(Position() + mMoveSpeed * MOVE_SPEED);
 		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
 	}
-
+	
 	// キャラクターの更新
 	CXCharacter::Update();
 
