@@ -50,6 +50,8 @@ CBeholder::CBeholder()
 	//インスタンスの設定
 	spInstance = this;
 
+	mType = EEnemyType::eBeholder;
+
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Beholder");
 

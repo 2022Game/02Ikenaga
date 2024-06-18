@@ -1,4 +1,4 @@
-#include "CRich.h"
+#include "CLich.h"
 #include "CCollisionManager.h"
 #include "CCane.h"
 #include "CPlayer.h"
@@ -9,40 +9,57 @@
 #include "CInput.h"
 
 // リッチのインスタンス
-CRich* CRich::spInstance = nullptr;
+CLich* CLich::spInstance = nullptr;
 
-float CRich::mElapsedTime;
+float CLich::mElapsedTime;
 
 #define ENEMY_HEIGHT    2.0f
 #define ROTATE_RANGE  250.0f  // 回転する範囲
+#define MC_ANIM_TIME    1.0f  // 魔法陣のアニメーション時間
+#define MC_ANIM_MOVE_Y 30.0f  // 魔法陣の高さ移動量
+#define MC_ANIM_ROT_Y 360.0f  // 魔法陣ののY軸回転量
+
+const CLich::SpawnData CLich::SPAWN_DATA[] =
+{
+	//  敵の種類　　　　　　 距離   魔法陣のオフセット位置    魔法陣の色              魔法陣の大きさ  敵の大きさ
+	//{ EEnemyType::eBee,      40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },
+	{ EEnemyType::eBeholder, 40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f,          15.0f,     0.5f },
+	/*{ EEnemyType::eBoxer,    40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },
+	{ EEnemyType::eCactus,   40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },
+	{ EEnemyType::eChest,    40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },
+	{ EEnemyType::eMushroom, 40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },
+	{ EEnemyType::eRay,      40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },*/
+	{ EEnemyType::eSlime,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,0.0f), 30.0f,           25.0f,    0.25f },
+	//{ EEnemyType::eTurtle,   40.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f), 15.0f, 15.0f },
+};
 
 // リッチのアニメーションデータのテーブル
-const CRich::AnimData CRich::ANIM_DATA[] =
+const CLich::AnimData CLich::ANIM_DATA[] =
 {
 	{ "",								                  true,	   0.0f,  0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Rich\\animation\\RichIdle.x",	  true,   41.0f,  0.4f},  // 待機 41.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichAttack.x",  false,  41.0f,  0.4f},  // 攻撃 41.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichAttack2.x", false,  71.0f,  0.5f},  // 攻撃 71.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichGetHit.x",  false,  41.0f,  0.4f},  // ヒット 41.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichDie.x",	  false,  29.0f,  0.5f},  // 死ぬ 29.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichVictory.x", false,  81.0f,  0.4f},  // 勝利 81.0f
-	{ "Character\\Enemy\\Rich\\animation\\RichRun.x",	  true,	  21.0f,  0.5f},  // 走る 21.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichIdle.x",	  true,   41.0f,  0.4f},  // 待機 41.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichAttack.x",  false,  41.0f,  0.4f},  // 攻撃 41.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichAttack2.x", false,  71.0f,  0.5f},  // 攻撃 71.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichGetHit.x",  false,  41.0f,  0.4f},  // ヒット 41.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichDie.x",	  false,  29.0f,  0.5f},  // 死ぬ 29.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichVictory.x", false,  81.0f,  0.4f},  // 勝利 81.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichRun.x",	  true,	  21.0f,  0.5f},  // 走る 21.0f
 };
 
 // コンストラクタ
-CRich::CRich()
+CLich::CLich()
 	: mState(EState::eIdle)
 	, mAttackTime(0)
 	, mStateStep(0)
 	, mpRideObject(nullptr)
 	, mIsGrounded(false)
-	, mIsSummoning(false)
+	, mpSpawnEnemy(nullptr)
 {
 	//インスタンスの設定
 	spInstance = this;
 
 	// モデルデータ読み込み
-	CModelX* model = CResourceManager::Get<CModelX>("Rich");
+	CModelX* model = CResourceManager::Get<CModelX>("Lich");
 
 	mElapsedTime = 0.0f;
 
@@ -147,7 +164,7 @@ CRich::CRich()
 }
 
 // デストラクタ
-CRich::~CRich()
+CLich::~CLich()
 {
 	// 線分コライダー
 	SAFE_DELETE(mpColliderLine);
@@ -159,16 +176,22 @@ CRich::~CRich()
 	SAFE_DELETE(mpDamageColBody);
 	SAFE_DELETE(mpDamageColArmL);
 	SAFE_DELETE(mpDamageColArmR);
+
+	// 自身が召喚した敵が存在すれば
+	if (mpSpawnEnemy)
+	{
+		mpSpawnEnemy->SetSummoner(nullptr);
+	}
 }
 
 // インスタンス
-CRich* CRich::Instance()
+CLich* CLich::Instance()
 {
 	return spInstance;
 }
 
 // アニメーション切り替え
-void CRich::ChangeAnimation(EAnimType type)
+void CLich::ChangeAnimation(EAnimType type)
 {
 	if (!(EAnimType::None < type && type < EAnimType::Num)) return;
 	AnimData data = ANIM_DATA[(int)type];
@@ -176,15 +199,45 @@ void CRich::ChangeAnimation(EAnimType type)
 }
 
 // 状態の切り替え
-void CRich::ChangeState(EState state)
+void CLich::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
 	mStateStep = 0;
 }
 
+CEnemy* CLich::SpawnEnemy(EEnemyType type) const
+{
+	CEnemy* ret = nullptr;
+
+	switch (type)
+	{
+	case EEnemyType::eBee:
+		break;
+	case EEnemyType::eBeholder:
+		ret = new CBeholder();
+		break;
+	case EEnemyType::eBoxer:
+		break;
+	case EEnemyType::eCactus:
+		break;
+	case EEnemyType::eChest:
+		break;
+	case EEnemyType::eMushroom:
+		break;
+	case EEnemyType::eRay:
+		break;
+	case EEnemyType::eSlime:
+		ret = new CSlime();
+		break;
+	case EEnemyType::eTurtle:
+		break;
+	}
+	return ret;
+}
+
 // 待機状態
-void CRich::UpdateIdle()
+void CLich::UpdateIdle()
 {
 	SetAnimationSpeed(0.4f);
 	// 待機アニメーションに切り替え
@@ -203,7 +256,7 @@ void CRich::UpdateIdle()
 }
 
 // 待機状態2
-void CRich::UpdateIdle2()
+void CLich::UpdateIdle2()
 {
 	SetAnimationSpeed(0.4f);
 	// 待機アニメーションに切り替え
@@ -215,7 +268,7 @@ void CRich::UpdateIdle2()
 }
 
 // 攻撃
-void CRich::UpdateAttack()
+void CLich::UpdateAttack()
 {
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eAttack);
@@ -227,7 +280,7 @@ void CRich::UpdateAttack()
 }
 
 // 攻撃2
-void CRich::UpdateAttack2()
+void CLich::UpdateAttack2()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack2);
@@ -238,7 +291,7 @@ void CRich::UpdateAttack2()
 }
 
 // 攻撃終了待ち
-void CRich::UpdateAttackWait()
+void CLich::UpdateAttackWait()
 {
 	if (IsAnimationFinished())
 	{
@@ -247,7 +300,7 @@ void CRich::UpdateAttackWait()
 }
 
 // ヒット
-void CRich::UpdateHit()
+void CLich::UpdateHit()
 {
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eHit);
@@ -258,14 +311,14 @@ void CRich::UpdateHit()
 }
 
 // 死ぬ
-void CRich::UpdateDie()
+void CLich::UpdateDie()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDie);
 }
 
 // 召喚
-void CRich::UpdateSummon()
+void CLich::UpdateSummon()
 {
 	SetAnimationSpeed(0.4f);
 	switch (mStateStep)
@@ -274,21 +327,109 @@ void CRich::UpdateSummon()
 		ChangeAnimation(EAnimType::eSummon);
 		mStateStep++;
 		break;
+	// ランダム召喚開始
 	case 1:
 		if (mAnimationFrame >= 5.0f)
 		{
-			if (mIsSummoning == false)
+			if (mpSpawnEnemy == nullptr)
 			{
-				RandomSummon();
-				mStateStep++;
+				mRandomSummonIndex = GetRandomSummonIndex();
+				if (mRandomSummonIndex < 0)
+				{
+					mStateStep = 4;
+				}
+				else
+				{
+					SpawnData data = SPAWN_DATA[mRandomSummonIndex];
+
+					CVector forward = VectorZ();
+					forward.Y(0.0f);
+					forward.Normalize();
+					CVector magicPos = Position() + forward * data.dist + data.offsetPos;
+					mpMagicCircle = new CMagicCircle
+					(
+						this,
+						magicPos
+					);
+					mpMagicCircle->SetColor(data.circleColor);
+					mpMagicCircle->Scale(CVector::one * data.circleScale);
+					
+					mMCStartPos = mpMagicCircle->Position();
+					mMCStartRot = mpMagicCircle->Rotation();
+
+					mStateStep++;
+					mElapsedTime = 0.0f;
+				}
 			}
 			else
 			{
-				mStateStep++;
+				mStateStep = 4;
 			}
 		}
 		break;
+		// 魔法陣のアニメーション
 	case 2:
+		if (mElapsedTime < MC_ANIM_TIME)
+		{
+			// 時間の経過に合わせて位置の回転値を変更
+			float percent = mElapsedTime / MC_ANIM_TIME;
+			
+			SpawnData data = SPAWN_DATA[mRandomSummonIndex];
+			if (mpSpawnEnemy == nullptr && percent >= data.spawnRatio)
+			{
+				RandomSummon();
+			}
+
+			// 位置
+			CVector targetPos = mMCStartPos + CVector(0.0f, MC_ANIM_MOVE_Y, 0.0f);
+			CVector pos = CVector::Lerp(mMCStartPos, targetPos, percent);
+			mpMagicCircle->Position(pos);
+
+			// 回転値
+			CVector startAngle = CVector(0.0f, 0.0f, 0.0f);
+			CVector targetAngle = CVector(0.0f, MC_ANIM_ROT_Y, 0.0f);
+			CQuaternion targetRot = mMCStartRot * CQuaternion(0.0f, MC_ANIM_ROT_Y, 0.0f);
+			CVector angle = CVector::Lerp(startAngle, targetAngle, percent);
+			CQuaternion rot = mMCStartRot * CQuaternion(angle);
+			mpMagicCircle->Rotation(rot);
+
+			mElapsedTime += Time::DeltaTime();
+		}
+		// アニメーション終了
+		else
+		{
+			if (mpSpawnEnemy == nullptr)
+			{
+				RandomSummon();
+			}
+
+			// 終了時の位置と回転値を設定
+			CVector targetPos = mMCStartPos + CVector(0.0f, MC_ANIM_MOVE_Y, 0.0f);
+			mpMagicCircle->Position(targetPos);
+			CVector targetAngle = CVector(0.0f, MC_ANIM_ROT_Y, 0.0f);
+			CQuaternion rot = mMCStartRot * CQuaternion(targetAngle);
+			mpMagicCircle->Rotation(rot);
+
+			mStateStep++;
+			mElapsedTime = 0.0f;
+		}
+		break;
+	// 魔法陣の待ち時間
+	case 3:
+		if (mElapsedTime < 1.0f)
+		{
+			mElapsedTime += Time::DeltaTime();
+		}
+		else
+		{
+			mpMagicCircle->Kill();
+			mpMagicCircle = nullptr;
+
+			mStateStep++;
+			mElapsedTime = 0.0f;
+		}
+		break;
+	case 4:
 		if (mAnimationFrame >= 81.0f)
 		{
 			ChangeState(EState::eIdle2);
@@ -298,57 +439,45 @@ void CRich::UpdateSummon()
 }
 
 // 移動
-void CRich::UpdateRun()
+void CLich::UpdateRun()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eRun);
 }
 
-// ランダム召喚
-void CRich::RandomSummon()
+// ランダム召喚する敵のインデックス値を取得
+int CLich::GetRandomSummonIndex() const
 {
-
-	bool Beholder = false;
-	int Random = Math::Rand(0, 2);
-
-	if (Random == 2) Beholder = true;
-	if (Beholder)
-	{
-		mpMagicCircle = new CMagicCircle
-		(
-			this,
-			Position() + CVector(0.0f, -9.6f, 40.0f)
-		);
-		mpMagicCircle->SetColor(CColor(1.0f, 0.0f, 1.0f));
-		mpMagicCircle->Scale(15.0f, 15.0f, 15.0f);
-
-		CVector magicPos = mpMagicCircle->Position();
-
-		// 球体のモンスター
-		CBeholder* enemy22 = new CBeholder();
-		enemy22->Position(magicPos);
-		enemy22->Scale(15.0f, 15.0f, 15.0f);
-	}
-	else
-	{
-		mpMagicCircle = new CMagicCircle
-		(
-			this,
-			Position() + CVector(0.0f, -9.6f, 50.0f)
-		);
-		mpMagicCircle->SetColor(CColor::red);
-		mpMagicCircle->Scale(30.0f, 30.0f, 30.0f);
-
-		CVector magicPos = mpMagicCircle->Position() + CVector(0.0f, 0.0f, 0.0f);
-		// レッドスライム
-		mpSlime = new CSlime();
-		mpSlime->Position(magicPos);
-		mpSlime->Scale(25.0f, 25.0f, 25.0f);
-	}
+	int tableSize = ARRAY_SIZE(SPAWN_DATA);
+	int index = Math::Rand(0, tableSize - 1);
+	
+	if (!(0 <= index && index < tableSize)) return -1;
+	return index;
 }
 
+// ランダム召喚
+void CLich::RandomSummon()
+{
+	SpawnData data = SPAWN_DATA[mRandomSummonIndex];
+
+	CVector forward = VectorZ();
+	forward.Y(0.0f);
+	forward.Normalize();
+	CVector magicPos = Position() + forward * data.dist + data.offsetPos;
+
+	// 召喚する敵を生成
+	mpSpawnEnemy = SpawnEnemy(data.type);
+	if (mpSpawnEnemy != nullptr)
+	{
+		mpSpawnEnemy->Position(magicPos);
+		mpSpawnEnemy->Scale(CVector::one * data.monsterScale);
+		mpSpawnEnemy->Rotation(CQuaternion::LookRotation(forward));
+		mpSpawnEnemy->SetSummoner(this);
+	}
+}
+	
 //更新処理
-void CRich::Update()
+void CLich::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
@@ -438,21 +567,12 @@ void CRich::Update()
 		ChangeState(EState::eSummon);
 	}
 
-	if (mpSlime->mHp <= 0)
-	{
-		mIsSummoning = false;
-	}
-	if (mpSlime->mHp > 0)
-	{
-		mIsSummoning = true;
-	}
-
 	mIsGrounded = false;
 	CDebugPrint::Print("false %f\n",mElapsedTime);
 }
 
 // 衝突処理
-void CRich::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
+void CLich::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	if (self == mpColliderLine)
 	{
@@ -477,14 +597,14 @@ void CRich::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 }
 
 // 1レベルアップ
-void CRich::LevelUp()
+void CLich::LevelUp()
 {
 	int level = mCharaStatus.level;
 	ChangeLevel(level + 1);
 }
 
 // レベルを変更
-void CRich::ChangeLevel(int level)
+void CLich::ChangeLevel(int level)
 {
 	// ステータスのテーブルのインデックス値に変換
 	int index = Math::Clamp(level - 1, 0, ENEMY__LEVEL_MAX);
@@ -498,7 +618,7 @@ void CRich::ChangeLevel(int level)
 }
 
 // 被ダメージ処理
-void CRich::TakeDamage(int damage, CObjectBase* causedObj)
+void CLich::TakeDamage(int damage, CObjectBase* causedObj)
 {
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
@@ -513,8 +633,18 @@ void CRich::TakeDamage(int damage, CObjectBase* causedObj)
 	}
 }
 
+// 召喚した敵の死亡処理
+void CLich::DeathSummonEnemy(CEnemy* enemy)
+{
+	// 自分が召喚した敵でなければ、処理しない
+	if (enemy != mpSpawnEnemy) return;
+
+	// 自分が召喚した敵であれば、ポインターを空にする
+	mpSpawnEnemy = nullptr;
+}
+
 // 描画
-void CRich::Render()
+void CLich::Render()
 {
 	CXCharacter::Render();
 }

@@ -11,40 +11,16 @@ class CMagicCircle;
  リッチクラス
  エネミークラスを継承
 */
-class CRich : public CEnemy
+class CLich : public CEnemy
 {
 public:
 	//インスタンスのポインタの取得
-	static CRich* Instance();
+	static CLich* Instance();
 
 	// コンストラクタ
-	CRich();
+	CLich();
 	// デストラクタ
-	~CRich();
-
-	// 待機状態
-	void UpdateIdle();
-	// 待機状態2
-	void UpdateIdle2();
-
-	// 攻撃
-	void UpdateAttack();
-	// 攻撃2
-	void UpdateAttack2();
-	// 攻撃終了待ち
-	void UpdateAttackWait();
-
-	// ヒット
-	void UpdateHit();
-	// 死ぬ
-	void UpdateDie();
-	// 召喚
-	void UpdateSummon();
-	// 移動
-	void UpdateRun();
-
-	// ランダム召喚
-	void RandomSummon();
+	~CLich();
 
 	// 更新処理
 	void Update();
@@ -67,12 +43,57 @@ public:
 	//ダメージを与えたオブジェクト
 	virtual void TakeDamage(int damage, CObjectBase* causedObj);
 
+	// 召喚した敵の死亡処理
+	void DeathSummonEnemy(CEnemy* enemy) override;
+
 	// 描画
 	void Render();
 
 	static float mElapsedTime;  // 経過時間
 
 private:
+	// 待機状態
+	void UpdateIdle();
+	// 待機状態2
+	void UpdateIdle2();
+
+	// 攻撃
+	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
+	// 攻撃終了待ち
+	void UpdateAttackWait();
+
+	// ヒット
+	void UpdateHit();
+	// 死ぬ
+	void UpdateDie();
+	// 召喚
+	void UpdateSummon();
+	// 移動
+	void UpdateRun();
+
+	// ランダム召喚する敵のインデックス値を取得
+	int GetRandomSummonIndex() const;
+	// ランダム召喚
+	void RandomSummon();
+
+	// 敵の召喚データ
+	struct SpawnData
+	{
+		EEnemyType type;     // 敵の種類
+		float dist;          // 生成距離
+		CVector offsetPos;   // 生成位置のオフセット位置
+		CColor circleColor;  // 魔法陣の色
+		float circleScale;   // 魔法陣のスケール値
+		float monsterScale;  // 生成する敵のスケール値
+		float spawnRatio;    // 召喚するタイミング
+	};
+	// 敵の召喚データのテーブル
+	static const SpawnData SPAWN_DATA[];
+
+	CEnemy* SpawnEnemy(EEnemyType type) const;
+
 	int mAttackTime;  // 攻撃時間の間隔
 
 	// アニメーションの種類
@@ -95,7 +116,7 @@ private:
 	void ChangeAnimation(EAnimType type);
 
 	// リッチのインスタンス
-	static CRich* spInstance;
+	static CLich* spInstance;
 
 	// アニメーションデータ
 	struct AnimData
@@ -128,7 +149,6 @@ private:
 	void ChangeState(EState state);
 
 	bool mIsGrounded;   // 接地しているかどうか
-	bool mIsSummoning;  // 召喚中どうか
 
 	// 線分コライダー
 	CColliderLine* mpColliderLine;
@@ -146,5 +166,10 @@ private:
 	CTransform* mpRideObject;
 
 	CMagicCircle* mpMagicCircle;
-	CSlime* mpSlime;
+	CEnemy* mpSpawnEnemy;  //自身が召喚した敵のポインタ
+
+	CVector mMCStartPos;      // 魔法陣のアニメーション開始位置
+	CQuaternion mMCStartRot;  // 魔法陣のアニメーション開始時の回転値
+
+	int mRandomSummonIndex;   // 敵を召喚するランダムインデックス値
 };

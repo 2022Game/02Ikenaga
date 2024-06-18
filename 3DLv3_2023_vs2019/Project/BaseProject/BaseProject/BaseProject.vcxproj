@@ -114,7 +114,7 @@
     <ClCompile Include="src\Game\CRay.cpp" />
     <ClCompile Include="src\Game\CRay2.cpp" />
     <ClCompile Include="src\Game\CRay3.cpp" />
-    <ClCompile Include="src\Game\CRich.cpp" />
+    <ClCompile Include="src\Game\CLich.cpp" />
     <ClCompile Include="src\Game\CRoar.cpp" />
     <ClCompile Include="src\Game\CShieldRotate.cpp" />
     <ClCompile Include="src\Game\CSky.cpp" />
@@ -270,7 +270,7 @@
     <ClInclude Include="src\Game\CRay.h" />
     <ClInclude Include="src\Game\CRay2.h" />
     <ClInclude Include="src\Game\CRay3.h" />
-    <ClInclude Include="src\Game\CRich.h" />
+    <ClInclude Include="src\Game\CLich.h" />
     <ClInclude Include="src\Game\CRoar.h" />
     <ClInclude Include="src\Game\CShieldRotate.h" />
     <ClInclude Include="src\Game\CSky.h" />

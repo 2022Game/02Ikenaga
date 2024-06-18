@@ -10,7 +10,6 @@
 // コンストラクタ
 CMagicCircle::CMagicCircle(CObjectBase* owner, const CVector& pos)
 	: mpOwner(owner)
-	, mElapsedTime(0.0f)
 {
 	Position(pos);
 
@@ -27,12 +26,6 @@ CMagicCircle::~CMagicCircle()
 void CMagicCircle::Update()
 {
 	Rotate(0.0f, 0.5f, 0.0f);
-	mElapsedTime += Time::DeltaTime();
-	if (mElapsedTime >= 10)
-	{
-		CTask::Kill();
-		//CTask::SetShow(false);
-	}
 }
 
 // 描画

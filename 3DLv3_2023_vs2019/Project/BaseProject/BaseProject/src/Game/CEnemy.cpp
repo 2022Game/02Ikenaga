@@ -5,6 +5,7 @@
 // コンストラクタ
 CEnemy::CEnemy()
 	:CXCharacter(ETag::eEnemy,ETaskPriority::eEnemy)
+	, mpSummoner(nullptr)
 {
 	// HPゲージ作成
 	mpHpGauge = new CHpGauge(true);
@@ -16,6 +17,11 @@ CEnemy::~CEnemy()
 {
 	// HPゲージを削除
 	mpHpGauge->Kill();
+
+	if (mpSummoner != nullptr)
+	{
+		mpSummoner->DeathSummonEnemy(this);
+	}
 }
 
 // 小さいスライムの死亡処理
@@ -220,4 +226,21 @@ void CEnemy::DragonDeath()
 // 死亡処理
 void CEnemy::Death()
 {
+}
+
+// 敵の種類を取得
+EEnemyType CEnemy::GetType() const
+{
+	return mType;
+}
+
+// 召喚した敵の死亡処理
+void CEnemy::DeathSummonEnemy(CEnemy* enemy)
+{
+}
+
+// 自身を召喚した敵を設定
+void CEnemy::SetSummoner(CEnemy* summone)
+{
+	mpSummoner = summone;
 }

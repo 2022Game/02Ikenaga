@@ -30,7 +30,7 @@
 #include "CChest3.h"
 #include "CBoxer.h"
 #include "CBoxer2.h"
-#include "CRich.h"
+#include "CLich.h"
 #include "CDragon.h"
 #include "CPortionRed.h"
 #include "CPortionGreen.h"
@@ -95,7 +95,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
-	CResourceManager::Load<CModelX>("Rich", "Character\\Enemy\\Rich\\Rich.x");
+	CResourceManager::Load<CModelX>("Lich", "Character\\Enemy\\Lich\\Lich.x");
 
 	// ƒ{ƒXŠÖ˜A
 	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
@@ -307,7 +307,7 @@ void CGameScene::Load()
 	//enemy27->Position(370.0f, 0.0f, 20.0f);
 	//enemy27->Scale(15.0f, 15.0f, 15.0f);
 
-	CRich* enemy8 = new CRich();
+	CLich* enemy8 = new CLich();
 	enemy8->Position(100.0f, 8.0f, 50.0f);
 	//enemy8->Rotate(0.0f,90.0f,-70.0f);
 	enemy8->Scale(0.2f, 0.2f, 0.2f);

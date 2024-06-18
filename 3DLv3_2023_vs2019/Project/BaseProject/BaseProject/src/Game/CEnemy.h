@@ -2,6 +2,26 @@
 #include "CXCharacter.h"
 #include "CHpGauge.h"
 
+// 敵の種類
+enum class EEnemyType
+{
+	None = -1,
+
+	eBee,
+	eBeholder,
+	eBoxer,
+	eCactus,
+	eChest,
+	eDragon,
+	eMushroom,
+	eRay,
+	eRich,
+	eSlime,
+	eTurtle,
+
+	Num
+};
+
 // エネミーのベースクラス
 class  CEnemy :public CXCharacter
 {
@@ -62,7 +82,17 @@ public:
 	// 死亡処理
 	virtual void Death();
 
+	// 敵の種類を取得
+	EEnemyType GetType() const;
+
+	// 召喚した敵の死亡処理
+	virtual void DeathSummonEnemy(CEnemy* enemy);
+	// 自身を召喚した敵を設定
+	void SetSummoner(CEnemy* summoner);
+
 protected:
+	EEnemyType mType;     // 敵の種類
 	CHpGauge* mpHpGauge;  // HPゲージ
-private:
+
+	CEnemy* mpSummoner;   // 自分自身を召喚した敵キャラ
 };
