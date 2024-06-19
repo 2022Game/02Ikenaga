@@ -173,6 +173,9 @@
     <Filter Include="ソース ファイル\Game\Character\Enemy\Lich">
       <UniqueIdentifier>{3d12f532-4649-4a44-a534-9b365a5fddb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Drain">
+      <UniqueIdentifier>{3d8c7065-76ff-4e7a-bc61-7a6c5e5bfc24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -609,6 +612,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CMagicCircle.cpp">
       <Filter>ソース ファイル\Game\Effect\MagicCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDrain.cpp">
+      <Filter>ソース ファイル\Game\Effect\Drain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDrainEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Drain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1070,6 +1079,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CMagicCircle.h">
       <Filter>ソース ファイル\Game\Effect\MagicCircle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDrain.h">
+      <Filter>ソース ファイル\Game\Effect\Drain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDrainEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Drain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

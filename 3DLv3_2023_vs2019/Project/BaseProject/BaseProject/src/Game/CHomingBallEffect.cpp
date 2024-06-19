@@ -128,10 +128,10 @@ void CHomingBallEffect::CreateLightningBall()
 // 更新
 void CHomingBallEffect::Update()
 {
-	// 雷球を発射していたら
+	// ホーミングボールを発射していたら
 	if (mIsThrowing)
 	{
-		// 経過時間に応じて、雷球を作成
+		// 経過時間に応じて、ホーミングボールを作成
 		if (mElapsedTime >= THROW_INTERVAL)
 		{
 			CreateLightningBall();

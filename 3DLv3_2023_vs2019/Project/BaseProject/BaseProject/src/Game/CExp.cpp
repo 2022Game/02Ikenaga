@@ -16,7 +16,6 @@ CExp::CExp(int exp)
 		0.5f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::eField });
-	//mpColliderSphere->Position(-0.03f, 0.1f, 0.05f);
 }
 
 CExp::~CExp()

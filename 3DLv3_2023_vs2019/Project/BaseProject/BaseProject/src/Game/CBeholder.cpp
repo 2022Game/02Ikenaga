@@ -592,6 +592,7 @@ void CBeholder::UpdateHit()
 	SetAnimationSpeed(0.5f);
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
+	mpHomingBall->Stop();
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -619,6 +620,7 @@ void CBeholder::UpdateDie()
 	SetAnimationSpeed(0.2f);
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
+	mpHomingBall->Stop();
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{

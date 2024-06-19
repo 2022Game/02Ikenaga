@@ -5,6 +5,7 @@
 #include "CModel.h"
 
 class CMagicCircle;
+class CDrainEffect;
 
 /*
  リッチクラス
@@ -42,6 +43,13 @@ public:
 
 	// 死亡処理
 	void Death() override;
+
+	/// <summary>
+	/// 防御力の強化割合を取得
+	/// </summary>
+	/// <param name="attackDir"></param>
+	/// <returns></returns>
+	float GetDefBuff(const CVector& attackDir) const override;
 
 	// 描画
 	void Render();
@@ -168,11 +176,11 @@ private:
 
 	CTransform* mpRideObject;
 
-	CMagicCircle* mpMagicCircle;
-	CEnemy* mpSpawnEnemy;  //自身が召喚した敵のポインタ
+	CMagicCircle* mpMagicCircle;  // 魔法陣
+	CEnemy* mpSpawnEnemy;         // 自身が召喚した敵のポインタ
+	CVector mMCStartPos;          // 魔法陣のアニメーション開始位置
+	CQuaternion mMCStartRot;      // 魔法陣のアニメーション開始時の回転値
+	int mRandomSummonIndex;       // 敵を召喚するランダムインデックス値
 
-	CVector mMCStartPos;      // 魔法陣のアニメーション開始位置
-	CQuaternion mMCStartRot;  // 魔法陣のアニメーション開始時の回転値
-
-	int mRandomSummonIndex;   // 敵を召喚するランダムインデックス値
+	CDrainEffect* mpDrain;
 };

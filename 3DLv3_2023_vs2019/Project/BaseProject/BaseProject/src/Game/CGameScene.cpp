@@ -230,10 +230,10 @@ void CGameScene::Load()
 	//enemy9->Position(-30.0f, -0.2f, -360.0f);
 	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	//// エイ
-	//CRay* enemy10 = new CRay();
-	//enemy10->Position(150.0f, 0.0f, -450.0f);
-	//enemy10->Scale(35.0f, 35.0f, 35.0f);
+	// エイ
+	CRay* enemy10 = new CRay();
+	enemy10->Position(150.0f, 0.0f, -450.0f);
+	enemy10->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ2
 	//CRay2* enemy11 = new CRay2();

@@ -13,6 +13,7 @@
 #include "CRay.h"
 #include "CSlime.h"
 #include "CTurtle.h"
+#include "CDrainEffect.h"
 #include "CInput.h"
 
 // ƒŠƒbƒ`‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
@@ -21,7 +22,7 @@ CLich* CLich::spInstance = nullptr;
 float CLich::mElapsedTime;
 
 #define ENEMY_HEIGHT  -40.0f  // c‚Ì’·‚³
-#define MOVE_SPEED      0.4f  // ˆÚ“®‘¬“x
+#define MOVE_SPEED      0.3f  // ˆÚ“®‘¬“x
 #define WALK_RANGE    300.0f  // ’ÇÕ‚·‚é”ÍˆÍ
 #define STOP_RANGE     50.0f  // ’ÇÕ‚ğ«‚ß‚é”ÍˆÍ
 #define ROTATE_RANGE  250.0f  // ‰ñ“]‚·‚é”ÍˆÍ
@@ -51,7 +52,7 @@ const CLich::AnimData CLich::ANIM_DATA[] =
 	{ "Character\\Enemy\\Lich\\animation\\LichAttack.x",  false,  41.0f,  0.4f},  // UŒ‚ 41.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichAttack2.x", false,  71.0f,  0.5f},  // UŒ‚ 71.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichGetHit.x",  false,  41.0f,  0.4f},  // ƒqƒbƒg 41.0f
-	{ "Character\\Enemy\\Lich\\animation\\LichDie.x",	  false,  29.0f,  0.5f},  // €‚Ê 29.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichDie.x",	  false,  29.0f,  0.3f},  // €‚Ê 29.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichVictory.x", false,  81.0f,  0.4f},  // Ÿ—˜ 81.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichRun.x",	  true,	  21.0f,  0.5f},  // ‘–‚é 21.0f
 };
@@ -175,6 +176,14 @@ CLich::CLich()
 	const CMatrix* armRightMty = GetFrameMtx("Armature_Hand_R");
 	mpColSphereArmR->SetAttachMtx(armRightMty);
 	mpDamageColArmR->SetAttachMtx(armRightMty);
+
+	mpDrain=new CDrainEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 0.0f, 0.0f),
+		CQuaternion(0.0, 0.f, 0.0f).Matrix()
+
+	);
 }
 
 // ƒfƒXƒgƒ‰ƒNƒ^
@@ -305,9 +314,28 @@ void CLich::UpdateAttack()
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eAttack);
 
-	if (mAnimationFrame >= 39.0f)
+	switch (mStateStep)
 	{
-		ChangeState(EState::eAttackWait);
+	case 0:
+		ChangeAnimation(EAnimType::eAttack);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 5.0f)
+		{
+			if (!mpDrain->IsThrowing())
+			{
+				mpDrain->Start();
+				mStateStep++;
+			}
+		}
+		break;
+	case 2:
+		if (mAnimationFrame >= 39.0f)
+		{
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -325,6 +353,7 @@ void CLich::UpdateAttack2()
 // UŒ‚I—¹‘Ò‚¿
 void CLich::UpdateAttackWait()
 {
+	mpDrain->Stop();
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle2);
@@ -334,6 +363,7 @@ void CLich::UpdateAttackWait()
 // ƒqƒbƒg
 void CLich::UpdateHit()
 {
+	mpDrain->Stop();
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -345,7 +375,8 @@ void CLich::UpdateHit()
 // €‚Ê
 void CLich::UpdateDie()
 {
-	SetAnimationSpeed(0.5f);
+	mpDrain->Stop();
+	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -622,7 +653,17 @@ void CLich::Update()
 		}
 		else if(mAttackTime >= 300 && mpSpawnEnemy != nullptr)
 		{
-			ChangeState(EState::eAttack);
+			bool Attack2 = false;
+			int random = Math::Rand(0, 2);
+			if (random == 2)Attack2 = true;
+			if (Attack2)
+			{
+				ChangeState(EState::eAttack2);
+			}
+			else
+			{
+				ChangeState(EState::eAttack);
+			}
 		}
 
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eSummon)
@@ -735,6 +776,16 @@ void CLich::Death()
 {
 	// €–Só‘Ô‚ÖˆÚs
 	ChangeState(EState::eDie);
+}
+
+// –hŒä—Í‚Ì‹­‰»Š„‡‚ğæ“¾
+float CLich::GetDefBuff(const CVector& attackDir)const
+{
+	// –hŒäó‘Ô‚Å‚ ‚ê‚ÎA–hŒä2”{
+	if (mpSpawnEnemy !=nullptr ) return 20.0f;
+
+	// ’Êí‚Ì–hŒä‚ÌŠ„‡
+	return mBaseDefenseBuffRatio;
 }
 
 // •`‰æ

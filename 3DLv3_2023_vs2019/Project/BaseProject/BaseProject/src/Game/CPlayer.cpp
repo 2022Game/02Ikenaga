@@ -176,8 +176,9 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColHead->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageColHead->SetCollisionTags({ ETag::eEnemy,ETag::eFlame ,ETag::eWave,ETag::eLightningBall,
-	                                ETag::eImpact, ETag::eHomingBall, ETag::eWeapon });
+	mpDamageColHead->SetCollisionTags({ ETag::eEnemy,  ETag::eFlame ,ETag::eWave,ETag::eLightningBall,
+	                                    ETag::eImpact, ETag::eHomingBall, ETag::eDrain,
+		                                ETag::eWeapon });
 	//ダメージを受けるコライダーを少し上へずらす
 	mpDamageColHead->Position(0.0f, 0.1f, 0.03f);
 
@@ -191,8 +192,9 @@ CPlayer::CPlayer()
 	//ダメージを受けるコライダーと
 	//衝突判定を行うコライダーのレイヤーとタグを設定
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
-	mpDamageColBody->SetCollisionTags({ ETag::eEnemy ,ETag::eFlame, ETag::eWave,ETag::eLightningBall,
-		                             ETag::eImpact, ETag::eHomingBall, ETag::eWeapon });
+	mpDamageColBody->SetCollisionTags({ ETag::eEnemy , ETag::eFlame, ETag::eWave,ETag::eLightningBall,
+		                                ETag::eImpact, ETag::eHomingBall, ETag::eDrain,
+		                                ETag::eWeapon });
 
 	//デフォルト座標を設定
 	mDefaultPos = Position();
