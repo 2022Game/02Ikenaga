@@ -9,7 +9,7 @@ CEnemy::CEnemy()
 {
 	// HPゲージ作成
 	mpHpGauge = new CHpGauge(true);
-	mpHpGauge->SetCenterRatio(CVector2(0.5, 0.0f));
+	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
 }
 
 // デストラクタ

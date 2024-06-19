@@ -21,6 +21,7 @@ public:
 
 	// コンストラクタ
 	CBeholder();
+	// デストラクタ
 	~CBeholder();
 
 	// 戦う前の待機状態

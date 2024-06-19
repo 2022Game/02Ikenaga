@@ -1,6 +1,5 @@
 #include "CBeholder.h"
 #include "CPlayer.h"
-#include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
 #include "Maths.h"
@@ -20,6 +19,8 @@ CBeholder* CBeholder::spInstance = nullptr;
 #define WALK_RANGE    150.0f   // 追跡する範囲
 #define STOP_RANGE    26.0f    // 追跡を辞める範囲
 #define ROTATE_RANGE  250.0f   // 回転する範囲
+#define START_POS_Y   20.0f    // 開始位置のY方向
+#define START_POS_Z   13.0f    // 開始位置のZ方向
 
 // 球体のモンスターのアニメーションデータのテーブル
 const CBeholder::AnimData CBeholder::ANIM_DATA[] =
@@ -332,10 +333,14 @@ CBeholder::CBeholder()
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
 
+	CVector forward = VectorZ();
+	forward.Y(0.0f);
+	forward.Normalize();
+	CVector HomingPos = Position() + forward * START_POS_Z + CVector(0.0f, START_POS_Y, 0.0f);
 	mpHomingBall = new CHomingBallEffect
 	(
 		this, nullptr,
-		CVector(0.0f, 20.0f, 0.0f),
+		HomingPos,
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
 }
@@ -778,11 +783,11 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				//ChangeState(EState::eAttack3);
+				ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
-				ChangeState(EState::eAttack4);
+				//ChangeState(EState::eAttack4);
 			}
 			else
 			{
@@ -833,9 +838,9 @@ void CBeholder::Update()
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
-	CDebugPrint::Print(" 飛行: %d\n", mFlyingTime);
+	/*CDebugPrint::Print(" 飛行: %d\n", mFlyingTime);
 	float y = Position().Y();
-	CDebugPrint::Print(" 高さ: %f\n", y);
+	CDebugPrint::Print(" 高さ: %f\n", y);*/
 
 	// キャラクターの更新
 	CXCharacter::Update();
@@ -868,18 +873,6 @@ void CBeholder::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-
-	if (CInput::PushKey('Q'))
-	{
-		if (!mpLightningBall->IsThrowing())
-		{
-			mpLightningBall->Start();
-		}
-		else
-		{
-			mpLightningBall->Stop();
-		}
-	}
 }
 
 // 衝突処理
@@ -913,7 +906,6 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 		{
 			Position(Position() + hit.adjust * hit.weight);
 			mIsGrounded = true;
-			//mMoveSpeed.Y(0.0f);
 
 			if (other->Tag() == ETag::eRideableObject)
 			{

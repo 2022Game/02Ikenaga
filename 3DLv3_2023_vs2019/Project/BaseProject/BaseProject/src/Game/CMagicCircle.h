@@ -25,4 +25,5 @@ public:
 private:
 	CObjectBase* mpOwner;  // このエフェクトの持ち主
 	CModel* mpModel;	   // エフェクトのモデルデータ
+	float mElapsedTime;  // 経過時間
 };

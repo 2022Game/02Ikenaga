@@ -4,7 +4,6 @@
 #include "CColliderSphere.h"
 #include "CModel.h"
 
-class CSlime;
 class CMagicCircle;
 
 /*
@@ -31,11 +30,6 @@ public:
 	/// <param name="other">衝突した相手のコライダー</param>
 	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
 
-	// 1レベルアップ
-	void LevelUp();
-	// レベルの変更
-	void ChangeLevel(int level);
-
 	/// <summary>
 	/// 被ダメージ処理
 	/// </summary>
@@ -46,8 +40,16 @@ public:
 	// 召喚した敵の死亡処理
 	void DeathSummonEnemy(CEnemy* enemy) override;
 
+	// 死亡処理
+	void Death() override;
+
 	// 描画
 	void Render();
+
+	// 1レベルアップ
+	void LevelUp();
+	// レベルの変更
+	void ChangeLevel(int level);
 
 	static float mElapsedTime;  // 経過時間
 
@@ -148,7 +150,8 @@ private:
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	bool mIsGrounded;   // 接地しているかどうか
+	CVector mMoveSpeed;	 // 移動速度
+	bool mIsGrounded;    // 接地しているかどうか
 
 	// 線分コライダー
 	CColliderLine* mpColliderLine;
