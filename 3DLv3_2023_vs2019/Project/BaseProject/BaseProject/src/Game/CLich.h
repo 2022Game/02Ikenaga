@@ -22,6 +22,9 @@ public:
 	// デストラクタ
 	~CLich();
 
+	// HP吸収または回復
+	virtual void DrainHp();
+
 	// 更新処理
 	void Update();
 

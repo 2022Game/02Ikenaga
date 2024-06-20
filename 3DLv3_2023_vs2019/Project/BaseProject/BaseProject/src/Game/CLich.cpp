@@ -177,10 +177,14 @@ CLich::CLich()
 	mpColSphereArmR->SetAttachMtx(armRightMty);
 	mpDamageColArmR->SetAttachMtx(armRightMty);
 
-	mpDrain=new CDrainEffect
+	CVector forward = VectorZ();
+	forward.Y(0.0f);
+	forward.Normalize();
+	CVector DrainPos = Position() + forward * 55.0f + CVector(0.0f, 10.0f, 0.0f);
+	mpDrain = new CDrainEffect
 	(
 		this, nullptr,
-		CVector(0.0f, 0.0f, 0.0f),
+		DrainPos,
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 
 	);
@@ -573,6 +577,21 @@ void CLich::RandomSummon()
 		mpSpawnEnemy->SetSummoner(this);
 	}
 }
+
+// HP‹zŽû‚Ü‚½‚Í‰ñ•œ
+void CLich::DrainHp()
+{
+	if (mCharaStatus.hp < mCharaMaxStatus.hp)
+	{
+		int Heel = 0;
+		Heel = mCharaMaxStatus.hp * 0.25;
+		mCharaStatus.hp += Heel;
+		if (mCharaStatus.hp > mCharaMaxStatus.hp)
+		{
+			mCharaStatus.hp = mCharaMaxStatus.hp;
+		}
+	}
+}
 	
 //XVˆ—
 void CLich::Update()
@@ -634,7 +653,7 @@ void CLich::Update()
 		mpHpGauge->SetWorldPos(gaugePos);
 	}
 
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -651,7 +670,7 @@ void CLich::Update()
 			ChangeState(EState::eSummon);
 			//ChangeState(EState::eAttack2);
 		}
-		else if(mAttackTime >= 300 && mpSpawnEnemy != nullptr)
+		else if(mAttackTime >= 350 && mpSpawnEnemy != nullptr)
 		{
 			bool Attack2 = false;
 			int random = Math::Rand(0, 2);
@@ -696,7 +715,9 @@ void CLich::Update()
 	if (CInput::PushKey('Z'))
 	{
 		ChangeState(EState::eSummon);
-		mpHpGauge->SetWorldPos(gaugePos);
+		int Heel = 0;
+		Heel = mCharaMaxStatus.hp * 0.25;
+		mCharaStatus.hp -= Heel;
 	}
 
 	mIsGrounded = false;

@@ -2,6 +2,7 @@
 #include "CCharaBase.h"
 #include "Easing.h"
 #include "Maths.h"
+#include "CLich.h"
 #include "CPlayer.h"
 
 // ドレインのスケール値の最大値
@@ -86,13 +87,17 @@ void CDrain::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			if (!IsAttackHitObj(chara))
 			{
 				// 与えるダメージを計算
-				int damage = CalcDamage(0.5f, mOwner, chara);
+				int damage = CalcDamage(0.4f, mOwner, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, mOwner);
 
 				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);
+
+				CLich* lich = CLich::Instance();
+				lich->DrainHp();
+
 				Kill();
 			}
 		}
