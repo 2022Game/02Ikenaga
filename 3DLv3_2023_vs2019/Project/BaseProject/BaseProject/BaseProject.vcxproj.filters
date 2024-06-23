@@ -176,6 +176,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Drain">
       <UniqueIdentifier>{3d8c7065-76ff-4e7a-bc61-7a6c5e5bfc24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Heal">
+      <UniqueIdentifier>{68ff742f-d391-4874-9b77-66b61a35b198}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -618,6 +621,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CDrainEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\Drain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHealAura.cpp">
+      <Filter>ソース ファイル\Game\Effect\Heal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1085,6 +1091,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CDrainEffect.h">
       <Filter>ソース ファイル\Game\Effect\Drain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHealAuar.h">
+      <Filter>ソース ファイル\Game\Effect\Heal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

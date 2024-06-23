@@ -785,11 +785,11 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				ChangeState(EState::eAttack3);
+				//ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
-				//ChangeState(EState::eAttack4);
+				ChangeState(EState::eAttack4);
 			}
 			else
 			{

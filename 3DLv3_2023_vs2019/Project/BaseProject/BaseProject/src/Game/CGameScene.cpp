@@ -121,13 +121,14 @@ void CGameScene::Load()
 
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
-	CResourceManager::Load<CModel>("Slash", "Effect\\slash.obj");
+	CResourceManager::Load<CModel>("Slash", "Effect\\Slash\\Slash.obj");
 	CResourceManager::Load<CModel>("Needle", "Effect\\Needle.obj");
 	CResourceManager::Load<CModel>("Coin", "Effect\\Coin.obj");
-	CResourceManager::Load<CModel>("Wave", "Effect\\Wave.obj");
+	CResourceManager::Load<CModel>("Wave", "Effect\\Wave\\Wave.obj");
 	CResourceManager::Load<CModel>("Roar", "Effect\\Roar.obj");
-	CResourceManager::Load<CModel>("Tornado", "Effect\\Tornado.obj");
-	CResourceManager::Load<CModel>("MagicCircle", "Effect\\MagicCircle.obj");
+	CResourceManager::Load<CModel>("Tornado", "Effect\\Tornado\\Tornado.obj");
+	CResourceManager::Load<CModel>("MagicCircle", "Effect\\MagicCircle\\MagicCircle.obj");
+	CResourceManager::Load<CModel>("Aura", "Effect\\Aura\\Aura.obj");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");

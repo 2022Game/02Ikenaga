@@ -12,6 +12,7 @@ class CSword;
 class CShield;
 class CSlash;
 class CShieldRotate;
+class CHealAura;
 
 #include <algorithm>
 
@@ -89,6 +90,7 @@ public:
 	static int mSa;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
 	static bool mPowerUp;       // 攻撃力アップ(ポーション効果)
+	static bool mHeal;
 	static bool mRolling;
 
 private:
@@ -230,7 +232,6 @@ private:
 
 	CVector mMoveSpeed;  // 移動速度
 	bool mIsGrounded;    // 接地しているかどうか
-	bool mHeel;          // 回復(ポーション効果)
 
 	// 経過時間(攻撃力アップ用)
 	float mElapsedPowerUpTime;
@@ -255,11 +256,15 @@ private:
 	CVector current;
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾
+
+	CSlash* mpSlash;
 	// 回転するシールド
 	CShieldRotate* mpShieldRotate;
 	CShieldRotate* mpShieldRotate2;
 	CShieldRotate* mpShieldRotate3;
 	CShieldRotate* mpShieldRotate4;
+
+	CHealAura* mpHealAura;
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;

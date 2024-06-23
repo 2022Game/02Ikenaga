@@ -22,6 +22,7 @@ CShieldRotate::~CShieldRotate()
 {
 }
 
+// ‚¿å‚ğİ’è
 void CShieldRotate::SetOwner(CCharaBase* owner)
 {
 	CWeapon::SetOwner(owner);
@@ -188,7 +189,6 @@ void CShieldRotate::Update()
 	{
 		CTask::SetShow(false);
 	}
-	//Position(Position() + mMoveSpeed);
 }
 
 // •`‰æ

@@ -60,6 +60,7 @@ protected:
 
 	bool mDefenseUp;              // 防御力アップ(ポーション効果)
 	float mElapsedDefenseUpTime;  // 経過時間(防御力アップ用)
+	float mElapsedHealTime;       // 経過時間(回復用)
 };
 
 /// <summary>

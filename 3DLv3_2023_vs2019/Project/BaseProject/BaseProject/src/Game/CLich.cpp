@@ -583,9 +583,9 @@ void CLich::DrainHp()
 {
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		int Heel = 0;
-		Heel = mCharaMaxStatus.hp * 0.25;
-		mCharaStatus.hp += Heel;
+		int Heal = 0;
+		Heal = mCharaMaxStatus.hp * 0.25;
+		mCharaStatus.hp += Heal;
 		if (mCharaStatus.hp > mCharaMaxStatus.hp)
 		{
 			mCharaStatus.hp = mCharaMaxStatus.hp;
@@ -715,9 +715,9 @@ void CLich::Update()
 	if (CInput::PushKey('Z'))
 	{
 		ChangeState(EState::eSummon);
-		int Heel = 0;
-		Heel = mCharaMaxStatus.hp * 0.25;
-		mCharaStatus.hp -= Heel;
+		int Heal = 0;
+		Heal = mCharaMaxStatus.hp * 0.25;
+		mCharaStatus.hp -= Heal;
 	}
 
 	mIsGrounded = false;

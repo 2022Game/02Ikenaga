@@ -15,6 +15,7 @@ public:
 	// デストラクタ
 	~CShieldRotate();
 
+	// 持ち主を設定
 	void SetOwner(CCharaBase* owner) override;
 
 	// 更新

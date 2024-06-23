@@ -11,6 +11,7 @@
 #include "CShieldRotate.h"
 #include "CSlash.h"
 #include "CElectricShockEffect.h"
+#include "CHealAuar.h"
 #include "CSceneManager.h"
 
 // プレイヤーのインスタンス
@@ -20,12 +21,11 @@ int CPlayer::mMaxHp;
 int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
 bool CPlayer::mPowerUp;
+bool CPlayer::mHeal;
 bool CPlayer::mRolling;
 
 // プレイヤーのモデルデータのパス
 #define MODEL_PATH "Character\\Player\\player.x"
-
-#define MODEL_TURTLE "Character\\Turtle\\Turtle.x"
 
 // プレイヤーのアニメーションデータのテーブル
 const CPlayer::AnimData CPlayer::ANIM_DATA[] =
@@ -51,14 +51,11 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 };
 
 #define PLAYER_HEIGHT 1.2f
-
 #define JUMP_SPEED 1.5f
 #define GRAVITY 0.0625f
 #define JUMP_END_Y 1.0f
-#define MOVE_SPEED 0.3f  //移動速度
-
-//デフォルトのスケール値
-#define DEFAULT_SCALE 10.0f
+#define MOVE_SPEED 0.3f      //移動速度
+#define DEFAULT_SCALE 10.0f  //デフォルトのスケール値
 
 bool CPlayer::IsDeath() const
 {
@@ -91,7 +88,7 @@ CPlayer::CPlayer()
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
-	, mHeel(false)
+	//, mHeal(false)
 	, mElapsedPowerUpTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 {
@@ -101,6 +98,7 @@ CPlayer::CPlayer()
 	mHp = 0;
 	mMaxHp = 0;
 	mDefenseUp = false;
+	mHeal = false;
 	mPowerUp = false;
 	mElapsedDefenseUpTime = 0.0f;
 	mRolling = false;
@@ -120,7 +118,7 @@ CPlayer::CPlayer()
 	mpSaGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
-	ChangeLevel(81);
+	ChangeLevel(1);
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -221,18 +219,24 @@ CPlayer::CPlayer()
 	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
 	mpShield->SetOwner(this);
 
-	float dist = 8.0f;
-	mpShieldRotate = new CShieldRotate(0.0f, dist);
+	float ShieldDist = 8.0f;
+	mpShieldRotate = new CShieldRotate(0.0f, ShieldDist);
 	mpShieldRotate->SetOwner(this);
 
-	mpShieldRotate2 = new CShieldRotate(180.0, dist);
+	mpShieldRotate2 = new CShieldRotate(180.0, ShieldDist);
 	mpShieldRotate2->SetOwner(this);
 
-	mpShieldRotate3 = new CShieldRotate(-270.0f, dist);
+	mpShieldRotate3 = new CShieldRotate(-270.0f, ShieldDist);
 	mpShieldRotate3->SetOwner(this);
 
-	mpShieldRotate4 = new CShieldRotate(270.0f, dist);
+	mpShieldRotate4 = new CShieldRotate(270.0f, ShieldDist);
 	mpShieldRotate4->SetOwner(this);
+
+	float HealDist = 0.0f;
+	mpHealAura = new CHealAura(0.0f, HealDist);
+	mpHealAura->SetColor(CColor(0.0f, 1.0f, 0.0f));
+	mpHealAura->SetShow(false);
+	mpHealAura->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
@@ -682,7 +686,7 @@ void CPlayer::UpdatePowerUp()
 	int rand = Math::Rand(0, 100);
 	if (rand <= 40 || mPowerUp == true && mDefenseUp == true)
 	{
-		mHeel = true;
+		mHeal = true;
 	}
 	else if (rand > 40 && rand <=70)
 	{
@@ -725,6 +729,8 @@ void CPlayer::UpdatePowerUpEnd()
 // ヒット
 void CPlayer::UpdateHit()
 {
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(1.0f);
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -1169,14 +1175,16 @@ void CPlayer::Update()
 	}
 
 	// 回復時(ポーション効果)
-	if (mHeel == true)
+	if (mHeal == true)
 	{
 		if (mCharaStatus.hp < mCharaMaxStatus.hp)
 		{
-			int Heel = 0;
-			Heel = mCharaMaxStatus.hp * 0.5f;
-			mCharaStatus.hp += Heel;
-			mHeel = false;
+			int Heal = 0;
+			Heal = mCharaMaxStatus.hp * 0.5f;
+			mCharaStatus.hp += Heal;
+			mpHealAura->StartAura();
+			mHeal = false;
+
 			if (mCharaStatus.hp > mCharaMaxStatus.hp)
 			{
 				mCharaStatus.hp = mCharaMaxStatus.hp;
@@ -1184,7 +1192,7 @@ void CPlayer::Update()
 		}
 		if (mCharaStatus.hp == mCharaMaxStatus.hp || mCharaStatus.hp <= 0)
 		{
-			mHeel = false;
+			mHeal = false;
 		}
 	}
 
@@ -1363,7 +1371,7 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		// ポーション効果(回復)
 		if (other->Tag() == ETag::ePortionGreen)
 		{
-			mHeel = true;
+			mHeal = true;
 		}
 		if (other->Tag() == ETag::ePortionRed)
 		{
