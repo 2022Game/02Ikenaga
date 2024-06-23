@@ -11,7 +11,7 @@
 #include "CShieldRotate.h"
 #include "CSlash.h"
 #include "CElectricShockEffect.h"
-#include "CHealAuar.h"
+#include "CHealCircle.h"
 #include "CSceneManager.h"
 
 // プレイヤーのインスタンス
@@ -233,10 +233,10 @@ CPlayer::CPlayer()
 	mpShieldRotate4->SetOwner(this);
 
 	float HealDist = 0.0f;
-	mpHealAura = new CHealAura(0.0f, HealDist);
-	mpHealAura->SetColor(CColor(0.0f, 1.0f, 0.0f));
-	mpHealAura->SetShow(false);
-	mpHealAura->SetOwner(this);
+	mpHealCircle = new CHealCircle(0.0f, HealDist);
+	mpHealCircle->SetColor(CColor(0.0f, 1.0f, 0.0f));
+	mpHealCircle->SetShow(false);
+	mpHealCircle->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
@@ -1182,7 +1182,7 @@ void CPlayer::Update()
 			int Heal = 0;
 			Heal = mCharaMaxStatus.hp * 0.5f;
 			mCharaStatus.hp += Heal;
-			mpHealAura->StartAura();
+			mpHealCircle->StartCircle();
 			mHeal = false;
 
 			if (mCharaStatus.hp > mCharaMaxStatus.hp)

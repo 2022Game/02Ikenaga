@@ -12,7 +12,7 @@ class CSword;
 class CShield;
 class CSlash;
 class CShieldRotate;
-class CHealAura;
+class CHealCircle;
 
 #include <algorithm>
 
@@ -264,7 +264,7 @@ private:
 	CShieldRotate* mpShieldRotate3;
 	CShieldRotate* mpShieldRotate4;
 
-	CHealAura* mpHealAura;
+	CHealCircle* mpHealCircle;
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;

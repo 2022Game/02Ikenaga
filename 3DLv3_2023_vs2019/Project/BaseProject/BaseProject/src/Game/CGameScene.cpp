@@ -122,13 +122,13 @@ void CGameScene::Load()
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
 	CResourceManager::Load<CModel>("Slash", "Effect\\Slash\\Slash.obj");
-	CResourceManager::Load<CModel>("Needle", "Effect\\Needle.obj");
-	CResourceManager::Load<CModel>("Coin", "Effect\\Coin.obj");
+	CResourceManager::Load<CModel>("Needle", "Effect\\Needle\\Needle.obj");
+	CResourceManager::Load<CModel>("Coin", "Effect\\Coin\\Coin.obj");
 	CResourceManager::Load<CModel>("Wave", "Effect\\Wave\\Wave.obj");
 	CResourceManager::Load<CModel>("Roar", "Effect\\Roar.obj");
 	CResourceManager::Load<CModel>("Tornado", "Effect\\Tornado\\Tornado.obj");
 	CResourceManager::Load<CModel>("MagicCircle", "Effect\\MagicCircle\\MagicCircle.obj");
-	CResourceManager::Load<CModel>("Aura", "Effect\\Aura\\Aura.obj");
+	CResourceManager::Load<CModel>("HealCircle", "Effect\\Circle\\Circle.obj");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
@@ -323,10 +323,10 @@ void CGameScene::Load()
 	//portionred->Position(90.0f, 10.0f, 0.0f);
 	//portionred->Scale(200.0f, 200.0f, 200.0f);
 
-	//// 回復ポーション
-	//CPortionGreen* portiongreen = new CPortionGreen();
-	//portiongreen->Position(-50.0f, 10.0f, 0.0f);
-	//portiongreen->Scale(200.0f, 200.0f, 200.0f);
+	// 回復ポーション
+	CPortionGreen* portiongreen = new CPortionGreen();
+	portiongreen->Position(-50.0f, 10.0f, 0.0f);
+	portiongreen->Scale(200.0f, 200.0f, 200.0f);
 
 	//// 防御力アップポーション
 	//CPortionBlue* portionblue = new CPortionBlue();

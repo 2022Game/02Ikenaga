@@ -622,7 +622,10 @@
     <ClCompile Include="src\Game\CDrainEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\Drain</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CHealAura.cpp">
+    <ClCompile Include="src\Game\CHealCircle.cpp">
+      <Filter>ソース ファイル\Game\Effect\Heal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CStarAura.cpp">
       <Filter>ソース ファイル\Game\Effect\Heal</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1092,7 +1095,10 @@
     <ClInclude Include="src\Game\CDrainEffect.h">
       <Filter>ソース ファイル\Game\Effect\Drain</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CHealAuar.h">
+    <ClInclude Include="src\Game\CHealCircle.h">
+      <Filter>ソース ファイル\Game\Effect\Heal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CStarAura.h">
       <Filter>ソース ファイル\Game\Effect\Heal</Filter>
     </ClInclude>
   </ItemGroup>

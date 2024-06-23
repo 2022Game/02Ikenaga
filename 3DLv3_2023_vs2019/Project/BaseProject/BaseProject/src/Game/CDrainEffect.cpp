@@ -108,14 +108,9 @@ void CDrainEffect::CreateDrain()
 	}
 
 	// 位置を取得
-	CVector pos = GetThrowPos();// + CVector(0.0f, 10.0f, 0.0f);
+	CVector pos = GetThrowPos();
 	// 方向を取得
-	CVector dir = GetThrowDir();// + CVector(0.0f, -1.0f, 0.0f);
-	// 方向をランダムでブラす
-	//dir.X(dir.X() + Math::Rand(-DIR_RAND, DIR_RAND));
-	//dir.Y(dir.Y() + Math::Rand(-DIR_RAND, DIR_RAND));
-	//dir.Z(dir.Z() + Math::Rand(-DIR_RAND, DIR_RAND));
-	//dir.Normalize();
+	CVector dir = GetThrowDir();
 	// 位置、方向、移動速度を設定
 	drain->Setup(pos, dir, 50.0f);
 

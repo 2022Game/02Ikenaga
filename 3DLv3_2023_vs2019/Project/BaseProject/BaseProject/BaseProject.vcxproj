@@ -101,7 +101,7 @@
     <ClCompile Include="src\Game\CGameCamera2.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
-    <ClCompile Include="src\Game\CHealAura.cpp" />
+    <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHomingBall.cpp" />
     <ClCompile Include="src\Game\CHomingBallEffect.cpp" />
     <ClCompile Include="src\Game\CImpact.cpp" />
@@ -140,6 +140,7 @@
     <ClCompile Include="src\Game\CShield.cpp" />
     <ClCompile Include="src\Game\CSlime2.cpp" />
     <ClCompile Include="src\Game\CSlime3.cpp" />
+    <ClCompile Include="src\Game\CStarAura.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
     <ClCompile Include="src\Game\CTornado.cpp" />
@@ -260,7 +261,7 @@
     <ClInclude Include="src\Game\CGameCamera2.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
-    <ClInclude Include="src\Game\CHealAuar.h" />
+    <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHomingBall.h" />
     <ClInclude Include="src\Game\CHomingBallEffect.h" />
     <ClInclude Include="src\Game\CImpact.h" />
@@ -299,6 +300,7 @@
     <ClInclude Include="src\Game\CShield.h" />
     <ClInclude Include="src\Game\CSlime2.h" />
     <ClInclude Include="src\Game\CSlime3.h" />
+    <ClInclude Include="src\Game\CStarAura.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />
     <ClInclude Include="src\Game\CTornado.h" />
