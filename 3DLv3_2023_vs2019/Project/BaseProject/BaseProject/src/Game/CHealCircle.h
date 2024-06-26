@@ -11,18 +11,18 @@ class CHealCircle : public CWeapon
 {
 public:
 	// コンストラク
-	CHealCircle(float angle, float dist);
+	CHealCircle();
 	// デストラクタ
 	~CHealCircle();
-
-	// インスタンスのポインタの取得
-	static CHealCircle* Instance();
 
 	// 持ち主を設定
 	void SetOwner(CCharaBase* owner) override;
 
 	// オーラ開始
 	void StartCircle();
+
+	// 削除
+	void Delete();
 
 	// 更新
 	void Update();
@@ -34,12 +34,8 @@ private:
 	int mCount;
 	// モデルデータ読み込み
 	CModel* mpHealCircle;
-	// インスタンス
-	static CHealCircle* spInstance;
-	// 経過時間
-	float mElapsedHealTime;
 
-	float mAngle;      // 回転角度
-	float mDistance;   // 持ち主からの距離
-	float mBaseScale;  // 持ち主のベーススケール値
+	float mElapsedHealTime;  // 経過時間
+	float mDistance;         // 持ち主からの距離
+	float mBaseScale;        // 持ち主のベーススケール値
 };

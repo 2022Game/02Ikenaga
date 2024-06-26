@@ -4,17 +4,12 @@
 #include "CStarAura.h"
 #include "Maths.h"
 
-CHealCircle* CHealCircle::spInstance = nullptr;
-
 // コンストラク
-CHealCircle::CHealCircle(float angle, float dist)
+CHealCircle::CHealCircle()
 	: mCount(0)
 	, mElapsedHealTime(0.0f)
-	, mAngle(angle)
-	, mDistance(dist)
 	, mBaseScale(1.0f)
 {
-	spInstance = this;
 	mpHealCircle = CResourceManager::Get<CModel>("HealCircle");
 	mpHealCircle->SetupEffectSettings();
 }
@@ -22,12 +17,6 @@ CHealCircle::CHealCircle(float angle, float dist)
 // デストラクタ
 CHealCircle::~CHealCircle()
 {
-}
-
-// インスタンス
-CHealCircle* CHealCircle::Instance()
-{
-	return spInstance;
 }
 
 // 持ち主を設定
@@ -41,6 +30,15 @@ void CHealCircle::SetOwner(CCharaBase* owner)
 void CHealCircle::StartCircle()
 {
 	mCount += 1;
+}
+
+// 削除
+void CHealCircle::Delete()
+{
+	if (mCount >= 0)
+	{
+		Kill();
+	}
 }
 
 // 更新

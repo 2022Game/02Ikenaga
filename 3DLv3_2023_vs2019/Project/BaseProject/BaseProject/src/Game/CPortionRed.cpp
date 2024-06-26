@@ -46,7 +46,7 @@ void CPortionRed::Update()
 {
 	Rotate(0.0f, 2.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
-	mPowerUp = player->mPowerUp;
+	mPowerUp = player->IsPowerUp();
 }
 
 // •`‰æ

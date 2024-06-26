@@ -83,7 +83,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
 
 	// エネミー関連
-	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	//CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
@@ -129,6 +129,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Tornado", "Effect\\Tornado\\Tornado.obj");
 	CResourceManager::Load<CModel>("MagicCircle", "Effect\\MagicCircle\\MagicCircle.obj");
 	CResourceManager::Load<CModel>("HealCircle", "Effect\\Circle\\Circle.obj");
+	CResourceManager::Load<CModel>("BuffCircle", "Effect\\Circle2\\Circle2.obj");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
@@ -318,10 +319,10 @@ void CGameScene::Load()
 	//bossEnemy->Position(-200.0f, 21.0f, 120.0f);
 	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
-	//// 攻撃力アップポーション
-	//CPortionRed* portionred = new CPortionRed();
-	//portionred->Position(90.0f, 10.0f, 0.0f);
-	//portionred->Scale(200.0f, 200.0f, 200.0f);
+	// 攻撃力アップポーション
+	CPortionRed* portionred = new CPortionRed();
+	portionred->Position(90.0f, 10.0f, 0.0f);
+	portionred->Scale(200.0f, 200.0f, 200.0f);
 
 	// 回復ポーション
 	CPortionGreen* portiongreen = new CPortionGreen();

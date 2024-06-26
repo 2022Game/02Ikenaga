@@ -6,7 +6,6 @@
 // コンストラク
 CSword::CSword()
 	: mPowerUp(false)
-	, mElapsedPowerUpTime(0.0f)
 {
 	mpSword = CResourceManager::Get<CModel>("Sword");
 
@@ -36,26 +35,8 @@ CSword::~CSword()
 // 更新
 void CSword::Update()
 {
-	if (mPowerUp == true)
-	{
-		mElapsedPowerUpTime += Time::DeltaTime();
-		if (mElapsedPowerUpTime >= 10)
-		{
-			mElapsedPowerUpTime = 0;
-			mPowerUp = false;
-		}
-	}
-	else
-	{
-		mElapsedPowerUpTime = 0;
-	}
-	CDebugPrint::Print("時間 %f\n", mElapsedPowerUpTime);
-}
-
-// 描画
-void CSword::Render()
-{
-	mpSword->Render(Matrix());
+	CPlayer* player = CPlayer::Instance();
+	mPowerUp = player->IsPowerUp();
 }
 
 // 衝突処理
@@ -129,8 +110,8 @@ void CSword:: AttackEnd()
 	mpAttackCol->SetEnable(false);
 }
 
-// 攻撃力アップ
-void CSword::PowerUp()
+// 描画
+void CSword::Render()
 {
-	mPowerUp = true;
+	mpSword->Render(Matrix());
 }

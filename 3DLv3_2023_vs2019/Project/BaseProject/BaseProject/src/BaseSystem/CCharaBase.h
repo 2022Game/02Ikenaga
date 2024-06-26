@@ -51,6 +51,12 @@ public:
 	// 防御力アップ中の経過時間
 	float GetElapsedDefenseUpTime() const;
 
+	// 攻撃力アップ
+	bool IsPowerUp() const;
+
+	// 攻撃力アップ中の経過時間
+	float GetElapsedPowerUpTime() const;
+
 protected:
 	CharaStatus mCharaMaxStatus;  // 最大ステータス
 	CharaStatus mCharaStatus;     // 現在のステータス
@@ -58,8 +64,10 @@ protected:
 	float mBaseAttackBuffRatio;   // 攻撃力の強化割合 (1.0で等値)
 	float mBaseDefenseBuffRatio;  // 防御力の強化割合 (1.0で等値)
 
-	bool mDefenseUp;              // 防御力アップ(ポーション効果)
+	bool mDefenseUp;              // 防御力アップ
 	float mElapsedDefenseUpTime;  // 経過時間(防御力アップ用)
+	bool mPowerUp;                // 攻撃力アップ
+	float mElapsedPowerUpTime;    // 経過時間(攻撃力アップ用)
 	float mElapsedHealTime;       // 経過時間(回復用)
 };
 

@@ -179,6 +179,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Heal">
       <UniqueIdentifier>{68ff742f-d391-4874-9b77-66b61a35b198}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\BuffCircle">
+      <UniqueIdentifier>{1b86be60-1724-4fe9-bac9-6e5c9491fc97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -627,6 +630,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CStarAura.cpp">
       <Filter>ソース ファイル\Game\Effect\Heal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBuffCircle.cpp">
+      <Filter>ソース ファイル\Game\Effect\BuffCircle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1100,6 +1106,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CStarAura.h">
       <Filter>ソース ファイル\Game\Effect\Heal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBuffCircle.h">
+      <Filter>ソース ファイル\Game\Effect\BuffCircle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

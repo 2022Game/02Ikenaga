@@ -13,6 +13,7 @@ class CShield;
 class CSlash;
 class CShieldRotate;
 class CHealCircle;
+class CBuffCircle;
 
 #include <algorithm>
 
@@ -36,6 +37,9 @@ public:
 	CPlayer();
 	// デストラクタ
 	~CPlayer();
+
+	// 死ぬ
+	void UpdateDei();
 
 	// 1レベルアップ
 	void LevelUp();
@@ -89,7 +93,6 @@ public:
 	static int mMaxHp;
 	static int mSa;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
-	static bool mPowerUp;       // 攻撃力アップ(ポーション効果)
 	static bool mHeal;
 	static bool mRolling;
 
@@ -134,8 +137,6 @@ private:
 	void UpdateGuardHit();
 	// 回避
 	void UpdateRolling();
-	// 死ぬ
-	void UpdateDei();
 	// ジャンプ攻撃
 	void UpdateJumpAttack();
 	// ジャンプ攻撃終了待ち
@@ -233,9 +234,6 @@ private:
 	CVector mMoveSpeed;  // 移動速度
 	bool mIsGrounded;    // 接地しているかどうか
 
-	// 経過時間(攻撃力アップ用)
-	float mElapsedPowerUpTime;
-
 	// 線分コライダー
 	CColliderLine* mpColliderLine;
 	// キャラクターの押し戻しコライダー(頭)
@@ -264,7 +262,8 @@ private:
 	CShieldRotate* mpShieldRotate3;
 	CShieldRotate* mpShieldRotate4;
 
-	CHealCircle* mpHealCircle;
+	CHealCircle* mpHealCircle;  // 回復用のサークル
+	CBuffCircle* mpBuffCircle;
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;

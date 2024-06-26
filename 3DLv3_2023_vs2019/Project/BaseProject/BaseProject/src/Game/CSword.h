@@ -18,8 +18,6 @@ public:
 
 	// 更新
 	void Update();
-	// 描画
-	void Render();
 
 	/// <summary>
 	/// 衝突処理
@@ -36,16 +34,15 @@ public:
 	void AttackStart() override;
 	// 攻撃終了
 	void AttackEnd() override;
-	// 攻撃力アップ
-	void PowerUp();
+
+	// 描画
+	void Render();
 
 private:
 	// モデルデータ読み込み
 	CModel* mpSword;
 	// 攻撃力アップ
 	bool mPowerUp;
-	// 経過時間(攻撃力アップ用)
-	float mElapsedPowerUpTime;
 	// 攻撃判定用のコライダー
 	CColliderLine* mpAttackCol;
 };

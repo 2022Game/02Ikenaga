@@ -12,6 +12,7 @@
 #include "CSlash.h"
 #include "CElectricShockEffect.h"
 #include "CHealCircle.h"
+#include "CBuffCircle.h"
 #include "CSceneManager.h"
 
 // プレイヤーのインスタンス
@@ -20,7 +21,6 @@ int CPlayer::mHp;
 int CPlayer::mMaxHp;
 int CPlayer::mSa;
 int CPlayer::mRecoveryCount;
-bool CPlayer::mPowerUp;
 bool CPlayer::mHeal;
 bool CPlayer::mRolling;
 
@@ -89,7 +89,6 @@ CPlayer::CPlayer()
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
 	//, mHeal(false)
-	, mElapsedPowerUpTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
@@ -101,6 +100,7 @@ CPlayer::CPlayer()
 	mHeal = false;
 	mPowerUp = false;
 	mElapsedDefenseUpTime = 0.0f;
+	mElapsedPowerUpTime = 0.0f;
 	mRolling = false;
 
 	// モデルデータ読み込み
@@ -219,24 +219,34 @@ CPlayer::CPlayer()
 	mpShield->SetAttachMtx(GetFrameMtx("Armature_mixamorig_LeftHand"));
 	mpShield->SetOwner(this);
 
+	// シールドとの距離
 	float ShieldDist = 8.0f;
+	// 回転するシールド
 	mpShieldRotate = new CShieldRotate(0.0f, ShieldDist);
 	mpShieldRotate->SetOwner(this);
 
+	// 回転するシールド2
 	mpShieldRotate2 = new CShieldRotate(180.0, ShieldDist);
 	mpShieldRotate2->SetOwner(this);
 
+	// 回転するシールド3
 	mpShieldRotate3 = new CShieldRotate(-270.0f, ShieldDist);
 	mpShieldRotate3->SetOwner(this);
 
+	// 回転するシールド4
 	mpShieldRotate4 = new CShieldRotate(270.0f, ShieldDist);
 	mpShieldRotate4->SetOwner(this);
 
-	float HealDist = 0.0f;
-	mpHealCircle = new CHealCircle(0.0f, HealDist);
+	// 回復サークル
+	mpHealCircle = new CHealCircle();
 	mpHealCircle->SetColor(CColor(0.0f, 1.0f, 0.0f));
 	mpHealCircle->SetShow(false);
 	mpHealCircle->SetOwner(this);
+
+	mpBuffCircle = new CBuffCircle();
+	mpBuffCircle->SetColor(CColor(1.0f, 0.0f, 0.0f));
+	mpBuffCircle->SetShow(true);
+	mpBuffCircle->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
@@ -801,6 +811,8 @@ void CPlayer::UpdateDei()
 	ChangeAnimation(EAnimType::eDie);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
+	mpHealCircle->Delete();
+
 	if (IsAnimationFinished())
 	{
 		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
@@ -1158,7 +1170,7 @@ void CPlayer::Update()
 		slash->SetOwner(this);
 	}
 
-	// 防御力アップ中(ポーション効果)
+	// 防御力アップ中
 	if (mDefenseUp == true)
 	{
 		mElapsedDefenseUpTime += Time::DeltaTime();
@@ -1174,15 +1186,15 @@ void CPlayer::Update()
 		mElapsedDefenseUpTime = 0;
 	}
 
-	// 回復時(ポーション効果)
+	// 回復時
 	if (mHeal == true)
 	{
+		mpHealCircle->StartCircle();
 		if (mCharaStatus.hp < mCharaMaxStatus.hp)
 		{
 			int Heal = 0;
 			Heal = mCharaMaxStatus.hp * 0.5f;
 			mCharaStatus.hp += Heal;
-			mpHealCircle->StartCircle();
 			mHeal = false;
 
 			if (mCharaStatus.hp > mCharaMaxStatus.hp)
@@ -1196,10 +1208,11 @@ void CPlayer::Update()
 		}
 	}
 
-	// 攻撃力アップ(ポーション効果)
+	// 攻撃力アップ
 	if (mPowerUp == true)
 	{
 		mElapsedPowerUpTime += Time::DeltaTime();
+		mpBuffCircle->StartCircle();
 		if (mElapsedPowerUpTime >= 10)
 		{
 			mElapsedPowerUpTime = 0;
@@ -1315,9 +1328,9 @@ void CPlayer::Update()
 	{
 		ChangeLevel(100);
 	}
-	else if (CInput::PushKey('3'))
+	else if (CInput::PushKey('4'))
 	{
-		mDefenseUp = true;
+		mPowerUp = true;
 	}
 	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
@@ -1331,8 +1344,8 @@ void CPlayer::Update()
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
-	CDebugPrint::Print(" 防御: %d\n", mDefenseUp);
-	CDebugPrint::Print(" 防御時間: %f\n", mElapsedDefenseUpTime);
+	CDebugPrint::Print(" 攻撃: %d\n", mPowerUp);
+	CDebugPrint::Print(" 攻撃時間: %f\n", mElapsedPowerUpTime);
 }
 
 // 衝突処理
@@ -1371,11 +1384,13 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		// ポーション効果(回復)
 		if (other->Tag() == ETag::ePortionGreen)
 		{
-			mHeal = true;
+			if (mCharaStatus.hp < mCharaMaxStatus.hp)
+			{
+				mHeal = true;
+			}
 		}
 		if (other->Tag() == ETag::ePortionRed)
 		{
-			mpSword->PowerUp();
 			mPowerUp = true;
 		}
 	}

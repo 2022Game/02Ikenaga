@@ -7,6 +7,8 @@ CCharaBase::CCharaBase(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseTy
 	, mBaseDefenseBuffRatio(1.0f)
 	, mDefenseUp(false)
 	, mElapsedDefenseUpTime(0.0f)
+	, mPowerUp(false)
+	, mElapsedPowerUpTime(0.0f)
 	, mElapsedHealTime(0.0f)
 {
 	mCharaMaxStatus.Reset();
@@ -57,6 +59,18 @@ bool CCharaBase::IsDefenseUp() const
 float CCharaBase::GetElapsedDefenseUpTime() const
 {
 	return mElapsedDefenseUpTime;
+}
+
+// 攻撃力アップ
+bool CCharaBase::IsPowerUp() const
+{
+	return mPowerUp;
+}
+
+// 攻撃力アップ中の経過時間
+float CCharaBase::GetElapsedPowerUpTime() const
+{
+	return mElapsedPowerUpTime;
 }
 
 //　ダメージ量を算出

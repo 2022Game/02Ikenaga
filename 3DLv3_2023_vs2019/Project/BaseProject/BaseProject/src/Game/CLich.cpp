@@ -40,7 +40,7 @@ const CLich::SpawnData CLich::SPAWN_DATA[] =
 	{ EEnemyType::eChest,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.85f,0.6f,0.0f), 35.0f,          35.0f,      0.25f },
 	{ EEnemyType::eMushroom, 50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.85f,0.6f), 30.0f,          35.0f,      0.25f },
 	{ EEnemyType::eRay,      50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,1.0f,1.0f),  30.0f,          40.0f,      0.25f },
-	{ EEnemyType::eSlime,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,0.0f),  30.0f,          30.0f,      0.25f },
+	//{ EEnemyType::eSlime,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,0.0f),  30.0f,          30.0f,      0.25f },
 	{ EEnemyType::eTurtle,   50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,0.0f,1.0f),  30.0f,          30.0f,      0.25f },
 };
 
@@ -261,7 +261,7 @@ CEnemy* CLich::SpawnEnemy(EEnemyType type) const
 		ret = new CRay();
 		break;
 	case EEnemyType::eSlime:
-		ret = new CSlime();
+		//ret = new CSlime();
 		break;
 	case EEnemyType::eTurtle:
 		ret = new CTurtle();
@@ -665,12 +665,12 @@ void CLich::Update()
 		}
 
 		mAttackTime++;
-		if (mAttackTime >= 200 && mpSpawnEnemy == nullptr)
+		if (mAttackTime >= 250 && mpSpawnEnemy == nullptr)
 		{
 			ChangeState(EState::eSummon);
 			//ChangeState(EState::eAttack2);
 		}
-		else if(mAttackTime >= 350 && mpSpawnEnemy != nullptr)
+		else if(mAttackTime >= 300 && mpSpawnEnemy != nullptr)
 		{
 			bool Attack2 = false;
 			int random = Math::Rand(0, 2);

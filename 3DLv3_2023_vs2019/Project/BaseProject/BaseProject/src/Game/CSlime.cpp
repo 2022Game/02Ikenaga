@@ -640,6 +640,7 @@ void CSlime::Update()
 
 	// HPƒQ[ƒW‚ÉŒ»İ‚ÌHP‚ğİ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
 }
 
 // Õ“Ëˆ—

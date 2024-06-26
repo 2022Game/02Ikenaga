@@ -47,7 +47,6 @@ void CPortionBlue::Update()
 	Rotate(0.0f, 2.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	mDefenseUp = player->IsDefenseUp();
-	CDebugPrint::Print(" –hŒä: %d\n", mDefenseUp);
 }
 
 // •`‰æ
