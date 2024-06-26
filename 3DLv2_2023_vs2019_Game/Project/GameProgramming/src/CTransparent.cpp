@@ -61,7 +61,7 @@ CTransparent::CTransparent(CModel* model, const CVector& position, const CVector
 	mScale = scale;  //拡縮の設定
 	mColliderMesh1.Set(this, &mMatrix, mpModel);
 	//コライダを表示しない
-	mColliderMesh1.SetHidden(false);
+	mColliderMesh1.SetHidden(true);
 	//CTransform::Update();
 }
 
