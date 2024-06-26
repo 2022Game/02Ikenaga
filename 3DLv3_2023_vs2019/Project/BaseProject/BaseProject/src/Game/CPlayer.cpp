@@ -245,7 +245,6 @@ CPlayer::CPlayer()
 
 	mpBuffCircle = new CBuffCircle();
 	mpBuffCircle->SetColor(CColor(1.0f, 0.0f, 0.0f));
-	mpBuffCircle->SetShow(true);
 	mpBuffCircle->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
@@ -1212,9 +1211,16 @@ void CPlayer::Update()
 	if (mPowerUp == true)
 	{
 		mElapsedPowerUpTime += Time::DeltaTime();
+
+		// 攻撃力アップ中なので、バフサークルの表示を開始
 		mpBuffCircle->StartCircle();
+
+		// 攻撃アップ時間が終了した
 		if (mElapsedPowerUpTime >= 10)
 		{
+			// バフサークルの表示も終了
+			mpBuffCircle->EndCircle();
+
 			mElapsedPowerUpTime = 0;
 			mPowerUp = false;
 		}

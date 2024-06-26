@@ -45,13 +45,14 @@ void CHealCircle::Delete()
 void CHealCircle::Update()
 {
 	// 持ち主のベーススケール値から、
-	// 現在の拡大率を求めて、回復オーラにも反映
+	// 現在の拡大率を求めて、回復サークルにも反映
 	float scale = mOwner->Scale().X() / mBaseScale;
 	Scale(scale, scale, scale);
 
-	// 回転する回復オーラの中心座標
+	// 回転する回復サークルの中心座標
 	CVector center = mOwner->Position();
 	CVector pos = CVector::zero;
+	center.Y(0.0f);
 	pos.Y(0.0f);
 	Position(center + pos * scale);
 	Rotate(0.0f, 0.3f, 0.0f);

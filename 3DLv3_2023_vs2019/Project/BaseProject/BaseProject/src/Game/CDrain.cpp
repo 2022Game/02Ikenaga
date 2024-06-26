@@ -151,7 +151,6 @@ void CDrain::Update()
 		else
 		{
 			mMoveDir = CVector::Slerp(mMoveDir, vec.Normalized(), 0.05f);
-			//mMoveDir = vec.Normalized();
 		}
 	}
 

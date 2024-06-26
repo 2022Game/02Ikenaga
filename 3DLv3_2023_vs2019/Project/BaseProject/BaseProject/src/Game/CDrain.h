@@ -8,6 +8,7 @@ class CDrain : public CBillBoardImage
 public:
 	// コンストラクタ
 	CDrain(ETag tag);
+
 	// デストラクタ
 	~CDrain();
 
@@ -21,6 +22,7 @@ public:
 
 	// カラーを設定
 	void SetColor(const CColor& color) override;
+
 	// ブレンドタイプを設定
 	void SetBlendType(EBlend type);
 
