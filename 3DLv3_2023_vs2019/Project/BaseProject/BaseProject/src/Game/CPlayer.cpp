@@ -13,6 +13,7 @@
 #include "CElectricShockEffect.h"
 #include "CHealCircle.h"
 #include "CBuffCircle.h"
+#include "CBuffAura.h"
 #include "CSceneManager.h"
 
 // プレイヤーのインスタンス
@@ -243,9 +244,15 @@ CPlayer::CPlayer()
 	mpHealCircle->SetShow(false);
 	mpHealCircle->SetOwner(this);
 
+	// バフサークル
 	mpBuffCircle = new CBuffCircle();
 	mpBuffCircle->SetColor(CColor(1.0f, 0.0f, 0.0f));
 	mpBuffCircle->SetOwner(this);
+
+	// バフオーラ
+	mpBuffAura = new CBuffAura();
+	mpBuffAura->SetColor(CColor(1.0f, 0.0f, 0.0f));
+	mpBuffAura->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
@@ -1214,12 +1221,14 @@ void CPlayer::Update()
 
 		// 攻撃力アップ中なので、バフサークルの表示を開始
 		mpBuffCircle->StartCircle();
+		mpBuffAura->StartAura();
 
 		// 攻撃アップ時間が終了した
 		if (mElapsedPowerUpTime >= 10)
 		{
 			// バフサークルの表示も終了
 			mpBuffCircle->EndCircle();
+			mpBuffAura->EndAura();
 
 			mElapsedPowerUpTime = 0;
 			mPowerUp = false;

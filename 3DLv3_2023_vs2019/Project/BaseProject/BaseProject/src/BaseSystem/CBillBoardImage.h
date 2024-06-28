@@ -35,7 +35,7 @@ public:
 	void Render() override;
 
 	// エフェクトの発射キャラクターを設定
-	void SetOwner(CCharaBase* owner);
+	virtual void SetOwner(CCharaBase* owner);
 
 	// エフェクトの発射キャラクターを取得
 	CCharaBase* GetOwner() const;

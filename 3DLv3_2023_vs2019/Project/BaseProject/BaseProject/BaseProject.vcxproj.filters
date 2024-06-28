@@ -182,6 +182,9 @@
     <Filter Include="ソース ファイル\Game\Effect\BuffCircle">
       <UniqueIdentifier>{1b86be60-1724-4fe9-bac9-6e5c9491fc97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Aura">
+      <UniqueIdentifier>{f7044498-84d4-4634-8526-4091bece0b52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -633,6 +636,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CBuffCircle.cpp">
       <Filter>ソース ファイル\Game\Effect\BuffCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBuffAura.cpp">
+      <Filter>ソース ファイル\Game\Effect\Aura</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPowerUpAura.cpp">
+      <Filter>ソース ファイル\Game\Effect\Aura</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1109,6 +1118,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBuffCircle.h">
       <Filter>ソース ファイル\Game\Effect\BuffCircle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBuffAura.h">
+      <Filter>ソース ファイル\Game\Effect\Aura</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPowerUpAura.h">
+      <Filter>ソース ファイル\Game\Effect\Aura</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,7 +16,6 @@ CStarAura::CStarAura(const CVector& pos, const CVector& dir, float speed, float 
 	, mElapsedTime(0.0f)
 	, mMovedDist(0.0f)
 	, mKillMoveDist(dist)
-	, mIsStarAura(true)
 {
 	Position(pos);
 	mMoveSpeed = dir.Normalized() * speed;

@@ -68,6 +68,7 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\AvoidanceGauge.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
+    <ClCompile Include="src\Game\CBuffAura.cpp" />
     <ClCompile Include="src\Game\CDrain.cpp" />
     <ClCompile Include="src\Game\CDrainEffect.cpp" />
     <ClCompile Include="src\Game\CElectricShock.cpp" />
@@ -115,6 +116,7 @@
     <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CPortionManager.cpp" />
     <ClCompile Include="src\Game\CBuffCircle.cpp" />
+    <ClCompile Include="src\Game\CPowerUpAura.cpp" />
     <ClCompile Include="src\Game\CRay.cpp" />
     <ClCompile Include="src\Game\CRay2.cpp" />
     <ClCompile Include="src\Game\CRay3.cpp" />
@@ -229,6 +231,7 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
+    <ClInclude Include="src\Game\CBuffAura.h" />
     <ClInclude Include="src\Game\CDrain.h" />
     <ClInclude Include="src\Game\CDrainEffect.h" />
     <ClInclude Include="src\Game\CElectricShock.h" />
@@ -276,6 +279,7 @@
     <ClInclude Include="src\Game\CNightSky.h" />
     <ClInclude Include="src\Game\CPortionManager.h" />
     <ClInclude Include="src\Game\CBuffCircle.h" />
+    <ClInclude Include="src\Game\CPowerUpAura.h" />
     <ClInclude Include="src\Game\CRay.h" />
     <ClInclude Include="src\Game\CRay2.h" />
     <ClInclude Include="src\Game\CRay3.h" />

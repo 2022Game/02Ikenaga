@@ -14,6 +14,8 @@ class CSlash;
 class CShieldRotate;
 class CHealCircle;
 class CBuffCircle;
+class CBuffAura;
+class CPowerUpAura;
 
 #include <algorithm>
 
@@ -262,8 +264,10 @@ private:
 	CShieldRotate* mpShieldRotate3;
 	CShieldRotate* mpShieldRotate4;
 
-	CHealCircle* mpHealCircle;  // 回復用のサークル
-	CBuffCircle* mpBuffCircle;
+	CHealCircle* mpHealCircle;    // 回復用のサークル
+	CBuffCircle* mpBuffCircle;    // バフサークル
+	CBuffAura* mpBuffAura;        // バフオーラ
+	CPowerUpAura* mpPowerUpAura;  //
 
 	CSound* mpSlashSE;
 	bool mIsPlayedSlashSE;
