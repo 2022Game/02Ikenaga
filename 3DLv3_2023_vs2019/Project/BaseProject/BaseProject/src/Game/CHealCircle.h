@@ -30,11 +30,11 @@ public:
 	void Render();
 
 private:
+
 	//カウント
 	int mCount;
 	// モデルデータ読み込み
 	CModel* mpHealCircle;
-
 	float mElapsedHealTime;  // 経過時間
 	float mDistance;         // 持ち主からの距離
 	float mBaseScale;        // 持ち主のベーススケール値

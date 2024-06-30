@@ -14,6 +14,7 @@
 #include "CHealCircle.h"
 #include "CBuffCircle.h"
 #include "CBuffAura.h"
+#include "CPowerUpAura.h"
 #include "CSceneManager.h"
 
 // プレイヤーのインスタンス
@@ -85,11 +86,11 @@ CPlayer::CPlayer()
 	, mHealCount(0)
 	, mStateStep(0)
 	, mStateJumpAttackStep(0)
+	, mBuffStep(0)
 	, mDefaultPos(CVector::zero)
 	, mIsPlayedSlashSE(false)
 	, mIsSpawnedSlashEffect(false)
 	, mIsGrounded(false)
-	//, mHeal(false)
 	, mMoveSpeed(CVector::zero)
 {
 	// インスタンスの設定
@@ -244,7 +245,7 @@ CPlayer::CPlayer()
 	mpHealCircle->SetShow(false);
 	mpHealCircle->SetOwner(this);
 
-	// バフサークル
+	// バフサークル(赤色)
 	mpBuffCircle = new CBuffCircle();
 	mpBuffCircle->SetColor(CColor(1.0f, 0.0f, 0.0f));
 	mpBuffCircle->SetOwner(this);
@@ -1196,6 +1197,7 @@ void CPlayer::Update()
 	if (mHeal == true)
 	{
 		mpHealCircle->StartCircle();
+
 		if (mCharaStatus.hp < mCharaMaxStatus.hp)
 		{
 			int Heal = 0;
@@ -1223,15 +1225,39 @@ void CPlayer::Update()
 		mpBuffCircle->StartCircle();
 		mpBuffAura->StartAura();
 
-		// 攻撃アップ時間が終了した
-		if (mElapsedPowerUpTime >= 10)
+		switch (mBuffStep)
 		{
-			// バフサークルの表示も終了
-			mpBuffCircle->EndCircle();
-			mpBuffAura->EndAura();
+		case 0:
+			if (mElapsedPowerUpTime >= 0.0f)
+			{
+				mpPowerUpAura = new CPowerUpAura
+				(
+					0.0f,
+					10.0f,
+					VectorY(),
+					40.0f,
+					40.0f
+				);
+				mpPowerUpAura->SetOwner(this);
+			}
+			if (mElapsedPowerUpTime >= 0.3f)
+			{
+				mBuffStep++;
+			}
+			break;
+		case 1:
+			// 攻撃アップ時間が終了した
+			if (mElapsedPowerUpTime >= 10)
+			{
+				// バフサークルの表示も終了
+				mpBuffCircle->EndCircle();
+				mpBuffAura->EndAura();
 
-			mElapsedPowerUpTime = 0;
-			mPowerUp = false;
+				mElapsedPowerUpTime = 0;
+				mBuffStep = 0;
+				mPowerUp = false;
+			}
+			break;
 		}
 	}
 	else
@@ -1359,8 +1385,6 @@ void CPlayer::Update()
 	mpHpGauge->SetValue(mCharaStatus.hp);
 	// SAゲージに現在のSAを設定
 	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
-	CDebugPrint::Print(" 攻撃: %d\n", mPowerUp);
-	CDebugPrint::Print(" 攻撃時間: %f\n", mElapsedPowerUpTime);
 }
 
 // 衝突処理

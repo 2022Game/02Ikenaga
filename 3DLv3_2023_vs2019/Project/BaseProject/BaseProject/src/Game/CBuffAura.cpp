@@ -184,9 +184,12 @@ void CBuffAura::Update()
 	CBillBoardImage::Update();
 
 	// 回転するバフオーラの中心座標
+	float scaleXZ = CalcScaleXZ();
 	float scaleY = CalcScaleY();
 	CVector center = mOwner->Position();
 	CVector pos = CVector::zero;
+	//pos.X()* scaleXZ;
 	pos.Y(11.0f * scaleY); 
+	//pos.Z()* scaleXZ;
 	Position(center + pos);
 }

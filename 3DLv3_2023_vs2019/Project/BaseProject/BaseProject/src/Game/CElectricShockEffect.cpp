@@ -102,7 +102,7 @@ CVector CElectricShockEffect::GetThrowDir() const
 }
 
 // 電撃を作成
-void CElectricShockEffect::CreateSlash()
+void CElectricShockEffect::CreateElectricShock()
 {
 	// 電撃を作成
 	CElectricShock* electricShock = new CElectricShock(ETag::eElectricShock);
@@ -136,7 +136,7 @@ void CElectricShockEffect::Update()
 		// 経過時間に応じて、電撃を作成
 		if (mElapsedTime >= THROW_INTERVAL)
 		{
-			CreateSlash();
+			CreateElectricShock();
 			mElapsedTime -= THROW_INTERVAL;
 		}
 		mElapsedTime += Time::DeltaTime();

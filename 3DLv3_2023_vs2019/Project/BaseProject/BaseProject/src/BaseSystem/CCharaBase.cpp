@@ -9,7 +9,6 @@ CCharaBase::CCharaBase(ETag tag, ETaskPriority prio, int sortOrder, ETaskPauseTy
 	, mElapsedDefenseUpTime(0.0f)
 	, mPowerUp(false)
 	, mElapsedPowerUpTime(0.0f)
-	, mElapsedHealTime(0.0f)
 {
 	mCharaMaxStatus.Reset();
 	mCharaStatus.Reset();

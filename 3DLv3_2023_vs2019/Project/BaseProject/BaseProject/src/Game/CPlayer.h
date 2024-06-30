@@ -229,12 +229,13 @@ private:
 	EState mState;
 	int mStateStep;
 	int mStateJumpAttackStep;
+	int mBuffStep;
 
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	CVector mMoveSpeed;  // 移動速度
-	bool mIsGrounded;    // 接地しているかどうか
+	CVector mMoveSpeed;      // 移動速度
+	bool mIsGrounded;        // 接地しているかどうか
 
 	// 線分コライダー
 	CColliderLine* mpColliderLine;
@@ -256,8 +257,8 @@ private:
 	CVector current;
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾
+	CSlash* mpSlash;      // スラッシュ
 
-	CSlash* mpSlash;
 	// 回転するシールド
 	CShieldRotate* mpShieldRotate;
 	CShieldRotate* mpShieldRotate2;
@@ -267,9 +268,9 @@ private:
 	CHealCircle* mpHealCircle;    // 回復用のサークル
 	CBuffCircle* mpBuffCircle;    // バフサークル
 	CBuffAura* mpBuffAura;        // バフオーラ
-	CPowerUpAura* mpPowerUpAura;  //
+	CPowerUpAura* mpPowerUpAura;  // パワーアップオーラ
 
-	CSound* mpSlashSE;
+	CSound* mpSlashSE;            // スラッシュの効果音
 	bool mIsPlayedSlashSE;
 	bool mIsSpawnedSlashEffect;
 };

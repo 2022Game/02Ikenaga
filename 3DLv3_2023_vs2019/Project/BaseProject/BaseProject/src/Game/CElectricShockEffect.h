@@ -33,7 +33,7 @@ public:
 
 private:
 	// “dŒ‚‚ğì¬
-	void CreateSlash();
+	void CreateElectricShock();
 
 	// “dŒ‚‚ÌˆÊ’u‚ğæ“¾
 	CVector GetThrowPos() const;

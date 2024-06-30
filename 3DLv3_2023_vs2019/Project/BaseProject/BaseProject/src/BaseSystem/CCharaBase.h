@@ -68,7 +68,6 @@ protected:
 	float mElapsedDefenseUpTime;  // 経過時間(防御力アップ用)
 	bool mPowerUp;                // 攻撃力アップ
 	float mElapsedPowerUpTime;    // 経過時間(攻撃力アップ用)
-	float mElapsedHealTime;       // 経過時間(回復用)
 };
 
 /// <summary>

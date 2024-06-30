@@ -3,7 +3,6 @@
 #include "CPlayer.h"
 #include "Maths.h"
 #include "Easing.h"
-#include "CPowerUpAura.h"
 
 #define SCALE_TIME   1.0f  // スケール値が最大値になるまでの時間
 #define ANIM_TIME    3.0f  // 終了待ち中のアニメーションの時間
@@ -166,24 +165,6 @@ void CBuffCircle::Update()
 	center.Y(0.0f);
 	pos.Y(0.4f * scale);
 	Position(center + pos);
-
-	if (mState == EState::Start || mState == EState::Wait)
-	{
-		CPowerUpAura* powerUpAura = new CPowerUpAura
-		(
-			center,
-			VectorY(),
-			1.0f,
-			10.0
-
-		);
-		powerUpAura->Scale(5.0f, 200.0f, 5.0f);
-		powerUpAura->SetColor(CColor(1.0f, 1.0f, 1.0f));
-		center.X(center.X() + Math::Rand(-5.0f, 5.0f));
-		center.Y(center.Y() + Math::Rand(0.0f, 0.0f));
-		center.Z(center.Z() + Math::Rand(-5.0f, 5.0f));
-		powerUpAura->Position(center);
-	}
 }
 
 // 描画

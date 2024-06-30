@@ -8,11 +8,12 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="pos">発生位置</param>
-	/// <param name="dir">移動方向</param>
+	/// <param name="angle">角度</param>
+	/// <param name="width">幅</param>
+	/// <param name="dire">移動方向</param>
 	/// <param name="speed">移動速度</param>
 	/// <param name="dist">移動したら消える距離</param>
-	CPowerUpAura(const CVector& pos, const CVector& dir, float speed, float dist);
+	CPowerUpAura(float angle, float width, const CVector& dire, float speed, float dist);
 
 	// デストラクタ
 	~CPowerUpAura();
@@ -32,17 +33,20 @@ public:
 	void EndAura();
 
 	// 更新
-	void Update() override;
+	void Update();
 
 private:
 
-	// 自身のベーススケール値を算出
-	float CalcScale() const;
+	// 攻撃力アップ
+	bool mPowerUp;
+	// 経過時間(攻撃力アップ用)
+	float mElapsedPowerUpTime;
 
+	float mAngle;        // 回転角度
+	float mDistance;     // 持ち主からの距離
 	CVector mMoveDir;	 // 移動する方向ベクトル
 	CVector mMoveSpeed;	 // 移動速度
 	float mKillMoveDist; // 移動したら消える距離
 	float mMovedDist;    // 現在移動した距離
-	float mElapsedTime;  // 経過時間
 	float mBaseScale;    // 持ち主のベーススケール値
 };

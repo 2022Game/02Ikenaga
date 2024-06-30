@@ -4,16 +4,18 @@
 #include "Maths.h"
 
 // コンストラクタ
-CPowerUpAura::CPowerUpAura(const CVector& pos, const CVector& dir, float speed, float dist)
-	: CBillBoardImage("Effect/Ball.png", ETag::eAura, ETaskPauseType::eGame)
+CPowerUpAura::CPowerUpAura(float angle, float width, const CVector& dire, float speed, float dist)
+	: CBillBoardImage("Effect/Buff.png", ETag::eAura, ETaskPauseType::eGame)
+	, mPowerUp(false)
+	, mElapsedPowerUpTime(0.0f)
+	, mAngle(angle)
+	, mDistance(width)
 	, mMoveDir(CVector::zero)
 	, mMovedDist(0.0f)
 	, mKillMoveDist(dist)
-	, mElapsedTime(0.0f)
 	, mBaseScale(1.0f)
 {
-	Position(pos);
-	mMoveSpeed = dir.Normalized() * speed;
+	mMoveSpeed = dire.Normalized() * speed;
 }
 
 // デストラクタ
@@ -47,42 +49,64 @@ void CPowerUpAura::SetBlendType(EBlend type)
 // バフオーラ開始
 void CPowerUpAura::StartAura()
 {
-	
 }
 
 // バフオーラ終了
 void CPowerUpAura::EndAura()
 {
-	
-}
-
-// 自身のベーススケール値を算出
-float CPowerUpAura::CalcScale() const
-{
-	return mOwner->Scale().X() / mBaseScale;
 }
 
 // 更新
 void CPowerUpAura::Update()
 {
+	mPowerUp = mOwner->IsPowerUp();
+	mElapsedPowerUpTime = mOwner->GetElapsedPowerUpTime();
+
 	// 基底クラスの更新処理
 	CBillBoardImage::Update();
 
-	// 移動ベクトルを求める
-	CVector move = mMoveSpeed * Time::DeltaTime();
-
-	float moveDist = move.Length();
-	if (mMovedDist + moveDist >= mKillMoveDist)
+	if (mPowerUp == true)
 	{
-		moveDist = mKillMoveDist - mMovedDist;
-		move = move.Normalized() * moveDist;
+
+		// 持ち主のベーススケール値から、
+		// 現在の拡大率を求めて、オーラにも反映
+		float scale = mOwner->Scale().X() / mBaseScale;
+		float size = 7.0f;
+		Scale(scale + size, scale + size, scale + size);
+
+		// 回転するオーラの中心座標
+		CVector center = mOwner->Position();
+		// 中心座標から現在の回転で座標を求める(円運動)
+		CVector pos = CVector::zero;
+		center.X(center.X() + Math::Rand(-20.0f, 20.0f));
+		center.Y(center.Y() + Math::Rand(5.0f, 5.0f));
+		center.Z(center.Z() + Math::Rand(-20.0f, 20.0f));
+		pos.Y(mMovedDist);
+		Position(center + pos * scale);
+
+		// 移動ベクトルを求める
+		CVector move = mMoveSpeed * Time::DeltaTime();
+
+		float moveDist = move.Length();
+		if (mMovedDist + moveDist >= mKillMoveDist)
+		{
+			moveDist = mKillMoveDist - mMovedDist;
+			move = move.Normalized() * moveDist;
+		}
+
+		if (mMovedDist < mKillMoveDist)
+		{
+			Position(Position() + move);
+		}
+
+		mMovedDist += moveDist;
+		if (mMovedDist >= mKillMoveDist)
+		{
+			Kill();
+		}
 	}
-	move.Y(0.1f);
-	Position(Position() + move);
-
-	mMovedDist += moveDist;
-	if (mMovedDist >= mKillMoveDist)
+	else
 	{
-		Kill();
+		SetShow(false);
 	}
 }

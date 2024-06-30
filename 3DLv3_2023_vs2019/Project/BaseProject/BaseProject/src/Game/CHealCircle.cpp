@@ -77,6 +77,7 @@ void CHealCircle::Update()
 			center.Z(center.Z() + Math::Rand(-40.0f, 40.0f));
 			star->Position(center);
 		}
+
 		if (mElapsedHealTime >= 1.5f)
 		{
 			CTask::SetShow(false);
