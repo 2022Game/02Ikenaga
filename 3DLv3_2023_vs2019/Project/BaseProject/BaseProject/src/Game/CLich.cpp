@@ -14,6 +14,7 @@
 #include "CSlime.h"
 #include "CTurtle.h"
 #include "CDrainEffect.h"
+#include "CShieldRotate.h"
 #include "CInput.h"
 
 // リッチのインスタンス
@@ -21,7 +22,7 @@ CLich* CLich::spInstance = nullptr;
 
 float CLich::mElapsedTime;
 
-#define ENEMY_HEIGHT  -40.0f  // 縦の長さ
+#define ENEMY_HEIGHT   -4.1f  // 縦の長さ
 #define MOVE_SPEED      0.3f  // 移動速度
 #define WALK_RANGE    300.0f  // 追跡する範囲
 #define STOP_RANGE     50.0f  // 追跡を辞める範囲
@@ -107,7 +108,7 @@ CLich::CLich()
 		this, ELayer::eEnemy,
 		CVector(0.0f, 1.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f),
-		10.0f, false, 20.0f
+		13.0f, false, 20.0f
 	);
 	mpColCapsuleBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy });
 	mpColCapsuleBody->Position(0.0f, -5.5f, -1.0f);
@@ -136,7 +137,7 @@ CLich::CLich()
 		this, ELayer::eDamageCol,
 		CVector(0.0f, 1.0f, 0.0f),
 		CVector(0.0f, 0.0f, 0.0f),
-		10.0f, false
+		13.0f, false
 	);
 	mpDamageColBody->SetCollisionLayers({ ELayer::eAttackCol });
 	mpDamageColBody->SetCollisionTags({ ETag::eWeapon });
@@ -180,7 +181,8 @@ CLich::CLich()
 	CVector forward = VectorZ();
 	forward.Y(0.0f);
 	forward.Normalize();
-	CVector DrainPos = Position() + forward * 55.0f + CVector(0.0f, 10.0f, 0.0f);
+	CVector DrainPos = Position() + forward * 55.0f + CVector(0.0f, 15.0f, 0.0f);
+	// ドレイン
 	mpDrain = new CDrainEffect
 	(
 		this, nullptr,
@@ -188,6 +190,24 @@ CLich::CLich()
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 
 	);
+
+	// シールドとの距離
+	float ShieldDist = 10.0f;
+	// 回転するシールド
+	mpShieldRotate = new CShieldRotate(0.0f, ShieldDist);
+	mpShieldRotate->SetOwner(this);
+
+	// 回転するシールド2
+	mpShieldRotate2 = new CShieldRotate(180.0, ShieldDist);
+	mpShieldRotate2->SetOwner(this);
+
+	// 回転するシールド3
+	mpShieldRotate3 = new CShieldRotate(-270.0f, ShieldDist);
+	mpShieldRotate3->SetOwner(this);
+
+	// 回転するシールド4
+	mpShieldRotate4 = new CShieldRotate(270.0f, ShieldDist);
+	mpShieldRotate4->SetOwner(this);
 }
 
 // デストラクタ
@@ -644,7 +664,7 @@ void CLich::Update()
 	}
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+	CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
@@ -699,6 +719,15 @@ void CLich::Update()
 		}
 	}
 
+	if (mpSpawnEnemy != nullptr)
+	{
+		mDefenseUp = true;
+	}
+	else
+	{
+		mDefenseUp = false;
+	}
+
 	// キャラクターの更新
 	CXCharacter::Update();
 
@@ -724,7 +753,7 @@ void CLich::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print("HP %d\n", mCharaStatus.hp);
+	CDebugPrint::Print("UP %d\n", mDefenseUp);
 }
 
 // 衝突処理
@@ -802,7 +831,6 @@ void CLich::Death()
 // 防御力の強化割合を取得
 float CLich::GetDefBuff(const CVector& attackDir)const
 {
-	// 防御状態であれば、防御2倍
 	if (mpSpawnEnemy !=nullptr ) return 20.0f;
 
 	// 通常時の防御の割合

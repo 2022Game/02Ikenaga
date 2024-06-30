@@ -6,6 +6,7 @@
 
 class CMagicCircle;
 class CDrainEffect;
+class CShieldRotate;
 
 /*
  リッチクラス
@@ -176,8 +177,13 @@ private:
 	CColliderCapsule* mpDamageColBody;  // 体
 	CColliderSphere* mpDamageColArmL;   // 左腕
 	CColliderSphere* mpDamageColArmR;   // 右腕
-
 	CTransform* mpRideObject;
+
+	// 回転するシールド
+	CShieldRotate* mpShieldRotate;
+	CShieldRotate* mpShieldRotate2;
+	CShieldRotate* mpShieldRotate3;
+	CShieldRotate* mpShieldRotate4;
 
 	CMagicCircle* mpMagicCircle;  // 魔法陣
 	CEnemy* mpSpawnEnemy;         // 自身が召喚した敵のポインタ

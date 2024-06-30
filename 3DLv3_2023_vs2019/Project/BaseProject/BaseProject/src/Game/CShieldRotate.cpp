@@ -188,6 +188,7 @@ void CShieldRotate::Update()
 	else
 	{
 		CTask::SetShow(false);
+		mStateStep = 0;
 	}
 }
 

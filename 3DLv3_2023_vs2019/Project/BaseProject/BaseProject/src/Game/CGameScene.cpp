@@ -42,7 +42,7 @@
 #include "CInput.h"
 #include "CGameMenu.h"
 #include "CBGMManager.h"
-//#include "CLineEffect.h"
+#include "CLineEffect.h"
 
 // コンストラクタ
 CGameScene::CGameScene()
@@ -130,6 +130,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("MagicCircle", "Effect\\MagicCircle\\MagicCircle.obj");
 	CResourceManager::Load<CModel>("HealCircle", "Effect\\Circle\\Circle.obj");
 	CResourceManager::Load<CModel>("BuffCircle", "Effect\\Circle2\\Circle2.obj");
+	CResourceManager::Load<CTexture>("Current", "Effect\\Current\\lightning_bolt.png");
 
 	// BGM関連
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
@@ -309,10 +310,10 @@ void CGameScene::Load()
 	//enemy27->Position(370.0f, 0.0f, 20.0f);
 	//enemy27->Scale(15.0f, 15.0f, 15.0f);
 
-	CLich* enemy8 = new CLich();
-	enemy8->Position(50.0f, 8.0f, 50.0f);
-	//enemy8->Rotate(0.0f,90.0f,-70.0f);
-	enemy8->Scale(0.2f, 0.2f, 0.2f);
+	CLich* enemy28 = new CLich();
+	enemy28->Position(50.0f, 3.0f, 50.0f);
+	//enemy28->Rotate(0.0f,90.0f,-70.0f);
+	enemy28->Scale(2.5f, 2.5f, 2.5f);
 
 	//// ドラゴン
 	//CDragon* bossEnemy = new CDragon();

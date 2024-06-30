@@ -32,6 +32,7 @@ void CEnemy::SlimeDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
 	CPortionManager::RandomPortion(
 		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
@@ -45,6 +46,10 @@ void CEnemy::SlimeBigDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 小さいマッシュルームの死亡処理
@@ -54,6 +59,10 @@ void CEnemy::MushroomDeath()
 	CExpManeger::MushroomSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -65,6 +74,10 @@ void CEnemy::MushroomBigDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 小さい亀の死亡処理
@@ -74,6 +87,10 @@ void CEnemy::TurtleDeath()
 	CExpManeger::TurtleSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -85,6 +102,10 @@ void CEnemy::TurtleBigDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 小さいエイの死亡処理
@@ -94,6 +115,10 @@ void CEnemy::RayDeath()
 	CExpManeger::RaySpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -105,6 +130,10 @@ void CEnemy::RayBigDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 小さい蜂の死亡処理
@@ -114,6 +143,10 @@ void CEnemy::BeeDeath()
 	CExpManeger::BeeSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -125,6 +158,10 @@ void CEnemy::BeeBigDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 小さいサボテンの死亡処理
@@ -134,6 +171,10 @@ void CEnemy::CactusDeath()
 	CExpManeger::CactusSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -145,6 +186,10 @@ void CEnemy::CactusBigDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 小さいチェストモンスターの死亡処理
@@ -155,6 +200,10 @@ void CEnemy::ChestDeath()
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 大きいチェストモンスターの死亡処理
@@ -164,6 +213,10 @@ void CEnemy::ChestBigDeath()
 	CExpManeger::ChestBigSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -178,6 +231,10 @@ void CEnemy::BeholderDeath()
 	CPortionManager::RandomPortion(
 		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
+	);
 }
 
 // 大きい球体モンスターの死亡処理
@@ -187,6 +244,10 @@ void CEnemy::BeholderBigDeath()
 	CExpManeger::BeholderBigSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
@@ -210,6 +271,10 @@ void CEnemy::BoxerBigDeath()
 	CExpManeger::BoxerBigSpawnExp(
 		mCharaStatus.exp,
 		Position() + CVector(0.0f, 2.0f, 0.0f)
+	);
+
+	CPortionManager::RandomPortion(
+		Position() + CVector(0.0f, 8.0f, 0.0f)
 	);
 }
 
