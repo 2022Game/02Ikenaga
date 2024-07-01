@@ -19,8 +19,45 @@ public:
 
 	// コンストラクタ
 	CMushroom();
+
 	// デストラクタ
 	~CMushroom();
+
+	// 更新処理
+	void Update();
+
+	/// 衝突処理
+	/// </summary>
+	/// <param name="self">衝突した自身のコライダー</param>
+	/// <param name="other">衝突した相手のコライダー</param>
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	// 攻撃開始
+	void AttackStart() override;
+	// 攻撃終了
+	void AttackEnd() override;
+
+	// 1レベルアップ
+	void LevelUp();
+	// レベルの変更
+	void ChangeLevel(int level);
+
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	//ダメージを与えたオブジェクト
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
+
+	// 死亡処理
+	void Death() override;
+
+	static int mHp;
+
+	// 描画
+	void Render();
+
+private:
 
 	// 戦う前の待機状態
 	void UpdateIdle();
@@ -47,42 +84,8 @@ public:
 	// 移動
 	void UpdateRun();
 
-	// 更新処理
-	void Update();
-
-	/// 衝突処理
-	/// </summary>
-	/// <param name="self">衝突した自身のコライダー</param>
-	/// <param name="other">衝突した相手のコライダー</param>
-	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-	// 攻撃開始
-	void AttackStart() override;
-	// 攻撃終了
-	void AttackEnd() override;
-
-	// 描画
-	void Render();
-
-	// 1レベルアップ
-	void LevelUp();
-	// レベルの変更
-	void ChangeLevel(int level);
-
-	/// <summary>
-	/// 被ダメージ処理
-	/// </summary>
-	/// <param name="damage">受けるダメージ</param>
-	//ダメージを与えたオブジェクト
-	virtual void TakeDamage(int damage, CObjectBase* causedObj);
-
-	// 死亡処理
-	void Death() override;
-
-	static int mHp;
-
-private:
 	int mAttackTime;   // 攻撃時間の間隔
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -123,21 +126,20 @@ private:
 	// マッシュルームの状態
 	enum class EState
 	{
-		eIdle,		// 戦う前の待機
-		eIdle2,		// 戦う前の待機2
-		eIdle3,     // 待機状態3
-		eAttack,	// 攻撃
-		eAttack2,	// 攻撃2
-		eAttack3,	// 攻撃3
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eDizzy,     // めまい(混乱)
-		eRun,       // 移動
+		eIdle,		  // 戦う前の待機
+		eIdle2,		  // 戦う前の待機2
+		eIdle3,       // 待機状態3
+		eAttack,	  // 攻撃
+		eAttack2,	  // 攻撃2
+		eAttack3,	  // 攻撃3
+		eAttackWait,  // 攻撃終了待ち
+		eHit,         // ヒット
+		eDie,         // 死ぬ時
+		eDizzy,       // めまい(混乱)
+		eRun,         // 移動
 	};
-	EState mState;	// マッシュルームの状態
-	int mStateAttack2Step;  // State内の攻撃2でのステップ処理
-	int mStateAttack3Step;  // State内の攻撃3でのステップ処理
+	EState mState;	  // マッシュルームの状態
+	int mStateStep;   // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -145,17 +147,21 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;           // キャラクターの線分コライダー
+	 // キャラクターの線分コライダー
+	CColliderLine* mpColliderLine;
 
-	CColliderSphere* mpColliderSphereHead;   // キャラクターの押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;   // キャラクターの押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereRoot;   // キャラクターの押し戻しコライダー(根)
+	// キャラクターの押し戻しコライダー
+	CColliderSphere* mpColliderSphereHead;   // 頭
+	CColliderSphere* mpColliderSphereBody;   // 体
+	CColliderSphere* mpColliderSphereRoot;   // 根
 
-	CColliderCapsule* mpDamageColBody;       // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColUmbrella;    // ダメージを受けるコライダー(かさ)
-	CColliderSphere* mpDamageColRoot;        // ダメージを受けるコライダー(根)
+	// ダメージを受けるコライダー
+	CColliderCapsule* mpDamageColBody;       // 体
+	CColliderSphere* mpDamageColUmbrella;    // かさ
+	CColliderSphere* mpDamageColRoot;        // 根
 
-	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackColRoot;        // ダメージを与えるコライダー(根)
+	// ダメージを与えるコライダー
+	CColliderSphere* mpAttackColHead;        // 頭
+	CColliderSphere* mpAttackColRoot;        // 根
 	CTransform* mpRideObject;
 };

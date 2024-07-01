@@ -5,6 +5,7 @@
 
 /*
  回転するシールドクラス
+ 持ち主大きさになる
  武器クラス継承
 */
 class CShieldRotate : public CWeapon

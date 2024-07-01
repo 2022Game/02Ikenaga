@@ -2,19 +2,18 @@
 #include "CXCharacter.h"
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
-#include "CRideableObject.h"
-#include <algorithm>
 #include "CEnemy.h"
 #include "CSound.h"
 
 /*
- レッドスライム(エネミー)のクラス
+ レッドスライムのクラス
  プレイヤーの推定レベル(1～5)
  エネミークラスを継承
 */
 class CSlime : public CEnemy
 {
 public:
+
 	bool IsDeath() const;
 	//インスタンスのポインタの取得
 	static CSlime* Instance();
@@ -23,31 +22,6 @@ public:
 	CSlime();
 	// デストラクタ
 	~CSlime();
-
-	// 待機状態
-	void UpdateIdle();
-	// 待機2状態
-	void UpdateIdle2();
-	// プレイヤーの攻撃がヒットした時の待機状態
-	void UpdateIdle3();
-	// 待機2の終了待ち
-	void UpdateIdleWait();
-
-	// 攻撃
-	void UpdateAttack();
-	// 攻撃2
-	void UpdateAttack2();
-	// 攻撃終了待ち
-	void UpdateAttackWait();
-	
-	//ヒット
-	void UpdateHit();
-	// 死ぬ時
-	void UpdateDie();
-	// めまい(混乱)
-	void UpdateDizzy();
-	// 移動
-	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -62,9 +36,6 @@ public:
 	void AttackStart() override;
 	// 攻撃終了
 	void AttackEnd() override;
-
-	// 描画
-	void Render();
 
 	// 1レベルアップ
 	void LevelUp();
@@ -83,7 +54,36 @@ public:
 
 	static int mHp;
 
+	// 描画
+	void Render();
+
 private:
+
+	// 待機状態
+	void UpdateIdle();
+	// 待機2状態
+	void UpdateIdle2();
+	// プレイヤーの攻撃がヒットした時の待機状態
+	void UpdateIdle3();
+	// 待機2の終了待ち
+	void UpdateIdleWait();
+
+	// 攻撃
+	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
+	// 攻撃終了待ち
+	void UpdateAttackWait();
+
+	//ヒット
+	void UpdateHit();
+	// 死ぬ時
+	void UpdateDie();
+	// めまい(混乱)
+	void UpdateDizzy();
+	// 移動
+	void UpdateRun();
+
 	int mAttackTime;   // 攻撃時間の間隔
 
 	// アニメーションの種類
@@ -102,15 +102,13 @@ private:
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
 		eRun,		// 移動
-		eLeftWalk,  // 右に歩行
-		eRightWalk, // 左に歩行
 
 		Num
 	};
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// レッドスライム(エネミー)のインスタンス
+	// レッドスライムのインスタンス
 	static CSlime* spInstance;
 
 	// アニメーションデータ
@@ -121,10 +119,11 @@ private:
 		float frameLength;	// アニメーションのフレーム数
 		float animSpeed;    // アニメーションの再生速度
 	};
+	
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// レッドスライム(エネミー)の状態
+	// レッドスライムの状態
 	enum class EState
 	{
 		eIdle,		// 待機
@@ -139,12 +138,8 @@ private:
 		eDizzy,     // めまい(混乱)
 		eRun,       // 移動
 	};
-	EState mState;	// レッドスライム(エネミー)の状態
-	int mStateAttackStep;  // State内の攻撃でのステップ処理
-	int mStateAttack2Step;
-	int mStateDizzyStep;
-	int mStateHitStep;
-	int mStateDieStep;
+	EState mState;	// レッドスライムの状態
+	int mStateStep; // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -158,6 +153,7 @@ private:
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
 
+	// サウンド関連
 	CSound* mpSlimeRunSE;     // 走るの音
 	CSound* mpSlimeAttackSE;  // 攻撃の音
 	CSound* mpSlimeDizzySE;   // 混乱の音

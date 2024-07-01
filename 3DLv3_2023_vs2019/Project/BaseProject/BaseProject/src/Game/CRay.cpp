@@ -2,7 +2,6 @@
 #include "CPlayer.h"
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
-#include "CInput.h"
 #include "CWave.h"
 #include "Maths.h"
 
@@ -11,10 +10,12 @@ CRay* CRay::spInstance = nullptr;
 
 #define ENEMY_HEIGHT    0.5f  // 線分コライダー
 #define WITHIN_RANGE   40.0f  // 範囲内
-#define MOVE_SPEED      0.1f  // 移動速度
+#define MOVE_SPEED      0.4f  // 移動速度
+#define MOVE_SPEED_Y 0.027f   // Yのスピード
 #define GRAVITY        0.06f  // 重力
 #define WALK_RANGE    100.0f  // 追跡する範囲
 #define STOP_RANGE     28.0f  // 追跡を辞める範囲
+#define STOP_RANGE_Y  20.0f   // 追跡を辞める高さ
 #define ROTATE_RANGE  250.0f  // 回転する範囲
 #define THROW_INTERVAL 0.07f  // 波動の発射間隔時間
 
@@ -22,14 +23,11 @@ CRay* CRay::spInstance = nullptr;
 const CRay::AnimData CRay::ANIM_DATA[] =
 {
 	{ "",										        true,	0.0f,	 0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	 0.5f},	 // 待機 21.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	false,	17.0f,	 0.4f},  // 攻撃 17.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	false,	13.0f,	0.25f},	 // ヒット 13.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    false,	20.0f,	0.15f},	 // 死ぬ 20.0f
-	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	 0.5f},	 // 移動 21.0f
-	//{ "Character\\Enemy\\Ray\\animation\\RayMoveFWD.x",	true,	42.0f	 },	    // 移動2 21.0f
-	//{ "Character\\Enemy\\Ray\\animation\\RayMoveLFT.x",	true,	42.0f	 },	    // 左移動 21.0f
-	//{ "Character\\Enemy\\Ray\\animation\\RayMoveRGT.x",	true,	42.0f	 },	    // 右移動 21.0f
+	{ "Character\\Enemy\\Ray\\animation\\RayIdle.x",	true,	21.0f,	 0.5f},	 // 待機
+	{ "Character\\Enemy\\Ray\\animation\\RayAttack.x",	false,	17.0f,	 0.4f},  // 攻撃
+	{ "Character\\Enemy\\Ray\\animation\\RayGetHit.x",	false,	13.0f,	0.25f},	 // ヒット
+	{ "Character\\Enemy\\Ray\\animation\\RayDie.x",	    false,	20.0f,	0.15f},	 // 死ぬ
+	{ "Character\\Enemy\\Ray\\animation\\RayMoveBWD.x",	true,	21.0f,	 0.5f},	 // 移動
 };
 
 // コンストラクタ
@@ -249,13 +247,25 @@ void CRay::UpdateIdle2()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE && player->Position().Y() < 1.0f)
+	if (GetAnimationFrame() >= 10.0f && vectorPos > STOP_RANGE && vectorPos < WALK_RANGE && player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
 	}
 	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
 	{
 		ChangeState(EState::eIdle2);
+	}
+	else if (vectorPos > WALK_RANGE)
+	{
+		ChangeState(EState::eIdle2);
+		if (vectorPos <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
 	}
 }
 
@@ -376,6 +386,10 @@ void CRay::UpdateRun()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
+	if (vectorPos <= 33.0f && player->Position().Y() >= 1.0f)
+	{
+		ChangeState(EState::eIdle2);
+	}
 	// 追跡が止まった時、待機モーションへ
 	else if (vectorPos < STOP_RANGE || vectorPos >= WALK_RANGE)
 	{
@@ -388,12 +402,8 @@ void CRay::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-
-	if (mState != EState::eRun)
-	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-	}
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -465,32 +475,36 @@ void CRay::Update()
 		}
 	}
 
-	if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE)
+	if (mState == EState::eRun)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
+		if (vectorPos > STOP_RANGE && vectorPos < WALK_RANGE)
+		{
+			Position(Position() + mMoveSpeed);
+		}
 	}
 
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	if (mState == EState::eRun)
 	{
 		mFlyingTime++;
-		if (mFlyingTime < 100 && mFlyingTime >= 10)
+		if (mFlyingTime < 200 && mFlyingTime > 0)
 		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + 0.04f);
-		}
-		else if (mFlyingTime > 100)
-		{
-			Position(Position().X(), Position().Y() - 0.5f, Position().Z());
+			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
 		}
 	}
 
-	if (Position().Y() <= -0.4f)
+	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
 	{
-		mFlyingTime = 0;
+		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
 	if (mState == EState::eHit || mState ==EState::eDie)
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
+	}
+
+	if (Position().Y() <= 0.0f)
+	{
+		mFlyingTime = 0;
 	}
 
 	// キャラクターの更新

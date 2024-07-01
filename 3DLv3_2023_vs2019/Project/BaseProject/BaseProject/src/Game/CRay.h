@@ -18,26 +18,9 @@ public:
 
 	// コンストラクタ
 	CRay();
+
 	// デストラクタ
 	~CRay();
-
-	// 待機状態
-	void UpdateIdle();
-	// 待機状態2
-	void UpdateIdle2();
-
-	// 攻撃
-	void UpdateAttack();
-	// 攻撃終了待ち
-	void UpdateAttackWait();
-
-	//ヒット
-	void UpdateHit();
-	// 死ぬ時
-	void UpdateDie();
-
-	// 移動
-	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -72,19 +55,40 @@ public:
 	void Death() override;
 
 private:
-	int mAttackTime;   // 攻撃時間の間隔
+
+	// 待機状態
+	void UpdateIdle();
+	// 待機状態2
+	void UpdateIdle2();
+
+	// 攻撃
+	void UpdateAttack();
+	// 攻撃終了待ち
+	void UpdateAttackWait();
+
+	//ヒット
+	void UpdateHit();
+
+	// 死ぬ時
+	void UpdateDie();
+
+	// 移動
+	void UpdateRun();
+
+	int mAttackTime;   // 次の攻撃時間
 	int mFlyingTime;   // 飛行時間
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
 		None = -1,
 
-		eTPose,		// Tポーズ
-		eIdle,		// 待機
-		eAttack,	// 攻撃
-		eHit,       // ヒット
-		eDie,       // 死ぬ
-		eRun,		// 移動
+		eTPose,	  // Tポーズ
+		eIdle,	  // 待機
+		eAttack,  // 攻撃
+		eHit,     // ヒット
+		eDie,     // 死ぬ
+		eRun,	  // 移動
 
 		Num
 	};
@@ -111,15 +115,15 @@ private:
 	// エイの状態
 	enum class EState
 	{
-		eIdle,		// 待機
-		eIdle2,		// 待機2
-		eAttack,	// 攻撃
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eRun,		// 移動
+		eIdle,		  // 待機
+		eIdle2,		  // 待機2
+		eAttack,	  // 攻撃
+		eAttackWait,  // 攻撃終了待ち
+		eHit,         // ヒット
+		eDie,         // 死ぬ時
+		eRun,		  // 移動
 	};
-	EState mState;	// エイの状態
+	EState mState;	  // エイの状態
 
 	int mStateAttackStep;  // State内の攻撃でのステップ処理
 	int mStateWave;        // State内の波動のステップ処理

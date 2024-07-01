@@ -8,13 +8,13 @@
 // サボテンのインスタンス
 CCactus* CCactus::spInstance = nullptr;
 
-#define ENEMY_HEIGHT  0.3f     // 線分コライダー
-#define WITHIN_RANGE  40.0f    // 範囲内
-#define MOVE_SPEED    0.6f    // 移動速度
-#define GRAVITY       0.0625f  // 重力
-#define WALK_RANGE    100.0f   // 追跡する範囲
-#define STOP_RANGE    24.0f    // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f   // 回転する範囲
+#define ENEMY_HEIGHT    0.3f  // 線分コライダー
+#define WITHIN_RANGE   40.0f  // 範囲内
+#define MOVE_SPEED      0.6f  // 移動速度
+#define GRAVITY      0.0625f  // 重力
+#define WALK_RANGE    100.0f  // 追跡する範囲
+#define STOP_RANGE     24.0f  // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f  // 回転する範囲
 
 // サボテンのアニメーションデータのテーブル
 const CCactus::AnimData CCactus::ANIM_DATA[] =

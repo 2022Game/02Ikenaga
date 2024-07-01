@@ -15,9 +15,11 @@ CBeholder* CBeholder::spInstance = nullptr;
 #define ENEMY_HEIGHT  0.5f     // 線分コライダー
 #define WITHIN_RANGE  40.0f    // 範囲内
 #define MOVE_SPEED    0.65f    // 移動速度
+#define MOVE_SPEED_Y  0.027f   // Yのスピード
 #define GRAVITY       0.0625f  // 重力
 #define WALK_RANGE    150.0f   // 追跡する範囲
 #define STOP_RANGE    26.0f    // 追跡を辞める範囲
+#define STOP_RANGE_Y  20.0f    // 追跡を辞める高さ
 #define ROTATE_RANGE  250.0f   // 回転する範囲
 #define START_POS_Y   20.0f    // 開始位置のY方向
 #define START_POS_Z   13.0f    // 開始位置のZ方向
@@ -785,7 +787,7 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				//ChangeState(EState::eAttack3);
+				ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
@@ -793,7 +795,7 @@ void CBeholder::Update()
 			}
 			else
 			{
-				//ChangeState(EState::eAttack);
+				ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
@@ -804,45 +806,36 @@ void CBeholder::Update()
 
 	if (mState == EState::eRun)
 	{
-		mFlyingTime++;
-		if (mFlyingTime < 200 && mFlyingTime > 0 && player->Position().Y() < 1.0f)
-		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + 0.05f);
-		}
-		else if(player->Position().Y() < 1.0f)
-		{
-			//Position(Position().X(), Position().Y() - 0.1f, Position().Z());
-		}
-	}
-	if (mState == EState::eIdle2 && vectorPos > WALK_RANGE)
-	{
-		Position(Position().X(), Position().Y() - 0.05f, Position().Z());
-	}
-	else if(mState == EState::eIdle2 && vectorPos <= STOP_RANGE)
-	{
-		Position(Position().X(), Position().Y() - 0.05f, Position().Z());
-	}
-
-	if (mState == EState::eRun)
-	{
 		if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 		{
 			Position(Position() + mMoveSpeed);
 		}
 	}
 
-	if (Position().Y() <= 0.0f)
+	if (mState == EState::eRun)
 	{
-		mFlyingTime = 0;
+		mFlyingTime++;
+
+		if (mFlyingTime <= 200 && mFlyingTime > 0)
+		{
+			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
+		}
 	}
-	if (mState == EState::eHit)
+
+	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
 	}
 
-	/*CDebugPrint::Print(" 飛行: %d\n", mFlyingTime);
-	float y = Position().Y();
-	CDebugPrint::Print(" 高さ: %f\n", y);*/
+	if (Position().Y() <= 0.0f)
+	{
+		mFlyingTime = 0;
+	}
+
+	if (mState == EState::eHit)
+	{
+		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
+	}
 
 	// キャラクターの更新
 	CXCharacter::Update();

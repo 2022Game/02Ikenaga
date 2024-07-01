@@ -1,5 +1,6 @@
 #pragma once
 #include "CSceneBase.h"
+#include "CEnemy.h"
 class CPlayer;
 class CSlime;
 class CSlime2;
@@ -29,10 +30,33 @@ public:
 	// ゲームクリア処理
 	void Clear();
 
+	// スポーン
+	void UpdateSpawn();
+
 	// シーンの更新処理
 	void Update();
 
 private:
+
+	// 敵のインデックス値を取得
+	int GetSpawnIndex() const;
+
+	// 敵のスポーンデータ
+	struct SpawnData
+	{
+		EEnemyType type;     // 敵の種類
+		float dist;          // 生成距離
+		CVector offsetPos;   // 生成位置のオフセット位置
+		float monsterScale;  // 生成する敵のスケール値
+		float SpawnTime;     // スポーンする時間
+	};
+
+	// 敵のスポーンデータのテーブル
+	static const SpawnData SPAWN_DATA[];
+	CEnemy* SpawnEnemy(EEnemyType type) const;
+	int mSpawnIndex;  // 敵がスポーンするインデックス値
+	CEnemy* mpSpawnEnemy;  // スポーンする敵
+
 	// 復活時間
 	int SlimeReTime;      // SlimeRevivalTime(レッドスライムの復活時間)
 	int Slime2ReTime;     // Slime2RevivalTime(オレンジスライムの復活時間)

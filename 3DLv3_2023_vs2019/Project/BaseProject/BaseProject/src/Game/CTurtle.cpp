@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
+#include "CShieldRotate2.h"
 #include "Maths.h"
 
 // 亀のインスタンス
@@ -9,31 +10,31 @@ CTurtle* CTurtle::spInstance = nullptr;
 
 int CTurtle::mHp;
 
-#define ENEMY_HEIGHT 1.0f
-#define WITHIN_RANGE 40.0f       // 範囲内
-#define MOVE_SPEED 0.07f         // 移動速度
-#define GRAVITY 0.0625f          // 重力
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 24.5f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT    1.0f  // 線分コライダー
+#define WITHIN_RANGE   40.0f  // 範囲内
+#define MOVE_SPEED      0.4f  // 移動速度
+#define GRAVITY         0.3f  // 重力
+#define WALK_RANGE    100.0f  // 追跡する範囲
+#define STOP_RANGE     24.5f  // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f  // 回転する範囲
 
 // 亀のアニメーションデータのテーブル
 const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 {
-	{ "",										                    true,	 0.0f,	0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",	true,	51.0f,	0.5f},  // 待機 51.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",	true,	25.0f,	0.5f},  // 待機2 25.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	        true,	71.0f,	0.5f},  // 見回す待機 71.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",     	true,	61.0f,	0.5f},  // 見回す待機2 61.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	    false,	26.0f,	0.5f},	// 攻撃 26.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	    false,  26.0f,	0.5f},	// 攻撃2 26.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	    true,	26.0f,	0.5f},	// ヒット 26.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	    false,	18.0f,	0.5f},	// 防御 18.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	    true,	 8.0f,	0.3f},	// 防御中のヒット 8.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendIdle.x",	true,	 8.0f,	0.3f},	// 防御中の待機 8.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	        true,	61.0f,	0.5f},	// 死ぬ 61.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	        true,	41.0f,	0.5f},	// めまい 41.0f
-	{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	        true,	17.0f,	0.45f}, // 移動 17.0f
+	{ "",										                  true,	  0.0f,	 0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleNormal.x",  true,	 51.0f,	 0.5f},  // 待機
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdleBattle.x",  true,	 25.0f,	 0.5f},  // 待機2
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle.x",	      true,	 71.0f,	 0.5f},  // 見回す待機
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleIdle2.x",       true,	 61.0f,	 0.5f},  // 見回す待機2
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack.x",	  false, 26.0f,	 0.5f},	 // 攻撃
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleAttack2.x",	  false, 26.0f,	 0.5f},	 // 攻撃2
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleGetHit.x",	  false, 26.0f,	 0.5f},	 // ヒット
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefend.x",	  false, 18.0f,	 0.5f},	 // 防御
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendHit.x",	  false,  8.0f,	 0.3f},	 // 防御中のヒット
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDefendIdle.x",  true,	  8.0f,	 0.3f},	 // 防御中の待機
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDie.x",	      false, 61.0f,	 0.3f},	 // 死ぬ
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleDizzy.x",	      false, 41.0f,	 0.5f},	 // めまい
+	{ "Character\\Enemy\\Turtle\\animation\\TurtleRun.x",	      true,	 17.0f,	0.45f},  // 移動
 
 };
 
@@ -45,8 +46,10 @@ CTurtle::CTurtle()
 	, mDefenseTime(0)
 	, mIsGrounded(false)
 	, mMoveSpeed(CVector::zero)
-	, mStateAttack2Step(0)
+	, mStateStep(0)
 {
+	mDefenseUp = false;
+
 	//インスタンスの設定
 	spInstance = this;
 
@@ -120,6 +123,28 @@ CTurtle::CTurtle()
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColBody->SetEnable(false);
+
+	// シールドとの距離
+	float ShieldDist = 20.0f;
+	// 回転するシールド
+	mpShieldRotate = new CShieldRotate2(0.0f, ShieldDist);
+	mpShieldRotate->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate->SetOwner(this);
+
+	// 回転するシールド2
+	mpShieldRotate2 = new CShieldRotate2(180.0, ShieldDist);
+	mpShieldRotate2->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate2->SetOwner(this);
+
+	// 回転するシールド3
+	mpShieldRotate3 = new CShieldRotate2(-270.0f, ShieldDist);
+	mpShieldRotate3->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate3->SetOwner(this);
+
+	// 回転するシールド4
+	mpShieldRotate4 = new CShieldRotate2(270.0f, ShieldDist);
+	mpShieldRotate4->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate4->SetOwner(this);
 }
 
 // デストラクタ
@@ -154,7 +179,7 @@ void CTurtle::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttack2Step = 0;
+	mStateStep = 0;
 }
 
 // 待機状態
@@ -180,6 +205,7 @@ void CTurtle::UpdateIdle2()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle2);
+
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle2);
@@ -187,7 +213,7 @@ void CTurtle::UpdateIdle2()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.7f)
+	if (GetAnimationFrame() >= 10.0f && vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.7f)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -203,6 +229,7 @@ void CTurtle::UpdateIdle3()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle3);
+
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eIdle3);
@@ -225,20 +252,20 @@ void CTurtle::UpdateAttack2()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateAttack2Step)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃2アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack2);
 		AttackStart();
-		mStateAttack2Step++;
+		mStateStep++;
 		break;
 		// ステップ1 : 押し戻しコライダをオフ
 	case 1:
 		if (mAnimationFrame >= 10.0f)
 		{
 			mpColliderSphereBody->SetEnable(false);
-			mStateAttack2Step++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃終了待ち
@@ -266,8 +293,8 @@ void CTurtle::UpdateAttackWait()
 void CTurtle::UpdateHit()
 {
 	SetAnimationSpeed(0.5f);
-	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
+
 	if (IsAnimationFinished())
 	{
 		// めまいをfalseにする
@@ -281,7 +308,6 @@ void CTurtle::UpdateHit()
 		}
 		else
 		{
-			// プレイヤーの攻撃がヒットした時の待機状態へ移行
 			ChangeState(EState::eIdle2);
 		}
 	}
@@ -292,6 +318,7 @@ void CTurtle::UpdateDefense()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDefense);
+
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eDefenseIdle);
@@ -342,8 +369,9 @@ void CTurtle::UpdateDefenseIdle()
 // 死ぬ
 void CTurtle::UpdateDie()
 {
-	SetAnimationSpeed(0.5f);
+	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDie);
+
 	if (IsAnimationFinished())
 	{
 		Kill();
@@ -357,9 +385,9 @@ void CTurtle::UpdateDizzy()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
+
 	if (IsAnimationFinished())
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
 		ChangeState(EState::eIdle2);
 	}
 }
@@ -405,26 +433,22 @@ void CTurtle::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
+	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Y(0.0f);
-
-	if (mState != EState::eRun)
-	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-	}
+	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
-		// 待機状態
+		// 待機
 	case EState::eIdle:
 		UpdateIdle();
 		break;
-		// 待機状態2
+		// 待機2
 	case EState::eIdle2:
 		UpdateIdle2();
 		break;
-		// 待機状態3
+		// 待機3
 	case EState::eIdle3:
 		UpdateIdle3();
 		break;
@@ -533,22 +557,19 @@ void CTurtle::Update()
 
 	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
-	}
-
-	if (Position().Y() >= 0.5f)
-	{
-		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+		Position(Position() + mMoveSpeed);
 	}
 
 	// 防御時間計測
 	if (mState == EState::eDefense || mState == EState::eDefenseHit || mState == EState::eDefenseIdle)
 	{
 		mDefenseTime++;
+		mDefenseUp = true;
 	}
 	else
 	{
 		mDefenseTime = 0;
+		mDefenseUp = false;
 	}
 
 	// キャラクターの更新
@@ -633,12 +654,6 @@ void CTurtle::AttackEnd()
 	mpAttackColBody->SetEnable(false);
 }
 
-// 描画
-void CTurtle::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CTurtle::LevelUp()
 {
@@ -705,10 +720,15 @@ float CTurtle::GetDefBuff(const CVector& attackDir)const
 	return mBaseDefenseBuffRatio;
 }
 
-
 // 死亡処理
 void CTurtle::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// 描画
+void CTurtle::Render()
+{
+	CXCharacter::Render();
 }

@@ -318,7 +318,7 @@ void CPlayer::UpdateIdle()
 
 		if (mCharaStatus.SpecialAttack >= 4)
 		{
-			if (CInput::PushKey('X'))
+			if (CInput::PushKey('Q'))
 			{
 				if (mDefenseUp != true || mPowerUp != true || mCharaStatus.hp < mCharaMaxStatus.hp)
 				{

@@ -17,8 +17,43 @@ public:
 
 	// コンストラクタ
 	CBee();
+
 	// デストラクタ
 	~CBee();
+
+	// 更新処理
+	void Update();
+
+	/// 衝突処理
+	/// </summary>
+	/// <param name="self">衝突した自身のコライダー</param>
+	/// <param name="other">衝突した相手のコライダー</param>
+	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	// 攻撃開始
+	void AttackStart() override;
+	// 攻撃終了
+	void AttackEnd() override;
+
+	// 1レベルアップ
+	void LevelUp();
+	// レベルの変更
+	void ChangeLevel(int level);
+
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	//ダメージを与えたオブジェクト
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
+
+	// 死亡処理
+	void Death() override;
+
+	// 描画
+	void Render();
+
+private:
 
 	// 待機状態
 	void UpdateIdle();
@@ -38,39 +73,6 @@ public:
 	// 移動
 	void UpdateRun();
 
-	// 更新処理
-	void Update();
-
-	/// 衝突処理
-	/// </summary>
-	/// <param name="self">衝突した自身のコライダー</param>
-	/// <param name="other">衝突した相手のコライダー</param>
-	void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-	// 攻撃開始
-	void AttackStart() override;
-	// 攻撃終了
-	void AttackEnd() override;
-
-	// 描画
-	void Render();
-
-	// 1レベルアップ
-	void LevelUp();
-	// レベルの変更
-	void ChangeLevel(int level);
-
-	/// <summary>
-	/// 被ダメージ処理
-	/// </summary>
-	/// <param name="damage">受けるダメージ</param>
-	//ダメージを与えたオブジェクト
-	virtual void TakeDamage(int damage, CObjectBase* causedObj);
-
-	// 死亡処理
-	void Death() override;
-
-private:
 	int mAttackTime;   // 攻撃時間の間隔
 	int mFlyingTime;   // 飛行時間
 
@@ -79,12 +81,12 @@ private:
 	{
 		None = -1,
 
-		eTPose,		// Tポーズ
-		eIdle,		// 待機
-		eAttack,	// 攻撃
-		eHit,       // ヒット
-		eDie,       // 死ぬ
-		eRun,		// 移動
+		eTPose,	  // Tポーズ
+		eIdle,	  // 待機
+		eAttack,  // 攻撃
+		eHit,     // ヒット
+		eDie,     // 死ぬ
+		eRun,	  // 移動
 
 		Num
 	};
@@ -108,17 +110,17 @@ private:
 	// 蜂の状態
 	enum class EState
 	{
-		eIdle,		// 待機
-		eIdle2,		// 待機2
-		eAttack,	// 攻撃
-		eAttackWait,// 攻撃終了待ち
-		eHit,       // ヒット
-		eDie,       // 死ぬ時
-		eRun,       // 移動
+		eIdle,		  // 待機
+		eIdle2,		  // 待機2
+		eAttack,	  // 攻撃
+		eAttackWait,  // 攻撃終了待ち
+		eHit,         // ヒット
+		eDie,         // 死ぬ時
+		eRun,         // 移動
 	};
-	EState mState;	// 蜂の状態
+	EState mState;	  // 蜂の状態
 
-	int mStateAttackStep;  // State内の攻撃でのステップ処理
+	int mStateStep;  // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -127,29 +129,33 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 	bool mIsSpawnedNeedleEffect;
 
-	CColliderLine* mpColliderLine;           // キャラクターの線分コライダー
+	// キャラクターの線分コライダー
+	CColliderLine* mpColliderLine;
 
-	CColliderSphere* mpColliderSphereHead;   // キャラクター押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBeak;   // キャラクター押し戻しコライダー(口ばし)
-	CColliderSphere* mpColliderSphereBeak2;  // キャラクター押し戻しコライダー(口ばし2)
-	CColliderSphere* mpColliderSphereBody;   // キャラクター押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereTail;   // キャラクター押し戻しコライダー(尻尾)
-	CColliderSphere* mpColliderSphereTail2;  // キャラクター押し戻しコライダー(尻尾2)
-	CColliderSphere* mpColliderSphereTail3;  // キャラクター押し戻しコライダー(尻尾3)
-	CColliderSphere* mpColliderSphereTail4;  // キャラクター押し戻しコライダー(尻尾4)
-	CColliderSphere* mpColliderSphereTail5;  // キャラクター押し戻しコライダー(尻尾5)
+	// キャラクター押し戻しコライダー
+	CColliderSphere* mpColliderSphereHead;   // 頭
+	CColliderSphere* mpColliderSphereBeak;   // 口ばし
+	CColliderSphere* mpColliderSphereBeak2;  // 口ばし2
+	CColliderSphere* mpColliderSphereBody;   // 体
+	CColliderSphere* mpColliderSphereTail;   // 尻尾
+	CColliderSphere* mpColliderSphereTail2;  // 尻尾2
+	CColliderSphere* mpColliderSphereTail3;  // 尻尾3
+	CColliderSphere* mpColliderSphereTail4;  // 尻尾4
+	CColliderSphere* mpColliderSphereTail5;  // 尻尾5
 
-	CColliderSphere* mpDamageColHead;    // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBeak;    // ダメージを受けるコライダー(口ばし)
-	CColliderSphere* mpDamageColBeak2;   // ダメージを受けるコライダー(口ばし2)
-	CColliderSphere* mpDamageColBody;    // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColTail;    // ダメージを受けるコライダー(尻尾)
-	CColliderSphere* mpDamageColTail2;   // ダメージを受けるコライダー(尻尾2)
-	CColliderSphere* mpDamageColTail3;   // ダメージを受けるコライダー(尻尾3)
-	CColliderSphere* mpDamageColTail4;   // ダメージを受けるコライダー(尻尾4)
-	CColliderSphere* mpDamageColTail5;   // ダメージを受けるコライダー(尻尾5)
+	 // ダメージを受けるコライダー
+	CColliderSphere* mpDamageColHead;    // 頭
+	CColliderSphere* mpDamageColBeak;    // 口ばし
+	CColliderSphere* mpDamageColBeak2;   // 口ばし2
+	CColliderSphere* mpDamageColBody;    // 体
+	CColliderSphere* mpDamageColTail;    // 尻尾
+	CColliderSphere* mpDamageColTail2;   // 尻尾2
+	CColliderSphere* mpDamageColTail3;   // 尻尾3
+	CColliderSphere* mpDamageColTail4;   // 尻尾4
+	CColliderSphere* mpDamageColTail5;   // 尻尾5
 
-	CColliderSphere* mpAttackCol;        // ダメージを与えるコライダー(針)
+	 // ダメージを与えるコライダー
+	CColliderSphere* mpAttackCol;        // 針
 
 	CTransform* mpRideObject;
 };

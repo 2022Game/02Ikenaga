@@ -185,6 +185,12 @@
     <Filter Include="ソース ファイル\Game\Effect\Aura">
       <UniqueIdentifier>{f7044498-84d4-4634-8526-4091bece0b52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Weapon\Shield">
+      <UniqueIdentifier>{a20513ec-c061-4dc4-8a1d-e5b31847952b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Weapon\Sword">
+      <UniqueIdentifier>{9c602e4b-8595-4127-a191-507c6962eb8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -380,15 +386,6 @@
       <Filter>ソース ファイル\Game\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CWeapon.cpp">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CSword.cpp">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CShield.cpp">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CCane.cpp">
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CBillBoardImage.cpp">
@@ -592,9 +589,6 @@
     <ClCompile Include="src\Game\CPortionManager.cpp">
       <Filter>ソース ファイル\Game\Item\Portion</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CShieldRotate.cpp">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CFlightFlame.cpp">
       <Filter>ソース ファイル\Game\Effect\Flame</Filter>
     </ClCompile>
@@ -642,6 +636,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CPowerUpAura.cpp">
       <Filter>ソース ファイル\Game\Effect\Aura</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CShield.cpp">
+      <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CShieldRotate.cpp">
+      <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSword.cpp">
+      <Filter>ソース ファイル\Game\Weapon\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CShieldRotate2.cpp">
+      <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -864,15 +870,6 @@
     <ClInclude Include="src\Game\CWeapon.h">
       <Filter>ソース ファイル\Game\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSword.h">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CShield.h">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CCane.h">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="src\BaseSystem\CBillBoardImage.h">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
     </ClInclude>
@@ -1074,9 +1071,6 @@
     <ClInclude Include="src\Game\CPortionManager.h">
       <Filter>ソース ファイル\Game\Item\Portion</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CShieldRotate.h">
-      <Filter>ソース ファイル\Game\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CFlightFlame.h">
       <Filter>ソース ファイル\Game\Effect\Flame</Filter>
     </ClInclude>
@@ -1124,6 +1118,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPowerUpAura.h">
       <Filter>ソース ファイル\Game\Effect\Aura</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CShield.h">
+      <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CShieldRotate.h">
+      <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSword.h">
+      <Filter>ソース ファイル\Game\Weapon\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CShieldRotate2.h">
+      <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

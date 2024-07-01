@@ -4,6 +4,8 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 
+class CShieldRotate2;
+
 /*
  亀
  プレイヤーの推定レベル(11～20)
@@ -34,9 +36,6 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// 描画
-	void Render();
-
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
@@ -61,12 +60,15 @@ public:
 
 	static int mHp;
 
+	// 描画
+	void Render();
+
 private:
-	// 待機状態
+	// 待機
 	void UpdateIdle();
-	// 待機状態2
+	// 待機2
 	void UpdateIdle2();
-	// 待機状態3
+	// 待機3
 	void UpdateIdle3();
 
 	// 攻撃
@@ -91,27 +93,28 @@ private:
 	// 移動
 	void UpdateRun();
 
-	int mDefenseTime;  // 防御時間の間隔
-	int mAttackTime;   // 攻撃時間の間隔
+	int mDefenseTime;  // 防御時間
+	int mAttackTime;   // 次の攻撃時間
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
 		None = -1,
 
-		eTPose,		  // Tポーズ
-		eIdle,		  // 待機
-		eIdle2,		  // 待機2
-		eIdle3,       // 待機3
-		eIdle4,       // 待機4
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
-		eHit,         // ヒット
-		eDefense,     // 防御
-		eDefenseHit,  // 防御中のヒット
-		eDefenseIdle, // 防御中の待機
-		eDie,         // 死ぬ
-		eDizzy,       // めまい(混乱)
-		eRun,		  // 移動
+		eTPose,		   // Tポーズ
+		eIdle,		   // 待機
+		eIdle2,		   // 待機2
+		eIdle3,        // 待機3
+		eIdle4,        // 待機4
+		eAttack,	   // 攻撃
+		eAttack2,	   // 攻撃2
+		eHit,          // ヒット
+		eDefense,      // 防御
+		eDefenseHit,   // 防御中のヒット
+		eDefenseIdle,  // 防御中の待機
+		eDie,          // 死ぬ
+		eDizzy,        // めまい(混乱)
+		eRun,		   // 移動
 
 		Num
 	};
@@ -135,33 +138,39 @@ private:
 	// 亀の状態
 	enum class EState
 	{
-		eIdle,		  // 待機
-		eIdle2,		  // 待機2
-		eIdle3,       // 待機3
-		eAttack,	  // 攻撃
-		eAttack2,	  // 攻撃2
-		eAttackWait,  // 攻撃終了待ち
-		eHit,         // ヒット
-		eDefense,     // 防御
-		eDefenseHit,  // 防御中のヒット
-		eDefenseIdle, // 防御中の待機
-		eDie,         // 死ぬ時
-		eDizzy,       // めまい(混乱)
-		eRun,         // 移動
+		eIdle,		   // 待機
+		eIdle2,		   // 待機2
+		eIdle3,        // 待機3
+		eAttack,	   // 攻撃
+		eAttack2,	   // 攻撃2
+		eAttackWait,   // 攻撃終了待ち
+		eHit,          // ヒット
+		eDefense,      // 防御
+		eDefenseHit,   // 防御中のヒット
+		eDefenseIdle,  // 防御中の待機
+		eDie,          // 死ぬ時
+		eDizzy,        // めまい(混乱)
+		eRun,          // 移動
 	};
-	EState mState;	  // 亀の状態
+	EState mState;	 // 亀の状態
+	int mStateStep;  // State内のステップ
 
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	int mStateAttack2Step;  // 攻撃2の時のステップ
-
 	CVector mMoveSpeed;	    // 移動速度
 	bool mIsGrounded;       // 接地しているかどうか
 
-	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
+	 // キャラクターの線分コライダー
+	CColliderLine* mpColliderLine;
 	CColliderSphere* mpColliderSphereBody;  // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
+
+	// 回転するシールド
+	CShieldRotate2* mpShieldRotate;
+	CShieldRotate2* mpShieldRotate2;
+	CShieldRotate2* mpShieldRotate3;
+	CShieldRotate2* mpShieldRotate4;
 };

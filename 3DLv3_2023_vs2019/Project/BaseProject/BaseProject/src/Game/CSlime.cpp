@@ -1,43 +1,34 @@
 #include "CSlime.h"
-#include "CEffect.h"
 #include "CCollisionManager.h"
-#include "CInput.h"
 #include "CHpGauge.h"
 #include "Maths.h"
 #include "CPlayer.h"
-#include "CCamera.h"
 
-// レッドスライム(エネミー)のインスタンス
+// レッドスライムのインスタンス
 CSlime* CSlime::spInstance = nullptr;
 
-#define ENEMY_HEIGHT 1.0f
-#define MOVE_SPEED 0.07f         // 移動速度
-#define GRAVITY 0.0625f          // 重力
-
-#define WALK_RANGE 100.0f        // 追跡する範囲
-#define STOP_RANGE 21.0f         // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f     // 回転する範囲
+#define ENEMY_HEIGHT   1.0f  // 線分コライダー
+#define MOVE_SPEED     0.4f  // 移動速度
+#define GRAVITY        0.3f  // 重力
+#define WALK_RANGE   100.0f  // 追跡する範囲
+#define STOP_RANGE    21.0f  // 追跡を辞める範囲
+#define ROTATE_RANGE 250.0f  // 回転する範囲
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
 const CSlime::AnimData CSlime::ANIM_DATA[] =
 {
 	{ "",										                         true,	0.0f,	0.0f},	// Tポーズ
-	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleNormal.x",	         true,	51.0f,	0.7f},  // アイドル通常 51.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingStart.x",	 true,	63.0f,  0.5f},  // 開始の見回す 63.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingRoutine.x",true,	71.0f,  0.5f},  // 見回す 71.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	         true,	25.0f,	0.8f},  // アイドルバトル 25.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	             false,	26.0f,	0.5f},  // 攻撃 26.0ff
-	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	             false,	26.0f,	0.5f},  // 攻撃2 26.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	             true,	26.0f,	0.5f},  // ヒット 26.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	                 true,	41.0f,	0.5f},  // 死ぬ 41.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	             true,	41.0f,	0.5f},  // めまい 41.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	                 true,	21.0f,	0.5f},  // 移動 21.0f
-	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	             true,	31.0f,	0.5f},  // 歩く 31.0f
-//	{ "Character\\Enemy\\Slime\\animation\\SlimeWalkRight.x",	true,	31.0f	},  // 右に移動
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkLeft.x",	true,	31.0f	},  // 左に移動
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeTaunt.x",	true,	21.0f	},  // 挑発
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeVictory.x",	true,	81.0f	},  // 勝利
-	//{ "Character\\Enemy\\Slime\\animation\\SlimeWalkBack.x",	true,	31.0f	},  // 後ろに歩く
+	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleNormal.x",	         true,	51.0f,	0.7f},  // アイドル通常
+	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingStart.x",	 true,	63.0f,  0.5f},  // 開始の見回す
+	{ "Character\\Enemy\\Slime\\animation\\SlimeSenseSomethingRoutine.x",true,	71.0f,  0.5f},  // 見回す
+	{ "Character\\Enemy\\Slime\\animation\\SlimeIdleBattle.x",	         true,	25.0f,	0.8f},  // アイドルバトル
+	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack.x",	             false,	26.0f,	0.5f},  // 攻撃
+	{ "Character\\Enemy\\Slime\\animation\\SlimeAttack2.x",	             false,	26.0f,	0.5f},  // 攻撃2
+	{ "Character\\Enemy\\Slime\\animation\\SlimeGetHit.x",	             false,	26.0f,	0.5f},  // ヒット
+	{ "Character\\Enemy\\Slime\\animation\\SlimeDie.x",	                 false,	41.0f,	0.5f},  // 死ぬ
+	{ "Character\\Enemy\\Slime\\animation\\SlimeDizzy.x",	             false,	41.0f,	0.5f},  // めまい
+	{ "Character\\Enemy\\Slime\\animation\\SlimeRun.x",	                 true,	21.0f,	0.5f},  // 移動
+	{ "Character\\Enemy\\Slime\\animation\\SlimeWalk.x",	             true,	31.0f,	0.5f},  // 歩く
 };
 
 bool CSlime::IsDeath() const
@@ -53,11 +44,7 @@ CSlime::CSlime()
 	, mpRideObject(nullptr)
 	, mAttackTime(0)
 	, mIsGrounded(false)
-	, mStateAttackStep(0)
-	, mStateAttack2Step(0)
-	, mStateDizzyStep(0)
-	, mStateHitStep(0)
-	, mStateDieStep(0)
+	, mStateStep(0)
 	, mIsSlimeRunSE(false)
 	, mIsSlimeAttackSE(false)
 	, mIsSlimeDizzySE(false)
@@ -179,14 +166,10 @@ void CSlime::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
-	mStateAttack2Step = 0;
-	mStateDizzyStep = 0;
-	mStateHitStep = 0;
-	mStateDieStep = 0;
+	mStateStep = 0;
 }
 
-// 待機状態
+// 待機
 void CSlime::UpdateIdle()
 {
 	SetAnimationSpeed(0.7f);
@@ -196,7 +179,7 @@ void CSlime::UpdateIdle()
 	}
 }
 
-// 待機2状態
+// 待機2
 void CSlime::UpdateIdle2()
 {
 	SetAnimationSpeed(0.5f);
@@ -208,7 +191,7 @@ void CSlime::UpdateIdle2()
 	}
 }
 
-// 攻撃した時の待機状態
+// ダメージを受けた時の待機3
 void CSlime::UpdateIdle3()
 {
 	SetAnimationSpeed(0.8f);
@@ -219,17 +202,14 @@ void CSlime::UpdateIdle3()
 	}
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 0.5f)
+	if (GetAnimationFrame() >= 10.0f && vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE
+		&& player->Position().Y() < 0.5f)
 	{
 		ChangeState(EState::eRun);
 	}
 	else 
 	{
-		if (vectorPos <= 25.0f && player->Position().Y() >= 6.0f)
-		{
-			mMoveSpeed.X(0.0f);
-			mMoveSpeed.Z(0.0f);
-		}
+		ChangeState(EState::eIdle3);
 	}
 }
 
@@ -253,13 +233,13 @@ void CSlime::UpdateAttack()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
 		AttackStart();
-		mStateAttackStep++;
+		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
 	case 1:
@@ -267,7 +247,7 @@ void CSlime::UpdateAttack()
 		{
 			mpSlimeAttackSE->Play();
 			mIsSlimeAttackSE = true;
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃終了待ち
@@ -287,7 +267,7 @@ void CSlime::UpdateAttack2()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateAttack2Step)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃2アニメーション開始
 	case 0:
@@ -296,7 +276,7 @@ void CSlime::UpdateAttack2()
 		{
 			AttackStart();
 			mpColliderSphereBody->SetEnable(false);
-			mStateAttack2Step++;
+			mStateStep++;
 		}
 		break;
 		// ステップ1　: 効果音開始	
@@ -305,7 +285,7 @@ void CSlime::UpdateAttack2()
 		{
 			mpSlimeAttackSE->Play();
 			mIsSlimeAttackSE = true;
-			mStateAttack2Step++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃終了待ち
@@ -335,10 +315,7 @@ void CSlime::UpdateAttackWait()
 		}
 		else
 		{
-			SetAnimationSpeed(0.5f);
-			// プレイヤーの攻撃がヒットした時の待機状態へ移行
 			ChangeState(EState::eIdle3);
-			ChangeAnimation(EAnimType::eIdle4);
 		}
 	}
 }
@@ -349,12 +326,12 @@ void CSlime::UpdateHit()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateHitStep)
+	switch (mStateStep)
 	{
 		// ステップ0 :ヒットアニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eHit);
-		mStateHitStep++;
+		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
 	case 1:
@@ -362,7 +339,7 @@ void CSlime::UpdateHit()
 		{
 			mpSlimeHitSE->Play(3.0f);
 			mIsSlimeHitSE = true;
-			mStateHitStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : ヒットモーション終了待ち
@@ -380,9 +357,7 @@ void CSlime::UpdateHit()
 			}
 			else
 			{
-				// プレイヤーの攻撃がヒットした時の待機状態へ移行
 				ChangeState(EState::eIdle3);
-				ChangeAnimation(EAnimType::eIdle4);
 			}
 		}
 		break;
@@ -395,12 +370,12 @@ void CSlime::UpdateDie()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateDieStep)
+	switch (mStateStep)
 	{
 		// ステップ0 :死亡アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
-		mStateDieStep++;
+		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
 	case 1:
@@ -413,7 +388,7 @@ void CSlime::UpdateDie()
 		{
 			mpSlimeDieSE->Play(5.0f);
 			mIsSlimeDieSE = true;
-			mStateDieStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 死亡モーション終了待ち
@@ -434,13 +409,13 @@ void CSlime::UpdateDizzy()
 	SetAnimationSpeed(0.5f);
 
 	// ステップごとに処理を分ける
-	switch (mStateDizzyStep)
+	switch (mStateStep)
 	{
 		// ステップ0 :めまいアニメーション開始
 	case 0:
 		// めまいアニメーションを開始
 		ChangeAnimation(EAnimType::eDizzy);
-		mStateDizzyStep++;
+		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
 	case 1:
@@ -448,7 +423,7 @@ void CSlime::UpdateDizzy()
 		{
 			mpSlimeDizzySE->Play();
 			mIsSlimeDizzySE = true;
-			mStateDizzyStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : めまいモーション終了待ち
@@ -510,25 +485,23 @@ void CSlime::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-	mMoveSpeed.Y(0.0f);
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(-GRAVITY);
+	mMoveSpeed.Z(0.0f);
 	mHp = mCharaStatus.hp;
-
-	if (mState != EState::eRun)
-	{
-		mMoveSpeed.X(0.0f);
-		mMoveSpeed.Z(0.0f);
-	}
 	
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
 	{
-		// 待機状態
+		// 待機
 	case EState::eIdle:
 		UpdateIdle();
 		break;
+		// 待機2
 	case EState::eIdle2:
 		UpdateIdle2();
 		break;
+		// 待機3
 	case EState::eIdle3:
 		UpdateIdle3();
 		break;
@@ -567,7 +540,7 @@ void CSlime::Update()
 	}
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 30.0f, 0.0f);
+	CVector gaugePos = Position() + CVector(0.0f, 32.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
@@ -620,10 +593,12 @@ void CSlime::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 	}
-	if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+	if (mState == EState::eRun)
 	{
-		Position(Position() + mMoveSpeed * MOVE_SPEED);
-		mMoveSpeed -= CVector(0.0f, GRAVITY, 0.0f);
+		if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+		{
+			Position(Position() + mMoveSpeed);
+		}
 	}
 	
 	// キャラクターの更新
@@ -640,7 +615,6 @@ void CSlime::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print(" HP: %d\n", mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -707,13 +681,6 @@ void CSlime::AttackEnd()
 	// 攻撃が終われば、攻撃判定用のコライダーをオフにする
 	mpAttackColBody->SetEnable(false);
 }
-
-// 描画
-void CSlime::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CSlime::LevelUp()
 {
@@ -768,4 +735,10 @@ void CSlime::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// 描画
+void CSlime::Render()
+{
+	CXCharacter::Render();
 }

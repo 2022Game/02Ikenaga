@@ -8,30 +8,26 @@
 // 蜂のインスタンス
 CBee* CBee::spInstance = nullptr;
 
-#define ENEMY_HEIGHT  0.3f    // 線分コライダー
-#define WITHIN_RANGE  40.0f   // 範囲内
-#define WALK_RANGE    100.0f  // 追跡する範囲
-#define STOP_RANGE    22.0f   // 追跡を辞める範囲
-#define STOP_RANGE_Y  20.0f   // 追跡を辞める高さ
-#define ROTATE_RANGE  250.0f  // 回転する範囲
-#define MOVE_SPEED    0.12f   // 移動速度
-#define MOVE_SPEED_Y  0.027f  // Yのスピード
-#define HEIGHT        0.5f    // 高さ
-#define PLAYER_HEIGHT 0.25f   // プレイヤーの高さ
-
+#define ENEMY_HEIGHT   0.3f  // 線分コライダー
+#define WITHIN_RANGE  40.0f  // 範囲内
+#define WALK_RANGE   100.0f  // 追跡する範囲
+#define STOP_RANGE    22.0f  // 追跡を辞める範囲
+#define STOP_RANGE_Y  20.0f  // 追跡を辞める高さ
+#define ROTATE_RANGE 250.0f  // 回転する範囲
+#define MOVE_SPEED     0.6f  // 移動速度
+#define MOVE_SPEED_Y 0.027f  // Yのスピード
+#define HEIGHT         0.5f  // 高さ
+#define PLAYER_HEIGHT 0.25f  // プレイヤーの高さ
 
 // 蜂のアニメーションデータのテーブル
 const CBee::AnimData CBee::ANIM_DATA[] =
 {
-	{ "",										        true,	0.0f,	 0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	 0.5f},	 // 待機 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	false,	17.0f,	 0.3f},	 // 攻撃 17.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	true,	13.0f,	0.25f},	 // ヒット 13.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    false,	20.0f,	0.15f},	 // 死ぬ 20.0f
-	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	 0.5f},	 // 移動2 21.0f
-	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveBWD.x",	true,	42.0f	},	    // 移動 21.0f
-	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveLFT.x",	true,	42.0f	},	    // 左移動 21.0f
-	//{ "Character\\Enemy\\Bee\\animation\\BeeMoveRGT.x",	true,	42.0f	},	    // 右移動 21.0f
+	{ "",										        true,	 0.0f,	 0.0f},  // Tポーズ
+	{ "Character\\Enemy\\Bee\\animation\\BeeIdle.x",	true,	20.0f,	 0.5f},	 // 待機
+	{ "Character\\Enemy\\Bee\\animation\\BeeAttack.x",	false,	17.0f,	 0.3f},	 // 攻撃
+	{ "Character\\Enemy\\Bee\\animation\\BeeGetHit.x",	false,	13.0f,	0.25f},	 // ヒット
+	{ "Character\\Enemy\\Bee\\animation\\BeeDie.x",	    false,	20.0f,	0.15f},	 // 死ぬ
+	{ "Character\\Enemy\\Bee\\animation\\BeeMoveFWD.x",	true,	21.0f,	 0.5f},	 // 移動
 };
 
 // コンストラクタ
@@ -43,7 +39,7 @@ CBee::CBee()
 	, mMoveSpeed(CVector::zero)
 	, mIsSpawnedNeedleEffect(false)
 	, mIsGrounded(false)
-	, mStateAttackStep(0)
+	, mStateStep(0)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -326,16 +322,15 @@ void CBee::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
+	mStateStep = 0;
 }
 
 // 待機状態
 void CBee::UpdateIdle()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
+
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 	if (vectorPos <= WITHIN_RANGE)
@@ -351,14 +346,13 @@ void CBee::UpdateIdle()
 // 待機状態2
 void CBee::UpdateIdle2()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
+
 	mFlyingTime++;
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 1.0f)
+	if (GetAnimationFrame() >= 10.0f && vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 1.0f)
 	{
 		ChangeState(EState::eRun);
 	}
@@ -383,14 +377,12 @@ void CBee::UpdateIdle2()
 // 攻撃
 void CBee::UpdateAttack()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.3f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始＋攻撃開始
 	case 0:
@@ -398,7 +390,7 @@ void CBee::UpdateAttack()
 		if (mAnimationFrame >= 5.0f)
 		{
 			AttackStart();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ1 : 
@@ -426,13 +418,13 @@ void CBee::UpdateAttack()
 					needle->SetOwner(this);
 
 					mIsSpawnedNeedleEffect = true;
-					mStateAttackStep++;
+					mStateStep++;
 				}
 			}
 		}
 		else
 		{
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃終了
@@ -440,7 +432,7 @@ void CBee::UpdateAttack()
 		if (mAnimationFrame >= 13.0f)
 		{
 			AttackEnd();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ3 : 攻撃終了待ち
@@ -466,8 +458,6 @@ void CBee::UpdateAttackWait()
 // ヒット
 void CBee::UpdateHit()
 {
-	mMoveSpeed.X(0.0f);
-	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(0.25f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -531,6 +521,8 @@ void CBee::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
+	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -606,11 +598,11 @@ void CBee::Update()
 	{
 		if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 		{
-			Position(Position() + mMoveSpeed * MOVE_SPEED);
+			Position(Position() + mMoveSpeed);
 		}
 	}
 
-	if (mState == EState::eIdle2 || mState == EState::eRun)
+	if (mState == EState::eRun)
 	{
 		mFlyingTime++;
 		if (mFlyingTime <= 200 && mFlyingTime > 0)
@@ -652,6 +644,7 @@ void CBee::Update()
 	mpColliderSphereTail3->Update();
 	mpColliderSphereTail4->Update();
 	mpColliderSphereTail5->Update();
+
 	// ダメージを受けるコライダー
 	mpDamageColHead->Update();
 	mpDamageColBeak->Update();
@@ -662,6 +655,7 @@ void CBee::Update()
 	mpDamageColTail3->Update();
 	mpDamageColTail4->Update();
 	mpDamageColTail5->Update();
+
 	// 攻撃コライダー
 	mpAttackCol->Update();
 
@@ -669,10 +663,6 @@ void CBee::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print(" 飛行 %d\n", mFlyingTime);
-	float y = Position().Y();
-	CDebugPrint::Print(" 高さ %f\n", y);
-	CDebugPrint::Print(" 高さ %f\n", vectorPos);
 }
 
 // 衝突処理
