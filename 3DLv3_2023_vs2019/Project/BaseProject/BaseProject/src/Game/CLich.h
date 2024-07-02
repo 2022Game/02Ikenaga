@@ -7,6 +7,7 @@
 class CMagicCircle;
 class CDrainEffect;
 class CShieldRotate;
+class CHealCircle;
 
 /*
  リッチクラス
@@ -191,5 +192,6 @@ private:
 	CQuaternion mMCStartRot;      // 魔法陣のアニメーション開始時の回転値
 	int mRandomSummonIndex;       // 敵を召喚するランダムインデックス値
 
-	CDrainEffect* mpDrain;
+	CDrainEffect* mpDrain;      // ドレイン
+	CHealCircle* mpHealCircle;  // 回復サークル
 };

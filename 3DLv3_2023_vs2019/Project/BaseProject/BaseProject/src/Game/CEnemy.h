@@ -7,17 +7,17 @@ enum class EEnemyType
 {
 	None = -1,
 
-	eBee,
-	eBeholder,
-	eBoxer,
-	eCactus,
-	eChest,
-	eDragon,
-	eMushroom,
-	eRay,
-	eRich,
-	eSlime,
-	eTurtle,
+	eBee,       // 蜂
+	eBeholder,  // 球体モンスター
+	eBoxer,     // ボクサー
+	eCactus,    // サボテン
+	eChest,     // チェスト
+	eDragon,    // ドラゴン
+	eMushroom,  // マッシュルーム
+	eRay,       // エイ
+	eRich,      // リッチ
+	eSlime,     // スライム
+	eTurtle,    // 亀
 
 	Num
 };

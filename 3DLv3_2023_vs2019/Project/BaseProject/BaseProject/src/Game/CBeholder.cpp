@@ -7,7 +7,6 @@
 #include "CElectricShockEffect.h"
 #include "CHomingBallEffect.h"
 #include "CTornado.h"
-#include "CInput.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
@@ -16,13 +15,15 @@ CBeholder* CBeholder::spInstance = nullptr;
 #define WITHIN_RANGE  40.0f  // 範囲内
 #define MOVE_SPEED    0.65f  // 移動速度
 #define MOVE_SPEED_Y  0.05f  // Yのスピード
-#define GRAVITY     0.0625f  // 重力
+#define GRAVITY        0.3f  // 重力
 #define WALK_RANGE   150.0f  // 追跡する範囲
 #define STOP_RANGE    26.0f  // 追跡を辞める範囲
 #define STOP_RANGE_Y  20.0f  // 追跡を辞める高さ
 #define ROTATE_RANGE 250.0f  // 回転する範囲
-#define START_POS_Y   20.0f  // 開始位置のY方向
-#define START_POS_Z   13.0f  // 開始位置のZ方向
+#define HOMING_VEC_Y  20.0f  // ホーミングボールのY方向
+#define HOMING_VEC_Z  13.0f  // ホーミングボールのZ方向
+#define TORNADO_VEC_Y 10.0f  // トルネードのY方向
+#define TORNADO_VEC_Z 16.0f  // トルネードのZ方向
 
 // 球体のモンスターのアニメーションデータのテーブル
 const CBeholder::AnimData CBeholder::ANIM_DATA[] =
@@ -34,9 +35,9 @@ const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack2.x",  false,  21.0f,  0.4f},  // 攻撃2(電流)
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack3.x",  false,  17.0f,  0.5f},  // 攻撃3(電気ボールのホーミング)
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderAttack4.x",  false,  23.0f,  0.4f},  // 攻撃4(回転攻撃＋エフェクト)
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   true,   23.0f,  0.5f},  // ヒット
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderGetHit.x",   false,  23.0f,  0.5f},  // ヒット
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderDie.x",	   false,  23.0f,  0.2f},  // 死ぬ
-	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   true,   41.0f,  0.5f},  // めまい
+	{ "Character\\Enemy\\Beholder\\animation\\BeholderDizzy.x",	   false,  41.0f,  0.5f},  // めまい
 	{ "Character\\Enemy\\Beholder\\animation\\BeholderRun.x",	   true,   17.0f,  0.5f},  // 走る
 };
 
@@ -53,6 +54,7 @@ CBeholder::CBeholder()
 	//インスタンスの設定
 	spInstance = this;
 
+	// 敵の種類
 	mType = EEnemyType::eBeholder;
 
 	// モデルデータ読み込み
@@ -340,7 +342,7 @@ CBeholder::CBeholder()
 	CVector forward = VectorZ();
 	forward.Y(0.0f);
 	forward.Normalize();
-	CVector HomingPos = Position() + forward * START_POS_Z + CVector(0.0f, START_POS_Y, 0.0f);
+	CVector HomingPos = Position() + forward * HOMING_VEC_Z + CVector(0.0f, HOMING_VEC_Y, 0.0f);
 	// ホーミングボール
 	mpHomingBall = new CHomingBallEffect
 	(
@@ -350,6 +352,7 @@ CBeholder::CBeholder()
 	);
 }
 
+// デストラクタ
 CBeholder::~CBeholder()
 {
 	// 線分コライダー
@@ -408,7 +411,7 @@ void CBeholder::CreateTornado()
 	CVector forward = VectorZ();
 	forward.Y(0.0f);
 	forward.Normalize();
-	CVector TornadoPos = Position() + forward * START_POS_Z + CVector(0.0f, START_POS_Y, 0.0f);
+	CVector TornadoPos = Position() + forward * TORNADO_VEC_Z + CVector(0.0f, TORNADO_VEC_Y, 0.0f);
 
 	// トルネードエフェクトを生成して、正面方向へ飛ばす
 	CTornado* tornado = new CTornado
@@ -562,11 +565,17 @@ void CBeholder::UpdateAttack4()
 		if (mAnimationFrame >= 13.0f)
 		{
 			AttackStart();
-			CreateTornado();
 			mStateStep++;
 		}
 		break;
 	case 2:
+		if (mAnimationFrame >= 15.0f)
+		{
+			CreateTornado();
+			mStateStep++;
+		}
+		break;
+	case 3:
 		if (mAnimationFrame >= 17.0f)
 		{
 			AttackEnd();
@@ -574,7 +583,7 @@ void CBeholder::UpdateAttack4()
 		}
 		break;
 		// 攻撃アニメーション終了待ち
-	case 3:
+	case 4:
 		if (mAnimationFrame >= 23.0f)
 		{
 			ChangeState(EState::eAttackWait);
@@ -645,9 +654,9 @@ void CBeholder::UpdateDizzy()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
+
 	if (IsAnimationFinished())
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
 		ChangeState(EState::eIdle2);
 	}
 }
@@ -821,10 +830,6 @@ void CBeholder::Update()
 		{
 			Position(Position() + mMoveSpeed);
 		}
-	}
-
-	if (mState == EState::eRun)
-	{
 
 		if (mFlyingTime <= 400 && mFlyingTime >= 1)
 		{
@@ -835,16 +840,10 @@ void CBeholder::Update()
 	if (mFlyingTime >= 400)
 	{
 		Position(Position().X(), Position().Y() - 0.08f, Position().Z());
-		if (mFlyingTime >= 700)
+		if (mFlyingTime >= 600)
 		{
 			mFlyingTime = 0;
 		}
-	}
-
-	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
-	{
-		//mMoveSpeed.Y(0.0f);
-		//mMoveSpeed.Y(mMoveSpeed.Y()* MOVE_SPEED_Y);
 	}
 
 	if (mState == EState::eHit)
@@ -855,6 +854,7 @@ void CBeholder::Update()
 	// キャラクターの更新
 	CXCharacter::Update();
 
+	// キャラクター押し戻しコライダー
 	mpColliderSphereBody->Update();
 	mpColliderSphereTentacle->Update();
 	mpColliderSphereTentacle2->Update();
@@ -863,6 +863,7 @@ void CBeholder::Update()
 	mpColliderSphereTentacle5->Update();
 	mpColliderSphereTentacle6->Update();
 
+	// ダメージを受けるコライダー
 	mpDamageColBody->Update();
 	mpDamageColTentacle->Update();
 	mpDamageColTentacle2->Update();
@@ -871,6 +872,7 @@ void CBeholder::Update()
 	mpDamageColTentacle5->Update();
 	mpDamageColTentacle6->Update();
 
+	// 攻撃コライダー
 	mpAttackColBody->Update();
 	mpAttackColTentacle->Update();
 	mpAttackColTentacle2->Update();

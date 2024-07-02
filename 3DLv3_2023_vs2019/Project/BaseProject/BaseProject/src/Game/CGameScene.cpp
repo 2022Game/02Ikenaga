@@ -84,26 +84,26 @@ void CGameScene::Load()
 
 	// フィールド関連
 	CResourceManager::Load<CModel>("Field", "Field\\field.obj");
-	CResourceManager::Load<CModel>("Sky", "Field\\Sky.obj");
-	CResourceManager::Load<CModel>("NightSky", "Field\\NightSky.obj");
+	CResourceManager::Load<CModel>("Sky", "Field\\Sky\\Sky.obj");
+	CResourceManager::Load<CModel>("NightSky", "Field\\NightSky\\NightSky.obj");
 
 	// プレイヤー関連
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
 
 	// エネミー関連
-	//CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
-	//CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
-	//CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
-	//CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
-	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
-	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
-	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
+	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
+	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
+	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
+	CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
+	CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
+	CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
 	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
-	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
+	CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
-	//CResourceManager::Load<CModelX>("Lich", "Character\\Enemy\\Lich\\Lich.x");
+	CResourceManager::Load<CModelX>("Lich", "Character\\Enemy\\Lich\\Lich.x");
 
 	// ボス関連
 	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
@@ -315,10 +315,11 @@ void CGameScene::Load()
 	//enemy27->Position(370.0f, 0.0f, 20.0f);
 	//enemy27->Scale(15.0f, 15.0f, 15.0f);
 
-	//CLich* enemy28 = new CLich();
+	CLich* enemy28 = new CLich();
 	//enemy28->Position(150.0f, 3.0f, -1350.0f);
-	////enemy28->Rotate(0.0f,90.0f,-70.0f);
-	//enemy28->Scale(2.5f, 2.5f, 2.5f);
+	enemy28->Position(0.0f, 3.0f, -150.0f);
+	//enemy28->Rotate(0.0f,90.0f,-70.0f);
+	enemy28->Scale(2.5f, 2.5f, 2.5f);
 
 	//// ドラゴン
 	//CDragon* bossEnemy = new CDragon();

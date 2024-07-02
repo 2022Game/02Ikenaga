@@ -46,6 +46,9 @@ CMushroom::CMushroom()
 	//インスタンスの設定
 	spInstance = this;
 
+	// 敵の種類
+	mType = EEnemyType::eMushroom;
+
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Mushroom");
 

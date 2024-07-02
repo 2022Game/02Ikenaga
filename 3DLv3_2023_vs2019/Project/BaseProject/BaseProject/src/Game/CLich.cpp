@@ -15,6 +15,7 @@
 #include "CTurtle.h"
 #include "CDrainEffect.h"
 #include "CShieldRotate.h"
+#include "CHealCircle.h"
 #include "CInput.h"
 
 // リッチのインスタンス
@@ -70,6 +71,9 @@ CLich::CLich()
 {
 	//インスタンスの設定
 	spInstance = this;
+
+	// 敵の種類
+	mType = EEnemyType::eRich;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Lich");
@@ -208,6 +212,13 @@ CLich::CLich()
 	// 回転するシールド4
 	mpShieldRotate4 = new CShieldRotate(270.0f, ShieldDist);
 	mpShieldRotate4->SetOwner(this);
+
+	// 回復サークル
+	mpHealCircle = new CHealCircle();
+	mpHealCircle->SetColor(CColor(0.0f, 1.0f, 0.0f));
+	mpHealCircle->Position(0.0f, -2.0f, 0.0f);
+	mpHealCircle->SetShow(false);
+	mpHealCircle->SetOwner(this);
 }
 
 // デストラクタ
@@ -606,6 +617,8 @@ void CLich::DrainHp()
 		int Heal = 0;
 		Heal = mCharaMaxStatus.hp * 0.25;
 		mCharaStatus.hp += Heal;
+		mpHealCircle->StartCircle();
+		
 		if (mCharaStatus.hp > mCharaMaxStatus.hp)
 		{
 			mCharaStatus.hp = mCharaMaxStatus.hp;
@@ -831,7 +844,9 @@ void CLich::Death()
 // 防御力の強化割合を取得
 float CLich::GetDefBuff(const CVector& attackDir)const
 {
-	if (mpSpawnEnemy !=nullptr ) return 20.0f;
+	if (mpSpawnEnemy != nullptr) return 20.0f;
+
+	else if (mState == EState::eSummon) return 2.0f;
 
 	// 通常時の防御の割合
 	return mBaseDefenseBuffRatio;

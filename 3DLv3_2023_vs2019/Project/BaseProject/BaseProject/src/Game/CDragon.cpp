@@ -62,6 +62,9 @@ CDragon::CDragon()
 	//インスタンスの設定
 	spInstance = this;
 
+	// 敵の種類
+	mType = EEnemyType::eDragon;
+
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Dragon");
 

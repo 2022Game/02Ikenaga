@@ -46,6 +46,9 @@ CRay::CRay()
 	//インスタンスの設定
 	spInstance = this;
 
+	//	敵の種類
+	mType = EEnemyType::eRay;
+
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Ray");
 

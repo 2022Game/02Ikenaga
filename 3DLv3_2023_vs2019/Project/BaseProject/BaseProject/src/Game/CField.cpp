@@ -24,21 +24,7 @@ CField::~CField()
 
 void CField::CreateFieldObjects()
 {
-	/*mpCubeModel = new CModel();
-	mpCubeModel->Load("Field\\Object\\cube.obj", "Field\\Object\\cube.mtl");
-
-	mpCylinderModel = new CModel();
-	mpCylinderModel->Load("Field\\Object\\cylinder.obj", "Field\\Object\\cylinder.mtl");*/
-
-	//// 動かない床②
-	//new CMoveFloor
-	//(
-	//	mpCubeModel,
-	//	CVector(135.0f, 70.0f, -52.5f), CVector(0.25f, 1.0f, 0.25f),
-	//	CVector(0.0f, 50.0f, 0.0f), 5.0f
-	//);
-
-	// 電撃エフェクト
+	//// 電撃エフェクト
 	//CLineEffect* le = new CLineEffect(ETag::eField);
 	//le->SetTexture("Current");
 	////le->SetBaseUV(CRect(0.0f, 0.0f, 128.0f, 1024.0f));

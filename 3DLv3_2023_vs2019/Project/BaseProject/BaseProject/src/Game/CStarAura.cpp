@@ -5,7 +5,7 @@
 #include "Maths.h"
 
 // 星のスケール値の最大値
-#define SCALE 3.0f
+#define SCALE 4.0f
 // 星のスケール値が最大値になるまでの時間
 #define SCALE_ANIM_TIME 0.2f
 

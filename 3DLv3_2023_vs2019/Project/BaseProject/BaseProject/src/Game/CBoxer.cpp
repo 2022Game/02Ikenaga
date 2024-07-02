@@ -10,15 +10,15 @@
 // ボクサーのインスタンス
 CBoxer* CBoxer::spInstance = nullptr;
 
-#define ENEMY_HEIGHT  1.0f
-#define WITHIN_RANGE  60.0f    // 範囲内
-#define MOVE_SPEED    0.8f     // 移動速度
-#define JUMP_SPEED    1.5f
-#define GRAVITY       0.0625f  // 重力
-#define JUMP_END_Y    1.0f	   
-#define WALK_RANGE    150.0f   // 追跡する範囲
-#define STOP_RANGE    30.0f    // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f   // 回転する範囲
+#define ENEMY_HEIGHT   1.0f   // 線分コライダー
+#define WITHIN_RANGE  60.0f   // 範囲内
+#define MOVE_SPEED     0.8f   // 移動速度
+#define JUMP_SPEED     1.5f   // ジャンプスピード
+#define GRAVITY     0.0625f   // 重力
+#define JUMP_END_Y     1.0f	   
+#define WALK_RANGE    50.0f   // 追跡する範囲
+#define STOP_RANGE    30.0f   // 追跡を辞める範囲
+#define ROTATE_RANGE 250.0f   // 回転する範囲
 
 // ボクサーのアニメーションデータのテーブル
 const CBoxer::AnimData CBoxer::ANIM_DATA[] =
@@ -52,6 +52,9 @@ CBoxer::CBoxer()
 {
 	//インスタンスの設定
 	spInstance = this;
+
+	// 敵の種類
+	mType = EEnemyType::eBoxer;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Boxer");

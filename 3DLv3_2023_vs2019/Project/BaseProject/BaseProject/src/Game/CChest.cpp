@@ -8,14 +8,14 @@
 // チェストモンスターのインスタンス
 CChest* CChest::spInstance = nullptr;
 
-#define ENEMY_HEIGHT  0.3f     // 線分コライダー
-#define WITHIN_RANGE  30.0f    // 範囲内
-#define ATTACK_RANGE  40.0f    // 攻撃の範囲内
-#define MOVE_SPEED    0.64f    // 移動速度
-#define GRAVITY       0.0625f  // 重力
-#define WALK_RANGE    150.0f   // 追跡する範囲
-#define STOP_RANGE    32.0f    // 追跡を辞める範囲
-#define ROTATE_RANGE  250.0f   // 回転する範囲
+#define ENEMY_HEIGHT   0.3f  // 線分コライダー
+#define WITHIN_RANGE  30.0f  // 範囲内
+#define ATTACK_RANGE  40.0f  // 攻撃の範囲内
+#define MOVE_SPEED    0.64f  // 移動速度
+#define GRAVITY     0.0625f  // 重力
+#define WALK_RANGE   150.0f  // 追跡する範囲
+#define STOP_RANGE    32.0f  // 追跡を辞める範囲
+#define ROTATE_RANGE 250.0f  // 回転する範囲
 
 // チェストモンスターのアニメーションデータのテーブル
 const CChest::AnimData CChest::ANIM_DATA[] =
@@ -43,6 +43,9 @@ CChest::CChest()
 {
 	//インスタンスの設定
 	spInstance = this;
+
+	// 敵の種類
+	mType = EEnemyType::eChest;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Chest");
