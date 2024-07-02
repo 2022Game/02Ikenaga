@@ -135,6 +135,14 @@ public:
 	/// <returns>線形補間の結果</returns>
 	static CVector Lerp(const CVector& a, const CVector& b, float t);
 	/// <summary>
+	/// 2点間を線形補間する（補間割合クランプなし版）
+	/// </summary>
+	/// <param name="a">開始位置</param>
+	/// <param name="b">終了位置</param>
+	/// <param name="t">補間割合</param>
+	/// <returns>線形補間の結果</returns>
+	static CVector LerpUnclamped(const CVector& a, const CVector& b, float t);
+	/// <summary>
 	/// 2つのベクトル間を球面線形補間する
 	/// </summary>
 	/// <param name="a">開始ベクトル</param>
@@ -279,6 +287,23 @@ public:
 	/// <param name="v1">2つ目のベクトル</param>
 	/// <returns>2つのベクトルの角度（ディグリー）</returns>
 	static float Angle(const CVector2& v0, const CVector2& v1);
+
+	/// <summary>
+	/// 2点間を線形補間する
+	/// </summary>
+	/// <param name="a">開始位置</param>
+	/// <param name="b">終了位置</param>
+	/// <param name="t">補間割合（0.0f～1.0f）</param>
+	/// <returns>線形補間の結果</returns>
+	static CVector2 Lerp(const CVector2& a, const CVector2& b, float t);
+	/// <summary>
+	/// 2点間を線形補間する（補間割合クランプなし版）
+	/// </summary>
+	/// <param name="a">開始位置</param>
+	/// <param name="b">終了位置</param>
+	/// <param name="t">補間割合</param>
+	/// <returns>線形補間の結果</returns>
+	static CVector2 LerpUnclamped(const CVector2& a, const CVector2& b, float t);
 
 	// 0ベクトル [0, 0]
 	const static CVector2 zero;

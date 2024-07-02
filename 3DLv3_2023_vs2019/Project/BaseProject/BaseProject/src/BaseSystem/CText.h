@@ -40,15 +40,35 @@ public:
 	void SetTextAlignH(ETextAlignH align);
 	void SetTextAlignV(ETextAlignV align);
 
+	void SetEnableShadow(bool enable);
+	void SetShadowOffsetPos(const CVector2& offset);
+	void SetShadowColor(const CColor& color);
+
+	void SetEnableOutline(bool enable);
+	//void SetOutlineWidth(float width);
+	void SetOutlineColor(const CColor& color);
+
 	void SetText(const char* format, ...);
 	void SetText(const wchar_t* format, ...);
 
 	void Render();
 
 private:
+	void CalcLineCount();
+	void RenderText(CVector2 pos, const CColor& color, const CColor& outlineColor);
+
 	CFont* mpFont;
 	std::wstring mText;
 	int mFontSize;
+	int mLineCount;
 	ETextAlignH mTextAlignH;
 	ETextAlignV mTextAlignV;
+
+	bool mIsEnableShadow;
+	CVector2 mShadowPos;
+	CColor mShadowColor;
+
+	bool mIsEnableOutline;
+	float mOutlineWidth;
+	CColor mOutlineColor;
 };

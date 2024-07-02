@@ -1,8 +1,6 @@
 #include "CQuaternion.h"
 #include "Maths.h"
 
-#define EPSILON 1e-6f
-
 const CQuaternion CQuaternion::identity(0.0f, 0.0f, 0.0f);
 
 CQuaternion::CQuaternion(float x, float y, float z, float w)

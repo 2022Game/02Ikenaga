@@ -3,6 +3,7 @@
 #include "CInput.h"
 #include "CImage.h"
 class CSound;
+class CTitleUI;
 
 //タイトルシーン
 class CTitleScene :public CSceneBase
@@ -18,5 +19,5 @@ public:
 	void Update();
 
 private:
-	CImage* mBgImage;   //背景画像
+	CTitleUI* mpTitleUI;
 };

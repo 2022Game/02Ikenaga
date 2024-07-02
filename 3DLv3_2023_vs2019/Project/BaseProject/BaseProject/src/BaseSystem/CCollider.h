@@ -5,6 +5,7 @@
 #include "CVertex.h"
 #include "ObjectTag.h"
 #include "CBounds.h"
+#include "CRect.h"
 
 class CObjectBase;
 class CCollisionManager;
@@ -149,6 +150,22 @@ public:
 	void Update();
 	// コライダー描画
 	virtual void Render() = 0;
+
+	/// <summary>
+	/// 矩形同士の衝突判定
+	/// </summary>
+	/// <param name="rect1">矩形1</param>
+	/// <param name="rect2">矩形2</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionRect(const CRect& rect1, const CRect& rect2);
+
+	/// <summary>
+	/// 矩形と点の衝突判定
+	/// </summary>
+	/// <param name="rect">矩形</param>
+	/// <param name="point">点</param>
+	/// <returns>trueならば、衝突している</returns>
+	static bool CollisionRectPoint(const CRect& rect, const CVector2 point);
 
 	/// <summary>
 	/// 三角形と三角形の衝突判定

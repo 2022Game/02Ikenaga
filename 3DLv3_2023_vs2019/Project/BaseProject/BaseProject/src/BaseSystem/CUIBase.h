@@ -18,6 +18,11 @@ public:
 	//表示座標を取得
 	const CVector2& GetPos() const;
 
+	//スケール値を設定
+	virtual void SetScale(const float& scale);
+	//スケール値を取得
+	float GetScale() const;
+
 	//表示サイズを設定（CVector2版）
 	virtual void SetSize(const CVector2& size);
 	//表示サイズを設定
@@ -46,10 +51,25 @@ public:
 	//アルファ値を取得
 	float GetAlpha() const;
 
+	//更新
+	void Update() override;
+
 protected:
+	bool CollisionPoint(const CVector2& point);
+
+	virtual void OnPointerEnter(const CVector2& pos);
+	virtual void OnPointerExit(const CVector2& pos);
+	virtual void OnPointerDown(const CVector2& pos);
+	virtual void OnPointerUp(const CVector2& pos);
+	virtual void OnMove(const CVector2& move);
+
+protected:
+	bool mIsTouch;
+	bool mIsEnter;
+	CVector2 mLastMousePos;
 	CVector2 mPosition;	//表示座標
 	CVector2 mSize;		//表示サイズ
 	CVector2 mCenter;	//中心位置
+	float mScale;
 	CColor mColor;		//UIのカラー
-private:
 };

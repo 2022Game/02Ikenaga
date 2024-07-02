@@ -112,3 +112,23 @@ void CRect::H(float h)
 {
 	mSize.Y(h);
 }
+
+float CRect::Left() const
+{
+	return mPosition.X();
+}
+
+float CRect::Right() const
+{
+	return mPosition.X() + mSize.X();
+}
+
+float CRect::Top() const
+{
+	return mPosition.Y();
+}
+
+float CRect::Bottom() const
+{
+	return mPosition.Y() + mSize.Y();
+}

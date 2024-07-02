@@ -210,6 +210,28 @@ void CCollider::Update()
 	}
 }
 
+// 矩形同士の衝突判定
+bool CCollider::CollisionRect(const CRect& rect1, const CRect& rect2)
+{
+	if (rect1.Left() <= rect2.Right() && rect1.Right() >= rect2.Left() &&
+		rect1.Top() <= rect2.Bottom() && rect1.Bottom() >= rect2.Top())
+	{
+		return true;
+	}
+	return false;
+}
+
+// 矩形と点の衝突判定
+bool CCollider::CollisionRectPoint(const CRect& rect, const CVector2 point)
+{
+	if (rect.Left() <= point.X() && rect.Right() >= point.X() &&
+		rect.Top() <= point.Y() && rect.Bottom() >= point.Y())
+	{
+		return true;
+	}
+	return false;
+}
+
 // コライダーの設定
 void CCollider::Set(CObjectBase* owner, ELayer layer)
 {

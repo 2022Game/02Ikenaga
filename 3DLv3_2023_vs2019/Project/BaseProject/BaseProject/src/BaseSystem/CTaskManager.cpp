@@ -290,30 +290,23 @@ void CTaskManager::Update()
 	}
 }
 
-// 描画
-void CTaskManager::Render()
+// 3Dオブジェクトの描画処理
+void CTaskManager::Render3d()
 {
-	// 現在のカメラが存在すれば
-	CCamera* current = CCamera::CurrentCamera();
-	if (current != nullptr)
+	for (CTask* task : m3dTasks)
 	{
-		// 現在のカメラを反映
-		current->Apply();
-		// 3D関連の描画
-		for (CTask* task : m3dTasks)
+		// 表示フラグがオンならば、
+		if (task->IsShow())
 		{
-			// 表示フラグがオンならば、
-			if (task->IsShow())
-			{
-				// タスクを描画
-				task->Render();
-			}
+			// タスクを描画
+			task->Render();
 		}
 	}
+}
 
-	// 2D描画用のカメラに切り替える
-	CCamera::Start2DCamera();
-	// 2D関連の描画
+// 2Dオブジェクトの描画処理
+void CTaskManager::Render2d()
+{
 	for (CTask* task : m2dTasks)
 	{
 		// 表示フラグがオンならば、
@@ -323,6 +316,81 @@ void CTaskManager::Render()
 			task->Render();
 		}
 	}
+}
+
+// モーションブラー有効時の3Dオブジェクトの描画処理
+void CTaskManager::RenderMotionBlur()
+{
+	// モーションブラーのパラメータを取得
+	CVector dir;
+	float width;
+	int count;
+	System::GetMotionBlurParam(&dir, &width, &count);
+
+	// 1回のブラーで反映する色の割合
+	float ratio = 1.0f / (count + 1);
+	// 指定された回数分ブラーを掛ける
+	for (int i = 0; i <= count; i++)
+	{
+		glPushMatrix();
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// ブラーの移動量を求める
+		CVector move = -dir * width * i;
+		glTranslatef(move.X(), move.Y(), move.Z());
+
+		// 3D関連のオブジェクトを描画
+		Render3d();
+
+		// 初回は、カラーバッファの内容を
+		// アキュムレーションバッファに上書き
+		if (i == 0)
+		{
+			glAccum(GL_LOAD, ratio);
+		}
+		// それ以降は、カラーバッファの内容を
+		// 一定割合で加算する
+		else
+		{
+			glAccum(GL_ACCUM, ratio);
+		}
+
+		glPopMatrix();
+	}
+	// モーションブラーを掛けた描画結果を
+	// カラーバッファに反映
+	glAccum(GL_RETURN, 1.0f);
+}
+
+// 描画
+void CTaskManager::Render()
+{
+	// 現在のカメラが存在すれば
+	CCamera* current = CCamera::CurrentCamera();
+	if (current != nullptr)
+	{
+		// 現在のカメラを反映
+		current->Apply();
+
+		// モーションブラーが有効
+		if (System::IsEnableMotionBlur())
+		{
+			// 3D関連の描画にモーションブラーを掛ける
+			RenderMotionBlur();
+		}
+		// モーションブラーが有効でない
+		else
+		{
+			// 通常の3D関連の描画
+			Render3d();
+		}
+	}
+
+	// 2D描画用のカメラに切り替える
+	CCamera::Start2DCamera();
+	// 2D関連の描画
+	Render2d();
 	// 3D描画用のカメラへ戻す
 	CCamera::End2DCamera();
 }

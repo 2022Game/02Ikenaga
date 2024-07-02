@@ -72,6 +72,11 @@ public:
 	float H() const;
 	void H(float h);
 
+	float Left() const;
+	float Right() const;
+	float Top() const;
+	float Bottom() const;
+
 private:
 	CVector2 mPosition;	// 矩形の開始位置
 	CVector2 mSize;		// 矩形のサイズ

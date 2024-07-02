@@ -172,7 +172,7 @@ int main(void)
 		glfwPollEvents();
 
 		int state = glfwGetKey(window, GLFW_KEY_ESCAPE);
-		if (state == GLFW_PRESS) {
+		if (System::IsExitGame() || state == GLFW_PRESS) {
 			//ESCキーでループ終了
 			break;
 		}

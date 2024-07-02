@@ -10,8 +10,15 @@ CText::CText(CFont* font, int fontSize, const CVector2& pos,
 	, mpFont(font)
 	, mText(L"")
 	, mFontSize(fontSize)
+	, mLineCount(0)
 	, mTextAlignH(ETextAlignH::eLeft)
 	, mTextAlignV(ETextAlignV::eTop)
+	, mIsEnableShadow(false)
+	, mShadowPos(CVector2(2.0f, 2.0f))
+	, mShadowColor(CColor::black)
+	, mIsEnableOutline(false)
+	, mOutlineWidth(1.0f)
+	, mOutlineColor(CColor::black)
 {
 	mPosition = pos;
 	mSize = size;
@@ -80,6 +87,36 @@ void CText::SetTextAlignV(ETextAlignV align)
 	}
 }
 
+void CText::SetEnableShadow(bool enable)
+{
+	mIsEnableShadow = enable;
+}
+
+void CText::SetShadowOffsetPos(const CVector2& offset)
+{
+	mShadowPos = offset;
+}
+
+void CText::SetShadowColor(const CColor& color)
+{
+	mShadowColor = color;
+}
+
+void CText::SetEnableOutline(bool enable)
+{
+	mIsEnableOutline = enable;
+}
+
+//void CText::SetOutlineWidth(float width)
+//{
+//	mOutlineWidth = width;
+//}
+
+void CText::SetOutlineColor(const CColor& color)
+{
+	mOutlineColor = color;
+}
+
 void CText::SetText(const char* format, ...)
 {
 	static const int size = 1024;
@@ -100,6 +137,7 @@ void CText::SetText(const char* format, ...)
 	{
 		mText = L"";
 	}
+	CalcLineCount();
 }
 
 void CText::SetText(const wchar_t* format, ...)
@@ -111,30 +149,72 @@ void CText::SetText(const wchar_t* format, ...)
 	va_end(ap);
 
 	mText = wbuf;
+	CalcLineCount();
+}
+
+void CText::CalcLineCount()
+{
+	mLineCount = 0;
+
+	int size = mText.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (mText.at(i) == '\n')
+		{
+			mLineCount++;
+		}
+	}
+}
+
+void CText::RenderText(CVector2 pos, const CColor& color, const CColor& outlineColor)
+{
+	if (mIsEnableOutline)
+	{
+		if (pos.X() - mOutlineWidth < 0.0f)
+		{
+			pos.X(pos.X() + mOutlineWidth);
+		}
+		glColor4f(outlineColor.R(), outlineColor.G(), outlineColor.B(), mColor.A());
+
+		glRasterPos2f(pos.X() - mOutlineWidth, pos.Y() - mOutlineWidth);
+		mpFont->Render(mText.c_str());
+		glRasterPos2f(pos.X() + mOutlineWidth, pos.Y() - mOutlineWidth);
+		mpFont->Render(mText.c_str());
+		glRasterPos2f(pos.X() + mOutlineWidth, pos.Y() + mOutlineWidth);
+		mpFont->Render(mText.c_str());
+		glRasterPos2f(pos.X() - mOutlineWidth, pos.Y() + mOutlineWidth);
+		mpFont->Render(mText.c_str());
+	}
+
+	glColor4f(color.R(), color.G(), color.B(), mColor.A());
+	glRasterPos2f(pos.X(), pos.Y());
+	mpFont->Render(mText.c_str());
 }
 
 void CText::Render()
 {
 	glPushMatrix();
 
-	float sx = mPosition.X();
-	float ex = mPosition.X() + mSize.X();
-	float sy = mPosition.Y();
-	float ey = mPosition.Y() + mSize.Y();
+	CVector pos = mPosition;
+	if (mTextAlignV == ETextAlignV::eTop)
+	{
+		pos.Y(pos.Y() + mFontSize);
+	}
+	else if (mTextAlignV == ETextAlignV::eMiddle)
+	{
+		pos.Y(pos.Y() + mSize.Y() * 0.5f - (mLineCount - 1) * 0.5f * mFontSize);
+	}
+	else if (mTextAlignV == ETextAlignV::eBottom)
+	{
+		pos.Y(pos.Y() + mSize.Y() - mLineCount * mFontSize);
+	}
 
-	//glBegin(GL_QUADS);
-	//glVertex2f(sx, sy);
-	//glVertex2f(sx, ey);
-	//glVertex2f(ex, ey);
-	//glVertex2f(ex, sy);
-	//glEnd();
+	if (mIsEnableShadow)
+	{
+		RenderText(pos + mShadowPos, mShadowColor, mShadowColor);
+	}
 
-	//F‚ÌÝ’è
-	glColor4f(mColor.R(), mColor.G(), mColor.B(), mColor.A());
-
-	glRasterPos2f(mPosition.X(), mPosition.Y() + mFontSize);
-
-	mpFont->Render(mText.c_str());
+	RenderText(pos, mColor, mOutlineColor);
 
 	glPopMatrix();
 }

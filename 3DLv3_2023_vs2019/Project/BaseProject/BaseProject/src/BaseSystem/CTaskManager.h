@@ -80,6 +80,14 @@ private:
 	// 更新するかどうか
 	bool IsUpdate(CTask* task) const;
 
+	// 3Dオブジェクトの描画処理
+	void Render3d();
+	// 2Dオブジェクトの描画処理
+	void Render2d();
+
+	// モーションブラー有効時の3Dオブジェクトの描画処理
+	void RenderMotionBlur();
+
 	// タスクマネージャのインスタンス
 	static CTaskManager* mpInstance;
 

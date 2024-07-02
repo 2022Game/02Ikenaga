@@ -71,5 +71,5 @@ private:
 	bool mIsShow;		//表示フラグ
 	ETaskPauseType mPauseType;//ポーズの種類
 	bool mAddTaskList;	//タスクリストに追加しているかどうか
-	EScene mSceneType;	//所属するシーンの種類
+	EScene mSceneType;	//所属するシーン種類
 };

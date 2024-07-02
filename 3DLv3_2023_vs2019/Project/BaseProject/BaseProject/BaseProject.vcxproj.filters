@@ -191,6 +191,9 @@
     <Filter Include="ソース ファイル\Game\Weapon\Sword">
       <UniqueIdentifier>{9c602e4b-8595-4127-a191-507c6962eb8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\TitleUI">
+      <UniqueIdentifier>{b146e67e-b51a-42c4-8fc3-7b8e0b2b34d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -648,6 +651,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CShieldRotate2.cpp">
       <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CTitleUI.cpp">
+      <Filter>ソース ファイル\Game\UI\TitleUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CUIManager.cpp">
+      <Filter>ソース ファイル\BaseSystem\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CButton.cpp">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseSystem\CExpandButton.cpp">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1130,6 +1145,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CShieldRotate2.h">
       <Filter>ソース ファイル\Game\Weapon\Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CTitleUI.h">
+      <Filter>ソース ファイル\Game\UI\TitleUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CUIManager.h">
+      <Filter>ソース ファイル\BaseSystem\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CButton.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseSystem\CExpandButton.h">
+      <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
