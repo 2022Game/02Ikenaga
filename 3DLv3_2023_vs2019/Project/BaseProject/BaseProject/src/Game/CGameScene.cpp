@@ -100,13 +100,13 @@ void CGameScene::Load()
 	//CResourceManager::Load<CModelX>("Bee", "Character\\Enemy\\Bee\\Bee.x");
 	//CResourceManager::Load<CModelX>("Cactus", "Character\\Enemy\\Cactus\\Cactus.x");
 	//CResourceManager::Load<CModelX>("Chest", "Character\\Enemy\\Chest\\Chest.x");
-	//CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
+	CResourceManager::Load<CModelX>("Beholder", "Character\\Enemy\\Beholder\\Beholder.x");
 	//CResourceManager::Load<CModelX>("Boxer", "Character\\Enemy\\Boxer\\Boxer.x");
 	//CResourceManager::Load<CModelX>("Boxer2", "Character\\Enemy\\Boxer\\Boxer2.x");
 	//CResourceManager::Load<CModelX>("Lich", "Character\\Enemy\\Lich\\Lich.x");
 
 	// ボス関連
-	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
+	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
 
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
@@ -298,11 +298,11 @@ void CGameScene::Load()
 	//enemy21->Position(-30.0f, 0.0f, -960.0f);
 	//enemy21->Scale(30.0f, 30.0f, 30.0f);
 
-	//// 球体のモンスター
-	//CBeholder* enemy22 = new CBeholder();
+	// 球体のモンスター
+	CBeholder* enemy22 = new CBeholder();
 	//enemy22->Position(150.0f, 0.0f, -1050.0f);
-	////enemy22->Position(50.0f, 0.0f, 0.0f);
-	//enemy22->Scale(15.0f, 15.0f, 15.0f);
+	enemy22->Position(50.0f, 0.0f, 0.0f);
+	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	//// ボクサー
 	//CBoxer* enemy25 = new CBoxer();
@@ -320,10 +320,10 @@ void CGameScene::Load()
 	////enemy28->Rotate(0.0f,90.0f,-70.0f);
 	//enemy28->Scale(2.5f, 2.5f, 2.5f);
 
-	// ドラゴン
-	CDragon* bossEnemy = new CDragon();
-	bossEnemy->Position(0.0f, 1.0f, -50.0f);
-	bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	//// ドラゴン
+	//CDragon* bossEnemy = new CDragon();
+	//bossEnemy->Position(0.0f, 1.0f, -50.0f);
+	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	//// 攻撃力アップポーション
 	//CPortionRed* portionred = new CPortionRed();

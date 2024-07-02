@@ -83,8 +83,10 @@ public:
 	void Death() override;
 
 private:
-	int mAttackTime;   // 攻撃時間の間隔
-	int mFlyingTime;   // 飛行時間
+
+	int mAttackTime;  // 次の攻撃時間
+	int mFlyingTime;  // 飛行時間  
+
 	// アニメーションの種類
 	enum class EAnimType
 	{

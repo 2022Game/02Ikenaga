@@ -12,17 +12,17 @@
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
 
-#define ENEMY_HEIGHT  0.5f     // 線分コライダー
-#define WITHIN_RANGE  40.0f    // 範囲内
-#define MOVE_SPEED    0.65f    // 移動速度
-#define MOVE_SPEED_Y  0.027f   // Yのスピード
-#define GRAVITY       0.0625f  // 重力
-#define WALK_RANGE    150.0f   // 追跡する範囲
-#define STOP_RANGE    26.0f    // 追跡を辞める範囲
-#define STOP_RANGE_Y  20.0f    // 追跡を辞める高さ
-#define ROTATE_RANGE  250.0f   // 回転する範囲
-#define START_POS_Y   20.0f    // 開始位置のY方向
-#define START_POS_Z   13.0f    // 開始位置のZ方向
+#define ENEMY_HEIGHT   0.5f  // 線分コライダー
+#define WITHIN_RANGE  40.0f  // 範囲内
+#define MOVE_SPEED    0.65f  // 移動速度
+#define MOVE_SPEED_Y  0.05f  // Yのスピード
+#define GRAVITY     0.0625f  // 重力
+#define WALK_RANGE   150.0f  // 追跡する範囲
+#define STOP_RANGE    26.0f  // 追跡を辞める範囲
+#define STOP_RANGE_Y  20.0f  // 追跡を辞める高さ
+#define ROTATE_RANGE 250.0f  // 回転する範囲
+#define START_POS_Y   20.0f  // 開始位置のY方向
+#define START_POS_Z   13.0f  // 開始位置のZ方向
 
 // 球体のモンスターのアニメーションデータのテーブル
 const CBeholder::AnimData CBeholder::ANIM_DATA[] =
@@ -321,6 +321,7 @@ CBeholder::CBeholder()
 	mpAttackColTentacle5->SetEnable(false);
 	mpAttackColTentacle6->SetEnable(false);
 
+	// 雷球
 	mpLightningBall = new CLightningBallEffect
 	(
 		this, nullptr,
@@ -328,6 +329,7 @@ CBeholder::CBeholder()
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
 
+	//　電撃
 	mpElectricShock = new  CElectricShockEffect
 	(
 		this, nullptr,
@@ -339,6 +341,7 @@ CBeholder::CBeholder()
 	forward.Y(0.0f);
 	forward.Normalize();
 	CVector HomingPos = Position() + forward * START_POS_Z + CVector(0.0f, START_POS_Y, 0.0f);
+	// ホーミングボール
 	mpHomingBall = new CHomingBallEffect
 	(
 		this, nullptr,
@@ -402,11 +405,16 @@ void CBeholder::ChangeState(EState state)
 // トルネードエフェクトを作成
 void CBeholder::CreateTornado()
 {
+	CVector forward = VectorZ();
+	forward.Y(0.0f);
+	forward.Normalize();
+	CVector TornadoPos = Position() + forward * START_POS_Z + CVector(0.0f, START_POS_Y, 0.0f);
+
 	// トルネードエフェクトを生成して、正面方向へ飛ばす
 	CTornado* tornado = new CTornado
 	(
 		this,
-		Position() + CVector(0.0f, 5.0f, 0.0f),
+		TornadoPos,
 		VectorZ(),
 		40.0f,
 		80.0f
@@ -686,6 +694,7 @@ void CBeholder::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
@@ -738,7 +747,7 @@ void CBeholder::Update()
 	}
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
+	CVector gaugePos = Position() + CVector(0.0f, 38.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
@@ -749,6 +758,8 @@ void CBeholder::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
+		mFlyingTime++;
+
 		if (vectorPos <= 70.0f)
 		{
 			mAttackTime++;
@@ -787,7 +798,7 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				ChangeState(EState::eAttack3);
+				//ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
@@ -795,7 +806,7 @@ void CBeholder::Update()
 			}
 			else
 			{
-				ChangeState(EState::eAttack);
+				//ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
@@ -814,22 +825,26 @@ void CBeholder::Update()
 
 	if (mState == EState::eRun)
 	{
-		mFlyingTime++;
 
-		if (mFlyingTime <= 200 && mFlyingTime > 0)
+		if (mFlyingTime <= 400 && mFlyingTime >= 1)
 		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
+			Position(Position().X(), Position().Y() + 0.2f, Position().Z());
+		}
+	}
+
+	if (mFlyingTime >= 400)
+	{
+		Position(Position().X(), Position().Y() - 0.08f, Position().Z());
+		if (mFlyingTime >= 700)
+		{
+			mFlyingTime = 0;
 		}
 	}
 
 	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
 	{
-		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
-	}
-
-	if (Position().Y() <= 0.0f)
-	{
-		mFlyingTime = 0;
+		//mMoveSpeed.Y(0.0f);
+		//mMoveSpeed.Y(mMoveSpeed.Y()* MOVE_SPEED_Y);
 	}
 
 	if (mState == EState::eHit)
@@ -865,9 +880,13 @@ void CBeholder::Update()
 	mpAttackColTentacle6->Update();
 
 	mIsGrounded = false;
+	float y = 0.0f;
+	y = Position().Y();
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
+	CDebugPrint::Print("高さ %f\n", y);
+	CDebugPrint::Print("飛行 %d\n", mFlyingTime);
 }
 
 // 衝突処理
