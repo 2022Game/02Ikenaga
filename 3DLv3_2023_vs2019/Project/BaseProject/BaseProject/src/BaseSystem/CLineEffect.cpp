@@ -5,19 +5,79 @@
 // コンストラクタ
 CLineEffect::CLineEffect(ETag tag)
 	: CEffect(tag)
+	, mpOwner(nullptr)
 	, mpTexture(nullptr)
+	, mpAnimData(nullptr)
+	, mAnimNo(0)
+	, mElapsedTime(0.0f)
+	, mBaseUV(0.0f, 0.0f, 1.0f, 1.0f)
+	, mUV(0.0f, 0.0f, 1.0f, 1.0f)
 {
 }
 
 // デストラクタ
 CLineEffect::~CLineEffect()
 {
+	// 持ち主が存在する場合は、
+	if (mpOwner != nullptr)
+	{
+		// 持ち主に自分が削除されたことを伝える
+		mpOwner->DeleteObject(this);
+	}
+}
+
+// 持ち主を設定
+void CLineEffect::SetOwner(CObjectBase* owner)
+{
+	mpOwner = owner;
 }
 
 // テクスチャ設定
 void CLineEffect::SetTexture(std::string texName)
 {
 	mpTexture = CResourceManager::Get<CTexture>(texName);
+}
+
+// UV設定
+void CLineEffect::SetBaseUV(const CRect& uv)
+{
+	mBaseUV = uv;
+}
+
+// アニメーションを再生できるかどうか
+bool CLineEffect::IsEnableAnim() const
+{
+	if (mpAnimData == nullptr) return false;
+	if (mpAnimData->frames.size() == 0) return false;
+	return true;
+}
+
+// アニメーションデータを設定
+void CLineEffect::SetAnimData(TexAnimData* animData)
+{
+	mpAnimData = animData;
+	mAnimNo = 0;
+	mElapsedTime = 0.0f;
+
+	// アニメーションが有効であれば、
+	// 一番最初の画像のUVを設定
+	if (IsEnableAnim())
+	{
+		mUV = mpTexture->CalcUV
+		(
+			mpAnimData->row,
+			mpAnimData->col,
+			0
+		);
+	}
+}
+
+// アニメーションが終わったかどうか
+bool CLineEffect::IsEndAnim() const
+{
+	if (mpAnimData == nullptr) return true;
+	int size = mpAnimData->frames.size();
+	return mAnimNo == size;
 }
 
 // 線のポイントを追加
@@ -58,6 +118,13 @@ CVector CLineEffect::GetPos(int index) const
 	return mPoints[index]->pos;
 }
 
+// 座標を計算
+CVector CLineEffect::CalcPos(const CVector& pos) const
+{
+	if (mpOwner == nullptr) return pos;
+	return mpOwner->Position() + mpOwner->Rotation() * pos;
+}
+
 //// 線のポイントの幅を設定
 //void CLineEffect::SetWidth(int index, float width)
 //{
@@ -75,6 +142,41 @@ CVector CLineEffect::GetPos(int index) const
 // 更新
 void CLineEffect::Update()
 {
+	if (IsEnableAnim())
+	{
+		int size = mpAnimData->frames.size();
+		if (mAnimNo < size)
+		{
+			TexAnimFrameData data = mpAnimData->frames[mAnimNo];
+			// 現在の画像の表示時間を超えたら
+			if (mElapsedTime >= data.time)
+			{
+				// 次の画像へ切り替え
+				mElapsedTime -= data.time;
+
+				mAnimNo++;
+				if (mAnimNo >= size)
+				{
+					if (mpAnimData->loop)
+					{
+						mAnimNo -= size;
+					}
+					else
+					{
+						mAnimNo = size;
+					}
+				}
+				mUV = mpTexture->CalcUV
+				(
+					mpAnimData->row,
+					mpAnimData->col,
+					mAnimNo
+				);
+			}
+			// 経過時間を計測
+			mElapsedTime += Time::DeltaTime();
+		}
+	}
 }
 
 // 描画
@@ -111,7 +213,13 @@ void CLineEffect::Render()
 		float endWidth = Math::Lerp(end->startWidth, end->endWidth, 1.0f - end->alpha);
 
 		CVector v = endPos - startPos;
-		CVector side = CVector::Cross(v.Normalized(), CVector::up);
+		CVector crossUp = CVector::up;
+		CVector side = CVector::Cross(v.Normalized(), crossUp);
+		if (abs(side.LengthSqr()) <= EPSILON)
+		{
+			crossUp = CVector::forward;
+			side = CVector::Cross(v.Normalized(), crossUp);
+		}
 		CVector up = CVector::Cross(v.Normalized(), side);
 
 		bool prev = i > 0;
@@ -119,13 +227,13 @@ void CLineEffect::Render()
 		CLinePoint* prevE = prev ? mPoints[i] : nullptr;
 		if (prev && prevS == nullptr) prev = false;
 		CVector prevV = prev ? prevE->pos - prevS->pos : CVector::zero;
-		CVector prevSide = prev ? CVector::Cross(prevV.Normalized(), CVector::up) : CVector::zero;
+		CVector prevSide = prev ? CVector::Cross(prevV.Normalized(), crossUp) : CVector::zero;
 		CVector prevUp = prev ? CVector::Cross(prevV.Normalized(), prevSide) : CVector::zero;
 		bool next = i + 1 < size - 1;
 		CLinePoint* nextS = next ? mPoints[i + 1] : nullptr;
 		CLinePoint* nextE = next ? mPoints[i + 2] : nullptr;
 		CVector nextV = next ? nextE->pos - nextS->pos : CVector::zero;
-		CVector nextSide = next ? CVector::Cross(nextV.Normalized(), CVector::up) : CVector::zero;
+		CVector nextSide = next ? CVector::Cross(nextV.Normalized(), crossUp) : CVector::zero;
 		CVector nextUp = next ? CVector::Cross(nextV.Normalized(), nextSide) : CVector::zero;
 
 		// 縦板を描画
@@ -152,14 +260,19 @@ void CLineEffect::Render()
 				vtx3 = (vtx3 + nextVtx1) * 0.5f;
 			}
 
+			vtx0 = CalcPos(vtx0);
+			vtx1 = CalcPos(vtx1);
+			vtx2 = CalcPos(vtx2);
+			vtx3 = CalcPos(vtx3);
+
 			glBegin(GL_TRIANGLE_STRIP);
-			glTexCoord2f(1.0f, 0.0f);
+			glTexCoord2f(mUV.Right(), mUV.Top());
 			glVertex3fv((const float*)&vtx0);
-			glTexCoord2f(0.0f, 0.0f);
+			glTexCoord2f(mUV.Left(), mUV.Top());
 			glVertex3fv((const float*)&vtx1);
-			glTexCoord2f(1.0f, 1.0f);
+			glTexCoord2f(mUV.Right(), mUV.Bottom());
 			glVertex3fv((const float*)&vtx2);
-			glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(mUV.Left(), mUV.Bottom());
 			glVertex3fv((const float*)&vtx3);
 			glEnd();
 		}
@@ -187,14 +300,19 @@ void CLineEffect::Render()
 				vtx3 = (vtx3 + nextVtx1) * 0.5f;
 			}
 
+			vtx0 = CalcPos(vtx0);
+			vtx1 = CalcPos(vtx1);
+			vtx2 = CalcPos(vtx2);
+			vtx3 = CalcPos(vtx3);
+
 			glBegin(GL_TRIANGLE_STRIP);
-			glTexCoord2f(1.0f, 0.0f);
+			glTexCoord2f(mUV.Right(), mUV.Top());
 			glVertex3fv((const float*)&vtx0);
-			glTexCoord2f(0.0f, 0.0f);
+			glTexCoord2f(mUV.Left(), mUV.Top());
 			glVertex3fv((const float*)&vtx1);
-			glTexCoord2f(1.0f, 1.0f);
+			glTexCoord2f(mUV.Right(), mUV.Bottom());
 			glVertex3fv((const float*)&vtx2);
-			glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(mUV.Left(), mUV.Bottom());
 			glVertex3fv((const float*)&vtx3);
 			glEnd();
 		}

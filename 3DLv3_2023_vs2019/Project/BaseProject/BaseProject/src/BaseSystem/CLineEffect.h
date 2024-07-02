@@ -23,8 +23,20 @@ public:
 	// デストラクタ
 	virtual ~CLineEffect();
 
+	// 持ち主を設定
+	void SetOwner(CObjectBase* owner);
+
 	// テクスチャ設定
 	void SetTexture(std::string texName);
+
+	// UV設定
+	void SetBaseUV(const CRect& uv);
+
+	// アニメーションデータを設定
+	void SetAnimData(TexAnimData* animData);
+
+	// アニメーションが終わったかどうか
+	bool IsEndAnim() const;
 
 	// 線のポイントを追加
 	int AddPoint(const CVector& pos, float startWidth, float endWidth);
@@ -49,9 +61,28 @@ public:
 	// 描画
 	void Render() override;
 
+private:
+	// 座標を計算
+	CVector CalcPos(const CVector& pos) const;
+	// アニメーションを再生できるかどうか
+	bool IsEnableAnim() const;
+
 protected:
+	// 持ち主
+	CObjectBase* mpOwner;
+
 	// 線のテクスチャ
 	CTexture* mpTexture;
 	// 線のポイントのリスト
 	std::vector<CLinePoint*> mPoints;
+
+	// アニメーションデータのリスト
+	TexAnimData* mpAnimData;
+	// 現在のアニメーション番号
+	int mAnimNo;
+	// アニメーション用の経過時間計測変数
+	float mElapsedTime;
+
+	CRect mBaseUV;
+	CRect mUV;
 };
