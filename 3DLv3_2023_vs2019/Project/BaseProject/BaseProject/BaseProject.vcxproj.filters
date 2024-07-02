@@ -194,6 +194,9 @@
     <Filter Include="ソース ファイル\Game\UI\TitleUI">
       <UniqueIdentifier>{b146e67e-b51a-42c4-8fc3-7b8e0b2b34d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Current">
+      <UniqueIdentifier>{9e8a1061-391a-45c2-ad34-068f0599dbf6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -663,6 +666,9 @@
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CExpandButton.cpp">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CCurrent.cpp">
+      <Filter>ソース ファイル\Game\Effect\Current</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1157,6 +1163,9 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CExpandButton.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CCurrent.h">
+      <Filter>ソース ファイル\Game\Effect\Current</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -28,6 +28,7 @@ enum class ETag
 	eHomingBall,      // ホーミングボール
 	eDrain,           // ドレイン(HP吸収)
 	eAura,            // オーラ
+	eCurrent,         // 電流
 
 	eCamera,          // カメラ
 

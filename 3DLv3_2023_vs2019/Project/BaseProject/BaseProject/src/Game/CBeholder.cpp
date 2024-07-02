@@ -7,6 +7,7 @@
 #include "CElectricShockEffect.h"
 #include "CHomingBallEffect.h"
 #include "CTornado.h"
+#include "CCurrent.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
@@ -405,7 +406,7 @@ void CBeholder::ChangeState(EState state)
 	mStateStep = 0;
 }
 
-// トルネードエフェクトを作成
+// トルネードエフェクトを生成
 void CBeholder::CreateTornado()
 {
 	CVector forward = VectorZ();
@@ -424,6 +425,22 @@ void CBeholder::CreateTornado()
 	);
 	tornado->SetColor(CColor(1.0f, 1.0f, 1.0f));
 	tornado->SetOwner(this);
+}
+
+// 電流エフェクトを生成
+void CBeholder::CreateCurrent()
+{
+	CVector forward = VectorZ();
+	forward.Y(0.0f);
+	forward.Normalize();
+	CVector CurrentPos = Position() + forward * HOMING_VEC_Z + CVector(0.0f, HOMING_VEC_Y, 0.0f);
+	mpCurrent = new CCurrent
+	(
+		this,
+		CurrentPos,
+		VectorZ()
+	);
+	mpCurrent->SetOwner(this);
 }
 
 // 待機状態
@@ -525,6 +542,7 @@ void CBeholder::UpdateAttack2()
 		ChangeAnimation(EAnimType::eAttack2);
 		if (mAnimationFrame >= 3.0f)
 		{
+			CreateCurrent();
 			mStateStep++;
 		}
 		break;
@@ -532,6 +550,7 @@ void CBeholder::UpdateAttack2()
 	case 1:
 		if (mAnimationFrame >= 20.0f)
 		{
+			mpCurrent->Kill();
 			ChangeState(EState::eAttackWait);
 		}
 		break;
@@ -803,7 +822,7 @@ void CBeholder::Update()
 			if (probability4 == 11)Attack4 = true;
 			if (Attack2)
 			{
-				//ChangeState(EState::eAttack2);
+				ChangeState(EState::eAttack2);
 			}
 			else if (Attack3)
 			{
@@ -811,7 +830,7 @@ void CBeholder::Update()
 			}
 			else if (Attack4)
 			{
-				ChangeState(EState::eAttack4);
+				//ChangeState(EState::eAttack4);
 			}
 			else
 			{

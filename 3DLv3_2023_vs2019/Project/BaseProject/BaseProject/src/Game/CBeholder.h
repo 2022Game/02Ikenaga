@@ -7,6 +7,7 @@
 class CLightningBallEffect;
 class CElectricShockEffect;
 class CHomingBallEffect;
+class CCurrent;
 
 /*
  球体のモンスター
@@ -21,31 +22,9 @@ public:
 
 	// コンストラクタ
 	CBeholder();
+
 	// デストラクタ
 	~CBeholder();
-
-	// 戦う前の待機状態
-	void UpdateIdle();
-	// 戦う前の待機状態2
-	void UpdateIdle2();
-
-	// 攻撃(電気ボール)
-	void UpdateAttack();
-	// 攻撃2(電流)
-	void UpdateAttack2();
-	// 攻撃3(電気ボールのホーミング)
-	void UpdateAttack3();
-	// 攻撃4(回転攻撃＋エフェクト)
-	void UpdateAttack4();
-	// 攻撃終了待ち
-	void UpdateAttackWait();
-
-	//ヒット
-	void UpdateHit();
-	// 死ぬ時
-	void UpdateDie();
-	// めまい(混乱)
-	void UpdateDizzy();
 
 	// 移動
 	void UpdateRun();
@@ -83,6 +62,29 @@ public:
 	void Death() override;
 
 private:
+
+	// 戦う前の待機状態
+	void UpdateIdle();
+	// 戦う前の待機状態2
+	void UpdateIdle2();
+
+	// 攻撃(電気ボール)
+	void UpdateAttack();
+	// 攻撃2(電流)
+	void UpdateAttack2();
+	// 攻撃3(電気ボールのホーミング)
+	void UpdateAttack3();
+	// 攻撃4(回転攻撃＋エフェクト)
+	void UpdateAttack4();
+	// 攻撃終了待ち
+	void UpdateAttackWait();
+
+	//ヒット
+	void UpdateHit();
+	// 死ぬ時
+	void UpdateDie();
+	// めまい(混乱)
+	void UpdateDizzy();
 
 	int mAttackTime;  // 次の攻撃時間
 	int mFlyingTime;  // 飛行時間  
@@ -144,8 +146,11 @@ private:
 	// 状態を切り替え
 	void ChangeState(EState state);
 
-	// トルネードエフェクトを作成
+	// トルネードエフェクトを生成
 	void CreateTornado();
+
+	// 電流エフェクトを生成
+	void CreateCurrent();
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
@@ -180,4 +185,5 @@ private:
 	CLightningBallEffect* mpLightningBall;  // 雷球
 	CElectricShockEffect* mpElectricShock;  // 電撃
 	CHomingBallEffect* mpHomingBall;  // ホーミングボール
+	CCurrent* mpCurrent;
 };

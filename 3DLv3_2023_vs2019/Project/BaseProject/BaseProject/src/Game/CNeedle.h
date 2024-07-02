@@ -17,6 +17,7 @@ public:
 	/// <param name="speed">移動速度</param>
 	/// <param name="dist">移動したら消える距離</param>
 	CNeedle(CObjectBase* owner, const CVector& pos, const CVector& dir, float speed, float dist);
+
 	// デストラクタ
 	~CNeedle();
 

@@ -72,6 +72,7 @@
     <ClCompile Include="src\Game\AvoidanceGauge.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBuffAura.cpp" />
+    <ClCompile Include="src\Game\CCurrent.cpp" />
     <ClCompile Include="src\Game\CDrain.cpp" />
     <ClCompile Include="src\Game\CDrainEffect.cpp" />
     <ClCompile Include="src\Game\CElectricShock.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
     <ClInclude Include="src\Game\CBuffAura.h" />
+    <ClInclude Include="src\Game\CCurrent.h" />
     <ClInclude Include="src\Game\CDrain.h" />
     <ClInclude Include="src\Game\CDrainEffect.h" />
     <ClInclude Include="src\Game\CElectricShock.h" />

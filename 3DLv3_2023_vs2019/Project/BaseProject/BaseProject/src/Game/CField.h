@@ -30,5 +30,5 @@ private:
 	CModel* mpCubeModel;
 	CModel* mpCylinderModel;
 
-	TexAnimData mEffectAnimData;
+	//TexAnimData mEffectAnimData;
 };
