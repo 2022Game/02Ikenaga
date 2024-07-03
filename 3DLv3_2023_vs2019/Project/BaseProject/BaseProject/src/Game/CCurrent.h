@@ -1,7 +1,6 @@
 #pragma once
 #include "CWeapon.h"
 #include "CTexture.h"
-#include "CColliderLine.h"
 
 class CLineEffect;
 
@@ -35,6 +34,4 @@ private:
 
 	CLineEffect* mpLineEffect;
 	TexAnimData mEffectAnimData;
-
-	CColliderLine* mpAttackCol;
 };

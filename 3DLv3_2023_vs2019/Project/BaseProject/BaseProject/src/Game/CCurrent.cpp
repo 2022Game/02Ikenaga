@@ -30,15 +30,6 @@ CCurrent::CCurrent(CObjectBase* owner, const CVector& pos, const CVector& dir)
 		CVector pos = CVector::Lerp(startPos, endPos, alpha);
 		mpLineEffect->AddPoint(pos, width, width);
 	}
-
-	mpAttackCol = new CColliderLine
-	(
-		this, ELayer::eAttackCol,
-		CVector(0.0f, 0.0f, 10.0f),
-		CVector(0.0f, 0.0f, 0.0f)
-	);
-	mpAttackCol->SetCollisionTags({ ETag::eField, ETag::eRideableObject,ETag::ePlayer });
-	mpAttackCol->SetCollisionLayers({ ELayer::eField ,ELayer::eDamageCol });
 }
 
 // デストラクタ
@@ -48,7 +39,6 @@ CCurrent::~CCurrent()
 	{
 		mpLineEffect->Kill();
 	}
-	SAFE_DELETE(mpAttackCol);
 }
 
 // 衝突処理

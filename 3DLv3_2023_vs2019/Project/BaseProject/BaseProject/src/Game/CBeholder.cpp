@@ -92,7 +92,7 @@ CBeholder::CBeholder()
 	mpColliderSphereBody = new CColliderSphere
 	(
 		this, ELayer::eEnemy,
-		0.41f, false, 2.0f
+		0.41f, false, 5.0f
 	);
 	mpColliderSphereBody->SetCollisionLayers({ ELayer::ePlayer,ELayer::eEnemy, ELayer::eField });
 
@@ -273,6 +273,24 @@ CBeholder::CBeholder()
 	mpAttackColTentacle6->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle6->SetCollisionTags({ ETag::ePlayer });
 
+	// ダメージを与える線分コライダー(左上の触手)
+	mpAttackColLine = new CColliderLine
+	(
+		this, ELayer::eAttackCol,
+		CVector(0.0f, 0.0, 1.0f),
+		CVector(0.0f, 0.0f, 0.0f)
+	);
+	mpAttackColLine->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackColLine->SetCollisionTags({ ETag::ePlayer });
+	CVector forwardX = VectorX();
+	CVector forwardZ = VectorZ();
+	forwardX.Y(0.0f);
+	forwardX.Normalize();
+	forwardZ.Y(0.0f);
+	forwardZ.Normalize();
+	CVector TentacleA05 = Position() + forwardX * -7.0f + forwardZ * 10.5f + CVector(0.0f, 24.5f, 0.0f);
+	mpAttackColLine->Position(TentacleA05);
+
 	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの体の行列にアタッチ
 	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
 	mpColliderSphereBody->SetAttachMtx(bodyMty);
@@ -323,6 +341,7 @@ CBeholder::CBeholder()
 	mpAttackColTentacle4->SetEnable(false);
 	mpAttackColTentacle5->SetEnable(false);
 	mpAttackColTentacle6->SetEnable(false);
+	mpAttackColLine->SetEnable(false);
 
 	// 雷球
 	mpLightningBall = new CLightningBallEffect
@@ -430,17 +449,61 @@ void CBeholder::CreateTornado()
 // 電流エフェクトを生成
 void CBeholder::CreateCurrent()
 {
-	CVector forward = VectorZ();
-	forward.Y(0.0f);
-	forward.Normalize();
-	CVector CurrentPos = Position() + forward * HOMING_VEC_Z + CVector(0.0f, HOMING_VEC_Y, 0.0f);
+	CVector forwardX = VectorX();
+	CVector forwardZ = VectorZ();
+	forwardX.Y(0.0f);
+	forwardX.Normalize();
+	forwardZ.Y(0.0f);
+	forwardZ.Normalize();
+
+	// 攻撃コライダーと同じ位置から開始
+	CVector TentacleA05 = Position() + forwardX * -7.0f + forwardZ * 10.5f + CVector(0.0f, 24.5f, 0.0f);
 	mpCurrent = new CCurrent
 	(
 		this,
-		CurrentPos,
+		TentacleA05,
 		VectorZ()
 	);
-	mpCurrent->SetOwner(this);
+
+	/*CVector TentacleE05 = Position() + forwardX * 5.0f + forwardZ * 11.5f + CVector(0.0f, 25.5f, 0.0f);
+	mpCurrent2 = new CCurrent
+	(
+		this,
+		TentacleE05,
+		VectorZ()
+	);
+
+	CVector TentacleB05 = Position() + forwardX * -7.0f + forwardZ * 12.5f + CVector(0.0f, 16.0f, 0.0f);
+	mpCurrent3 = new CCurrent
+	(
+		this,
+		TentacleB05,
+		VectorZ()
+	);
+
+	CVector TentacleD05 = Position() + forwardX * 10.0f + forwardZ * 8.0f + CVector(0.0f, 18.5f, 0.0f);
+	mpCurrent4 = new CCurrent
+	(
+		this,
+		TentacleD05,
+		VectorZ()
+	);
+
+	CVector TentacleF05 = Position() + forwardX * -5.0f + forwardZ * 4.0f + CVector(0.0f, 29.8f, 0.0f);
+	mpCurrent5 = new CCurrent
+	(
+		this,
+		TentacleF05,
+		VectorZ()
+	);
+
+	CVector TentacleC05 = Position() + forwardX * 2.0f + forwardZ * 5.0f + CVector(0.0f, 12.3f, 0.0f);
+	mpCurrent6 = new CCurrent
+	(
+		this,
+		TentacleC05,
+		VectorZ()
+	);*/
 }
 
 // 待機状態
@@ -543,6 +606,7 @@ void CBeholder::UpdateAttack2()
 		if (mAnimationFrame >= 3.0f)
 		{
 			CreateCurrent();
+			AttackStart();
 			mStateStep++;
 		}
 		break;
@@ -551,6 +615,11 @@ void CBeholder::UpdateAttack2()
 		if (mAnimationFrame >= 20.0f)
 		{
 			mpCurrent->Kill();
+			/*mpCurrent2->Kill();
+			mpCurrent3->Kill();
+			mpCurrent4->Kill();
+			mpCurrent5->Kill();
+			mpCurrent6->Kill();*/
 			ChangeState(EState::eAttackWait);
 		}
 		break;
@@ -852,13 +921,19 @@ void CBeholder::Update()
 
 		if (mFlyingTime <= 400 && mFlyingTime >= 1)
 		{
-			Position(Position().X(), Position().Y() + 0.2f, Position().Z());
+			if (mState != EState::eAttack2)
+			{
+				Position(Position().X(), Position().Y() + 0.2f, Position().Z());
+			}
 		}
 	}
 
 	if (mFlyingTime >= 400)
 	{
-		Position(Position().X(), Position().Y() - 0.08f, Position().Z());
+		if (mState != EState::eAttack2)
+		{
+			Position(Position().X(), Position().Y() - 0.08f, Position().Z());
+		}
 		if (mFlyingTime >= 600)
 		{
 			mFlyingTime = 0;
@@ -914,8 +989,10 @@ void CBeholder::Update()
 void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackColBody || self == mpAttackColTentacle || self == mpAttackColTentacle2 || self == mpAttackColTentacle3 || self == mpAttackColTentacle4
-		|| self == mpAttackColTentacle5 || self == mpAttackColTentacle6 && mState != EState::eIdle && mState != EState::eIdle2)
+	if (self == mpAttackColBody || self == mpAttackColTentacle || self == mpAttackColTentacle2 
+		|| self == mpAttackColTentacle3 || self == mpAttackColTentacle4 || self == mpAttackColTentacle5
+		|| self == mpAttackColTentacle6 || self == mpAttackColLine
+		&& mState != EState::eIdle && mState != EState::eIdle2)
 	{
 		// キャラのポインタに変換
 		CCharaBase* chara = dynamic_cast<CCharaBase*> (other->Owner());
@@ -964,6 +1041,11 @@ void CBeholder::AttackStart()
 {
 	CXCharacter::AttackStart();
 	// 攻撃が始まったら、攻撃判定用のコライダーをオンにする
+	if (mState == EState::eAttack2)
+	{
+		mpAttackColLine->SetEnable(true);
+	}
+
 	if (mState == EState::eAttack4)
 	{
 		mpAttackColBody->SetEnable(true);
@@ -988,6 +1070,7 @@ void CBeholder::AttackEnd()
 	mpAttackColTentacle4->SetEnable(false);
 	mpAttackColTentacle5->SetEnable(false);
 	mpAttackColTentacle6->SetEnable(false);
+	mpAttackColLine->SetEnable(false);
 }
 
 // 描画
