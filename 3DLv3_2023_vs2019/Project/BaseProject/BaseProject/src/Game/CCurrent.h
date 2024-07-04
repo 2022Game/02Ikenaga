@@ -1,8 +1,10 @@
 #pragma once
 #include "CWeapon.h"
 #include "CTexture.h"
+#include <functional>
 
 class CLineEffect;
+class CColliderLine;
 
 class CCurrent : public CWeapon
 {
@@ -19,6 +21,15 @@ public:
 	//デストラクタ
 	~CCurrent();
 
+	// ヒットした時のコールバック関数を設定
+	void SetCollisionCallback(std::function<void()>callback);
+
+	//攻撃開始
+	void AttackStart()override;
+
+	//攻撃終了
+	void AttackEnd()override;
+
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -32,6 +43,10 @@ public:
 
 private:
 
+	float mElapsedTime;  // 経過時間
+
 	CLineEffect* mpLineEffect;
 	TexAnimData mEffectAnimData;
+	CColliderLine* mpAttackCol;          // 攻撃コライダー
+	std::function<void()> mColCallback;  // コールバック関数
 };

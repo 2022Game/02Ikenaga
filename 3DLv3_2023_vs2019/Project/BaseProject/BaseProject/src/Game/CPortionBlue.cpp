@@ -38,6 +38,12 @@ CPortionBlue::~CPortionBlue()
 				 Kill();
 			 }
 		 }
+		 if (other->Layer() == ELayer::ePortion)
+		 {
+			 CVector pushBack = hit.adjust * hit.weight;
+			 pushBack.Y(0.0f);
+			 Position(Position() + pushBack);
+		 }
 	 }
 }
 

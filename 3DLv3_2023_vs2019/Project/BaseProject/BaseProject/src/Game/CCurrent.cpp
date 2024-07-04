@@ -1,10 +1,13 @@
 #include "CCurrent.h"
 #include "CLineEffect.h"
 #include "CCharaBase.h"
+#include "CColliderLine.h"
+#include "CInput.h"
 
 // コンストラ
 CCurrent::CCurrent(CObjectBase* owner, const CVector& pos, const CVector& dir)
 	: mEffectAnimData(1, 11, true, 11, 0.03f)
+	, mElapsedTime(0.0f)
 {
 	Position(pos);
 
@@ -30,6 +33,15 @@ CCurrent::CCurrent(CObjectBase* owner, const CVector& pos, const CVector& dir)
 		CVector pos = CVector::Lerp(startPos, endPos, alpha);
 		mpLineEffect->AddPoint(pos, width, width);
 	}
+
+	mpAttackCol = new CColliderLine
+	(
+		this,ELayer::eAttackCol,
+		CVector::zero, forward * 40.0f,
+		true
+	);
+	mpAttackCol->SetCollisionLayers({ ELayer::eDamageCol });
+	mpAttackCol->SetCollisionTags({ ETag::ePlayer });
 }
 
 // デストラクタ
@@ -39,6 +51,30 @@ CCurrent::~CCurrent()
 	{
 		mpLineEffect->Kill();
 	}
+
+	SAFE_DELETE(mpAttackCol);
+}
+
+// ヒットした時のコールバック関数を設定
+void CCurrent::SetCollisionCallback(std::function<void()>callback)
+{
+	mColCallback = callback;
+}
+
+// 攻撃開始
+void CCurrent::AttackStart()
+{
+	CWeapon::AttackStart();
+	mpAttackCol->SetEnable(true);;
+	SetEnableCol(true);
+}
+
+// 攻撃終了
+void CCurrent::AttackEnd()
+{
+	CWeapon::AttackEnd();
+	mpAttackCol->SetEnable(false);
+	SetEnableCol(false);
 }
 
 // 衝突処理
@@ -54,14 +90,20 @@ void CCurrent::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				// 与えるダメージを計算
-				int damage = CalcDamage(1.5f, mOwner, chara);
-
-				// ダメージを与える
+				int damage = 0;
+				damage = 30;
+				// ダメージを与える(30の固定ダメージ+防御力無視)
 				chara->TakeDamage(damage, mOwner);
 
 				// 攻撃済みリストに追加
 				AddAttackHitObj(chara);
+
+				// ヒット時に呼び出す、
+				// コールバック関数が設定されていたら、実行する
+				if (mColCallback != nullptr)
+				{
+					mColCallback();
+				}
 			}
 		}
 	}
@@ -70,4 +112,9 @@ void CCurrent::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 // 更新
 void CCurrent::Update()
 {
+	mElapsedTime += Time::DeltaTime();
+	if (mElapsedTime >= 0.8f)
+	{
+		Kill();
+	}
 }

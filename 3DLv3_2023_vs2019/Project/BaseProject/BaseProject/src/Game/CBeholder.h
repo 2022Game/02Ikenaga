@@ -43,9 +43,6 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// 描画
-	void Render();
-
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
@@ -60,6 +57,9 @@ public:
 
 	// 死亡処理
 	void Death() override;
+
+	// 描画
+	void Render();
 
 private:
 
@@ -151,9 +151,11 @@ private:
 
 	// 電流エフェクトを生成
 	void CreateCurrent();
+	// 電流エフェクトにヒットした
+	void CollisionCurrent();
 
-	CVector mMoveSpeed;	// 移動速度
-	bool mIsGrounded;	// 接地しているかどうか
+	CVector mMoveSpeed;	  // 移動速度
+	bool mIsGrounded;	  // 接地しているかどうか
 
 	 // 線分コライダー
 	CColliderLine* mpColliderLine;
@@ -184,9 +186,6 @@ private:
 	CColliderSphere* mpAttackColTentacle4;       // 右下の触手
 	CColliderSphere* mpAttackColTentacle5;       // 真ん中上の触手
 	CColliderSphere* mpAttackColTentacle6;       // 真ん中下の触手
-
-	// 電流のダメージを与える線分コライダー
-	CColliderLine* mpAttackColLine;  // 左上の触手
 
 	CTransform* mpRideObject;
 

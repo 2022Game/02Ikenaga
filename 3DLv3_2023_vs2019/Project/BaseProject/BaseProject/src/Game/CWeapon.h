@@ -8,6 +8,7 @@ class CWeapon : public CObjectBase
 public:
 	// コンストラク
 	CWeapon();
+
 	// デストラクタ
 	virtual ~CWeapon();
 
