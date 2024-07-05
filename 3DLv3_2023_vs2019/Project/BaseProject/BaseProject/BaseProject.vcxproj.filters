@@ -346,7 +346,7 @@
     <ClCompile Include="src\BaseSystem\CDebugTimer.cpp">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSaGauge.cpp">
+    <ClCompile Include="src\Game\CSpGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CDebugCamera.cpp">
@@ -843,7 +843,7 @@
     <ClInclude Include="src\BaseSystem\Time.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSaGauge.h">
+    <ClInclude Include="src\Game\CSpGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CDebugCamera.h">

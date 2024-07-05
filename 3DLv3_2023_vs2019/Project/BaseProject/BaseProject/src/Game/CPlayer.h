@@ -7,7 +7,7 @@
 #include "CImage.h"
 #include "CSound.h"
 class CHpGauge;
-class CSaGauge;
+class CSpGauge;
 class CSword;
 class CShield;
 class CSlash;
@@ -93,7 +93,7 @@ public:
 
 	static int mHp;
 	static int mMaxHp;
-	static int mSa;
+	static int mSp;
 	static int mRecoveryCount;  // 特殊攻撃の回数の回復までのカウント
 	static bool mHeal;
 	static bool mRolling;
@@ -252,7 +252,7 @@ private:
 	CTransform* mpRideObject;
 
 	CHpGauge* mpHpGauge;  // HPゲージ
-	CSaGauge* mpSaGauge;  // SAゲージ(スペシャルアタック)
+	CSpGauge* mpSpGauge;  // SPゲージ(スペシャルポイント)
 	CVector mDefaultPos;  // デフォルトの座標
 	CVector current;
 	CSword* mpSword;      // 右手に持つ剣

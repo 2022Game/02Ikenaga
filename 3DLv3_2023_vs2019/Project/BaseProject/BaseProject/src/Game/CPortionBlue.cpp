@@ -14,7 +14,7 @@ CPortionBlue::CPortionBlue()
 	mpColliderSphere = new CColliderSphere
 	(
 		this, ELayer::ePortion,
-		0.035f, false
+		0.035f, false,0.1f
 	);
 	mpColliderSphere->SetCollisionLayers({ ELayer::ePlayer });
 	mpColliderSphere->SetCollisionTags({ ETag::ePlayer });
@@ -37,12 +37,6 @@ CPortionBlue::~CPortionBlue()
 			 {
 				 Kill();
 			 }
-		 }
-		 if (other->Layer() == ELayer::ePortion)
-		 {
-			 CVector pushBack = hit.adjust * hit.weight;
-			 pushBack.Y(0.0f);
-			 Position(Position() + pushBack);
 		 }
 	 }
 }

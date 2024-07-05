@@ -9,7 +9,7 @@ struct CharaStatus
 	int power;          // UŒ‚—Í
 	int defense;        // –hŒä—Í
 	float mobility;     // ˆÚ“®«
-	int SpecialAttack;  // “ÁêUŒ‚
+	int SpecialPoint;   // “Áêƒ|ƒCƒ“ƒg
 	float volume;       // ‘å‚«‚³
 	float cameraHeight; // ƒJƒƒ‰‚Ì‚‚³
 
@@ -21,7 +21,7 @@ struct CharaStatus
 		power = 5;
 		defense = 0;
 		mobility = 1.0f;
-		SpecialAttack = 2;
+		SpecialPoint = 2;
 		volume = 1.02f;
 		cameraHeight = 0.0f;
 	}

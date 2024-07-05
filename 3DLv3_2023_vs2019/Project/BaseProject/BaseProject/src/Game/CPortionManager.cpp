@@ -14,32 +14,40 @@ CPortionManager::~CPortionManager()
 // ランダムでポーション生成
 void CPortionManager::RandomPortion(const CVector& pos)
 {
-	bool PortionBlue = false;
-	bool PortionGreen = false;
 	bool PortionRed = false;
+	bool PortionGreen = false;
+	bool PortionBlue = false;
 
-	float rand2 = Math::Rand(0, 3);
-	float rand3 = Math::Rand(4, 7);
+	float rand = Math::Rand(0, 5);
+	//float rand2 = Math::Rand(0, 10);
+	//float rand3 = Math::Rand(0, 10);
 
-	if (rand2 == 3)PortionGreen = true;
-	if (rand3 == 7) PortionRed = true;
+	if (rand == 1) PortionRed = true;
+	if (rand == 3)PortionGreen = true;
+	if (rand == 5)PortionBlue = true;
 
-	if (PortionGreen)
+	if (PortionRed)
 	{
-		// 回復ポーション
-		CPortionGreen* portiongreen = new CPortionGreen();
-		portiongreen->Position(pos);
-		portiongreen->Scale(200.0f, 200.0f, 200.0f);
-	}
-	else if (PortionRed)
-	{
+		PortionBlue = false;
+		PortionGreen = false;
 		// 攻撃力アップポーション
 		CPortionRed* portionred = new CPortionRed();
 		portionred->Position(pos);
 		portionred->Scale(200.0f, 200.0f, 200.0f);
 	}
-	else
+	else if (PortionGreen)
 	{
+		PortionBlue = false;
+		PortionRed = false;
+		// 回復ポーション
+		CPortionGreen* portiongreen = new CPortionGreen();
+		portiongreen->Position(pos);
+		portiongreen->Scale(200.0f, 200.0f, 200.0f);
+	}
+	else if (PortionBlue)
+	{
+		PortionGreen = false;
+		PortionRed = false;
 		// 防御力アップポーション
 		CPortionBlue* portionblue = new CPortionBlue();
 		portionblue->Position(pos);

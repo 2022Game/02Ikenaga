@@ -143,7 +143,7 @@
     <ClCompile Include="src\Game\CPortionRed.cpp" />
     <ClCompile Include="src\Game\CRideabeObject.cpp" />
     <ClCompile Include="src\Game\CRotateFloor.cpp" />
-    <ClCompile Include="src\Game\CSaGauge.cpp" />
+    <ClCompile Include="src\Game\CSpGauge.cpp" />
     <ClCompile Include="src\Game\CShield.cpp" />
     <ClCompile Include="src\Game\CSlime2.cpp" />
     <ClCompile Include="src\Game\CSlime3.cpp" />
@@ -311,7 +311,7 @@
     <ClInclude Include="src\Game\CPortionRed.h" />
     <ClInclude Include="src\Game\CRideableObject.h" />
     <ClInclude Include="src\Game\CRotateFloor.h" />
-    <ClInclude Include="src\Game\CSaGauge.h" />
+    <ClInclude Include="src\Game\CSpGauge.h" />
     <ClInclude Include="src\Game\CShield.h" />
     <ClInclude Include="src\Game\CSlime2.h" />
     <ClInclude Include="src\Game\CSlime3.h" />

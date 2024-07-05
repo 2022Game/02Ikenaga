@@ -4,7 +4,7 @@
 #include "CCamera.h"
 #include "CGameCamera2.h"
 #include "CHpGauge.h"
-#include "CSaGauge.h"
+#include "CSpGauge.h"
 #include "Maths.h"
 #include "CSword.h"
 #include "CShield.h"
@@ -21,7 +21,7 @@
 CPlayer* CPlayer::spInstance = nullptr;
 int CPlayer::mHp;
 int CPlayer::mMaxHp;
-int CPlayer::mSa;
+int CPlayer::mSp;
 int CPlayer::mRecoveryCount;
 bool CPlayer::mHeal;
 bool CPlayer::mRolling;
@@ -115,9 +115,9 @@ CPlayer::CPlayer()
 	mpHpGauge->SetPos(10.0f, 63.0f);
 	mpHpGauge->SetShow(true);
 
-	// SAゲージを作成
-	mpSaGauge = new CSaGauge();
-	mpSaGauge->SetPos(10.0f,103.5f);
+	// SPゲージを作成
+	mpSpGauge = new CSpGauge();
+	mpSpGauge->SetPos(10.0f,103.5f);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -307,22 +307,22 @@ void CPlayer::UpdateIdle()
 		}
 		
 		// スペシャル攻撃
-		if (mCharaStatus.level >= 10 && mCharaStatus.SpecialAttack >= 5)
+		if (mCharaStatus.level >= 10 && mCharaStatus.SpecialPoint >= 5)
 		{
 			if (CInput::PushKey(VK_MBUTTON))
 			{
-				mCharaStatus.SpecialAttack -= 5;
+				mCharaStatus.SpecialPoint -= 5;
 				ChangeState(EState::eAttack4);
 			}
 		}
 
-		if (mCharaStatus.SpecialAttack >= 4)
+		if (mCharaStatus.SpecialPoint >= 4)
 		{
 			if (CInput::PushKey('Q'))
 			{
 				if (mDefenseUp != true || mPowerUp != true || mCharaStatus.hp < mCharaMaxStatus.hp)
 				{
-					mCharaStatus.SpecialAttack -= 4;
+					mCharaStatus.SpecialPoint -= 4;
 					ChangeState(EState::ePowerUp);
 				}
 			}
@@ -397,44 +397,57 @@ void CPlayer::UpdateAttack4()
 {
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	// 攻撃アニメーションを開始
-	ChangeAnimation(EAnimType::eAttack4);
 
-	if (mAnimationFrame >= 39.0f)
+	switch (mStateStep)
 	{
-		// 斬撃エフェクトの生成済みフラグを初期化
-		mIsSpawnedSlashEffect = false;
-		// 斬撃エフェクトを生成していないかつ、アニメーションが39%以上進行したら、
-		if (!mIsSpawnedSlashEffect && GetAnimationFrameRatio() >= 0.39f)
+		// ステージ0 : 攻撃アニメーションを開始
+	case 0:
+		ChangeAnimation(EAnimType::eAttack4);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 39.0f)
 		{
-			// 斬撃エフェクトを生成して、正面方向へ飛ばす
-			CSlash* slash = new CSlash
-			(
-				this,
-				Position() + CVector(0.0f, 10.0f, 0.0f),
-				VectorZ(),
-				100.0f,
-				100.0f
-			);
-			// 斬撃エフェクトの色設定
-			slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
-			slash->SetOwner(this);
-			if (mCharaStatus.level >= 50)
+			// 斬撃エフェクトの生成済みフラグを初期化
+			mIsSpawnedSlashEffect = false;
+			// 斬撃エフェクトを生成していないかつ、アニメーションが39%以上進行したら、
+			if (!mIsSpawnedSlashEffect && GetAnimationFrameRatio() >= 0.39f)
 			{
-				slash->Scale(2.0f, 2.0f, 2.0f);
-			}
-			if (mCharaStatus.level >= 100)
-			{
-				slash->Scale(3.0f, 3.0f, 3.0f);
-			}
+				// 斬撃エフェクトを生成して、正面方向へ飛ばす
+				CSlash* slash = new CSlash
+				(
+					this,
+					Position() + CVector(0.0f, 10.0f, 0.0f),
+					VectorZ(),
+					100.0f,
+					100.0f
+				);
+				// 斬撃エフェクトの色設定
+				slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
+				slash->SetOwner(this);
+				if (mCharaStatus.level >= 50)
+				{
+					slash->Scale(2.0f, 2.0f, 2.0f);
+				}
+				if (mCharaStatus.level >= 100)
+				{
+					slash->Scale(3.0f, 3.0f, 3.0f);
+				}
 
-			mIsSpawnedSlashEffect = true;
+				mStateStep++;
+				SetAnimationSpeed(1.5f);
+				mIsSpawnedSlashEffect = true;
+			}
 		}
-	}
-	if (mIsSpawnedSlashEffect && mAnimationFrame >= 42.0f)
-	{
-		// 攻撃終了待ち状態へ移行
-		ChangeState(EState::eAttackWait);
+		break;
+	case 2:
+		if (mAnimationFrame >= 100.0f)
+		{
+			SetAnimationSpeed(1.0f);
+			// 攻撃終了待ち状態へ移行
+			ChangeState(EState::eAttackWait);
+		}
+		break;
 	}
 }
 
@@ -926,8 +939,8 @@ void CPlayer::ChangeLevel(int level)
 	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
 	mpHpGauge->SetValue(mCharaStatus.hp);
 
-	mpSaGauge->SetMaxValue(mCharaStatus.SpecialAttack);
-	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+	mpSpGauge->SetMaxValue(mCharaStatus.SpecialPoint);
+	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
 
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
@@ -944,7 +957,7 @@ void CPlayer::ChangeLevel(int level)
 	}
 }
 
-// HP回復と特殊攻撃(SA)の自動回復
+// HP回復と特殊攻撃(SP)の自動回復
 void CPlayer::AutomaticRecovery()
 {
 	mHealCount++;
@@ -964,27 +977,27 @@ void CPlayer::AutomaticRecovery()
 	{
 		mHealCount = 0;
 	}
-	if (mCharaStatus.SpecialAttack < mCharaMaxStatus.SpecialAttack)
+	if (mCharaStatus.SpecialPoint < mCharaMaxStatus.SpecialPoint)
 	{
 		mRecoveryCount++;
 		if (mRecoveryCount > 400)
 		{
-			mCharaStatus.SpecialAttack++;
+			mCharaStatus.SpecialPoint++;
 			mRecoveryCount = 0;
 		}
 	}
-	if (mCharaStatus.SpecialAttack == mCharaMaxStatus.SpecialAttack)
+	if (mCharaStatus.SpecialPoint == mCharaMaxStatus.SpecialPoint)
 	{
 		mRecoveryCount = 0;
 	}
 }
 
-// 攻撃が当たったら特殊攻撃(SA)を回復
+// 攻撃が当たったら特殊ポイント(SP)を回復
 void CPlayer::AttackRecovery()
 {
-	if (mCharaStatus.SpecialAttack < mCharaMaxStatus.SpecialAttack)
+	if (mCharaStatus.SpecialPoint < mCharaMaxStatus.SpecialPoint)
 	{
-		mCharaStatus.SpecialAttack++;
+		mCharaStatus.SpecialPoint++;
 	}
 }
 
@@ -1022,7 +1035,7 @@ void CPlayer::Update()
 	mpRideObject = nullptr;
 	mHp = mCharaStatus.hp;
 	mMaxHp = mCharaMaxStatus.hp;
-	mSa = mCharaStatus.SpecialAttack;
+	mSp = mCharaStatus.SpecialPoint;
 
 	if (mAttackCount >= 1)
 	{
@@ -1328,7 +1341,7 @@ void CPlayer::Update()
 				CDebugPrint::Print(" 防御力:    %d×4\n", mCharaStatus.defense);
 			}
 		}
-		CDebugPrint::Print("    SA:    %d / %d\n", mCharaStatus.SpecialAttack, mCharaMaxStatus.SpecialAttack);
+		CDebugPrint::Print("    SP:    %d / %d\n", mCharaStatus.SpecialPoint, mCharaMaxStatus.SpecialPoint);
 		CVector scale = Scale();
 		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 		CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
@@ -1383,8 +1396,8 @@ void CPlayer::Update()
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	// SAゲージに現在のSAを設定
-	mpSaGauge->SetValue(mCharaStatus.SpecialAttack);
+	// SPゲージに現在のSPを設定
+	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
 }
 
 // 衝突処理

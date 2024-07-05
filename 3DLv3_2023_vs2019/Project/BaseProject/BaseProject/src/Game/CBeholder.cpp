@@ -967,15 +967,15 @@ void CBeholder::Update()
 			}
 			else if (Attack3)
 			{
-				//ChangeState(EState::eAttack3);
+				ChangeState(EState::eAttack3);
 			}
 			else if (Attack4)
 			{
-				//ChangeState(EState::eAttack4);
+				ChangeState(EState::eAttack4);
 			}
 			else
 			{
-				//ChangeState(EState::eAttack);
+				ChangeState(EState::eAttack);
 			}
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
