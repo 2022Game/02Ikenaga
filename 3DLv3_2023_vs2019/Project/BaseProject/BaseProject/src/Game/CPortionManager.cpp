@@ -18,13 +18,11 @@ void CPortionManager::RandomPortion(const CVector& pos)
 	bool PortionGreen = false;
 	bool PortionBlue = false;
 
-	float rand = Math::Rand(0, 5);
-	//float rand2 = Math::Rand(0, 10);
-	//float rand3 = Math::Rand(0, 10);
+	float rand = Math::Rand(0, 3);
 
 	if (rand == 1) PortionRed = true;
-	if (rand == 3)PortionGreen = true;
-	if (rand == 5)PortionBlue = true;
+	if (rand == 2)PortionGreen = true;
+	if (rand == 3)PortionBlue = true;
 
 	if (PortionRed)
 	{

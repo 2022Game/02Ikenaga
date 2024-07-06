@@ -9,7 +9,7 @@
 #define FLAME_DIR_RAND 0.01f
 // 炎の移動速度
 #define FLAME_MOVE_SPEED 80.0f
-// 炎の色
+// 炎の色(青)
 #define FLAME_COLOR CColor(0.0f, 0.1f, 1.0f)
 
 // コンストラクタ

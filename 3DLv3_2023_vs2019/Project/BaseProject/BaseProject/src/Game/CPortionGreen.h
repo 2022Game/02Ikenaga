@@ -1,17 +1,20 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
+#include "CColliderLine.h"
 #include "CColliderSphere.h"
 
 /*
-回復のポーションクラス
-オブジェクトベース継承
+ 回復のポーションクラス
+ オブジェクトベース継承
 */
 class CPortionGreen : public CObjectBase
 {
 public:
+
 	// コンストラク
 	CPortionGreen();
+
 	// デストラクタ
 	~CPortionGreen();
 
@@ -25,10 +28,18 @@ public:
 
 	// 更新
 	void Update();
+
 	// 描画
 	void Render();
 
 private:
-	CModel* mpPortionGreen;  // モデルデータ読み込み
-	CColliderSphere* mpColliderSphere;  // 球(衝突処理用)
+
+	// モデルデータ読み込み
+	CModel* mpPortionGreen;
+
+	// 線分コライダー
+	CColliderLine* mpColliderLine;
+
+	// 球(衝突処理用)
+	CColliderSphere* mpColliderSphere;
 };

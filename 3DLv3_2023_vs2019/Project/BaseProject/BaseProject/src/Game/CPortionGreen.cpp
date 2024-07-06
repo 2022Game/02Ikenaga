@@ -3,11 +3,22 @@
 #include "CColliderSphere.h"
 #include "CPlayer.h"
 
+#define HEIGHT 0.04f  // 高さ
+
 // コンストラク
 CPortionGreen::CPortionGreen()
 	: CObjectBase(ETag::ePortionGreen, ETaskPriority::eItem)
 {
 	mpPortionGreen = CResourceManager::Get<CModel>("Portion2");
+
+	// 線を生成
+	mpColliderLine = new CColliderLine
+	(
+		this, ELayer::ePortion,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, -HEIGHT, 0.0f)
+	);
+	mpColliderLine->SetCollisionLayers({ ELayer::eField });
 
 	// 球を生成
 	mpColliderSphere = new CColliderSphere
@@ -22,13 +33,24 @@ CPortionGreen::CPortionGreen()
 // デストラクタ
 CPortionGreen::~CPortionGreen()
 {
+	// 線分コライダー
+	SAFE_DELETE(mpColliderLine)
+
+	// 球コライダー
 	SAFE_DELETE(mpColliderSphere)
 }
 
 // 衝突処理
 void CPortionGreen::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self == mpColliderSphere)
+	if (self == mpColliderLine)
+	{
+		if (other->Layer() == ELayer::eField)
+		{
+			Position(Position() + hit.adjust * hit.weight);
+		}
+	}
+	else if (self == mpColliderSphere)
 	{
 		if (other->Layer() == ELayer::ePlayer)
 		{

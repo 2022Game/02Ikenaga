@@ -1,17 +1,20 @@
 #pragma once
 #include "CObjectBase.h"
 #include "CColliderMesh.h"
+#include "CColliderLine.h"
 #include "CColliderSphere.h"
 
 /*
-防御力アップのポーションクラス
-オブジェクトベース継承
+ 防御力アップのポーションクラス
+ オブジェクトベース継承
 */
 class CPortionBlue : public CObjectBase
 {
 public:
+
 	// コンストラク
 	CPortionBlue();
+
 	// デストラクタ
 	~CPortionBlue();
 
@@ -25,11 +28,21 @@ public:
 
 	// 更新
 	void Update();
+
 	// 描画
 	void Render();
 
 private:
-	CModel* mpPortionBlue;  // モデルデータ読み込み
-	CColliderSphere* mpColliderSphere;  // 球(衝突処理用)
-	bool mDefenseUp;     // 防御力アップ(ポーション効果)
+
+	// モデルデータ読み込み
+	CModel* mpPortionBlue;
+
+	// 線分コライダー
+	CColliderLine* mpColliderLine;
+
+	// 球(衝突処理用)
+	CColliderSphere* mpColliderSphere;
+
+	// 防御力アップ
+	bool mDefenseUp;
 };

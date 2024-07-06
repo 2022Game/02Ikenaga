@@ -191,7 +191,7 @@ void CGameScene::Load()
 	mainCamera->AddCollider(field2->GetCollider());
 	mainCamera->AddCollider(field3->GetCollider());
 	mainCamera->SetHitColliderRatio(0.98f);
-	player->Position(0.0f, 40.0f, 0.0f);
+	player->Position(0.0f, 100.0f, 0.0f);
 
 	//// レッドスライム
 	//CSlime* enemy = new CSlime();
@@ -323,7 +323,7 @@ void CGameScene::Load()
 
 	//// ドラゴン
 	//CDragon* bossEnemy = new CDragon();
-	//bossEnemy->Position(0.0f, 1.0f, -50.0f);
+	//bossEnemy->Position(0.0f, 1.0f, -450.0f);
 	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
 	//// 攻撃力アップポーション
