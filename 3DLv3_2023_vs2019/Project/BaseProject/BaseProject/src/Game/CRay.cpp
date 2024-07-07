@@ -11,11 +11,11 @@ CRay* CRay::spInstance = nullptr;
 #define ENEMY_HEIGHT    0.5f  // 線分コライダー
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.4f  // 移動速度
-#define MOVE_SPEED_Y 0.027f   // Yのスピード
+#define MOVE_SPEED_Y  0.027f  // Yのスピード
 #define GRAVITY        0.06f  // 重力
 #define WALK_RANGE    100.0f  // 追跡する範囲
 #define STOP_RANGE     28.0f  // 追跡を辞める範囲
-#define STOP_RANGE_Y  20.0f   // 追跡を辞める高さ
+#define STOP_RANGE_Y   20.0f  // 追跡を辞める高さ
 #define ROTATE_RANGE  250.0f  // 回転する範囲
 #define THROW_INTERVAL 0.07f  // 波動の発射間隔時間
 
@@ -139,27 +139,27 @@ CRay::CRay()
 	mpAttackColHead->SetCollisionTags({ ETag::ePlayer });
 
 	// 攻撃コライダーをエイの頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_Head");
-	mpColliderSphereHead->SetAttachMtx(headMty);
-	mpAttackColHead->SetAttachMtx(headMty);
+	const CMatrix* headMtx = GetFrameMtx("Armature_Head");
+	mpColliderSphereHead->SetAttachMtx(headMtx);
+	mpAttackColHead->SetAttachMtx(headMtx);
 
 	// キャラの押し戻しコライダーをエイの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_Body");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
 
 	// ダメージを受けるコライダーをエイの脊椎の行列にアタッチ
-	const CMatrix* spineMty = GetFrameMtx("Armature_Spine");
-	mpDamageColSpine->SetAttachMtx(spineMty);
+	const CMatrix* spineMtx = GetFrameMtx("Armature_Spine");
+	mpDamageColSpine->SetAttachMtx(spineMtx);
 
 	// キャラの押し戻しコライダーと
 	// ダメージを受けるコライダーをエイのヒレの左の行列にアタッチ
-	const CMatrix* finLeftMty = GetFrameMtx("Armature_WingLeft01");
-	mpDamageColFinLeft->SetAttachMtx(finLeftMty);
+	const CMatrix* finLeftMtx = GetFrameMtx("Armature_WingLeft01");
+	mpDamageColFinLeft->SetAttachMtx(finLeftMtx);
 
 	// キャラの押し戻しコライダーと
 	// ダメージを受けるコライダーをエイのヒレの右の行列にアタッチ
-	const CMatrix* finRightMty = GetFrameMtx("Armature_WingRight01");
-	mpDamageColFinRight->SetAttachMtx(finRightMty);
+	const CMatrix* finRightMtx = GetFrameMtx("Armature_WingRight01");
+	mpDamageColFinRight->SetAttachMtx(finRightMtx);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);

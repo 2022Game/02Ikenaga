@@ -10,15 +10,15 @@
 // ボクサーのインスタンス
 CBoxer* CBoxer::spInstance = nullptr;
 
-#define ENEMY_HEIGHT   1.0f   // 線分コライダー
-#define WITHIN_RANGE  60.0f   // 範囲内
-#define MOVE_SPEED     0.8f   // 移動速度
-#define JUMP_SPEED     1.5f   // ジャンプスピード
-#define GRAVITY     0.0625f   // 重力
-#define JUMP_END_Y     1.0f	   
-#define WALK_RANGE    50.0f   // 追跡する範囲
-#define STOP_RANGE    30.0f   // 追跡を辞める範囲
-#define ROTATE_RANGE 250.0f   // 回転する範囲
+#define ENEMY_HEIGHT    1.0f   // 線分コライダー
+#define WITHIN_RANGE   60.0f   // 範囲内
+#define MOVE_SPEED      0.8f   // 移動速度
+#define JUMP_SPEED      1.5f   // ジャンプスピード
+#define GRAVITY      0.0625f   // 重力
+#define JUMP_END_Y      1.0f   // ジャンプ終了Y  
+#define WALK_RANGE    100.0f   // 追跡する範囲
+#define STOP_RANGE     30.0f   // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f   // 回転する範囲
 
 // ボクサーのアニメーションデータのテーブル
 const CBoxer::AnimData CBoxer::ANIM_DATA[] =
@@ -280,55 +280,55 @@ CBoxer::CBoxer()
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをボクサーの頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_neck_01");
-	mpColliderSphereHead->SetAttachMtx(headMty);
-	mpDamageColHead->SetAttachMtx(headMty);
-	mpAttackColHead->SetAttachMtx(headMty);
+	const CMatrix* headMtx = GetFrameMtx("Armature_neck_01");
+	mpColliderSphereHead->SetAttachMtx(headMtx);
+	mpDamageColHead->SetAttachMtx(headMtx);
+	mpAttackColHead->SetAttachMtx(headMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをボクサーの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_spine_02");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
-	mpAttackColBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_spine_02");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
+	mpAttackColBody->SetAttachMtx(bodyMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをボクサーの右手の行列にアタッチ
-	const CMatrix* rightHandMty = GetFrameMtx("Armature_drill_r");
-	mpColliderSphereHandR->SetAttachMtx(rightHandMty);
-	mpDamageColHandR->SetAttachMtx(rightHandMty);
-	mpAttackColHandR->SetAttachMtx(rightHandMty);
+	const CMatrix* rightHandMtx = GetFrameMtx("Armature_drill_r");
+	mpColliderSphereHandR->SetAttachMtx(rightHandMtx);
+	mpDamageColHandR->SetAttachMtx(rightHandMtx);
+	mpAttackColHandR->SetAttachMtx(rightHandMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをボクサーの左手の行列にアタッチ
-	const CMatrix* leftHandMty = GetFrameMtx("Armature_drill_l");
-	mpColliderSphereHandL->SetAttachMtx(leftHandMty);
-	mpDamageColHandL->SetAttachMtx(leftHandMty);
+	const CMatrix* leftHandMtx = GetFrameMtx("Armature_drill_l");
+	mpColliderSphereHandL->SetAttachMtx(leftHandMtx);
+	mpDamageColHandL->SetAttachMtx(leftHandMtx);
 
 	// ダメージを受けるコライダーをボクサーの右腕の行列にアタッチ
-	const CMatrix* rightArmMty = GetFrameMtx("Armature_lowerarm_r");
-	mpDamageColArmR->SetAttachMtx(rightArmMty);
+	const CMatrix* rightArmMtx = GetFrameMtx("Armature_lowerarm_r");
+	mpDamageColArmR->SetAttachMtx(rightArmMtx);
 
 	// ダメージを受けるコライダーをボクサーの左腕の行列にアタッチ
-	const CMatrix* leftArmMty = GetFrameMtx("Armature_lowerarm_l");
-	mpDamageColArmL->SetAttachMtx(leftArmMty);
+	const CMatrix* leftArmMtx = GetFrameMtx("Armature_lowerarm_l");
+	mpDamageColArmL->SetAttachMtx(leftArmMtx);
 
 	// ダメージを受けるコライダーをボクサーの右足の行列にアタッチ
-	const CMatrix* rightFootMty = GetFrameMtx("Armature_thigh_r");
-	mpDamageColFeetR->SetAttachMtx(rightFootMty);
+	const CMatrix* rightFootMtx = GetFrameMtx("Armature_thigh_r");
+	mpDamageColFeetR->SetAttachMtx(rightFootMtx);
 
 	// ダメージを受けるコライダーをボクサーの左足の行列にアタッチ
-	const CMatrix* leftFootMty = GetFrameMtx("Armature_thigh_l");
-	mpDamageColFeetL->SetAttachMtx(leftFootMty);
+	const CMatrix* leftFootMtx = GetFrameMtx("Armature_thigh_l");
+	mpDamageColFeetL->SetAttachMtx(leftFootMtx);
 
 	// 押し戻しコライダーと攻撃コライダーをボクサーの右足の行列にアタッチ
-	const CMatrix* rightFootMty2 = GetFrameMtx("Armature_foot_r");
-	mpColliderSphereFeetR->SetAttachMtx(rightFootMty2);
-	mpAttackColFeetR->SetAttachMtx(rightFootMty2);
+	const CMatrix* rightFootMtx2 = GetFrameMtx("Armature_foot_r");
+	mpColliderSphereFeetR->SetAttachMtx(rightFootMtx2);
+	mpAttackColFeetR->SetAttachMtx(rightFootMtx2);
 
 	// 押し戻しコライダーと攻撃コライダーをボクサーの左足の行列にアタッチ
-	const CMatrix* leftFootMty2 = GetFrameMtx("Armature_foot_l");
-	mpColliderSphereFeetL->SetAttachMtx(leftFootMty2);
-	mpAttackColFeetL->SetAttachMtx(leftFootMty2);
+	const CMatrix* leftFootMtx2 = GetFrameMtx("Armature_foot_l");
+	mpColliderSphereFeetL->SetAttachMtx(leftFootMtx2);
+	mpAttackColFeetL->SetAttachMtx(leftFootMtx2);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);

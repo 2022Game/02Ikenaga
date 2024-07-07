@@ -8,6 +8,7 @@ class CMagicCircle;
 class CDrainEffect;
 class CShieldRotate;
 class CHealCircle;
+class CIceBreath;
 
 /*
  リッチクラス
@@ -194,4 +195,5 @@ private:
 
 	CDrainEffect* mpDrain;      // ドレイン
 	CHealCircle* mpHealCircle;  // 回復サークル
+	CIceBreath* mpIceBreath;    // アイスブレス
 };

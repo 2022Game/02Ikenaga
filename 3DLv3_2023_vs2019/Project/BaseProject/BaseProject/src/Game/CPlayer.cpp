@@ -1380,7 +1380,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(61);
+		ChangeLevel(91);
 	}
 	else if (CInput::PushKey('4'))
 	{
@@ -1396,6 +1396,7 @@ void CPlayer::Update()
 
 	// HPƒQ[ƒW‚ÉŒ»Ý‚ÌHP‚ðÝ’è
 	mpHpGauge->SetValue(mCharaStatus.hp);
+
 	// SPƒQ[ƒW‚ÉŒ»Ý‚ÌSP‚ðÝ’è
 	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
 }

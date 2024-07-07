@@ -162,23 +162,23 @@ CMushroom::CMushroom()
 
 	// キャラクター押し戻しコライダーと
 	// ダメージを受けるコライダーと攻撃コライダーをマッシュルームの頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_mushroom_spine03");
-	mpColliderSphereHead->SetAttachMtx(headMty);
-	mpDamageColUmbrella->SetAttachMtx(headMty);
-	mpAttackColHead->SetAttachMtx(headMty);
+	const CMatrix* headMtx = GetFrameMtx("Armature_mushroom_spine03");
+	mpColliderSphereHead->SetAttachMtx(headMtx);
+	mpDamageColUmbrella->SetAttachMtx(headMtx);
+	mpAttackColHead->SetAttachMtx(headMtx);
 
 	// キャラクター押し戻しコライダーと
 	// ダメージを受けるコライダーをマッシュルームの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_mushroom_spine02");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_mushroom_spine02");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
 
 	// キャラクター押し戻しコライダーと
 	// ダメージを受けるコライダーと攻撃コライダーをマッシュルームの根の行列にアタッチ
-	const CMatrix* rootMty = GetFrameMtx("Armature_mushroom_root");
-	mpColliderSphereRoot->SetAttachMtx(rootMty);
-	mpDamageColRoot->SetAttachMtx(rootMty);
-	mpAttackColRoot->SetAttachMtx(rootMty);
+	const CMatrix* rootMtx = GetFrameMtx("Armature_mushroom_root");
+	mpColliderSphereRoot->SetAttachMtx(rootMtx);
+	mpDamageColRoot->SetAttachMtx(rootMtx);
+	mpAttackColRoot->SetAttachMtx(rootMtx);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);

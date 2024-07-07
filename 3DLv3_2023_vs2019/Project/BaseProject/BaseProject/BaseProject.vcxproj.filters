@@ -197,6 +197,12 @@
     <Filter Include="ソース ファイル\Game\Effect\Current">
       <UniqueIdentifier>{9e8a1061-391a-45c2-ad34-068f0599dbf6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Breath">
+      <UniqueIdentifier>{811ebbf1-d1ef-43eb-86ea-7929f1c60671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Breath\IceBreath">
+      <UniqueIdentifier>{0c20dcfa-3586-41cd-8a45-82964f83f0e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -669,6 +675,12 @@
     </ClCompile>
     <ClCompile Include="src\Game\CFlightFlamethrower.cpp">
       <Filter>ソース ファイル\Game\Effect\Flame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CIceBreath.cpp">
+      <Filter>ソース ファイル\Game\Effect\Breath\IceBreath</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBreath.cpp">
+      <Filter>ソース ファイル\Game\Effect\Breath</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1166,6 +1178,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CFlightFlamethrower.h">
       <Filter>ソース ファイル\Game\Effect\Flame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CIceBreath.h">
+      <Filter>ソース ファイル\Game\Effect\Breath\IceBreath</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBreath.h">
+      <Filter>ソース ファイル\Game\Effect\Breath</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

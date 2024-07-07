@@ -257,57 +257,55 @@ CDragon::CDragon()
 	mpAttackColFeet2->Position(0.0f, 0.0f, 0.2f);
 
 	// ダメージを受けるコライダーと攻撃コライダーをドラゴンの頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_Head");
+	const CMatrix* headMtx = GetFrameMtx("Armature_Head");
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをドラゴンの口の行列にアタッチ
-	const CMatrix* mouthMty = GetFrameMtx("Armature_UpperMouth01");
-	mpColSphereMouth->SetAttachMtx(mouthMty);
-	mpDamageColMouth->SetAttachMtx(mouthMty);
-	mpAttackColMouth->SetAttachMtx(mouthMty);
+	const CMatrix* mouthMtx = GetFrameMtx("Armature_UpperMouth01");
+	mpColSphereMouth->SetAttachMtx(mouthMtx);
+	mpDamageColMouth->SetAttachMtx(mouthMtx);
+	mpAttackColMouth->SetAttachMtx(mouthMtx);
 
 	// 押し戻しコライダーと
 	// ダメージを受けるコライダーをドラゴンの首の行列にアタッチ
-	const CMatrix* neckMty = GetFrameMtx("Armature_Neck03");
-	mpColSphereNeck->SetAttachMtx(neckMty);
-	mpDamageColNeck->SetAttachMtx(neckMty);
+	const CMatrix* neckMtx = GetFrameMtx("Armature_Neck03");
+	mpColSphereNeck->SetAttachMtx(neckMtx);
+	mpDamageColNeck->SetAttachMtx(neckMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをドラゴンの胸の行列にアタッチ
-	const CMatrix* chestMty = GetFrameMtx("Armature_Chest");
-	mpColSphereBody->SetAttachMtx(chestMty);
-	mpDamageColChest->SetAttachMtx(chestMty);
-	mpAttackColBody->SetAttachMtx(chestMty);
+	const CMatrix* chestMtx = GetFrameMtx("Armature_Chest");
+	mpColSphereBody->SetAttachMtx(chestMtx);
+	mpDamageColChest->SetAttachMtx(chestMtx);
+	mpAttackColBody->SetAttachMtx(chestMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをドラゴンの前の左足の行列にアタッチ
-	const CMatrix* leftFootMty = GetFrameMtx("Armature_Middle01_L");
-	mpColSphereFeet->SetAttachMtx(leftFootMty);
-	mpDamageColFeet->SetAttachMtx(leftFootMty);
-	mpAttackColFeet->SetAttachMtx(leftFootMty);
+	const CMatrix* leftFootMtx = GetFrameMtx("Armature_Middle01_L");
+	mpColSphereFeet->SetAttachMtx(leftFootMtx);
+	mpDamageColFeet->SetAttachMtx(leftFootMtx);
+	mpAttackColFeet->SetAttachMtx(leftFootMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをドラゴンの前の右足の行列にアタッチ
-	const CMatrix* rightFootMty = GetFrameMtx("Armature_Middle01_R");
-	mpColSphereFeet2->SetAttachMtx(rightFootMty);
-	mpDamageColFeet2->SetAttachMtx(rightFootMty);
-	mpAttackColFeet2->SetAttachMtx(rightFootMty);
+	const CMatrix* rightFootMtx = GetFrameMtx("Armature_Middle01_R");
+	mpColSphereFeet2->SetAttachMtx(rightFootMtx);
+	mpDamageColFeet2->SetAttachMtx(rightFootMtx);
+	mpAttackColFeet2->SetAttachMtx(rightFootMtx);
 
 	// ダメージを受けるコライダーをドラゴンの後ろの左足の行列にアタッチ
-	const CMatrix* leftFootMty2 = GetFrameMtx("Armature_MiddleToe01_L");
-	mpDamageColFeet3->SetAttachMtx(leftFootMty2);
+	const CMatrix* leftFootMtx2 = GetFrameMtx("Armature_MiddleToe01_L");
+	mpDamageColFeet3->SetAttachMtx(leftFootMtx2);
 
 	// ダメージを受けるコライダーをドラゴンの後ろの右足の行列にアタッチ
-	const CMatrix* rightFootMty2 = GetFrameMtx("Armature_MiddleToe01_R");
-	mpDamageColFeet4->SetAttachMtx(rightFootMty2);
+	const CMatrix* rightFootMtx2 = GetFrameMtx("Armature_MiddleToe01_R");
+	mpDamageColFeet4->SetAttachMtx(rightFootMtx2);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColMouth->SetEnable(false);
 	mpAttackColBody->SetEnable(false);
 	mpAttackColFeet->SetEnable(false);
 	mpAttackColFeet2->SetEnable(false);
-
-	//mpDamageColChest->SetEnable(false);
 
 	// 火炎放射の生成
 	const CMatrix* mtx = GetFrameMtx("Armature_Tongue01");

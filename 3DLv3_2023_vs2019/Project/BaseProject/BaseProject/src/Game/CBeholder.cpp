@@ -12,19 +12,19 @@
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
 
-#define ENEMY_HEIGHT   0.5f  // 線分コライダー
-#define WITHIN_RANGE  40.0f  // 範囲内
-#define MOVE_SPEED    0.65f  // 移動速度
-#define MOVE_SPEED_Y  0.05f  // Yのスピード
-#define GRAVITY        0.3f  // 重力
-#define WALK_RANGE   150.0f  // 追跡する範囲
-#define STOP_RANGE    26.0f  // 追跡を辞める範囲
-#define STOP_RANGE_Y  20.0f  // 追跡を辞める高さ
-#define ROTATE_RANGE 250.0f  // 回転する範囲
-#define HOMING_VEC_Y  20.0f  // ホーミングボールのY方向
-#define HOMING_VEC_Z  10.0f  // ホーミングボールのZ方向
-#define TORNADO_VEC_Y 10.0f  // トルネードのY方向
-#define TORNADO_VEC_Z 16.0f  // トルネードのZ方向
+#define ENEMY_HEIGHT    0.5f  // 線分コライダー
+#define WITHIN_RANGE   40.0f  // 範囲内
+#define MOVE_SPEED     0.65f  // 移動速度
+#define MOVE_SPEED_Y   0.05f  // Yのスピード
+#define GRAVITY         0.3f  // 重力
+#define WALK_RANGE    150.0f  // 追跡する範囲
+#define STOP_RANGE     26.0f  // 追跡を辞める範囲
+#define STOP_RANGE_Y   20.0f  // 追跡を辞める高さ
+#define ROTATE_RANGE  250.0f  // 回転する範囲
+#define HOMING_VEC_Y   20.0f  // ホーミングボールのY方向
+#define HOMING_VEC_Z   10.0f  // ホーミングボールのZ方向
+#define TORNADO_VEC_Y  10.0f  // トルネードのY方向
+#define TORNADO_VEC_Z  16.0f  // トルネードのZ方向
 
 // 球体のモンスターのアニメーションデータのテーブル
 const CBeholder::AnimData CBeholder::ANIM_DATA[] =
@@ -279,47 +279,54 @@ CBeholder::CBeholder()
 	mpAttackColTentacle6->SetCollisionLayers({ ELayer::eDamageCol });
 	mpAttackColTentacle6->SetCollisionTags({ ETag::ePlayer });
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
-	mpAttackColBody->SetAttachMtx(bodyMty);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの体の行列にアタッチ
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_Body");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
+	mpAttackColBody->SetAttachMtx(bodyMtx);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの左上の触手の行列にアタッチ
-	const CMatrix* tentacleMty = GetFrameMtx("Armature_TentacleA05");
-	mpColliderSphereTentacle->SetAttachMtx(tentacleMty);
-	mpDamageColTentacle->SetAttachMtx(tentacleMty);
-	mpAttackColTentacle->SetAttachMtx(tentacleMty);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの左上の触手の行列にアタッチ
+	const CMatrix* tentacleMtx = GetFrameMtx("Armature_TentacleA05");
+	mpColliderSphereTentacle->SetAttachMtx(tentacleMtx);
+	mpDamageColTentacle->SetAttachMtx(tentacleMtx);
+	mpAttackColTentacle->SetAttachMtx(tentacleMtx);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの右上の触手の行列にアタッチ
-	const CMatrix* tentacleMty2 = GetFrameMtx("Armature_TentacleE05");
-	mpColliderSphereTentacle2->SetAttachMtx(tentacleMty2);
-	mpDamageColTentacle2->SetAttachMtx(tentacleMty2);
-	mpAttackColTentacle2->SetAttachMtx(tentacleMty2);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの右上の触手の行列にアタッチ
+	const CMatrix* tentacleMtx2 = GetFrameMtx("Armature_TentacleE05");
+	mpColliderSphereTentacle2->SetAttachMtx(tentacleMtx2);
+	mpDamageColTentacle2->SetAttachMtx(tentacleMtx2);
+	mpAttackColTentacle2->SetAttachMtx(tentacleMtx2);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの左下の触手の行列にアタッチ
-	const CMatrix * tentacleMty3 = GetFrameMtx("Armature_TentacleB05");
-	mpColliderSphereTentacle3->SetAttachMtx(tentacleMty3);
-	mpDamageColTentacle3->SetAttachMtx(tentacleMty3);
-	mpAttackColTentacle3->SetAttachMtx(tentacleMty3);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの左下の触手の行列にアタッチ
+	const CMatrix * tentacleMtx3 = GetFrameMtx("Armature_TentacleB05");
+	mpColliderSphereTentacle3->SetAttachMtx(tentacleMtx3);
+	mpDamageColTentacle3->SetAttachMtx(tentacleMtx3);
+	mpAttackColTentacle3->SetAttachMtx(tentacleMtx3);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの右下の触手の行列にアタッチ
-	const CMatrix* tentacleMty4 = GetFrameMtx("Armature_TentacleD05");
-	mpColliderSphereTentacle4->SetAttachMtx(tentacleMty4);
-	mpDamageColTentacle4->SetAttachMtx(tentacleMty4);
-	mpAttackColTentacle4->SetAttachMtx(tentacleMty4);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの右下の触手の行列にアタッチ
+	const CMatrix* tentacleMtx4 = GetFrameMtx("Armature_TentacleD05");
+	mpColliderSphereTentacle4->SetAttachMtx(tentacleMtx4);
+	mpDamageColTentacle4->SetAttachMtx(tentacleMtx4);
+	mpAttackColTentacle4->SetAttachMtx(tentacleMtx4);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの真ん中上の触手の行列にアタッチ
-	const CMatrix* tentacleMty5 = GetFrameMtx("Armature_TentacleF05");
-	mpColliderSphereTentacle5->SetAttachMtx(tentacleMty5);
-	mpDamageColTentacle5->SetAttachMtx(tentacleMty5);
-	mpAttackColTentacle5->SetAttachMtx(tentacleMty5);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの真ん中上の触手の行列にアタッチ
+	const CMatrix* tentacleMtx5 = GetFrameMtx("Armature_TentacleF05");
+	mpColliderSphereTentacle5->SetAttachMtx(tentacleMtx5);
+	mpDamageColTentacle5->SetAttachMtx(tentacleMtx5);
+	mpAttackColTentacle5->SetAttachMtx(tentacleMtx5);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーを球体のモンスターの真ん中下の触手の行列にアタッチ
-	const CMatrix* tentacleMty6 = GetFrameMtx("Armature_TentacleC05");
-	mpColliderSphereTentacle6->SetAttachMtx(tentacleMty6);
-	mpDamageColTentacle6->SetAttachMtx(tentacleMty6);
-	mpAttackColTentacle6->SetAttachMtx(tentacleMty6);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーを球体のモンスターの真ん中下の触手の行列にアタッチ
+	const CMatrix* tentacleMtx6 = GetFrameMtx("Armature_TentacleC05");
+	mpColliderSphereTentacle6->SetAttachMtx(tentacleMtx6);
+	mpDamageColTentacle6->SetAttachMtx(tentacleMtx6);
+	mpAttackColTentacle6->SetAttachMtx(tentacleMtx6);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColBody->SetEnable(false);

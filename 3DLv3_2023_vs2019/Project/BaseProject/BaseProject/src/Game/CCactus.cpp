@@ -24,11 +24,11 @@ const CCactus::AnimData CCactus::ANIM_DATA[] =
 	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlantToBattle.x",	true,  21.0f,  0.3f},  // 植物2 21.0f
 	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleBattle.x",	    true,  18.0f,  0.5f},  // 待機 18.0f
 	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleNormal.x",	    true,  41.0f,  0.5f},  // 待機2 41.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack.x",	        true,  21.0f,  0.5f},  // 攻撃 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack2.x",	        true,  26.0f,  0.5f},  // 攻撃2 26.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusGetHit.x",	        true,  23.0f,  0.3f},  // ヒット 23.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusDie.x",	            true,  23.0f,  0.2f},  // 死ぬ 23.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusDizzy.x",          	true,  41.0f,  0.5f},  // めまい 41.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack.x",	        false, 21.0f,  0.5f},  // 攻撃 21.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack2.x",	        false, 26.0f,  0.5f},  // 攻撃2 26.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusGetHit.x",	        false, 23.0f,  0.3f},  // ヒット 23.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusDie.x",	            false, 23.0f,  0.2f},  // 死ぬ 23.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusDizzy.x",          	false, 41.0f,  0.5f},  // めまい 41.0f
 	{ "Character\\Enemy\\Cactus\\animation\\CactusRun.x",	            true,  17.0f,  0.4f},  // 走る 17.0f
 	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle.x",	true,	121.0f	},	 // 始まりの待機 121.0f
 	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle2.x",	true,	46.0f	},	 // 始まりの待機2 23.0f
@@ -201,37 +201,38 @@ CCactus::CCactus()
 	mpAttackColLeftHand->Position(-0.12f, 0.01f, 0.0f);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをサボテンの体の行列にアタッチ
-	const CMatrix* hitBodyMty = GetFrameMtx("Armature_cactus_spine03");
-	mpColliderSphereBody->SetAttachMtx(hitBodyMty);
-	mpDamageColBody->SetAttachMtx(hitBodyMty);
+	const CMatrix* hitBodyMtx = GetFrameMtx("Armature_cactus_spine03");
+	mpColliderSphereBody->SetAttachMtx(hitBodyMtx);
+	mpDamageColBody->SetAttachMtx(hitBodyMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをサボテンの足元の行列にアタッチ
-	const CMatrix* hitFeetMty = GetFrameMtx("Armature_cactus_spine01");
-	mpColliderSphereFeet->SetAttachMtx(hitFeetMty);
-	mpDamageColFeet->SetAttachMtx(hitFeetMty);
+	const CMatrix* hitFeetMtx = GetFrameMtx("Armature_cactus_spine01");
+	mpColliderSphereFeet->SetAttachMtx(hitFeetMtx);
+	mpDamageColFeet->SetAttachMtx(hitFeetMtx);
 
-	// 押し戻しコライダーとダメージを受けるコライダーと攻撃コライダーをサボテンの頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_cactus_headDeco");
-	mpColliderSphereHead->SetAttachMtx(headMty);
-	mpDamageColHead->SetAttachMtx(headMty);
-	mpAttackColHead->SetAttachMtx(headMty);
+	// 押し戻しコライダーとダメージを受けるコライダーと
+	// 攻撃コライダーをサボテンの頭の行列にアタッチ
+	const CMatrix* headMtx = GetFrameMtx("Armature_cactus_headDeco");
+	mpColliderSphereHead->SetAttachMtx(headMtx);
+	mpDamageColHead->SetAttachMtx(headMtx);
+	mpAttackColHead->SetAttachMtx(headMtx);
 
 	// 押し戻しコライダーと攻撃コライダーをサボテンの左手の行列にアタッチ
-	const CMatrix* leftHandMty = GetFrameMtx("Armature_cactus_leftHandTip");
-	mpColliderSphereLeftHand->SetAttachMtx(leftHandMty);
-	mpAttackColLeftHand->SetAttachMtx(leftHandMty);
+	const CMatrix* leftHandMtx = GetFrameMtx("Armature_cactus_leftHandTip");
+	mpColliderSphereLeftHand->SetAttachMtx(leftHandMtx);
+	mpAttackColLeftHand->SetAttachMtx(leftHandMtx);
 
 	// ダメージを受けるコライダーをサボテンの左腕の行列にアタッチ
-    const CMatrix* leftArmMty = GetFrameMtx("Armature_cactus_leftLowerArm");
-	mpDamageColLeftHand->SetAttachMtx(leftArmMty);
+    const CMatrix* leftArmMtx = GetFrameMtx("Armature_cactus_leftLowerArm");
+	mpDamageColLeftHand->SetAttachMtx(leftArmMtx);
 
 	// 押し戻しコライダーをサボテンの右手の行列にアタッチ
-	const CMatrix* rightHandMty = GetFrameMtx("Armature_cactus_rightHandTip");
-	mpColliderSphereRightHand->SetAttachMtx(rightHandMty);
+	const CMatrix* rightHandMtx = GetFrameMtx("Armature_cactus_rightHandTip");
+	mpColliderSphereRightHand->SetAttachMtx(rightHandMtx);
 
 	// メージを受けるコライダーをサボテンの右腕の行列にアタッチ
-	const CMatrix* rightArmMty = GetFrameMtx("Armature_cactus_rightLowerArm");
-	mpDamageColRightHand->SetAttachMtx(rightArmMty);
+	const CMatrix* rightArmMtx = GetFrameMtx("Armature_cactus_rightLowerArm");
+	mpDamageColRightHand->SetAttachMtx(rightArmMtx);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
@@ -240,7 +241,7 @@ CCactus::CCactus()
 	// ひび割れエフェクト作成
 	mpCrack = new CCrackEffect
 	(
-		this, leftHandMty,
+		this, leftHandMtx,
 		CVector(0.0f, 0.0f, 0.0f),
 		CQuaternion(0.0, -90.f, 0.0f).Matrix()
 	);

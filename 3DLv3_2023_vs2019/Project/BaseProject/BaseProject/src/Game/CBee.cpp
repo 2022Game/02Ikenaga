@@ -8,16 +8,16 @@
 // 蜂のインスタンス
 CBee* CBee::spInstance = nullptr;
 
-#define ENEMY_HEIGHT   0.3f  // 線分コライダー
-#define WITHIN_RANGE  40.0f  // 範囲内
-#define WALK_RANGE   100.0f  // 追跡する範囲
-#define STOP_RANGE    22.0f  // 追跡を辞める範囲
-#define STOP_RANGE_Y  20.0f  // 追跡を辞める高さ
-#define ROTATE_RANGE 250.0f  // 回転する範囲
-#define MOVE_SPEED     0.6f  // 移動速度
-#define MOVE_SPEED_Y 0.027f  // Yのスピード
-#define HEIGHT         0.5f  // 高さ
-#define PLAYER_HEIGHT 0.25f  // プレイヤーの高さ
+#define ENEMY_HEIGHT    0.3f  // 線分コライダー
+#define WITHIN_RANGE   40.0f  // 範囲内
+#define WALK_RANGE    100.0f  // 追跡する範囲
+#define STOP_RANGE     22.0f  // 追跡を辞める範囲
+#define STOP_RANGE_Y   20.0f  // 追跡を辞める高さ
+#define ROTATE_RANGE  250.0f  // 回転する範囲
+#define MOVE_SPEED      0.6f  // 移動速度
+#define MOVE_SPEED_Y  0.027f  // Yのスピード
+#define HEIGHT          0.5f  // 高さ
+#define PLAYER_HEIGHT  0.25f  // プレイヤーの高さ
 
 // 蜂のアニメーションデータのテーブル
 const CBee::AnimData CBee::ANIM_DATA[] =
@@ -239,38 +239,38 @@ CBee::CBee()
 	mpAttackCol->Position(-0.28f, 0.0f, 0.1f);
 
 	// キャラクター押し戻しとダメージを受けるコライダーを頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_Head");
-	mpColliderSphereHead->SetAttachMtx(headMty);
-	mpColliderSphereBeak->SetAttachMtx(headMty);
-	mpColliderSphereBeak2->SetAttachMtx(headMty);
-	mpDamageColHead->SetAttachMtx(headMty);
-	mpDamageColBeak->SetAttachMtx(headMty);
-	mpDamageColBeak2->SetAttachMtx(headMty);
+	const CMatrix* headMtx = GetFrameMtx("Armature_Head");
+	mpColliderSphereHead->SetAttachMtx(headMtx);
+	mpColliderSphereBeak->SetAttachMtx(headMtx);
+	mpColliderSphereBeak2->SetAttachMtx(headMtx);
+	mpDamageColHead->SetAttachMtx(headMtx);
+	mpDamageColBeak->SetAttachMtx(headMtx);
+	mpDamageColBeak2->SetAttachMtx(headMtx);
 
 	// キャラクター押し戻しと
 	// ダメージを受けるコライダーを体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_Body");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
 
 	// キャラクター押し戻しと
 	// ダメージを受けるコライダーを尻尾の行列にアタッチ
-	const CMatrix* tailMty = GetFrameMtx("Armature_Tail01");
-	mpColliderSphereTail->SetAttachMtx(tailMty);
-	mpColliderSphereTail2->SetAttachMtx(tailMty);
-	mpDamageColTail->SetAttachMtx(tailMty);
-	mpDamageColTail2->SetAttachMtx(tailMty);
+	const CMatrix* tailMtx = GetFrameMtx("Armature_Tail01");
+	mpColliderSphereTail->SetAttachMtx(tailMtx);
+	mpColliderSphereTail2->SetAttachMtx(tailMtx);
+	mpDamageColTail->SetAttachMtx(tailMtx);
+	mpDamageColTail2->SetAttachMtx(tailMtx);
 
 	// キャラクター押し戻しとダメージを受けるコライダーと
 	// 攻撃コライダーを蜂の針の行列にアタッチ
-	const CMatrix* needleMty = GetFrameMtx("Armature_Tail02");
-	mpColliderSphereTail3->SetAttachMtx(needleMty);
-	mpColliderSphereTail4->SetAttachMtx(needleMty);
-	mpColliderSphereTail5->SetAttachMtx(needleMty);
-	mpDamageColTail3->SetAttachMtx(needleMty);
-	mpDamageColTail4->SetAttachMtx(needleMty);
-	mpDamageColTail5->SetAttachMtx(needleMty);
-	mpAttackCol->SetAttachMtx(needleMty);
+	const CMatrix* needleMtx = GetFrameMtx("Armature_Tail02");
+	mpColliderSphereTail3->SetAttachMtx(needleMtx);
+	mpColliderSphereTail4->SetAttachMtx(needleMtx);
+	mpColliderSphereTail5->SetAttachMtx(needleMtx);
+	mpDamageColTail3->SetAttachMtx(needleMtx);
+	mpDamageColTail4->SetAttachMtx(needleMtx);
+	mpDamageColTail5->SetAttachMtx(needleMtx);
+	mpAttackCol->SetAttachMtx(needleMtx);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackCol->SetEnable(false);

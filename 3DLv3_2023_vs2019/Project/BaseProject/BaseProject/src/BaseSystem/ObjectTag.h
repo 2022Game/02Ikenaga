@@ -29,6 +29,7 @@ enum class ETag
 	eDrain,           // ドレイン(HP吸収)
 	eAura,            // オーラ
 	eCurrent,         // 電流
+	eBreath,          // ブレス
 
 	eCamera,          // カメラ
 

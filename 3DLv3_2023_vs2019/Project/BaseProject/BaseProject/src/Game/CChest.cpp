@@ -8,14 +8,14 @@
 // チェストモンスターのインスタンス
 CChest* CChest::spInstance = nullptr;
 
-#define ENEMY_HEIGHT   0.3f  // 線分コライダー
-#define WITHIN_RANGE  30.0f  // 範囲内
-#define ATTACK_RANGE  40.0f  // 攻撃の範囲内
-#define MOVE_SPEED    0.64f  // 移動速度
-#define GRAVITY     0.0625f  // 重力
-#define WALK_RANGE   150.0f  // 追跡する範囲
-#define STOP_RANGE    32.0f  // 追跡を辞める範囲
-#define ROTATE_RANGE 250.0f  // 回転する範囲
+#define ENEMY_HEIGHT    0.3f  // 線分コライダー
+#define WITHIN_RANGE   30.0f  // 範囲内
+#define ATTACK_RANGE   40.0f  // 攻撃の範囲内
+#define MOVE_SPEED     0.64f  // 移動速度
+#define GRAVITY      0.0625f  // 重力
+#define WALK_RANGE    150.0f  // 追跡する範囲
+#define STOP_RANGE     32.0f  // 追跡を辞める範囲
+#define ROTATE_RANGE  250.0f  // 回転する範囲
 
 // チェストモンスターのアニメーションデータのテーブル
 const CChest::AnimData CChest::ANIM_DATA[] =
@@ -169,28 +169,28 @@ CChest::CChest()
 
 	// 押し戻しコライダーとダメージを受けるコライダーと
 	// 攻撃コライダーをチェストモンスターの頭の行列にアタッチ
-	const CMatrix* headMty = GetFrameMtx("Armature_Head");
-	mpColliderSphereHead->SetAttachMtx(headMty);
-	mpDamageColHead->SetAttachMtx(headMty);
-	mpAttackColHead->SetAttachMtx(headMty);
+	const CMatrix* headMtx = GetFrameMtx("Armature_Head");
+	mpColliderSphereHead->SetAttachMtx(headMtx);
+	mpDamageColHead->SetAttachMtx(headMtx);
+	mpAttackColHead->SetAttachMtx(headMtx);
 
 	// 押し戻しコライダーと
 	// ダメージを受けるコライダーをチェストモンスターの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_Body");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
 
 	// 押し戻しコライダーと
 	// ダメージを受けるコライダーをチェストモンスターの前の左足の行列にアタッチ
-	const CMatrix* leftFeetMty = GetFrameMtx("Armature_FrontLeftLeg02");
-	mpColliderSphereFeet->SetAttachMtx(leftFeetMty);
-	mpDamageColFeet->SetAttachMtx(leftFeetMty);
+	const CMatrix* leftFeetMtx = GetFrameMtx("Armature_FrontLeftLeg02");
+	mpColliderSphereFeet->SetAttachMtx(leftFeetMtx);
+	mpDamageColFeet->SetAttachMtx(leftFeetMtx);
 
 	// 押し戻しコライダーと
 	// ダメージを受けるコライダーをチェストモンスターの前の右足の行列にアタッチ
-	const CMatrix* rightFeetMty = GetFrameMtx("Armature_FrontRightLeg02");
-	mpColliderSphereFeet2->SetAttachMtx(rightFeetMty);
-	mpDamageColFeet2->SetAttachMtx(rightFeetMty);
+	const CMatrix* rightFeetMtx = GetFrameMtx("Armature_FrontRightLeg02");
+	mpColliderSphereFeet2->SetAttachMtx(rightFeetMtx);
+	mpDamageColFeet2->SetAttachMtx(rightFeetMtx);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);

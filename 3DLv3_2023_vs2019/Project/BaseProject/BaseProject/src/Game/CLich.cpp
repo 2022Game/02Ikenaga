@@ -16,6 +16,7 @@
 #include "CDrainEffect.h"
 #include "CShieldRotate.h"
 #include "CHealCircle.h"
+#include "CIceBreath.h"
 #include "CInput.h"
 
 // リッチのインスタンス
@@ -168,19 +169,19 @@ CLich::CLich()
 	mpDamageColArmR->Position(0.0f, -0.15f, 0.0f);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをリッチの体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Spine");
-	mpColCapsuleBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_Spine");
+	mpColCapsuleBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをリッチの左腕の行列にアタッチ
-	const CMatrix* armLeftMty = GetFrameMtx("Armature_Hand_L");
-	mpColSphereArmL->SetAttachMtx(armLeftMty);
-	mpDamageColArmL->SetAttachMtx(armLeftMty);
+	const CMatrix* armLeftMtx = GetFrameMtx("Armature_Hand_L");
+	mpColSphereArmL->SetAttachMtx(armLeftMtx);
+	mpDamageColArmL->SetAttachMtx(armLeftMtx);
 
 	// 押し戻しコライダーとダメージを受けるコライダーをリッチの右腕の行列にアタッチ
-	const CMatrix* armRightMty = GetFrameMtx("Armature_Hand_R");
-	mpColSphereArmR->SetAttachMtx(armRightMty);
-	mpDamageColArmR->SetAttachMtx(armRightMty);
+	const CMatrix* armRightMtx = GetFrameMtx("Armature_Hand_R");
+	mpColSphereArmR->SetAttachMtx(armRightMtx);
+	mpDamageColArmR->SetAttachMtx(armRightMtx);
 
 	CVector forward = VectorZ();
 	forward.Y(0.0f);
@@ -219,6 +220,16 @@ CLich::CLich()
 	mpHealCircle->Position(0.0f, -2.0f, 0.0f);
 	mpHealCircle->SetShow(false);
 	mpHealCircle->SetOwner(this);
+
+	const CMatrix* mtx = GetFrameMtx("Armature_Lower_Arm_L");
+	CVector IceBreathPos = CVector(0.0f, 60.0f, 0.0f);
+	// アイスブレスの生成
+	mpIceBreath = new CIceBreath
+	(
+		this, mtx,
+		IceBreathPos,
+		CQuaternion(0.0, 90.f, 0.0f).Matrix()
+	);
 }
 
 // デストラクタ
@@ -377,8 +388,25 @@ void CLich::UpdateAttack()
 // 攻撃2
 void CLich::UpdateAttack2()
 {
+	CPlayer* player = CPlayer::Instance();
+	CVector dir = player->Position() - Position();
+	dir.Y(0.0f);
+	dir.Normalize();
+	Rotation(CQuaternion::LookRotation(dir));
+
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eAttack2);
+	if (mAnimationFrame >= 25.0f)
+	{
+		if (!mpIceBreath->IsThrowing())
+		{
+			mpIceBreath->Start();
+		}
+	}
+	if (mAnimationFrame >= 50.0f)
+	{
+		mpIceBreath->Stop();
+	}
 	if (mAnimationFrame >= 71.0f)
 	{
 		ChangeState(EState::eAttackWait);
@@ -690,7 +718,6 @@ void CLich::Update()
 	{
 		if (vectorPos <= ROTATE_RANGE)
 		{
-			// プレイヤーのいる方向へ向く
 			CVector dir = player->Position() - Position();
 			dir.Y(0.0f);
 			dir.Normalize();
@@ -714,7 +741,7 @@ void CLich::Update()
 			}
 			else
 			{
-				ChangeState(EState::eAttack);
+				//ChangeState(EState::eAttack);
 			}
 		}
 
@@ -756,17 +783,13 @@ void CLich::Update()
 
 	if (CInput::PushKey('Z'))
 	{
-		ChangeState(EState::eSummon);
-		int Heal = 0;
-		Heal = mCharaMaxStatus.hp * 0.25;
-		mCharaStatus.hp -= Heal;
+		ChangeState(EState::eAttack2);
 	}
 
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
 	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print("UP %d\n", mDefenseUp);
 }
 
 // 衝突処理

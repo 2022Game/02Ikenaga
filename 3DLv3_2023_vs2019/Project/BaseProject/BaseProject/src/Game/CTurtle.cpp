@@ -119,10 +119,10 @@ CTurtle::CTurtle()
 
 	// キャラクター押し戻しコライダーと
 	// ダメージを受けるコライダーと攻撃コライダーを亀の体の行列にアタッチ
-	const CMatrix* bodyMty = GetFrameMtx("Armature_Body");
-	mpColliderSphereBody->SetAttachMtx(bodyMty);
-	mpDamageColBody->SetAttachMtx(bodyMty);
-	mpAttackColBody->SetAttachMtx(bodyMty);
+	const CMatrix* bodyMtx = GetFrameMtx("Armature_Body");
+	mpColliderSphereBody->SetAttachMtx(bodyMtx);
+	mpDamageColBody->SetAttachMtx(bodyMtx);
+	mpAttackColBody->SetAttachMtx(bodyMtx);
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColBody->SetEnable(false);
