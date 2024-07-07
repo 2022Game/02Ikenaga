@@ -7,14 +7,8 @@ class CImage;
 */
 class CSpGauge : public CUIBase
 {
-private:
-	CImage* mpFrameImage;  // ゲージのフレームのイメージ
-	CImage* mpBarImage;    // ゲージのバーのイメージ	
-	CImage* mpEdgeImage;   // ゲージのふち
-	int mMaxValue;         // ポイントの最大値
-	int mValue;            // ポイントの現在値
-
 public:
+
 	// コンストラクタ
 	CSpGauge();
 
@@ -23,9 +17,18 @@ public:
 
 	// 最大値を設定
 	void SetMaxValue(int value);
+
 	// 現在値を設定
 	void SetValue(int value);
 
 	// 更新
 	void Update();
+
+private:
+
+	CImage* mpFrameImage;  // ゲージのフレームのイメージ
+	CImage* mpBarImage;    // ゲージのバーのイメージ	
+	CImage* mpEdgeImage;   // ゲージのふち
+	int mMaxValue;         // ポイントの最大値
+	int mValue;            // ポイントの現在値
 };

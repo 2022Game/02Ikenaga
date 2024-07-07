@@ -24,14 +24,14 @@ CLich* CLich::spInstance = nullptr;
 
 float CLich::mElapsedTime;
 
-#define ENEMY_HEIGHT   -4.1f  // c‚Ì’·‚³
-#define MOVE_SPEED      0.3f  // ˆÚ“®‘¬“x
-#define WALK_RANGE    300.0f  // ’ÇÕ‚·‚é”ÍˆÍ
-#define STOP_RANGE     50.0f  // ’ÇÕ‚ðŽ«‚ß‚é”ÍˆÍ
-#define ROTATE_RANGE  250.0f  // ‰ñ“]‚·‚é”ÍˆÍ
-#define MC_ANIM_TIME    1.0f  // –‚–@w‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ŽžŠÔ
-#define MC_ANIM_MOVE_Y 38.0f  // –‚–@w‚Ì‚‚³ˆÚ“®—Ê
-#define MC_ANIM_ROT_Y 360.0f  // –‚–@w‚Ì‚ÌYŽ²‰ñ“]—Ê
+#define ENEMY_HEIGHT    -4.1f  // c‚Ì’·‚³
+#define MOVE_SPEED       0.3f  // ˆÚ“®‘¬“x
+#define WALK_RANGE     300.0f  // ’ÇÕ‚·‚é”ÍˆÍ
+#define STOP_RANGE      50.0f  // ’ÇÕ‚ðŽ«‚ß‚é”ÍˆÍ
+#define ROTATE_RANGE   250.0f  // ‰ñ“]‚·‚é”ÍˆÍ
+#define MC_ANIM_TIME     1.0f  // –‚–@w‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ŽžŠÔ
+#define MC_ANIM_MOVE_Y  38.0f  // –‚–@w‚Ì‚‚³ˆÚ“®—Ê
+#define MC_ANIM_ROT_Y  360.0f  // –‚–@w‚Ì‚ÌYŽ²‰ñ“]—Ê
 
 const CLich::SpawnData CLich::SPAWN_DATA[] =
 {
@@ -427,6 +427,7 @@ void CLich::UpdateAttackWait()
 void CLich::UpdateHit()
 {
 	mpDrain->Stop();
+	mpIceBreath->Stop();
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eHit);
 	if (IsAnimationFinished())
@@ -439,6 +440,7 @@ void CLich::UpdateHit()
 void CLich::UpdateDie()
 {
 	mpDrain->Stop();
+	mpIceBreath->Stop();
 	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
@@ -728,7 +730,6 @@ void CLich::Update()
 		if (mAttackTime >= 250 && mpSpawnEnemy == nullptr)
 		{
 			ChangeState(EState::eSummon);
-			//ChangeState(EState::eAttack2);
 		}
 		else if(mAttackTime >= 300 && mpSpawnEnemy != nullptr)
 		{
@@ -741,7 +742,7 @@ void CLich::Update()
 			}
 			else
 			{
-				//ChangeState(EState::eAttack);
+				ChangeState(EState::eAttack);
 			}
 		}
 

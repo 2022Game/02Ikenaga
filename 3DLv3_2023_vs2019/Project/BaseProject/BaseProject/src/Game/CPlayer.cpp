@@ -10,7 +10,6 @@
 #include "CShield.h"
 #include "CShieldRotate.h"
 #include "CSlash.h"
-#include "CElectricShockEffect.h"
 #include "CHealCircle.h"
 #include "CBuffCircle.h"
 #include "CBuffAura.h"
@@ -42,22 +41,22 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogAttack5.x",	   false,	101.0f,	 1.0f},  // 攻撃5 101.0f
 	{ "Character\\Player\\animation\\DogAttack6.x",	   false,	219.0f,	 1.0f},  // 攻撃6
 	{ "Character\\Player\\animation\\DogAttack7.x",	   false,	190.0f,	 1.0f},  // 攻撃7 213.0f
-	{ "Character\\Player\\animation\\DogPowerUp.x",	   true,	143.0f,  4.0f},  // 攻撃力アップ
-	{ "Character\\Player\\animation\\DogHit.x",	       true,	 43.0f,	 1.0f},  // ヒット 43.0f
+	{ "Character\\Player\\animation\\DogPowerUp.x",	   false,	143.0f,  4.0f},  // 攻撃力アップ
+	{ "Character\\Player\\animation\\DogHit.x",	       false,	 43.0f,	 1.0f},  // ヒット 43.0f
 	{ "Character\\Player\\animation\\DogGuard.x",	   false,	 47.0f,	 1.0f},  // ガード 47.0f
 	{ "Character\\Player\\animation\\DogGuardHit.x",   false,	 47.0f,	 1.0f},  // ガードヒット 47.0f
-	{ "Character\\Player\\animation\\DogRolling.x",	   true,	 43.0f,	 1.0f},  // 回避 43.0f
+	{ "Character\\Player\\animation\\DogRolling.x",	   false,	 43.0f,	 1.0f},  // 回避 43.0f
 	//{ "Character\\Player\\animation\\DogImpact.x",   true,	 43.0f,	 1.0f},  // 衝撃
 	{ "Character\\Player\\animation\\DogDie.x",	       false,	235.0f,	 1.0f},  // 死ぬ
 	{ "Character\\Player\\animation\\DogJumpAttack.x", false,	172.0f,	 1.0f},  // ジャンプ攻撃
 };
 
-#define PLAYER_HEIGHT 1.2f
-#define JUMP_SPEED 1.5f
-#define GRAVITY 0.0625f
-#define JUMP_END_Y 1.0f
-#define MOVE_SPEED 0.3f      //移動速度
-#define DEFAULT_SCALE 10.0f  //デフォルトのスケール値
+#define PLAYER_HEIGHT  1.2f  // 線分コライダー
+#define JUMP_SPEED     1.5f  // ジャンプスピード
+#define GRAVITY     0.0625f  // 重力
+#define JUMP_END_Y     1.0f  // ジャンプ終了
+#define MOVE_SPEED     0.3f  // 移動速度
+#define DEFAULT_SCALE 10.0f  // デフォルトのスケール値
 
 bool CPlayer::IsDeath() const
 {
@@ -118,6 +117,10 @@ CPlayer::CPlayer()
 	// SPゲージを作成
 	mpSpGauge = new CSpGauge();
 	mpSpGauge->SetPos(10.0f,103.5f);
+
+	// 回避ゲージ作成
+	mpAvoidanceGauge = new CAvoidanceGauge(true);
+	mpAvoidanceGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -942,6 +945,9 @@ void CPlayer::ChangeLevel(int level)
 	mpSpGauge->SetMaxValue(mCharaStatus.SpecialPoint);
 	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
 
+	mpAvoidanceGauge->SetMaxValue(200);
+	mpAvoidanceGauge->SetValue(mRollingTime);
+
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
 
@@ -1160,9 +1166,19 @@ void CPlayer::Update()
 	CVector forward = CVector::Slerp(current, target, 0.125f);
 	Rotation(CQuaternion::LookRotation(forward));
 
+	CVector dir = VectorX();
+	dir.Y(0.0f);
+	dir.Normalize();
+	CVector AvoidanceGaugePos = Position()+ dir * 20.0f + CVector(0.0f, 40.0f, 0.0f);
+
 	if (mRollingCount < 1)
 	{
 		mRollingTime++;
+		mpAvoidanceGauge->SetWorldPos(AvoidanceGaugePos);
+	}
+	else
+	{
+		mpAvoidanceGauge->SetShow(false);
 	}
 	if (mRollingTime >= 200)
 	{
@@ -1399,6 +1415,9 @@ void CPlayer::Update()
 
 	// SPゲージに現在のSPを設定
 	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
+
+	// 回避ゲージに現在のクールタイムを設定
+	mpAvoidanceGauge->SetValue(mRollingTime);
 }
 
 // 衝突処理

@@ -19,10 +19,10 @@ CSpGauge::CSpGauge()
 	: mMaxValue(100)
 	, mValue(100)
 {
-	mpFrameImage = new CImage("HpFrame");
+	mpFrameImage = new CImage("Frame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 
-	mpBarImage = new CImage("HpGauge");
+	mpBarImage = new CImage("Gauge");
 	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
 	mpEdgeImage = new CImage("FrameEdge");
@@ -53,7 +53,7 @@ void CSpGauge::SetValue(int value)
 // 更新
 void CSpGauge::Update()
 {
-	// ゲージのフレームｔｐバーの位置を設定
+	// ゲージのフレームとバーと縁の位置を設定
 	mpFrameImage->SetPos(mPosition);
 	mpBarImage->SetPos(mPosition + CVector2(FRAME_BORDER, FRAME_BORDER));
 	mpEdgeImage->SetPos(mPosition);

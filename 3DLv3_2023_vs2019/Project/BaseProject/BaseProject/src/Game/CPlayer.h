@@ -6,6 +6,7 @@
 #include "CRideableObject.h"
 #include "CImage.h"
 #include "CSound.h"
+#include "CAvoidanceGauge.h"
 class CHpGauge;
 class CSpGauge;
 class CSword;
@@ -258,6 +259,8 @@ private:
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾
 	CSlash* mpSlash;      // スラッシュ
+
+	CAvoidanceGauge* mpAvoidanceGauge;  // 回避ゲージ
 
 	// 回転するシールド
 	CShieldRotate* mpShieldRotate;

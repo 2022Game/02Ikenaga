@@ -3,13 +3,6 @@
 #include "Maths.h"
 #include "CCamera.h"
 
-// ゲージのフレーム画像のファイルパス
-//#define FRAME_IMAGE "Character\\Player\\HP\\Frame.png"
-//ゲージのバー画像のファイルパス
-//#define BAR_IMAGE "UI\\white.png"
-// ゲージのふち
-//#define EDGE_IMAGE "Character\\Player\\HP\\FrameEdge.png"
-
 // フレームの横のサイズ
 #define FRAME_SIZE_X (450.0f)
 // フレームの縦のサイズ
@@ -31,20 +24,24 @@
 #define SCALE_MAX 1.5f
 
 // コンストラクタ
-CAvoidanceGauge::CAvoidanceGauge()
+CAvoidanceGauge::CAvoidanceGauge(bool is3dGauge)
 	:mMaxValue(100)
 	, mValue(100)
 	, mCenterRatio(0.0f, 0.0f)
 	, mScale(1.0f)
+	, mIs3dGauge(is3dGauge)
 {
-	mpFrameImage = new CImage("AvoidanceGaugeFrame");
+	mpFrameImage = new CImage("Frame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 
-	mpBarImage = new CImage("AvoidanceGauge");
+	mpBarImage = new CImage("Gauge");
 	mpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
 	mpEdgeImage = new CImage("FrameEdge");
 	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
+
+	// 最初は非表示
+	SetShow(false);
 }
 
 // デストラクタ
@@ -52,13 +49,23 @@ CAvoidanceGauge::~CAvoidanceGauge()
 {
 }
 
-// HPゲージを削除
+// 回避ゲージを削除
 void CAvoidanceGauge::Kill()
 {
 	CTask::Kill();
 	mpFrameImage->Kill();
 	mpBarImage->Kill();
 	mpEdgeImage->Kill();
+}
+
+// 表示するかどうか設定
+void CAvoidanceGauge::SetShow(bool isShow)
+{
+	// ベースクラスの表示設定処理
+	CTask::SetShow(isShow);
+	mpFrameImage->SetShow(isShow);
+	mpBarImage->SetShow(isShow);
+	mpEdgeImage->SetShow(isShow);
 }
 
 // 最大値を設定
@@ -90,24 +97,33 @@ void CAvoidanceGauge::SetWorldPos(const CVector& worldPos)
 	CVector screenPos = cam->WorldToScreenPos(worldPos);
 
 	// 設定ワールド座標がカメラの背後であれば、
-	// 回避ゲージを表示しない
+	// ゲージを表示しない
 	if (screenPos.Z() < 0.0f)
 	{
 		SetShow(false);
 		return;
 	}
 
-	// 回避ゲージを表示
-	SetShow(true);
 	// もとめたスクリーン座標を自身の位置に設定
 	mPosition = screenPos;
 
 	// 設定されたワールド座標とカメラの座標を求める
 	float dist = (worldPos - cam->Position()).Length();
 
-	// カメラから離れるごとにスケール値を小さくする
-	float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
-	mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+	if (dist <= SCALE_DIST_MAX)
+	{
+		// カメラから離れるごとにスケール値を小さくする
+		float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
+		mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+
+		// ゲージが表示
+		SetShow(true);
+	}
+	// カメラの距離が遠い場合は、非表示
+	else
+	{
+		SetShow(false);
+	}
 }
 
 // 更新
@@ -124,22 +140,26 @@ void CAvoidanceGauge::Update()
 	mpFrameImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
 	mpEdgeImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
 
-	// バーのサイズを最大値と現在値から求める
+	// HPバーのサイズを最大値と現在値から求める
 	float percent = Math::Clamp01((float)mValue / mMaxValue);
 	CVector2 size = CVector2(BAR_SIZE_X * percent, BAR_SIZE_Y) * mScale;
 	mpBarImage->SetSize(size);
 
-	// フレームとバーの中心位置を設定
+	// フレームの中心位置を設定
 	mpFrameImage->SetCenter
 	(
 		FRAME_SIZE_X * mCenterRatio.X() * mScale,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
+
+	// バーの中心位置を設定
 	mpBarImage->SetCenter
 	(
 		0.0f,
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
+
+	// ふちの中心位置を設定
 	mpEdgeImage->SetCenter
 	(
 		FRAME_SIZE_X * mCenterRatio.X() * mScale,
@@ -148,12 +168,8 @@ void CAvoidanceGauge::Update()
 
 	// 回避の割合でバーの色を変更
 	CColor color;
-	// 10%以下は赤色
-	if (percent <= 0.1f) color = CColor(1.0f, 0.0f, 0.0f);
-	// 30%以下は黄色
-	else if (percent <= 0.3f)color = CColor(1.0f, 1.0f, 0.0f);
-	// それ以外は緑色
-	else color = CColor(0.0f, 1.0f, 0.0f);
+	// 白色
+	if (percent <= 1.0f) color = CColor(1.0f, 1.0f, 1.0f);
 	// バーに色を設定
 	mpBarImage->SetColor(color);
 }

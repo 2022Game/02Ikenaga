@@ -40,13 +40,13 @@ CHpGauge::CHpGauge(bool is3dGauge)
 	, mDamageWaitTime(0.0f)
 	, mDamageElapsedTime(0.0f)
 {
-	mpFrameImage = new CImage("HpFrame");
+	mpFrameImage = new CImage("Frame");
 	mpFrameImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
 
-	mpDamagaBarImage = new CImage("HpGauge");
+	mpDamagaBarImage = new CImage("Gauge");
 	mpDamagaBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
-	mpHpBarImage = new CImage("HpGauge");
+	mpHpBarImage = new CImage("Gauge");
 	mpHpBarImage->SetSize(BAR_SIZE_X, BAR_SIZE_Y);
 
 	mpEdgeImage = new CImage("FrameEdge");

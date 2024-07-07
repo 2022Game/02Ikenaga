@@ -9,8 +9,10 @@ HPゲージ
 class CHpGauge : public CUIBase
 {
 public:
+
 	// コンストラクタ
 	CHpGauge(bool is3dGauge);
+
 	// デストラクタ
 	~CHpGauge();
 
@@ -22,6 +24,7 @@ public:
 
 	// 最大値を設定
 	void SetMaxValue(int value);
+
 	// 現在値を設定
 	void SetValue(int value);
 
@@ -33,10 +36,12 @@ public:
 
 	// 更新
 	void Update();
+
 private:
+
 	CImage* mpFrameImage;      // ゲージのフレームのイメージ
 	CImage* mpDamagaBarImage;  // ダメージバーのイメージ
-	CImage* mpHpBarImage;      // Hpゲージのバーのイメージ
+	CImage* mpHpBarImage;      // HPゲージのバーのイメージ
 	CImage* mpEdgeImage;       // ゲージのふち
 
 	int mMaxValue;             // ポイントの最大値

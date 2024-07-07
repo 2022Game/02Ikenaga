@@ -119,12 +119,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("Portion3", "Item\\Portion\\PortionBlue.obj");
 
 	// UI関連
-	CResourceManager::Load<CTexture>("HpFrame", "Character\\Player\\HP\\Frame.png");
-	CResourceManager::Load<CTexture>("HpGauge", "UI\\white.png");
-	CResourceManager::Load<CTexture>("SaFrame", "Character\\Player\\HP\\Frame.png");
-	CResourceManager::Load<CTexture>("SaGauge", "UI\\white.png");
-	CResourceManager::Load<CTexture>("AvoidanceFrame", "Character\\Player\\HP\\Frame.png");
-	CResourceManager::Load<CTexture>("AvoidanceGaugeGauge", "UI\\white.png");
+	CResourceManager::Load<CTexture>("Frame", "Character\\Player\\HP\\Frame.png");
+	CResourceManager::Load<CTexture>("Gauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
 
 	// エフェクト関連

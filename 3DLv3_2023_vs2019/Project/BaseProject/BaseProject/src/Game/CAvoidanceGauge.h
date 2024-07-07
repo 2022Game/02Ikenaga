@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "CUIBase.h"
 #include "CVector.h"
 class CImage;
@@ -9,26 +8,23 @@ class CImage;
 */
 class CAvoidanceGauge : public CUIBase
 {
-private:
-	CImage* mpFrameImage;  // ゲージのフレームのイメージ
-	CImage* mpBarImage;    // ゲージのバーのイメージ	
-	CImage* mpEdgeImage;   // ゲージのふち
-	int mMaxValue;         // ポイントの最大値
-	int mValue;            // ポイントの現在値
-	CVector2 mCenterRatio; // 中心位置の割合
-	float mScale;          // 回避ゲージのスケール値
-
 public:
+
 	// コンストラクタ
-	CAvoidanceGauge();
+	CAvoidanceGauge(bool is3dGauge);
+
 	// デストラクタ
 	~CAvoidanceGauge();
 
 	// 回避ゲージを削除
 	void Kill()override;
 
+	// 表示するかどうか設定
+	void SetShow(bool isShow)override;
+
 	// 最大値を設定
 	void SetMaxValue(int value);
+
 	// 現在値を設定
 	void SetValue(int value);
 
@@ -40,4 +36,15 @@ public:
 
 	// 更新
 	void Update();
+
+private:
+
+	CImage* mpFrameImage;  // ゲージのフレームのイメージ
+	CImage* mpBarImage;    // ゲージのバーのイメージ	
+	CImage* mpEdgeImage;   // ゲージのふち
+	int mMaxValue;         // ポイントの最大値
+	int mValue;            // ポイントの現在値
+	CVector2 mCenterRatio; // 中心位置の割合
+	float mScale;          // 回避ゲージのスケール値
+	bool mIs3dGauge;       // 3D空間に配置するゲージかどうか
 };
