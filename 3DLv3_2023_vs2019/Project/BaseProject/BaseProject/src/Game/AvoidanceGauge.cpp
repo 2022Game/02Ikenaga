@@ -2,11 +2,12 @@
 #include "CImage.h"
 #include "Maths.h"
 #include "CCamera.h"
+#include "CTransform.h"
 
 // フレームの横のサイズ
-#define FRAME_SIZE_X (450.0f)
+#define FRAME_SIZE_X (20.0f)
 // フレームの縦のサイズ
-#define FRAME_SIZE_Y (40.0f)
+#define FRAME_SIZE_Y (150.0f)
 // 緑の幅
 #define FRAME_BORDER (2.0f)
 // バーの横のサイズ
@@ -25,7 +26,7 @@
 
 // コンストラクタ
 CAvoidanceGauge::CAvoidanceGauge(bool is3dGauge)
-	:mMaxValue(100)
+	: mMaxValue(100)
 	, mValue(100)
 	, mCenterRatio(0.0f, 0.0f)
 	, mScale(1.0f)
@@ -132,17 +133,17 @@ void CAvoidanceGauge::Update()
 	// ゲージのフレームバーの位置を設定
 	mpFrameImage->SetPos(mPosition);
 	CVector2 barPos = mPosition;
-	barPos.X(barPos.X() - FRAME_SIZE_X * mCenterRatio.X() * mScale);
+	barPos.Y(barPos.Y() - FRAME_SIZE_Y * mCenterRatio.Y() * mScale);
 	mpBarImage->SetPos(barPos + CVector2(FRAME_BORDER, FRAME_BORDER) * mScale);
 	mpEdgeImage->SetPos(mPosition);
 
 	// フレームサイズを変更
-	mpFrameImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
-	mpEdgeImage->SetSize(CVector2(FRAME_SIZE_X, FRAME_SIZE_Y) * mScale);
+	mpFrameImage->SetSize(CVector2(FRAME_SIZE_X, -FRAME_SIZE_Y) * mScale);
+	mpEdgeImage->SetSize(CVector2(FRAME_SIZE_X, -FRAME_SIZE_Y) * mScale);
 
-	// HPバーのサイズを最大値と現在値から求める
+	// バーのサイズを最大値と現在値から求める
 	float percent = Math::Clamp01((float)mValue / mMaxValue);
-	CVector2 size = CVector2(BAR_SIZE_X * percent, BAR_SIZE_Y) * mScale;
+	CVector2 size = CVector2(BAR_SIZE_X , -BAR_SIZE_Y * percent) * mScale;
 	mpBarImage->SetSize(size);
 
 	// フレームの中心位置を設定
@@ -155,8 +156,8 @@ void CAvoidanceGauge::Update()
 	// バーの中心位置を設定
 	mpBarImage->SetCenter
 	(
-		0.0f,
-		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
+		FRAME_SIZE_X * mCenterRatio.X() * mScale,
+		1.5f
 	);
 
 	// ふちの中心位置を設定
@@ -166,10 +167,9 @@ void CAvoidanceGauge::Update()
 		FRAME_SIZE_Y * mCenterRatio.Y() * mScale
 	);
 
-	// 回避の割合でバーの色を変更
 	CColor color;
 	// 白色
-	if (percent <= 1.0f) color = CColor(1.0f, 1.0f, 1.0f);
+	if (percent <= 1.0f) color = CColor::white;
 	// バーに色を設定
 	mpBarImage->SetColor(color);
 }

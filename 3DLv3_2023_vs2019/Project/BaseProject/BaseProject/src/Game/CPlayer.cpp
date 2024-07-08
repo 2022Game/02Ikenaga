@@ -272,6 +272,11 @@ CPlayer::~CPlayer()
 	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBody);
+
+	// ゲージ関連の削除
+	mpHpGauge->Kill();
+	mpSpGauge->Kill();
+	mpAvoidanceGauge->Kill();
 }
 
 // インスタンス
@@ -1169,7 +1174,7 @@ void CPlayer::Update()
 	CVector dir = VectorX();
 	dir.Y(0.0f);
 	dir.Normalize();
-	CVector AvoidanceGaugePos = Position()+ dir * 20.0f + CVector(0.0f, 40.0f, 0.0f);
+	CVector AvoidanceGaugePos = Position() + dir * 15.0f;
 
 	if (mRollingCount < 1)
 	{
