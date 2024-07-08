@@ -9,6 +9,7 @@
 #include "CAvoidanceGauge.h"
 class CHpGauge;
 class CSpGauge;
+class CExpGauge;
 class CSword;
 class CShield;
 class CSlash;
@@ -252,15 +253,19 @@ private:
 
 	CTransform* mpRideObject;
 
-	CHpGauge* mpHpGauge;  // HPゲージ
-	CSpGauge* mpSpGauge;  // SPゲージ(スペシャルポイント)
 	CVector mDefaultPos;  // デフォルトの座標
 	CVector current;
+
+	// 武器関連
 	CSword* mpSword;      // 右手に持つ剣
 	CShield* mpShield;    // 左手に持つ盾
 	CSlash* mpSlash;      // スラッシュ
 
+	// ゲージ関連
+	CHpGauge* mpHpGauge;  // HPゲージ
+	CSpGauge* mpSpGauge;  // SPゲージ(スペシャルポイント)
 	CAvoidanceGauge* mpAvoidanceGauge;  // 回避ゲージ
+	CExpGauge* mpExpGauge;  // Expゲージ
 
 	// 回転するシールド
 	CShieldRotate* mpShieldRotate;
@@ -268,11 +273,13 @@ private:
 	CShieldRotate* mpShieldRotate3;
 	CShieldRotate* mpShieldRotate4;
 
+	// エフェクト関連
 	CHealCircle* mpHealCircle;    // 回復用のサークル
 	CBuffCircle* mpBuffCircle;    // バフサークル
 	CBuffAura* mpBuffAura;        // バフオーラ
 	CPowerUpAura* mpPowerUpAura;  // パワーアップオーラ
 
+	// SE関連
 	CSound* mpSlashSE;            // スラッシュの効果音
 	bool mIsPlayedSlashSE;
 	bool mIsSpawnedSlashEffect;

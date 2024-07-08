@@ -682,6 +682,9 @@
     <ClCompile Include="src\Game\CBreath.cpp">
       <Filter>ソース ファイル\Game\Effect\Breath</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CExpGauge.cpp">
+      <Filter>ソース ファイル\Game\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1184,6 +1187,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBreath.h">
       <Filter>ソース ファイル\Game\Effect\Breath</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExpGauge.h">
+      <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

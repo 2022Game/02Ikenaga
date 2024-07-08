@@ -97,6 +97,7 @@
     <ClCompile Include="src\Game\CDragon.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CExp.cpp" />
+    <ClCompile Include="src\Game\CExpGauge.cpp" />
     <ClCompile Include="src\Game\CExpManager.cpp" />
     <ClCompile Include="src\Game\CFlame.cpp" />
     <ClCompile Include="src\Game\CFlamethrower.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="src\Game\CDragon.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CExp.h" />
+    <ClInclude Include="src\Game\CExpGauge.h" />
     <ClInclude Include="src\Game\CExpManager.h" />
     <ClInclude Include="src\Game\CFlame.h" />
     <ClInclude Include="src\Game\CFlamethrower.h" />

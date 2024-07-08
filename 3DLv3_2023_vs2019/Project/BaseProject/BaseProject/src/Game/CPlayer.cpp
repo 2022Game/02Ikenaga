@@ -5,6 +5,7 @@
 #include "CGameCamera2.h"
 #include "CHpGauge.h"
 #include "CSpGauge.h"
+#include "CExpGauge.h"
 #include "Maths.h"
 #include "CSword.h"
 #include "CShield.h"
@@ -121,6 +122,10 @@ CPlayer::CPlayer()
 	// 回避ゲージ作成
 	mpAvoidanceGauge = new CAvoidanceGauge(true);
 	mpAvoidanceGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
+
+	// Expゲージ作成
+	mpExpGauge = new CExpGauge();
+	mpExpGauge->SetPos(320.0f, 700.0f);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -272,6 +277,14 @@ CPlayer::~CPlayer()
 	// ダメージを受けるコライダー
 	SAFE_DELETE(mpDamageColHead);
 	SAFE_DELETE(mpDamageColBody);
+
+	// 武器関連の削除
+	mpSword->Kill();
+	mpShield->Kill();
+	mpShieldRotate->Kill();
+	mpShieldRotate2->Kill();
+	mpShieldRotate3->Kill();
+	mpShieldRotate4->Kill();
 
 	// ゲージ関連の削除
 	mpHpGauge->Kill();
@@ -953,6 +966,9 @@ void CPlayer::ChangeLevel(int level)
 	mpAvoidanceGauge->SetMaxValue(200);
 	mpAvoidanceGauge->SetValue(mRollingTime);
 
+	mpExpGauge->SetMaxValue(mCharaMaxStatus.exp);
+	mpExpGauge->SetValue(mCharaMaxStatus.exp);
+
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
 
@@ -1423,6 +1439,9 @@ void CPlayer::Update()
 
 	// 回避ゲージに現在のクールタイムを設定
 	mpAvoidanceGauge->SetValue(mRollingTime);
+
+	// Expゲージに現在の経験値を設定
+	mpExpGauge->SetValue(mCharaStatus.exp);
 }
 
 // 衝突処理

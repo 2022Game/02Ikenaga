@@ -8,7 +8,7 @@
 #define FRAME_SIZE_X (20.0f)
 // フレームの縦のサイズ
 #define FRAME_SIZE_Y (150.0f)
-// 緑の幅
+// 白色の幅
 #define FRAME_BORDER (2.0f)
 // バーの横のサイズ
 #define BAR_SIZE_X (FRAME_SIZE_X - FRAME_BORDER*2.0f)
