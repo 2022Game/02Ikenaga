@@ -203,6 +203,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Breath\IceBreath">
       <UniqueIdentifier>{0c20dcfa-3586-41cd-8a45-82964f83f0e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI">
+      <UniqueIdentifier>{e8b9c72a-7524-43d4-8193-7bd8d249a5d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -420,9 +423,6 @@
     </ClCompile>
     <ClCompile Include="src\Game\CGameCamera.cpp">
       <Filter>ソース ファイル\Game\System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\AvoidanceGauge.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CLineEffect.cpp">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
@@ -685,6 +685,15 @@
     <ClCompile Include="src\Game\CExpGauge.cpp">
       <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CGamePlayerUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\AvoidanceGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerNameUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -926,9 +935,6 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameCamera.h">
       <Filter>ソース ファイル\Game\System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CAvoidanceGauge.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CLineEffect.h">
       <Filter>ソース ファイル\BaseSystem\Effect</Filter>
@@ -1190,6 +1196,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CExpGauge.h">
       <Filter>ソース ファイル\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGamePlayerUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CAvoidanceGauge.h">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerNameUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

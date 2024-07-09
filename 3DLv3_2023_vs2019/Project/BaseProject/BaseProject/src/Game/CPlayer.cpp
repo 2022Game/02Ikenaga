@@ -6,6 +6,7 @@
 #include "CHpGauge.h"
 #include "CSpGauge.h"
 #include "CExpGauge.h"
+#include "CAvoidanceGauge.h"
 #include "Maths.h"
 #include "CSword.h"
 #include "CShield.h"
@@ -16,6 +17,7 @@
 #include "CBuffAura.h"
 #include "CPowerUpAura.h"
 #include "CSceneManager.h"
+#include "CGamePlayerUI.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -110,128 +112,10 @@ CPlayer::CPlayer()
 	// デフォルトスケールの反映
 	Scale(CVector::one * DEFAULT_SCALE);
 
-	// HPゲージを作成
-	mpHpGauge = new CHpGauge(false);
-	mpHpGauge->SetPos(10.0f, 63.0f);
-	mpHpGauge->SetShow(true);
-
-	// SPゲージを作成
-	mpSpGauge = new CSpGauge();
-	mpSpGauge->SetPos(10.0f,103.5f);
-
-	// 回避ゲージ作成
-	mpAvoidanceGauge = new CAvoidanceGauge(true);
-	mpAvoidanceGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
-
-	// Expゲージ作成
-	mpExpGauge = new CExpGauge();
-	mpExpGauge->SetPos(320.0f, 700.0f);
-
-	CVector2 pos = CVector2(0.0f, 30.0f);
-	CVector2 scale = CVector2(WINDOW_WIDTH, WINDOW_HEIGHT);
-	ETextAlignH textAlignH = ETextAlignH::eLeft;
+	// プレイヤー名を作成
+	mpGameUI = new CGamePlayerUI();
 	std::string text = "【Name】 Dog Knight";
-
-	// テキストの影
-	mpTextShadow = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(1.0f, 0.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow->SetTextAlignH(textAlignH);
-	mpTextShadow->SetText(text.c_str());
-
-	mpTextShadow2 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(-1.0f,0.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow2->SetTextAlignH(textAlignH);
-	mpTextShadow2->SetText(text.c_str());
-
-	mpTextShadow3 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(0.0f, 1.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow3->SetTextAlignH(textAlignH);
-	mpTextShadow3->SetText(text.c_str());
-
-	mpTextShadow4 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(0.0f, -1.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow4->SetTextAlignH(textAlignH);
-	mpTextShadow4->SetText(text.c_str());
-
-	mpTextShadow5 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(1.0f, 1.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow5->SetTextAlignH(textAlignH);
-	mpTextShadow5->SetText(text.c_str());
-
-	mpTextShadow6 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(1.0f, -1.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow6->SetTextAlignH(textAlignH);
-	mpTextShadow6->SetText(text.c_str());
-
-	mpTextShadow7 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(-1.0f, -1.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow7->SetTextAlignH(textAlignH);
-	mpTextShadow7->SetText(text.c_str());
-
-	mpTextShadow8 = new CText
-	(
-		nullptr, 24,
-		pos + CVector2(-1.0f, 1.0f),
-		scale,
-		CColor(0.0f, 0.0f, 0.0f),
-		ETaskPriority::eTextShadow
-	);
-	mpTextShadow8->SetTextAlignH(textAlignH);
-	mpTextShadow8->SetText(text.c_str());
-
-	// テキスト本体
-	mpText = new CText
-	(
-		nullptr, 24,
-		pos, scale,
-		CColor(1.0f, 1.0f, 1.0f),
-		ETaskPriority::eText
-	);
-	mpText->SetTextAlignH(textAlignH);
-	mpText->SetText(text.c_str());
-
+	mpGameUI->SetPlayerName(text);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -392,12 +276,8 @@ CPlayer::~CPlayer()
 	mpShieldRotate3->Kill();
 	mpShieldRotate4->Kill();
 
-	// ゲージ関連の削除
-	mpHpGauge->Kill();
-	mpSpGauge->Kill();
-	mpAvoidanceGauge->Kill();
-
-	mpText->Kill();
+	// UIを削除
+	mpGameUI->Kill();
 }
 
 // インスタンス
@@ -1065,17 +945,17 @@ void CPlayer::ChangeLevel(int level)
 	// 残りの経験値を反映
 	mCharaStatus.exp = remaiExp;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpGameUI->SetHp(mCharaStatus.hp);
 
-	mpSpGauge->SetMaxValue(mCharaStatus.SpecialPoint);
-	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
+	mpGameUI->SetMaxSp(mCharaMaxStatus.SpecialPoint);
+	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
 
-	mpAvoidanceGauge->SetMaxValue(200);
-	mpAvoidanceGauge->SetValue(mRollingTime);
+	mpGameUI->SetAvoidMaxValue(200);
+	mpGameUI->SetAvoidValue(mRollingTime);
 
-	mpExpGauge->SetMaxValue(mCharaMaxStatus.exp);
-	mpExpGauge->SetValue(mCharaMaxStatus.exp);
+	mpGameUI->SetMaxExp(mCharaMaxStatus.exp);
+	mpGameUI->SetExp(mCharaStatus.exp);
 
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
@@ -1300,14 +1180,15 @@ void CPlayer::Update()
 	dir.Normalize();
 	CVector AvoidanceGaugePos = Position() + dir * 15.0f;
 
+	CAvoidanceGauge* avoidGauge = mpGameUI->GetAvoidGauge();
 	if (mRollingCount < 1)
 	{
 		mRollingTime++;
-		mpAvoidanceGauge->SetWorldPos(AvoidanceGaugePos);
+		avoidGauge->SetWorldPos(AvoidanceGaugePos);
 	}
 	else
 	{
-		mpAvoidanceGauge->SetShow(false);
+		avoidGauge->SetShow(false);
 	}
 	if (mRollingTime >= 200)
 	{
@@ -1539,17 +1420,17 @@ void CPlayer::Update()
 	mpDamageColHead->Update();
 	mpDamageColBody->Update();
 
-	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	// 現在のHPを設定
+	mpGameUI->SetHp(mCharaStatus.hp);
 
-	// SPゲージに現在のSPを設定
-	mpSpGauge->SetValue(mCharaStatus.SpecialPoint);
+	// 現在のSPを設定
+	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
 
-	// 回避ゲージに現在のクールタイムを設定
-	mpAvoidanceGauge->SetValue(mRollingTime);
+	// 現在のクールタイムを設定
+	mpGameUI->SetAvoidValue(mRollingTime);
 
-	// Expゲージに現在の経験値を設定
-	mpExpGauge->SetValue(mCharaStatus.exp);
+	// 現在の経験値を設定
+	mpGameUI->SetExp(mCharaStatus.exp);
 }
 
 // 衝突処理

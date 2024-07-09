@@ -6,11 +6,8 @@
 #include "CRideableObject.h"
 #include "CImage.h"
 #include "CSound.h"
-#include "CAvoidanceGauge.h"
 #include "CText.h"
-class CHpGauge;
-class CSpGauge;
-class CExpGauge;
+
 class CSword;
 class CShield;
 class CSlash;
@@ -19,6 +16,7 @@ class CHealCircle;
 class CBuffCircle;
 class CBuffAura;
 class CPowerUpAura;
+class CGamePlayerUI;
 
 #include <algorithm>
 
@@ -262,23 +260,6 @@ private:
 	CShield* mpShield;    // 左手に持つ盾
 	CSlash* mpSlash;      // スラッシュ
 
-	// ゲージ関連
-	CHpGauge* mpHpGauge;  // HPゲージ
-	CSpGauge* mpSpGauge;  // SPゲージ(スペシャルポイント)
-	CAvoidanceGauge* mpAvoidanceGauge;  // 回避ゲージ
-	CExpGauge* mpExpGauge;  // Expゲージ
-
-	// 文字関連
-	CText* mpText;
-	CText* mpTextShadow;
-	CText* mpTextShadow2;
-	CText* mpTextShadow3;
-	CText* mpTextShadow4;
-	CText* mpTextShadow5;
-	CText* mpTextShadow6;
-	CText* mpTextShadow7;
-	CText* mpTextShadow8;
-
 	// 回転するシールド
 	CShieldRotate* mpShieldRotate;
 	CShieldRotate* mpShieldRotate2;
@@ -295,4 +276,6 @@ private:
 	CSound* mpSlashSE;            // スラッシュの効果音
 	bool mIsPlayedSlashSE;
 	bool mIsSpawnedSlashEffect;
+
+	CGamePlayerUI* mpGameUI;
 };
