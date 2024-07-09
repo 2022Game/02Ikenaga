@@ -127,6 +127,112 @@ CPlayer::CPlayer()
 	mpExpGauge = new CExpGauge();
 	mpExpGauge->SetPos(320.0f, 700.0f);
 
+	CVector2 pos = CVector2(0.0f, 30.0f);
+	CVector2 scale = CVector2(WINDOW_WIDTH, WINDOW_HEIGHT);
+	ETextAlignH textAlignH = ETextAlignH::eLeft;
+	std::string text = "【Name】 Dog Knight";
+
+	// テキストの影
+	mpTextShadow = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(1.0f, 0.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow->SetTextAlignH(textAlignH);
+	mpTextShadow->SetText(text.c_str());
+
+	mpTextShadow2 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(-1.0f,0.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow2->SetTextAlignH(textAlignH);
+	mpTextShadow2->SetText(text.c_str());
+
+	mpTextShadow3 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(0.0f, 1.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow3->SetTextAlignH(textAlignH);
+	mpTextShadow3->SetText(text.c_str());
+
+	mpTextShadow4 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(0.0f, -1.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow4->SetTextAlignH(textAlignH);
+	mpTextShadow4->SetText(text.c_str());
+
+	mpTextShadow5 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(1.0f, 1.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow5->SetTextAlignH(textAlignH);
+	mpTextShadow5->SetText(text.c_str());
+
+	mpTextShadow6 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(1.0f, -1.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow6->SetTextAlignH(textAlignH);
+	mpTextShadow6->SetText(text.c_str());
+
+	mpTextShadow7 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(-1.0f, -1.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow7->SetTextAlignH(textAlignH);
+	mpTextShadow7->SetText(text.c_str());
+
+	mpTextShadow8 = new CText
+	(
+		nullptr, 24,
+		pos + CVector2(-1.0f, 1.0f),
+		scale,
+		CColor(0.0f, 0.0f, 0.0f),
+		ETaskPriority::eTextShadow
+	);
+	mpTextShadow8->SetTextAlignH(textAlignH);
+	mpTextShadow8->SetText(text.c_str());
+
+	// テキスト本体
+	mpText = new CText
+	(
+		nullptr, 24,
+		pos, scale,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eText
+	);
+	mpText->SetTextAlignH(textAlignH);
+	mpText->SetText(text.c_str());
+
+
 	// 最初に1レベルに設定
 	ChangeLevel(1);
 
@@ -290,6 +396,8 @@ CPlayer::~CPlayer()
 	mpHpGauge->Kill();
 	mpSpGauge->Kill();
 	mpAvoidanceGauge->Kill();
+
+	mpText->Kill();
 }
 
 // インスタンス

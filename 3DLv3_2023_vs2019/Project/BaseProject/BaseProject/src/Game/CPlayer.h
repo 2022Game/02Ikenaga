@@ -7,6 +7,7 @@
 #include "CImage.h"
 #include "CSound.h"
 #include "CAvoidanceGauge.h"
+#include "CText.h"
 class CHpGauge;
 class CSpGauge;
 class CExpGauge;
@@ -266,6 +267,17 @@ private:
 	CSpGauge* mpSpGauge;  // SPゲージ(スペシャルポイント)
 	CAvoidanceGauge* mpAvoidanceGauge;  // 回避ゲージ
 	CExpGauge* mpExpGauge;  // Expゲージ
+
+	// 文字関連
+	CText* mpText;
+	CText* mpTextShadow;
+	CText* mpTextShadow2;
+	CText* mpTextShadow3;
+	CText* mpTextShadow4;
+	CText* mpTextShadow5;
+	CText* mpTextShadow6;
+	CText* mpTextShadow7;
+	CText* mpTextShadow8;
 
 	// 回転するシールド
 	CShieldRotate* mpShieldRotate;
