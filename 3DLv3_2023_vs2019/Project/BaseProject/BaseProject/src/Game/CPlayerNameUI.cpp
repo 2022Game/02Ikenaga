@@ -1,12 +1,12 @@
 #include "CPlayerNameUI.h"
 #include "CText.h"
 
-#define SHADOW_COUNT 8
-#define SHADOW_WIDTH 2.0f
+#define SHADOW_COUNT 8     // 影のカウント
+#define SHADOW_WIDTH 2.0f  // 影の幅
 
 // コンストラク
 CPlayerNameUI::CPlayerNameUI()
-	: mBasePos(0.0f + SHADOW_WIDTH, 30.0f)
+	: mBasePos(100.0f + SHADOW_WIDTH, 32.0f)
 {
 	CVector2 size = CVector2(WINDOW_WIDTH, WINDOW_HEIGHT);
 	ETextAlignH textAlignH = ETextAlignH::eLeft;

@@ -206,6 +206,15 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI">
       <UniqueIdentifier>{e8b9c72a-7524-43d4-8193-7bd8d249a5d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\Gauge">
+      <UniqueIdentifier>{f669b703-3070-4bca-914e-97a41d42ab44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI">
+      <UniqueIdentifier>{ae95ac4e-4642-496b-900d-00593a03452b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\EnemyUI">
+      <UniqueIdentifier>{6de88451-1363-4ebe-9b22-7ce34defa889}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -343,9 +352,6 @@
     <ClCompile Include="src\Game\CRotateFloor.cpp">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CHpGauge.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CharaStatus.cpp">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClCompile>
@@ -354,9 +360,6 @@
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CDebugTimer.cpp">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CSpGauge.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseSystem\CDebugCamera.cpp">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
@@ -682,17 +685,35 @@
     <ClCompile Include="src\Game\CBreath.cpp">
       <Filter>ソース ファイル\Game\Effect\Breath</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CExpGauge.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CGamePlayerUI.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\AvoidanceGauge.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CExpGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSpGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CPlayerNameUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerLevelUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CLevelUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGamePlayerUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHpGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHpUI.cpp">
+      <Filter>ソース ファイル\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSpUI.cpp">
+      <Filter>ソース ファイル\Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -852,9 +873,6 @@
     <ClInclude Include="src\Game\CRotateFloor.h">
       <Filter>ソース ファイル\Game\Field\Object</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CHpGauge.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CharaStatus.h">
       <Filter>ソース ファイル\Game\Character</Filter>
     </ClInclude>
@@ -866,9 +884,6 @@
     </ClInclude>
     <ClInclude Include="src\BaseSystem\Time.h">
       <Filter>ソース ファイル\BaseSystem\System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CSpGauge.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseSystem\CDebugCamera.h">
       <Filter>ソース ファイル\BaseSystem\Debug</Filter>
@@ -1194,17 +1209,35 @@
     <ClInclude Include="src\Game\CBreath.h">
       <Filter>ソース ファイル\Game\Effect\Breath</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CExpGauge.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CGamePlayerUI.h">
-      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CAvoidanceGauge.h">
-      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExpGauge.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSpGauge.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CPlayerNameUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerLevelUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLevelUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGamePlayerUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHpGauge.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHpUI.h">
+      <Filter>ソース ファイル\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSpUI.h">
+      <Filter>ソース ファイル\Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

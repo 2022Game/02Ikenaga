@@ -110,6 +110,7 @@
     <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHomingBall.cpp" />
     <ClCompile Include="src\Game\CHomingBallEffect.cpp" />
+    <ClCompile Include="src\Game\CHpUI.cpp" />
     <ClCompile Include="src\Game\CIceBreath.cpp" />
     <ClCompile Include="src\Game\CImpact.cpp" />
     <ClCompile Include="src\Game\CImpactEffect.cpp" />
@@ -121,6 +122,8 @@
     <ClCompile Include="src\Game\CNeedle.cpp" />
     <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CGamePlayerUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerLevelUI.cpp" />
+    <ClCompile Include="src\Game\CLevelUI.cpp" />
     <ClCompile Include="src\Game\CPlayerNameUI.cpp" />
     <ClCompile Include="src\Game\CPortionManager.cpp" />
     <ClCompile Include="src\Game\CBuffCircle.cpp" />
@@ -152,6 +155,7 @@
     <ClCompile Include="src\Game\CShield.cpp" />
     <ClCompile Include="src\Game\CSlime2.cpp" />
     <ClCompile Include="src\Game\CSlime3.cpp" />
+    <ClCompile Include="src\Game\CSpUI.cpp" />
     <ClCompile Include="src\Game\CStarAura.cpp" />
     <ClCompile Include="src\Game\CSword.cpp" />
     <ClCompile Include="src\Game\CTitleScene.cpp" />
@@ -283,6 +287,7 @@
     <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHomingBall.h" />
     <ClInclude Include="src\Game\CHomingBallEffect.h" />
+    <ClInclude Include="src\Game\CHpUI.h" />
     <ClInclude Include="src\Game\CImpact.h" />
     <ClInclude Include="src\Game\CImpactEffect.h" />
     <ClInclude Include="src\Game\CLightningBall.h" />
@@ -293,6 +298,8 @@
     <ClInclude Include="src\Game\CNeedle.h" />
     <ClInclude Include="src\Game\CNightSky.h" />
     <ClInclude Include="src\Game\CGamePlayerUI.h" />
+    <ClInclude Include="src\Game\CPlayerLevelUI.h" />
+    <ClInclude Include="src\Game\CLevelUI.h" />
     <ClInclude Include="src\Game\CPlayerNameUI.h" />
     <ClInclude Include="src\Game\CPortionManager.h" />
     <ClInclude Include="src\Game\CBuffCircle.h" />
@@ -324,6 +331,7 @@
     <ClInclude Include="src\Game\CShield.h" />
     <ClInclude Include="src\Game\CSlime2.h" />
     <ClInclude Include="src\Game\CSlime3.h" />
+    <ClInclude Include="src\Game\CSpUI.h" />
     <ClInclude Include="src\Game\CStarAura.h" />
     <ClInclude Include="src\Game\CSword.h" />
     <ClInclude Include="src\Game\CTitleScene.h" />

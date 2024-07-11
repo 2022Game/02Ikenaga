@@ -2,10 +2,14 @@
 #include "CTask.h"
 
 class CPlayerNameUI;
+class CLevelUI;
+class CPlayerLevelUI;
 class CHpGauge;
 class CSpGauge;
 class CAvoidanceGauge;
 class CExpGauge;
+class CHpUI;
+class CSpUI;
 
 // ゲーム中のプレイヤーUI
 class CGamePlayerUI : public CTask
@@ -21,15 +25,24 @@ public:
 	// プレイヤー名を設定
 	void SetPlayerName(std::string name);
 
+	// Lvを設定
+	void SetLevel(std::string lv);
+	// プレイヤーレベルを設定
+	void SetPlayerLevel(int level);
+
 	// 最大Hpを設定
 	void SetMaxHp(int maxHp);
 	// 現在のHpを設定
 	void SetHp(int hp);
+	// Hpを表示
+	void SetHpText(std::string hpText);
 
 	// 最大Spを設定
 	void SetMaxSp(int maxSp);
 	// 現在のSpを設定
 	void SetSp(int sp);
+	// Spを表示
+	void SetSpText(std::string spText);
 
 	// 最大Avoidを設定
 	void SetAvoidMaxValue(int maxValue);
@@ -45,9 +58,16 @@ public:
 	CAvoidanceGauge* GetAvoidGauge()const;
 
 private:
-	CPlayerNameUI* mpNameUI;
-	CHpGauge* mpHpGauge;
-	CSpGauge* mpSpGauge;
-	CAvoidanceGauge* mpAvoidGauge;
-	CExpGauge* mpExpGauge;
+	// UI関連
+	CPlayerNameUI* mpNameUI;          // 名前のUI
+	CLevelUI* mpLevelUI;              // レベルのUI(Lv)
+	CPlayerLevelUI* mpPlayerLevelUI;  // プレイヤーのレベルUI
+	CHpUI* mpHpUI;                    // HpのUI
+	CSpUI* mpSpUI;                    // SpのUI
+
+	// ゲージ関連
+	CHpGauge* mpHpGauge;            // Hpゲージ
+	CSpGauge* mpSpGauge;            // Spゲージ
+	CAvoidanceGauge* mpAvoidGauge;  // 回避ゲージ
+	CExpGauge* mpExpGauge;          // Expゲージ
 };

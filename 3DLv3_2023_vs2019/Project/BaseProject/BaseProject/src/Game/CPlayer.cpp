@@ -114,8 +114,22 @@ CPlayer::CPlayer()
 
 	// プレイヤー名を作成
 	mpGameUI = new CGamePlayerUI();
-	std::string text = "【Name】 Dog Knight";
-	mpGameUI->SetPlayerName(text);
+
+	// Lv.を表示
+	std::string lv = "Lv.";
+	mpGameUI->SetLevel(lv);
+
+	// 名前を設定
+	std::string name = "Dog Knight";
+	mpGameUI->SetPlayerName(name);
+
+	// Hpを表示
+	std::string hp = "HP";
+	mpGameUI->SetHpText(hp);
+
+	// Spを表示
+	std::string sp = "SP";
+	mpGameUI->SetSpText(sp);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -1431,6 +1445,8 @@ void CPlayer::Update()
 
 	// 現在の経験値を設定
 	mpGameUI->SetExp(mCharaStatus.exp);
+
+	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 }
 
 // 衝突処理
@@ -1474,6 +1490,7 @@ void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 				mHeal = true;
 			}
 		}
+		// ポーション効果(攻撃力アップ)
 		if (other->Tag() == ETag::ePortionRed)
 		{
 			mPowerUp = true;

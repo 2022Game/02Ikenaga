@@ -1,5 +1,9 @@
 #include "CGamePlayerUI.h"
 #include "CPlayerNameUI.h"
+#include "CLevelUI.h"
+#include "CPlayerLevelUI.h"
+#include "CHpUI.h"
+#include "CSpUI.h"
 #include "CHpGauge.h"
 #include "CSpGauge.h"
 #include "CAvoidanceGauge.h"
@@ -11,6 +15,17 @@ CGamePlayerUI::CGamePlayerUI()
 {
 	// プレイヤー名のUIを作成
 	mpNameUI = new CPlayerNameUI();
+
+	// Lv.UIを作成
+	mpLevelUI = new CLevelUI();
+	// プレイヤーレベルのUIを作成
+	mpPlayerLevelUI = new CPlayerLevelUI();
+
+	// HpUIを作成
+	mpHpUI = new CHpUI();
+
+	// SpUIを作成
+	mpSpUI = new CSpUI();
 
 	// プレイヤーのHPゲージを作成
 	mpHpGauge = new CHpGauge(false);
@@ -35,6 +50,10 @@ CGamePlayerUI::~CGamePlayerUI()
 {
 	// UI関連の削除
 	mpNameUI->Kill();
+	mpLevelUI->Kill();
+	mpPlayerLevelUI->Kill();
+	mpHpUI->Kill();
+	mpSpUI->Kill();
 	// ゲージ関連の削除
 	mpHpGauge->Kill();
 	mpSpGauge->Kill();
@@ -46,6 +65,18 @@ CGamePlayerUI::~CGamePlayerUI()
 void CGamePlayerUI::SetPlayerName(std::string name)
 {
 	mpNameUI->SetPlayerName(name);
+}
+
+// Lvを設定
+void CGamePlayerUI::SetLevel(std::string lv)
+{
+	mpLevelUI->SetLevel(lv);
+}
+
+// プレイヤーレベルを設定
+void CGamePlayerUI::SetPlayerLevel(int level)
+{
+	mpPlayerLevelUI->SetPlayerLevel(level);
 }
 
 // 最大Hpを設定
@@ -60,6 +91,12 @@ void CGamePlayerUI::SetHp(int hp)
 	mpHpGauge->SetValue(hp);
 }
 
+// Hpを表示
+void CGamePlayerUI::SetHpText(std::string hpText)
+{
+	mpHpUI->SetHpText(hpText);
+}
+
 // 最大Spを設定
 void CGamePlayerUI::SetMaxSp(int maxSp)
 {
@@ -70,6 +107,12 @@ void CGamePlayerUI::SetMaxSp(int maxSp)
 void CGamePlayerUI::SetSp(int sp)
 {
 	mpSpGauge->SetValue(sp);
+}
+
+// Spを表示
+void CGamePlayerUI::SetSpText(std::string spText)
+{
+	mpSpUI->SetSpText(spText);
 }
 
 // 最大Avoidを設定
