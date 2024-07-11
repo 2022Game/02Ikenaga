@@ -131,6 +131,10 @@ CPlayer::CPlayer()
 	std::string sp = "SP";
 	mpGameUI->SetSpText(sp);
 
+	// Exp‚ğ•\¦
+	std::string exp = "EXP";
+	mpGameUI->SetExpText(exp);
+
 	// Å‰‚É1ƒŒƒxƒ‹‚Éİ’è
 	ChangeLevel(1);
 

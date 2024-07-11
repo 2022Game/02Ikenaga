@@ -62,7 +62,7 @@ void CExpGauge::Update()
 	// SAの割合でバーの色を変更
 	CColor color;
 	// ピンク色
-	if (percent <= 1.0f) color = CColor(0.0f, 0.5f, 0.0f, 0.75f);
+	if (percent <= 1.0f) color = CColor(0.0f, 0.5f, 0.0f, 0.8f);
 	// バーに色を設定
 	mpBarImage->SetColor(color);
 }

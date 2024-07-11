@@ -710,10 +710,16 @@
       <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CHpUI.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\CSpUI.cpp">
-      <Filter>ソース ファイル\Game\UI</Filter>
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CExpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameEnemyUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1234,10 +1240,16 @@
       <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CHpUI.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\CSpUI.h">
-      <Filter>ソース ファイル\Game\UI</Filter>
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameEnemyUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

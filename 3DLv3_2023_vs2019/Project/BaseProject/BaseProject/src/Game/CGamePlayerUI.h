@@ -10,6 +10,7 @@ class CAvoidanceGauge;
 class CExpGauge;
 class CHpUI;
 class CSpUI;
+class CExpUI;
 
 // ゲーム中のプレイヤーUI
 class CGamePlayerUI : public CTask
@@ -53,6 +54,8 @@ public:
 	void SetMaxExp(int maxExp);
 	// 現在のExpを設定
 	void SetExp(int exp);
+	// Expを表示
+	void SetExpText(std::string expText);
 
 	// AvoidGaugeを取得
 	CAvoidanceGauge* GetAvoidGauge()const;
@@ -64,6 +67,7 @@ private:
 	CPlayerLevelUI* mpPlayerLevelUI;  // プレイヤーのレベルUI
 	CHpUI* mpHpUI;                    // HpのUI
 	CSpUI* mpSpUI;                    // SpのUI
+	CExpUI* mpExpUI;                  // ExpのUI
 
 	// ゲージ関連
 	CHpGauge* mpHpGauge;            // Hpゲージ

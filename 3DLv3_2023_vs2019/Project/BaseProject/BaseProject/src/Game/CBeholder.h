@@ -8,6 +8,7 @@ class CLightningBallEffect;
 class CElectricShockEffect;
 class CHomingBallEffect;
 class CCurrent;
+class CGameEnemyUI;
 
 /*
  球体のモンスター
@@ -200,4 +201,7 @@ private:
 	CCurrent* mpCurrent4;
 	CCurrent* mpCurrent5;
 	CCurrent* mpCurrent6;
+
+	// UI関連
+	CGameEnemyUI* mpGameUI;
 };

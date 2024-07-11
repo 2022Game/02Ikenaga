@@ -8,6 +8,8 @@
 #include "CHomingBallEffect.h"
 #include "CTornado.h"
 #include "CCurrent.h"
+#include "CGameEnemyUI.h"
+#include "CLevelUI.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
@@ -69,6 +71,8 @@ CBeholder::CBeholder()
 
 	//最初に1レベルに設定
 	ChangeLevel(1);
+
+	mpGameUI = new CGameEnemyUI();
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -924,12 +928,18 @@ void CBeholder::Update()
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 38.0f, 0.0f);
+	CVector levelPos = Position() + CVector(0.0f, 43.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
+	CLevelUI* lvUI = mpGameUI->GetLv();
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
 		mpHpGauge->SetWorldPos(gaugePos);
+		// Lv.を表示
+		std::string lv = "Lv.";
+		mpGameUI->SetLv(lv);
+		lvUI->SetWorldPos(levelPos);
 	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)

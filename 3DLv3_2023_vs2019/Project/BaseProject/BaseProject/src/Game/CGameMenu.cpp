@@ -18,7 +18,7 @@ CGameMenu::CGameMenu()
 	);
 	mpBackground->SetCenter(mpBackground->GetSize() * 0.5f);
 	mpBackground->SetPos(CVector2(WINDOW_WIDTH, WINDOW_HEIGHT) * 0.5f);
-	mpBackground->SetColor(1.0f, 1.0f, 1.0f, MENU_ALPHA);
+	mpBackground->SetColor(0.0f, 0.0f, 0.0f, MENU_ALPHA);
 
 	int menuItemCount = 3;
 	float spaceY = (float)WINDOW_HEIGHT / (menuItemCount + 1);

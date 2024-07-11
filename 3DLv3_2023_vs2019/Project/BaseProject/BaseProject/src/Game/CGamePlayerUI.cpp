@@ -4,6 +4,7 @@
 #include "CPlayerLevelUI.h"
 #include "CHpUI.h"
 #include "CSpUI.h"
+#include "CExpUI.h"
 #include "CHpGauge.h"
 #include "CSpGauge.h"
 #include "CAvoidanceGauge.h"
@@ -17,7 +18,7 @@ CGamePlayerUI::CGamePlayerUI()
 	mpNameUI = new CPlayerNameUI();
 
 	// Lv.UIを作成
-	mpLevelUI = new CLevelUI();
+	mpLevelUI = new CLevelUI(false);
 	// プレイヤーレベルのUIを作成
 	mpPlayerLevelUI = new CPlayerLevelUI();
 
@@ -26,6 +27,9 @@ CGamePlayerUI::CGamePlayerUI()
 
 	// SpUIを作成
 	mpSpUI = new CSpUI();
+
+	// ExpUIを作成
+	mpExpUI = new CExpUI();
 
 	// プレイヤーのHPゲージを作成
 	mpHpGauge = new CHpGauge(false);
@@ -54,6 +58,7 @@ CGamePlayerUI::~CGamePlayerUI()
 	mpPlayerLevelUI->Kill();
 	mpHpUI->Kill();
 	mpSpUI->Kill();
+	mpExpUI->Kill();
 	// ゲージ関連の削除
 	mpHpGauge->Kill();
 	mpSpGauge->Kill();
@@ -137,6 +142,12 @@ void CGamePlayerUI::SetMaxExp(int maxExp)
 void CGamePlayerUI::SetExp(int exp)
 {
 	mpExpGauge->SetValue(exp);
+}
+
+// Expを表示
+void CGamePlayerUI::SetExpText(std::string expText)
+{
+	mpExpUI->SetExpText(expText);
 }
 
 // AvoidGaugeを取得
