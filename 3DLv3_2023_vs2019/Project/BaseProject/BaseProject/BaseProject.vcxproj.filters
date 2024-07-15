@@ -215,6 +215,9 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI\EnemyUI">
       <UniqueIdentifier>{6de88451-1363-4ebe-9b22-7ce34defa889}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Hit">
+      <UniqueIdentifier>{db4e4e2f-51a9-4bd3-997a-2d761234dba6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -720,6 +723,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CGameEnemyUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHit.cpp">
+      <Filter>ソース ファイル\Game\Effect\Hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1250,6 +1256,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CGameEnemyUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHit.h">
+      <Filter>ソース ファイル\Game\Effect\Hit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

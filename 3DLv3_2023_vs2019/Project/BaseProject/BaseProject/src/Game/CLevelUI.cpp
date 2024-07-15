@@ -78,22 +78,22 @@ void CLevelUI::SetWorldPos(const CVector& worldPos)
 	mPosition = screenPos;
 
 	// 設定されたワールド座標とカメラの座標を求める
-	//float dist = (worldPos - cam->Position()).Length();
+	float dist = (worldPos - cam->Position()).Length();
 
-	//if (dist <= SCALE_DIST_MAX)
-	//{
-	//	// カメラから離れるごとにスケール値を小さくする
-	//	//float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
-	//	//mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+	if (dist <= SCALE_DIST_MAX)
+	{
+		// カメラから離れるごとにスケール値を小さくする
+		float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
+		mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
 
-	//	// 表示
-	//	SetShow(true);
-	//}
-	//// カメラの距離が遠い場合は、非表示
-	//else
-	//{
-	//	SetShow(false);
-	//}
+		// 表示
+		SetShow(true);
+	}
+	// カメラの距離が遠い場合は、非表示
+	else
+	{
+		SetShow(false);
+	}
 }
 
 // 更新
@@ -101,11 +101,14 @@ void CLevelUI::Update()
 {
 	if (mIs3dGauge)
 	{
+		CVector2 Pos = mPosition;
+		Pos.X(Pos.X()- 0.0f* mCenterRatio.X() * mScale);
 		mpLevelText->SetCenter
 		(
-			mCenterRatio.X() * mScale,
-			mCenterRatio.Y() * mScale
+		   0.0f * mCenterRatio.X() * mScale,
+		   0.0f * mCenterRatio.Y() * mScale
 		);
+		mpLevelText->SetPos(Pos);
 	}
 }
 
@@ -114,8 +117,6 @@ void CLevelUI::Render()
 {
 	if (mIs3dGauge)
 	{
-		CVector2 Pos = mPosition;
-		Pos.X(Pos.X() - mCenterRatio.X() * mScale);
 		mpLevelText->SetColor(0.0f, 0.0f, 0.0f);
 
 		for (int i = 0; i < SHADOW_COUNT; i++)
@@ -123,11 +124,11 @@ void CLevelUI::Render()
 			CVector2 v = CVector2(1.0f, 0.0f);
 			float alpha = (float)i / SHADOW_COUNT;
 			CQuaternion rot = CQuaternion(0.0f, 0.0f, 360.0f * alpha);
-			mpLevelText->SetPos(Pos + (CVector2)(rot * v) * SHADOW_WIDTH);
+			mpLevelText->SetPos(mPosition+ (CVector2)(rot * v) * SHADOW_WIDTH);
 			mpLevelText->Render();
 		}
 		mpLevelText->SetColor(1.0f, 1.0f, 1.0f);
-		mpLevelText->SetPos(Pos);
+		mpLevelText->SetPos(mPosition);
 		mpLevelText->Render();
 	}
 	else

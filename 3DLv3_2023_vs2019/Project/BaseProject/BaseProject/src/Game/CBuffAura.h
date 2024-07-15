@@ -52,6 +52,7 @@ private:
 		Wait,   // I—¹‘Ò‚¿
 		End,    // I—¹
 	};
+	// ó‘Ô‚ÌØ‚è‘Ö‚¦
 	void ChangeState(EState state);
 
 	EState mState;       // Œ»İ‚Ìó‘Ô

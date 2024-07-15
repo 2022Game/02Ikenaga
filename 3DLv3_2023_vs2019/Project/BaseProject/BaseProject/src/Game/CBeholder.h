@@ -8,6 +8,7 @@ class CLightningBallEffect;
 class CElectricShockEffect;
 class CHomingBallEffect;
 class CCurrent;
+class CHit;
 class CGameEnemyUI;
 
 /*
@@ -155,6 +156,8 @@ private:
 	// 電流エフェクトにヒットした
 	void CollisionCurrent();
 
+	void CreateHit();
+
 	CVector mMoveSpeed;	  // 移動速度
 	bool mIsGrounded;	  // 接地しているかどうか
 
@@ -201,6 +204,8 @@ private:
 	CCurrent* mpCurrent4;
 	CCurrent* mpCurrent5;
 	CCurrent* mpCurrent6;
+
+	CHit* mpHitEffect;
 
 	// UI関連
 	CGameEnemyUI* mpGameUI;

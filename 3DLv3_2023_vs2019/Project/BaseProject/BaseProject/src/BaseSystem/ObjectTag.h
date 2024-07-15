@@ -30,6 +30,7 @@ enum class ETag
 	eAura,            // オーラ
 	eCurrent,         // 電流
 	eBreath,          // ブレス
+	eHit,             // ヒット
 
 	eCamera,          // カメラ
 

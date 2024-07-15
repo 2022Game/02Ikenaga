@@ -93,6 +93,5 @@ public:
 protected:
 	EEnemyType mType;     // 敵の種類
 	CHpGauge* mpHpGauge;  // HPゲージ
-
 	CEnemy* mpSummoner;   // 自分自身を召喚した敵キャラ
 };

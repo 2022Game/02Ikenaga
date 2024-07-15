@@ -110,6 +110,7 @@
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CHealCircle.cpp" />
+    <ClCompile Include="src\Game\CHit.cpp" />
     <ClCompile Include="src\Game\CHomingBall.cpp" />
     <ClCompile Include="src\Game\CHomingBallEffect.cpp" />
     <ClCompile Include="src\Game\CHpUI.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CHealCircle.h" />
+    <ClInclude Include="src\Game\CHit.h" />
     <ClInclude Include="src\Game\CHomingBall.h" />
     <ClInclude Include="src\Game\CHomingBallEffect.h" />
     <ClInclude Include="src\Game\CHpUI.h" />

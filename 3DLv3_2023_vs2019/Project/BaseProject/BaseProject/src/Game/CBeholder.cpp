@@ -8,6 +8,7 @@
 #include "CHomingBallEffect.h"
 #include "CTornado.h"
 #include "CCurrent.h"
+#include "CHit.h"
 #include "CGameEnemyUI.h"
 #include "CLevelUI.h"
 
@@ -373,6 +374,12 @@ CBeholder::CBeholder()
 		HomingPos,
 		CQuaternion(0.0, 0.f, 0.0f).Matrix()
 	);
+
+	float Size = 20.0f;
+	float Height = 1.5f;
+	mpHitEffect = new CHit(ETag::eHit, Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
 }
 
 // デストラクタ
@@ -404,6 +411,8 @@ CBeholder::~CBeholder()
 	SAFE_DELETE(mpAttackColTentacle4);
 	SAFE_DELETE(mpAttackColTentacle5);
 	SAFE_DELETE(mpAttackColTentacle6);
+	// UI関連
+	mpGameUI->Kill();
 }
 
 // インスタンス
@@ -542,6 +551,11 @@ void CBeholder::CollisionCurrent()
 	if (mpCurrent4 != nullptr) mpCurrent4->SetEnableCol(false);
 	if (mpCurrent5 != nullptr) mpCurrent5->SetEnableCol(false);
 	if (mpCurrent6 != nullptr) mpCurrent6->SetEnableCol(false);
+}
+
+// ヒットエフェクト生成
+void CBeholder::CreateHit()
+{
 }
 
 // 待機状態
@@ -779,25 +793,38 @@ void CBeholder::UpdateHit()
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
 
-	// ヒットアニメーションを開始
-	ChangeAnimation(EAnimType::eHit);
-
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		// めまいをfalseにする
-		bool stan = false;
-		// 確率を最小に0最大20
-		int probability = Math::Rand(0, 20);
-		if (probability == 1)stan = true;
-		if (stan)
+	case 0:
+	// ステップ0 : ヒットアニメーションを開始
+		ChangeAnimation(EAnimType::eHit);
+		mStateStep++;
+		break;
+	// ステップ1 : ヒットエフェクト開始
+	case 1:
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	// ステップ2 : アニメーション終了待ち＋待機状態かめまい
+	case 2:
+		if (IsAnimationFinished())
 		{
-			ChangeState(EState::eDizzy);
+			// めまいをfalseにする
+			bool stan = false;
+			// 確率を最小に0最大20
+			int probability = Math::Rand(0, 20);
+			if (probability == 1)stan = true;
+			if (stan)
+			{
+				ChangeState(EState::eDizzy);
+			}
+			else
+			{
+				mpHitEffect->EndHitEffect();
+				ChangeState(EState::eIdle2);
+			}
 		}
-		else
-		{
-			// プレイヤーの攻撃がヒットした時の待機状態へ移行
-			ChangeState(EState::eIdle2);
-		}
+		break;
 	}
 }
 
@@ -808,22 +835,38 @@ void CBeholder::UpdateDie()
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::BeholderDeath();
+	// ステップ0 : アニメーションを開始
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mStateStep++;
+		break;
+	// ステップ1 : ヒットエフェクト開始
+	case 1:
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	// ステップ2 : アニメーション終了待ち
+	case 2:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::BeholderDeath();
+		}
 	}
 }
 
 // めまい(混乱)
 void CBeholder::UpdateDizzy()
 {
-	SetAnimationSpeed(0.5f);
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
+
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
 
 	if (IsAnimationFinished())
@@ -928,7 +971,12 @@ void CBeholder::Update()
 
 	// HPゲージの座標を更新(敵の座標の少し上の座標)
 	CVector gaugePos = Position() + CVector(0.0f, 38.0f, 0.0f);
-	CVector levelPos = Position() + CVector(0.0f, 43.0f, 0.0f);
+
+	CVector z = VectorZ();
+	z.Z(0.0f);
+	z.Normalize();
+	CVector2 levelPos = Position() + CVector(0.0f, 43.0f, 0.0f);
+
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 

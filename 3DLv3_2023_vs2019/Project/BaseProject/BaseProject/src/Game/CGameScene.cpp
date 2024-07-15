@@ -135,6 +135,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModel>("HealCircle", "Effect\\Circle\\Circle.obj");
 	CResourceManager::Load<CModel>("BuffCircle", "Effect\\Circle2\\Circle2.obj");
 	CResourceManager::Load<CTexture>("Current", "Effect\\Current\\lightning_bolt.png");
+	CResourceManager::Load<CTexture>("Hit", "Effect\\Hit\\HitEffect.png");
 
 	// BGMŠÖ˜A
 	CResourceManager::Load<CSound>("SlashSound", "Sound\\SE\\slash.wav");
