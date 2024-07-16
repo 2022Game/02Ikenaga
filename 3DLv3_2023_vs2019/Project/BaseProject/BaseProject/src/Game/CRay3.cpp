@@ -304,7 +304,7 @@ void CRay3::Update()
 	if (mState == EState::eAttack || mState == EState::eAttackWait || mState == EState::eDie
 		|| mState == EState::eHit || mState == EState::eIdle || mState == EState::eRun)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
+		//mpHpGauge->SetWorldPos(gaugePos);
 	}
 
 	if (mState == EState::eIdle && vectorp <= 60.0f || mState == EState::eHit || mState == EState::eRun
@@ -370,7 +370,7 @@ void CRay3::Update()
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -459,8 +459,8 @@ void CRay3::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

@@ -2,7 +2,6 @@
 #include "CCollisionManager.h"
 #include "CPlayer.h"
 #include "CHpGauge.h"
-#include "Maths.h"
 #include "CMagicCircle.h"
 #include "CBee.h"
 #include "CBeholder.h"
@@ -18,6 +17,8 @@
 #include "CHealCircle.h"
 #include "CIceBreath.h"
 #include "CHit.h"
+#include "CGameEnemyUI.h"
+#include "Maths.h"
 #include "CInput.h"
 
 // リッチのインスタンス
@@ -56,7 +57,7 @@ const CLich::AnimData CLich::ANIM_DATA[] =
 	{ "Character\\Enemy\\Lich\\animation\\LichAttack.x",  false,  41.0f,  0.4f},  // 攻撃 41.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichAttack2.x", false,  71.0f,  0.5f},  // 攻撃 71.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichGetHit.x",  false,  41.0f,  0.4f},  // ヒット 41.0f
-	{ "Character\\Enemy\\Lich\\animation\\LichDie.x",	  false,  29.0f,  0.3f},  // 死ぬ 29.0f
+	{ "Character\\Enemy\\Lich\\animation\\LichDie.x",	  false,  29.0f,  0.2f},  // 死ぬ 29.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichVictory.x", false,  81.0f,  0.4f},  // 勝利 81.0f
 	{ "Character\\Enemy\\Lich\\animation\\LichRun.x",	  true,	  21.0f,  0.5f},  // 走る 21.0f
 };
@@ -237,6 +238,9 @@ CLich::CLich()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+
+	mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 40.0f, 0.0f));
+	mpGameUI->SetLvOffsetPos(CVector(0.0f, 40.0f, 0.0f));
 }
 
 // デストラクタ
@@ -457,7 +461,11 @@ void CLich::UpdateDie()
 {
 	mpDrain->Stop();
 	mpIceBreath->Stop();
-	SetAnimationSpeed(0.3f);
+
+	CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+	hpGauge->SetShow(false);
+
+	SetAnimationSpeed(0.2f);
 	ChangeAnimation(EAnimType::eDie);
 	if (IsAnimationFinished())
 	{
@@ -722,15 +730,8 @@ void CLich::Update()
 		break;
 	}
 
-	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-
-	if (mState != EState::eIdle && mState != EState::eDie)
-	{
-		mpHpGauge->SetWorldPos(gaugePos);
-	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
@@ -805,8 +806,15 @@ void CLich::Update()
 
 	mIsGrounded = false;
 
-	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	if (mState != EState::eIdle && mState != EState::eDie)
+	{
+		CEnemy::Update();
+	}
+	else
+	{
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -919,6 +927,7 @@ void CLich::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpGameUI->SetHp(mCharaStatus.hp);
+	mpGameUI->SetLv(mCharaStatus.level);
 }

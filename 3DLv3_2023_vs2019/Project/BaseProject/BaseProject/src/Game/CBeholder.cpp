@@ -10,7 +10,6 @@
 #include "CCurrent.h"
 #include "CHit.h"
 #include "CGameEnemyUI.h"
-#include "CLevelUI.h"
 
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
@@ -72,8 +71,6 @@ CBeholder::CBeholder()
 
 	//最初に1レベルに設定
 	ChangeLevel(1);
-
-	mpGameUI = new CGameEnemyUI();
 
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
@@ -380,6 +377,9 @@ CBeholder::CBeholder()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+
+	mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 38.0f, 0.0f));
+	mpGameUI->SetLvOffsetPos(CVector(0.0f, 38.0f, 0.0f));
 }
 
 // デストラクタ
@@ -411,8 +411,6 @@ CBeholder::~CBeholder()
 	SAFE_DELETE(mpAttackColTentacle4);
 	SAFE_DELETE(mpAttackColTentacle5);
 	SAFE_DELETE(mpAttackColTentacle6);
-	// UI関連
-	mpGameUI->Kill();
 }
 
 // インスタンス
@@ -834,6 +832,9 @@ void CBeholder::UpdateDie()
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
 
+	CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+	hpGauge->SetShow(false);
+
 	switch (mStateStep)
 	{
 	// ステップ0 : アニメーションを開始
@@ -967,26 +968,8 @@ void CBeholder::Update()
 		break;
 	}
 
-	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 38.0f, 0.0f);
-
-	CVector z = VectorZ();
-	z.Z(0.0f);
-	z.Normalize();
-	CVector2 levelPos = Position() + CVector(0.0f, 43.0f, 0.0f);
-
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-
-	CLevelUI* lvUI = mpGameUI->GetLv();
-	if (mState != EState::eIdle && mState != EState::eDie)
-	{
-		mpHpGauge->SetWorldPos(gaugePos);
-		// Lv.を表示
-		std::string lv = "Lv.";
-		mpGameUI->SetLv(lv);
-		lvUI->SetWorldPos(levelPos);
-	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
@@ -1119,13 +1102,16 @@ void CBeholder::Update()
 	mpAttackColTentacle6->Update();
 
 	mIsGrounded = false;
-	float y = 0.0f;
-	y = Position().Y();
 
-	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
-	CDebugPrint::Print("高さ %f\n", y);
-	CDebugPrint::Print("飛行 %d\n", mFlyingTime);
+	if (mState != EState::eIdle && mState != EState::eDie)
+	{
+		CEnemy::Update();
+	}
+	else
+	{
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -1264,8 +1250,9 @@ void CBeholder::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpGameUI->SetHp(mCharaStatus.hp);
+	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

@@ -3,6 +3,7 @@
 #include "CHpGauge.h"
 #include "CCollisionManager.h"
 #include "CShieldRotate2.h"
+#include "CGameEnemyUI.h"
 #include "Maths.h"
 
 // 亀のインスタンス
@@ -504,7 +505,12 @@ void CTurtle::Update()
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
+		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 27.0f, 0.0f));
+		mpGameUI->GetHpGauge()->SetShow(true);
+	}
+	else
+	{
+		mpGameUI->GetHpGauge()->SetShow(false);
 	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefenseIdle
@@ -587,8 +593,7 @@ void CTurtle::Update()
 
 	mIsGrounded = false;
 
-	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	CEnemy::Update();
 }
 
 // 衝突処理
@@ -674,8 +679,9 @@ void CTurtle::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpGameUI->SetHp(mCharaStatus.hp);
+	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

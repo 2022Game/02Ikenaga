@@ -1,22 +1,20 @@
 #include "CEnemy.h"
 #include "CExpManager.h"
 #include "CPortionManager.h"
+#include "CGameEnemyUI.h"
 
 // コンストラクタ
 CEnemy::CEnemy()
 	:CXCharacter(ETag::eEnemy,ETaskPriority::eEnemy)
 	, mpSummoner(nullptr)
 {
-	// HPゲージ作成
-	mpHpGauge = new CHpGauge(true);
-	mpHpGauge->SetCenterRatio(CVector2(0.5f, 0.0f));
+	mpGameUI = new CGameEnemyUI();
 }
 
 // デストラクタ
 CEnemy::~CEnemy()
 {
-	// HPゲージを削除
-	mpHpGauge->Kill();
+	mpGameUI->Kill();
 
 	if (mpSummoner != nullptr)
 	{
@@ -304,4 +302,20 @@ void CEnemy::DeathSummonEnemy(CEnemy* enemy)
 void CEnemy::SetSummoner(CEnemy* summone)
 {
 	mpSummoner = summone;
+}
+
+// 更新
+void CEnemy::Update()
+{
+	// HPゲージに現在のHPを設定
+	mpGameUI->SetHp(mCharaStatus.hp);
+	
+	CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+	CVector gaugePos = Position() + mpGameUI->GetHpGaugeOffsetPos();
+	hpGauge->SetWorldPos(gaugePos);
+	
+	CLevelUI* lvUI = mpGameUI->GetLv();
+	CVector levelPos = Position() + mpGameUI->GetLvOffsetPos();
+	lvUI->SetWorldPos(levelPos);
+
 }

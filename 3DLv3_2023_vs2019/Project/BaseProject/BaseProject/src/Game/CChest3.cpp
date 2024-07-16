@@ -524,7 +524,7 @@ void CChest3::Update()
 	if (mState == EState::eRun || mState == EState::eIdle2 || mState == EState::eAttack || mState == EState::eAttack2 ||
 		mState == EState::eHit || mState == EState::eDie || mState == EState::eDizzy || mState == EState::eAttackWait)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
+		//mpHpGauge->SetWorldPos(gaugePos);
 	}
 
 	if (mState == EState::eIdle2 && mState != EState::eDizzy || mState == EState::eRun)
@@ -594,7 +594,7 @@ void CChest3::Update()
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -684,8 +684,8 @@ void CChest3::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

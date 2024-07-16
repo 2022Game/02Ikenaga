@@ -714,7 +714,7 @@ void CBoxer2::Update()
 
 	if (vectorp <= WITHIN_RANGE && mState != EState::eIdle)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
+		//mpHpGauge->SetWorldPos(gaugePos);
 	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
@@ -830,7 +830,7 @@ void CBoxer2::Update()
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -929,8 +929,8 @@ void CBoxer2::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

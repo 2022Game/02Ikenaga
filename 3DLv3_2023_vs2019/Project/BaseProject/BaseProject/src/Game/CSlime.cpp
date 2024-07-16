@@ -1,8 +1,9 @@
 #include "CSlime.h"
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
-#include "Maths.h"
 #include "CPlayer.h"
+#include "CGameEnemyUI.h"
+#include "Maths.h"
 
 // レッドスライムのインスタンス
 CSlime* CSlime::spInstance = nullptr;
@@ -542,17 +543,14 @@ void CSlime::Update()
 		break;
 	}
 
-	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 32.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
-
-		(mAttackTime++ / 100);
+		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 32.0f, 0.0f));
+		mpGameUI->GetHpGauge()->SetShow(true);
 
 		if (mAttackTime > 230)
 		{
@@ -583,6 +581,10 @@ void CSlime::Update()
 		{
 			mAttackTime = 0;
 		}
+	}
+	else
+	{
+		mpGameUI->GetHpGauge()->SetShow(false);
 	}
 
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
@@ -616,8 +618,7 @@ void CSlime::Update()
 
 	mIsGrounded = false;
 
-	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	CEnemy::Update();
 }
 
 // 衝突処理
@@ -701,8 +702,9 @@ void CSlime::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpGameUI->SetHp(mCharaStatus.hp);
+	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

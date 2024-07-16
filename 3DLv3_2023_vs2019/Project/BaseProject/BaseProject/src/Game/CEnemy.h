@@ -2,6 +2,8 @@
 #include "CXCharacter.h"
 #include "CHpGauge.h"
 
+class CGameEnemyUI;
+
 // 敵の種類
 enum class EEnemyType
 {
@@ -90,8 +92,12 @@ public:
 	// 自身を召喚した敵を設定
 	void SetSummoner(CEnemy* summoner);
 
+	// 更新
+	void Update() override;
 protected:
 	EEnemyType mType;     // 敵の種類
-	CHpGauge* mpHpGauge;  // HPゲージ
 	CEnemy* mpSummoner;   // 自分自身を召喚した敵キャラ
+
+	// UI関連
+	CGameEnemyUI* mpGameUI;
 };

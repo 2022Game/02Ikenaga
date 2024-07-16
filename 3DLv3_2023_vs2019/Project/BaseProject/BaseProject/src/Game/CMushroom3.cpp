@@ -435,11 +435,11 @@ void CMushroom3::Update()
 		// HPゲージの座標を更新(敵の座標の少し上の座標)
 		CVector gaugePos = Position() + CVector(0.0f, 40.0f, 0.0f);
 
-		mpHpGauge->SetWorldPos(gaugePos);
+		//mpHpGauge->SetWorldPos(gaugePos);
 	}
 	else
 	{
-		mpHpGauge->SetPos(-1000.0f, -1000.0f);
+		//mpHpGauge->SetPos(-1000.0f, -1000.0f);
 	}
 
 	if (mState == EState::eIdle3 || mState == EState::eRun)
@@ -503,7 +503,7 @@ void CMushroom3::Update()
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -593,8 +593,8 @@ void CMushroom3::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

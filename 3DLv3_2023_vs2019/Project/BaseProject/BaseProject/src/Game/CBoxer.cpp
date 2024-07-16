@@ -3,9 +3,9 @@
 #include "CEffect.h"
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
-#include "Maths.h"
 #include "CImpactEffect.h"
-#include "CInput.h"
+#include "CGameEnemyUI.h"
+#include "Maths.h"
 
 // ボクサーのインスタンス
 CBoxer* CBoxer::spInstance = nullptr;
@@ -835,14 +835,17 @@ void CBoxer::Update()
 		break;
 	}
 
-	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 35.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
+		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 35.0f, 0.0f));
+		mpGameUI->GetHpGauge()->SetShow(true);
+	}
+	else
+	{
+		mpGameUI->GetHpGauge()->SetShow(false);
 	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
@@ -961,9 +964,8 @@ void CBoxer::Update()
 	mpAttackColFeetL->Update();
 
 	mIsGrounded = false;
-
-	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	
+	CEnemy::Update();
 }
 
 // 衝突処理
@@ -1072,8 +1074,9 @@ void CBoxer::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpGameUI->SetHp(mCharaStatus.hp);
+	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

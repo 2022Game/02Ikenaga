@@ -409,7 +409,7 @@ void CSlime3::Update()
 
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		mpHpGauge->SetWorldPos(gaugePos);
+		//mpHpGauge->SetWorldPos(gaugePos);
 
 		mAttackTime++;
 		if (mAttackTime > 230)
@@ -439,7 +439,7 @@ void CSlime3::Update()
 	}
 	else
 	{
-		mpHpGauge->SetPos(-1000.0f, -1000.0f);
+		//mpHpGauge->SetPos(-1000.0f, -1000.0f);
 	}
 
 	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
@@ -468,7 +468,7 @@ void CSlime3::Update()
 	mIsGrounded = false;
 
 	// HPゲージに現在のHPを設定
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 衝突処理
@@ -559,8 +559,8 @@ void CSlime3::ChangeLevel(int level)
 	// 現在のステータスを最大値にすることで、HP回復
 	mCharaStatus = mCharaMaxStatus;
 
-	mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
-	mpHpGauge->SetValue(mCharaStatus.hp);
+	//mpHpGauge->SetMaxValue(mCharaMaxStatus.hp);
+	//mpHpGauge->SetValue(mCharaStatus.hp);
 }
 
 // 被ダメージ処理

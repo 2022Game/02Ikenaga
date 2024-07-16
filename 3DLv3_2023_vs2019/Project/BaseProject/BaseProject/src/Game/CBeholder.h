@@ -207,7 +207,4 @@ private:
 
 	// ヒットエフェクト
 	CHit* mpHitEffect;
-
-	// UI関連
-	CGameEnemyUI* mpGameUI;
 };

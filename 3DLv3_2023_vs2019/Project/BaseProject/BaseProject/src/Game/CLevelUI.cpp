@@ -6,7 +6,7 @@
 // スケール値計算時のカメラとの距離の最小
 #define SCALE_DIST_MIN 0.0f
 // スケール値計算時のカメラとの距離の最大
-#define SCALE_DIST_MAX 200.0f
+#define SCALE_DIST_MAX 140.0f
 // スケール値の最小値
 #define SCALE_MIN 0.7f
 // スケール値の最大値
@@ -21,7 +21,7 @@ CLevelUI::CLevelUI(bool is3dGauge)
 	, mCenterRatio(0.0f, 0.0f)
 	, mIs3dGauge(is3dGauge)
 {
-	CVector2 size = CVector2(WINDOW_WIDTH, WINDOW_HEIGHT);
+	CVector2 size = CVector2(WINDOW_WIDTH*0.5, WINDOW_HEIGHT*0.5f);
 	ETextAlignH textAlignH = ETextAlignH::eLeft;
 
 	// レベルのテキストを作成
@@ -75,7 +75,7 @@ void CLevelUI::SetWorldPos(const CVector& worldPos)
 	}
 
 	// もとめたスクリーン座標を自身の位置に設定
-	mPosition = screenPos;
+	mPosition = (CVector2)screenPos + CVector2(-120.0f,-32.0f);
 
 	// 設定されたワールド座標とカメラの座標を求める
 	float dist = (worldPos - cam->Position()).Length();
@@ -99,17 +99,6 @@ void CLevelUI::SetWorldPos(const CVector& worldPos)
 // 更新
 void CLevelUI::Update()
 {
-	if (mIs3dGauge)
-	{
-		CVector Pos = mPosition;
-		Pos.X(Pos.X()- 0.0f* mCenterRatio.X() * mScale);
-		mpLevelText->SetCenter
-		(
-		   0.0f * mCenterRatio.X() * mScale,
-		   0.0f * mCenterRatio.Y() * mScale
-		);
-		mpLevelText->SetPos(Pos);
-	}
 }
 
 // 描画
