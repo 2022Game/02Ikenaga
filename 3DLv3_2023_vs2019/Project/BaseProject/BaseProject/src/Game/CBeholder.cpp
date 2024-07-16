@@ -376,8 +376,8 @@ CBeholder::CBeholder()
 	);
 
 	float Size = 20.0f;
-	float Height = 1.5f;
-	mpHitEffect = new CHit(ETag::eHit, Size, Height);
+	float Height = 1.8f;
+	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
 }
@@ -702,7 +702,7 @@ void CBeholder::UpdateAttack2()
 			mStateStep++;
 		}
 		break;
-		// ステップ6 : 攻撃アニメーション終了待ち
+		// ステップ6 : 攻撃アニメーション終了待ち+電流終了
 	case 6:
 		if (mAnimationFrame >= 20.0f)
 		{
@@ -737,10 +737,12 @@ void CBeholder::UpdateAttack4()
 	SetAnimationSpeed(0.4f);
 	switch (mStateStep)
 	{
+	// ステップ0 : アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack4);
 		mStateStep++;
 		break;
+	// ステップ1 : 攻撃開始
 	case 1:
 		if (mAnimationFrame >= 13.0f)
 		{
@@ -748,6 +750,7 @@ void CBeholder::UpdateAttack4()
 			mStateStep++;
 		}
 		break;
+	// ステップ2 : トルネード開始
 	case 2:
 		if (mAnimationFrame >= 15.0f)
 		{
@@ -755,6 +758,7 @@ void CBeholder::UpdateAttack4()
 			mStateStep++;
 		}
 		break;
+	// ステップ3 : 攻撃終了
 	case 3:
 		if (mAnimationFrame >= 17.0f)
 		{
@@ -762,7 +766,7 @@ void CBeholder::UpdateAttack4()
 			mStateStep++;
 		}
 		break;
-		// 攻撃アニメーション終了待ち
+	// // ステップ4 : 攻撃アニメーション終了待ち
 	case 4:
 		if (mAnimationFrame >= 23.0f)
 		{
@@ -800,13 +804,8 @@ void CBeholder::UpdateHit()
 		ChangeAnimation(EAnimType::eHit);
 		mStateStep++;
 		break;
-	// ステップ1 : ヒットエフェクト開始
+	// ステップ1 : アニメーション終了待ち＋待機状態かめまい
 	case 1:
-		mpHitEffect->StartHitEffect();
-		mStateStep++;
-		break;
-	// ステップ2 : アニメーション終了待ち＋待機状態かめまい
-	case 2:
 		if (IsAnimationFinished())
 		{
 			// めまいをfalseにする
@@ -820,7 +819,6 @@ void CBeholder::UpdateHit()
 			}
 			else
 			{
-				mpHitEffect->EndHitEffect();
 				ChangeState(EState::eIdle2);
 			}
 		}
@@ -1276,6 +1274,10 @@ void CBeholder::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、

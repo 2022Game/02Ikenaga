@@ -1424,7 +1424,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(91);
+		ChangeLevel(61);
 	}
 	else if (CInput::PushKey('4'))
 	{

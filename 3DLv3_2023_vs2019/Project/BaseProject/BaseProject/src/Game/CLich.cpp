@@ -17,6 +17,7 @@
 #include "CShieldRotate.h"
 #include "CHealCircle.h"
 #include "CIceBreath.h"
+#include "CHit.h"
 #include "CInput.h"
 
 // リッチのインスタンス
@@ -230,6 +231,12 @@ CLich::CLich()
 		IceBreathPos,
 		CQuaternion(0.0, 90.f, 0.0f).Matrix()
 	);
+
+	float Size = 70.0f;
+	float Height = 6.0f;
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
 }
 
 // デストラクタ
@@ -429,10 +436,19 @@ void CLich::UpdateHit()
 	mpDrain->Stop();
 	mpIceBreath->Stop();
 	SetAnimationSpeed(0.4f);
-	ChangeAnimation(EAnimType::eHit);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		ChangeState(EState::eIdle2);
+	case 0:
+		ChangeAnimation(EAnimType::eHit);
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			ChangeState(EState::eIdle2);
+		}
+		break;
 	}
 }
 
@@ -824,6 +840,10 @@ void CLich::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		if (mState != EState::eSummon)
 		{
 			ChangeState(EState::eHit);

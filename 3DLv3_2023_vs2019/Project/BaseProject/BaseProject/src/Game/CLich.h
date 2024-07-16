@@ -9,6 +9,7 @@ class CDrainEffect;
 class CShieldRotate;
 class CHealCircle;
 class CIceBreath;
+class CHit;
 
 /*
  リッチクラス
@@ -196,4 +197,5 @@ private:
 	CDrainEffect* mpDrain;      // ドレイン
 	CHealCircle* mpHealCircle;  // 回復サークル
 	CIceBreath* mpIceBreath;    // アイスブレス
+	CHit* mpHitEffect;          // ヒットエフェクト
 };

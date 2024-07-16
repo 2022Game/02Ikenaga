@@ -101,7 +101,7 @@ void CLevelUI::Update()
 {
 	if (mIs3dGauge)
 	{
-		CVector2 Pos = mPosition;
+		CVector Pos = mPosition;
 		Pos.X(Pos.X()- 0.0f* mCenterRatio.X() * mScale);
 		mpLevelText->SetCenter
 		(
@@ -124,7 +124,7 @@ void CLevelUI::Render()
 			CVector2 v = CVector2(1.0f, 0.0f);
 			float alpha = (float)i / SHADOW_COUNT;
 			CQuaternion rot = CQuaternion(0.0f, 0.0f, 360.0f * alpha);
-			mpLevelText->SetPos(mPosition+ (CVector2)(rot * v) * SHADOW_WIDTH);
+			mpLevelText->SetPos(mPosition + (CVector2)(rot * v) * SHADOW_WIDTH);
 			mpLevelText->Render();
 		}
 		mpLevelText->SetColor(1.0f, 1.0f, 1.0f);

@@ -205,6 +205,7 @@ private:
 	CCurrent* mpCurrent5;
 	CCurrent* mpCurrent6;
 
+	// ヒットエフェクト
 	CHit* mpHitEffect;
 
 	// UI関連

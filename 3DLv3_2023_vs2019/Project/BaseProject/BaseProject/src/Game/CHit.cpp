@@ -3,13 +3,13 @@
 #include "Maths.h"
 #include "Easing.h"
 
-#define SCALE_TIME   0.01f  // スケール値が最大値になるまでの時間
-#define ANIM_TIME    0.1f   // 終了待ち中のアニメーションの時間
-#define ANIM_SCALE   15.0f  // 終了待ち中のアニメーションで拡縮するスケール値
+#define SCALE_TIME  0.01f  // スケール値が最大値になるまでの時間
+#define ANIM_TIME    0.2f  // 終了待ち中のアニメーションの時間
+#define ANIM_SCALE  15.0f  // 終了待ち中のアニメーションで拡縮するスケール値
 #define FADEOUT_TIME 0.0f  // 終了時のフェードアウト時間
 
 // コンストラクタ
-CHit::CHit(ETag tag, float size,float height)
+CHit::CHit(float size,float height)
 	: CBillBoardImage("Effect/hitEffect.png", ETag::eHit, ETaskPauseType::eGame)
 	, mState(EState::Idle)
 	, mElapsedTime(0.0f)

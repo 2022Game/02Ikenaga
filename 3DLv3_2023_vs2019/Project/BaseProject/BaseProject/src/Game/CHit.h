@@ -6,7 +6,7 @@ class CHit : public CBillBoardImage
 {
 public:
 	// コンストラクタ
-	CHit(ETag tag, float size,float height);
+	CHit(float size,float height);
 
 	// デストラクタ
 	~CHit();
