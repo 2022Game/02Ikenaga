@@ -240,7 +240,15 @@ CLich::CLich()
 	mpHitEffect->Position(Position());
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
-	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "81";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "召喚師 リッチ";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -806,14 +814,18 @@ void CLich::Update()
 
 	mIsGrounded = false;
 
-	if (mState != EState::eIdle && mState != EState::eDie)
+	CEnemy::Update();
+
+	if (mState == EState::eIdle || mState == EState::eDie)
 	{
-		CEnemy::Update();
-	}
-	else
-	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
 		CLevelUI* Lv = mpGameUI->GetLv();
 		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
 	}
 }
 

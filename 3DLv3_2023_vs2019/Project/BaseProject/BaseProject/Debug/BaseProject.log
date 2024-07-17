@@ -1,16 +1,2 @@
-﻿  CBee.cpp
-  CBeholder.cpp
-  CBoxer.cpp
-  CCactus.cpp
-  CChest.cpp
-  CDragon.cpp
-  CEnemy.cpp
-  CEnemyNameUI.cpp
-  CGameEnemyUI.cpp
-  CLich.cpp
-  CMushroom.cpp
-  CRay.cpp
-  CSlime.cpp
-  CTurtle.cpp
-  コードを生成中...
+﻿  CLevelUI.cpp
   BaseProject.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\BaseProject.exe

@@ -13,6 +13,7 @@ class CHit;
 
 /*
  リッチクラス
+ プレイヤーの推定レベル(81～90)
  エネミークラスを継承
 */
 class CLich : public CEnemy

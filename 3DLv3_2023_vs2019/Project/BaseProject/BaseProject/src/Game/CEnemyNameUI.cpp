@@ -5,7 +5,7 @@
 // スケール値計算時のカメラとの距離の最小
 #define SCALE_DIST_MIN 0.0f
 // スケール値計算時のカメラとの距離の最大
-#define SCALE_DIST_MAX 140.0f
+#define SCALE_DIST_MAX 300.0f
 // スケール値の最小値
 #define SCALE_MIN 0.7f
 // スケール値の最大値

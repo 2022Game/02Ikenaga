@@ -839,9 +839,6 @@ void CBeholder::UpdateDie()
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
 
-	CHpGauge* hpGauge = mpGameUI->GetHpGauge();
-	hpGauge->SetShow(false);
-
 	switch (mStateStep)
 	{
 	// ステップ0 : アニメーションを開始
@@ -1110,12 +1107,12 @@ void CBeholder::Update()
 
 	mIsGrounded = false;
 
-	if (mState != EState::eIdle && mState != EState::eDie)
+	CEnemy::Update();
+
+	if (mState == EState::eIdle || mState == EState::eDie)
 	{
-		CEnemy::Update();
-	}
-	else
-	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
 		CLevelUI* Lv = mpGameUI->GetLv();
 		Lv->SetShow(false);
 		CEnemyLevelUI* Level = mpGameUI->GetLevel();
