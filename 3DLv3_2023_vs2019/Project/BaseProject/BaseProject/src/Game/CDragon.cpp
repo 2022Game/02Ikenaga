@@ -964,12 +964,12 @@ void CDragon::Update()
 	{
 		if (mState == EState::eFlyingIdle)
 		{
-			mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 150.0f, 0.0f));
+			mpGameUI->SetUIoffSetPos(CVector(0.0f, 150.0f, 0.0f));
 			mpGameUI->GetHpGauge()->SetShow(true);
 		}
 		else
 		{
-			mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 35.0f, 0.0f));
+			mpGameUI->SetUIoffSetPos(CVector(0.0f, 35.0f, 0.0f));
 			mpGameUI->GetHpGauge()->SetShow(true);
 		}
 	}
@@ -1274,7 +1274,6 @@ void CDragon::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

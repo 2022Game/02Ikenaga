@@ -276,6 +276,8 @@ CBee::CBee()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackCol->SetEnable(false);
 	mpColliderSphereBeak2->SetEnable(false);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 35.0f, 0.0f));
 }
 
 // デストラクタ
@@ -566,7 +568,6 @@ void CBee::Update()
 
 	if (mState != EState::eIdle)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 35.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 	}
 	else
@@ -763,7 +764,6 @@ void CBee::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

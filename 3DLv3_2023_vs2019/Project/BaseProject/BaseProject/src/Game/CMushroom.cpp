@@ -184,6 +184,8 @@ CMushroom::CMushroom()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
 	mpAttackColRoot->SetEnable(false);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
 }
 
 // デストラクタ
@@ -566,7 +568,6 @@ void CMushroom::Update()
 
 	if (mState !=EState::eIdle && mState != EState::eIdle2 && mState != EState::eDie)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 30.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 	}
 	else
@@ -756,7 +757,6 @@ void CMushroom::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

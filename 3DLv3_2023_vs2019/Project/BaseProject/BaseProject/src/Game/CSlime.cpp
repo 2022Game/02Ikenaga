@@ -131,6 +131,8 @@ CSlime::CSlime()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColBody->SetEnable(false);
 
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 32.0f, 0.0f));
+
 	mpSlimeRunSE = CResourceManager::Get<CSound>("SlimeRun");
 	mpSlimeAttackSE = CResourceManager::Get<CSound>("SlimeAttack");
 	mpSlimeDizzySE = CResourceManager::Get<CSound>("SlimeDizzy");
@@ -549,7 +551,6 @@ void CSlime::Update()
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 32.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 
 		if (mAttackTime > 230)
@@ -704,7 +705,6 @@ void CSlime::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

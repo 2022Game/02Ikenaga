@@ -239,8 +239,8 @@ CLich::CLich()
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
 
-	mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 40.0f, 0.0f));
-	mpGameUI->SetLvOffsetPos(CVector(0.0f, 40.0f, 0.0f));
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
 }
 
 // デストラクタ
@@ -929,5 +929,4 @@ void CLich::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }

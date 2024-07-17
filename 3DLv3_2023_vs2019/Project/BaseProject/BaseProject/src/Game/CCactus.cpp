@@ -246,6 +246,8 @@ CCactus::CCactus()
 		CVector(0.0f, 0.0f, 0.0f),
 		CQuaternion(0.0, -90.f, 0.0f).Matrix()
 	);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 37.0f, 0.0f));
 }
 
 // デストラクタ
@@ -620,7 +622,6 @@ void CCactus::Update()
 
 	if (mState != EState::eIdle && mState != EState::eIdle2)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 37.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 	}
 	else
@@ -823,7 +824,6 @@ void CCactus::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

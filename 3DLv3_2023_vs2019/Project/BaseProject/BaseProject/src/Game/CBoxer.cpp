@@ -345,6 +345,8 @@ CBoxer::CBoxer()
 		CVector(0.0f, 0.0f, 0.0f),
 		CQuaternion(0.0, 90.f, 0.0f).Matrix()
 	);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 35.0f, 0.0f));
 }
 
 // デストラクタ
@@ -840,7 +842,6 @@ void CBoxer::Update()
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 35.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 	}
 	else
@@ -1076,7 +1077,6 @@ void CBoxer::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

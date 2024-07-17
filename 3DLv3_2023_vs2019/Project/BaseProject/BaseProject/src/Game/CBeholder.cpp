@@ -378,8 +378,15 @@ CBeholder::CBeholder()
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
 
-	mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 38.0f, 0.0f));
-	mpGameUI->SetLvOffsetPos(CVector(0.0f, 38.0f, 0.0f));
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 38.0f, 0.0f));
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "61";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "エイ・リアン";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -1111,6 +1118,10 @@ void CBeholder::Update()
 	{
 		CLevelUI* Lv = mpGameUI->GetLv();
 		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
 	}
 }
 
@@ -1252,7 +1263,6 @@ void CBeholder::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

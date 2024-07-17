@@ -11,6 +11,14 @@ CGameEnemyUI::CGameEnemyUI()
 	// Lv.UIを作成
 	mpLvUI = new CLevelUI(true);
 	mpLvUI->SetCenterRatio(CVector2(0.5f, 0.0f));
+
+	// Levelを作成
+	mpLevelUI = new CEnemyLevelUI(true);
+	mpLevelUI->SetCenterRatio(CVector2(0.5f, 0.0f));
+
+	// 名前を作成
+	mpNameUI = new CEnemyNameUI(true);
+	mpNameUI->SetCenterRatio(CVector2(0.5f, 0.0f));
 }
 
 // デストラクタ
@@ -20,6 +28,22 @@ CGameEnemyUI::~CGameEnemyUI()
 	mpHpGauge->Kill();
 	// LvUIの削除
 	mpLvUI->Kill();
+	// LevelUIの削除
+	mpLevelUI->Kill();
+	// 名前を削除
+	mpNameUI->Kill();
+}
+
+// UIのオフセット位置
+void CGameEnemyUI::SetUIoffSetPos(const CVector& pos)
+{
+	mpUIoffSetPos = pos;
+}
+
+// UIのオフセット位置を取得
+const CVector& CGameEnemyUI::GetUIoffSetPos() const
+{
+	return mpUIoffSetPos;
 }
 
 // HPを設定
@@ -34,18 +58,6 @@ void CGameEnemyUI::SetMaxHp(int maxHp)
 	mpHpGauge->SetMaxValue(maxHp);
 }
 
-// HPゲージのオフセット位置
-void CGameEnemyUI::SetHpGaugeOffsetPos(const CVector& pos)
-{
-	mpHpGaugeOffsetPos = pos;
-}
-
-// UIのオフセット位置を取得
-const CVector& CGameEnemyUI::GetHpGaugeOffsetPos() const
-{
-	return mpHpGaugeOffsetPos;
-}
-
 // HPゲージを取得
 CHpGauge* CGameEnemyUI::GetHpGauge() const
 {
@@ -53,9 +65,9 @@ CHpGauge* CGameEnemyUI::GetHpGauge() const
 }
 
 // Lvを設定
-void CGameEnemyUI::SetLv(int lv)
+void CGameEnemyUI::SetLv()
 {
-	std::string lvStr = "Lv." + std::to_string(lv);
+	std::string lvStr = "Lv.";
 	mpLvUI->SetLevel(lvStr);
 }
 
@@ -65,14 +77,26 @@ CLevelUI* CGameEnemyUI::GetLv()const
 	return mpLvUI;
 }
 
-// Lvのオフセット位置
-void CGameEnemyUI::SetLvOffsetPos(const CVector& pos)
+// レベルを設定
+void CGameEnemyUI::SetEnemyLevel(std::string level)
 {
-	mpLvOffsetPos = pos;
+	mpLevelUI->SetEnemyLevel(level);
 }
 
-// UIのオフセット位置を取得
-const CVector& CGameEnemyUI::GetLvOffsetPos() const
+// レベルを取得
+CEnemyLevelUI* CGameEnemyUI::GetLevel() const
 {
-	return mpLvOffsetPos;
+	return mpLevelUI;
+}
+
+// 名前を設定
+void CGameEnemyUI::SetEnemyName(std::string name)
+{
+	mpNameUI->SetEnemyName(name);
+}
+
+// 名前を取得
+CEnemyNameUI* CGameEnemyUI::GetName() const
+{
+	return mpNameUI;
 }

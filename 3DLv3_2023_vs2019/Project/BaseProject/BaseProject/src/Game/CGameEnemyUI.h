@@ -2,6 +2,8 @@
 #include "CTask.h"
 #include "CHpGauge.h"
 #include "CLevelUI.h"
+#include "CEnemyLevelUI.h"
+#include "CEnemyNameUI.h"
 
 // ゲーム中のエネミーUI
 class CGameEnemyUI : public CTask
@@ -14,30 +16,38 @@ public:
 	// デストラクタ
 	~CGameEnemyUI();
 
+	// UIのオフセット位置
+	void SetUIoffSetPos(const CVector& pos);
+	// UIのオフセット位置を取得
+	const CVector& GetUIoffSetPos() const;
+
 	// HPを設定
 	void SetHp(int hp);
 	// 最大のHPを設定
 	void SetMaxHp(int maxHp);
 	// HPゲージを取得
 	CHpGauge* GetHpGauge() const;
-	// HPゲージのオフセット位置
-	void SetHpGaugeOffsetPos(const CVector& pos);
-	// HPゲージのオフセット位置を取得
-	const CVector& GetHpGaugeOffsetPos() const;
 
 	// Lvを設定
-	void SetLv(int lv);
+	void SetLv();
 	// Lvを取得
-	CLevelUI* GetLv()const;
-	// Lvのオフセット位置
-	void SetLvOffsetPos(const CVector& pos);
-	// Lvのオフセット位置を取得
-	const CVector& GetLvOffsetPos() const;
+	CLevelUI* GetLv() const;
+
+	// レベルを設定
+	void SetEnemyLevel(std::string level);
+	// レベルを取得
+	CEnemyLevelUI* GetLevel() const;
+
+	// 名前を設定
+	void SetEnemyName(std::string name);
+	// 名前を取得
+	CEnemyNameUI* GetName() const;
 
 private:
 	// UI関連
-	CVector mpHpGaugeOffsetPos;  // HPゲージのオフセット位置
-	CHpGauge* mpHpGauge;    // HPゲージ
-	CLevelUI* mpLvUI;       // レベルのUI(Lv)
-	CVector mpLvOffsetPos;  // Lvのオフセット位置
+	CVector mpUIoffSetPos;     // UIのオフセット位置
+	CHpGauge* mpHpGauge;       // HPゲージ
+	CLevelUI* mpLvUI;          // レベルのUI(Lv)
+	CEnemyLevelUI* mpLevelUI;  // 敵のレベルUI(数字)
+	CEnemyNameUI* mpNameUI;    // 敵の名前
 };

@@ -195,6 +195,8 @@ CChest::CChest()
 
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
 }
 
 CChest::~CChest()
@@ -525,7 +527,6 @@ void CChest::Update()
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 40.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 	}
 	else
@@ -693,7 +694,6 @@ void CChest::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

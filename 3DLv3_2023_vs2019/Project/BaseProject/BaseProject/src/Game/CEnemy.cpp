@@ -310,12 +310,23 @@ void CEnemy::Update()
 	// HPゲージに現在のHPを設定
 	mpGameUI->SetHp(mCharaStatus.hp);
 	
+	// HPゲージ
 	CHpGauge* hpGauge = mpGameUI->GetHpGauge();
-	CVector gaugePos = Position() + mpGameUI->GetHpGaugeOffsetPos();
+	CVector gaugePos = Position() + mpGameUI->GetUIoffSetPos();
 	hpGauge->SetWorldPos(gaugePos);
 	
-	CLevelUI* lvUI = mpGameUI->GetLv();
-	CVector levelPos = Position() + mpGameUI->GetLvOffsetPos();
-	lvUI->SetWorldPos(levelPos);
+	// Lv
+	CLevelUI* LvUI = mpGameUI->GetLv();
+	CVector lvPos = Position() + mpGameUI->GetUIoffSetPos();
+	LvUI->SetWorldPos(lvPos);
 
+	// Level(数字)
+	CEnemyLevelUI* LevelUI = mpGameUI->GetLevel();
+	CVector levelPos = Position() + mpGameUI->GetUIoffSetPos();
+	LevelUI->SetWorldPos(levelPos);
+	
+	// 名前
+	CEnemyNameUI* NameUI = mpGameUI->GetName();
+	CVector namePos = Position() + mpGameUI->GetUIoffSetPos();
+	NameUI->SetWorldPos(namePos);
 }

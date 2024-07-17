@@ -149,6 +149,8 @@ CTurtle::CTurtle()
 	mpShieldRotate4 = new CShieldRotate2(270.0f, ShieldDist);
 	mpShieldRotate4->Scale(2.0f, 2.0f, 2.0f);
 	mpShieldRotate4->SetOwner(this);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 27.0f, 0.0f));
 }
 
 // デストラクタ
@@ -505,7 +507,6 @@ void CTurtle::Update()
 
 	if (mState != EState::eIdle && mState != EState::eDie)
 	{
-		mpGameUI->SetHpGaugeOffsetPos(CVector(0.0f, 27.0f, 0.0f));
 		mpGameUI->GetHpGauge()->SetShow(true);
 	}
 	else
@@ -681,7 +682,6 @@ void CTurtle::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpGameUI->SetLv(mCharaStatus.level);
 }
 
 // 被ダメージ処理

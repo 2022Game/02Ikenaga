@@ -96,6 +96,8 @@
     <ClCompile Include="src\Game\CCrackEffect.cpp" />
     <ClCompile Include="src\Game\CDragon.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
+    <ClCompile Include="src\Game\CEnemyLevelUI.cpp" />
+    <ClCompile Include="src\Game\CEnemyNameUI.cpp" />
     <ClCompile Include="src\Game\CExp.cpp" />
     <ClCompile Include="src\Game\CExpGauge.cpp" />
     <ClCompile Include="src\Game\CExpManager.cpp" />
@@ -276,6 +278,8 @@
     <ClInclude Include="src\Game\CCrackEffect.h" />
     <ClInclude Include="src\Game\CDragon.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
+    <ClInclude Include="src\Game\CEnemyLevelUI.h" />
+    <ClInclude Include="src\Game\CEnemyNameUI.h" />
     <ClInclude Include="src\Game\CExp.h" />
     <ClInclude Include="src\Game\CExpGauge.h" />
     <ClInclude Include="src\Game\CExpManager.h" />
