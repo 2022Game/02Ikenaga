@@ -4,6 +4,7 @@
 #include "CCollisionManager.h"
 #include "CShieldRotate2.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // 亀のインスタンス
@@ -150,7 +151,23 @@ CTurtle::CTurtle()
 	mpShieldRotate4->Scale(2.0f, 2.0f, 2.0f);
 	mpShieldRotate4->SetOwner(this);
 
-	mpGameUI->SetUIoffSetPos(CVector(0.0f, 27.0f, 0.0f));
+	float Size = 18.0f;   // サイズ
+	float Height = 0.5f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 32.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "11";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "タートル";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -376,13 +393,27 @@ void CTurtle::UpdateDefenseIdle()
 void CTurtle::UpdateDie()
 {
 	SetAnimationSpeed(0.3f);
-	ChangeAnimation(EAnimType::eDie);
-
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::TurtleDeath();
+	// ステップ0 : アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mStateStep++;
+		break;
+	// ステップ1 : ヒットエフェクト開始
+	case 1:
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	// ステップ0 : アニメーション終了待ち
+	case 2:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::TurtleDeath();
+		}
+		break;
 	}
 }
 
@@ -500,19 +531,8 @@ void CTurtle::Update()
 		break;
 	}
 
-	// HPゲージの座標を更新(敵の座標の少し上の座標)
-	CVector gaugePos = Position() + CVector(0.0f, 32.0f, 0.0f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-
-	if (mState != EState::eIdle && mState != EState::eDie)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefenseIdle
 		|| mState == EState::eHit)
@@ -595,6 +615,18 @@ void CTurtle::Update()
 	mIsGrounded = false;
 
 	CEnemy::Update();
+
+	if (mState == EState::eIdle || mState == EState::eDie)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -692,10 +724,18 @@ void CTurtle::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		if (mState == EState::eDefense || mState == EState::eDefenseIdle)
 		{
+			if (mState != EState::eDie)
+			{
+				mpHitEffect->StartHitEffect();
+			}
 			ChangeState(EState::eDefenseHit);
 		}
 		else
 		{
+			if (mState != EState::eDie)
+			{
+				mpHitEffect->StartHitEffect();
+			}
 			ChangeState(EState::eHit);
 		}
 	}

@@ -41,11 +41,12 @@ public:
 	void Update() override;
 
 private:
-	CVector mMoveDir;	  // 移動する方向ベクトル
-	float mElapsedTime;	  // 経過時間
-	bool mIsDeath;		  // 削除フラグ
-	float mKillMoveDist;  // 移動したら消える距離
-	float mMovedDist;     // 現在移動した距離
-	bool mIsDrain;        // ドレインするかどうか
+	CVector mMoveDir;	     // 移動する方向ベクトル
+	bool mIsDeath;		     // 削除フラグ
+	float mKillMoveDist;     // 移動したら消える距離
+	float mMovedDist;        // 現在移動した距離
+	bool mIsDrain;           // ドレインするかどうか
+	float mElapsedTime;	     // 経過時間
+	float mElapsedDrainTime; // ドレインの経過時間
 	CColliderSphere* mpAttackCollider;
 };

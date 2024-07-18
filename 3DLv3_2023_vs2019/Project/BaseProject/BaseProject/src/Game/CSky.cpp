@@ -44,7 +44,7 @@ void CSky::Update()
 	{
 		mElapsedTime = 0.0f;
 	}
-	CDebugPrint::Print("ŽžŠÔ %f\n", mElapsedTime);
+	//CDebugPrint::Print("ŽžŠÔ %f\n", mElapsedTime);
 }
 
 // •`‰æ

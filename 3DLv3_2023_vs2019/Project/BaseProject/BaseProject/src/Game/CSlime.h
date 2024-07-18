@@ -1,9 +1,10 @@
 #pragma once
-#include "CXCharacter.h"
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
 #include "CEnemy.h"
 #include "CSound.h"
+
+class CHit;
 
 /*
  レッドスライムのクラス
@@ -152,6 +153,8 @@ private:
 	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
+
+	CHit* mpHitEffect;        // ヒットエフェクト 
 
 	// サウンド関連
 	CSound* mpSlimeRunSE;     // 走るの音

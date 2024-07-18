@@ -1123,10 +1123,10 @@ void CDragon::Update()
 	{
 		Position(Position() - mMoveSpeed);
 	}
-	CDebugPrint::Print(" 攻撃時間: %d", mAttackTime);
-	CDebugPrint::Print(" HP: %d", mCharaStatus.hp);
-	CDebugPrint::Print(" 距離: %f", vectorPos);
-	CDebugPrint::Print(" 後ろ: %f", mBackStepTime);
+	//CDebugPrint::Print(" 攻撃時間: %d", mAttackTime);
+	//CDebugPrint::Print(" HP: %d", mCharaStatus.hp);
+	//CDebugPrint::Print(" 距離: %f", vectorPos);
+	//CDebugPrint::Print(" 後ろ: %f", mBackStepTime);
 
 	if (mIsSpawnedRoarEffect)
 	{

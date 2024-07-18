@@ -17,10 +17,11 @@
 CHomingBall::CHomingBall(ETag tag)
 	: CBillBoardImage("Effect/Ball.png", ETag::eHomingBall, ETaskPauseType::eGame)
 	, mMoveDir(CVector::zero)
-	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 	, mMovedDist(0.0f)
 	, mIsHoming(true)
+	, mElapsedTime(0.0f)
+	, mElapsedHomingTime(0.0f)
 {
 	mpAttackCollider = new CColliderSphere
 	(
@@ -165,8 +166,11 @@ void CHomingBall::Update()
 	if (mIsHoming == false)
 	{
 		mMovedDist += moveDist;
-		if (mMovedDist >= mKillMoveDist)
+		mElapsedHomingTime += Time::DeltaTime();
+
+		if (mMovedDist >= mKillMoveDist || mElapsedHomingTime >= 5.0f)
 		{
+			mElapsedHomingTime = 0.0f;
 			Kill();
 		}
 	}

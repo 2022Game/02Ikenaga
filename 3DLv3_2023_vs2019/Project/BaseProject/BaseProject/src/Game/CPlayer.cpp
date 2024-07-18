@@ -984,8 +984,7 @@ void CPlayer::ChangeLevel(int level)
 	{
 		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
 		diff.Normalize();
-		diff.Y(diff.Y() +   mCharaStatus.cameraHeight);
-		//diff.Z(diff.Z() + mCharaStatus.cameraHeight);
+		diff.Y(diff.Y() + mCharaStatus.cameraHeight);
 		mainCamera->SetFollowTargetOffset(diff);
 	}
 }
@@ -1357,7 +1356,7 @@ void CPlayer::Update()
 		debug2 = !debug2;
 	}
 
-	if(debug)
+	/*if(debug)
 	{
 		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
 		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
@@ -1389,8 +1388,8 @@ void CPlayer::Update()
 		CVector scale = Scale();
 		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
 		CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
-	}
-	if (debug2)
+	}*/
+	/*if (debug2)
 	{
 		CDebugPrint::Print(" R: ステータス表示\n");
 		CDebugPrint::Print(" 2: レベルアップ\n");
@@ -1402,8 +1401,7 @@ void CPlayer::Update()
 		CDebugPrint::Print(" スペース: ジャンプ\n");
 		CDebugPrint::Print(" WASD+Sfift: 回避\n");
 		CDebugPrint::Print(" 回避のクールタイム: %d\n", mRollingTime);
-		CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
-	}
+	}*/
 
 	if (CInput::Key('1'))
 	{
@@ -1451,6 +1449,8 @@ void CPlayer::Update()
 	mpGameUI->SetExp(mCharaStatus.exp);
 
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
+
+	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }
 
 // 衝突処理

@@ -4,6 +4,7 @@
 #include "CCollisionManager.h"
 #include "CWave.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // エイのインスタンス
@@ -165,6 +166,13 @@ CRay::CRay()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
 
+	float Size = 18.0f;   // サイズ
+	float Height = 0.5f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 27.0f, 0.0f));
 }
 
@@ -201,11 +209,16 @@ void CRay::ChangeAnimation(EAnimType type)
 // 波動エフェクトを作成
 void CRay::CreateWave()
 {
+	CVector forward = VectorZ();
+	forward.Y(0.0f);
+	forward.Normalize();
+	CVector wavePos = Position() + forward * 16.0f + CVector(0.0f, 10.0f, 0.0f);
+
 	// 波動エフェクトを生成して、正面方向へ飛ばす
 	CWave* wave = new CWave
 	(
 		this,
-		Position() + CVector(0.0f, 10.0f, 0.0f),
+		wavePos,
 		VectorZ(),
 		30.0f,
 		80.0f
@@ -633,6 +646,10 @@ void CRay::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、

@@ -6,6 +6,8 @@
 #include "CColliderSphere.h"
 #include "CColliderCapsule.h"
 
+class CHit;
+
 /*
  マッシュルームクラス
  プレイヤーの推定レベル(6～10)
@@ -151,17 +153,19 @@ private:
 	CColliderLine* mpColliderLine;
 
 	// キャラクターの押し戻しコライダー
-	CColliderSphere* mpColliderSphereHead;   // 頭
-	CColliderSphere* mpColliderSphereBody;   // 体
-	CColliderSphere* mpColliderSphereRoot;   // 根
+	CColliderSphere* mpColliderSphereHead;  // 頭
+	CColliderSphere* mpColliderSphereBody;  // 体
+	CColliderSphere* mpColliderSphereRoot;  // 根
 
 	// ダメージを受けるコライダー
-	CColliderCapsule* mpDamageColBody;       // 体
-	CColliderSphere* mpDamageColUmbrella;    // かさ
-	CColliderSphere* mpDamageColRoot;        // 根
+	CColliderCapsule* mpDamageColBody;      // 体
+	CColliderSphere* mpDamageColUmbrella;   // かさ
+	CColliderSphere* mpDamageColRoot;       // 根
 
 	// ダメージを与えるコライダー
-	CColliderSphere* mpAttackColHead;        // 頭
-	CColliderSphere* mpAttackColRoot;        // 根
+	CColliderSphere* mpAttackColHead;       // 頭
+	CColliderSphere* mpAttackColRoot;       // 根
 	CTransform* mpRideObject;
+
+	CHit* mpHitEffect;  // ヒットエフェクト 
 };

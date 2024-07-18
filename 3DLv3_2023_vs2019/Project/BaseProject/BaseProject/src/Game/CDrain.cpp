@@ -18,10 +18,11 @@
 CDrain::CDrain(ETag tag)
 	: CBillBoardImage("Effect/heart.png", ETag::eDrain, ETaskPauseType::eGame)
 	, mMoveDir(CVector::zero)
-	, mElapsedTime(0.0f)
 	, mIsDeath(false)
 	, mMovedDist(0.0f)
 	, mIsDrain(true)
+	, mElapsedTime(0.0f)
+	, mElapsedDrainTime(0.0f)
 {
 	mpAttackCollider = new CColliderSphere
 	(
@@ -169,8 +170,11 @@ void CDrain::Update()
 	if (mIsDrain == false)
 	{
 		mMovedDist += moveDist;
-		if (mMovedDist >= mKillMoveDist)
+		mElapsedDrainTime += Time::DeltaTime();
+
+		if (mMovedDist >= mKillMoveDist || mElapsedDrainTime >= 5.0f)
 		{
+			mElapsedDrainTime = 0.0f;
 			Kill();
 		}
 	}

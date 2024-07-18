@@ -3,6 +3,7 @@
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // マッシュルームのインスタンス
@@ -185,7 +186,23 @@ CMushroom::CMushroom()
 	mpAttackColHead->SetEnable(false);
 	mpAttackColRoot->SetEnable(false);
 
+	float Size = 17.0f;   // サイズ
+	float Height = 0.6f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "6";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "偽きのこ";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -444,13 +461,27 @@ void CMushroom::UpdateHit()
 void CMushroom::UpdateDie()
 {
 	SetAnimationSpeed(0.25f);
-	ChangeAnimation(EAnimType::eDie);
-
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::MushroomDeath();
+	// ステップ0 : アニメーション開始
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mStateStep++;
+		break;
+	// ステップ1 : ヒットエフェクト開始
+	case 1:
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	// ステップ2 : アニメーション終了待ち
+	case 2:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::MushroomDeath();
+		}
+		break;
 	}
 }
 
@@ -566,15 +597,6 @@ void CMushroom::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mState !=EState::eIdle && mState != EState::eIdle2 && mState != EState::eDie)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
-
 	if (mState == EState::eIdle3 || mState == EState::eRun || mState == EState::eHit)
 	{
 		mAttackTime++;
@@ -665,6 +687,18 @@ void CMushroom::Update()
 	mIsGrounded = false;
 
 	CEnemy::Update();
+
+	if (mState == EState::eIdle || mState == EState::eIdle2 || mState == EState::eDie)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -765,6 +799,10 @@ void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、

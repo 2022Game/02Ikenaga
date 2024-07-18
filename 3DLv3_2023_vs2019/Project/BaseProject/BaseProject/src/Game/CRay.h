@@ -5,6 +5,8 @@
 #include "CColliderSphere.h"
 #include "CColliderCapsule.h"
 
+class CHit;
+
 /*
  エイ
  プレイヤーの推定レベル(21～30)
@@ -153,4 +155,6 @@ private:
 
 	bool mIsSpawnedWaveEffect;  // 波動エフェクト
 	float mElapsedWaveTime;     // 経過時間計測用(波動)
+
+	CHit* mpHitEffect;        // ヒットエフェクト 
 };

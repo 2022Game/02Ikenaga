@@ -5,6 +5,7 @@
 #include "CColliderSphere.h"
 
 class CShieldRotate2;
+class CHit;
 
 /*
  亀
@@ -173,4 +174,6 @@ private:
 	CShieldRotate2* mpShieldRotate2;
 	CShieldRotate2* mpShieldRotate3;
 	CShieldRotate2* mpShieldRotate4;
+
+	CHit* mpHitEffect;  // ヒットエフェクト 
 };

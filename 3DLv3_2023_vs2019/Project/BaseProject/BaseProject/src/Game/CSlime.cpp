@@ -3,6 +3,7 @@
 #include "CHpGauge.h"
 #include "CPlayer.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // レッドスライムのインスタンス
@@ -131,7 +132,23 @@ CSlime::CSlime()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColBody->SetEnable(false);
 
-	mpGameUI->SetUIoffSetPos(CVector(0.0f, 32.0f, 0.0f));
+	float Size = 17.0f;   // サイズ
+	float Height = 0.6f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "1";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "スライム";
+	mpGameUI->SetEnemyName(name);
 
 	mpSlimeRunSE = CResourceManager::Get<CSound>("SlimeRun");
 	mpSlimeAttackSE = CResourceManager::Get<CSound>("SlimeAttack");
@@ -344,6 +361,7 @@ void CSlime::UpdateHit()
 		if (mAnimationFrame >= 0.0f)
 		{
 			mpSlimeHitSE->Play(3.0f);
+			//mpHitEffect->StartHitEffect();
 			mIsSlimeHitSE = true;
 			mStateStep++;
 		}
@@ -381,13 +399,14 @@ void CSlime::UpdateDie()
 		// ステップ0 :死亡アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
 		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
 	case 1:
 		if (mAnimationFrame >= 0.0f)
 		{
-			mpSlimeHitSE->Play(3.0f);
+			mpSlimeHitSE->Play(2.0f);
 			mIsSlimeHitSE = true;
 		}
 		if (mAnimationFrame >= 15.0f)
@@ -548,10 +567,43 @@ void CSlime::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
+	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
+	{
+		if (vectorPos <= ROTATE_RANGE)
+		{
+			// プレイヤーのいる方向へ向く
+			CVector dir = player->Position() - Position();
+			dir.Y(0.0f);
+			dir.Normalize();
+			Rotation(CQuaternion::LookRotation(dir));
+		}
+	}
+	if (mState == EState::eRun)
+	{
+		if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
+		{
+			Position(Position() + mMoveSpeed);
+		}
+	}
+	
+	// キャラクターの更新
+	CXCharacter::Update();
+
+	// キャラクターの押し戻しコライダー
+	mpColliderSphereBody->Update();
+	// ダメージを受けるコライダー
+	mpDamageColBody->Update();
+	// 攻撃コライダー
+	mpAttackColBody->Update();
+
+	mIsGrounded = false;
+
+	CEnemy::Update();
+
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		mpGameUI->GetHpGauge()->SetShow(true);
+		mAttackTime++;
 
 		if (mAttackTime > 230)
 		{
@@ -585,41 +637,15 @@ void CSlime::Update()
 	}
 	else
 	{
-		mpGameUI->GetHpGauge()->SetShow(false);
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
 	}
-
-	if (mState != EState::eIdle && mState != EState::eIdle2 && mState != EState::eIdleWait)
-	{
-		if (vectorPos <= ROTATE_RANGE)
-		{
-			// プレイヤーのいる方向へ向く
-			CVector dir = player->Position() - Position();
-			dir.Y(0.0f);
-			dir.Normalize();
-			Rotation(CQuaternion::LookRotation(dir));
-		}
-	}
-	if (mState == EState::eRun)
-	{
-		if (vectorPos >= STOP_RANGE && vectorPos <= WALK_RANGE)
-		{
-			Position(Position() + mMoveSpeed);
-		}
-	}
-	
-	// キャラクターの更新
-	CXCharacter::Update();
-
-	// キャラクターの押し戻しコライダー
-	mpColliderSphereBody->Update();
-	// ダメージを受けるコライダー
-	mpDamageColBody->Update();
-	// 攻撃コライダー
-	mpAttackColBody->Update();
-
-	mIsGrounded = false;
-
-	CEnemy::Update();
 }
 
 // 衝突処理
@@ -713,6 +739,10 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、

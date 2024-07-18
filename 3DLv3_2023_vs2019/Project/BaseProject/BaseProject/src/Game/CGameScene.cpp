@@ -91,7 +91,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Player", "Character\\Player\\Dog.x");
 
 	// エネミー関連
-	//CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
+	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
 	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
@@ -189,10 +189,10 @@ void CGameScene::Load()
 	mainCamera->SetHitColliderRatio(0.98f);
 	player->Position(0.0f, 100.0f, 0.0f);
 
-	//// レッドスライム
-	//CSlime* enemy = new CSlime();
-	//enemy->Position(0.0f, 0.0f, -40.0f);
-	//enemy->Scale(25.0f, 25.0f, 25.0f);
+	// レッドスライム
+	CSlime* enemy = new CSlime();
+	enemy->Position(0.0f, 0.0f, -40.0f);
+	enemy->Scale(25.0f, 25.0f, 25.0f);
 
 	//// オレンジスライム
 	//CSlime2* enemy2 = new CSlime2();
@@ -204,10 +204,10 @@ void CGameScene::Load()
 	//enemy3->Position(-20.0f, 0.0f, -90.0f);
 	//enemy3->Scale(35.0f, 35.0f, 35.0f);
 
-	//// マッシュルーム
-	//CMushroom* enemy4 = new CMushroom();
-	//enemy4->Position(150.0f, 0.0f, -150.0f);
-	//enemy4->Scale(25.0f, 25.0f, 25.0f);
+	// マッシュルーム
+	CMushroom* enemy4 = new CMushroom();
+	enemy4->Position(150.0f, 0.0f, -150.0f);
+	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	//// マッシュルーム2
 	//CMushroom2* enemy5 = new CMushroom2();
@@ -219,10 +219,10 @@ void CGameScene::Load()
 	//enemy6->Position(180.0f, 0.0f, -210.0f);
 	//enemy6->Scale(35.0f, 35.0f, 35.0f);
 
-	//// 亀
-	//CTurtle* enemy7 = new CTurtle();
-	//enemy7->Position(0.0f, -0.2f, -300.0f);
-	//enemy7->Scale(25.0f, 25.0f, 25.0f);
+	// 亀
+	CTurtle* enemy7 = new CTurtle();
+	enemy7->Position(0.0f, -0.2f, -300.0f);
+	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
 	//// 亀2
 	//CTurtle2* enemy8 = new CTurtle2();
@@ -234,10 +234,10 @@ void CGameScene::Load()
 	//enemy9->Position(-30.0f, -0.2f, -360.0f);
 	//enemy9->Scale(35.0f, 35.0f, 35.0f);
 
-	//// エイ
-	//CRay* enemy10 = new CRay();
-	//enemy10->Position(150.0f, 0.0f, -450.0f);
-	//enemy10->Scale(35.0f, 35.0f, 35.0f);
+	// エイ
+	CRay* enemy10 = new CRay();
+	enemy10->Position(150.0f, 0.0f, -450.0f);
+	enemy10->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ2
 	//CRay2* enemy11 = new CRay2();
@@ -249,10 +249,10 @@ void CGameScene::Load()
 	//enemy12->Position(180.f,0.0f,-520.0f);
 	//enemy12->Scale(45.0f, 45.0f, 45.0f);
 
-	//// 蜂
-	//CBee* enemy13 = new CBee();
-	//enemy13->Position(0.0f, 0.0f, -600.0f);
-	//enemy13->Scale(30.0f, 30.0f, 30.0f);
+	// 蜂
+	CBee* enemy13 = new CBee();
+	enemy13->Position(0.0f, 0.0f, -600.0f);
+	enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 蜂2
 	//CBee2* enemy14 = new CBee2();
@@ -264,10 +264,10 @@ void CGameScene::Load()
 	//enemy15->Position(-30.0f, 0.0f, -660.0f);
 	//enemy15->Scale(40.0f, 40.0f, 40.0f);
 
-	//// サボテン
-	//CCactus* enemy16 = new CCactus();
-	//enemy16->Position(150.0f, 0.0f, -750.0f);
-	//enemy16->Scale(30.0f, 30.0f, 30.0f);
+	// サボテン
+	CCactus* enemy16 = new CCactus();
+	enemy16->Position(150.0f, 0.0f, -750.0f);
+	enemy16->Scale(30.0f, 30.0f, 30.0f);
 
 	//// サボテン2
 	//CCactus2* enemy17 = new CCactus2();
@@ -279,10 +279,10 @@ void CGameScene::Load()
 	//enemy18->Position(180.0f, 0.0f, -810.0f);
 	//enemy18->Scale(40.0f, 40.0f, 40.0f);
 
-	//// チェストモンスター
-	//CChest* enemy19 = new CChest();
-	//enemy19->Position(0.0f, 0.0f, -900.0f);
-	//enemy19->Scale(30.0f, 30.0f, 30.0f);
+	// チェストモンスター
+	CChest* enemy19 = new CChest();
+	enemy19->Position(0.0f, 0.0f, -900.0f);
+	enemy19->Scale(30.0f, 30.0f, 30.0f);
 
 	//// チェストモンスター2
 	//CChest2* enemy20 = new CChest2();
@@ -300,20 +300,21 @@ void CGameScene::Load()
 	enemy22->Position(50.0f, 0.0f, 0.0f);
 	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
-	//// ボクサー
-	//CBoxer* enemy25 = new CBoxer();
-	//enemy25->Position(0.0f, 0.0f, -1200.0f);
-	////enemy25->Position(0.0f, 0.0f, 80.0f);
-	//enemy25->Scale(20.0f, 20.0f, 20.0f);
+	// ボクサー
+	CBoxer* enemy25 = new CBoxer();
+	enemy25->Position(0.0f, 0.0f, -1200.0f);
+	//enemy25->Position(0.0f, 0.0f, 80.0f);
+	enemy25->Scale(20.0f, 20.0f, 20.0f);
 
 	//// ボクサー2
 	//CBoxer2* enemy27 = new CBoxer2();
 	//enemy27->Position(370.0f, 0.0f, 20.0f);
 	//enemy27->Scale(15.0f, 15.0f, 15.0f);
 
+	// リッチ
 	CLich* enemy28 = new CLich();
-	//enemy28->Position(150.0f, 3.0f, -1350.0f);
-	enemy28->Position(0.0f, 3.0f, -150.0f);
+	enemy28->Position(150.0f, 3.0f, -1350.0f);
+	//enemy28->Position(0.0f, 3.0f, -200.0f);
 	//enemy28->Rotate(0.0f,90.0f,-70.0f);
 	enemy28->Scale(2.5f, 2.5f, 2.5f);
 
@@ -321,21 +322,6 @@ void CGameScene::Load()
 	//CDragon* bossEnemy = new CDragon();
 	//bossEnemy->Position(0.0f, 1.0f, -450.0f);
 	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
-
-	//// 攻撃力アップポーション
-	//CPortionRed* portionred = new CPortionRed();
-	//portionred->Position(90.0f, 10.0f, 0.0f);
-	//portionred->Scale(200.0f, 200.0f, 200.0f);
-
-	//// 回復ポーション
-	//CPortionGreen* portiongreen = new CPortionGreen();
-	//portiongreen->Position(-50.0f, 10.0f, 0.0f);
-	//portiongreen->Scale(200.0f, 200.0f, 200.0f);
-
-	//// 防御力アップポーション
-	//CPortionBlue* portionblue = new CPortionBlue();
-	//portionblue->Position(-80.0f, 10.0f, 0.0f);
-	//portionblue->Scale(200.0f, 200.0f, 200.0f);
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();
