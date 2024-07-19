@@ -11,6 +11,7 @@ CSlime* CSlime::spInstance = nullptr;
 
 #define ENEMY_HEIGHT   1.0f  // 線分コライダー
 #define MOVE_SPEED     0.4f  // 移動速度
+#define WITHIN_RANGE  30.0f  // 範囲内
 #define GRAVITY        0.3f  // 重力
 #define WALK_RANGE   100.0f  // 追跡する範囲
 #define STOP_RANGE    21.0f  // 追跡を辞める範囲
@@ -138,6 +139,7 @@ CSlime::CSlime()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
 
@@ -399,7 +401,6 @@ void CSlime::UpdateDie()
 		// ステップ0 :死亡アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
-		mpHitEffect->StartHitEffect();
 		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
@@ -603,7 +604,10 @@ void CSlime::Update()
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		mAttackTime++;
+		if (vectorPos <= WITHIN_RANGE)
+		{
+			mAttackTime++;
+		}
 
 		if (mAttackTime > 230)
 		{

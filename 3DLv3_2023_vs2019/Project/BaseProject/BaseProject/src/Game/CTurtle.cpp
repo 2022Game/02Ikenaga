@@ -157,6 +157,7 @@ CTurtle::CTurtle()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 32.0f, 0.0f));
 
@@ -400,13 +401,8 @@ void CTurtle::UpdateDie()
 		ChangeAnimation(EAnimType::eDie);
 		mStateStep++;
 		break;
-	// ステップ1 : ヒットエフェクト開始
+	// ステップ1 : アニメーション終了待ち
 	case 1:
-		mpHitEffect->StartHitEffect();
-		mStateStep++;
-		break;
-	// ステップ0 : アニメーション終了待ち
-	case 2:
 		if (IsAnimationFinished())
 		{
 			Kill();

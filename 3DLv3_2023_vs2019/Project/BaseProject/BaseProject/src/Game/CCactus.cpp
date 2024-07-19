@@ -4,6 +4,7 @@
 #include "CCollisionManager.h"
 #include "CCrackEffect.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // サボテンのインスタンス
@@ -247,7 +248,24 @@ CCactus::CCactus()
 		CQuaternion(0.0, -90.f, 0.0f).Matrix()
 	);
 
+	float Size = 17.0f;   // サイズ
+	float Height = 0.6f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 37.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "41";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "パワー型サボテン";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -620,15 +638,6 @@ void CCactus::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mState != EState::eIdle && mState != EState::eIdle2)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
-
 	if (mState == EState::eIdle3 || mState == EState::eRun || mState == EState::eHit)
 	{
 		if (vectorPos <= WITHIN_RANGE)
@@ -702,6 +711,18 @@ void CCactus::Update()
 	mIsGrounded = false;
 
 	CEnemy::Update();
+
+	if (mState == EState::eIdle || mState == EState::eIdle2)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -832,6 +853,10 @@ void CCactus::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、

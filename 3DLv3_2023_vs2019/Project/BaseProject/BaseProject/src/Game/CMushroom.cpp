@@ -192,6 +192,7 @@ CMushroom::CMushroom()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
 
@@ -468,13 +469,8 @@ void CMushroom::UpdateDie()
 		ChangeAnimation(EAnimType::eDie);
 		mStateStep++;
 		break;
-	// ステップ1 : ヒットエフェクト開始
+	// ステップ1 : アニメーション終了待ち
 	case 1:
-		mpHitEffect->StartHitEffect();
-		mStateStep++;
-		break;
-	// ステップ2 : アニメーション終了待ち
-	case 2:
 		if (IsAnimationFinished())
 		{
 			Kill();

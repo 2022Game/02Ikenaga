@@ -155,6 +155,8 @@ private:
 	int mAttackCount;
 	// 回復までのカウント
 	int mHealCount;
+	// 回復量
+	int mRecoveryAmount;
 
 	// アニメーションの種類
 	enum class EAnimType

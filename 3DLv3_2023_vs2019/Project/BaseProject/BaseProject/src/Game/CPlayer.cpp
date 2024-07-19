@@ -86,6 +86,7 @@ CPlayer::CPlayer()
 	, mAttackTime(0)
 	, mAttackCount(0)
 	, mHealCount(0)
+	, mRecoveryAmount(0)
 	, mStateStep(0)
 	, mStateJumpAttackStep(0)
 	, mBuffStep(0)
@@ -992,14 +993,21 @@ void CPlayer::ChangeLevel(int level)
 // HP‰ñ•œ‚Æ“ÁêUŒ‚(SP)‚Ì©“®‰ñ•œ
 void CPlayer::AutomaticRecovery()
 {
+	mRecoveryAmount = mCharaStatus.level;
+	// HP‰ñ•œ
 	mHealCount++;
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
+		
 		if (mHealCount > 700)
 		{
-			mCharaStatus.hp++;
+			mCharaStatus.hp += mRecoveryAmount;
 			mHealCount = 0;
 		}
+	}
+	else if(mCharaStatus.hp > mCharaMaxStatus.hp)
+	{
+		mCharaStatus.hp = mCharaMaxStatus.hp;
 	}
 	if (mCharaStatus.hp <= 0)
 	{
@@ -1009,6 +1017,8 @@ void CPlayer::AutomaticRecovery()
 	{
 		mHealCount = 0;
 	}
+
+	// SP‰ñ•œ
 	if (mCharaStatus.SpecialPoint < mCharaMaxStatus.SpecialPoint)
 	{
 		mRecoveryCount++;
@@ -1422,7 +1432,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(61);
+		ChangeLevel(41);
 	}
 	else if (CInput::PushKey('4'))
 	{
@@ -1451,6 +1461,7 @@ void CPlayer::Update()
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	CDebugPrint::Print("    Hp:    %d / %d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
 }
 
 // Õ“Ëˆ—

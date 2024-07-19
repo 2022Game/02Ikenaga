@@ -166,14 +166,24 @@ CRay::CRay()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
 
-	float Size = 18.0f;   // サイズ
-	float Height = 0.5f;  // 高さ
+	float Size = 15.0f;   // サイズ
+	float Height = 0.4f;  // 高さ
 	// ヒットエフェクトを作成
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 27.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "21";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "マンタ";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -212,7 +222,7 @@ void CRay::CreateWave()
 	CVector forward = VectorZ();
 	forward.Y(0.0f);
 	forward.Normalize();
-	CVector wavePos = Position() + forward * 16.0f + CVector(0.0f, 10.0f, 0.0f);
+	CVector wavePos = Position() + forward * 15.0f + CVector(0.0f, 10.0f, 0.0f);
 
 	// 波動エフェクトを生成して、正面方向へ飛ばす
 	CWave* wave = new CWave
@@ -295,6 +305,22 @@ void CRay::UpdateAttack()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
+	mIsSpawnedWaveEffect = false;
+	if (!mIsSpawnedWaveEffect && vectorPos >= 40.0f && mAnimationFrame <= 7.0f)
+	{
+		mIsSpawnedWaveEffect = true;
+		if (mIsSpawnedWaveEffect)
+		{
+			mElapsedWaveTime += Time::DeltaTime();
+			// 経過時間に応じて、波動のエフェクトを作成
+			if (mElapsedWaveTime >= THROW_INTERVAL)
+			{
+				CreateWave();
+				mElapsedWaveTime -= THROW_INTERVAL;
+			}
+		}
+	}
+
 	// ステップごとに処理を分ける
 	switch (mStateAttackStep)
 	{
@@ -326,22 +352,6 @@ void CRay::UpdateAttack()
 			ChangeState(EState::eAttackWait);
 		}
 		break;
-	}
-
-	mIsSpawnedWaveEffect = false;
-	if (!mIsSpawnedWaveEffect && vectorPos >= 30.0f && mAnimationFrame <= 5.0f)
-	{
-		mIsSpawnedWaveEffect = true;
-		if (mIsSpawnedWaveEffect)
-		{
-			mElapsedWaveTime += Time::DeltaTime();
-			// 経過時間に応じて、波動のエフェクトを作成
-			if (mElapsedWaveTime >= THROW_INTERVAL)
-			{
-				CreateWave();
-				mElapsedWaveTime -= THROW_INTERVAL;
-			}
-		}
 	}
 }
 
@@ -422,6 +432,7 @@ void CRay::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
@@ -460,17 +471,9 @@ void CRay::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mState != EState::eIdle)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
-
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
+		mFlyingTime++;
 		mAttackTime++;
 
 		if (vectorPos <= ROTATE_RANGE)
@@ -504,28 +507,35 @@ void CRay::Update()
 		}
 	}
 
-	if (mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		mFlyingTime++;
-		if (mFlyingTime < 200 && mFlyingTime > 0)
+		if (mFlyingTime <= 400 && mFlyingTime >= 1 && Position().Y() <= 10.0f)
 		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
+			if (mState != EState::eAttack)
+			{
+				Position(Position().X(), Position().Y() + 0.15f, Position().Z());
+			}
 		}
 	}
 
-	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
+		if (mFlyingTime > 400)
+		{
+			if (mState != EState::eAttack)
+			{
+				Position(Position().X(), Position().Y() - 0.08f, Position().Z());
+			}
+			if (mFlyingTime >= 600)
+			{
+				mFlyingTime = 0;
+			}
+		}
 	}
 
 	if (mState == EState::eHit || mState ==EState::eDie)
 	{
 		Position(Position().X(), Position().Y() - 0.5f, Position().Z());
-	}
-
-	if (Position().Y() <= 0.0f)
-	{
-		mFlyingTime = 0;
 	}
 
 	// キャラクターの更新
@@ -546,6 +556,18 @@ void CRay::Update()
 	mIsGrounded = false;
 
 	CEnemy::Update();
+
+	if (mState == EState::eIdle)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理

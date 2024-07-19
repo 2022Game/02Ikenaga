@@ -4,6 +4,7 @@
 #include "CCollisionManager.h"
 #include "CNeedle.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // 蜂のインスタンス
@@ -277,7 +278,24 @@ CBee::CBee()
 	mpAttackCol->SetEnable(false);
 	mpColliderSphereBeak2->SetEnable(false);
 
+	float Size = 15.0f;   // サイズ
+	float Height = 0.8f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 35.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "31";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "凶暴蜂";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -386,6 +404,15 @@ void CBee::UpdateAttack()
 	SetAnimationSpeed(0.3f);
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
+
+	if (vectorPos <= ROTATE_RANGE)
+	{
+		// プレイヤーのいる方向へ向く
+		CVector dir = player->Position() - Position();
+		dir.Y(0.0f);
+		dir.Normalize();
+		Rotation(CQuaternion::LookRotation(dir));
+	}
 
 	// ステップごとに処理を分ける
 	switch (mStateStep)
@@ -528,6 +555,7 @@ void CBee::Update()
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
 	mMoveSpeed.X(0.0f);
+	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
 
 	// 状態に合わせて、更新処理を切り替える
@@ -566,17 +594,9 @@ void CBee::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mState != EState::eIdle)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
-
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
+		mFlyingTime++;
 		mAttackTime++;
 
 		if (vectorPos <= ROTATE_RANGE)
@@ -610,33 +630,35 @@ void CBee::Update()
 		}
 	}
 
-	if (mState == EState::eRun)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		mFlyingTime++;
-		if (mFlyingTime <= 200 && mFlyingTime > 0)
+		if (mFlyingTime <= 150 && mFlyingTime >= 1 && Position().Y() <= 10.0f)
 		{
-			mMoveSpeed.Y(mMoveSpeed.Y() + MOVE_SPEED_Y);
+			if (mState != EState::eAttack)
+			{
+				Position(Position().X(), Position().Y() + 0.15f, Position().Z());
+			}
 		}
 	}
 
-	if (mFlyingTime >= 200 && Position().Y() >= 0.1f)
+	if (mState == EState::eIdle2 || mState == EState::eRun)
+	{
+		if (mFlyingTime > 150)
+		{
+			if (mState != EState::eAttack)
+			{
+				Position(Position().X(), Position().Y() - 0.2f, Position().Z());
+			}
+			if (mFlyingTime >= 200)
+			{
+				mFlyingTime = 0;
+			}
+		}
+	}
+
+	if (mState == EState::eHit || mState == EState::eDie)
 	{
 		Position(Position().X(), Position().Y() - HEIGHT, Position().Z());
-	}
-
-	if (mState == EState::eHit)
-	{
-		Position(Position().X(), Position().Y() - HEIGHT, Position().Z());
-	}
-
-	if (vectorPos <= STOP_RANGE_Y && player->Position().Y() > PLAYER_HEIGHT)
-	{
-		ChangeState(EState::eIdle2);
-	}
-
-	if (Position().Y() <= 0.0f)
-	{
-		mFlyingTime = 0;
 	}
 
 	// キャラクターの更新
@@ -670,6 +692,18 @@ void CBee::Update()
 	mIsGrounded = false;
 
 	CEnemy::Update();
+
+	if (mState == EState::eIdle)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -739,12 +773,6 @@ void CBee::AttackEnd()
 	mpAttackCol->SetEnable(false);
 }
 
-// 描画
-void CBee::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CBee::LevelUp()
 {
@@ -772,6 +800,10 @@ void CBee::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
@@ -799,4 +831,10 @@ void CBee::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// 描画
+void CBee::Render()
+{
+	CXCharacter::Render();
 }

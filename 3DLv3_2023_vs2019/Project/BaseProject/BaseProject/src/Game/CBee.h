@@ -4,6 +4,8 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 
+class CHit;
+
 /*
  蜂
  プレイヤーの推定レベル(31～40)
@@ -158,4 +160,7 @@ private:
 	CColliderSphere* mpAttackCol;        // 針
 
 	CTransform* mpRideObject;
+
+	// エフェクト関連
+	CHit* mpHitEffect;        // ヒットエフェクト
 };

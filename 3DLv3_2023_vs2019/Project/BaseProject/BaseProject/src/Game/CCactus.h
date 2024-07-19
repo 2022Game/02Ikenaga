@@ -6,6 +6,7 @@
 #include "CColliderCapsule.h"
 
 class CCrackEffect;
+class CHit;
 
 /*
  サボテン
@@ -159,5 +160,7 @@ private:
 
 	CTransform* mpRideObject;
 
+	// エフェクト関連
 	CCrackEffect* mpCrack;  // ひび割れ
+	CHit* mpHitEffect;      // ヒットエフェクト
 };

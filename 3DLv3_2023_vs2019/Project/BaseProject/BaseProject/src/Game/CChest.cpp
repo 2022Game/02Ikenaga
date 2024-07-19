@@ -197,8 +197,15 @@ CChest::CChest()
 	mpAttackColHead->SetEnable(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "51";
+	mpGameUI->SetEnemyLevel(level);
 }
 
+// デストラクタ
 CChest::~CChest()
 {
 	// 線分コライダー
@@ -525,15 +532,6 @@ void CChest::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mState != EState::eIdle && mState != EState::eDie)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
-
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		if (vectorPos <= 45.0f)
@@ -600,6 +598,30 @@ void CChest::Update()
 	mIsGrounded = false;
 
 	CEnemy::Update();
+
+	if (mState == EState::eIdle || mState == EState::eDie)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		// 名前を設定
+		std::string name = "宝箱";
+		mpGameUI->SetEnemyName(name);
+	}
+	else
+	{
+		// 名前を設定
+		std::string name = "箱モン";
+		mpGameUI->SetEnemyName(name);
+	}
+	if (mState == EState::eDie)
+	{
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理

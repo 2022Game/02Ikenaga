@@ -238,6 +238,7 @@ CLich::CLich()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
 

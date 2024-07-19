@@ -377,6 +377,7 @@ CBeholder::CBeholder()
 	mpHitEffect = new CHit(Size, Height);
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 38.0f, 0.0f));
 	// Lv.‚ğİ’è
