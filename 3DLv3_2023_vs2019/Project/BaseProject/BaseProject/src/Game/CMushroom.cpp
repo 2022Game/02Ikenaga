@@ -684,7 +684,7 @@ void CMushroom::Update()
 
 	CEnemy::Update();
 
-	if (mState == EState::eIdle || mState == EState::eIdle2 || mState == EState::eDie)
+	if (mState == EState::eIdle || mState == EState::eIdle2)
 	{
 		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
 		hpGauge->SetShow(false);

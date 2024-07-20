@@ -266,6 +266,12 @@ CLich::~CLich()
 	SAFE_DELETE(mpDamageColArmL);
 	SAFE_DELETE(mpDamageColArmR);
 
+	// ‰ñ“]‚·‚éƒV[ƒ‹ƒh
+	mpShieldRotate->Kill();
+	mpShieldRotate2->Kill();
+	mpShieldRotate3->Kill();
+	mpShieldRotate4->Kill();
+
 	// Ž©g‚ª¢Š«‚µ‚½“G‚ª‘¶Ý‚·‚ê‚Î
 	if (mpSpawnEnemy)
 	{
@@ -817,7 +823,7 @@ void CLich::Update()
 
 	CEnemy::Update();
 
-	if (mState == EState::eIdle || mState == EState::eDie)
+	if (mState == EState::eIdle)
 	{
 		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
 		hpGauge->SetShow(false);

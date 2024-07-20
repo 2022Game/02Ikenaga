@@ -290,6 +290,7 @@ CPlayer::~CPlayer()
 	// 武器関連の削除
 	mpSword->Kill();
 	mpShield->Kill();
+	// 回転するシールド
 	mpShieldRotate->Kill();
 	mpShieldRotate2->Kill();
 	mpShieldRotate3->Kill();
@@ -1432,7 +1433,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(41);
+		ChangeLevel(71);
 	}
 	else if (CInput::PushKey('4'))
 	{
@@ -1461,7 +1462,6 @@ void CPlayer::Update()
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
-	CDebugPrint::Print("    Hp:    %d / %d\n", mCharaStatus.hp, mCharaMaxStatus.hp);
 }
 
 // 衝突処理

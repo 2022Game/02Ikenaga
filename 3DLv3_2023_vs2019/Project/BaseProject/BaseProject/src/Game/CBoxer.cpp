@@ -4,7 +4,9 @@
 #include "CCollisionManager.h"
 #include "CHpGauge.h"
 #include "CImpactEffect.h"
+#include "CShieldRotate2.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // ボクサーのインスタンス
@@ -346,7 +348,48 @@ CBoxer::CBoxer()
 		CQuaternion(0.0, 90.f, 0.0f).Matrix()
 	);
 
-	mpGameUI->SetUIoffSetPos(CVector(0.0f, 35.0f, 0.0f));
+	// シールドとの距離
+	float ShieldDist = 20.0f;
+	float height = 15.0f;
+	// 回転するシールド
+	mpShieldRotate = new CShieldRotate2(0.0f, ShieldDist, height);
+	mpShieldRotate->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate->Position(0.0f, 10.0f, 0.0f);
+	mpShieldRotate->SetOwner(this);
+
+	// 回転するシールド2
+	mpShieldRotate2 = new CShieldRotate2(180.0, ShieldDist, height);
+	mpShieldRotate2->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate2->SetOwner(this);
+
+	// 回転するシールド3
+	mpShieldRotate3 = new CShieldRotate2(-270.0f, ShieldDist, height);
+	mpShieldRotate3->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate3->SetOwner(this);
+
+	// 回転するシールド4
+	mpShieldRotate4 = new CShieldRotate2(270.0f, ShieldDist, height);
+	mpShieldRotate4->Scale(2.0f, 2.0f, 2.0f);
+	mpShieldRotate4->SetOwner(this);
+
+	float Size = 20.0f;   // サイズ
+	float Height = 0.8f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 37.0f, 0.0f));
+
+	// Lv.を設定
+	mpGameUI->SetLv();
+	// レベルを設定
+	std::string level = "71";
+	mpGameUI->SetEnemyLevel(level);
+	// 名前を設定
+	std::string name = "右利き ボブ";
+	mpGameUI->SetEnemyName(name);
 }
 
 // デストラクタ
@@ -376,6 +419,11 @@ CBoxer::~CBoxer()
 	SAFE_DELETE(mpAttackColHandR);
 	SAFE_DELETE(mpAttackColFeetR);
 	SAFE_DELETE(mpAttackColFeetL);
+	// 回転するシールド
+	mpShieldRotate->Kill();
+	mpShieldRotate2->Kill();
+	mpShieldRotate3->Kill();
+	mpShieldRotate4->Kill();
 }
 
 // インスタンス
@@ -840,15 +888,6 @@ void CBoxer::Update()
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mState != EState::eIdle && mState != EState::eDie)
-	{
-		mpGameUI->GetHpGauge()->SetShow(true);
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
-
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
 		if (vectorPos <= 50.0f)
@@ -922,9 +961,11 @@ void CBoxer::Update()
 	if (mState == EState::eDefense || mState == EState::eDefenseHit)
 	{
 		mDefenseTime++;
+		mDefenseUp = true;
 	}
 	else
 	{
+		mDefenseUp = false;
 		mDefenseTime = 0;
 	}
 
@@ -967,6 +1008,18 @@ void CBoxer::Update()
 	mIsGrounded = false;
 	
 	CEnemy::Update();
+
+	if (mState == EState::eIdle)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+		CLevelUI* Lv = mpGameUI->GetLv();
+		Lv->SetShow(false);
+		CEnemyLevelUI* Level = mpGameUI->GetLevel();
+		Level->SetShow(false);
+		CEnemyNameUI* Name = mpGameUI->GetName();
+		Name->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -1052,12 +1105,6 @@ void CBoxer::AttackEnd()
 	mpAttackColFeetL->SetEnable(false);
 }
 
-// 描画
-void CBoxer::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CBoxer::LevelUp()
 {
@@ -1087,10 +1134,18 @@ void CBoxer::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		if (mState == EState::eDefense)
 		{
+			if (mState != EState::eDie)
+			{
+				mpHitEffect->StartHitEffect();
+			}
 			ChangeState(EState::eDefenseHit);
 		}
 		else
 		{
+			if (mState != EState::eDie)
+			{
+				mpHitEffect->StartHitEffect();
+			}
 			ChangeState(EState::eHit);
 		}
 	}
@@ -1129,4 +1184,10 @@ void CBoxer::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// 描画
+void CBoxer::Render()
+{
+	CXCharacter::Render();
 }

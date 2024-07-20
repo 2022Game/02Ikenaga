@@ -4,6 +4,7 @@
 #include "CCollisionManager.h"
 #include "CCoin.h"
 #include "CGameEnemyUI.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // チェストモンスターのインスタンス
@@ -11,7 +12,7 @@ CChest* CChest::spInstance = nullptr;
 
 #define ENEMY_HEIGHT    0.3f  // 線分コライダー
 #define WITHIN_RANGE   30.0f  // 範囲内
-#define ATTACK_RANGE   40.0f  // 攻撃の範囲内
+#define ATTACK_RANGE   50.0f  // 攻撃の範囲内
 #define MOVE_SPEED     0.64f  // 移動速度
 #define GRAVITY      0.0625f  // 重力
 #define WALK_RANGE    150.0f  // 追跡する範囲
@@ -196,6 +197,14 @@ CChest::CChest()
 	// 最初の攻撃コライダーを無効にしておく
 	mpAttackColHead->SetEnable(false);
 
+	float Size = 25.0f;   // サイズ
+	float Height = 0.7f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
 
 	// Lv.を設定
@@ -333,13 +342,19 @@ void CChest::UpdateAttack()
 			{
 				// コインを生成済みフラグを初期化
 				mIsSpawnedCoinEffect = false;
+
+				CVector forward = VectorZ();
+				forward.Y(0.0f);
+				forward.Normalize();
+				CVector coinPos = Position() + forward * 15.0f + CVector(0.0f, 18.0f, 0.0f);
+
 				// コインを生成していない
 				if (!mIsSpawnedCoinEffect)
 				{
 					CCoin* coin = new CCoin
 					(
 						this,
-						Position() + CVector(0.0f, 18.0f, 0.0f),
+						coinPos,
 						VectorZ(),
 						180.0f,
 						150.0f
@@ -534,7 +549,7 @@ void CChest::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		if (vectorPos <= 45.0f)
+		if (vectorPos <= 70.0f)
 		{
 			mAttackTime++;
 		}
@@ -553,7 +568,7 @@ void CChest::Update()
 			// 攻撃2
 			bool Attack2 = false;
 			// 確率を最小に2最大5
-			int probability2 = Math::Rand(2, 5);
+			int probability2 = Math::Rand(0, 2);
 			if (probability2 == 2)Attack2 = true;
 			if (Attack2)
 			{
@@ -599,7 +614,7 @@ void CChest::Update()
 
 	CEnemy::Update();
 
-	if (mState == EState::eIdle || mState == EState::eDie)
+	if (mState == EState::eIdle)
 	{
 		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
 		hpGauge->SetShow(false);
@@ -607,20 +622,17 @@ void CChest::Update()
 		Lv->SetShow(false);
 		CEnemyLevelUI* Level = mpGameUI->GetLevel();
 		Level->SetShow(false);
+		mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
 		// 名前を設定
-		std::string name = "宝箱";
+		std::string name = " 宝箱？";
 		mpGameUI->SetEnemyName(name);
 	}
 	else
 	{
+		mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
 		// 名前を設定
-		std::string name = "箱モン";
+		std::string name = " 箱モン";
 		mpGameUI->SetEnemyName(name);
-	}
-	if (mState == EState::eDie)
-	{
-		CEnemyNameUI* Name = mpGameUI->GetName();
-		Name->SetShow(false);
 	}
 }
 
@@ -691,12 +703,6 @@ void CChest::AttackEnd()
 	mpAttackColHead->SetEnable(false);
 }
 
-// 描画
-void CChest::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CChest::LevelUp()
 {
@@ -724,6 +730,10 @@ void CChest::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
@@ -751,4 +761,10 @@ void CChest::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// 描画
+void CChest::Render()
+{
+	CXCharacter::Render();
 }

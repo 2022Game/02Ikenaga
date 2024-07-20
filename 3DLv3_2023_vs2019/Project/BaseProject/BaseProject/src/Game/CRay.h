@@ -156,5 +156,5 @@ private:
 	// エフェクト関連
 	bool mIsSpawnedWaveEffect;  // 波動エフェクト
 	float mElapsedWaveTime;     // 経過時間計測用(波動)
-	CHit* mpHitEffect;          // ヒットエフェクト 
+	CHit* mpHitEffect;          // ヒットエフェクト
 };

@@ -5,6 +5,8 @@
 #include "CColliderSphere.h"
 
 class CImpactEffect;
+class CShieldRotate2;
+class CHit;
 
 /*
  ボクサー
@@ -36,9 +38,6 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// 描画
-	void Render();
-
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
@@ -60,6 +59,9 @@ public:
 
 	// 死亡処理
 	void Death() override;
+
+	// 描画
+	void Render();
 
 private:
 
@@ -197,6 +199,13 @@ private:
 
 	CTransform* mpRideObject;
 
-	// 衝撃エフェクト
-	CImpactEffect* mpImpact;
+	// 回転するシールド
+	CShieldRotate2* mpShieldRotate;
+	CShieldRotate2* mpShieldRotate2;
+	CShieldRotate2* mpShieldRotate3;
+	CShieldRotate2* mpShieldRotate4;
+
+	// エフェクト関連
+	CImpactEffect* mpImpact;  // 衝撃エフェクト
+	CHit* mpHitEffect;        // ヒットエフェクト
 };

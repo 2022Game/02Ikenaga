@@ -5,6 +5,8 @@
 #include "CColliderSphere.h"
 #include "CColliderCapsule.h"
 
+class CHit;
+
 /*
  チェストモンスター
  プレイヤーの推定レベル(51～60)
@@ -18,6 +20,7 @@ public:
 
 	// コンストラクタ
 	CChest();
+	// デストラクタ
 	~CChest();
 
 	// 戦う前の待機状態
@@ -58,9 +61,6 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// 描画
-	void Render();
-
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
@@ -75,6 +75,9 @@ public:
 
 	// 死亡処理
 	void Death() override;
+
+	// 描画
+	void Render();
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔
@@ -139,18 +142,25 @@ private:
 	bool mIsGrounded;	 // 接地しているかどうか
 	bool mIsSpawnedCoinEffect;  // コイン発射
 
-	CColliderLine* mpColliderLine;           // 線分コライダー
+	// 線分コライダー
+	CColliderLine* mpColliderLine;
 
-	CColliderSphere* mpColliderSphereHead;   // キャラクターの押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;   // キャラクターの押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereFeet;   // キャラクターの押し戻しコライダー(前の左足)
-	CColliderSphere* mpColliderSphereFeet2;  // キャラクターの押し戻しコライダー(前の右足)
+	// キャラクターの押し戻しコライダー
+	CColliderSphere* mpColliderSphereHead;   // 頭
+	CColliderSphere* mpColliderSphereBody;   // 体
+	CColliderSphere* mpColliderSphereFeet;   // 前の左足
+	CColliderSphere* mpColliderSphereFeet2;  // 前の右足
 
-	CColliderSphere* mpDamageColHead;        // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBody;        // ダメージを受けるコライダー(体)
-	CColliderCapsule* mpDamageColFeet;       // ダメージを受けるコライダー(前の左足)
-	CColliderCapsule* mpDamageColFeet2;      // ダメージを受けるコライダー(前の右足)
+	// ダメージを受けるコライダー
+	CColliderSphere* mpDamageColHead;        // 頭
+	CColliderSphere* mpDamageColBody;        // 体
+	CColliderCapsule* mpDamageColFeet;       // 前の左足
+	CColliderCapsule* mpDamageColFeet2;      // 前の右足
 
-	CColliderSphere* mpAttackColHead;        // ダメージを与えるコライダー(頭)
+	// ダメージを与えるコライダー
+	CColliderSphere* mpAttackColHead;        // 頭
 	CTransform* mpRideObject;
+
+	// エフェクト関連
+	CHit* mpHitEffect;          // ヒットエフェクト 
 };

@@ -11,7 +11,7 @@ class CShieldRotate2 : public CWeapon
 {
 public:
 	// コンストラク
-	CShieldRotate2(float angle, float dist);
+	CShieldRotate2(float angle, float dist, float height);
 	// デストラクタ
 	~CShieldRotate2();
 
@@ -33,4 +33,5 @@ private:
 
 	float mAngle;      // 盾の回転角度
 	float mDistance;   // 持ち主からの距離
+	float mHeight;     // 高さ
 };

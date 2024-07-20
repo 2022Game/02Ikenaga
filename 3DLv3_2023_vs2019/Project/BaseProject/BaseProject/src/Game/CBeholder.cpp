@@ -1110,7 +1110,7 @@ void CBeholder::Update()
 
 	CEnemy::Update();
 
-	if (mState == EState::eIdle || mState == EState::eDie)
+	if (mState == EState::eIdle)
 	{
 		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
 		hpGauge->SetShow(false);

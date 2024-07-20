@@ -4,11 +4,12 @@
 #include "Maths.h"
 
 // コンストラク
-CShieldRotate2::CShieldRotate2(float angle, float dist)
+CShieldRotate2::CShieldRotate2(float angle, float dist, float height)
 	: mDefenseUp(false)
 	, mElapsedDefenseUpTime(0.0f)
 	, mAngle(angle)
 	, mDistance(dist)
+	, mHeight(height)
 {
 	mpShieldRotate2 = CResourceManager::Get<CModel>("ShieldRotate");
 	mpShieldRotate2->SetColor(CColor(0.15f, 0.75f, 0.75f));
@@ -38,7 +39,7 @@ void CShieldRotate2::Update()
 	CVector pos = CVector::zero;
 	pos.X(cosf(Math::DegreeToRadian(mAngle)) * mDistance);
 	pos.Z(sinf(Math::DegreeToRadian(mAngle)) * mDistance);
-	pos.Y(9.0f);
+	pos.Y(mHeight);
 	Position(center + pos);
 
 	// 現在位置から中心座標までのベクトルを求めて、
