@@ -2,6 +2,7 @@
 #include "CInput.h"
 #include "CTaskManager.h"
 #include "CBGMManager.h"
+#include "COperationIns.h"
 
 #define MENU_ALPHA 0.75f
 
@@ -44,7 +45,20 @@ CGameMenu::CGameMenu()
 		false, false
 	);
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpSelectFrame->SetColor(1.0f, 0.5f, 0.0f, MENU_ALPHA);
+	mpSelectFrame->SetColor(0.0f, 0.7f, 1.0f, MENU_ALPHA);
+
+	mpText = new CImage
+	(
+		"UI/Text/Text.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpText->SetCenter(mpSelectFrame->GetSize() * 0.5f);
+	mpText->SetColor(1.0f, 1.0f, 1.0f, MENU_ALPHA);
+	mpText->SetPos(485.0f, 380.0f);
+	mpText->SetSize(350.0f, 90.0f);
+
+	mpOperationIns = new COperationIns();
 
 	SetEnable(false);
 	SetShow(false);
@@ -58,6 +72,7 @@ void CGameMenu::Open()
 {
 	SetEnable(true);
 	SetShow(true);
+	mIsOpened = true;
 	mSelectIndex = 0;
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
@@ -67,6 +82,7 @@ void CGameMenu::Close()
 {
 	SetEnable(false);
 	SetShow(false);
+	mIsOpened = false;
 	CBGMManager::Instance()->Play(EBGMType::eGame, false);
 	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
 }
@@ -105,6 +121,21 @@ void CGameMenu::Update()
 		Decide(mSelectIndex);
 	}
 
+	switch (mSelectIndex)
+	{
+	case 0:
+		break;
+	case 1:
+		if (CInput::PushKey(VK_SPACE))
+		{
+			mpOperationIns->Open();
+			mIsOpened = true;
+			//SetEnable(false);
+			SetShow(false);
+		}
+		break;
+	}
+
 	mpBackground->Update();
 	for (CImage* item : mMenuItems)
 	{
@@ -127,4 +158,5 @@ void CGameMenu::Render()
 			mpSelectFrame->Render();
 		}
 	}
+	mpText->Render();
 }

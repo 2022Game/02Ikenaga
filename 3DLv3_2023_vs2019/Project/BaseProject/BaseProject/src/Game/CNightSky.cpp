@@ -3,7 +3,7 @@
 
 // コンストラク
 CNightSky::CNightSky()
-	: CObjectBase(ETag::eSky, ETaskPriority::eBackground)
+	: CObjectBase(ETag::eSky, ETaskPriority::eBackground, 0, ETaskPauseType::eGame)
 	, mElapsedTime(0.0f)
 {
 	mpModel = CResourceManager::Get<CModel>("NightSky");

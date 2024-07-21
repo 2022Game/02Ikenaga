@@ -127,6 +127,7 @@
     <ClCompile Include="src\Game\CNeedle.cpp" />
     <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CGamePlayerUI.cpp" />
+    <ClCompile Include="src\Game\COperationIns.cpp" />
     <ClCompile Include="src\Game\CPlayerLevelUI.cpp" />
     <ClCompile Include="src\Game\CLevelUI.cpp" />
     <ClCompile Include="src\Game\CPlayerNameUI.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="src\Game\CNeedle.h" />
     <ClInclude Include="src\Game\CNightSky.h" />
     <ClInclude Include="src\Game\CGamePlayerUI.h" />
+    <ClInclude Include="src\Game\COperationIns.h" />
     <ClInclude Include="src\Game\CPlayerLevelUI.h" />
     <ClInclude Include="src\Game\CLevelUI.h" />
     <ClInclude Include="src\Game\CPlayerNameUI.h" />

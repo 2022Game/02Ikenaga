@@ -1,6 +1,7 @@
 #pragma once
 #include "CTask.h"
 #include "CImage.h"
+#include "COperationIns.h"
 #include <vector>
 
 class CGameMenu : public CTask
@@ -22,6 +23,10 @@ private:
 	CImage* mpBackground;
 	std::vector<CImage*> mMenuItems;
 	CImage* mpSelectFrame;
+	CImage* mpText;
+
 	int mSelectIndex;
 	bool mIsOpened;
+
+	COperationIns* mpOperationIns;
 };

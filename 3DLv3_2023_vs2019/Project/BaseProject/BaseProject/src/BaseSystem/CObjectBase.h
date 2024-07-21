@@ -75,6 +75,7 @@ public:
 	virtual void AttackEnd();
 
 private:
+
 	ETag mTag;			// オブジェクト識別用のタグ
 	bool mIsEnableCol;	// 衝突判定を行うかどうか
 

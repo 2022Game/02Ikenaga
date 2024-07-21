@@ -9,7 +9,7 @@ CCamera* CCamera::spCurrentCamera = nullptr;
 
 // コンストラクタ
 CCamera::CCamera(const CVector& eye, const CVector& center, bool isMainCamera)
-	: CObjectBase(ETag::eCamera, ETaskPriority::eCamera)
+	: CObjectBase(ETag::eCamera, ETaskPriority::eCamera,0,ETaskPauseType::eGame)
 	, mIsMainCamera(isMainCamera)
 	, mFollowTargetTf(nullptr)
 	, mFollowOffsetPos(CVector::zero)

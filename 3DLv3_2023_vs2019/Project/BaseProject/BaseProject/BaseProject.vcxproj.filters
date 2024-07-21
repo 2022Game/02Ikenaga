@@ -733,6 +733,9 @@
     <ClCompile Include="src\Game\CSpUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\COperationIns.cpp">
+      <Filter>ソース ファイル\Game\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1271,6 +1274,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CSpUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\COperationIns.h">
+      <Filter>ソース ファイル\Game\Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

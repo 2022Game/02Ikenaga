@@ -13,7 +13,7 @@ CSky* CSky::Instance()
 
 // コンストラク
 CSky::CSky()
-	: CObjectBase(ETag::eSky, ETaskPriority::eBackground)
+	: CObjectBase(ETag::eSky, ETaskPriority::eBackground,0,ETaskPauseType::eGame)
 {
 	spInstance = this;
 	mElapsedTime = 0.0f;
