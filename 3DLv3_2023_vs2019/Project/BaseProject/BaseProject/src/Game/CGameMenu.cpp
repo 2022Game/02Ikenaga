@@ -3,9 +3,11 @@
 #include "CTaskManager.h"
 #include "CBGMManager.h"
 #include "COperationIns.h"
+#include "CPlayerStatusUI.h"
 
 #define MENU_ALPHA 0.75f
 
+// コンストラ
 CGameMenu::CGameMenu()
 	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eMenu)
 	, mSelectIndex(0)
@@ -54,20 +56,42 @@ CGameMenu::CGameMenu()
 		false, false
 	);
 	mpText->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpText->SetColor(1.0f, 1.0f, 1.0f, MENU_ALPHA);
 	mpText->SetPos(485.0f, 380.0f);
 	mpText->SetSize(350.0f, 90.0f);
 
+	mpStatus = new CImage
+	(
+		"UI/Text/status.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpStatus->SetCenter(mpSelectFrame->GetSize() * 0.5f);
+	mpStatus->SetPos(480.0f, 195.0f);
+	mpStatus->SetSize(350.0f, 90.0f);
+
+	mpTextReturn = new CImage
+	(
+		"UI/Text/TextReturn.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpTextReturn->SetCenter(mpSelectFrame->GetSize() * 0.5f);
+	mpTextReturn->SetPos(485.0f, 555.0f);
+	mpTextReturn->SetSize(350.0f, 90.0f);
+
 	mpOperationIns = new COperationIns();
+	mpPlayerStatusUI = new CPlayerStatusUI();
 
 	SetEnable(false);
 	SetShow(false);
 }
 
+// デストラクタ
 CGameMenu::~CGameMenu()
 {
 }
 
+// オープン
 void CGameMenu::Open()
 {
 	SetEnable(true);
@@ -78,6 +102,7 @@ void CGameMenu::Open()
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 }
 
+// クローズ
 void CGameMenu::Close()
 {
 	SetEnable(false);
@@ -87,11 +112,13 @@ void CGameMenu::Close()
 	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
 }
 
+// オープンするかどうか
 bool CGameMenu::IsOpened() const
 {
 	return mIsOpened;
 }
 
+// 決める
 void CGameMenu::Decide(int select)
 {
 	switch (select)
@@ -105,6 +132,7 @@ void CGameMenu::Decide(int select)
 	}
 }
 
+// 更新
 void CGameMenu::Update()
 {
 	int itemCount = mMenuItems.size();
@@ -124,13 +152,20 @@ void CGameMenu::Update()
 	switch (mSelectIndex)
 	{
 	case 0:
+		if (CInput::PushKey(VK_SPACE))
+		{
+			mpPlayerStatusUI->Open();
+			mIsOpened = true;
+			SetEnable(false);
+			SetShow(false);
+		}
 		break;
 	case 1:
 		if (CInput::PushKey(VK_SPACE))
 		{
 			mpOperationIns->Open();
 			mIsOpened = true;
-			//SetEnable(false);
+			SetEnable(false);
 			SetShow(false);
 		}
 		break;
@@ -144,6 +179,7 @@ void CGameMenu::Update()
 	mpSelectFrame->Update();
 }
 
+// 描画
 void CGameMenu::Render()
 {
 	mpBackground->Render();
@@ -159,4 +195,6 @@ void CGameMenu::Render()
 		}
 	}
 	mpText->Render();
+	mpStatus->Render();
+	mpTextReturn->Render();
 }

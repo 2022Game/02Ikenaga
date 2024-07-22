@@ -30,23 +30,23 @@ COperationIns::COperationIns()
 	mpText->SetPos(105.0f, 80.0f);
 	mpText->SetSize(250.0f, 80.0f);
 
-	mpText2 = new CImage
+	mpTextMove = new CImage
 	(
-		"UI/Text/Text2.png",
+		"UI/Text/move.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText2->SetPos(600.0f, 160.0f);
-	mpText2->SetSize(250.0f, 80.0f);
+	mpTextMove->SetPos(600.0f, 160.0f);
+	mpTextMove->SetSize(250.0f, 80.0f);
 
-	mpText3 = new CImage
+	mpTextSpecial = new CImage
 	(
-		"UI/Text/Text3.png",
+		"UI/Text/special.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText3->SetPos(600.0f, 240.0f);
-	mpText3->SetSize(250.0f, 80.0f);
+	mpTextSpecial->SetPos(600.0f, 240.0f);
+	mpTextSpecial->SetSize(250.0f, 80.0f);
 
 	mpTextSP = new CImage
 	(
@@ -57,14 +57,14 @@ COperationIns::COperationIns()
 	mpTextSP->SetPos(765.0f, 240.0f);
 	mpTextSP->SetSize(250.0f, 80.0f);
 
-	mpText4 = new CImage
+	mpTextMenu = new CImage
 	(
-		"UI/Text/Text4.png",
+		"UI/Text/menu.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText4->SetPos(600.0f, 320.0f);
-	mpText4->SetSize(250.0f, 80.0f);
+	mpTextMenu->SetPos(600.0f, 320.0f);
+	mpTextMenu->SetSize(250.0f, 80.0f);
 
 	mpText5 = new CImage
 	(
@@ -81,8 +81,17 @@ COperationIns::COperationIns()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText6->SetPos(600.0f, 510.0f);
+	mpText6->SetPos(600.0f, 480.0f);
 	mpText6->SetSize(250.0f, 80.0f);
+
+	mpTextMove2 = new CImage
+	(
+		"UI/Text/move.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpTextMove2->SetPos(130.0f, 480.0f);
+	mpTextMove2->SetSize(250.0f, 80.0f);
 
 	mpText7 = new CImage
 	(
@@ -90,8 +99,17 @@ COperationIns::COperationIns()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText7->SetPos(800.0f, 510.0f);
+	mpText7->SetPos(600.0f, 560.0f);
 	mpText7->SetSize(250.0f, 80.0f);
+
+	mpText8 = new CImage
+	(
+		"UI/Text/Text8.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpText8->SetPos(800.0f, 560.0f);
+	mpText8->SetSize(250.0f, 80.0f);
 
 	mpWkey = new CImage
 	(
@@ -165,14 +183,23 @@ COperationIns::COperationIns()
 	mpSpaceKey->SetPos(215.0f, 400.0f);
 	mpSpaceKey->SetSize(100.0f, 80.0f);
 
+	mpShiftKey = new CImage
+	(
+		"UI/Key/shift.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpShiftKey->SetPos(410.0f, 480.0f);
+	mpShiftKey->SetSize(100.0f, 80.0f);
+
 	mpMouseLeft = new CImage
 	(
 		"UI/Mouse/mouseLeft.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpMouseLeft->SetPos(200.0f, 500.0f);
-	mpMouseLeft->SetSize(100.0f, 100.0f);
+	mpMouseLeft->SetPos(200.0f, 560.0f);
+	mpMouseLeft->SetSize(100.0f, 80.0f);
 
 	mpMouseMiddle = new CImage
 	(
@@ -189,8 +216,17 @@ COperationIns::COperationIns()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpMouseRight->SetPos(300.0f, 500.0f);
-	mpMouseRight->SetSize(100.0f, 100.0f);
+	mpMouseRight->SetPos(300.0f, 560.0f);
+	mpMouseRight->SetSize(100.0f, 80.0f);
+
+	mpPlus = new CImage
+	(
+		"UI/plus.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpPlus->SetPos(305.0f, 480.0f);
+	mpPlus->SetSize(90.0f, 80.0f);
 
 	SetEnable(false);
 	SetShow(false);
@@ -263,13 +299,15 @@ void COperationIns::Render()
 {
 	mpBackground->Render();
 	mpText->Render();
-	mpText2->Render();
-	mpText3->Render();
+	mpTextMove->Render();
+	mpTextSpecial->Render();
 	mpTextSP->Render();
-	mpText4->Render();
+	mpTextMenu->Render();
 	mpText5->Render();
 	mpText6->Render();
+	mpTextMove2->Render();
 	mpText7->Render();
+	mpText8->Render();
 
 	mpWkey->Render();
 	mpAkey->Render();
@@ -279,7 +317,11 @@ void COperationIns::Render()
 	mpEkey->Render();
 	mpMkey->Render();
 	mpSpaceKey->Render();
+	mpShiftKey->Render();
+
 	mpMouseLeft->Render();
 	mpMouseMiddle->Render();
 	mpMouseRight->Render();
+
+	mpPlus->Render();
 }

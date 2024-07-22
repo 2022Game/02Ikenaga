@@ -2,7 +2,7 @@
 #include "CTask.h"
 #include "CImage.h"
 #include "COperationIns.h"
-#include <vector>
+#include "CPlayerStatusUI.h"
 
 class CGameMenu : public CTask
 {
@@ -24,9 +24,12 @@ private:
 	std::vector<CImage*> mMenuItems;
 	CImage* mpSelectFrame;
 	CImage* mpText;
+	CImage* mpStatus;
+	CImage* mpTextReturn;
 
 	int mSelectIndex;
 	bool mIsOpened;
 
 	COperationIns* mpOperationIns;
+	CPlayerStatusUI* mpPlayerStatusUI;
 };

@@ -18,6 +18,7 @@
 #include "CPowerUpAura.h"
 #include "CSceneManager.h"
 #include "CGamePlayerUI.h"
+#include "CPlayerStatusUI.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;

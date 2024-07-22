@@ -1,7 +1,6 @@
 #pragma once
 #include "CTask.h"
 #include "CImage.h"
-#include <vector>
 
 class COperationIns : public CTask
 {
@@ -30,13 +29,15 @@ private:
 	CImage* mpBackground;
 	// テキスト関連
 	CImage* mpText;
-	CImage* mpText2;
-	CImage* mpText3;
+	CImage* mpTextMove;
+	CImage* mpTextSpecial;
 	CImage* mpTextSP;
-	CImage* mpText4;
+	CImage* mpTextMenu;
 	CImage* mpText5;
 	CImage* mpText6;
+	CImage* mpTextMove2;
 	CImage* mpText7;
+	CImage* mpText8;
 	// キー関連
 	CImage* mpWkey;
 	CImage* mpAkey;
@@ -46,10 +47,13 @@ private:
 	CImage* mpEkey;
 	CImage* mpMkey;
 	CImage* mpSpaceKey;
+	CImage* mpShiftKey;
 	// マウス関連
 	CImage* mpMouseLeft;
 	CImage* mpMouseMiddle;
 	CImage* mpMouseRight;
+	// 記号関連
+	CImage* mpPlus;
 
 	bool mIsOpened;
 };
