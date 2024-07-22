@@ -116,6 +116,7 @@ CPlayer::CPlayer()
 
 	// プレイヤー名を作成
 	mpGameUI = new CGamePlayerUI();
+	mpStatusUI = new CPlayerStatusUI();
 
 	// Lv.を表示
 	std::string lv = "Lv.";
@@ -969,6 +970,9 @@ void CPlayer::ChangeLevel(int level)
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
 
+	mpStatusUI->SetMaxHp(mCharaMaxStatus.hp);
+	mpStatusUI->SetHp(mCharaStatus.hp);
+
 	mpGameUI->SetMaxSp(mCharaMaxStatus.SpecialPoint);
 	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
 
@@ -977,6 +981,8 @@ void CPlayer::ChangeLevel(int level)
 
 	mpGameUI->SetMaxExp(mCharaMaxStatus.exp);
 	mpGameUI->SetExp(mCharaStatus.exp);
+
+	mpStatusUI->SetExp(mCharaStatus.exp);
 
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
@@ -1450,6 +1456,7 @@ void CPlayer::Update()
 
 	// 現在のHPを設定
 	mpGameUI->SetHp(mCharaStatus.hp);
+	mpStatusUI->SetHp(mCharaStatus.hp);
 
 	// 現在のSPを設定
 	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
@@ -1459,8 +1466,10 @@ void CPlayer::Update()
 
 	// 現在の経験値を設定
 	mpGameUI->SetExp(mCharaStatus.exp);
+	mpStatusUI->SetExp(mCharaStatus.exp);
 
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
+	mpStatusUI->SetLevel(mCharaStatus.level);
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }

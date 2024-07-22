@@ -218,6 +218,12 @@
     <Filter Include="ソース ファイル\Game\Effect\Hit">
       <UniqueIdentifier>{db4e4e2f-51a9-4bd3-997a-2d761234dba6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\HP">
+      <UniqueIdentifier>{1cc3b218-4c04-42b6-9c3c-c2cc86327724}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Exp">
+      <UniqueIdentifier>{f123f740-bdb1-4c00-a8d9-9c4cc0588628}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -727,9 +733,6 @@
     <ClCompile Include="src\Game\CEnemyNameUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CExpUI.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CSpUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
     </ClCompile>
@@ -738,6 +741,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CPlayerStatusUI.cpp">
       <Filter>ソース ファイル\Game\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerHpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\HP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerMaxHpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\HP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CExpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerExpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1272,9 +1287,6 @@
     <ClInclude Include="src\Game\CEnemyNameUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CExpUI.h">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CSpUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
     </ClInclude>
@@ -1283,6 +1295,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPlayerStatusUI.h">
       <Filter>ソース ファイル\Game\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerHpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\HP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerMaxHpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\HP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerExpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CExpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

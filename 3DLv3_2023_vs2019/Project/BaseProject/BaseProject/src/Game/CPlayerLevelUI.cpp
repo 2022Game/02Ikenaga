@@ -5,8 +5,8 @@
 #define SHADOW_WIDTH 2.0f  // 影の幅
 
 // コンストラク
-CPlayerLevelUI::CPlayerLevelUI()
-	: mBasePos(50.0f + SHADOW_WIDTH, 32.0f)
+CPlayerLevelUI::CPlayerLevelUI(float x, float y)
+	: mBasePos(x + SHADOW_WIDTH, y)
 {
 	CVector2 size = CVector2(WINDOW_WIDTH, WINDOW_HEIGHT);
 	ETextAlignH textAlignH = ETextAlignH::eLeft;
@@ -23,6 +23,7 @@ CPlayerLevelUI::CPlayerLevelUI()
 		false, false
 	);
 	mpLevelText->SetTextAlignH(textAlignH);
+	SetShow(false);
 }
 
 // デストラクタ
@@ -32,14 +33,9 @@ CPlayerLevelUI::~CPlayerLevelUI()
 }
 
 // プレイヤーレベルを設定
-void CPlayerLevelUI::SetPlayerLevel(int level)
+void CPlayerLevelUI::SetLevel(int level)
 {
 	mpLevelText->SetText("%d",level);
-}
-
-// 更新
-void CPlayerLevelUI::Update()
-{
 }
 
 // 描画

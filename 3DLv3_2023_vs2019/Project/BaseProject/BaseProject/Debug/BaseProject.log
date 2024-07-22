@@ -1,7 +1,2 @@
-﻿  CGameMenu.cpp
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\Game\CGameMenu.cpp(186,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  CGameScene.cpp
-  COperationIns.cpp
-  CPlayerStatusUI.cpp
-  コードを生成中...
+﻿  CPlayerStatusUI.cpp
   BaseProject.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\BaseProject.exe

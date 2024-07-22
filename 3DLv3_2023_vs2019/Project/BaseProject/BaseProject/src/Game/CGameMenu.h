@@ -23,7 +23,7 @@ private:
 	CImage* mpBackground;
 	std::vector<CImage*> mMenuItems;
 	CImage* mpSelectFrame;
-	CImage* mpText;
+	CImage* mpTextOperation;
 	CImage* mpStatus;
 	CImage* mpTextReturn;
 

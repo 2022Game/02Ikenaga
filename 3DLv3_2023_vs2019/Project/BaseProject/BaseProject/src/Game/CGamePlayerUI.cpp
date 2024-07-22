@@ -20,7 +20,8 @@ CGamePlayerUI::CGamePlayerUI()
 	// Lv.UIを作成
 	mpLevelUI = new CLevelUI(false);
 	// プレイヤーレベルのUIを作成
-	mpPlayerLevelUI = new CPlayerLevelUI();
+	mpPlayerLevelUI = new CPlayerLevelUI(50.0f,32.0f);
+	mpPlayerLevelUI->SetShow(true);
 
 	// HpUIを作成
 	mpHpUI = new CHpUI();
@@ -81,7 +82,7 @@ void CGamePlayerUI::SetLevel(std::string lv)
 // プレイヤーレベルを設定
 void CGamePlayerUI::SetPlayerLevel(int level)
 {
-	mpPlayerLevelUI->SetPlayerLevel(level);
+	mpPlayerLevelUI->SetLevel(level);
 }
 
 // 最大Hpを設定

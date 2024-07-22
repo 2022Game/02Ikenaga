@@ -28,16 +28,16 @@ public:
 private:
 	CImage* mpBackground;
 	// テキスト関連
-	CImage* mpText;
+	CImage* mpTextOperation;
 	CImage* mpTextMove;
 	CImage* mpTextSpecial;
 	CImage* mpTextSP;
 	CImage* mpTextMenu;
-	CImage* mpText5;
-	CImage* mpText6;
+	CImage* mpTextJump;
+	CImage* mpTextAvoid;
 	CImage* mpTextMove2;
-	CImage* mpText7;
-	CImage* mpText8;
+	CImage* mpTextAttack;
+	CImage* mpTextGuard;
 	// キー関連
 	CImage* mpWkey;
 	CImage* mpAkey;

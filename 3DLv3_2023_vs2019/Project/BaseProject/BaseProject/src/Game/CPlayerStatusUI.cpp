@@ -4,6 +4,10 @@
 #include "CBGMManager.h"
 #include "CGameMenu.h"
 #include "CText.h"
+#include "CPlayerLevelUI.h"
+#include "CPlayerExpUI.h"
+#include "CPlayerMaxHpUI.h"
+#include "CPlayerHpUI.h"
 
 #define LV_POS CVector2(220.0f, 180.0f)
 #define EXP_POS CVector2(210.0f, 220.0f)
@@ -63,7 +67,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 	mpExpText = new CText
 	(
 		nullptr, 24,
-		LV_POS,
+		EXP_POS,
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
@@ -143,8 +147,49 @@ CPlayerStatusUI::CPlayerStatusUI()
 	mpSizeText->SetTextAlignH(textAlignH);
 	mpSizeText->SetText("大きさ");
 
+	// 線2を作成
+	mpLine2 = new CText
+	(
+		nullptr, 24,
+		CVector2(400.0f,260.0f),
+		size,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eGame,
+		false, false
+	);
+	mpLine2->SetTextAlignH(textAlignH);
+	mpLine2->SetText("/");
+
+	// 線3を作成
+	mpLine3 = new CText
+	(
+		nullptr, 24,
+		CVector2(400.0f, 300.0f),
+		size,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eGame,
+		false, false
+	);
+	mpLine3->SetTextAlignH(textAlignH);
+	mpLine3->SetText("/");
+
 	SetEnable(false);
 	SetShow(false);
+
+	// プレイヤーレベルのUIを作成
+	mpLevelUI = new CPlayerLevelUI(400.0f, 180.f);
+	mpLevelUI->SetShow(true);
+
+	mpExpUI = new CPlayerExpUI(360.0f, 220.f);
+	mpExpUI->SetShow(true);
+
+	mpMaxHpUI = new CPlayerMaxHpUI(430.0f, 260.f);
+	mpMaxHpUI->SetShow(true);
+
+	mpHpUI = new CPlayerHpUI(350.0f, 260.f);
+	mpHpUI->SetShow(true);
 }
 
 // デストラクタ
@@ -157,6 +202,11 @@ CPlayerStatusUI::~CPlayerStatusUI()
 	SAFE_DELETE(mpAttackText);
 	SAFE_DELETE(mpDefenseText);
 	SAFE_DELETE(mpSizeText);
+	SAFE_DELETE(mpLine2);
+	SAFE_DELETE(mpLine3);
+	mpLevelUI->Kill();
+	mpMaxHpUI->Kill();
+	mpHpUI->Kill();
 }
 
 // オープン
@@ -197,10 +247,28 @@ void CPlayerStatusUI::Decide(int select)
 	}
 }
 
-// Levelを設定
-void CPlayerStatusUI::SetLevel(std::string level)
+// プレイヤーレベルを設定
+void CPlayerStatusUI::SetLevel(int level)
 {
-	mpLevelText->SetText(level.c_str());
+	mpLevelUI->SetLevel(level);
+}
+
+// プレイヤー経験値を設定
+void CPlayerStatusUI::SetExp(int exp)
+{
+	mpExpUI->SetExp(exp);
+}
+
+// プレイヤーの最大HPを設定
+void CPlayerStatusUI::SetMaxHp(int maxHp)
+{
+	mpMaxHpUI->SetMaxHp(maxHp);
+}
+
+// プレイヤーHPを設定
+void CPlayerStatusUI::SetHp(int hp)
+{
+	mpHpUI->SetHp(hp);
 }
 
 // 更新
@@ -235,6 +303,8 @@ void CPlayerStatusUI::Render()
 	mpAttackText->SetColor(1.0f, 1.0f, 1.0f);
 	mpDefenseText->SetColor(1.0f, 1.0f, 1.0f);
 	mpSizeText->SetColor(1.0f, 1.0f, 1.0f);
+	mpLine2->SetColor(1.0f, 1.0f, 1.0f);
+	mpLine3->SetColor(1.0f, 1.0f, 1.0f);
 
 	for (int i = 0; i < SHADOW_COUNT; i++)
 	{
@@ -269,6 +339,14 @@ void CPlayerStatusUI::Render()
 		// 大きさ
 		mpSizeText->SetPos(SIZE_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpSizeText->Render();
+
+		// 線2
+		mpLine2->SetPos(CVector2(400.0f,260.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpLine2->Render();
+
+		// 線3
+		mpLine3->SetPos(CVector2(400.0f, 300.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpLine3->Render();
 	}
 	mpLevelText->SetColor(0.0f, 0.0f, 0.0f);
 	mpLevelText->SetPos(LV_POS);
@@ -297,4 +375,12 @@ void CPlayerStatusUI::Render()
 	mpSizeText->SetColor(0.0f, 0.0f, 0.0f);
 	mpSizeText->SetPos(SIZE_POS);
 	mpSizeText->Render();
+
+	mpLine2->SetColor(0.0f, 0.0f, 0.0f);
+	mpLine2->SetPos(CVector2(400.0f, 260.0f));
+	mpLine2->Render();
+
+	mpLine3->SetColor(0.0f, 0.0f, 0.0f);
+	mpLine3->SetPos(CVector2(400.0f, 300.0f));
+	mpLine3->Render();
 }

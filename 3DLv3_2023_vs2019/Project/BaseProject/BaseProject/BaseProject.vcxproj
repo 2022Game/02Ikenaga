@@ -128,8 +128,11 @@
     <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CGamePlayerUI.cpp" />
     <ClCompile Include="src\Game\COperationIns.cpp" />
+    <ClCompile Include="src\Game\CPlayerExpUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerHpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerLevelUI.cpp" />
     <ClCompile Include="src\Game\CLevelUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerMaxHpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerNameUI.cpp" />
     <ClCompile Include="src\Game\CPlayerStatusUI.cpp" />
     <ClCompile Include="src\Game\CPortionManager.cpp" />
@@ -311,8 +314,11 @@
     <ClInclude Include="src\Game\CNightSky.h" />
     <ClInclude Include="src\Game\CGamePlayerUI.h" />
     <ClInclude Include="src\Game\COperationIns.h" />
+    <ClInclude Include="src\Game\CPlayerExpUI.h" />
+    <ClInclude Include="src\Game\CPlayerHpUI.h" />
     <ClInclude Include="src\Game\CPlayerLevelUI.h" />
     <ClInclude Include="src\Game\CLevelUI.h" />
+    <ClInclude Include="src\Game\CPlayerMaxHpUI.h" />
     <ClInclude Include="src\Game\CPlayerNameUI.h" />
     <ClInclude Include="src\Game\CPlayerStatusUI.h" />
     <ClInclude Include="src\Game\CPortionManager.h" />

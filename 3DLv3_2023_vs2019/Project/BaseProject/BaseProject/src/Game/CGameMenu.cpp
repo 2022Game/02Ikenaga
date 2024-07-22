@@ -49,15 +49,15 @@ CGameMenu::CGameMenu()
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
 	mpSelectFrame->SetColor(0.0f, 0.7f, 1.0f, MENU_ALPHA);
 
-	mpText = new CImage
+	mpTextOperation = new CImage
 	(
-		"UI/Text/Text.png",
+		"UI/Text/operation.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpText->SetPos(485.0f, 380.0f);
-	mpText->SetSize(350.0f, 90.0f);
+	mpTextOperation->SetCenter(mpSelectFrame->GetSize() * 0.5f);
+	mpTextOperation->SetPos(485.0f, 380.0f);
+	mpTextOperation->SetSize(350.0f, 90.0f);
 
 	mpStatus = new CImage
 	(
@@ -66,7 +66,7 @@ CGameMenu::CGameMenu()
 		false, false
 	);
 	mpStatus->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpStatus->SetPos(480.0f, 195.0f);
+	mpStatus->SetPos(480.0f, 197.0f);
 	mpStatus->SetSize(350.0f, 90.0f);
 
 	mpTextReturn = new CImage
@@ -76,7 +76,7 @@ CGameMenu::CGameMenu()
 		false, false
 	);
 	mpTextReturn->SetCenter(mpSelectFrame->GetSize() * 0.5f);
-	mpTextReturn->SetPos(485.0f, 555.0f);
+	mpTextReturn->SetPos(485.0f, 557.0f);
 	mpTextReturn->SetSize(350.0f, 90.0f);
 
 	mpOperationIns = new COperationIns();
@@ -194,7 +194,7 @@ void CGameMenu::Render()
 			mpSelectFrame->Render();
 		}
 	}
-	mpText->Render();
+	mpTextOperation->Render();
 	mpStatus->Render();
 	mpTextReturn->Render();
 }

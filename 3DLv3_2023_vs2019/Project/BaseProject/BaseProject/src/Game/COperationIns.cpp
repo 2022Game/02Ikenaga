@@ -21,14 +21,14 @@ COperationIns::COperationIns()
 	mpBackground->SetPos(CVector2(WINDOW_WIDTH, WINDOW_HEIGHT) * 0.5f);
 	mpBackground->SetColor(0.0f, 0.0f, 0.0f, MENU_ALPHA);
 
-	mpText = new CImage
+	mpTextOperation = new CImage
 	(
-		"UI/Text/Text.png",
+		"UI/Text/operation.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText->SetPos(105.0f, 80.0f);
-	mpText->SetSize(250.0f, 80.0f);
+	mpTextOperation->SetPos(105.0f, 80.0f);
+	mpTextOperation->SetSize(250.0f, 80.0f);
 
 	mpTextMove = new CImage
 	(
@@ -66,23 +66,23 @@ COperationIns::COperationIns()
 	mpTextMenu->SetPos(600.0f, 320.0f);
 	mpTextMenu->SetSize(250.0f, 80.0f);
 
-	mpText5 = new CImage
+	mpTextJump = new CImage
 	(
-		"UI/Text/Text5.png",
+		"UI/Text/jump.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText5->SetPos(600.0f, 400.0f);
-	mpText5->SetSize(250.0f, 80.0f);
+	mpTextJump->SetPos(600.0f, 400.0f);
+	mpTextJump->SetSize(250.0f, 80.0f);
 
-	mpText6 = new CImage
+	mpTextAvoid = new CImage
 	(
-		"UI/Text/Text6.png",
+		"UI/Text/avoidance.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText6->SetPos(600.0f, 480.0f);
-	mpText6->SetSize(250.0f, 80.0f);
+	mpTextAvoid->SetPos(600.0f, 480.0f);
+	mpTextAvoid->SetSize(250.0f, 80.0f);
 
 	mpTextMove2 = new CImage
 	(
@@ -93,23 +93,23 @@ COperationIns::COperationIns()
 	mpTextMove2->SetPos(130.0f, 480.0f);
 	mpTextMove2->SetSize(250.0f, 80.0f);
 
-	mpText7 = new CImage
+	mpTextAttack = new CImage
 	(
-		"UI/Text/Text7.png",
+		"UI/Text/attack.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText7->SetPos(600.0f, 560.0f);
-	mpText7->SetSize(250.0f, 80.0f);
+	mpTextAttack->SetPos(600.0f, 560.0f);
+	mpTextAttack->SetSize(250.0f, 80.0f);
 
-	mpText8 = new CImage
+	mpTextGuard = new CImage
 	(
-		"UI/Text/Text8.png",
+		"UI/Text/guard.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpText8->SetPos(800.0f, 560.0f);
-	mpText8->SetSize(250.0f, 80.0f);
+	mpTextGuard->SetPos(800.0f, 560.0f);
+	mpTextGuard->SetSize(250.0f, 80.0f);
 
 	mpWkey = new CImage
 	(
@@ -298,16 +298,16 @@ void COperationIns::Update()
 void COperationIns::Render()
 {
 	mpBackground->Render();
-	mpText->Render();
+	mpTextOperation->Render();
 	mpTextMove->Render();
 	mpTextSpecial->Render();
 	mpTextSP->Render();
 	mpTextMenu->Render();
-	mpText5->Render();
-	mpText6->Render();
+	mpTextJump->Render();
+	mpTextAvoid->Render();
 	mpTextMove2->Render();
-	mpText7->Render();
-	mpText8->Render();
+	mpTextAttack->Render();
+	mpTextGuard->Render();
 
 	mpWkey->Render();
 	mpAkey->Render();

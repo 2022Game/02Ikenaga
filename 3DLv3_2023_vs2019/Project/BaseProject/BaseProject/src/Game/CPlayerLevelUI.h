@@ -9,16 +9,13 @@ class CPlayerLevelUI : public CUIBase
 public:
 
 	// コンストラク
-	CPlayerLevelUI();
+	CPlayerLevelUI(float x,float y);
 
 	// デストラクタ
 	~CPlayerLevelUI();
 
 	// プレイヤーレベルを設定
-	void SetPlayerLevel(int level);
-
-	// 更新
-	void Update()override;
+	void SetLevel(int level);
 
 	// 描画
 	void Render()override;
