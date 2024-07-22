@@ -224,6 +224,12 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Exp">
       <UniqueIdentifier>{f123f740-bdb1-4c00-a8d9-9c4cc0588628}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\SP">
+      <UniqueIdentifier>{584d634e-53b1-4697-aa56-9ab773c03a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Name">
+      <UniqueIdentifier>{a64aabe2-367b-4f87-b8b3-745bcfcae05a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -703,9 +709,6 @@
     <ClCompile Include="src\Game\CSpGauge.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPlayerNameUI.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CPlayerLevelUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
     </ClCompile>
@@ -733,9 +736,6 @@
     <ClCompile Include="src\Game\CEnemyNameUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CSpUI.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\COperationIns.cpp">
       <Filter>ソース ファイル\Game\Menu</Filter>
     </ClCompile>
@@ -753,6 +753,21 @@
     </ClCompile>
     <ClCompile Include="src\Game\CPlayerExpUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerMaxExpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerNameUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Name</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerSpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerMaxSpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1257,9 +1272,6 @@
     <ClInclude Include="src\Game\CSpGauge.h">
       <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPlayerNameUI.h">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CPlayerLevelUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
     </ClInclude>
@@ -1287,9 +1299,6 @@
     <ClInclude Include="src\Game\CEnemyNameUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CSpUI.h">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\COperationIns.h">
       <Filter>ソース ファイル\Game\Menu</Filter>
     </ClInclude>
@@ -1307,6 +1316,21 @@
     </ClInclude>
     <ClInclude Include="src\Game\CExpUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerMaxExpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Exp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerSpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerNameUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Name</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerMaxSpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

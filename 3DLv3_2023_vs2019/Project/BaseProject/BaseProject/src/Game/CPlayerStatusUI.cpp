@@ -5,9 +5,12 @@
 #include "CGameMenu.h"
 #include "CText.h"
 #include "CPlayerLevelUI.h"
+#include "CPlayerMaxExpUI.h"
 #include "CPlayerExpUI.h"
 #include "CPlayerMaxHpUI.h"
 #include "CPlayerHpUI.h"
+#include "CPlayerMaxSpUI.h"
+#include "CPlayerSpUI.h"
 
 #define LV_POS CVector2(220.0f, 180.0f)
 #define EXP_POS CVector2(210.0f, 220.0f)
@@ -147,11 +150,25 @@ CPlayerStatusUI::CPlayerStatusUI()
 	mpSizeText->SetTextAlignH(textAlignH);
 	mpSizeText->SetText("大きさ");
 
+	// 線を作成
+	mpLine = new CText
+	(
+		nullptr, 24,
+		CVector2(410.0f, 220.0f),
+		size,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eGame,
+		false, false
+	);
+	mpLine->SetTextAlignH(textAlignH);
+	mpLine->SetText("/");
+
 	// 線2を作成
 	mpLine2 = new CText
 	(
 		nullptr, 24,
-		CVector2(400.0f,260.0f),
+		CVector2(410.0f,260.0f),
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
@@ -165,7 +182,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 	mpLine3 = new CText
 	(
 		nullptr, 24,
-		CVector2(400.0f, 300.0f),
+		CVector2(410.0f, 300.0f),
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
@@ -178,18 +195,33 @@ CPlayerStatusUI::CPlayerStatusUI()
 	SetEnable(false);
 	SetShow(false);
 
-	// プレイヤーレベルのUIを作成
+	// レベルUIを作成
 	mpLevelUI = new CPlayerLevelUI(400.0f, 180.f);
 	mpLevelUI->SetShow(true);
 
-	mpExpUI = new CPlayerExpUI(360.0f, 220.f);
+	// 最大経験値のUIを作成
+	mpMaxExpUI = new CPlayerMaxExpUI(455.0f, 220.f);
+	mpMaxExpUI->SetShow(true);
+
+	// 経験値のUIを作成
+	mpExpUI = new CPlayerExpUI(350.0f, 220.f);
 	mpExpUI->SetShow(true);
 
-	mpMaxHpUI = new CPlayerMaxHpUI(430.0f, 260.f);
+	// 最大HPのUIを作成
+	mpMaxHpUI = new CPlayerMaxHpUI(445.0f, 260.f);
 	mpMaxHpUI->SetShow(true);
 
-	mpHpUI = new CPlayerHpUI(350.0f, 260.f);
+	// HPのUIを作成
+	mpHpUI = new CPlayerHpUI(340.0f, 260.f);
 	mpHpUI->SetShow(true);
+
+	// 最大SPのUIを作成
+	mpMaxSpUI = new CPlayerMaxSpUI(455.0f, 300.f);
+	mpMaxSpUI->SetShow(true);
+
+	// SPのUIを作成
+	mpSpUI = new CPlayerSpUI(350.0f, 300.f);
+	mpSpUI->SetShow(true);
 }
 
 // デストラクタ
@@ -202,11 +234,16 @@ CPlayerStatusUI::~CPlayerStatusUI()
 	SAFE_DELETE(mpAttackText);
 	SAFE_DELETE(mpDefenseText);
 	SAFE_DELETE(mpSizeText);
+	SAFE_DELETE(mpLine);
 	SAFE_DELETE(mpLine2);
 	SAFE_DELETE(mpLine3);
 	mpLevelUI->Kill();
+	mpMaxExpUI->Kill();
+	mpExpUI->Kill();
 	mpMaxHpUI->Kill();
 	mpHpUI->Kill();
+	mpMaxSpUI->Kill();
+	mpSpUI->Kill();
 }
 
 // オープン
@@ -253,6 +290,12 @@ void CPlayerStatusUI::SetLevel(int level)
 	mpLevelUI->SetLevel(level);
 }
 
+// プレイヤー最大経験値を設定
+void CPlayerStatusUI::SetMaxExp(int maxExp)
+{
+	mpMaxExpUI->SetMaxExp(maxExp);
+}
+
 // プレイヤー経験値を設定
 void CPlayerStatusUI::SetExp(int exp)
 {
@@ -269,6 +312,18 @@ void CPlayerStatusUI::SetMaxHp(int maxHp)
 void CPlayerStatusUI::SetHp(int hp)
 {
 	mpHpUI->SetHp(hp);
+}
+
+// プレイヤー最大SPを設定
+void CPlayerStatusUI::SetMaxSp(int maxSp)
+{
+	mpMaxSpUI->SetMaxSp(maxSp);
+}
+
+// プレイヤーSPを設定
+void CPlayerStatusUI::SetSp(int sp)
+{
+	mpSpUI->SetSp(sp);
 }
 
 // 更新
@@ -303,6 +358,7 @@ void CPlayerStatusUI::Render()
 	mpAttackText->SetColor(1.0f, 1.0f, 1.0f);
 	mpDefenseText->SetColor(1.0f, 1.0f, 1.0f);
 	mpSizeText->SetColor(1.0f, 1.0f, 1.0f);
+	mpLine->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine2->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine3->SetColor(1.0f, 1.0f, 1.0f);
 
@@ -340,12 +396,16 @@ void CPlayerStatusUI::Render()
 		mpSizeText->SetPos(SIZE_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpSizeText->Render();
 
+		// 線
+		mpLine->SetPos(CVector2(410.0f, 220.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpLine->Render();
+
 		// 線2
-		mpLine2->SetPos(CVector2(400.0f,260.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpLine2->SetPos(CVector2(410.0f,260.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpLine2->Render();
 
 		// 線3
-		mpLine3->SetPos(CVector2(400.0f, 300.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpLine3->SetPos(CVector2(410.0f, 300.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpLine3->Render();
 	}
 	mpLevelText->SetColor(0.0f, 0.0f, 0.0f);
@@ -376,11 +436,15 @@ void CPlayerStatusUI::Render()
 	mpSizeText->SetPos(SIZE_POS);
 	mpSizeText->Render();
 
+	mpLine->SetColor(0.0f, 0.0f, 0.0f);
+	mpLine->SetPos(CVector2(410.0f, 220.0f));
+	mpLine->Render();
+
 	mpLine2->SetColor(0.0f, 0.0f, 0.0f);
-	mpLine2->SetPos(CVector2(400.0f, 260.0f));
+	mpLine2->SetPos(CVector2(410.0f, 260.0f));
 	mpLine2->Render();
 
 	mpLine3->SetColor(0.0f, 0.0f, 0.0f);
-	mpLine3->SetPos(CVector2(400.0f, 300.0f));
+	mpLine3->SetPos(CVector2(410.0f, 300.0f));
 	mpLine3->Render();
 }

@@ -132,8 +132,11 @@
     <ClCompile Include="src\Game\CPlayerHpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerLevelUI.cpp" />
     <ClCompile Include="src\Game\CLevelUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerMaxExpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerMaxHpUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerMaxSpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerNameUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerSpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerStatusUI.cpp" />
     <ClCompile Include="src\Game\CPortionManager.cpp" />
     <ClCompile Include="src\Game\CBuffCircle.cpp" />
@@ -308,6 +311,7 @@
     <ClInclude Include="src\Game\CLightningBall.h" />
     <ClInclude Include="src\Game\CLightningBallEffect.h" />
     <ClInclude Include="src\Game\CMagicCircle.h" />
+    <ClInclude Include="src\Game\CPlayerMaxExpUI.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
     <ClInclude Include="src\Game\CNeedle.h" />
@@ -319,7 +323,9 @@
     <ClInclude Include="src\Game\CPlayerLevelUI.h" />
     <ClInclude Include="src\Game\CLevelUI.h" />
     <ClInclude Include="src\Game\CPlayerMaxHpUI.h" />
+    <ClInclude Include="src\Game\CPlayerMaxSpUI.h" />
     <ClInclude Include="src\Game\CPlayerNameUI.h" />
+    <ClInclude Include="src\Game\CPlayerSpUI.h" />
     <ClInclude Include="src\Game\CPlayerStatusUI.h" />
     <ClInclude Include="src\Game\CPortionManager.h" />
     <ClInclude Include="src\Game\CBuffCircle.h" />

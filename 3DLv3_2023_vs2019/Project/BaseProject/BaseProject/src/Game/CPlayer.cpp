@@ -967,21 +967,25 @@ void CPlayer::ChangeLevel(int level)
 	// 残りの経験値を反映
 	mCharaStatus.exp = remaiExp;
 
+	// HPを設定
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-
 	mpStatusUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpStatusUI->SetHp(mCharaStatus.hp);
 
+	// SPを設定
 	mpGameUI->SetMaxSp(mCharaMaxStatus.SpecialPoint);
 	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
+	mpStatusUI->SetMaxSp(mCharaMaxStatus.SpecialPoint);
+	mpStatusUI->SetSp(mCharaStatus.SpecialPoint);
 
 	mpGameUI->SetAvoidMaxValue(200);
 	mpGameUI->SetAvoidValue(mRollingTime);
 
+	// 経験値を設定
 	mpGameUI->SetMaxExp(mCharaMaxStatus.exp);
 	mpGameUI->SetExp(mCharaStatus.exp);
-
+	mpStatusUI->SetMaxExp(mCharaMaxStatus.exp);
 	mpStatusUI->SetExp(mCharaStatus.exp);
 
 	// 現在値のステータスのスケール値を反映
@@ -1440,7 +1444,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(71);
+		ChangeLevel(100);
 	}
 	else if (CInput::PushKey('4'))
 	{
@@ -1460,6 +1464,7 @@ void CPlayer::Update()
 
 	// 現在のSPを設定
 	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
+	mpStatusUI->SetSp(mCharaStatus.SpecialPoint);
 
 	// 現在のクールタイムを設定
 	mpGameUI->SetAvoidValue(mRollingTime);
