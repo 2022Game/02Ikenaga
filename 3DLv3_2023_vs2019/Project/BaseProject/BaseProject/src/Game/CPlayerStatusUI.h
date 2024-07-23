@@ -10,6 +10,9 @@ class CPlayerMaxHpUI;
 class CPlayerHpUI;
 class CPlayerMaxSpUI;
 class CPlayerSpUI;
+class CPlayerPowerUI;
+class CPlayerDefenseUI;
+class CPlayerScaleUI;
 
 // プレイヤーのステータスUI
 class CPlayerStatusUI : public CTask
@@ -30,23 +33,32 @@ public:
 	// 決める
 	void Decide(int select);
 
-	// プレイヤーレベルを設定
+	// プレイヤーのレベルを設定
 	void SetLevel(int level);
 
-	// プレイヤー最大経験値を設定
+	// プレイヤーの最大経験値を設定
 	void SetMaxExp(int maxExp);
-	// プレイヤー経験値を設定
+	// プレイヤーの経験値を設定
 	void SetExp(int exp);
 
-	// プレイヤー最大HPを設定
+	// プレイヤーの最大HPを設定
 	void SetMaxHp(int maxHp);
-	// プレイヤーHPを設定
+	// プレイヤーのHPを設定
 	void SetHp(int hp);
 
-	// プレイヤー最大SPを設定
+	// プレイヤーの最大SPを設定
 	void SetMaxSp(int maxSp);
-	// プレイヤーSPを設定
+	// プレイヤーのSPを設定
 	void SetSp(int sp);
+
+	// プレイヤーの攻撃力を設定
+	void SetPower(int power);
+
+	// プレイヤーの防御力を設定
+	void SetDefense(int defense);
+
+	// プレイヤーの大きさを設定
+	void SetScale(float scale);
 
 	// 更新
 	void Update() override;
@@ -66,16 +78,19 @@ private:
 	CText* mpAttackText;  // 攻撃力のテキスト
 	CText* mpDefenseText; // 防御力のテキスト
 	CText* mpSizeText;    // 大きさのテキスト
-	CText* mpLine;       // 線
+	CText* mpLine;        // 線
 	CText* mpLine2;       // 線2
 	CText* mpLine3;       // 線3
 	// UI関連
-	CPlayerLevelUI* mpLevelUI;  // レベル
-	CPlayerMaxExpUI* mpMaxExpUI;// 経験値
-	CPlayerExpUI* mpExpUI;      // 経験値
-	CPlayerMaxHpUI* mpMaxHpUI;  // 最大Hp
-	CPlayerHpUI* mpHpUI;        // Hp
-	CPlayerMaxSpUI* mpMaxSpUI;  // 最大Sp
-	CPlayerSpUI* mpSpUI;        // Sp
+	CPlayerLevelUI* mpLevelUI;     // レベル
+	CPlayerMaxExpUI* mpMaxExpUI;   // 経験値
+	CPlayerExpUI* mpExpUI;         // 経験値
+	CPlayerMaxHpUI* mpMaxHpUI;     // 最大Hp
+	CPlayerHpUI* mpHpUI;           // Hp
+	CPlayerMaxSpUI* mpMaxSpUI;     // 最大Sp
+	CPlayerSpUI* mpSpUI;           // Sp
+	CPlayerPowerUI* mpPowerUI;     // 攻撃力
+	CPlayerDefenseUI* mpDefenseUI; // 防御力
+	CPlayerScaleUI* mpScaleUI;     // 大きさ
 	bool mIsOpened;
 };

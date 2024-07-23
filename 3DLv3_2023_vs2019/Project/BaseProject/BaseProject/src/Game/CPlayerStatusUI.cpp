@@ -11,6 +11,9 @@
 #include "CPlayerHpUI.h"
 #include "CPlayerMaxSpUI.h"
 #include "CPlayerSpUI.h"
+#include "CPlayerPowerUI.h"
+#include "CPlayerDefenseUI.h"
+#include "CPlayerScaleUI.h"
 
 #define LV_POS CVector2(220.0f, 180.0f)
 #define EXP_POS CVector2(210.0f, 220.0f)
@@ -222,6 +225,18 @@ CPlayerStatusUI::CPlayerStatusUI()
 	// SPのUIを作成
 	mpSpUI = new CPlayerSpUI(350.0f, 300.f);
 	mpSpUI->SetShow(true);
+
+	// 攻撃力のUIを作成
+	mpPowerUI = new CPlayerPowerUI(400.0f,340.0f);
+	mpPowerUI->SetShow(true);
+
+	// 防御力のUIを作成
+	mpDefenseUI = new CPlayerDefenseUI(400.0f, 380.0f);
+	mpDefenseUI->SetShow(true);
+
+	// 大きさのUIを作成
+	mpScaleUI = new CPlayerScaleUI(350.0f, 420.0f);
+	mpScaleUI->SetShow(true);
 }
 
 // デストラクタ
@@ -244,6 +259,9 @@ CPlayerStatusUI::~CPlayerStatusUI()
 	mpHpUI->Kill();
 	mpMaxSpUI->Kill();
 	mpSpUI->Kill();
+	mpPowerUI->Kill();
+	mpDefenseUI->Kill();
+	mpScaleUI->Kill();
 }
 
 // オープン
@@ -284,19 +302,19 @@ void CPlayerStatusUI::Decide(int select)
 	}
 }
 
-// プレイヤーレベルを設定
+// プレイヤーのレベルを設定
 void CPlayerStatusUI::SetLevel(int level)
 {
 	mpLevelUI->SetLevel(level);
 }
 
-// プレイヤー最大経験値を設定
+// プレイヤーの最大経験値を設定
 void CPlayerStatusUI::SetMaxExp(int maxExp)
 {
 	mpMaxExpUI->SetMaxExp(maxExp);
 }
 
-// プレイヤー経験値を設定
+// プレイヤーの経験値を設定
 void CPlayerStatusUI::SetExp(int exp)
 {
 	mpExpUI->SetExp(exp);
@@ -308,22 +326,40 @@ void CPlayerStatusUI::SetMaxHp(int maxHp)
 	mpMaxHpUI->SetMaxHp(maxHp);
 }
 
-// プレイヤーHPを設定
+// プレイヤーのHPを設定
 void CPlayerStatusUI::SetHp(int hp)
 {
 	mpHpUI->SetHp(hp);
 }
 
-// プレイヤー最大SPを設定
+// プレイヤーの最大SPを設定
 void CPlayerStatusUI::SetMaxSp(int maxSp)
 {
 	mpMaxSpUI->SetMaxSp(maxSp);
 }
 
-// プレイヤーSPを設定
+// プレイヤーのSPを設定
 void CPlayerStatusUI::SetSp(int sp)
 {
 	mpSpUI->SetSp(sp);
+}
+
+// プレイヤーの攻撃力を設定
+void CPlayerStatusUI::SetPower (int power)
+{
+	mpPowerUI->SetPower(power);
+}
+
+// プレイヤーの防御力を設定
+void CPlayerStatusUI::SetDefense(int defense)
+{
+	mpDefenseUI->SetDefense(defense);
+}
+
+// プレイヤーの大きさを設定
+void CPlayerStatusUI::SetScale(float scale)
+{
+	mpScaleUI->SetScale(scale);
 }
 
 // 更新
@@ -352,12 +388,12 @@ void CPlayerStatusUI::Render()
 	mpStatus->Render();
 
 	mpLevelText->SetColor(1.0f, 1.0f, 1.0f);
-	mpExpText->SetColor(1.0f, 1.0f, 1.0f);
-	mpHpText->SetColor(1.0f, 1.0f, 1.0f);
-	mpSpText->SetColor(1.0f, 1.0f, 1.0f);
-	mpAttackText->SetColor(1.0f, 1.0f, 1.0f);
-	mpDefenseText->SetColor(1.0f, 1.0f, 1.0f);
-	mpSizeText->SetColor(1.0f, 1.0f, 1.0f);
+	mpExpText->SetColor(1.0f, 1.0f, 0.0f);
+	mpHpText->SetColor(0.0f, 1.0f, 0.0f);
+	mpSpText->SetColor(1.0f, 0.0f, 0.8f);
+	mpAttackText->SetColor(1.0f, 0.0f, 0.0f);
+	mpDefenseText->SetColor(0.0f, 1.0f, 1.0f);
+	mpSizeText->SetColor(1.0f, 0.5f, 0.0f);
 	mpLine->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine2->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine3->SetColor(1.0f, 1.0f, 1.0f);

@@ -43,6 +43,7 @@
 #include "CGameMenu.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
+#include "CGear.h"
 #include "Maths.h"
 
 const CGameScene::SpawnData CGameScene::SPAWN_DATA[] =
@@ -122,6 +123,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("Frame", "Character\\Player\\HP\\Frame.png");
 	CResourceManager::Load<CTexture>("Gauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
+	CResourceManager::Load<CTexture>("Gear", "UI\\Gear.png");
 
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
@@ -321,6 +323,8 @@ void CGameScene::Load()
 	//CDragon* bossEnemy = new CDragon();
 	//bossEnemy->Position(0.0f, 1.0f, -450.0f);
 	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+
+	CGear* gear = new CGear(0.0f, 675.0f);
 
 	// ゲームメニューを作成
 	mpGameMenu = new CGameMenu();

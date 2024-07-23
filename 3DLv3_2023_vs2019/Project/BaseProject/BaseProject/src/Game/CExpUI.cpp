@@ -17,7 +17,7 @@ CExpUI::CExpUI()
 		nullptr, 24,
 		mBasePos,
 		size,
-		CColor(1.0f, 1.0f, 0.5f),
+		CColor(1.0f, 1.0f, 0.0f),
 		ETaskPriority::eUI, 0,
 		ETaskPauseType::eGame,
 		false, false
@@ -51,7 +51,7 @@ void CExpUI::Render()
 		mpExpText->SetPos(mBasePos + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpExpText->Render();
 	}
-	mpExpText->SetColor(1.0f, 1.0f, 0.5f);
+	mpExpText->SetColor(1.0f, 1.0f, 0.0f);
 	mpExpText->SetPos(mBasePos);
 	mpExpText->Render();
 }

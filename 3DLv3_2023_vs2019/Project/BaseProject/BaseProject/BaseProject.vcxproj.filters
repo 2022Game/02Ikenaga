@@ -230,6 +230,18 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Name">
       <UniqueIdentifier>{a64aabe2-367b-4f87-b8b3-745bcfcae05a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Power">
+      <UniqueIdentifier>{3e3138f8-6f5f-403d-ab78-8d90508a61ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Defense">
+      <UniqueIdentifier>{c3448158-5871-4476-96fd-53c5dc168673}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Scale">
+      <UniqueIdentifier>{92d98662-4791-4b48-845e-c4a9d10bd69d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\Gear">
+      <UniqueIdentifier>{19348d1d-0654-4af9-86bf-63871360e45e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -768,6 +780,18 @@
     </ClCompile>
     <ClCompile Include="src\Game\CPlayerMaxSpUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerPowerUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Power</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerDefenseUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Defense</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerScaleUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Scale</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGear.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1331,6 +1355,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CPlayerMaxSpUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerPowerUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Power</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerDefenseUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Defense</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerScaleUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Scale</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGear.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gear</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

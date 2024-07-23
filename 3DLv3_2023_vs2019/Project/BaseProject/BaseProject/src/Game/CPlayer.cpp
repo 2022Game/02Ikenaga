@@ -988,6 +988,15 @@ void CPlayer::ChangeLevel(int level)
 	mpStatusUI->SetMaxExp(mCharaMaxStatus.exp);
 	mpStatusUI->SetExp(mCharaStatus.exp);
 
+	// 攻撃力を設定
+	mpStatusUI->SetPower(mCharaStatus.power);
+
+	// 現在の防御力を設定
+	mpStatusUI->SetDefense(mCharaStatus.defense);
+
+	// 現在の大きさを設定
+	mpStatusUI->SetScale(mCharaStatus.volume);
+
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
 
@@ -1473,8 +1482,18 @@ void CPlayer::Update()
 	mpGameUI->SetExp(mCharaStatus.exp);
 	mpStatusUI->SetExp(mCharaStatus.exp);
 
+	// 現在のレベルを設定
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 	mpStatusUI->SetLevel(mCharaStatus.level);
+
+	// 現在の攻撃力を設定
+	mpStatusUI->SetPower(mCharaStatus.power);
+
+	// 現在の防御力を設定
+	mpStatusUI->SetDefense(mCharaStatus.defense);
+
+	// 現在の大きさを設定
+	mpStatusUI->SetScale(mCharaStatus.volume);
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }

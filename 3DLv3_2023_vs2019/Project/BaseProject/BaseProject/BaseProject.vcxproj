@@ -111,6 +111,7 @@
     <ClCompile Include="src\Game\CGameEnemyUI.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
+    <ClCompile Include="src\Game\CGear.cpp" />
     <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHit.cpp" />
     <ClCompile Include="src\Game\CHomingBall.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CGamePlayerUI.cpp" />
     <ClCompile Include="src\Game\COperationIns.cpp" />
+    <ClCompile Include="src\Game\CPlayerDefenseUI.cpp" />
     <ClCompile Include="src\Game\CPlayerExpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerHpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerLevelUI.cpp" />
@@ -136,6 +138,8 @@
     <ClCompile Include="src\Game\CPlayerMaxHpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerMaxSpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerNameUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerPowerUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerScaleUI.cpp" />
     <ClCompile Include="src\Game\CPlayerSpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerStatusUI.cpp" />
     <ClCompile Include="src\Game\CPortionManager.cpp" />
@@ -301,6 +305,7 @@
     <ClInclude Include="src\Game\CGameEnemyUI.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
+    <ClInclude Include="src\Game\CGear.h" />
     <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHit.h" />
     <ClInclude Include="src\Game\CHomingBall.h" />
@@ -311,6 +316,7 @@
     <ClInclude Include="src\Game\CLightningBall.h" />
     <ClInclude Include="src\Game\CLightningBallEffect.h" />
     <ClInclude Include="src\Game\CMagicCircle.h" />
+    <ClInclude Include="src\Game\CPlayerDefenseUI.h" />
     <ClInclude Include="src\Game\CPlayerMaxExpUI.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />
@@ -325,6 +331,8 @@
     <ClInclude Include="src\Game\CPlayerMaxHpUI.h" />
     <ClInclude Include="src\Game\CPlayerMaxSpUI.h" />
     <ClInclude Include="src\Game\CPlayerNameUI.h" />
+    <ClInclude Include="src\Game\CPlayerPowerUI.h" />
+    <ClInclude Include="src\Game\CPlayerScaleUI.h" />
     <ClInclude Include="src\Game\CPlayerSpUI.h" />
     <ClInclude Include="src\Game\CPlayerStatusUI.h" />
     <ClInclude Include="src\Game\CPortionManager.h" />
