@@ -26,6 +26,7 @@ public:
 	void Render() override;
 
 private:
+	// 背景
 	CImage* mpBackground;
 	// テキスト関連
 	CImage* mpTextOperation;
@@ -48,11 +49,14 @@ private:
 	CImage* mpMkey;
 	CImage* mpSpaceKey;
 	CImage* mpShiftKey;
+	CImage* mpShiftKey2;
 	// マウス関連
 	CImage* mpMouseLeft;
 	CImage* mpMouseRight;
 	// 記号関連
 	CImage* mpPlus;
+	// 矢印
+	CImage* mpBack;
 
 	bool mIsOpened;
 };

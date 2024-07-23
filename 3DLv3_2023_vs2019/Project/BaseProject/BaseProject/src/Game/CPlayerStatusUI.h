@@ -76,6 +76,11 @@ private:
 	CImage* mpBackground;
 	// ステータス
 	CImage* mpStatus;
+	// 矢印
+	CImage* mpBack;
+	// キー
+	CImage* mpShiftKey;
+
 	// テキスト関連
 	CText* mpLevelText;   // レベルのテキスト
 	CText* mpExpText;     // 経験値のテキスト

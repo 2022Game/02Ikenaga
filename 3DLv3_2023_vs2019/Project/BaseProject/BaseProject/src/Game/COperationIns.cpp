@@ -198,7 +198,7 @@ COperationIns::COperationIns()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpMouseLeft->SetPos(200.0f, 560.0f);
+	mpMouseLeft->SetPos(250.0f, 560.0f);
 	mpMouseLeft->SetSize(100.0f, 80.0f);
 
 	mpMouseRight = new CImage
@@ -207,7 +207,7 @@ COperationIns::COperationIns()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpMouseRight->SetPos(300.0f, 560.0f);
+	mpMouseRight->SetPos(350.0f, 560.0f);
 	mpMouseRight->SetSize(100.0f, 80.0f);
 
 	mpPlus = new CImage
@@ -219,6 +219,24 @@ COperationIns::COperationIns()
 	mpPlus->SetPos(305.0f, 480.0f);
 	mpPlus->SetSize(90.0f, 80.0f);
 
+	mpBack = new CImage
+	(
+		"UI/back.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpBack->SetPos(140.0f, 600.0f);
+	mpBack->SetSize(30.0f, 30.0f);
+
+	mpShiftKey2 = new CImage
+	(
+		"UI/Key/shift.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpShiftKey2->SetPos(185.0f, 590.0f);
+	mpShiftKey2->SetSize(55.0f, 55.0f);
+
 	SetEnable(false);
 	SetShow(false);
 }
@@ -226,6 +244,34 @@ COperationIns::COperationIns()
 // デストラクタ
 COperationIns::~COperationIns()
 {
+	SAFE_DELETE(mpBackground);
+	SAFE_DELETE(mpTextOperation);
+	SAFE_DELETE(mpTextMove);
+	SAFE_DELETE(mpTextSpecial);
+	SAFE_DELETE(mpTextSP);
+	SAFE_DELETE(mpTextMenu);
+	SAFE_DELETE(mpTextJump);
+	SAFE_DELETE(mpTextAvoid);
+	SAFE_DELETE(mpTextMove2);
+	SAFE_DELETE(mpTextAttack);
+	SAFE_DELETE(mpTextGuard);
+
+	SAFE_DELETE(mpWkey);
+	SAFE_DELETE(mpAkey);
+	SAFE_DELETE(mpSkey);
+	SAFE_DELETE(mpDkey);
+	SAFE_DELETE(mpQkey);
+	SAFE_DELETE(mpEkey);
+	SAFE_DELETE(mpMkey);
+	SAFE_DELETE(mpSpaceKey);
+	SAFE_DELETE(mpShiftKey);
+	SAFE_DELETE(mpShiftKey2);
+	
+	SAFE_DELETE(mpMouseLeft);
+	SAFE_DELETE(mpMouseRight);
+
+	SAFE_DELETE(mpPlus);
+	SAFE_DELETE(mpBack);
 }
 
 // オープン
@@ -307,9 +353,11 @@ void COperationIns::Render()
 	mpMkey->Render();
 	mpSpaceKey->Render();
 	mpShiftKey->Render();
+	mpShiftKey2->Render();
 
 	mpMouseLeft->Render();
 	mpMouseRight->Render();
 
 	mpPlus->Render();
+	mpBack->Render();
 }

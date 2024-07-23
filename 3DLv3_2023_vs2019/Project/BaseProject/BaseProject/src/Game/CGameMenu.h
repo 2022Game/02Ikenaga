@@ -41,6 +41,8 @@ private:
 	CImage* mpTextOperation;
 	CImage* mpStatus;
 	CImage* mpTextReturn;
+	CImage* mpUpUI;
+	CImage* mpDownUI;
 
 	int mSelectIndex;
 	bool mIsOpened;

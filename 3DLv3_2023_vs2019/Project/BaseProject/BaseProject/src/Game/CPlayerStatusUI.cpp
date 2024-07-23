@@ -23,7 +23,7 @@
 #define ATTACK_POS CVector2(200.0f, 340.0f)
 #define DEFENSE_POS CVector2(200.0f, 380.0f)
 #define SIZE_POS CVector2(200.0f, 420.0f)
-#define DETAIL_POS CVector2(200.0f, 520.0f)
+#define DETAIL_POS CVector2(200.0f, 500.0f)
 
 #define SHADOW_COUNT 8     // 影のカウント
 #define SHADOW_WIDTH 2.0f  // 影の幅
@@ -53,6 +53,24 @@ CPlayerStatusUI::CPlayerStatusUI()
 	);
 	mpStatus->SetPos(105.0f, 80.0f);
 	mpStatus->SetSize(350.0f, 90.0f);
+
+	mpBack = new CImage
+	(
+		"UI/back.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpBack->SetPos(140.0f, 600.0f);
+	mpBack->SetSize(30.0f, 30.0f);
+
+	mpShiftKey = new CImage
+	(
+		"UI/Key/shift.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpShiftKey->SetPos(185.0f, 590.0f);
+	mpShiftKey->SetSize(55.0f, 55.0f);
 
 	CVector2 size = CVector2(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.5f);
 	ETextAlignH textAlignH = ETextAlignH::eLeft;
@@ -239,7 +257,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 	mpDefenseUI = new CPlayerDefenseUI(400.0f, 380.0f);
 
 	// 大きさのUIを作成
-	mpScaleUI = new CPlayerScaleUI(350.0f, 420.0f);
+	mpScaleUI = new CPlayerScaleUI(360.0f, 420.0f);
 
 	SetEnable(false);
 	SetShow(false);
@@ -248,6 +266,10 @@ CPlayerStatusUI::CPlayerStatusUI()
 // デストラクタ
 CPlayerStatusUI::~CPlayerStatusUI()
 {
+	SAFE_DELETE(mpBackground);
+	SAFE_DELETE(mpStatus);
+	SAFE_DELETE(mpBack);
+	SAFE_DELETE(mpShiftKey);
 	SAFE_DELETE(mpLevelText);
 	SAFE_DELETE(mpExpText);
 	SAFE_DELETE(mpHpText);
@@ -433,6 +455,8 @@ void CPlayerStatusUI::Render()
 {
 	mpBackground->Render();
 	mpStatus->Render();
+	mpBack->Render();
+	mpShiftKey->Render();
 
 	mpLevelText->SetColor(1.0f, 1.0f, 1.0f);
 	mpExpText->SetColor(1.0f, 1.0f, 0.0f);

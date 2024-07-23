@@ -101,6 +101,24 @@ CGameMenu::CGameMenu()
 	mpTextReturn->SetPos(485.0f, 557.0f);
 	mpTextReturn->SetSize(350.0f, 90.0f);
 
+	mpUpUI = new CImage
+	(
+		"UI/up.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpUpUI->SetPos(1080.0f, 560.0f);
+	mpUpUI->SetSize(60.0f, 60.0f);
+
+	mpDownUI = new CImage
+	(
+		"UI/down.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpDownUI->SetPos(1080.0f, 590.0f);
+	mpDownUI->SetSize(60.0f, 60.0f);
+
 	mpOperationIns = new COperationIns();
 	mpPlayerStatusUI = new CPlayerStatusUI();
 
@@ -111,6 +129,13 @@ CGameMenu::CGameMenu()
 // デストラクタ
 CGameMenu::~CGameMenu()
 {
+	SAFE_DELETE(mpBackground);
+	SAFE_DELETE(mpSelectFrame);
+	SAFE_DELETE(mpTextOperation);
+	SAFE_DELETE(mpStatus);
+	SAFE_DELETE(mpTextReturn);
+	SAFE_DELETE(mpUpUI);
+	SAFE_DELETE(mpDownUI);
 }
 
 // オープン
@@ -219,4 +244,6 @@ void CGameMenu::Render()
 	mpTextOperation->Render();
 	mpStatus->Render();
 	mpTextReturn->Render();
+	mpUpUI->Render();
+	mpDownUI->Render();
 }
