@@ -23,6 +23,9 @@ public:
 	// デストラクタ
 	~CPlayerStatusUI();
 
+	// 表示設定
+	void SetShow(bool show)override;
+
 	// オープン
 	void Open();
 	// クローズ
@@ -66,6 +69,9 @@ public:
 	void Render() override;
 
 private:
+	// 現在のプレイヤーのステータスを反映
+	void ApplyPlayerStatus();
+
 	// 背景
 	CImage* mpBackground;
 	// ステータス
@@ -81,6 +87,7 @@ private:
 	CText* mpLine;        // 線
 	CText* mpLine2;       // 線2
 	CText* mpLine3;       // 線3
+	CText* mpDetail;      // 詳細
 	// UI関連
 	CPlayerLevelUI* mpLevelUI;     // レベル
 	CPlayerMaxExpUI* mpMaxExpUI;   // 経験値

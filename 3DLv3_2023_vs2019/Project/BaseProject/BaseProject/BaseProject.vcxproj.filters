@@ -239,8 +239,14 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Scale">
       <UniqueIdentifier>{92d98662-4791-4b48-845e-c4a9d10bd69d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\UI\GameUI\Gear">
+    <Filter Include="ソース ファイル\Game\UI\GameUI\Key">
+      <UniqueIdentifier>{929a39ba-0258-4704-903a-d48792172c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\Menu">
       <UniqueIdentifier>{19348d1d-0654-4af9-86bf-63871360e45e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\Skill">
+      <UniqueIdentifier>{9146e88e-6b22-4b60-9114-26104655e2a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -790,8 +796,14 @@
     <ClCompile Include="src\Game\CPlayerScaleUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Scale</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CGear.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI\Gear</Filter>
+    <ClCompile Include="src\Game\CMenu.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CKeyM.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CBuffSkill.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1365,8 +1377,14 @@
     <ClInclude Include="src\Game\CPlayerScaleUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Scale</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CGear.h">
-      <Filter>ソース ファイル\Game\UI\GameUI\Gear</Filter>
+    <ClInclude Include="src\Game\CMenu.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CKeyM.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CBuffSkill.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

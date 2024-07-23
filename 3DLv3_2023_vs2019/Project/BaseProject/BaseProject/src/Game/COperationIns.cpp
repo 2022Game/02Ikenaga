@@ -201,15 +201,6 @@ COperationIns::COperationIns()
 	mpMouseLeft->SetPos(200.0f, 560.0f);
 	mpMouseLeft->SetSize(100.0f, 80.0f);
 
-	mpMouseMiddle = new CImage
-	(
-		"UI/Mouse/mouseMiddle.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
-		false, false
-	);
-	mpMouseMiddle->SetPos(370.0f, 240.0f);
-	mpMouseMiddle->SetSize(100.0f, 80.0f);
-
 	mpMouseRight = new CImage
 	(
 		"UI/Mouse/mouseRight.png",
@@ -243,8 +234,6 @@ void COperationIns::Open()
 	SetEnable(true);
 	SetShow(true);
 	mIsOpened = true;
-	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
-	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 }
 
 // クローズ
@@ -252,8 +241,8 @@ void COperationIns::Close()
 {
 	SetEnable(false);
 	SetShow(false);
-	CBGMManager::Instance()->Play(EBGMType::eGame, false);
-	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
+
+	CGameMenu::Instance()->Open();
 }
 
 // オープンするかどうか
@@ -320,7 +309,6 @@ void COperationIns::Render()
 	mpShiftKey->Render();
 
 	mpMouseLeft->Render();
-	mpMouseMiddle->Render();
 	mpMouseRight->Render();
 
 	mpPlus->Render();

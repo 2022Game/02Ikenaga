@@ -5,7 +5,29 @@
 #include "COperationIns.h"
 #include "CPlayerStatusUI.h"
 
+CGameMenu* CGameMenu::spInstance = nullptr;
+
 #define MENU_ALPHA 0.75f
+
+// ゲームメニューのインスタンスを取得
+CGameMenu* CGameMenu::Instance()
+{
+	if (spInstance == nullptr)
+	{
+		spInstance = new CGameMenu();
+	}
+	return spInstance;
+}
+
+// ゲームメニューのインスタンスを削除
+void CGameMenu::ClearInstance()
+{
+	if (spInstance != nullptr)
+	{
+		spInstance->Kill();
+		spInstance = nullptr;
+	}
+}
 
 // コンストラ
 CGameMenu::CGameMenu()

@@ -11,7 +11,6 @@ class CMushroom3;
 class CTurtle;
 class CTurtle2;
 class CTurtle3;
-class CGameMenu;
 class CSound;
 
 // タイトルシーン
@@ -82,6 +81,4 @@ private:
 	CTurtle* mpTurtle;
 	CTurtle2* mpTurtle2;
 	CTurtle3* mpTurtle3;
-
-	CGameMenu* mpGameMenu;
 };

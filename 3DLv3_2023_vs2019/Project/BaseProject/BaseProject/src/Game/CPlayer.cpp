@@ -18,7 +18,6 @@
 #include "CPowerUpAura.h"
 #include "CSceneManager.h"
 #include "CGamePlayerUI.h"
-#include "CPlayerStatusUI.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -116,7 +115,6 @@ CPlayer::CPlayer()
 
 	// プレイヤー名を作成
 	mpGameUI = new CGamePlayerUI();
-	mpStatusUI = new CPlayerStatusUI();
 
 	// Lv.を表示
 	std::string lv = "Lv.";
@@ -340,7 +338,7 @@ void CPlayer::UpdateIdle()
 		// スペシャル攻撃
 		if (mCharaStatus.level >= 10 && mCharaStatus.SpecialPoint >= 5)
 		{
-			if (CInput::PushKey(VK_MBUTTON))
+			if (CInput::PushKey('E'))
 			{
 				mCharaStatus.SpecialPoint -= 5;
 				ChangeState(EState::eAttack4);
@@ -970,14 +968,10 @@ void CPlayer::ChangeLevel(int level)
 	// HPを設定
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpStatusUI->SetMaxHp(mCharaMaxStatus.hp);
-	mpStatusUI->SetHp(mCharaStatus.hp);
 
 	// SPを設定
 	mpGameUI->SetMaxSp(mCharaMaxStatus.SpecialPoint);
 	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
-	mpStatusUI->SetMaxSp(mCharaMaxStatus.SpecialPoint);
-	mpStatusUI->SetSp(mCharaStatus.SpecialPoint);
 
 	mpGameUI->SetAvoidMaxValue(200);
 	mpGameUI->SetAvoidValue(mRollingTime);
@@ -985,17 +979,6 @@ void CPlayer::ChangeLevel(int level)
 	// 経験値を設定
 	mpGameUI->SetMaxExp(mCharaMaxStatus.exp);
 	mpGameUI->SetExp(mCharaStatus.exp);
-	mpStatusUI->SetMaxExp(mCharaMaxStatus.exp);
-	mpStatusUI->SetExp(mCharaStatus.exp);
-
-	// 攻撃力を設定
-	mpStatusUI->SetPower(mCharaStatus.power);
-
-	// 現在の防御力を設定
-	mpStatusUI->SetDefense(mCharaStatus.defense);
-
-	// 現在の大きさを設定
-	mpStatusUI->SetScale(mCharaStatus.volume);
 
 	// 現在値のステータスのスケール値を反映
 	Scale(CVector::one * DEFAULT_SCALE * mCharaMaxStatus.volume);
@@ -1246,24 +1229,6 @@ void CPlayer::Update()
 
 	AutomaticRecovery();
 
-	// 「E」キーで炎の発射をオンオフする
-	if (CInput::PushKey('E'))
-	{
-
-		// 斬撃エフェクトを生成して、正面方向へ飛ばす
-		CSlash* slash = new CSlash
-		(
-			this,
-			Position() + CVector(0.0f, 10.0f, 0.0f),
-			VectorZ(),
-			100.0f,
-			100.0f
-		);
-		// 斬撃エフェクトの色設定
-		slash->SetColor(CColor(0.15f, 0.5f, 0.5f));
-		slash->SetOwner(this);
-	}
-
 	// 防御力アップ中
 	if (mDefenseUp == true)
 	{
@@ -1469,31 +1434,18 @@ void CPlayer::Update()
 
 	// 現在のHPを設定
 	mpGameUI->SetHp(mCharaStatus.hp);
-	mpStatusUI->SetHp(mCharaStatus.hp);
 
 	// 現在のSPを設定
 	mpGameUI->SetSp(mCharaStatus.SpecialPoint);
-	mpStatusUI->SetSp(mCharaStatus.SpecialPoint);
 
 	// 現在のクールタイムを設定
 	mpGameUI->SetAvoidValue(mRollingTime);
 
 	// 現在の経験値を設定
 	mpGameUI->SetExp(mCharaStatus.exp);
-	mpStatusUI->SetExp(mCharaStatus.exp);
 
 	// 現在のレベルを設定
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
-	mpStatusUI->SetLevel(mCharaStatus.level);
-
-	// 現在の攻撃力を設定
-	mpStatusUI->SetPower(mCharaStatus.power);
-
-	// 現在の防御力を設定
-	mpStatusUI->SetDefense(mCharaStatus.defense);
-
-	// 現在の大きさを設定
-	mpStatusUI->SetScale(mCharaStatus.volume);
 
 	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }

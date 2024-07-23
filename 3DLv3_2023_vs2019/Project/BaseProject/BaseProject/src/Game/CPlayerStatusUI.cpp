@@ -4,6 +4,7 @@
 #include "CBGMManager.h"
 #include "CGameMenu.h"
 #include "CText.h"
+#include "CPlayer.h"
 #include "CPlayerLevelUI.h"
 #include "CPlayerMaxExpUI.h"
 #include "CPlayerExpUI.h"
@@ -22,6 +23,7 @@
 #define ATTACK_POS CVector2(200.0f, 340.0f)
 #define DEFENSE_POS CVector2(200.0f, 380.0f)
 #define SIZE_POS CVector2(200.0f, 420.0f)
+#define DETAIL_POS CVector2(200.0f, 520.0f)
 
 #define SHADOW_COUNT 8     // 影のカウント
 #define SHADOW_WIDTH 2.0f  // 影の幅
@@ -63,7 +65,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpLevelText->SetTextAlignH(textAlignH);
@@ -77,7 +79,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpExpText->SetTextAlignH(textAlignH);
@@ -91,7 +93,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpHpText->SetTextAlignH(textAlignH);
@@ -105,7 +107,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpSpText->SetTextAlignH(textAlignH);
@@ -119,7 +121,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpAttackText->SetTextAlignH(textAlignH);
@@ -133,7 +135,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpDefenseText->SetTextAlignH(textAlignH);
@@ -147,7 +149,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpSizeText->SetTextAlignH(textAlignH);
@@ -161,7 +163,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpLine->SetTextAlignH(textAlignH);
@@ -175,7 +177,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpLine2->SetTextAlignH(textAlignH);
@@ -189,54 +191,58 @@ CPlayerStatusUI::CPlayerStatusUI()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eMenu,
 		false, false
 	);
 	mpLine3->SetTextAlignH(textAlignH);
 	mpLine3->SetText("/");
 
-	SetEnable(false);
-	SetShow(false);
+	// 詳細のテキストを作成
+	mpDetail = new CText
+	(
+		nullptr, 24,
+		DETAIL_POS,
+		size,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+	mpDetail->SetTextAlignH(textAlignH);
+	mpDetail->SetText("剣と盾で様々な困難を乗り越えスキルで自分を強化、回復をしその身を極めていく。");
 
 	// レベルUIを作成
 	mpLevelUI = new CPlayerLevelUI(400.0f, 180.f);
-	mpLevelUI->SetShow(true);
 
 	// 最大経験値のUIを作成
 	mpMaxExpUI = new CPlayerMaxExpUI(455.0f, 220.f);
-	mpMaxExpUI->SetShow(true);
 
 	// 経験値のUIを作成
 	mpExpUI = new CPlayerExpUI(350.0f, 220.f);
-	mpExpUI->SetShow(true);
 
 	// 最大HPのUIを作成
 	mpMaxHpUI = new CPlayerMaxHpUI(445.0f, 260.f);
-	mpMaxHpUI->SetShow(true);
 
 	// HPのUIを作成
 	mpHpUI = new CPlayerHpUI(340.0f, 260.f);
-	mpHpUI->SetShow(true);
 
 	// 最大SPのUIを作成
 	mpMaxSpUI = new CPlayerMaxSpUI(455.0f, 300.f);
-	mpMaxSpUI->SetShow(true);
 
 	// SPのUIを作成
 	mpSpUI = new CPlayerSpUI(350.0f, 300.f);
-	mpSpUI->SetShow(true);
 
 	// 攻撃力のUIを作成
 	mpPowerUI = new CPlayerPowerUI(400.0f,340.0f);
-	mpPowerUI->SetShow(true);
 
 	// 防御力のUIを作成
 	mpDefenseUI = new CPlayerDefenseUI(400.0f, 380.0f);
-	mpDefenseUI->SetShow(true);
 
 	// 大きさのUIを作成
 	mpScaleUI = new CPlayerScaleUI(350.0f, 420.0f);
-	mpScaleUI->SetShow(true);
+
+	SetEnable(false);
+	SetShow(false);
 }
 
 // デストラクタ
@@ -264,14 +270,55 @@ CPlayerStatusUI::~CPlayerStatusUI()
 	mpScaleUI->Kill();
 }
 
+// 表示設定
+void CPlayerStatusUI::SetShow(bool show)
+{
+	CTask::SetShow(show);
+
+	mpLevelUI->SetShow(show);
+	mpMaxExpUI->SetShow(show);
+	mpExpUI->SetShow(show);
+	mpMaxHpUI->SetShow(show);
+	mpHpUI->SetShow(show);
+	mpMaxSpUI->SetShow(show);
+	mpSpUI->SetShow(show);
+	mpPowerUI->SetShow(show);
+	mpDefenseUI->SetShow(show);
+	mpScaleUI->SetShow(show);
+}
+
+// 現在のプレイヤーのステータスを反映
+void CPlayerStatusUI::ApplyPlayerStatus()
+{
+	CPlayer* player = CPlayer::Instance();
+	if (player == nullptr)return;
+
+	const CharaStatus& status = player->Status();
+	const CharaStatus& maxStatus = player->MaxStatus();
+
+	// 最大ステータスを反映
+	SetMaxHp(maxStatus.hp);
+	SetMaxSp(maxStatus.SpecialPoint);
+	SetMaxExp(maxStatus.exp);
+
+	// 現在のステータスを反映
+	SetHp(status.hp);
+	SetSp(status.SpecialPoint);
+	SetExp(status.exp);
+	SetPower(status.power);
+	SetDefense(status.defense);
+	SetScale(status.volume);
+	SetLevel(status.level);
+}
+
 // オープン
 void CPlayerStatusUI::Open()
 {
 	SetEnable(true);
 	SetShow(true);
 	mIsOpened = true;
-	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
-	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
+
+	ApplyPlayerStatus();
 }
 
 // クローズ
@@ -279,8 +326,8 @@ void CPlayerStatusUI::Close()
 {
 	SetEnable(false);
 	SetShow(false);
-	CBGMManager::Instance()->Play(EBGMType::eGame, false);
-	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
+
+	CGameMenu::Instance()->Open();
 }
 
 // オープンするかどうか
@@ -397,6 +444,7 @@ void CPlayerStatusUI::Render()
 	mpLine->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine2->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine3->SetColor(1.0f, 1.0f, 1.0f);
+	mpDetail->SetColor(1.0f, 1.0f, 1.0f);
 
 	for (int i = 0; i < SHADOW_COUNT; i++)
 	{
@@ -443,6 +491,10 @@ void CPlayerStatusUI::Render()
 		// 線3
 		mpLine3->SetPos(CVector2(410.0f, 300.0f) + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpLine3->Render();
+
+		// 詳細
+		mpDetail->SetPos(DETAIL_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpDetail->Render();
 	}
 	mpLevelText->SetColor(0.0f, 0.0f, 0.0f);
 	mpLevelText->SetPos(LV_POS);
@@ -483,4 +535,8 @@ void CPlayerStatusUI::Render()
 	mpLine3->SetColor(0.0f, 0.0f, 0.0f);
 	mpLine3->SetPos(CVector2(410.0f, 300.0f));
 	mpLine3->Render();
+
+	mpDetail->SetColor(0.0f, 0.0f, 0.0f);
+	mpDetail->SetPos(DETAIL_POS);
+	mpDetail->Render();
 }

@@ -7,19 +7,34 @@
 class CGameMenu : public CTask
 {
 public:
-	CGameMenu();
-	~CGameMenu();
+	// ゲームメニューのインスタンスを取得
+	static CGameMenu* Instance();
+	// ゲームメニューのインスタンスを削除
+	static void ClearInstance();
 
+	// オープン
 	void Open();
+	// クローズ
 	void Close();
+	// オープンするかどうか
 	bool IsOpened() const;
 
+	// 決める
 	void Decide(int select);
 
+	// 更新
 	void Update() override;
+	// 描画
 	void Render() override;
 
 private:
+	// コンストラク
+	CGameMenu();
+	// デストラクタ
+	~CGameMenu();
+
+	static CGameMenu* spInstance;
+
 	CImage* mpBackground;
 	std::vector<CImage*> mMenuItems;
 	CImage* mpSelectFrame;

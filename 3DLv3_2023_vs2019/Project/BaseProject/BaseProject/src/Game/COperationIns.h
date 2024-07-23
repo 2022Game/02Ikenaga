@@ -50,7 +50,6 @@ private:
 	CImage* mpShiftKey;
 	// マウス関連
 	CImage* mpMouseLeft;
-	CImage* mpMouseMiddle;
 	CImage* mpMouseRight;
 	// 記号関連
 	CImage* mpPlus;

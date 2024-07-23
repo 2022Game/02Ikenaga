@@ -17,7 +17,6 @@ class CBuffCircle;
 class CBuffAura;
 class CPowerUpAura;
 class CGamePlayerUI;
-class CPlayerStatusUI;
 
 #include <algorithm>
 
@@ -281,5 +280,4 @@ private:
 	bool mIsSpawnedSlashEffect;
 
 	CGamePlayerUI* mpGameUI;
-	CPlayerStatusUI* mpStatusUI;
 };

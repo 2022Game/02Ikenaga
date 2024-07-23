@@ -43,7 +43,9 @@
 #include "CGameMenu.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
-#include "CGear.h"
+#include "CMenu.h"
+#include "CKeyM.h"
+#include "CBuffSkill.h"
 #include "Maths.h"
 
 const CGameScene::SpawnData CGameScene::SPAWN_DATA[] =
@@ -65,13 +67,13 @@ CGameScene::CGameScene()
 	, TurtleReTime(0)
 	, Turtle2ReTime(0)
 	, Turtle3ReTime(0)  
-	, mpGameMenu(nullptr)
 {
 }
 
 // デストラクタ
 CGameScene::~CGameScene()
 {
+	CGameMenu::ClearInstance();
 }
 
 // シーン読み込み
@@ -123,7 +125,9 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("Frame", "Character\\Player\\HP\\Frame.png");
 	CResourceManager::Load<CTexture>("Gauge", "UI\\white.png");
 	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
-	CResourceManager::Load<CTexture>("Gear", "UI\\Gear.png");
+	CResourceManager::Load<CTexture>("Menu", "UI\\menu.png");
+	CResourceManager::Load<CTexture>("KeyM", "UI\\Key\\mKey.png");
+	CResourceManager::Load<CTexture>("BuffSkill", "UI\\buffSkill.png");
 
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
@@ -324,10 +328,15 @@ void CGameScene::Load()
 	//bossEnemy->Position(0.0f, 1.0f, -450.0f);
 	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
 
-	CGear* gear = new CGear(0.0f, 675.0f);
+	// メニューアイコンを作成
+	CMenu* menu = new CMenu(10.0f, 680.0f);
+	//Mキーを作成
+	CKeyM* keyM = new CKeyM(40.0f, 670.0f);
+	// バフスキルを作成
+	CBuffSkill* buhhSkill = new CBuffSkill(980.0f, 610.0f);
 
 	// ゲームメニューを作成
-	mpGameMenu = new CGameMenu();
+	CGameMenu::Instance();
 }
 
 // ゲームクリア判定
@@ -416,11 +425,12 @@ void CGameScene::Update()
 	//}
 
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
-	if (!mpGameMenu->IsOpened())
+	CGameMenu* menu = CGameMenu::Instance();
+	if (!menu->IsOpened())
 	{
 		if (CInput::PushKey('M'))
 		{
-			mpGameMenu->Open();
+			menu->Open();
 		}
 	}
 

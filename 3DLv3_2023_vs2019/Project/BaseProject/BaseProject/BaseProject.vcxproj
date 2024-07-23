@@ -73,6 +73,7 @@
     <ClCompile Include="src\Game\CApplication.cpp" />
     <ClCompile Include="src\Game\CBreath.cpp" />
     <ClCompile Include="src\Game\CBuffAura.cpp" />
+    <ClCompile Include="src\Game\CBuffSkill.cpp" />
     <ClCompile Include="src\Game\CCurrent.cpp" />
     <ClCompile Include="src\Game\CDrain.cpp" />
     <ClCompile Include="src\Game\CDrainEffect.cpp" />
@@ -111,7 +112,7 @@
     <ClCompile Include="src\Game\CGameEnemyUI.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
-    <ClCompile Include="src\Game\CGear.cpp" />
+    <ClCompile Include="src\Game\CMenu.cpp" />
     <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHit.cpp" />
     <ClCompile Include="src\Game\CHomingBall.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="src\Game\CIceBreath.cpp" />
     <ClCompile Include="src\Game\CImpact.cpp" />
     <ClCompile Include="src\Game\CImpactEffect.cpp" />
+    <ClCompile Include="src\Game\CKeyM.cpp" />
     <ClCompile Include="src\Game\CLightningBall.cpp" />
     <ClCompile Include="src\Game\CLightningBallEffect.cpp" />
     <ClCompile Include="src\Game\CMagicCircle.cpp" />
@@ -267,6 +269,7 @@
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
     <ClInclude Include="src\Game\CBreath.h" />
     <ClInclude Include="src\Game\CBuffAura.h" />
+    <ClInclude Include="src\Game\CBuffSkill.h" />
     <ClInclude Include="src\Game\CCurrent.h" />
     <ClInclude Include="src\Game\CDrain.h" />
     <ClInclude Include="src\Game\CDrainEffect.h" />
@@ -305,7 +308,7 @@
     <ClInclude Include="src\Game\CGameEnemyUI.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
-    <ClInclude Include="src\Game\CGear.h" />
+    <ClInclude Include="src\Game\CMenu.h" />
     <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHit.h" />
     <ClInclude Include="src\Game\CHomingBall.h" />
@@ -313,6 +316,7 @@
     <ClInclude Include="src\Game\CHpUI.h" />
     <ClInclude Include="src\Game\CImpact.h" />
     <ClInclude Include="src\Game\CImpactEffect.h" />
+    <ClInclude Include="src\Game\CKeyM.h" />
     <ClInclude Include="src\Game\CLightningBall.h" />
     <ClInclude Include="src\Game\CLightningBallEffect.h" />
     <ClInclude Include="src\Game\CMagicCircle.h" />
