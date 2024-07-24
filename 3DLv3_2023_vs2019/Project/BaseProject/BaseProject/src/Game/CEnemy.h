@@ -18,7 +18,8 @@ enum class EEnemyType
 	eMushroom,  // マッシュルーム
 	eRay,       // エイ
 	eRich,      // リッチ
-	eSlime,     // スライム
+	eSlime,     // レッドスライム
+	eSlime2,    // オレンジスライム
 	eTurtle,    // 亀
 
 	Num
@@ -86,6 +87,8 @@ public:
 
 	// 敵の種類を取得
 	EEnemyType GetType() const;
+
+	virtual CVector GetRandomSpawnPos();
 
 	// 召喚した敵の死亡処理
 	virtual void DeathSummonEnemy(CEnemy* enemy);

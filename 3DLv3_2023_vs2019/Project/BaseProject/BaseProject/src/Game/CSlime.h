@@ -53,7 +53,8 @@ public:
 	// 死亡処理
 	void Death() override;
 
-	static int mHp;
+	// ランダムに位置を取得
+	CVector GetRandomSpawnPos()override;
 
 	// 描画
 	void Render();
@@ -109,7 +110,7 @@ private:
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// レッドスライムのインスタンス
+	// インスタンス
 	static CSlime* spInstance;
 
 	// アニメーションデータ
@@ -157,13 +158,11 @@ private:
 	CHit* mpHitEffect;        // ヒットエフェクト 
 
 	// サウンド関連
-	CSound* mpSlimeRunSE;     // 走るの音
 	CSound* mpSlimeAttackSE;  // 攻撃の音
 	CSound* mpSlimeDizzySE;   // 混乱の音
 	CSound* mpSlimeHitSE;     // ヒットの音
 	CSound* mpSlimeDieSE;     // 死亡の音
 
-	bool mIsSlimeRunSE;
 	bool mIsSlimeAttackSE;
 	bool mIsSlimeDizzySE;
 	bool mIsSlimeHitSE;

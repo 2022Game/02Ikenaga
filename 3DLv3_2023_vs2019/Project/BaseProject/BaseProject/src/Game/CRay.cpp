@@ -184,6 +184,8 @@ CRay::CRay()
 	// 名前を設定
 	std::string name = "マンタ";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(35.0f, 35.0f, 35.0f);
 }
 
 // デストラクタ

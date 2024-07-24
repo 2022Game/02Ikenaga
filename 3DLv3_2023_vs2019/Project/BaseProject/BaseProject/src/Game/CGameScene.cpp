@@ -49,34 +49,23 @@
 #include "CKeyE.h"
 #include "CBuffSkill.h"
 #include "CSlashSkill.h"
+#include "CLockWall.h"
+#include "CEnemyManager.h"
 #include "Maths.h"
-
-const CGameScene::SpawnData CGameScene::SPAWN_DATA[] =
-{
-	  // 敵の種類　　　　  距離   オフセット位置           敵の大きさ  復活時間
-	{ EEnemyType::eSlime,  0.0f, CVector(0.0f,0.0f,0.0f),  30.0f,      0.0f },
-};
 
 // コンストラクタ
 CGameScene::CGameScene()
 	: CSceneBase(EScene::eGame)
-	, mpSpawnEnemy(nullptr)
-	, SlimeReTime(0)
-	, Slime2ReTime(0)
-	, Slime3ReTime(0)
-	, MushroomReTime(0)
-	, Mushroom2ReTime(0)
-	, Mushroom3ReTime(0)
-	, TurtleReTime(0)
-	, Turtle2ReTime(0)
-	, Turtle3ReTime(0)  
 {
+	CEnemyManager::Create();
 }
 
 // デストラクタ
 CGameScene::~CGameScene()
 {
 	CGameMenu::ClearInstance();
+
+	CEnemyManager::Delete();
 }
 
 // シーン読み込み
@@ -98,7 +87,7 @@ void CGameScene::Load()
 
 	// エネミー関連
 	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
-	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
+	CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
 	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
@@ -112,7 +101,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CModelX>("Lich", "Character\\Enemy\\Lich\\Lich.x");
 
 	// ボス関連
-	//CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
+	CResourceManager::Load<CModelX>("Dragon", "Character\\Enemy\\Dragon\\Dragon.x");
 
 	// 武器関連
 	CResourceManager::Load<CModel>("Sword", "Item\\Equipment\\Sword\\Sword.obj");
@@ -133,6 +122,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("KeyQ", "UI\\Key\\qKey.png");
 	CResourceManager::Load<CTexture>("KeyE", "UI\\Key\\eKey.png");
 	CResourceManager::Load<CTexture>("BuffSkill", "UI\\buffSkill.png");
+	CResourceManager::Load<CTexture>("Wall", "UI\\black.png");
 
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
@@ -203,12 +193,11 @@ void CGameScene::Load()
 	// レッドスライム
 	CSlime* enemy = new CSlime();
 	enemy->Position(0.0f, 0.0f, -40.0f);
-	enemy->Scale(25.0f, 25.0f, 25.0f);
 
-	//// オレンジスライム
-	//CSlime2* enemy2 = new CSlime2();
-	//enemy2->Position(-40.0f, 0.0f, -40.0f);
-	//enemy2->Scale(25.0f, 25.0f, 25.0f);
+	// オレンジスライム
+	CSlime2* enemy2 = new CSlime2();
+	enemy2->Position(-40.0f, 0.0f, -40.0f);
+	enemy2->Scale(25.0f, 25.0f, 25.0f);
 
 	//// ブルースライム
 	//CSlime3* enemy3 = new CSlime3();
@@ -218,7 +207,6 @@ void CGameScene::Load()
 	// マッシュルーム
 	CMushroom* enemy4 = new CMushroom();
 	enemy4->Position(150.0f, 0.0f, -150.0f);
-	enemy4->Scale(25.0f, 25.0f, 25.0f);
 
 	//// マッシュルーム2
 	//CMushroom2* enemy5 = new CMushroom2();
@@ -233,7 +221,6 @@ void CGameScene::Load()
 	// 亀
 	CTurtle* enemy7 = new CTurtle();
 	enemy7->Position(0.0f, -0.2f, -300.0f);
-	enemy7->Scale(25.0f, 25.0f, 25.0f);
 
 	//// 亀2
 	//CTurtle2* enemy8 = new CTurtle2();
@@ -248,7 +235,6 @@ void CGameScene::Load()
 	// エイ
 	CRay* enemy10 = new CRay();
 	enemy10->Position(150.0f, 0.0f, -450.0f);
-	enemy10->Scale(35.0f, 35.0f, 35.0f);
 
 	//// エイ2
 	//CRay2* enemy11 = new CRay2();
@@ -263,7 +249,6 @@ void CGameScene::Load()
 	// 蜂
 	CBee* enemy13 = new CBee();
 	enemy13->Position(0.0f, 0.0f, -600.0f);
-	enemy13->Scale(30.0f, 30.0f, 30.0f);
 
 	//// 蜂2
 	//CBee2* enemy14 = new CBee2();
@@ -278,7 +263,6 @@ void CGameScene::Load()
 	// サボテン
 	CCactus* enemy16 = new CCactus();
 	enemy16->Position(150.0f, 0.0f, -750.0f);
-	enemy16->Scale(30.0f, 30.0f, 30.0f);
 
 	//// サボテン2
 	//CCactus2* enemy17 = new CCactus2();
@@ -293,7 +277,6 @@ void CGameScene::Load()
 	// チェストモンスター
 	CChest* enemy19 = new CChest();
 	enemy19->Position(0.0f, 0.0f, -900.0f);
-	enemy19->Scale(30.0f, 30.0f, 30.0f);
 
 	//// チェストモンスター2
 	//CChest2* enemy20 = new CChest2();
@@ -308,13 +291,10 @@ void CGameScene::Load()
 	// 球体のモンスター
 	CBeholder* enemy22 = new CBeholder();
 	enemy22->Position(150.0f, 0.0f, -1050.0f);
-	enemy22->Scale(15.0f, 15.0f, 15.0f);
 
 	// ボクサー
 	CBoxer* enemy25 = new CBoxer();
-	//enemy25->Position(0.0f, 0.0f, -1200.0f);
-	enemy25->Position(0.0f, 0.0f, 80.0f);
-	enemy25->Scale(20.0f, 20.0f, 20.0f);
+	enemy25->Position(0.0f, 0.0f, -1200.0f);
 
 	//// ボクサー2
 	//CBoxer2* enemy27 = new CBoxer2();
@@ -326,12 +306,10 @@ void CGameScene::Load()
 	enemy28->Position(150.0f, 3.0f, -1350.0f);
 	//enemy28->Position(0.0f, 3.0f, -200.0f);
 	//enemy28->Rotate(0.0f,90.0f,-70.0f);
-	enemy28->Scale(2.5f, 2.5f, 2.5f);
 
-	//// ドラゴン
-	//CDragon* bossEnemy = new CDragon();
-	//bossEnemy->Position(0.0f, 1.0f, -450.0f);
-	//bossEnemy->Scale(15.0f, 15.0f, 15.0f);
+	// ドラゴン
+	CDragon* bossEnemy = new CDragon();
+	bossEnemy->Position(0.0f, 1.0f, -1500.0f);
 
 	// メニューアイコンを作成
 	CMenu* menu = new CMenu(10.0f, 680.0f);
@@ -345,6 +323,8 @@ void CGameScene::Load()
 	CBuffSkill* buhhSkill = new CBuffSkill(990.0f, 619.0f);
 	// スラッシュスキル作成
 	CSlashSkill* slashSkill = new CSlashSkill(1120.0f, 619.0f);
+	// ロック中の壁
+	CLockWall* lockWall = new CLockWall(990.0f, 619.0f);
 
 	// ゲームメニューを作成
 	CGameMenu::Instance();
@@ -362,79 +342,9 @@ void CGameScene::Clear()
 	//CSceneManager::ClearInstance();
 }
 
-// 敵のインデックス値を取得
-int CGameScene::GetSpawnIndex() const
-{
-	int tableSize = ARRAY_SIZE(SPAWN_DATA);
-	int index = Math::Rand(0, tableSize - 1);
-
-	if (!(0 <= index && index < tableSize)) return -1;
-	return index;
-}
-
-CEnemy* CGameScene::SpawnEnemy(EEnemyType type) const
-{
-	SpawnData data = SPAWN_DATA[mSpawnIndex];
-
-	CEnemy* ret = nullptr;
-	switch (type)
-	{
-	case EEnemyType::eBee:
-		//ret = new CBee();
-		break;
-	case EEnemyType::eBeholder:
-		//ret = new CBeholder();
-		break;
-	case EEnemyType::eBoxer:
-		//ret = new CBoxer();
-		break;
-	case EEnemyType::eCactus:
-		//ret = new CCactus();
-		break;
-	case EEnemyType::eChest:
-		//ret = new CChest();
-		break;
-	case EEnemyType::eMushroom:
-		//ret = new CMushroom();
-		break;
-	case EEnemyType::eRay:
-		//ret = new CRay();
-		break;
-	case EEnemyType::eSlime:
-	/*	if (data.SpawnTime >= 5.0f)
-		{
-			ret = new CSlime();
-			data.SpawnTime = 0.0f;
-		}*/
-		break;
-	case EEnemyType::eTurtle:
-		//ret = new CTurtle();
-		break;
-	}
-	return ret;
-}
-
-void CGameScene::UpdateSpawn()
-{
-	mSpawnIndex = GetSpawnIndex();
-	SpawnData data = SPAWN_DATA[mSpawnIndex];
-	// 召喚する敵を生成
-	mpSpawnEnemy = SpawnEnemy(data.type);
-	if (mpSpawnEnemy != nullptr)
-	{
-		mpSpawnEnemy->Scale(CVector::one * data.monsterScale);
-	}
-}
-
 // シーンの更新処理
 void CGameScene::Update()
 {
-	// BGM再生中でなければ、BGMを再生
-	//if (!mpGameBGM->IsPlaying())
-	//{
-	//	mpGameBGM->PlayLoop(-1, 1.0f, false, 1.0f);
-	//}
-
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
 	CGameMenu* menu = CGameMenu::Instance();
 	if (!menu->IsOpened())
@@ -444,128 +354,4 @@ void CGameScene::Update()
 			menu->Open();
 		}
 	}
-
-	mSpawnIndex = GetSpawnIndex();
-	SpawnData data = SPAWN_DATA[mSpawnIndex];
-
-	//// レッドスライムの復活
-	//if (mpSlime->mHp <=0.0f)
-	//{
-	//	UpdateSpawn();
-	//}
-
-	//// オレンジスライムの復活
-	//if (mpSlime2->mHp <= 0)
-	//{
-	//	(Slime2ReTime++ / 100);
-	//	if (Slime2ReTime > 500)
-	//	{
-	//		// オレンジスライム
-	//		CSlime2* enemy2 = new CSlime2();
-	//		enemy2->Position(-40.0f, 0.0f, -40.0f);
-	//		enemy2->Scale(25.0f, 25.0f, 25.0f);
-	//		Slime2ReTime = 0;
-	//	}
-	//}
-
-	////	ブルースライムの復活
-	//if (mpSlime3->mHp <= 0)
-	//{
-	//	(Slime3ReTime++ / 100);
-	//	if (Slime3ReTime > 1000)
-	//	{
-	//		// ブルースライム
-	//		CSlime3* enemy3 = new CSlime3();
-	//		enemy3->Position(-20.0f, 0.0f, -90.0f);
-	//		enemy3->Scale(35.0f, 35.0f, 35.0f);
-	//		Slime3ReTime = 0;
-	//	}
-	//}
-
-	//// マッシュルームの復活
-	//if (mpMushroom->mHp <= 0)
-	//{
-	//	(MushroomReTime++ / 100);
-	//	if (MushroomReTime > 500)
-	//	{
-	//		// マッシュルーム
-	//		CMushroom* enemy4 = new CMushroom();
-	//		enemy4->Position(150.0f, 0.0f, -150.0f);
-	//		enemy4->Scale(25.0f, 25.0f, 25.0f);
-	//		MushroomReTime = 0;
-	//	}
-	//}
-
-	//// マッシュルーム2の復活
-	//if (mpMushroom2->mHp <= 0)
-	//{
-	//	(Mushroom2ReTime++ / 100);
-	//	if (Mushroom2ReTime > 500)
-	//	{
-	//		// マッシュルーム2
-	//		CMushroom2* enemy5 = new CMushroom2();
-	//		enemy5->Position(210.0f, 0.0f, -150.0f);
-	//		enemy5->Scale(25.0f, 25.0f, 25.0f);
-	//		Mushroom2ReTime = 0;
-	//	}
-	//}
-
-	//// マッシュルーム3の復活
-	//if (mpMushroom3->mHp <= 0)
-	//{
-	//	(Mushroom3ReTime++ / 100);
-	//	if (Mushroom3ReTime > 1000)
-	//	{
-	//		// マッシュルーム3
-	//		CMushroom3* enemy6 = new CMushroom3();
-	//		enemy6->Position(180.0f, 0.0f, -210.0f);
-	//		enemy6->Scale(35.0f, 35.0f, 35.0f);
-	//		Mushroom3ReTime = 0;
-	//	}
-	//}
-
-	//// 亀の復活
-	//if (mpTurtle->mHp <=0)
-	//{
-	//	TurtleReTime++;
-	//	if (TurtleReTime > 500)
-	//	{
-	//		// 亀
-	//		CTurtle* enemy7 = new CTurtle();
-	//		enemy7->Position(0.0f, -0.2f, -300.0f);
-	//		enemy7->Scale(25.0f, 25.0f, 25.0f);
-	//		TurtleReTime = 0;
-	//	}
-	//}
-
-	//// 亀2の復活
-	//if (mpTurtle2->mHp <= 0)
-	//{
-	//	Turtle2ReTime++;
-	//	if (Turtle2ReTime > 500)
-	//	{
-	//		// 亀2
-	//		CTurtle2* enemy8 = new CTurtle2();
-	//		enemy8->Position(-60.0f, -0.2f, -300.0f);
-	//		enemy8->Scale(25.0f, 25.0f, 25.0f);
-	//		Turtle2ReTime = 0;
-	//	}
-	//}
-
-	//// 亀3の復活
-	//if (mpTurtle3->mHp <= 0)
-	//{
-	//	Turtle3ReTime++;
-	//	if (Turtle3ReTime > 1000)
-	//	{
-	//		// 亀3
-	//		CTurtle3* enemy9 = new CTurtle3();
-	//		enemy9->Position(-30.0f, -0.2f, -360.0f);
-	//		enemy9->Scale(35.0f, 35.0f, 35.0f);
-	//		Turtle3ReTime = 0;
-	//	}
-	//}
-	//CDebugPrint::Print("時間 %d\n", TurtleReTime);
-	//CDebugPrint::Print("時間 %d\n", Turtle2ReTime);
-	//CDebugPrint::Print("時間 %d\n", Turtle3ReTime);
 }

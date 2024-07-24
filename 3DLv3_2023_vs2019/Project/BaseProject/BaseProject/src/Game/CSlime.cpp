@@ -16,6 +16,8 @@ CSlime* CSlime::spInstance = nullptr;
 #define WALK_RANGE   100.0f  // 追跡する範囲
 #define STOP_RANGE    21.0f  // 追跡を辞める範囲
 #define ROTATE_RANGE 250.0f  // 回転する範囲
+#define SPAWN_RANDOM_RANGE_X 100.0f
+#define SPAWN_RANDOM_RANGE_Z 40.0f
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
 const CSlime::AnimData CSlime::ANIM_DATA[] =
@@ -39,8 +41,6 @@ bool CSlime::IsDeath() const
 	return mCharaStatus.hp <= 0;
 }
 
-int CSlime::mHp;
-
 // コンストラクタ
 CSlime::CSlime()
 	: mState(EState::eIdle)
@@ -48,7 +48,6 @@ CSlime::CSlime()
 	, mAttackTime(0)
 	, mIsGrounded(false)
 	, mStateStep(0)
-	, mIsSlimeRunSE(false)
 	, mIsSlimeAttackSE(false)
 	, mIsSlimeDizzySE(false)
 	, mIsSlimeHitSE(false)
@@ -152,11 +151,12 @@ CSlime::CSlime()
 	std::string name = "スライム";
 	mpGameUI->SetEnemyName(name);
 
-	mpSlimeRunSE = CResourceManager::Get<CSound>("SlimeRun");
 	mpSlimeAttackSE = CResourceManager::Get<CSound>("SlimeAttack");
 	mpSlimeDizzySE = CResourceManager::Get<CSound>("SlimeDizzy");
 	mpSlimeHitSE = CResourceManager::Get<CSound>("SlimeHit");
 	mpSlimeDieSE = CResourceManager::Get<CSound>("SlimeDie");
+
+	Scale(25.0f, 25.0f, 25.0f);
 }
 
 // デストラクタ
@@ -474,12 +474,6 @@ void CSlime::UpdateRun()
 	CVector newPos = (player->Position() - Position()).Normalized();
 	float vectorPos = (player->Position() - Position()).Length();
 
-	if (mAnimationFrame >= 5.0f)
-	{
-		mpSlimeRunSE->Play();
-		mIsSlimeRunSE = true;
-	}
-
 	// 範囲内の時、移動し追跡する
 	if (vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE)
 	{
@@ -514,7 +508,6 @@ void CSlime::Update()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Y(-GRAVITY);
 	mMoveSpeed.Z(0.0f);
-	mHp = mCharaStatus.hp;
 	
 	// 状態に合わせて、更新処理を切り替える
 	switch (mState)
@@ -774,6 +767,16 @@ void CSlime::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// ランダムに位置を取得
+CVector CSlime::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(-100.0f, 0.0f));
+	pos.Z(Math::Rand(-140.0f, 0.0f));
+
+	return CVector(pos);
 }
 
 // 描画

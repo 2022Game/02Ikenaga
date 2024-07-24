@@ -212,6 +212,8 @@ CChest::CChest()
 	// レベルを設定
 	std::string level = "51";
 	mpGameUI->SetEnemyLevel(level);
+
+	Scale(30.0f, 30.0f, 30.0f);
 }
 
 // デストラクタ

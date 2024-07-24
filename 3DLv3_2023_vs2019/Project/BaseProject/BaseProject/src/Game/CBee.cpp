@@ -296,6 +296,8 @@ CBee::CBee()
 	// 名前を設定
 	std::string name = "凶暴蜂";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(30.0f, 30.0f, 30.0f);
 }
 
 // デストラクタ

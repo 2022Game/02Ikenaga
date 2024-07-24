@@ -98,6 +98,7 @@
     <ClCompile Include="src\Game\CDragon.cpp" />
     <ClCompile Include="src\Game\CEnemy.cpp" />
     <ClCompile Include="src\Game\CEnemyLevelUI.cpp" />
+    <ClCompile Include="src\Game\CEnemyManager.cpp" />
     <ClCompile Include="src\Game\CEnemyNameUI.cpp" />
     <ClCompile Include="src\Game\CExp.cpp" />
     <ClCompile Include="src\Game\CExpGauge.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CKeyE.cpp" />
     <ClCompile Include="src\Game\CKeyQ.cpp" />
+    <ClCompile Include="src\Game\CLockWall.cpp" />
     <ClCompile Include="src\Game\CMenu.cpp" />
     <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHit.cpp" />
@@ -297,6 +299,7 @@
     <ClInclude Include="src\Game\CDragon.h" />
     <ClInclude Include="src\Game\CEnemy.h" />
     <ClInclude Include="src\Game\CEnemyLevelUI.h" />
+    <ClInclude Include="src\Game\CEnemyManager.h" />
     <ClInclude Include="src\Game\CEnemyNameUI.h" />
     <ClInclude Include="src\Game\CExp.h" />
     <ClInclude Include="src\Game\CExpGauge.h" />
@@ -313,6 +316,7 @@
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CKeyE.h" />
     <ClInclude Include="src\Game\CKeyQ.h" />
+    <ClInclude Include="src\Game\CLockWall.h" />
     <ClInclude Include="src\Game\CMenu.h" />
     <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHit.h" />

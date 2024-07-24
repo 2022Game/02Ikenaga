@@ -34,8 +34,6 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	            true,	17.0f, 	0.4f},	// 移動
 };
 
-int CMushroom::mHp;
-
 // コンストラクタ
 CMushroom::CMushroom()
 	: mState(EState::eIdle)
@@ -204,6 +202,8 @@ CMushroom::CMushroom()
 	// 名前を設定
 	std::string name = "偽きのこ";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(25.0f, 25.0f, 25.0f);
 }
 
 // デストラクタ
@@ -532,7 +532,6 @@ void CMushroom::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-	mHp = mCharaStatus.hp;
 	mMoveSpeed.Y(-GRAVITY);
 
 	if (mState != EState::eAttack3)
@@ -826,6 +825,16 @@ void CMushroom::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// ランダムに位置を取得
+CVector CMushroom::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(50.0f, 150.0f));
+	pos.Z(Math::Rand(-200.0f, -100.0f));
+
+	return CVector(pos);
 }
 
 // 描画

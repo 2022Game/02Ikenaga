@@ -170,6 +170,8 @@ CTurtle::CTurtle()
 	// 名前を設定
 	std::string name = "タートル";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(25.0f, 25.0f, 25.0f);
 }
 
 // デストラクタ

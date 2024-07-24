@@ -54,7 +54,8 @@ public:
 	// €–Sˆ—
 	void Death() override;
 
-	static int mHp;
+	// ƒ‰ƒ“ƒ_ƒ€‚ÉˆÊ’u‚ğæ“¾
+	CVector GetRandomSpawnPos()override;
 
 	// •`‰æ
 	void Render();

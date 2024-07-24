@@ -814,6 +814,12 @@
     <ClCompile Include="src\Game\CKeyE.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CLockWall.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CEnemyManager.cpp">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1403,6 +1409,12 @@
     </ClInclude>
     <ClInclude Include="src\Game\CKeyE.h">
       <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLockWall.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CEnemyManager.h">
+      <Filter>ソース ファイル\Game\Character\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -266,6 +266,8 @@ CCactus::CCactus()
 	// 名前を設定
 	std::string name = "パワー型サボテン";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(30.0f, 30.0f, 30.0f);
 }
 
 // デストラクタ

@@ -250,6 +250,8 @@ CLich::CLich()
 	// 名前を設定
 	std::string name = "召喚師 リッチ";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(2.5f, 2.5f, 2.5f);
 }
 
 // デストラクタ

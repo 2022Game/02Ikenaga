@@ -388,6 +388,8 @@ CBeholder::CBeholder()
 	// 名前を設定
 	std::string name = "エイ・リアン";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(15.0f, 15.0f, 15.0f);
 }
 
 // デストラクタ

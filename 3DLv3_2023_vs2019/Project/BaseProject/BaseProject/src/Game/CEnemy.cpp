@@ -2,18 +2,27 @@
 #include "CExpManager.h"
 #include "CPortionManager.h"
 #include "CGameEnemyUI.h"
+#include "CEnemyManager.h"
+#include "Maths.h"
+
+#define SPAWN_RANDOM_RANGE_X 100.0f
+#define SPAWN_RANDOM_RANGE_Z 1000.0f
 
 // コンストラクタ
 CEnemy::CEnemy()
 	:CXCharacter(ETag::eEnemy,ETaskPriority::eEnemy)
 	, mpSummoner(nullptr)
 {
+	CEnemyManager::Add(this);
+
 	mpGameUI = new CGameEnemyUI();
 }
 
 // デストラクタ
 CEnemy::~CEnemy()
 {
+	CEnemyManager::Remove(this);
+
 	mpGameUI->Kill();
 
 	if (mpSummoner != nullptr)
@@ -291,6 +300,14 @@ void CEnemy::Death()
 EEnemyType CEnemy::GetType() const
 {
 	return mType;
+}
+
+CVector CEnemy::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(-SPAWN_RANDOM_RANGE_X, SPAWN_RANDOM_RANGE_X));
+	pos.Z(Math::Rand(-SPAWN_RANDOM_RANGE_Z, SPAWN_RANDOM_RANGE_Z));
+	return pos;
 }
 
 // 召喚した敵の死亡処理

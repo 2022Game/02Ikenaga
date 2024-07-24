@@ -390,6 +390,8 @@ CBoxer::CBoxer()
 	// 名前を設定
 	std::string name = "右利き ボブ";
 	mpGameUI->SetEnemyName(name);
+
+	Scale(20.0f, 20.0f, 20.0f);
 }
 
 // デストラクタ

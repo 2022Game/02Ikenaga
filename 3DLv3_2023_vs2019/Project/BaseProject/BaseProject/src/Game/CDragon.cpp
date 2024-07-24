@@ -324,6 +324,8 @@ CDragon::CDragon()
 		CVector(0.0f, 0.0f, 0.0f),
 		CQuaternion(0.0, -90.f, 0.0f).Matrix()
 	);
+
+	Scale(15.0f, 15.0f, 15.0f);
 }
 
 // デストラクタ
