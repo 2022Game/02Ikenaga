@@ -45,7 +45,10 @@
 #include "CLineEffect.h"
 #include "CMenu.h"
 #include "CKeyM.h"
+#include "CKeyQ.h"
+#include "CKeyE.h"
 #include "CBuffSkill.h"
+#include "CSlashSkill.h"
 #include "Maths.h"
 
 const CGameScene::SpawnData CGameScene::SPAWN_DATA[] =
@@ -127,6 +130,8 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("FrameEdge","Character\\Player\\HP\\FrameEdge.png");
 	CResourceManager::Load<CTexture>("Menu", "UI\\menu.png");
 	CResourceManager::Load<CTexture>("KeyM", "UI\\Key\\mKey.png");
+	CResourceManager::Load<CTexture>("KeyQ", "UI\\Key\\qKey.png");
+	CResourceManager::Load<CTexture>("KeyE", "UI\\Key\\eKey.png");
 	CResourceManager::Load<CTexture>("BuffSkill", "UI\\buffSkill.png");
 
 	// エフェクト関連
@@ -332,8 +337,14 @@ void CGameScene::Load()
 	CMenu* menu = new CMenu(10.0f, 680.0f);
 	//Mキーを作成
 	CKeyM* keyM = new CKeyM(40.0f, 670.0f);
+	// Qキーを作成
+	CKeyQ* keyQ = new CKeyQ(1012.0f, 560.0f);
+	// Eキーを作成
+	CKeyE* keyE = new CKeyE(1142.0f, 560.0f);
 	// バフスキルを作成
-	CBuffSkill* buhhSkill = new CBuffSkill(980.0f, 610.0f);
+	CBuffSkill* buhhSkill = new CBuffSkill(990.0f, 619.0f);
+	// スラッシュスキル作成
+	CSlashSkill* slashSkill = new CSlashSkill(1120.0f, 619.0f);
 
 	// ゲームメニューを作成
 	CGameMenu::Instance();

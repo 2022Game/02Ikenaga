@@ -112,6 +112,8 @@
     <ClCompile Include="src\Game\CGameEnemyUI.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
+    <ClCompile Include="src\Game\CKeyE.cpp" />
+    <ClCompile Include="src\Game\CKeyQ.cpp" />
     <ClCompile Include="src\Game\CMenu.cpp" />
     <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHit.cpp" />
@@ -156,6 +158,7 @@
     <ClCompile Include="src\Game\CShieldRotate2.cpp" />
     <ClCompile Include="src\Game\CSky.cpp" />
     <ClCompile Include="src\Game\CSlash.cpp" />
+    <ClCompile Include="src\Game\CSlashSkill.cpp" />
     <ClCompile Include="src\Game\CSlime.cpp" />
     <ClCompile Include="src\Game\CMushroom.cpp" />
     <ClCompile Include="src\Game\CField.cpp" />
@@ -308,6 +311,8 @@
     <ClInclude Include="src\Game\CGameEnemyUI.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
+    <ClInclude Include="src\Game\CKeyE.h" />
+    <ClInclude Include="src\Game\CKeyQ.h" />
     <ClInclude Include="src\Game\CMenu.h" />
     <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHit.h" />
@@ -351,6 +356,7 @@
     <ClInclude Include="src\Game\CShieldRotate2.h" />
     <ClInclude Include="src\Game\CSky.h" />
     <ClInclude Include="src\Game\CSlash.h" />
+    <ClInclude Include="src\Game\CSlashSkill.h" />
     <ClInclude Include="src\Game\CSlime.h" />
     <ClInclude Include="src\Game\CMushroom.h" />
     <ClInclude Include="src\Game\CField.h" />

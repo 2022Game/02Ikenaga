@@ -107,7 +107,7 @@ CGameMenu::CGameMenu()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpUpUI->SetPos(1080.0f, 560.0f);
+	mpUpUI->SetPos(130.0f, 560.0f);
 	mpUpUI->SetSize(60.0f, 60.0f);
 
 	mpDownUI = new CImage
@@ -116,8 +116,17 @@ CGameMenu::CGameMenu()
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);
-	mpDownUI->SetPos(1080.0f, 590.0f);
+	mpDownUI->SetPos(130.0f, 590.0f);
 	mpDownUI->SetSize(60.0f, 60.0f);
+
+	mpEnterKey = new CImage
+	(
+		"UI/Key/enter.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpEnterKey->SetPos(1075.0f, 580.0f);
+	mpEnterKey->SetSize(60.0f, 60.0f);
 
 	mpOperationIns = new COperationIns();
 	mpPlayerStatusUI = new CPlayerStatusUI();
@@ -136,6 +145,7 @@ CGameMenu::~CGameMenu()
 	SAFE_DELETE(mpTextReturn);
 	SAFE_DELETE(mpUpUI);
 	SAFE_DELETE(mpDownUI);
+	SAFE_DELETE(mpEnterKey);
 }
 
 // ƒI[ƒvƒ“
@@ -199,7 +209,7 @@ void CGameMenu::Update()
 	switch (mSelectIndex)
 	{
 	case 0:
-		if (CInput::PushKey(VK_SPACE))
+		if (CInput::PushKey(VK_RETURN))
 		{
 			mpPlayerStatusUI->Open();
 			mIsOpened = true;
@@ -208,7 +218,7 @@ void CGameMenu::Update()
 		}
 		break;
 	case 1:
-		if (CInput::PushKey(VK_SPACE))
+		if (CInput::PushKey(VK_RETURN))
 		{
 			mpOperationIns->Open();
 			mIsOpened = true;
@@ -246,4 +256,5 @@ void CGameMenu::Render()
 	mpTextReturn->Render();
 	mpUpUI->Render();
 	mpDownUI->Render();
+	mpEnterKey->Render();
 }

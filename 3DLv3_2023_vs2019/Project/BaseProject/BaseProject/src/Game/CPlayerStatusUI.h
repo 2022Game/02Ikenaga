@@ -80,6 +80,10 @@ private:
 	CImage* mpBack;
 	// キー
 	CImage* mpShiftKey;
+	// バフスキル
+	CImage* mpBuffSkill;
+	// スラッシュスキル
+	CImage* mpSlashSkill;
 
 	// テキスト関連
 	CText* mpLevelText;   // レベルのテキスト
@@ -93,6 +97,8 @@ private:
 	CText* mpLine2;       // 線2
 	CText* mpLine3;       // 線3
 	CText* mpDetail;      // 詳細
+	CText* mpSkillText;   // スキル
+	CText* mpSkillText2;   // スキル2
 	// UI関連
 	CPlayerLevelUI* mpLevelUI;     // レベル
 	CPlayerMaxExpUI* mpMaxExpUI;   // 経験値

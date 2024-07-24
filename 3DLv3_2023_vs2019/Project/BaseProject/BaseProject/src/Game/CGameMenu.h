@@ -43,6 +43,8 @@ private:
 	CImage* mpTextReturn;
 	CImage* mpUpUI;
 	CImage* mpDownUI;
+	
+	CImage* mpEnterKey;
 
 	int mSelectIndex;
 	bool mIsOpened;

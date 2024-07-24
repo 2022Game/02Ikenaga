@@ -805,6 +805,15 @@
     <ClCompile Include="src\Game\CBuffSkill.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CSlashSkill.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CKeyQ.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CKeyE.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1385,6 +1394,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CBuffSkill.h">
       <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSlashSkill.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CKeyQ.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CKeyE.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Key</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

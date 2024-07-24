@@ -24,6 +24,8 @@
 #define DEFENSE_POS CVector2(200.0f, 380.0f)
 #define SIZE_POS CVector2(200.0f, 420.0f)
 #define DETAIL_POS CVector2(200.0f, 500.0f)
+#define SKILL_POS CVector2(650.0f, 240.0f)
+#define SKILL_POS2 CVector2(650.0f, 420.0f)
 
 #define SHADOW_COUNT 8     // 影のカウント
 #define SHADOW_WIDTH 2.0f  // 影の幅
@@ -71,6 +73,24 @@ CPlayerStatusUI::CPlayerStatusUI()
 	);
 	mpShiftKey->SetPos(185.0f, 590.0f);
 	mpShiftKey->SetSize(55.0f, 55.0f);
+
+	mpBuffSkill = new CImage
+	(
+		"UI/buffSkill.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpBuffSkill->SetPos(820.0f, 140.0f);
+	mpBuffSkill->SetSize(80.0f, 80.0f);
+
+	mpSlashSkill = new CImage
+	(
+		"UI/buffSkill.png",
+		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
+		false, false
+	);
+	mpSlashSkill->SetPos(820.0f, 320.0f);
+	mpSlashSkill->SetSize(80.0f, 80.0f);
 
 	CVector2 size = CVector2(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.5f);
 	ETextAlignH textAlignH = ETextAlignH::eLeft;
@@ -229,6 +249,34 @@ CPlayerStatusUI::CPlayerStatusUI()
 	mpDetail->SetTextAlignH(textAlignH);
 	mpDetail->SetText("剣と盾で様々な困難を乗り越えスキルで自分を強化、回復をしその身を極めていく。");
 
+	// スキルのテキストを作成
+	mpSkillText = new CText
+	(
+		nullptr, 24,
+		SKILL_POS,
+		size,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+	mpSkillText->SetTextAlignH(textAlignH);
+	mpSkillText->SetText("ランダムで攻撃力アップ,防御力アップ,\nHP回復をする。（SP消費-4）");
+
+	// スキル2のテキストを作成
+	mpSkillText2 = new CText
+	(
+		nullptr, 24,
+		SKILL_POS2,
+		size,
+		CColor(1.0f, 1.0f, 1.0f),
+		ETaskPriority::eUI, 0,
+		ETaskPauseType::eMenu,
+		false, false
+	);
+	mpSkillText2->SetTextAlignH(textAlignH);
+	mpSkillText2->SetText("前方に向かって斬撃を放つ。（SP消費-5）");
+
 	// レベルUIを作成
 	mpLevelUI = new CPlayerLevelUI(400.0f, 180.f);
 
@@ -270,6 +318,8 @@ CPlayerStatusUI::~CPlayerStatusUI()
 	SAFE_DELETE(mpStatus);
 	SAFE_DELETE(mpBack);
 	SAFE_DELETE(mpShiftKey);
+	SAFE_DELETE(mpBuffSkill);
+	SAFE_DELETE(mpSlashSkill);
 	SAFE_DELETE(mpLevelText);
 	SAFE_DELETE(mpExpText);
 	SAFE_DELETE(mpHpText);
@@ -280,6 +330,8 @@ CPlayerStatusUI::~CPlayerStatusUI()
 	SAFE_DELETE(mpLine);
 	SAFE_DELETE(mpLine2);
 	SAFE_DELETE(mpLine3);
+	SAFE_DELETE(mpDetail);
+	SAFE_DELETE(mpSkillText);
 	mpLevelUI->Kill();
 	mpMaxExpUI->Kill();
 	mpExpUI->Kill();
@@ -457,6 +509,8 @@ void CPlayerStatusUI::Render()
 	mpStatus->Render();
 	mpBack->Render();
 	mpShiftKey->Render();
+	mpBuffSkill->Render();
+	mpSlashSkill->Render();
 
 	mpLevelText->SetColor(1.0f, 1.0f, 1.0f);
 	mpExpText->SetColor(1.0f, 1.0f, 0.0f);
@@ -469,6 +523,8 @@ void CPlayerStatusUI::Render()
 	mpLine2->SetColor(1.0f, 1.0f, 1.0f);
 	mpLine3->SetColor(1.0f, 1.0f, 1.0f);
 	mpDetail->SetColor(1.0f, 1.0f, 1.0f);
+	mpSkillText->SetColor(1.0f, 1.0f, 1.0f);
+	mpSkillText2->SetColor(1.0f, 1.0f, 1.0f);
 
 	for (int i = 0; i < SHADOW_COUNT; i++)
 	{
@@ -519,6 +575,14 @@ void CPlayerStatusUI::Render()
 		// 詳細
 		mpDetail->SetPos(DETAIL_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpDetail->Render();
+
+		// スキル
+		mpSkillText->SetPos(SKILL_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpSkillText->Render();
+
+		// スキル2
+		mpSkillText2->SetPos(SKILL_POS2 + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpSkillText2->Render();
 	}
 	mpLevelText->SetColor(0.0f, 0.0f, 0.0f);
 	mpLevelText->SetPos(LV_POS);
@@ -563,4 +627,12 @@ void CPlayerStatusUI::Render()
 	mpDetail->SetColor(0.0f, 0.0f, 0.0f);
 	mpDetail->SetPos(DETAIL_POS);
 	mpDetail->Render();
+
+	mpSkillText->SetColor(0.0f, 0.0f, 0.0f);
+	mpSkillText->SetPos(SKILL_POS);
+	mpSkillText->Render();
+
+	mpSkillText2->SetColor(0.0f, 0.0f, 0.0f);
+	mpSkillText2->SetPos(SKILL_POS2);
+	mpSkillText2->Render();
 }
