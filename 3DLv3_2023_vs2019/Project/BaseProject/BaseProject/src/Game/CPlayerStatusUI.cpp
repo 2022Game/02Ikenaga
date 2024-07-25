@@ -85,7 +85,7 @@ CPlayerStatusUI::CPlayerStatusUI()
 
 	mpSlashSkill = new CImage
 	(
-		"UI/buffSkill.png",
+		"UI/slashSkill.png",
 		ETaskPriority::eUI, 0, ETaskPauseType::eMenu,
 		false, false
 	);

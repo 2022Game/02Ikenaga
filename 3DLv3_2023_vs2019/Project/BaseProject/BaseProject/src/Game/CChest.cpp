@@ -765,6 +765,16 @@ void CChest::Death()
 	ChangeState(EState::eDie);
 }
 
+// ƒ‰ƒ“ƒ_ƒ€‚ÉˆÊ’u‚ðŽæ“¾
+CVector CChest::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(-200.0f, 0.0f));
+	pos.Z(Math::Rand(-950.0f, -800.0f));
+
+	return CVector(pos);
+}
+
 // •`‰æ
 void CChest::Render()
 {

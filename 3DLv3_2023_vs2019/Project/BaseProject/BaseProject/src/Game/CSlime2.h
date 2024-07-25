@@ -84,8 +84,6 @@ private:
 	// 移動
 	void UpdateRun();
 
-	int mAttackTime;   // 攻撃時間の間隔
-
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -146,6 +144,7 @@ private:
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
+	float mAttackTime;  // 攻撃時間の間隔
 
 	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
 	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)

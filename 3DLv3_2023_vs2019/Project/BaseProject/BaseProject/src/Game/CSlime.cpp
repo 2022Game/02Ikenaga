@@ -11,13 +11,11 @@ CSlime* CSlime::spInstance = nullptr;
 
 #define ENEMY_HEIGHT   1.0f  // 線分コライダー
 #define MOVE_SPEED     0.4f  // 移動速度
-#define WITHIN_RANGE  30.0f  // 範囲内
+#define WITHIN_RANGE  35.0f  // 範囲内
 #define GRAVITY        0.3f  // 重力
 #define WALK_RANGE   100.0f  // 追跡する範囲
 #define STOP_RANGE    21.0f  // 追跡を辞める範囲
 #define ROTATE_RANGE 250.0f  // 回転する範囲
-#define SPAWN_RANDOM_RANGE_X 100.0f
-#define SPAWN_RANDOM_RANGE_Z 40.0f
 
 // レッドスライム(エネミー)のアニメーションデータのテーブル
 const CSlime::AnimData CSlime::ANIM_DATA[] =
@@ -45,8 +43,8 @@ bool CSlime::IsDeath() const
 CSlime::CSlime()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
 	, mIsGrounded(false)
+	, mAttackTime(0)
 	, mStateStep(0)
 	, mIsSlimeAttackSE(false)
 	, mIsSlimeDizzySE(false)
@@ -597,7 +595,7 @@ void CSlime::Update()
 	// HPが減ったら攻撃開始
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		if (vectorPos <= WITHIN_RANGE)
+		if (vectorPos <= WITHIN_RANGE || mState == EState::eHit)
 		{
 			mAttackTime++;
 		}
@@ -773,8 +771,8 @@ void CSlime::Death()
 CVector CSlime::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(-100.0f, 0.0f));
-	pos.Z(Math::Rand(-140.0f, 0.0f));
+	pos.X(Math::Rand(-200.0f, 0.0f));
+	pos.Z(Math::Rand(-150.0f, 0.0f));
 
 	return CVector(pos);
 }

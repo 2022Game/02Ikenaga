@@ -59,6 +59,8 @@ public:
 	// •`‰æ
 	void Render();
 
+	int mAttackTime;    // UŒ‚ŠÔ‚ÌŠÔŠu
+
 private:
 
 	// ‘Ò‹@ó‘Ô
@@ -85,8 +87,6 @@ private:
 	void UpdateDizzy();
 	// ˆÚ“®
 	void UpdateRun();
-
-	int mAttackTime;   // UŒ‚ŠÔ‚ÌŠÔŠu
 
 	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìí—Ş
 	enum class EAnimType

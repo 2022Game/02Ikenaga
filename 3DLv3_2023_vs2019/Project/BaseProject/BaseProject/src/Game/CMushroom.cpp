@@ -831,8 +831,8 @@ void CMushroom::Death()
 CVector CMushroom::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(50.0f, 150.0f));
-	pos.Z(Math::Rand(-200.0f, -100.0f));
+	pos.X(Math::Rand(70.0f, 270.0f));
+	pos.Z(Math::Rand(-250.0f, -100.0f));
 
 	return CVector(pos);
 }

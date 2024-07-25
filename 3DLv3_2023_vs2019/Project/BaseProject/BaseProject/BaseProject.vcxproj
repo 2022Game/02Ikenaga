@@ -115,7 +115,11 @@
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
     <ClCompile Include="src\Game\CKeyE.cpp" />
     <ClCompile Include="src\Game\CKeyQ.cpp" />
+    <ClCompile Include="src\Game\CLock.cpp" />
+    <ClCompile Include="src\Game\CLock2.cpp" />
+    <ClCompile Include="src\Game\CLockLevel.cpp" />
     <ClCompile Include="src\Game\CLockWall.cpp" />
+    <ClCompile Include="src\Game\CLockWall2.cpp" />
     <ClCompile Include="src\Game\CMenu.cpp" />
     <ClCompile Include="src\Game\CHealCircle.cpp" />
     <ClCompile Include="src\Game\CHit.cpp" />
@@ -316,7 +320,11 @@
     <ClInclude Include="src\Game\CGameOverScene.h" />
     <ClInclude Include="src\Game\CKeyE.h" />
     <ClInclude Include="src\Game\CKeyQ.h" />
+    <ClInclude Include="src\Game\CLock.h" />
+    <ClInclude Include="src\Game\CLock2.h" />
+    <ClInclude Include="src\Game\CLockLevel.h" />
     <ClInclude Include="src\Game\CLockWall.h" />
+    <ClInclude Include="src\Game\CLockWall2.h" />
     <ClInclude Include="src\Game\CMenu.h" />
     <ClInclude Include="src\Game\CHealCircle.h" />
     <ClInclude Include="src\Game\CHit.h" />

@@ -822,12 +822,6 @@ void CCactus::AttackEnd()
 	mpAttackColLeftHand->SetEnable(false);
 }
 
-// 描画
-void CCactus::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CCactus::LevelUp()
 {
@@ -886,4 +880,20 @@ void CCactus::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// ランダムに位置を取得
+CVector CCactus::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(70.0f, 270.0f));
+	pos.Z(Math::Rand(-850.0f, -700.0f));
+
+	return CVector(pos);
+}
+
+// 描画
+void CCactus::Render()
+{
+	CXCharacter::Render();
 }

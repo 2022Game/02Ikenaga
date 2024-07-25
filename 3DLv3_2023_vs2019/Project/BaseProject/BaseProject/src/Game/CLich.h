@@ -59,13 +59,16 @@ public:
 	/// <returns></returns>
 	float GetDefBuff(const CVector& attackDir) const override;
 
-	// 描画
-	void Render();
-
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
 	void ChangeLevel(int level);
+
+	// ランダムに位置を取得
+	CVector GetRandomSpawnPos()override;
+
+	// 描画
+	void Render();
 
 	static float mElapsedTime;  // 経過時間
 

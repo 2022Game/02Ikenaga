@@ -1,26 +1,63 @@
 #pragma once
-#include "CXCharacter.h"
 #include "CColliderLine.h"
 #include "CColliderSphere.h"
-#include "CRideableObject.h"
-#include <algorithm>
 #include "CEnemy.h"
+#include "CSound.h"
+
+class CHit;
 
 /*
- ブルースライム(エネミー)のクラス
- プレイヤーの推定レベル(5)
+ ブルースライムのクラス
+ プレイヤーの推定レベル(1～5)
  エネミークラスを継承
 */
 class CSlime3 : public CEnemy
 {
 public:
-	bool IsDeath() const;
 	//インスタンスのポインタの取得
 	static CSlime3* Instance();
 
 	// コンストラクタ
 	CSlime3();
+	// デストラクタ
 	~CSlime3();
+
+	// 更新処理
+	void Update();
+
+	/// 衝突処理
+	/// </summary>
+	/// <param name="self">衝突した自身のコライダー</param>
+	/// <param name="other">衝突した相手のコライダー</param>
+	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
+
+	// 攻撃開始
+	void AttackStart() override;
+	// 攻撃終了
+	void AttackEnd() override;
+
+	// 1レベルアップ
+	void LevelUp();
+	// レベルの変更
+	void ChangeLevel(int level);
+
+	/// <summary>
+	/// 被ダメージ処理
+	/// </summary>
+	/// <param name="damage">受けるダメージ</param>
+	//ダメージを与えたオブジェクト
+	virtual void TakeDamage(int damage, CObjectBase* causedObj);
+
+	// 死亡処理
+	void Death() override;
+
+	// ランダムに位置を取得
+	CVector GetRandomSpawnPos()override;
+
+	// 描画
+	void Render();
+
+private:
 
 	// 待機状態
 	void UpdateIdle();
@@ -44,45 +81,9 @@ public:
 	void UpdateDie();
 	// めまい(混乱)
 	void UpdateDizzy();
-	// 走る
+	// 移動
 	void UpdateRun();
 
-	// 更新処理
-	void Update();
-
-	/// 衝突処理
-	/// </summary>
-	/// <param name="self">衝突した自身のコライダー</param>
-	/// <param name="other">衝突した相手のコライダー</param>
-	virtual void Collision(CCollider* self, CCollider* other, const CHitInfo& hit) override;
-
-	// 攻撃開始
-	void AttackStart() override;
-	// 攻撃終了
-	void AttackEnd() override;
-
-	// 描画
-	void Render();
-
-	// 1レベルアップ
-	void LevelUp();
-	// レベルの変更
-	void ChangeLevel(int level);
-
-	/// <summary>
-	/// 被ダメージ処理
-	/// </summary>
-	/// <param name="damage">受けるダメージ</param>
-	//ダメージを与えたオブジェクト
-	virtual void TakeDamage(int damage, CObjectBase* causedObj);
-
-	// 死亡処理
-	void Death() override;
-
-	static int mHp;
-
-private:
-	int mAttackTime;   // 攻撃時間の間隔
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -98,17 +99,14 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eRun,		// 走る
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,		// 移動
 
 		Num
 	};
 	// アニメーション切り替え
 	void ChangeAnimation(EAnimType type);
 
-	// ブルースライム(エネミー)のインスタンス
+	// インスタンス
 	static CSlime3* spInstance;
 
 	// アニメーションデータ
@@ -117,11 +115,13 @@ private:
 		std::string path;	// アニメーションデータのパス
 		bool loop;			// ループするかどうか
 		float frameLength;	// アニメーションのフレーム数
+		float animSpeed;    // アニメーションの再生速度
 	};
+
 	// アニメーションデータのテーブル
 	static const AnimData ANIM_DATA[];
 
-	// ブルースライム(エネミー)の状態
+	// ブルースライムの状態
 	enum class EState
 	{
 		eIdle,		// 待機
@@ -134,19 +134,34 @@ private:
 		eHit,       // ヒット
 		eDie,       // 死ぬ時
 		eDizzy,     // めまい(混乱)
-		eRun,      // 走る
-		eJumpStart,	// ジャンプ開始
-		eJump,		// ジャンプ中
-		eJumpEnd,	// ジャンプ終了
+		eRun,       // 移動
 	};
-	EState mState;	// ブルースライム(エネミー)の状態
+	EState mState;	// ブルースライムの状態
+	int mStateStep; // State内のステップ処理
+
+	// 状態を切り替え
+	void ChangeState(EState state);
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
+	float mAttackTime;  // 攻撃時間の間隔
 
-	CColliderLine* mpColliderLine;
-	CColliderSphere* mpColliderSphere;
-	CColliderSphere* mpDamageCol;  // ダメージを受けるコライダー
-	CColliderSphere* mpAttackCol;  // ダメージを与えるコライダー
+	CColliderLine* mpColliderLine;          // キャラクターの線分コライダー
+	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
+	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
+	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
+
+	CHit* mpHitEffect;        // ヒットエフェクト 
+
+	// サウンド関連
+	CSound* mpSlimeAttackSE;  // 攻撃の音
+	CSound* mpSlimeDizzySE;   // 混乱の音
+	CSound* mpSlimeHitSE;     // ヒットの音
+	CSound* mpSlimeDieSE;     // 死亡の音
+
+	bool mIsSlimeAttackSE;
+	bool mIsSlimeDizzySE;
+	bool mIsSlimeHitSE;
+	bool mIsSlimeDieSE;
 };

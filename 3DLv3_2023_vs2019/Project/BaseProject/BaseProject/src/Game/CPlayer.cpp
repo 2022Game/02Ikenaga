@@ -55,7 +55,7 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 };
 
 #define PLAYER_HEIGHT  1.2f  // 線分コライダー
-#define JUMP_SPEED     1.5f  // ジャンプスピード
+#define JUMP_SPEED     1.2f  // ジャンプスピード
 #define GRAVITY     0.0625f  // 重力
 #define JUMP_END_Y     1.0f  // ジャンプ終了
 #define MOVE_SPEED     0.3f  // 移動速度
@@ -135,6 +135,9 @@ CPlayer::CPlayer()
 	// Expを表示
 	std::string exp = "EXP";
 	mpGameUI->SetExpText(exp);
+
+	std::string lockLevel = "レベル5";
+	mpGameUI->SetLockLevel(lockLevel);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -1343,62 +1346,6 @@ void CPlayer::Update()
 		ChangeState(EState::eDie);
 	}
 
-	// プレイヤーのデバック表示
-	static bool debug = false;
-	static bool debug2 = true;
-	if (CInput::PushKey('R'))
-	{
-		debug = !debug;
-		debug2 = !debug2;
-	}
-
-	/*if(debug)
-	{
-		CDebugPrint::Print("    Lv:      %d\n", mCharaStatus.level);
-		CDebugPrint::Print("   Exp:     %d  / %d\n", mCharaStatus.exp, mCharaMaxStatus.exp);
-		CDebugPrint::Print("    Hp:    %d / %d\n", mCharaStatus.hp,mCharaMaxStatus.hp);
-		if (mPowerUp != true)
-		{
-			CDebugPrint::Print(" 攻撃力:    %d\n", mCharaStatus.power / 2);
-		}
-		else
-		{
-			CDebugPrint::Print(" 攻撃力:    %d×2\n", mCharaStatus.power / 2);
-		}
-		if (mDefenseUp != true)
-		{
-			CDebugPrint::Print(" 防御力:    %d\n", mCharaStatus.defense);
-		}
-		else if (mDefenseUp == true)
-		{
-			if (mState != EState::eGuard && mState != EState::eGuard)
-			{
-				CDebugPrint::Print(" 防御力:    %d×2\n", mCharaStatus.defense);
-			}
-			else
-			{
-				CDebugPrint::Print(" 防御力:    %d×4\n", mCharaStatus.defense);
-			}
-		}
-		CDebugPrint::Print("    SP:    %d / %d\n", mCharaStatus.SpecialPoint, mCharaMaxStatus.SpecialPoint);
-		CVector scale = Scale();
-		CDebugPrint::Print(" スケール値 %f,%f,%f \n", scale.X(), scale.Y(), scale.Z());
-		CDebugPrint::Print(" 回避回数: %d\n", mRollingCount);
-	}*/
-	/*if (debug2)
-	{
-		CDebugPrint::Print(" R: ステータス表示\n");
-		CDebugPrint::Print(" 2: レベルアップ\n");
-		CDebugPrint::Print(" WASD: 移動\n");
-		CDebugPrint::Print(" 右クリック: ガード\n");
-		CDebugPrint::Print(" 左クリック: 攻撃\n");
-		CDebugPrint::Print(" マウスホイール\n");
-		CDebugPrint::Print(" (レベル10以降:使用可) : スペシャル攻撃\n");
-		CDebugPrint::Print(" スペース: ジャンプ\n");
-		CDebugPrint::Print(" WASD+Sfift: 回避\n");
-		CDebugPrint::Print(" 回避のクールタイム: %d\n", mRollingTime);
-	}*/
-
 	if (CInput::Key('1'))
 	{
 		if (CInput::PushKey(VK_UP)) mCharaStatus.hp++;
@@ -1418,7 +1365,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(100);
+		ChangeLevel(91);
 	}
 	else if (CInput::PushKey('4'))
 	{

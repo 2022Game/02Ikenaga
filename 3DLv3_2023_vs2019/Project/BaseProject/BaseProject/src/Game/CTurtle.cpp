@@ -10,9 +10,7 @@
 // 亀のインスタンス
 CTurtle* CTurtle::spInstance = nullptr;
 
-int CTurtle::mHp;
-
-#define ENEMY_HEIGHT    1.0f  // 線分コライダー
+#define ENEMY_HEIGHT    0.9f  // 線分コライダー
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.4f  // 移動速度
 #define GRAVITY         0.3f  // 重力
@@ -350,6 +348,7 @@ void CTurtle::UpdateDefense()
 {
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDefense);
+	mpAttackColBody->SetEnable(false);
 
 	if (IsAnimationFinished())
 	{
@@ -362,6 +361,7 @@ void CTurtle::UpdateDefenseHit()
 {
 	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDefenseHit);
+	mpAttackColBody->SetEnable(false);
 	if (IsAnimationFinished())
 	{
 		ChangeState(EState::eDefenseIdle);
@@ -373,6 +373,7 @@ void CTurtle::UpdateDefenseIdle()
 {
 	SetAnimationSpeed(0.3f);
 	ChangeAnimation(EAnimType::eDefenseIdle);
+	mpAttackColBody->SetEnable(false);
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
@@ -473,7 +474,6 @@ void CTurtle::Update()
 {
 	SetParent(mpRideObject);
 	mpRideObject = nullptr;
-	mHp = mCharaStatus.hp;
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Y(0.0f);
 	mMoveSpeed.Z(0.0f);
@@ -778,6 +778,17 @@ void CTurtle::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// ランダムに位置を取得
+CVector CTurtle::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(-200.0f, 0.0f));
+	pos.Y(-0.2f);
+	pos.Z(Math::Rand(-350.0f, -200.0f));
+
+	return CVector(pos);
 }
 
 // 描画

@@ -37,8 +37,8 @@ const CSlime2::AnimData CSlime2::ANIM_DATA[] =
 CSlime2::CSlime2()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
 	, mIsGrounded(false)
+	, mAttackTime(0.0f)
 	, mStateStep(0)
 	, mIsSlimeAttackSE(false)
 	, mIsSlimeDizzySE(false)
@@ -589,12 +589,12 @@ void CSlime2::Update()
 	// HPÇ™å∏Ç¡ÇΩÇÁçUåÇäJén
 	if (mCharaStatus.hp < mCharaMaxStatus.hp)
 	{
-		if (vectorPos <= WITHIN_RANGE)
+		if (vectorPos <= WITHIN_RANGE || mState == EState::eHit)
 		{
-			mAttackTime++;
+			mAttackTime += Time::DeltaTime();
 		}
 
-		if (mAttackTime > 230)
+		if (mAttackTime > 2.0f)
 		{
 			// ëÂçUåÇ
 			bool BigAttack = false;
@@ -613,15 +613,15 @@ void CSlime2::Update()
 		}
 		else if (mCharaStatus.hp <= 0)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDizzy)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 	else

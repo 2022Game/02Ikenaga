@@ -11,6 +11,7 @@ class CExpGauge;
 class CHpUI;
 class CSpUI;
 class CExpUI;
+class CLockLevel;
 
 // ゲーム中のプレイヤーUI
 class CGamePlayerUI : public CTask
@@ -57,6 +58,9 @@ public:
 	// Expを表示
 	void SetExpText(std::string expText);
 
+	// ロック中のレベル
+	void SetLockLevel(std::string lockLevel);
+
 	// AvoidGaugeを取得
 	CAvoidanceGauge* GetAvoidGauge()const;
 
@@ -68,6 +72,7 @@ private:
 	CHpUI* mpHpUI;                    // HpのUI
 	CSpUI* mpSpUI;                    // SpのUI
 	CExpUI* mpExpUI;                  // ExpのUI
+	CLockLevel* mpLockLevel;          // ロック中のレベル
 
 	// ゲージ関連
 	CHpGauge* mpHpGauge;            // Hpゲージ

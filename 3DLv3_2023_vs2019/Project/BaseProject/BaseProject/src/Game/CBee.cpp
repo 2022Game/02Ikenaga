@@ -835,6 +835,16 @@ void CBee::Death()
 	ChangeState(EState::eDie);
 }
 
+// ƒ‰ƒ“ƒ_ƒ€‚ÉˆÊ’u‚ðŽæ“¾
+CVector CBee::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(-200.0f, 0.0f));
+	pos.Z(Math::Rand(-650.0f, -500.0f));
+
+	return CVector(pos);
+}
+
 // •`‰æ
 void CBee::Render()
 {

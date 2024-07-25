@@ -637,12 +637,6 @@ void CRay::AttackEnd()
 	mpAttackColHead->SetEnable(false);
 }
 
-// 描画
-void CRay::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CRay::LevelUp()
 {
@@ -701,4 +695,20 @@ void CRay::Death()
 {
 	// 死亡状態へ移行
 	ChangeState(EState::eDie);
+}
+
+// ランダムに位置を取得
+CVector CRay::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(70.0f, 170.0f));
+	pos.Z(Math::Rand(-550.0f, -400.0f));
+
+	return CVector(pos);
+}
+
+// 描画
+void CRay::Render()
+{
+	CXCharacter::Render();
 }

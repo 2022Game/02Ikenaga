@@ -103,7 +103,7 @@ CEnemy* CEnemyManager::SpawnEnemy(EEnemyType type)
 	case EEnemyType::eDragon: return new CDragon();
 	case EEnemyType::eMushroom: return new CMushroom();
 	case EEnemyType::eRay: return new CRay();
-	case EEnemyType::eRich: return new CLich();
+	case EEnemyType::eLich: return new CLich();
 	case EEnemyType::eSlime: return new CSlime();
 	case EEnemyType::eSlime2: return new CSlime2();
 	case EEnemyType::eTurtle: return new CTurtle();

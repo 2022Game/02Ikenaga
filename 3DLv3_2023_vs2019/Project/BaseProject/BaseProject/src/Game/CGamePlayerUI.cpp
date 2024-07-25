@@ -5,6 +5,7 @@
 #include "CHpUI.h"
 #include "CSpUI.h"
 #include "CExpUI.h"
+#include "CLockLevel.h"
 #include "CHpGauge.h"
 #include "CSpGauge.h"
 #include "CAvoidanceGauge.h"
@@ -48,6 +49,8 @@ CGamePlayerUI::CGamePlayerUI()
 	// プレイヤーのExpゲージ作成
 	mpExpGauge = new CExpGauge();
 	mpExpGauge->SetPos(320.0f, 700.0f);
+
+	mpLockLevel = new CLockLevel(1002.5f, 685.0f);
 }
 
 // デストラクタ
@@ -149,6 +152,12 @@ void CGamePlayerUI::SetExp(int exp)
 void CGamePlayerUI::SetExpText(std::string expText)
 {
 	mpExpUI->SetExpText(expText);
+}
+
+// ロック中のレベル
+void CGamePlayerUI::SetLockLevel(std::string lockLevel)
+{
+	mpLockLevel->SetLevel(lockLevel);
 }
 
 // AvoidGaugeを取得

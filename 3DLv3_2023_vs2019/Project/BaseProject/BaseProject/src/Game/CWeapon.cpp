@@ -3,7 +3,7 @@
 
 // コンストラク
 CWeapon::CWeapon()
-	: CObjectBase(ETag::eWeapon, ETaskPriority::eWeapon)
+	: CObjectBase(ETag::eWeapon, ETaskPriority::eWeapon, 0, ETaskPauseType::eGame)
 	, mpAttachMtx(nullptr)
 	, mOwner(nullptr)
 {

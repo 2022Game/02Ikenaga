@@ -76,7 +76,7 @@ CLich::CLich()
 	spInstance = this;
 
 	// 敵の種類
-	mType = EEnemyType::eRich;
+	mType = EEnemyType::eLich;
 
 	// モデルデータ読み込み
 	CModelX* model = CResourceManager::Get<CModelX>("Lich");
@@ -925,12 +925,6 @@ float CLich::GetDefBuff(const CVector& attackDir)const
 	return mBaseDefenseBuffRatio;
 }
 
-// 描画
-void CLich::Render()
-{
-	CXCharacter::Render();
-}
-
 // 1レベルアップ
 void CLich::LevelUp()
 {
@@ -950,4 +944,16 @@ void CLich::ChangeLevel(int level)
 
 	mpGameUI->SetMaxHp(mCharaMaxStatus.hp);
 	mpGameUI->SetHp(mCharaStatus.hp);
+}
+
+// ランダムに位置を取得
+CVector CLich::GetRandomSpawnPos()
+{
+	return CVector();
+}
+
+// 描画
+void CLich::Render()
+{
+	CXCharacter::Render();
 }

@@ -17,9 +17,10 @@ enum class EEnemyType
 	eDragon,    // ドラゴン
 	eMushroom,  // マッシュルーム
 	eRay,       // エイ
-	eRich,      // リッチ
+	eLich,      // リッチ
 	eSlime,     // レッドスライム
 	eSlime2,    // オレンジスライム
+	eSlime3,    // ブルースライム
 	eTurtle,    // 亀
 
 	Num

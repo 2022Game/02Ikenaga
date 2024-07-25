@@ -61,9 +61,6 @@ public:
 	// 攻撃終了
 	void AttackEnd() override;
 
-	// 描画
-	void Render();
-
 	// 1レベルアップ
 	void LevelUp();
 	// レベルの変更
@@ -78,6 +75,12 @@ public:
 
 	// 死亡処理
 	void Death() override;
+
+	// ランダムに位置を取得
+	CVector GetRandomSpawnPos()override;
+
+	// 描画
+	void Render();
 
 private:
 	int mAttackTime;   // 攻撃時間の間隔

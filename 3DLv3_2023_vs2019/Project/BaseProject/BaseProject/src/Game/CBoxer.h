@@ -60,6 +60,9 @@ public:
 	// €–Sˆ—
 	void Death() override;
 
+	// ƒ‰ƒ“ƒ_ƒ€‚ÉˆÊ’u‚ğæ“¾
+	CVector GetRandomSpawnPos()override;
+
 	// •`‰æ
 	void Render();
 

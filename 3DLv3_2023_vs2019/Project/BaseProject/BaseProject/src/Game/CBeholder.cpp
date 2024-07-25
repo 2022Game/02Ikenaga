@@ -1304,6 +1304,16 @@ void CBeholder::Death()
 	ChangeState(EState::eDie);
 }
 
+// ƒ‰ƒ“ƒ_ƒ€‚ÉˆÊ’u‚ðŽæ“¾
+CVector CBeholder::GetRandomSpawnPos()
+{
+	CVector pos = CVector::zero;
+	pos.X(Math::Rand(70.0f, 270.0f));
+	pos.Z(Math::Rand(-1150.0f, -1000.0f));
+
+	return CVector(pos);
+}
+
 // •`‰æ
 void CBeholder::Render()
 {
