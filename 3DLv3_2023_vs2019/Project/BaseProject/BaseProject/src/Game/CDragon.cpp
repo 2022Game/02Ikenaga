@@ -7,13 +7,15 @@
 #include "CFlightFlamethrower.h"
 #include "CRoar.h"
 #include "CGameEnemyUI.h"
+#include "CGameClearScene.h"
+#include "CHit.h"
 #include "Maths.h"
 
 // ドラゴンのインスタンス
 CDragon* CDragon::spInstance = nullptr;
 
 #define ENEMY_HEIGHT  -2.9f    // 線分コライダー
-#define WITHIN_RANGE  70.0f    // 範囲内
+#define WITHIN_RANGE  150.0f     // 範囲内
 #define MOVE_SPEED    0.8f     // 移動速度
 #define GRAVITY       0.0625f  // 重力
 #define WALK_RANGE    500.0f   // 追跡する範囲
@@ -326,6 +328,16 @@ CDragon::CDragon()
 	);
 
 	Scale(15.0f, 15.0f, 15.0f);
+
+	float Size = 130.0f;   // サイズ
+	float Height = 0.2f;  // 高さ
+	// ヒットエフェクトを作成
+	mpHitEffect = new CHit(Size, Height);
+	mpHitEffect->SetOwner(this);
+	mpHitEffect->Position(Position());
+	mpHitEffect->SetShow(false);
+
+	CGameClearScene::Instance();
 }
 
 // デストラクタ
@@ -662,6 +674,8 @@ void CDragon::UpdateDie()
 		Kill();
 		// エネミーの死亡処理へ
 		CEnemy::DragonDeath();
+		CGameClearScene* clear = CGameClearScene::Instance();
+		clear->Open();
 	}
 }
 
@@ -875,7 +889,7 @@ void CDragon::Update()
 
 	if (CInput::PushKey(('T')))
 	{
-		ChangeState(EState::eBackStep);
+		ChangeState(EState::eIdle2);
 	}
 
 	// 状態に合わせて、更新処理を切り替える
@@ -961,24 +975,6 @@ void CDragon::Update()
 
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
-	
-	if (mState != EState::eIdle3 && mState != EState::eDie)
-	{
-		if (mState == EState::eFlyingIdle)
-		{
-			mpGameUI->SetUIoffSetPos(CVector(0.0f, 150.0f, 0.0f));
-			mpGameUI->GetHpGauge()->SetShow(true);
-		}
-		else
-		{
-			mpGameUI->SetUIoffSetPos(CVector(0.0f, 35.0f, 0.0f));
-			mpGameUI->GetHpGauge()->SetShow(true);
-		}
-	}
-	else
-	{
-		mpGameUI->GetHpGauge()->SetShow(false);
-	}
 
 	if (mState == EState::eIdle2 && vectorPos <= 110.0f 
 		|| mState == EState::eHit && vectorPos <= 110.0f)
@@ -1038,11 +1034,11 @@ void CDragon::Update()
 			}
 			else if (mAttack)
 			{
-				//ChangeState(EState::eAttack);
+				ChangeState(EState::eAttack);
 			}
 			else if (mDefense)
 			{
-				//ChangeState(EState::eDefense);
+				ChangeState(EState::eDefense);
 			}
 			else
 			{
@@ -1169,7 +1165,24 @@ void CDragon::Update()
 
 	mIsGrounded = false;
 
+	if (mState == EState::eFlyingIdle || mState == EState::eFlyingStart
+		|| mState == EState::eFlyingEnd || mState == EState::eFlyingAttack
+		|| mState == EState::eFlyForward || mState == EState::eFlyingAttackWait)
+	{
+		mpGameUI->SetUIoffSetPos(CVector(0.0f, 200.0f, 0.0f));
+	}
+	else
+	{
+		mpGameUI->SetUIoffSetPos(CVector(0.0f, 55.0f, 0.0f));
+	}
+
 	CEnemy::Update();
+
+	if (mState == EState::eIdle3 || mState == EState::eDie)
+	{
+		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
+		hpGauge->SetShow(false);
+	}
 }
 
 // 衝突処理
@@ -1286,6 +1299,10 @@ void CDragon::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		mpFlamethrower->Stop();
 		mpFlightFlamethrower->Stop();
+		if (mState != EState::eDie)
+		{
+			mpHitEffect->StartHitEffect();
+		}
 		if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eAttack3)
 		{
 			ChangeState(EState::eHit);

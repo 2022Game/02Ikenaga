@@ -35,7 +35,6 @@ CHpGauge::CHpGauge(bool is3dGauge)
 	, mValue(100)
 	, mDamageValue(100)
 	, mCenterRatio(0.0f, 0.0f)
-	, mScale(1.0f)
 	, mIs3dGauge(is3dGauge)
 	, mDamageWaitTime(0.0f)
 	, mDamageElapsedTime(0.0f)
@@ -51,6 +50,11 @@ CHpGauge::CHpGauge(bool is3dGauge)
 
 	mpEdgeImage = new CImage("FrameEdge");
 	mpEdgeImage->SetSize(FRAME_SIZE_X, FRAME_SIZE_Y);
+
+	if (!mIs3dGauge)
+	{
+		mScale = 1.0f;
+	}
 
 	// Å‰‚Í”ñ•\¦
 	SetShow(false);
@@ -80,6 +84,12 @@ void CHpGauge::SetShow(bool isShow)
 	mpDamagaBarImage->SetShow(isShow);
 	mpHpBarImage->SetShow(isShow);
 	mpEdgeImage->SetShow(isShow);
+}
+
+// ‘å‚«‚³‚ğİ’è
+void CHpGauge::SetScale(float scale)
+{
+	mSize = scale;
 }
 
 // Å‘å’l‚ğİ’è
@@ -151,6 +161,10 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 	else
 	{
 		SetShow(false);
+	}
+	if (mIs3dGauge)
+	{
+		mScale = mSize;
 	}
 }
 

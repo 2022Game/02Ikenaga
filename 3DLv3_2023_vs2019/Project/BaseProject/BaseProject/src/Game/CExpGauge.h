@@ -21,6 +21,9 @@ public:
 	// 現在値を設定
 	void SetValue(int value);
 
+	// 表示するかどうか設定
+	void SetShow(bool isShow)override;
+
 	// 更新
 	void Update();
 

@@ -29,6 +29,7 @@
 #include "CGameCamera2.h"
 #include "CInput.h"
 #include "CGameMenu.h"
+#include "CGameOverScene.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CMenu.h"
@@ -55,7 +56,6 @@ CGameScene::CGameScene()
 CGameScene::~CGameScene()
 {
 	CGameMenu::ClearInstance();
-
 	CEnemyManager::Delete();
 }
 
@@ -79,8 +79,8 @@ void CGameScene::Load()
 
 	// エネミー関連
 	CResourceManager::Load<CModelX>("Slime","Character\\Enemy\\Slime\\Slime.x");
-	CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
-	CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
+	//CResourceManager::Load<CModelX>("Slime2", "Character\\Enemy\\Slime\\SlimeOrange.x");
+	//CResourceManager::Load<CModelX>("Slime3", "Character\\Enemy\\Slime\\SlimeBlue.x");
 	CResourceManager::Load<CModelX>("Mushroom", "Character\\Enemy\\Mushroom\\Mushroom.x");
 	CResourceManager::Load<CModelX>("Turtle", "Character\\Enemy\\Turtle\\Turtle.x");
 	CResourceManager::Load<CModelX>("Ray", "Character\\Enemy\\Ray\\Ray.x");
@@ -157,17 +157,26 @@ void CGameScene::Load()
 	CLock* lock = new CLock(1010.0f, 630.0f);
 	// ロック
 	CLock2* lock2 = new CLock2(1140.0f, 630.0f);
+	// Qキーを作成
+	CKeyQ* keyQ = new CKeyQ(1014.0f, 560.0f);
+	// Eキーを作成
+	CKeyE* keyE = new CKeyE(1144.0f, 560.0f);
+	// メニューアイコンを作成
+	CMenu* menu = new CMenu(10.0f, 680.0f);
+	//Mキーを作成
+	CKeyM* keyM = new CKeyM(40.0f, 670.0f);
 
+	// フィールド
 	CField* field = new CField();
 
 	// 空
 	CSky* sky = new CSky();
-	sky->Scale(400.0f, 400.0f, 400.0f);
+	sky->Scale(250.0f, 250.0f, 250.0f);
 	sky->Position(0.0f, -1.5f, 0.0f);
 
 	// 夜空
 	CNightSky* nightSky = new CNightSky();
-	nightSky->Scale(400.0f, 400.0f, 400.0f);
+	nightSky->Scale(250.0f, 250.0f, 250.0f);
 	nightSky->Position(0.0f, -1.5f, 0.0f);
 
 	CPlayer* player = new CPlayer();
@@ -182,20 +191,20 @@ void CGameScene::Load()
 	mainCamera->SetFollowTargetTf(player);
 	mainCamera->AddCollider(field->GetCollider());
 	mainCamera->SetHitColliderRatio(0.98f);
-	player->Position(0.0f, 100.0f, 0.0f);
+	player->Position(0.0f, 50.0f, 0.0f);
 
 	// レッドスライム
 	CSlime* enemy = new CSlime();
 	enemy->Position(0.0f, 0.0f, -40.0f);
 
-	// オレンジスライム
-	CSlime2* enemy2 = new CSlime2();
-	enemy2->Position(-40.0f, 0.0f, -40.0f);
-	enemy2->Scale(25.0f, 25.0f, 25.0f);
+	//// オレンジスライム
+	//CSlime2* enemy2 = new CSlime2();
+	//enemy2->Position(-40.0f, 0.0f, -40.0f);
+	//enemy2->Scale(25.0f, 25.0f, 25.0f);
 
-	// ブルースライム
-	CSlime3* enemy3 = new CSlime3();
-	enemy3->Position(-20.0f, 0.0f, -90.0f);
+	//// ブルースライム
+	//CSlime3* enemy3 = new CSlime3();
+	//enemy3->Position(-20.0f, 0.0f, -90.0f);
 
 	// マッシュルーム
 	CMushroom* enemy4 = new CMushroom();
@@ -242,17 +251,9 @@ void CGameScene::Load()
 	CDragon* bossEnemy = new CDragon();
 	bossEnemy->Position(75.0f, 1.0f, -1700.0f);
 
-	// メニューアイコンを作成
-	CMenu* menu = new CMenu(10.0f, 680.0f);
-	//Mキーを作成
-	CKeyM* keyM = new CKeyM(40.0f, 670.0f);
-	// Qキーを作成
-	CKeyQ* keyQ = new CKeyQ(1014.0f, 560.0f);
-	// Eキーを作成
-	CKeyE* keyE = new CKeyE(1144.0f, 560.0f);
-
 	// ゲームメニューを作成
 	CGameMenu::Instance();
+	CGameOverScene::Instance();
 }
 
 // ゲームクリア判定
@@ -272,7 +273,8 @@ void CGameScene::Update()
 {
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
 	CGameMenu* menu = CGameMenu::Instance();
-	if (!menu->IsOpened())
+	CGameOverScene* gameOver = CGameOverScene::Instance();
+	if (!menu->IsOpened()&& !gameOver->IsOpened())
 	{
 		if (CInput::PushKey('M'))
 		{

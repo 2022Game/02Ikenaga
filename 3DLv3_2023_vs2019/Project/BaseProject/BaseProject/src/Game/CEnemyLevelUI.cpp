@@ -44,9 +44,9 @@ CEnemyLevelUI::~CEnemyLevelUI()
 }
 
 // エネミーのレベルを設定
-void CEnemyLevelUI::SetEnemyLevel(std::string level)
+void CEnemyLevelUI::SetEnemyLevel(int level)
 {
-	mpLevelText->SetText(level.c_str());
+	mpLevelText->SetText("%d", level);
 }
 
 // 中心位置のの割合の設定

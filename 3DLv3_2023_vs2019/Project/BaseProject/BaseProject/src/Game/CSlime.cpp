@@ -143,7 +143,8 @@ CSlime::CSlime()
 	// Lv.を設定
 	mpGameUI->SetLv();
 	// レベルを設定
-	std::string level = "1";
+	int level = 1;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// 名前を設定
 	std::string name = "スライム";

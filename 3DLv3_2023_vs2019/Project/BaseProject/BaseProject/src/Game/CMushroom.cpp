@@ -197,7 +197,8 @@ CMushroom::CMushroom()
 	// Lv.‚ğİ’è
 	mpGameUI->SetLv();
 	// ƒŒƒxƒ‹‚ğİ’è
-	std::string level = "6";
+	int level = 6;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// –¼‘O‚ğİ’è
 	std::string name = "‹U‚«‚Ì‚±";

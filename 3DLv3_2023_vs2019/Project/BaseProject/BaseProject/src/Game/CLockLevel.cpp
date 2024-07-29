@@ -49,11 +49,6 @@ void CLockLevel::Update()
 	{
 		Kill();
 	}
-	else
-	{
-		mpLockLevel->SetEnable(true);
-		mpLockLevel->SetShow(true);
-	}
 }
 
 // •`‰æ

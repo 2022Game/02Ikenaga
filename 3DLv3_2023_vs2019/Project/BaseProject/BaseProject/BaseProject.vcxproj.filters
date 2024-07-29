@@ -835,6 +835,18 @@
     <ClCompile Include="src\Game\CLock2.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\Skill\Lock</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\CLockLevel2.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill\Lock</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\COperationIns2.cpp">
+      <Filter>ソース ファイル\Game\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CGameClearScene.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CHpBossGauge.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseSystem\CCollider.h">
@@ -1442,6 +1454,18 @@
     </ClInclude>
     <ClInclude Include="src\Game\CLock2.h">
       <Filter>ソース ファイル\Game\UI\GameUI\Skill\Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLockLevel2.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Skill\Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\COperationIns2.h">
+      <Filter>ソース ファイル\Game\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CGameClearScene.h">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CHpBossGauge.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

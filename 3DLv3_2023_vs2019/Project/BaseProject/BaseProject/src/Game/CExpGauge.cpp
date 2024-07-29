@@ -46,6 +46,15 @@ void CExpGauge::SetValue(int value)
 	mValue = value;
 }
 
+// 表示するかどうか設定
+void CExpGauge::SetShow(bool isShow)
+{
+	// ベースクラスの表示設定処理
+	CTask::SetShow(isShow);
+	mpBarImage->SetShow(isShow);
+	mpEdgeImage->SetShow(isShow);
+}
+
 // 更新
 void CExpGauge::Update()
 {

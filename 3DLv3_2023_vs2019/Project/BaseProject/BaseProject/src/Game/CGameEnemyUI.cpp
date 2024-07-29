@@ -46,6 +46,12 @@ const CVector& CGameEnemyUI::GetUIoffSetPos() const
 	return mpUIoffSetPos;
 }
 
+// ‘å‚«‚³‚ðÝ’è
+void CGameEnemyUI::SetScale(float scale)
+{
+	mpHpGauge->SetScale(scale);
+}
+
 // HP‚ðÝ’è
 void CGameEnemyUI::SetHp(int hp)
 {
@@ -78,7 +84,7 @@ CLevelUI* CGameEnemyUI::GetLv()const
 }
 
 // ƒŒƒxƒ‹‚ðÝ’è
-void CGameEnemyUI::SetEnemyLevel(std::string level)
+void CGameEnemyUI::SetEnemyLevel(int level)
 {
 	mpLevelUI->SetEnemyLevel(level);
 }

@@ -21,6 +21,9 @@ public:
 	// UIのオフセット位置を取得
 	const CVector& GetUIoffSetPos() const;
 
+	// 大きさを設定
+	void SetScale(float scale);
+
 	// HPを設定
 	void SetHp(int hp);
 	// 最大のHPを設定
@@ -34,7 +37,7 @@ public:
 	CLevelUI* GetLv() const;
 
 	// レベルを設定
-	void SetEnemyLevel(std::string level);
+	void SetEnemyLevel(int level);
 	// レベルを取得
 	CEnemyLevelUI* GetLevel() const;
 

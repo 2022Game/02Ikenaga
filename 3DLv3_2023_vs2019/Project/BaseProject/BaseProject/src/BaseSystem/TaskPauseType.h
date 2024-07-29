@@ -24,6 +24,8 @@ enum class ETaskPauseType
 	//メニュー内のオブジェクト
 	//（ゲームポーズ時のみポーズするTaskに設定）
 	eMenu = PAUSE_GAME,
+	eGameOver = PAUSE_GAME,
+	eGameClear = PAUSE_GAME,
 	//システム関連
 	//（システム関連のTaskは常に動かすのでポーズしない）
 	eSystem = eNone,

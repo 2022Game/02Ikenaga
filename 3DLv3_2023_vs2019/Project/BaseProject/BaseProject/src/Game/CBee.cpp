@@ -291,7 +291,8 @@ CBee::CBee()
 	// Lv.‚ğİ’è
 	mpGameUI->SetLv();
 	// ƒŒƒxƒ‹‚ğİ’è
-	std::string level = "31";
+	int level = 31;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// –¼‘O‚ğİ’è
 	std::string name = "‹¥–\–I";

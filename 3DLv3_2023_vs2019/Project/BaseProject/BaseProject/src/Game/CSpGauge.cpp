@@ -50,6 +50,16 @@ void CSpGauge::SetValue(int value)
 	mValue = value;
 }
 
+// 表示するかどうか設定
+void CSpGauge::SetShow(bool isShow)
+{
+	// ベースクラスの表示設定処理
+	CTask::SetShow(isShow);
+	mpFrameImage->SetShow(isShow);
+	mpBarImage->SetShow(isShow);
+	mpEdgeImage->SetShow(isShow);
+}
+
 // 更新
 void CSpGauge::Update()
 {

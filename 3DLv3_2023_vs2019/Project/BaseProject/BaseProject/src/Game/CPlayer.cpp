@@ -16,8 +16,8 @@
 #include "CBuffCircle.h"
 #include "CBuffAura.h"
 #include "CPowerUpAura.h"
-#include "CSceneManager.h"
 #include "CGamePlayerUI.h"
+#include "CGameOverScene.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -136,8 +136,15 @@ CPlayer::CPlayer()
 	std::string exp = "EXP";
 	mpGameUI->SetExpText(exp);
 
-	std::string lockLevel = "レベル5";
-	mpGameUI->SetLockLevel(lockLevel);
+	int lockLevel = 5;
+	std::to_string(lockLevel);
+	std::string LockLevel = "レベル" + std::to_string(lockLevel);
+	mpGameUI->SetLockLevel(LockLevel);
+
+	int lockLevel2 = 10;
+	std::to_string(lockLevel2);
+	std::string LockLevel2 = "レベル" + std::to_string(lockLevel2);
+	mpGameUI->SetLockLevel2(LockLevel2);
 
 	// 最初に1レベルに設定
 	ChangeLevel(1);
@@ -863,12 +870,23 @@ void CPlayer::UpdateDei()
 	ChangeAnimation(EAnimType::eDie);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
-	mpHealCircle->Delete();
 
 	if (IsAnimationFinished())
 	{
-		CSceneManager::Instance()->LoadScene(EScene::eGameOver);
+		CGameOverScene* gameOver = CGameOverScene::Instance();
+		if (!gameOver->IsOpened())
+		{
+			gameOver->Open();
+		}
 	}
+}
+
+// 復活
+void CPlayer::UpdateRevival()
+{
+	mCharaStatus.hp = mCharaMaxStatus.hp;
+	mCharaStatus.SpecialPoint = mCharaMaxStatus.SpecialPoint;
+	ChangeState(EState::eIdle);
 }
 
 // ジャンプ攻撃
@@ -1365,7 +1383,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(91);
+		ChangeLevel(81);
 	}
 	else if (CInput::PushKey('4'))
 	{
@@ -1394,7 +1412,7 @@ void CPlayer::Update()
 	// 現在のレベルを設定
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 
-	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	//CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }
 
 // 衝突処理

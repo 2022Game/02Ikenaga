@@ -137,7 +137,8 @@ CSlime3::CSlime3()
 	// Lv.を設定
 	mpGameUI->SetLv();
 	// レベルを設定
-	std::string level = "5";
+	int level = 5;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// 名前を設定
 	std::string name = "ビッグスライム";

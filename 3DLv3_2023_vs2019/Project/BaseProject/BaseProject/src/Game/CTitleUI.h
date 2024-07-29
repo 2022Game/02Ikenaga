@@ -4,6 +4,7 @@
 class CFont;
 class CImage;
 class CExpandButton;
+class COperationIns2;
 
 class CTitleUI : public CTask
 {
@@ -64,4 +65,6 @@ private:
 	CImage* mpTitleBg;	// タイトル背景イメージ
 	CText* mpStartText;	// 「CLICK TO START」のテキスト
 	std::vector<CExpandButton*> mButtons;
+
+	COperationIns2* mpOperationIns;
 };

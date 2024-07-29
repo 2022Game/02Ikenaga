@@ -326,6 +326,14 @@ void CEnemy::Update()
 {
 	// HPƒQ[ƒW‚ÉŒ»Ý‚ÌHP‚ðÝ’è
 	mpGameUI->SetHp(mCharaStatus.hp);
+	if (mType == EEnemyType::eDragon)
+	{
+		mpGameUI->SetScale(1.25f);
+	}
+	else
+	{
+		mpGameUI->SetScale(0.5f);
+	}
 	
 	// HPƒQ[ƒW
 	CHpGauge* hpGauge = mpGameUI->GetHpGauge();

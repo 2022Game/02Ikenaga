@@ -261,7 +261,8 @@ CCactus::CCactus()
 	// Lv.を設定
 	mpGameUI->SetLv();
 	// レベルを設定
-	std::string level = "41";
+	int level = 41;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// 名前を設定
 	std::string name = "パワー型サボテン";

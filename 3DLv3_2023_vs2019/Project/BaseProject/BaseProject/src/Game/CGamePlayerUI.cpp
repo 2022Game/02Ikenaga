@@ -6,6 +6,7 @@
 #include "CSpUI.h"
 #include "CExpUI.h"
 #include "CLockLevel.h"
+#include "CLockLevel2.h"
 #include "CHpGauge.h"
 #include "CSpGauge.h"
 #include "CAvoidanceGauge.h"
@@ -36,6 +37,7 @@ CGamePlayerUI::CGamePlayerUI()
 	// プレイヤーのHPゲージを作成
 	mpHpGauge = new CHpGauge(false);
 	mpHpGauge->SetPos(10.0f, 63.0f);
+	//mpHpGauge->SetScale(1.0f);
 	mpHpGauge->SetShow(true);
 
 	// プレイヤーのSPゲージを作成
@@ -51,6 +53,7 @@ CGamePlayerUI::CGamePlayerUI()
 	mpExpGauge->SetPos(320.0f, 700.0f);
 
 	mpLockLevel = new CLockLevel(1002.5f, 685.0f);
+	mpLockLevel2 = new CLockLevel2(1126.0f, 685.0f);
 }
 
 // デストラクタ
@@ -158,6 +161,12 @@ void CGamePlayerUI::SetExpText(std::string expText)
 void CGamePlayerUI::SetLockLevel(std::string lockLevel)
 {
 	mpLockLevel->SetLevel(lockLevel);
+}
+
+// ロック中のレベル2
+void CGamePlayerUI::SetLockLevel2(std::string lockLevel2)
+{
+	mpLockLevel2->SetLevel2(lockLevel2);
 }
 
 // AvoidGaugeを取得

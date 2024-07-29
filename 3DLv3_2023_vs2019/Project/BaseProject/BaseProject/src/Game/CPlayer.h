@@ -41,8 +41,14 @@ public:
 	// デストラクタ
 	~CPlayer();
 
+	// 待機状態
+	void UpdateIdle();
+
 	// 死ぬ
 	void UpdateDei();
+
+	// 復活
+	void UpdateRevival();
 
 	// 1レベルアップ
 	void LevelUp();
@@ -100,8 +106,6 @@ public:
 	static bool mRolling;
 
 private:
-	// 待機状態
-	void UpdateIdle();
 	// 歩行
 	void UpadateWalk();
 	// 攻撃

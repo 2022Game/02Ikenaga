@@ -39,14 +39,14 @@ const CLich::SpawnData CLich::SPAWN_DATA[] =
 {
 	//  敵の種類　　　　　　 距離   魔法陣のオフセット位置    魔法陣の色               魔法陣の大きさ  敵の大きさ  召喚するタイミング
 	{ EEnemyType::eBee,      50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.7f,0.0f,1.0f),  25.0f,          30.0f,      0.25f },
-	{ EEnemyType::eBeholder, 50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f),  25.0f,          18.0f,       0.5f },
-	{ EEnemyType::eBoxer,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,1.0f,0.0f),  35.0f,          25.0f,      0.25f },
-	{ EEnemyType::eCactus,   50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,1.0f,0.0f),  35.0f,          35.0f,      0.25f },
-	{ EEnemyType::eChest,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.85f,0.6f,0.0f), 35.0f,          35.0f,      0.25f },
-	{ EEnemyType::eMushroom, 50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.85f,0.6f), 30.0f,          35.0f,      0.25f },
-	{ EEnemyType::eRay,      50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,1.0f,1.0f),  30.0f,          40.0f,      0.25f },
-	//{ EEnemyType::eSlime,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,0.0f),  30.0f,          30.0f,      0.25f },
-	{ EEnemyType::eTurtle,   50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,0.0f,1.0f),  30.0f,          30.0f,      0.25f },
+	{ EEnemyType::eBeholder, 50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,1.0f),  25.0f,          15.0f,       0.5f },
+	{ EEnemyType::eBoxer,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,1.0f,0.0f),  35.0f,          20.0f,      0.25f },
+	{ EEnemyType::eCactus,   50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,1.0f,0.0f),  35.0f,          30.0f,      0.25f },
+	{ EEnemyType::eChest,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.85f,0.6f,0.0f), 35.0f,          30.0f,      0.25f },
+	{ EEnemyType::eMushroom, 50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.85f,0.6f), 30.0f,          25.0f,      0.25f },
+	{ EEnemyType::eRay,      50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,1.0f,1.0f),  30.0f,          35.0f,      0.25f },
+	{ EEnemyType::eSlime,    50.0f, CVector(0.0f,-9.6f,0.0f), CColor(1.0f,0.0f,0.0f),  30.0f,          25.0f,      0.25f },
+	{ EEnemyType::eTurtle,   50.0f, CVector(0.0f,-9.6f,0.0f), CColor(0.0f,0.0f,1.0f),  30.0f,          25.0f,      0.25f },
 };
 
 // リッチのアニメーションデータのテーブル
@@ -245,7 +245,8 @@ CLich::CLich()
 	// Lv.を設定
 	mpGameUI->SetLv();
 	// レベルを設定
-	std::string level = "81";
+	int level = 81;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// 名前を設定
 	std::string name = "召喚師 リッチ";
@@ -331,7 +332,7 @@ CEnemy* CLich::SpawnEnemy(EEnemyType type) const
 		ret = new CRay();
 		break;
 	case EEnemyType::eSlime:
-		//ret = new CSlime();
+		ret = new CSlime();
 		break;
 	case EEnemyType::eTurtle:
 		ret = new CTurtle();
@@ -949,7 +950,7 @@ void CLich::ChangeLevel(int level)
 // ランダムに位置を取得
 CVector CLich::GetRandomSpawnPos()
 {
-	return CVector();
+	return CVector(75.0f, 3.0f, -1350.0f);
 }
 
 // 描画

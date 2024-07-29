@@ -385,7 +385,8 @@ CBoxer::CBoxer()
 	// Lv.を設定
 	mpGameUI->SetLv();
 	// レベルを設定
-	std::string level = "71";
+	int level = 71;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 	// 名前を設定
 	std::string name = "右利き ボブ";

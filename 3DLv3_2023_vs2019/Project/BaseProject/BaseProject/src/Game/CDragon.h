@@ -6,6 +6,7 @@
 #include "CColliderCapsule.h"
 class CFlamethrower;
 class CFlightFlamethrower;
+class CHit;
 
 /*
  ボスドラゴン
@@ -230,4 +231,5 @@ private:
 	bool mIsSpawnedRoarEffect;
 	// 経過時間計測用(雄叫び)
 	float mElapsedRoarTime;
+	CHit* mpHitEffect;  // ヒットエフェクト 
 };

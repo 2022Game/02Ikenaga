@@ -110,14 +110,17 @@
     <ClCompile Include="src\Game\CFlightFlamethrower.cpp" />
     <ClCompile Include="src\Game\CGameCamera.cpp" />
     <ClCompile Include="src\Game\CGameCamera2.cpp" />
+    <ClCompile Include="src\Game\CGameClearScene.cpp" />
     <ClCompile Include="src\Game\CGameEnemyUI.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
+    <ClCompile Include="src\Game\CHpBossGauge.cpp" />
     <ClCompile Include="src\Game\CKeyE.cpp" />
     <ClCompile Include="src\Game\CKeyQ.cpp" />
     <ClCompile Include="src\Game\CLock.cpp" />
     <ClCompile Include="src\Game\CLock2.cpp" />
     <ClCompile Include="src\Game\CLockLevel.cpp" />
+    <ClCompile Include="src\Game\CLockLevel2.cpp" />
     <ClCompile Include="src\Game\CLockWall.cpp" />
     <ClCompile Include="src\Game\CLockWall2.cpp" />
     <ClCompile Include="src\Game\CMenu.cpp" />
@@ -139,6 +142,7 @@
     <ClCompile Include="src\Game\CNightSky.cpp" />
     <ClCompile Include="src\Game\CGamePlayerUI.cpp" />
     <ClCompile Include="src\Game\COperationIns.cpp" />
+    <ClCompile Include="src\Game\COperationIns2.cpp" />
     <ClCompile Include="src\Game\CPlayerDefenseUI.cpp" />
     <ClCompile Include="src\Game\CPlayerExpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerHpUI.cpp" />
@@ -315,14 +319,17 @@
     <ClInclude Include="src\Game\CFlightFlamethrower.h" />
     <ClInclude Include="src\Game\CGameCamera.h" />
     <ClInclude Include="src\Game\CGameCamera2.h" />
+    <ClInclude Include="src\Game\CGameClearScene.h" />
     <ClInclude Include="src\Game\CGameEnemyUI.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
+    <ClInclude Include="src\Game\CHpBossGauge.h" />
     <ClInclude Include="src\Game\CKeyE.h" />
     <ClInclude Include="src\Game\CKeyQ.h" />
     <ClInclude Include="src\Game\CLock.h" />
     <ClInclude Include="src\Game\CLock2.h" />
     <ClInclude Include="src\Game\CLockLevel.h" />
+    <ClInclude Include="src\Game\CLockLevel2.h" />
     <ClInclude Include="src\Game\CLockWall.h" />
     <ClInclude Include="src\Game\CLockWall2.h" />
     <ClInclude Include="src\Game\CMenu.h" />
@@ -337,6 +344,7 @@
     <ClInclude Include="src\Game\CLightningBall.h" />
     <ClInclude Include="src\Game\CLightningBallEffect.h" />
     <ClInclude Include="src\Game\CMagicCircle.h" />
+    <ClInclude Include="src\Game\COperationIns2.h" />
     <ClInclude Include="src\Game\CPlayerDefenseUI.h" />
     <ClInclude Include="src\Game\CPlayerMaxExpUI.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
@@ -445,11 +453,13 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>include;$(IncludePath)</IncludePath>
     <LibraryPath>lib;$(LibraryPath)</LibraryPath>
+    <TargetName>Lone Dog</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>include;$(IncludePath)</IncludePath>
     <LibraryPath>lib;$(LibraryPath)</LibraryPath>
+    <TargetName>Lone Dog</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

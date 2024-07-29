@@ -210,7 +210,8 @@ CChest::CChest()
 	// Lv.‚ðÝ’è
 	mpGameUI->SetLv();
 	// ƒŒƒxƒ‹‚ðÝ’è
-	std::string level = "51";
+	int level = 51;
+	std::to_string(level);
 	mpGameUI->SetEnemyLevel(level);
 
 	Scale(30.0f, 30.0f, 30.0f);

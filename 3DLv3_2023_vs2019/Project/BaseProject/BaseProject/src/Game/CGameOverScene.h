@@ -1,37 +1,52 @@
 #pragma once
-#include "CSceneBase.h"
-class CText;
+#include "CTask.h"
+#include "CImage.h"
 
-// ゲームオーバー画面とメニューに戻る選択
-class CGameOverScene :public CSceneBase
+class CTexk;
+
+class CGameOverScene : public CTask
 {
 public:
-	// コンストラクタ
+	// インスタンスを取得
+	static CGameOverScene* Instance();
+	// インスタンスを削除
+	static void ClearInstance();
+
+	// オープン
+	void Open();
+	// クローズ
+	void Close();
+	// オープンするかどうか
+	bool IsOpened() const;
+
+	// 決める
+	void Decide(int select);
+
+	// 更新
+	void Update() override;
+	// 描画
+	void Render() override;
+
+private:
+	// コンストラク
 	CGameOverScene();
 	// デストラクタ
 	~CGameOverScene();
 
-	// シーンの読み込み
-	void Load()override;
-	// 更新
-	void Update()override;
+	static CGameOverScene* spInstance;
 
-private:
-	// 次の項目を選択
-	void SelectNextMenu();
-	// 前の項目を選択
-	void SelectPrevMenu();
+	CImage* mpBackground;
+	CImage* mpBackground2;
+	std::vector<CImage*> mMenuItems;
+	CImage* mpSelectFrame;
+	CImage* mpUpUI;
+	CImage* mpDownUI;
 
-	CText* mpText;	// 文字列描画用
+	CImage* mpEnterKey;
 
-	// 選択情報
-	struct ChoiceInfo
-	{
-		std::string name;	// 表示名
-		EScene scene;		// 遷移先のシーン
-	};
-	// 選択情報のリスト
-	std::vector<ChoiceInfo> mChoiceInfoList;
-
-	int mSelectIndex;	// 選択中のインデックス値
+	int mSelectIndex;
+	bool mIsOpened;
+	CText* mpGameOver;  // ゲームオーバー
+	CText* mpRevival;
+	CText* mpEnd;
 };

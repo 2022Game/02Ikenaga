@@ -6,6 +6,7 @@
 #include "CInput.h"
 #include "CFade.h"
 #include "CExpandButton.h"
+#include "COperationIns2.h"
 #include "Easing.h"
 
 // 「CLICK TO START」の点滅時間
@@ -44,14 +45,14 @@ CTitleUI::CTitleUI()
 		false,
 		false
 	);
-	mpTitleLogo->SetText("タイトルロゴ");
+	mpTitleLogo->SetText("Lone Dog");
 	mpTitleLogo->SetEnableOutline(true);
 	mpTitleLogo->SetOutlineColor(CColor(0.9f, 0.9f, 0.9f));
 
 	// タイトル画面の背景イメージを生成
 	mpTitleBg = new CImage
 	(
-		"UI/title_bg.png",
+		"UI/title.png",
 		ETaskPriority::eUI,
 		0,
 		ETaskPauseType::eDefault,
@@ -125,6 +126,8 @@ CTitleUI::CTitleUI()
 	btn3->SetEnable(false);
 	btn3->SetScale(0.0f);
 	mButtons.push_back(btn3);
+
+	mpOperationIns = new COperationIns2();
 }
 
 // デストラクタ
@@ -189,6 +192,7 @@ void CTitleUI::OnClickOption()
 	if (mIsEnd) return;
 
 	mSelectIndex = 1;
+	mpOperationIns->Open();
 }
 
 // [QUIT]クリック時のコールバック関数

@@ -15,7 +15,7 @@ public:
 	~CEnemyLevelUI();
 
 	// エネミーのレベルを設定
-	void SetEnemyLevel(std::string level);
+	void SetEnemyLevel(int level);
 
 	// 中心位置のの割合の設定
 	void SetCenterRatio(const CVector2& ratio);
