@@ -224,7 +224,8 @@ void CGameOverScene::Decide(int select)
 		Close();
 		break;
 	case 1:
-		System::ExitGame();
+		CSceneManager::Instance()->LoadScene(EScene::eTitle);
+		//System::ExitGame();
 		break;
 	}
 }

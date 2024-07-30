@@ -54,7 +54,8 @@ const CPlayer::AnimData CPlayer::ANIM_DATA[] =
 	{ "Character\\Player\\animation\\DogJumpAttack.x", false,	172.0f,	 1.0f},  // ジャンプ攻撃
 };
 
-#define PLAYER_HEIGHT  1.2f  // 線分コライダー
+#define PLAYER_SIDE   0.75f  // 線分コライダー(横)
+#define PLAYER_HEIGHT  1.2f  // 線分コライダー(縦)
 #define JUMP_SPEED     1.2f  // ジャンプスピード
 #define GRAVITY     0.0625f  // 重力
 #define JUMP_END_Y     1.0f  // ジャンプ終了
@@ -163,15 +164,26 @@ CPlayer::CPlayer()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
 	(
 		this, ELayer::ePlayer,
-		CVector(0.0f, -0.01f, 0.0f),
-		CVector(0.0f, PLAYER_HEIGHT, 0.0f)
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, PLAYER_SIDE)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine->Position(0.0f, 0.2f, 0.0f)
-		;
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 10.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
+	(
+		this, ELayer::ePlayer,
+		CVector(0.0f,0.0f,0.0f),
+		CVector(0.0f, PLAYER_HEIGHT,0.0f)
+	);
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->Position(0.0f, 0.2f, 0.0f);
+
 	// キャラクター同士の押し戻しコライダー(頭)
 	mpColliderSphereHead = new CColliderSphere
 	(
@@ -289,7 +301,8 @@ CPlayer::CPlayer()
 CPlayer::~CPlayer()
 {
 	// 線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
@@ -1418,7 +1431,7 @@ void CPlayer::Update()
 // 衝突処理
 void CPlayer::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self == mpColliderLine)
+	if (self == mpColLineSide || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{

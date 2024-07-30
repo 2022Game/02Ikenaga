@@ -1,4 +1,5 @@
 #include "CSky.h"
+#include "CColliderMesh.h"
 
 // インスタンス
 CSky* CSky::spInstance = nullptr;
@@ -19,11 +20,20 @@ CSky::CSky()
 	mElapsedTime = 0.0f;
 
 	mpModel = CResourceManager::Get<CModel>("Sky");
+
+	mpColliderMesh = new CColliderMesh(this, ELayer::eField, mpModel, true);
 }
 
 // デストラクタ
 CSky::~CSky()
 {
+	SAFE_DELETE(mpColliderMesh);
+}
+
+// コライダーを取得
+CCollider* CSky::GetCollider() const
+{
+	return mpColliderMesh;
 }
 
 // 更新
@@ -44,7 +54,6 @@ void CSky::Update()
 	{
 		mElapsedTime = 0.0f;
 	}
-	//CDebugPrint::Print("時間 %f\n", mElapsedTime);
 }
 
 // 描画

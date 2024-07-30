@@ -30,6 +30,7 @@
 #include "CInput.h"
 #include "CGameMenu.h"
 #include "CGameOverScene.h"
+#include "CGameClearScene.h"
 #include "CBGMManager.h"
 #include "CLineEffect.h"
 #include "CMenu.h"
@@ -190,6 +191,7 @@ void CGameScene::Load()
 	);
 	mainCamera->SetFollowTargetTf(player);
 	mainCamera->AddCollider(field->GetCollider());
+	mainCamera->AddCollider(sky->GetCollider());
 	mainCamera->SetHitColliderRatio(0.98f);
 	player->Position(0.0f, 50.0f, 0.0f);
 
@@ -274,7 +276,8 @@ void CGameScene::Update()
 	// ゲームメニューを開いてなければ、[Ｍ]キーでメニューを開く
 	CGameMenu* menu = CGameMenu::Instance();
 	CGameOverScene* gameOver = CGameOverScene::Instance();
-	if (!menu->IsOpened()&& !gameOver->IsOpened())
+	CGameClearScene* gameClear = CGameClearScene::Instance();
+	if (!menu->IsOpened()&& !gameOver->IsOpened()&& !gameClear->IsOpened())
 	{
 		if (CInput::PushKey('M'))
 		{

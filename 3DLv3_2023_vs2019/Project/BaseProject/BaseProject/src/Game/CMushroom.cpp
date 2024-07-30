@@ -1,6 +1,5 @@
 #include "CMushroom.h"
 #include "CPlayer.h"
-#include "CCollisionManager.h"
 #include "CHpGauge.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
@@ -9,7 +8,8 @@
 // マッシュルームのインスタンス
 CMushroom* CMushroom::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.9f  // 線分コライダー
+#define ENEMY_SIDE      0.9f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    0.9f  // 線分コライダー(縦)
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.4f  // 移動速度
 #define GRAVITY         0.3f  // 重力
@@ -70,15 +70,25 @@ CMushroom::CMushroom()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// キャラクターの線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	//mpColLineSide->Position(0.0f, 0.2f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine->Position(0.0f, 0.2f, 0.0f);
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->Position(0.0f, 0.2f, 0.0f);
 
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
@@ -211,7 +221,8 @@ CMushroom::CMushroom()
 CMushroom::~CMushroom()
 {
 	// キャラクターの線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
@@ -722,7 +733,7 @@ void CMushroom::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColLineHeight || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{

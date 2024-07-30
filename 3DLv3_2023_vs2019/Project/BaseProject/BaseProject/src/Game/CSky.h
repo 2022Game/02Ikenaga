@@ -16,6 +16,9 @@ public:
 	//　デストラクタ
 	~CSky();
 
+	// コライダーを取得
+	CCollider* GetCollider() const;
+
 	// 更新
 	void Update();
 	// 描画
@@ -25,5 +28,8 @@ public:
 private:
 	// インスタンス
 	static CSky* spInstance;
+	// モデル
 	CModel* mpModel;
+	// コライダーメッシュ
+	CColliderMesh* mpColliderMesh;
 };

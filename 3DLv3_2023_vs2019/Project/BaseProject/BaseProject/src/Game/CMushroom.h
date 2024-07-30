@@ -150,8 +150,9 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	 // キャラクターの線分コライダー
-	CColliderLine* mpColliderLine;
+	 // 線分コライダー
+	CColliderLine* mpColLineSide;           // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;         // 線分コライダー(高さ)
 
 	// キャラクターの押し戻しコライダー
 	CColliderSphere* mpColliderSphereHead;  // 頭

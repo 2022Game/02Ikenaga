@@ -22,13 +22,8 @@ public:
 	void Render();
 
 private:
-	void CreateFieldObjects();
-
+	// モデル
 	CModel* mpModel;
+	// コライダーメッシュ
 	CColliderMesh* mpColliderMesh;
-
-	CModel* mpCubeModel;
-	CModel* mpCylinderModel;
-
-	//TexAnimData mEffectAnimData;
 };

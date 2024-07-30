@@ -332,7 +332,7 @@ void CEnemy::Update()
 	}
 	else
 	{
-		mpGameUI->SetScale(0.5f);
+		mpGameUI->SetScale(0.6f);
 	}
 	
 	// HPÉQÅ[ÉW

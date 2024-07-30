@@ -9,8 +9,9 @@
 // レッドスライムのインスタンス
 CSlime* CSlime::spInstance = nullptr;
 
-#define ENEMY_HEIGHT   1.0f  // 線分コライダー
-#define MOVE_SPEED     0.4f  // 移動速度
+#define ENEMY_SIDE     0.7f  // 線分コライダー(横)
+#define ENEMY_HEIGHT   1.0f  // 線分コライダー(縦)
+#define MOVE_SPEED     1.5f  // 移動速度
 #define WITHIN_RANGE  35.0f  // 範囲内
 #define GRAVITY        0.3f  // 重力
 #define WALK_RANGE   100.0f  // 追跡する範囲
@@ -79,14 +80,24 @@ CSlime::CSlime()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// キャラクターの線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eEnemy,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0, 10.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eEnemy,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
 
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
@@ -162,7 +173,8 @@ CSlime::CSlime()
 CSlime::~CSlime()
 {
 	// キャラクターの線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダーを削除
 	SAFE_DELETE(mpColliderSphereBody);
 	// ダメージを受けるコライダーを削除
@@ -659,7 +671,7 @@ void CSlime::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(1.0f,this,chara);
+				int damage = CalcDamage(1.0f, this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -670,7 +682,7 @@ void CSlime::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 		}
 	}
 	// フィールドとの接地判定
-	else if (self == mpColliderLine)
+	else if (self == mpColLineSide || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
