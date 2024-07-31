@@ -190,7 +190,8 @@ void CGameClearScene::Decide(int select)
 	switch (select)
 	{
 	case 0:
-		System::ExitGame();
+		Close();
+		CSceneManager::Instance()->LoadScene(EScene::eTitle);
 		break;
 	case 1:
 		break;

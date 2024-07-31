@@ -95,8 +95,8 @@ private:
 	// 移動
 	void UpdateRun();
 
-	int mDefenseTime;  // 防御時間
-	int mAttackTime;   // 次の攻撃時間
+	float mDefenseTime;  // 防御時間
+	float mAttackTime;   // 次の攻撃時間
 
 	// アニメーションの種類
 	enum class EAnimType
@@ -163,8 +163,10 @@ private:
 	CVector mMoveSpeed;	    // 移動速度
 	bool mIsGrounded;       // 接地しているかどうか
 
-	 // キャラクターの線分コライダー
-	CColliderLine* mpColliderLine;
+	 // 線分コライダー
+	CColliderLine* mpColLineSide;           // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;         // 線分コライダー(縦)
+
 	CColliderSphere* mpColliderSphereBody;  // キャラクター押し戻しコライダー(体)
 	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)

@@ -12,7 +12,7 @@ CGameOverScene* CGameOverScene::spInstance = nullptr;
 #define MENU_ALPHA 0.75f
 #define GAMEOVER_POS CVector2(350.0f + SHADOW_WIDTH, 150.0f)
 #define REVIVAL_POS CVector2(590.0f + SHADOW_WIDTH, 365.0f)
-#define END_POS CVector2(520.0f + SHADOW_WIDTH, 475.0f)
+#define TITLE_POS CVector2(540.0f + SHADOW_WIDTH, 475.0f)
 
 // インスタンスを取得
 CGameOverScene* CGameOverScene::Instance()
@@ -36,7 +36,7 @@ void CGameOverScene::ClearInstance()
 
 // コンストラ
 CGameOverScene::CGameOverScene()
-	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eGameOver)
+	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,false,true)
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
@@ -46,7 +46,6 @@ CGameOverScene::CGameOverScene()
 		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
 		false, false
 	);
-	//mpBackground->SetSize(1380.0f, 820.0f);
 	mpBackground->SetCenter(mpBackground->GetSize() * 0.5f);
 	mpBackground->SetPos(CVector2(WINDOW_WIDTH, WINDOW_HEIGHT) * 0.5f);
 	mpBackground->SetColor(0.0f, 0.0f, 0.0f, MENU_ALPHA);
@@ -125,19 +124,19 @@ CGameOverScene::CGameOverScene()
 	mpRevival->SetText("復活");
 	mpRevival->SetFontSize(50);
 
-	mpEnd = new CText
+	mpTitle = new CText
 	(
 		nullptr, 24,
-		END_POS,
+		TITLE_POS,
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
 		ETaskPauseType::eGame,
 		false, false
 	);
-	mpEnd->SetTextAlignH(textAlignH);
-	mpEnd->SetText("ゲーム終了");
-	mpEnd->SetFontSize(50);
+	mpTitle->SetTextAlignH(textAlignH);
+	mpTitle->SetText("タイトル");
+	mpTitle->SetFontSize(50);
 
 	mpUpUI = new CImage
 	(
@@ -178,7 +177,7 @@ CGameOverScene::~CGameOverScene()
 	SAFE_DELETE(mpSelectFrame);
 	SAFE_DELETE(mpGameOver);
 	SAFE_DELETE(mpRevival);
-	SAFE_DELETE(mpEnd);
+	SAFE_DELETE(mpTitle);
 	SAFE_DELETE(mpUpUI);
 	SAFE_DELETE(mpDownUI);
 	SAFE_DELETE(mpEnterKey);
@@ -224,8 +223,8 @@ void CGameOverScene::Decide(int select)
 		Close();
 		break;
 	case 1:
+		Close();
 		CSceneManager::Instance()->LoadScene(EScene::eTitle);
-		//System::ExitGame();
 		break;
 	}
 }
@@ -275,7 +274,7 @@ void CGameOverScene::Render()
 
 	mpGameOver->SetColor(1.0f, 1.0f, 1.0f);
 	mpRevival->SetColor(1.0f, 1.0f, 1.0f);
-	mpEnd->SetColor(1.0f, 1.0f, 1.0f);
+	mpTitle->SetColor(1.0f, 1.0f, 1.0f);
 
 	for (int i = 0; i < SHADOW_COUNT; i++)
 	{
@@ -288,8 +287,8 @@ void CGameOverScene::Render()
 		mpRevival->SetPos(REVIVAL_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpRevival->Render();
 
-		mpEnd->SetPos(END_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
-		mpEnd->Render();
+		mpTitle->SetPos(TITLE_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpTitle->Render();
 	}
 	mpGameOver->SetColor(1.0f, 0.0f, 0.0f);
 	mpGameOver->SetPos(GAMEOVER_POS);
@@ -299,9 +298,9 @@ void CGameOverScene::Render()
 	mpRevival->SetPos(REVIVAL_POS);
 	mpRevival->Render();
 
-	mpEnd->SetColor(0.0f, 0.0f, 0.0f);
-	mpEnd->SetPos(END_POS);
-	mpEnd->Render();
+	mpTitle->SetColor(0.0f, 0.0f, 0.0f);
+	mpTitle->SetPos(TITLE_POS);
+	mpTitle->Render();
 
 	mpUpUI->Render();
 	mpDownUI->Render();

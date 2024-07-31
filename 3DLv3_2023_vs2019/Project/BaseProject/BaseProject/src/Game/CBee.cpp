@@ -10,16 +10,15 @@
 // 蜂のインスタンス
 CBee* CBee::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.3f  // 線分コライダー
+#define ENEMY_SIDE     0.75f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    1.0f  // 線分コライダー
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define WALK_RANGE    100.0f  // 追跡する範囲
 #define STOP_RANGE     22.0f  // 追跡を辞める範囲
 #define STOP_RANGE_Y   20.0f  // 追跡を辞める高さ
 #define ROTATE_RANGE  250.0f  // 回転する範囲
 #define MOVE_SPEED      0.6f  // 移動速度
-#define MOVE_SPEED_Y  0.027f  // Yのスピード
 #define HEIGHT          0.5f  // 高さ
-#define PLAYER_HEIGHT  0.25f  // プレイヤーの高さ
 
 // 蜂のアニメーションデータのテーブル
 const CBee::AnimData CBee::ANIM_DATA[] =
@@ -36,8 +35,8 @@ const CBee::AnimData CBee::ANIM_DATA[] =
 CBee::CBee()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
-	, mFlyingTime(0)
+	, mAttackTime(0.0f)
+	, mFlyingTime(0.0f)
 	, mMoveSpeed(CVector::zero)
 	, mIsSpawnedNeedleEffect(false)
 	, mIsGrounded(false)
@@ -69,15 +68,25 @@ CBee::CBee()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// キャラクターの線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 20.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine->Position(0.0f, 5.0f, 0.0f);
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->Position(0.0f, 5.0f, 0.0f);
 
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
@@ -305,7 +314,8 @@ CBee::CBee()
 CBee::~CBee()
 {
 	// キャラクターの線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクター押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBeak);
@@ -376,7 +386,6 @@ void CBee::UpdateIdle2()
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eIdle);
 
-	mFlyingTime++;
 	CPlayer* player = CPlayer::Instance();
 	float vectorPos = (player->Position() - Position()).Length();
 	if (GetAnimationFrame() >= 10.0f && vectorPos > STOP_RANGE && vectorPos <= WALK_RANGE && player->Position().Y() < 1.0f)
@@ -599,8 +608,8 @@ void CBee::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mFlyingTime++;
-		mAttackTime++;
+		mFlyingTime += Time::DeltaTime();;
+		mAttackTime += Time::DeltaTime();
 
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -611,17 +620,17 @@ void CBee::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 150)
+		if (mAttackTime >= 2.0f)
 		{
 			ChangeState(EState::eAttack);
 		}
 		if (mState == EState::eAttack)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -635,7 +644,7 @@ void CBee::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime <= 150 && mFlyingTime >= 1 && Position().Y() <= 10.0f)
+		if (mFlyingTime < 2.0f && mFlyingTime >= 0.1f && Position().Y() <= 10.0f)
 		{
 			if (mState != EState::eAttack)
 			{
@@ -646,15 +655,15 @@ void CBee::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime > 150)
+		if (mFlyingTime >= 2.0f)
 		{
 			if (mState != EState::eAttack)
 			{
 				Position(Position().X(), Position().Y() - 0.2f, Position().Z());
 			}
-			if (mFlyingTime >= 200)
+			if (mFlyingTime >= 4.0f)
 			{
-				mFlyingTime = 0;
+				mFlyingTime = 0.0f;
 			}
 		}
 	}
@@ -723,7 +732,7 @@ void CBee::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(1.0f,this, chara);
+				int damage = CalcDamage(1.0f, this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -733,7 +742,8 @@ void CBee::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine || self == mpColliderSphereHead || self == mpColliderSphereBody)
+	else if (self == mpColLineSide || self == mpColLineHeight
+		|| self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -840,8 +850,8 @@ void CBee::Death()
 CVector CBee::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(-200.0f, 0.0f));
-	pos.Z(Math::Rand(-650.0f, -500.0f));
+	pos.X(Math::Rand(-100.0f, 0.0f));
+	pos.Z(Math::Rand(240.0f, 340.0f));
 
 	return CVector(pos);
 }

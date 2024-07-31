@@ -1021,10 +1021,9 @@ void CPlayer::ChangeLevel(int level)
 	CCamera* mainCamera = CGameCamera2::MainCamera();
 	if (mainCamera != nullptr)
 	{
-		CVector diff = DEFAULT_CAMERA_POS - mDefaultPos;
-		diff.Normalize();
-		diff.Y(diff.Y() + mCharaStatus.cameraHeight);
-		mainCamera->SetFollowTargetOffset(diff);
+		CVector offSet = DEFAULT_CAMERA_OFFSET;
+		offSet.Y(offSet.Y() + mCharaStatus.cameraHeight);
+		mainCamera->SetFollowTargetOffset(offSet);
 	}
 }
 
@@ -1396,12 +1395,9 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(81);
+		ChangeLevel(31);
 	}
-	else if (CInput::PushKey('4'))
-	{
-		mPowerUp = true;
-	}
+
 	// キャラクターの押し戻しコライダー
 	mpColliderSphereHead->Update();
 	mpColliderSphereBody->Update();

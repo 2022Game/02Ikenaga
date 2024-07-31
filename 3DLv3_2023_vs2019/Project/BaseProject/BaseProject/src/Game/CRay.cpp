@@ -10,11 +10,10 @@
 // エイのインスタンス
 CRay* CRay::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.5f  // 線分コライダー
+#define ENEMY_SIDE     0.75f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    0.6f  // 線分コライダー(縦)
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.4f  // 移動速度
-#define MOVE_SPEED_Y  0.027f  // Yのスピード
-#define GRAVITY        0.06f  // 重力
 #define WALK_RANGE    100.0f  // 追跡する範囲
 #define STOP_RANGE     28.0f  // 追跡を辞める範囲
 #define STOP_RANGE_Y   20.0f  // 追跡を辞める高さ
@@ -36,8 +35,8 @@ const CRay::AnimData CRay::ANIM_DATA[] =
 CRay::CRay()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
-	, mFlyingTime(0)
+	, mAttackTime(0.0f)
+	, mFlyingTime(0.0f)
 	, mIsGrounded(false)
 	, mMoveSpeed(CVector::zero)
 	, mStateAttackStep(0)
@@ -72,14 +71,24 @@ CRay::CRay()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// キャラクターの線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 10.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
 
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
@@ -193,7 +202,8 @@ CRay::CRay()
 CRay::~CRay()
 {
 	// キャラクターの線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
@@ -476,8 +486,8 @@ void CRay::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mFlyingTime++;
-		mAttackTime++;
+		mFlyingTime += Time::DeltaTime();
+		mAttackTime += Time::DeltaTime();
 
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -488,17 +498,17 @@ void CRay::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime >= 3.0f)
 		{
 			ChangeState(EState::eAttack);
 		}
 		if (mState == EState::eAttack || mState == EState::eAttackWait)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -512,7 +522,7 @@ void CRay::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime <= 400 && mFlyingTime >= 1 && Position().Y() <= 10.0f)
+		if (mFlyingTime < 4.0f && mFlyingTime >= 0.1f && Position().Y() <= 10.0f)
 		{
 			if (mState != EState::eAttack)
 			{
@@ -523,15 +533,15 @@ void CRay::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime > 400)
+		if (mFlyingTime >= 4.0f)
 		{
 			if (mState != EState::eAttack)
 			{
 				Position(Position().X(), Position().Y() - 0.08f, Position().Z());
 			}
-			if (mFlyingTime >= 600)
+			if (mFlyingTime >= 6.0f)
 			{
-				mFlyingTime = 0;
+				mFlyingTime = 0.0;
 			}
 		}
 	}
@@ -587,7 +597,7 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(1.0f,this, chara);
+				int damage = CalcDamage(1.0f, this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -597,7 +607,8 @@ void CRay::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine || self == mpColliderSphereHead || self == mpColliderSphereBody)
+	else if (self == mpColLineSide || self == mpColLineHeight
+		|| self == mpColliderSphereHead || self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -702,8 +713,8 @@ void CRay::Death()
 CVector CRay::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(70.0f, 170.0f));
-	pos.Z(Math::Rand(-550.0f, -400.0f));
+	pos.X(Math::Rand(50.0f, 150.0f));
+	pos.Z(Math::Rand(390.0f, 490.0f));
 
 	return CVector(pos);
 }

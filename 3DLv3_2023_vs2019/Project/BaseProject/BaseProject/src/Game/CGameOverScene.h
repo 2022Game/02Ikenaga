@@ -46,7 +46,8 @@ private:
 
 	int mSelectIndex;
 	bool mIsOpened;
+
 	CText* mpGameOver;  // ゲームオーバー
-	CText* mpRevival;
-	CText* mpEnd;
+	CText* mpRevival;   // 復活
+	CText* mpTitle;     // タイトル
 };

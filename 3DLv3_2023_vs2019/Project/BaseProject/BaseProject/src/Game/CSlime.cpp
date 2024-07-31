@@ -11,7 +11,7 @@ CSlime* CSlime::spInstance = nullptr;
 
 #define ENEMY_SIDE     0.7f  // 線分コライダー(横)
 #define ENEMY_HEIGHT   1.0f  // 線分コライダー(縦)
-#define MOVE_SPEED     1.5f  // 移動速度
+#define MOVE_SPEED     0.5f  // 移動速度
 #define WITHIN_RANGE  35.0f  // 範囲内
 #define GRAVITY        0.3f  // 重力
 #define WALK_RANGE   100.0f  // 追跡する範囲
@@ -45,13 +45,13 @@ CSlime::CSlime()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
 	, mIsGrounded(false)
-	, mAttackTime(0)
 	, mStateStep(0)
 	, mIsSlimeAttackSE(false)
 	, mIsSlimeDizzySE(false)
 	, mIsSlimeHitSE(false)
 	, mIsSlimeDieSE(false)
 	, mMoveSpeed(CVector::zero)
+	, mAttackTime(0.0f)
 {
 	// インスタンスの設定
 	spInstance = this;
@@ -610,10 +610,10 @@ void CSlime::Update()
 	{
 		if (vectorPos <= WITHIN_RANGE || mState == EState::eHit)
 		{
-			mAttackTime++;
+			mAttackTime += Time::DeltaTime();
 		}
 
-		if (mAttackTime > 230)
+		if (mAttackTime >= 2.0f)
 		{
 			// 大攻撃
 			bool BigAttack = false;
@@ -632,15 +632,15 @@ void CSlime::Update()
 		}
 		else if (mCharaStatus.hp <= 0)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDizzy)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 	else
@@ -784,8 +784,8 @@ void CSlime::Death()
 CVector CSlime::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(-200.0f, 0.0f));
-	pos.Z(Math::Rand(-150.0f, 0.0f));
+	pos.X(Math::Rand(-100.0f, 0.0f));
+	pos.Z(Math::Rand(800.0f, 900.0f));
 
 	return CVector(pos);
 }

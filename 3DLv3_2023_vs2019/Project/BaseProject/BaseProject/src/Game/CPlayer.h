@@ -20,7 +20,8 @@ class CGamePlayerUI;
 
 #include <algorithm>
 
-#define DEFAULT_CAMERA_POS CVector(0.0f, 10.0f, 50.0f)
+#define DEFAULT_CAMERA_POS CVector(0.0f, 20.0f, 100.0f)
+#define DEFAULT_CAMERA_OFFSET CVector(0.0f, 20.0f, 0.0f)
 
 /*
 プレイヤークラス

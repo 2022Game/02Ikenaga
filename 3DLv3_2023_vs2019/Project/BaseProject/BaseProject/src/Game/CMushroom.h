@@ -87,8 +87,6 @@ private:
 	// 移動
 	void UpdateRun();
 
-	int mAttackTime;   // 攻撃時間の間隔
-
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -141,8 +139,9 @@ private:
 		eDizzy,       // めまい(混乱)
 		eRun,         // 移動
 	};
-	EState mState;	  // マッシュルームの状態
-	int mStateStep;   // State内のステップ処理
+	EState mState;	    // マッシュルームの状態
+	int mStateStep;     // State内のステップ処理
+	float mAttackTime;  // 次の攻撃時間
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -152,7 +151,7 @@ private:
 
 	 // 線分コライダー
 	CColliderLine* mpColLineSide;           // 線分コライダー(横)
-	CColliderLine* mpColLineHeight;         // 線分コライダー(高さ)
+	CColliderLine* mpColLineHeight;         // 線分コライダー(縦)
 
 	// キャラクターの押し戻しコライダー
 	CColliderSphere* mpColliderSphereHead;  // 頭

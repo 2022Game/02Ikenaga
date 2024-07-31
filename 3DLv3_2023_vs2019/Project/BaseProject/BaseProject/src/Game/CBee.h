@@ -78,8 +78,8 @@ private:
 	// 移動
 	void UpdateRun();
 
-	int mAttackTime;   // 攻撃時間の間隔
-	int mFlyingTime;   // 飛行時間
+	float mAttackTime;  // 次の攻撃時間
+	float mFlyingTime;  // 飛行時間
 
 	// アニメーションの種類
 	enum class EAnimType
@@ -134,8 +134,10 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 	bool mIsSpawnedNeedleEffect;
 
-	// キャラクターの線分コライダー
-	CColliderLine* mpColliderLine;
+	// 線分コライダー
+	CColliderLine* mpColLineSide;            // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;          // 線分コライダー(縦)
+
 
 	// キャラクター押し戻しコライダー
 	CColliderSphere* mpColliderSphereHead;   // 頭

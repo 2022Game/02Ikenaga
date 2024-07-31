@@ -8,8 +8,8 @@
 // マッシュルームのインスタンス
 CMushroom* CMushroom::spInstance = nullptr;
 
-#define ENEMY_SIDE      0.9f  // 線分コライダー(横)
-#define ENEMY_HEIGHT    0.9f  // 線分コライダー(縦)
+#define ENEMY_SIDE      0.7f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    1.0f  // 線分コライダー(縦)
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.4f  // 移動速度
 #define GRAVITY         0.3f  // 重力
@@ -38,10 +38,10 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 CMushroom::CMushroom()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
 	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
+	, mAttackTime(0.0f)
 {
 	//インスタンスの設定
 	spInstance = this;
@@ -78,7 +78,7 @@ CMushroom::CMushroom()
 		CVector(0.0f, 0.0f, ENEMY_SIDE)
 	);
 	mpColLineSide->SetCollisionLayers({ ELayer::eField });
-	//mpColLineSide->Position(0.0f, 0.2f, 0.0f);
+	mpColLineSide->Position(0.0f, 10.0f, 0.0f);
 
 	// 線分コライダー(縦)
 	mpColLineHeight = new CColliderLine
@@ -606,7 +606,7 @@ void CMushroom::Update()
 
 	if (mState == EState::eIdle3 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mAttackTime++;
+		mAttackTime += Time::DeltaTime();
 
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -617,7 +617,7 @@ void CMushroom::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime >= 2.0f)
 		{
 			// 攻撃2
 			bool Attack2 = false;
@@ -644,11 +644,11 @@ void CMushroom::Update()
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3
 			|| mState == EState::eAttackWait)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -843,8 +843,8 @@ void CMushroom::Death()
 CVector CMushroom::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(70.0f, 270.0f));
-	pos.Z(Math::Rand(-250.0f, -100.0f));
+	pos.X(Math::Rand(50.0f, 150.0f));
+	pos.Z(Math::Rand(690.0f, 790.0f));
 
 	return CVector(pos);
 }

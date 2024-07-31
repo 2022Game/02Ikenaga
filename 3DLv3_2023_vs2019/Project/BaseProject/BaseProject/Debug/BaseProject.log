@@ -1,2 +1,5 @@
-﻿  CGameScene.cpp
+﻿  CBee.cpp
+C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\Game\CBee.cpp(306,7): warning C4834: 'nodiscard' 属性を持つ関数の戻り値を破棄しています
+  CGameScene.cpp
+  コードを生成中...
   BaseProject.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\Lone Dog.exe

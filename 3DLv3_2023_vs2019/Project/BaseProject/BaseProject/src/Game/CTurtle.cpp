@@ -10,7 +10,8 @@
 // 亀のインスタンス
 CTurtle* CTurtle::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.9f  // 線分コライダー
+#define ENEMY_SIDE      1.0f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    1.0f  // 線分コライダー(縦)
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.4f  // 移動速度
 #define GRAVITY         0.3f  // 重力
@@ -42,8 +43,8 @@ const CTurtle::AnimData CTurtle::ANIM_DATA[] =
 CTurtle::CTurtle()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
-	, mDefenseTime(0)
+	, mDefenseTime(0.0f)
+	, mAttackTime(0.0f)
 	, mIsGrounded(false)
 	, mMoveSpeed(CVector::zero)
 	, mStateStep(0)
@@ -76,14 +77,24 @@ CTurtle::CTurtle()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// キャラクターの線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 10.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
 
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
@@ -177,7 +188,8 @@ CTurtle::CTurtle()
 CTurtle::~CTurtle()
 {
 	// キャラクターの線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	//　キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereBody);
 	// ダメージを受けるコライダー
@@ -389,7 +401,7 @@ void CTurtle::UpdateDefenseIdle()
 
 	if (IsAnimationFinished())
 	{
-		if (mDefenseTime >= 800)
+		if (mDefenseTime >= 10.0f)
 		{
 			ChangeState(EState::eAttack2);
 		}
@@ -542,7 +554,7 @@ void CTurtle::Update()
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eDefenseIdle
 		|| mState == EState::eHit)
 	{
-		mAttackTime++;
+		mAttackTime += Time::DeltaTime();
 
 		if (vectorPos <= ROTATE_RANGE)
 		{
@@ -553,7 +565,7 @@ void CTurtle::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime >= 2.0f)
 		{
 			// 攻撃2
 			bool Attack2 = false;
@@ -582,11 +594,11 @@ void CTurtle::Update()
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eDefense)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 		if (vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -598,12 +610,12 @@ void CTurtle::Update()
 	// 防御時間計測
 	if (mState == EState::eDefense || mState == EState::eDefenseHit || mState == EState::eDefenseIdle)
 	{
-		mDefenseTime++;
+		mDefenseTime += Time::DeltaTime();
 		mDefenseUp = true;
 	}
 	else
 	{
-		mDefenseTime = 0;
+		mDefenseTime = 0.0f;
 		mDefenseUp = false;
 	}
 
@@ -659,7 +671,7 @@ void CTurtle::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColLineSide || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -785,9 +797,9 @@ void CTurtle::Death()
 CVector CTurtle::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(-200.0f, 0.0f));
+	pos.X(Math::Rand(-100.0f, 0.0f));
 	pos.Y(-0.2f);
-	pos.Z(Math::Rand(-350.0f, -200.0f));
+	pos.Z(Math::Rand(540.0f, 640.0f));
 
 	return CVector(pos);
 }

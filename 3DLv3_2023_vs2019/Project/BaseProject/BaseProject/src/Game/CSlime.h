@@ -59,8 +59,6 @@ public:
 	// 描画
 	void Render();
 
-	int mAttackTime;    // 攻撃時間の間隔
-
 private:
 
 	// 待機状態
@@ -148,9 +146,10 @@ private:
 
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
+	float mAttackTime;  // 次の攻撃時間
 
 	CColliderLine* mpColLineSide;           // 線分コライダー(横)
-	CColliderLine* mpColLineHeight;         // 線分コライダー(高さ)
+	CColliderLine* mpColLineHeight;         // 線分コライダー(縦)
 	CColliderSphere* mpColliderSphereBody;  // キャラクターの押し戻しコライダー(体)
 	CColliderSphere* mpDamageColBody;       // ダメージを受けるコライダー(体)
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)

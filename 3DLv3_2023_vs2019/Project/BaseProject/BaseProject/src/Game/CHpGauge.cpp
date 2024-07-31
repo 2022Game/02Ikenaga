@@ -127,6 +127,10 @@ void CHpGauge::SetCenterRatio(const CVector2& ratio)
 // ワールド座標を設定
 void CHpGauge::SetWorldPos(const CVector& worldPos)
 {
+	if (mIs3dGauge)
+	{
+		mScale = mSize;
+	}
 	// 現在のカメラを取得
 	CCamera* cam = CCamera::CurrentCamera();
 	if (cam == nullptr)return;
@@ -161,10 +165,6 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 	else
 	{
 		SetShow(false);
-	}
-	if (mIs3dGauge)
-	{
-		mScale = mSize;
 	}
 }
 
