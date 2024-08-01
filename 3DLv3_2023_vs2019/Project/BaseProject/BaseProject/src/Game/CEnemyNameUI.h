@@ -31,4 +31,6 @@ private:
 	CVector2 mBasePos;     // ベース位置
 	CVector2 mCenterRatio; // 中心位置の割合
 	bool mIs3dGauge;       // 3D空間に配置するゲージかどうか
+	float mMaxScale;
+	float mMinScale;
 };

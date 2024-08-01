@@ -57,6 +57,8 @@ CGameScene::CGameScene()
 CGameScene::~CGameScene()
 {
 	CGameMenu::ClearInstance();
+	CGameOverScene::ClearInstance();
+	CGameClearScene::ClearInstance();
 	CEnemyManager::Delete();
 }
 
@@ -118,6 +120,7 @@ void CGameScene::Load()
 	CResourceManager::Load<CTexture>("SlashSkill", "UI\\slashSkill.png");
 	CResourceManager::Load<CTexture>("Wall", "UI\\black.png");
 	CResourceManager::Load<CTexture>("Lock", "UI\\Lock.png");
+	CResourceManager::Load<CTexture>("BossUI", "UI\\Text\\boss.png");
 
 	// エフェクト関連
 	CResourceManager::Load<CTexture>("Laser", "Effect\\laser.png");
@@ -194,9 +197,9 @@ void CGameScene::Load()
 	mainCamera->SetHitColliderRatio(0.98f);
 	player->Position(0.0f, 50.0f, 900.0f);
 
-	//// レッドスライム
-	//CSlime* enemy = new CSlime();
-	//enemy->Position(0.0f, 0.0f, 800.0f);
+	// レッドスライム
+	CSlime* enemy = new CSlime();
+	enemy->Position(0.0f, 0.0f, 800.0f);
 
 	//// オレンジスライム
 	//CSlime2* enemy2 = new CSlime2();
@@ -249,25 +252,14 @@ void CGameScene::Load()
 	//CLich* enemy28 = new CLich();
 	//enemy28->Position(75.0f, 3.0f, -1350.0f);
 
-	//// ドラゴン
-	//CDragon* bossEnemy = new CDragon();
+	// ドラゴン
+	CDragon* bossEnemy = new CDragon();
+	bossEnemy->Position(75.0f, 1.0f, 500.0f);
 	//bossEnemy->Position(75.0f, 1.0f, -1700.0f);
 
 	// ゲームメニューを作成
 	CGameMenu::Instance();
 	CGameOverScene::Instance();
-}
-
-// ゲームクリア判定
-bool CGameScene::IsClear()
-{
-	return mpPlayer->mHp >= 10000;
-}
-
-// ゲームクリア処理
-void CGameScene::Clear()
-{
-	//CSceneManager::ClearInstance();
 }
 
 // シーンの更新処理

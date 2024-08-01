@@ -4,9 +4,11 @@
 #include "CEnemy.h"
 #include "CColliderSphere.h"
 #include "CColliderCapsule.h"
+
 class CFlamethrower;
 class CFlightFlamethrower;
 class CHit;
+class CBossUI;
 
 /*
  ボスドラゴン
@@ -232,4 +234,5 @@ private:
 	// 経過時間計測用(雄叫び)
 	float mElapsedRoarTime;
 	CHit* mpHitEffect;  // ヒットエフェクト 
+	CBossUI* mpBossUI;  // ボスUI
 };

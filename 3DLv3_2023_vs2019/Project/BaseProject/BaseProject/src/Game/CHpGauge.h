@@ -22,8 +22,11 @@ public:
 	// 表示するかどうか設定
 	void SetShow(bool isShow)override;
 
-	// 大きさを設定
-	void SetScale(float scale);
+	// 最大の大きさを設定
+	void SetMaxScale(float maxScale);
+	// 最小の大きさを設定
+	void SetMinScale(float minScale);
+
 
 	// 最大値を設定
 	void SetMaxValue(int value);
@@ -52,7 +55,8 @@ private:
 
 	CVector2 mCenterRatio;     // 中心位置の割合
 	float mScale;              // HPゲージのスケール値
-	float mSize;
+	float mMaxScale;
+	float mMinScale;
 	bool mIs3dGauge;           // 3D空間に配置するゲージかどうか
 
 	int mDamageValue;          // ダメージバー表示用のポイント

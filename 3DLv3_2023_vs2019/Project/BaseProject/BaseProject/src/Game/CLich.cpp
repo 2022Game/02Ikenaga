@@ -817,11 +817,6 @@ void CLich::Update()
 	mpDamageColArmL->Update();
 	mpDamageColArmR->Update();
 
-	if (CInput::PushKey('Z'))
-	{
-		ChangeState(EState::eAttack2);
-	}
-
 	mIsGrounded = false;
 
 	CEnemy::Update();

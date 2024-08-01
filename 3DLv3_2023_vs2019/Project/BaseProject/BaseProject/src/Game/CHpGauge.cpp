@@ -87,9 +87,15 @@ void CHpGauge::SetShow(bool isShow)
 }
 
 // 大きさを設定
-void CHpGauge::SetScale(float scale)
+void CHpGauge::SetMaxScale(float maxScale)
 {
-	mSize = scale;
+	mMaxScale = maxScale;
+}
+
+// 最小の大きさを設定
+void CHpGauge::SetMinScale(float minScale)
+{
+	mMinScale = minScale;
 }
 
 // 最大値を設定
@@ -127,10 +133,6 @@ void CHpGauge::SetCenterRatio(const CVector2& ratio)
 // ワールド座標を設定
 void CHpGauge::SetWorldPos(const CVector& worldPos)
 {
-	if (mIs3dGauge)
-	{
-		mScale = mSize;
-	}
 	// 現在のカメラを取得
 	CCamera* cam = CCamera::CurrentCamera();
 	if (cam == nullptr)return;
@@ -156,7 +158,7 @@ void CHpGauge::SetWorldPos(const CVector& worldPos)
 	{
 		// カメラから離れるごとにスケール値を小さくする
 		float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
-		mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+		mScale = Math::Lerp(mMinScale, mMaxScale, ratio);
 	
 		// HPゲージが表示
 		SetShow(true);

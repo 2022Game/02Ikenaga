@@ -17,6 +17,7 @@ class CBuffCircle;
 class CBuffAura;
 class CPowerUpAura;
 class CGamePlayerUI;
+class CLevelUpUI;
 
 #include <algorithm>
 
@@ -46,7 +47,7 @@ public:
 	void UpdateIdle();
 
 	// Ž€‚Ê
-	void UpdateDei();
+	void UpdateDie();
 
 	// •œŠˆ
 	void UpdateRevival();
@@ -287,4 +288,5 @@ private:
 	bool mIsSpawnedSlashEffect;
 
 	CGamePlayerUI* mpGameUI;
+	CLevelUpUI* mpLevelUpUI;
 };

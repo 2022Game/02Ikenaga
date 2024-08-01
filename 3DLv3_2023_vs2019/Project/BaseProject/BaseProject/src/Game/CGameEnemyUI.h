@@ -21,8 +21,10 @@ public:
 	// UIのオフセット位置を取得
 	const CVector& GetUIoffSetPos() const;
 
-	// 大きさを設定
-	void SetScale(float scale);
+	// 最大の大きさを設定
+	void SetMaxScale(float maxScale);
+	// 最小の大きさを設定
+	void SetMinScale(float minScale);
 
 	// HPを設定
 	void SetHp(int hp);

@@ -33,6 +33,7 @@ enum class ETag
 	eHit,             // ƒqƒbƒg
 
 	eCamera,          // ƒJƒƒ‰
+	eUI,              // UI
 
 	Num
 };

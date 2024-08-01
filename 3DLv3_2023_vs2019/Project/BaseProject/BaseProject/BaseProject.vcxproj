@@ -71,6 +71,7 @@
     <ClCompile Include="src\BaseSystem\System.cpp" />
     <ClCompile Include="src\Game\AvoidanceGauge.cpp" />
     <ClCompile Include="src\Game\CApplication.cpp" />
+    <ClCompile Include="src\Game\CBossUI.cpp" />
     <ClCompile Include="src\Game\CBreath.cpp" />
     <ClCompile Include="src\Game\CBuffAura.cpp" />
     <ClCompile Include="src\Game\CBuffSkill.cpp" />
@@ -114,9 +115,9 @@
     <ClCompile Include="src\Game\CGameEnemyUI.cpp" />
     <ClCompile Include="src\Game\CGameMenu.cpp" />
     <ClCompile Include="src\Game\CGameOverScene.cpp" />
-    <ClCompile Include="src\Game\CHpBossGauge.cpp" />
     <ClCompile Include="src\Game\CKeyE.cpp" />
     <ClCompile Include="src\Game\CKeyQ.cpp" />
+    <ClCompile Include="src\Game\CLevelUpUI.cpp" />
     <ClCompile Include="src\Game\CLock.cpp" />
     <ClCompile Include="src\Game\CLock2.cpp" />
     <ClCompile Include="src\Game\CLockLevel.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="src\Define.h" />
     <ClInclude Include="src\Game\CApplication.h" />
     <ClInclude Include="src\Game\CAvoidanceGauge.h" />
+    <ClInclude Include="src\Game\CBossUI.h" />
     <ClInclude Include="src\Game\CBreath.h" />
     <ClInclude Include="src\Game\CBuffAura.h" />
     <ClInclude Include="src\Game\CBuffSkill.h" />
@@ -323,9 +325,9 @@
     <ClInclude Include="src\Game\CGameEnemyUI.h" />
     <ClInclude Include="src\Game\CGameMenu.h" />
     <ClInclude Include="src\Game\CGameOverScene.h" />
-    <ClInclude Include="src\Game\CHpBossGauge.h" />
     <ClInclude Include="src\Game\CKeyE.h" />
     <ClInclude Include="src\Game\CKeyQ.h" />
+    <ClInclude Include="src\Game\CLevelUpUI.h" />
     <ClInclude Include="src\Game\CLock.h" />
     <ClInclude Include="src\Game\CLock2.h" />
     <ClInclude Include="src\Game\CLockLevel.h" />

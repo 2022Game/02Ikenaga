@@ -46,10 +46,16 @@ const CVector& CGameEnemyUI::GetUIoffSetPos() const
 	return mpUIoffSetPos;
 }
 
-// ‘å‚«‚³‚ğİ’è
-void CGameEnemyUI::SetScale(float scale)
+// Å‘å‚Ì‘å‚«‚³‚ğİ’è
+void CGameEnemyUI::SetMaxScale(float maxScale)
 {
-	mpHpGauge->SetScale(scale);
+	mpHpGauge->SetMaxScale(maxScale);
+}
+
+// Å¬‚Ì‘å‚«‚³‚ğİ’è
+void CGameEnemyUI::SetMinScale(float minScale)
+{
+	mpHpGauge->SetMinScale(minScale);
 }
 
 // HP‚ğİ’è

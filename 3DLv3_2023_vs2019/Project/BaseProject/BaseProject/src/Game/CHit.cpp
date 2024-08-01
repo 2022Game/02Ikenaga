@@ -22,6 +22,7 @@ CHit::CHit(float size,float height)
 // デストラクタ
 CHit::~CHit()
 {
+	Kill();
 }
 
 // 状態の切り替え

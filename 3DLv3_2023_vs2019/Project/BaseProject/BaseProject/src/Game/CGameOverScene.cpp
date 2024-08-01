@@ -36,7 +36,7 @@ void CGameOverScene::ClearInstance()
 
 // コンストラ
 CGameOverScene::CGameOverScene()
-	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,false,true)
+	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eGameOver)
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
@@ -190,6 +190,7 @@ void CGameOverScene::Open()
 	SetShow(true);
 	mIsOpened = true;
 	mSelectIndex = 0;
+
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 }
@@ -223,7 +224,8 @@ void CGameOverScene::Decide(int select)
 		Close();
 		break;
 	case 1:
-		Close();
+		mIsOpened = false;
+		CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
 		CSceneManager::Instance()->LoadScene(EScene::eTitle);
 		break;
 	}
@@ -232,6 +234,8 @@ void CGameOverScene::Decide(int select)
 // 更新
 void CGameOverScene::Update()
 {
+	if (!mIsOpened) return;
+
 	int itemCount = mMenuItems.size();
 	if (CInput::PushKey(VK_UP))
 	{

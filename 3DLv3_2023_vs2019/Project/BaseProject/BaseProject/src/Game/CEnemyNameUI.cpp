@@ -83,7 +83,7 @@ void CEnemyNameUI::SetWorldPos(const CVector& worldPos)
 	{
 		// カメラから離れるごとにスケール値を小さくする
 		float ratio = 0.3f - Math::Clamp01((dist - SCALE_DIST_MIN) / (SCALE_DIST_MAX - SCALE_DIST_MIN));
-		mScale = Math::Lerp(SCALE_MIN, SCALE_MAX, ratio);
+		mScale = Math::Lerp(SCALE_MIN, SCALE_MAX,ratio);
 
 		// 表示
 		SetShow(true);

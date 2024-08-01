@@ -251,6 +251,9 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI\Skill\Lock">
       <UniqueIdentifier>{6e64ad32-6553-430b-9e3b-3f57f8be942d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Level">
+      <UniqueIdentifier>{ebe73079-89a4-462e-bccf-31c449c24bb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -730,9 +733,6 @@
     <ClCompile Include="src\Game\CSpGauge.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CPlayerLevelUI.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\CLevelUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI</Filter>
     </ClCompile>
@@ -844,8 +844,14 @@
     <ClCompile Include="src\Game\CGameClearScene.cpp">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\CHpBossGauge.cpp">
-      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    <ClCompile Include="src\Game\CBossUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerLevelUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CLevelUpUI.cpp">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1350,9 +1356,6 @@
     <ClInclude Include="src\Game\CSpGauge.h">
       <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CPlayerLevelUI.h">
-      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\CLevelUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI</Filter>
     </ClInclude>
@@ -1464,8 +1467,14 @@
     <ClInclude Include="src\Game\CGameClearScene.h">
       <Filter>ソース ファイル\Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\CHpBossGauge.h">
-      <Filter>ソース ファイル\Game\UI\GameUI\Gauge</Filter>
+    <ClInclude Include="src\Game\CBossUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\EnemyUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerLevelUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CLevelUpUI.h">
+      <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

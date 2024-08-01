@@ -11,7 +11,7 @@ CGameClearScene* CGameClearScene::spInstance = nullptr;
 #define SHADOW_WIDTH 2.0f  // 影の幅
 #define MENU_ALPHA 0.75f
 #define GAMECLEAR_POS CVector2(410.0f + SHADOW_WIDTH, 150.0f)
-#define END_POS CVector2(520.0f + SHADOW_WIDTH, 365.0f)
+#define TITLE_POS CVector2(540.0f + SHADOW_WIDTH, 365.0f)
 
 // インスタンスを取得
 CGameClearScene* CGameClearScene::Instance()
@@ -91,31 +91,31 @@ CGameClearScene::CGameClearScene()
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eGameClear,
 		false, false
 	);
 	mpGameClear->SetTextAlignH(textAlignH);
 	mpGameClear->SetText("ゲームクリア");
 	mpGameClear->SetFontSize(80);
 
-	mpEnd = new CText
+	mpTitle = new CText
 	(
 		nullptr, 24,
-		END_POS,
+		TITLE_POS,
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
 		ETaskPriority::eUI, 0,
-		ETaskPauseType::eGame,
+		ETaskPauseType::eGameClear,
 		false, false
 	);
-	mpEnd->SetTextAlignH(textAlignH);
-	mpEnd->SetText("ゲーム終了");
-	mpEnd->SetFontSize(50);
+	mpTitle->SetTextAlignH(textAlignH);
+	mpTitle->SetText("タイトル");
+	mpTitle->SetFontSize(50);
 
 	mpUpUI = new CImage
 	(
 		"UI/up.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 0, ETaskPauseType::eGameClear,
 		false, false
 	);
 	mpUpUI->SetPos(130.0f, 560.0f);
@@ -124,7 +124,7 @@ CGameClearScene::CGameClearScene()
 	mpDownUI = new CImage
 	(
 		"UI/down.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 0, ETaskPauseType::eGameClear,
 		false, false
 	);
 	mpDownUI->SetPos(130.0f, 590.0f);
@@ -133,7 +133,7 @@ CGameClearScene::CGameClearScene()
 	mpEnterKey = new CImage
 	(
 		"UI/Key/enter.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 0, ETaskPauseType::eGameClear,
 		false, false
 	);
 	mpEnterKey->SetPos(1075.0f, 580.0f);
@@ -150,7 +150,7 @@ CGameClearScene::~CGameClearScene()
 	SAFE_DELETE(mpBackground2);
 	SAFE_DELETE(mpSelectFrame);
 	SAFE_DELETE(mpGameClear);
-	SAFE_DELETE(mpEnd);
+	SAFE_DELETE(mpTitle);
 	SAFE_DELETE(mpUpUI);
 	SAFE_DELETE(mpDownUI);
 	SAFE_DELETE(mpEnterKey);
@@ -163,6 +163,7 @@ void CGameClearScene::Open()
 	SetShow(true);
 	mIsOpened = true;
 	mSelectIndex = 0;
+
 	CBGMManager::Instance()->Play(EBGMType::eMenu, false);
 	CTaskManager::Instance()->Pause(PAUSE_MENU_OPEN);
 }
@@ -174,7 +175,6 @@ void CGameClearScene::Close()
 	SetShow(false);
 	mIsOpened = false;
 
-	CBGMManager::Instance()->Play(EBGMType::eGame, false);
 	CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
 }
 
@@ -190,7 +190,9 @@ void CGameClearScene::Decide(int select)
 	switch (select)
 	{
 	case 0:
-		Close();
+		mIsOpened = false;
+
+		CTaskManager::Instance()->UnPause(PAUSE_MENU_OPEN);
 		CSceneManager::Instance()->LoadScene(EScene::eTitle);
 		break;
 	case 1:
@@ -201,6 +203,8 @@ void CGameClearScene::Decide(int select)
 // 更新
 void CGameClearScene::Update()
 {
+	if (!mIsOpened)return;
+
 	int itemCount = mMenuItems.size();
 	if (CInput::PushKey(VK_UP))
 	{
@@ -242,7 +246,7 @@ void CGameClearScene::Render()
 	}
 
 	mpGameClear->SetColor(1.0f, 1.0f, 1.0f);
-	mpEnd->SetColor(1.0f, 1.0f, 1.0f);
+	mpTitle->SetColor(1.0f, 1.0f, 1.0f);
 
 	for (int i = 0; i < SHADOW_COUNT; i++)
 	{
@@ -252,16 +256,16 @@ void CGameClearScene::Render()
 		mpGameClear->SetPos(GAMECLEAR_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
 		mpGameClear->Render();
 
-		mpEnd->SetPos(END_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
-		mpEnd->Render();
+		mpTitle->SetPos(TITLE_POS + (CVector2)(rot * v) * SHADOW_WIDTH);
+		mpTitle->Render();
 	}
 	mpGameClear->SetColor(0.0f, 1.0f, 0.0f);
 	mpGameClear->SetPos(GAMECLEAR_POS);
 	mpGameClear->Render();
 
-	mpEnd->SetColor(0.0f, 0.0f, 0.0f);
-	mpEnd->SetPos(END_POS);
-	mpEnd->Render();
+	mpTitle->SetColor(0.0f, 0.0f, 0.0f);
+	mpTitle->SetPos(TITLE_POS);
+	mpTitle->Render();
 
 	mpUpUI->Render();
 	mpDownUI->Render();

@@ -18,6 +18,7 @@
 #include "CPowerUpAura.h"
 #include "CGamePlayerUI.h"
 #include "CGameOverScene.h"
+#include "CLevelUpUI.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -293,6 +294,10 @@ CPlayer::CPlayer()
 	mpBuffAura = new CBuffAura();
 	mpBuffAura->SetColor(CColor(1.0f, 0.0f, 0.0f));
 	mpBuffAura->SetOwner(this);
+
+	mpLevelUpUI = new CLevelUpUI(17.0f);
+	mpLevelUpUI->Position(Position());
+	mpLevelUpUI->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
@@ -878,19 +883,24 @@ void CPlayer::UpdateRolling()
 }
 
 // 死ぬ
-void CPlayer::UpdateDei()
+void CPlayer::UpdateDie()
 {
-	ChangeAnimation(EAnimType::eDie);
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		CGameOverScene* gameOver = CGameOverScene::Instance();
-		if (!gameOver->IsOpened())
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		if (IsAnimationFinished())
 		{
+			CGameOverScene* gameOver = CGameOverScene::Instance();
 			gameOver->Open();
+			mStateStep++;
 		}
+		break;
+	case 1:
+		break;
 	}
 }
 
@@ -981,6 +991,8 @@ void CPlayer::LevelUp()
 		// 次のレベルの最大ステータスを設定
 		current = PLAYER_STATUS[level - 1];
 	}
+
+	mpLevelUpUI->StartLevelUpUI();
 	// レベルを切り替え
 	ChangeLevel(level);
 }
@@ -989,7 +1001,7 @@ void CPlayer::LevelUp()
 void CPlayer::ChangeLevel(int level)
 {
 	// ステータスのテーブルのインデックス値に変換
-	int index =Math::Clamp(level-1,0, PLAYER_LEVEL_MAX);
+	int index = Math::Clamp(level - 1, 0, PLAYER_LEVEL_MAX);
 	// 最大ステータスに設定
 	mCharaMaxStatus = PLAYER_STATUS[index];
 	// 残りの経験値を記憶しておく
@@ -1202,7 +1214,7 @@ void CPlayer::Update()
 			break;
 		// 死ぬ
 		case EState::eDie:
-			UpdateDei();
+			UpdateDie();
 			break;
 		// ジャンプ攻撃
 		case EState::eJumpAttack:
@@ -1269,7 +1281,7 @@ void CPlayer::Update()
 		// 20秒経過したら防御力アップfalseにする||防御力アップ時間を0にする
 		if (mElapsedDefenseUpTime >= 20.0f)
 		{
-			mElapsedDefenseUpTime = 0;
+			mElapsedDefenseUpTime = 0.0f;
 			mDefenseUp = false;
 		}
 	}
@@ -1347,7 +1359,7 @@ void CPlayer::Update()
 	}
 	else
 	{
-		mElapsedPowerUpTime = 0;
+		mElapsedPowerUpTime = 0.0f;
 	}
 
 	// キャラクターの更新
@@ -1395,7 +1407,7 @@ void CPlayer::Update()
 	}
 	else if (CInput::PushKey('3'))
 	{
-		ChangeLevel(31);
+		ChangeLevel(91);
 	}
 
 	// キャラクターの押し戻しコライダー
@@ -1421,7 +1433,7 @@ void CPlayer::Update()
 	// 現在のレベルを設定
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 
-	//CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }
 
 // 衝突処理

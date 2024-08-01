@@ -45,7 +45,7 @@ private:
 	CImage* mpEnterKey;
 
 	int mSelectIndex;
-	bool mIsOpened;
+	bool mIsOpened;      // オープンするかどうか
 	CText* mpGameClear;  // ゲームクリア
-	CText* mpEnd;
+	CText* mpTitle;      // タイトル
 };

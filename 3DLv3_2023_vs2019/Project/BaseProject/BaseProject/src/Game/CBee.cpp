@@ -608,7 +608,7 @@ void CBee::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mFlyingTime += Time::DeltaTime();;
+		mFlyingTime += Time::DeltaTime();
 		mAttackTime += Time::DeltaTime();
 
 		if (vectorPos <= ROTATE_RANGE)

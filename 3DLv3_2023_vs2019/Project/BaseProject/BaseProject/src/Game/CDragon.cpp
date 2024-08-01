@@ -9,19 +9,20 @@
 #include "CGameEnemyUI.h"
 #include "CGameClearScene.h"
 #include "CHit.h"
+#include "CBossUI.h"
 #include "Maths.h"
 
 // ドラゴンのインスタンス
 CDragon* CDragon::spInstance = nullptr;
 
-#define ENEMY_HEIGHT  -2.9f    // 線分コライダー
-#define WITHIN_RANGE  150.0f     // 範囲内
-#define MOVE_SPEED    0.8f     // 移動速度
-#define GRAVITY       0.0625f  // 重力
+#define ENEMY_HEIGHT   -2.9f   // 線分コライダー
+#define WITHIN_RANGE  150.0f   // 範囲内
+#define MOVE_SPEED      1.0f   // 移動速度
+#define GRAVITY      0.0625f   // 重力
 #define WALK_RANGE    500.0f   // 追跡する範囲
 #define STOP_RANGE    155.0f   // 追跡を辞める範囲
 #define ROTATE_RANGE  500.0f   // 回転する範囲
-#define THROW_INTERVAL 1.0f    // 雄叫びの発射間隔時間
+#define THROW_INTERVAL  1.0f   // 雄叫びの発射間隔時間
 
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
@@ -327,9 +328,7 @@ CDragon::CDragon()
 		CQuaternion(0.0, -90.f, 0.0f).Matrix()
 	);
 
-	Scale(15.0f, 15.0f, 15.0f);
-
-	float Size = 130.0f;   // サイズ
+	float Size = 130.0f;  // サイズ
 	float Height = 0.2f;  // 高さ
 	// ヒットエフェクトを作成
 	mpHitEffect = new CHit(Size, Height);
@@ -337,7 +336,15 @@ CDragon::CDragon()
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
 
+	mpBossUI = new CBossUI(70.0f);
+	mpBossUI->SetSize(CVector2(100, 20));
+	mpBossUI->Position(Position());
+	mpBossUI->SetOwner(this);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 55.0f, 0.0f));
+
 	CGameClearScene::Instance();
+	Scale(15.0f, 15.0f, 15.0f);
 }
 
 // デストラクタ
@@ -668,14 +675,22 @@ void CDragon::UpdateDefense()
 void CDragon::UpdateDie()
 {
 	SetAnimationSpeed(0.4f);
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理へ
-		CEnemy::DragonDeath();
-		CGameClearScene* clear = CGameClearScene::Instance();
-		clear->Open();
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理へ
+			CEnemy::DragonDeath();
+			CGameClearScene* clear = CGameClearScene::Instance();
+			clear->Open();
+		}
+		break;
+	case 1:
+		break;
 	}
 }
 
@@ -1165,23 +1180,19 @@ void CDragon::Update()
 
 	mIsGrounded = false;
 
-	if (mState == EState::eFlyingIdle || mState == EState::eFlyingStart
-		|| mState == EState::eFlyingEnd || mState == EState::eFlyingAttack
-		|| mState == EState::eFlyForward || mState == EState::eFlyingAttackWait)
-	{
-		mpGameUI->SetUIoffSetPos(CVector(0.0f, 200.0f, 0.0f));
-	}
-	else
-	{
-		mpGameUI->SetUIoffSetPos(CVector(0.0f, 55.0f, 0.0f));
-	}
-
 	CEnemy::Update();
 
-	if (mState == EState::eIdle3 || mState == EState::eDie)
+	if (mState == EState::eIdle3 || mState == EState::eDie || vectorPos > WALK_RANGE)
 	{
 		CHpGauge* hpGauge = mpGameUI->GetHpGauge();
 		hpGauge->SetShow(false);
+		mpBossUI->SetEnable(false);
+		mpBossUI->SetShow(false);
+	}
+	else
+	{
+		mpBossUI->SetEnable(true);
+		mpBossUI->SetShow(true);
 	}
 }
 

@@ -328,11 +328,13 @@ void CEnemy::Update()
 	mpGameUI->SetHp(mCharaStatus.hp);
 	if (mType == EEnemyType::eDragon)
 	{
-		mpGameUI->SetScale(1.25f);
+		mpGameUI->SetMaxScale(2.0f);
+		mpGameUI->SetMinScale(1.5f);
 	}
 	else
 	{
-		mpGameUI->SetScale(0.6f);
+		mpGameUI->SetMaxScale(1.5f);
+		mpGameUI->SetMinScale(0.7f);
 	}
 	
 	// HPÉQÅ[ÉW
