@@ -183,20 +183,6 @@ void CGameScene::Load()
 	nightSky->Scale(250.0f, 250.0f, 250.0f);
 	nightSky->Position(0.0f, -1.5f, 0.0f);
 
-	CPlayer* player = new CPlayer();
-
-	// CGameCamera2のテスト
-	CGameCamera2* mainCamera = new CGameCamera2
-	(
-		player->Position() + DEFAULT_CAMERA_POS,
-		player->Position() + DEFAULT_CAMERA_OFFSET
-	);
-	mainCamera->SetFollowTargetTf(player);
-	mainCamera->AddCollider(field->GetCollider());
-	mainCamera->AddCollider(sky->GetCollider());
-	mainCamera->SetHitColliderRatio(0.98f);
-	player->Position(0.0f, 50.0f, 900.0f);
-
 	// レッドスライム
 	CSlime* enemy = new CSlime();
 	enemy->Position(0.0f, 0.0f, 800.0f);
@@ -210,13 +196,13 @@ void CGameScene::Load()
 	//CSlime3* enemy3 = new CSlime3();
 	//enemy3->Position(-20.0f, 0.0f, -90.0f);
 
-	//// マッシュルーム
-	//CMushroom* enemy4 = new CMushroom();
-	//enemy4->Position(150.0f, 0.0f, 690.0f);
+	// マッシュルーム
+	CMushroom* enemy2 = new CMushroom();
+	enemy2->Position(150.0f, 0.0f, 690.0f);
 
-	//// 亀
-	//CTurtle* enemy7 = new CTurtle();
-	//enemy7->Position(0.0f, -0.5f, 540.0f);
+	// 亀
+	CTurtle* enemy3 = new CTurtle();
+	enemy3->Position(0.0f, -0.5f, 540.0f);
 
 	// エイ
 	CRay* enemy10 = new CRay();
@@ -224,38 +210,50 @@ void CGameScene::Load()
 
 	// 蜂
 	CBee* enemy13 = new CBee();
-	//enemy13->Position(0.0f, 0.0f, -600.0f);
 	enemy13->Position(0.0f, 0.0f, 240.0f);
 
-	//// サボテン
-	//CCactus* enemy16 = new CCactus();
-	//enemy16->Position(150.0f, 0.0f, -750.0f);
+	// サボテン
+	CCactus* enemy16 = new CCactus();
+	enemy16->Position(150.0f, 0.0f, 90.0f);
 
-	//// チェストモンスター
-	//CChest* enemy19 = new CChest();
-	//enemy19->Position(0.0f, 0.0f, -900.0f);
+	// チェストモンスター
+	CChest* enemy19 = new CChest();
+	enemy19->Position(0.0f, 0.0f, -60.0f);
 
-	//// 球体のモンスター
-	//CBeholder* enemy22 = new CBeholder();
-	//enemy22->Position(150.0f, 0.0f, -1050.0f);
+	// 球体のモンスター
+	CBeholder* enemy22 = new CBeholder();
+	enemy22->Position(150.0f, 0.0f, -210.0f);
 
-	//// ボクサー
-	//CBoxer* enemy25 = new CBoxer();
-	//enemy25->Position(0.0f, 0.0f, -1200.0f);
+	// ボクサー
+	CBoxer* enemy25 = new CBoxer();
+	enemy25->Position(0.0f, 0.0f, -360.0f);
 
-	////// ボクサー2
-	////CBoxer2* enemy27 = new CBoxer2();
-	////enemy27->Position(370.0f, 0.0f, 20.0f);
-	////enemy27->Scale(15.0f, 15.0f, 15.0f);
+	//// ボクサー2
+	//CBoxer2* enemy27 = new CBoxer2();
+	//enemy27->Position(370.0f, 0.0f, 20.0f);
+	//enemy27->Scale(15.0f, 15.0f, 15.0f);
 
-	//// リッチ
-	//CLich* enemy28 = new CLich();
-	//enemy28->Position(75.0f, 3.0f, -1350.0f);
+	// リッチ
+	CLich* enemy28 = new CLich();
+	enemy28->Position(75.0f, 3.0f, -510.0f);
 
 	// ドラゴン
 	CDragon* bossEnemy = new CDragon();
-	bossEnemy->Position(75.0f, 1.0f, 500.0f);
-	//bossEnemy->Position(75.0f, 1.0f, -1700.0f);
+	bossEnemy->Position(75.0f, 1.0f, -860.0f);
+
+	CPlayer* player = new CPlayer();
+
+	// CGameCamera2のテスト
+	CGameCamera2* mainCamera = new CGameCamera2
+	(
+		player->Position() + DEFAULT_CAMERA_POS,
+		player->Position() + DEFAULT_CAMERA_OFFSET
+	);
+	mainCamera->SetFollowTargetTf(player);
+	mainCamera->AddCollider(field->GetCollider());
+	mainCamera->AddCollider(sky->GetCollider());
+	mainCamera->SetHitColliderRatio(0.98f);
+	player->Position(0.0f, 60.0f, 900.0f);
 
 	// ゲームメニューを作成
 	CGameMenu::Instance();

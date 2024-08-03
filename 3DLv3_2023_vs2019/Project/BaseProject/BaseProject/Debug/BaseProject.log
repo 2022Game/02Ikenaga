@@ -1,4 +1,5 @@
-﻿  CPlayer.cpp
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\Game\CPlayer.cpp(142,7): warning C4834: 'nodiscard' 属性を持つ関数の戻り値を破棄しています
-C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\BaseProject\src\Game\CPlayer.cpp(147,7): warning C4834: 'nodiscard' 属性を持つ関数の戻り値を破棄しています
+﻿  CDragon.cpp
+  CEnemyManager.cpp
+  CGameScene.cpp
+  コードを生成中...
   BaseProject.vcxproj -> C:\Users\ikenaga0605\Desktop\Git - コピー\02Ikenaga\3DLv3_2023_vs2019\Project\BaseProject\Debug\Lone Dog.exe

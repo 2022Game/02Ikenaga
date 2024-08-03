@@ -130,8 +130,7 @@ private:
 	};
 	EState mState;	  // エイの状態
 
-	int mStateAttackStep;  // State内の攻撃でのステップ処理
-	int mStateWave;        // State内の波動のステップ処理
+	int mStateStep;  // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);

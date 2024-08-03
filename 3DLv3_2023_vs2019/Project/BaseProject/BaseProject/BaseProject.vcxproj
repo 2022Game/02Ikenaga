@@ -76,6 +76,8 @@
     <ClCompile Include="src\Game\CBuffAura.cpp" />
     <ClCompile Include="src\Game\CBuffSkill.cpp" />
     <ClCompile Include="src\Game\CCurrent.cpp" />
+    <ClCompile Include="src\Game\CDizzy.cpp" />
+    <ClCompile Include="src\Game\CDizzyEffect.cpp" />
     <ClCompile Include="src\Game\CDrain.cpp" />
     <ClCompile Include="src\Game\CDrainEffect.cpp" />
     <ClCompile Include="src\Game\CElectricShock.cpp" />
@@ -146,6 +148,7 @@
     <ClCompile Include="src\Game\COperationIns2.cpp" />
     <ClCompile Include="src\Game\CPlayerDefenseUI.cpp" />
     <ClCompile Include="src\Game\CPlayerExpUI.cpp" />
+    <ClCompile Include="src\Game\CPlayerHit.cpp" />
     <ClCompile Include="src\Game\CPlayerHpUI.cpp" />
     <ClCompile Include="src\Game\CPlayerLevelUI.cpp" />
     <ClCompile Include="src\Game\CLevelUI.cpp" />
@@ -286,6 +289,8 @@
     <ClInclude Include="src\Game\CBuffAura.h" />
     <ClInclude Include="src\Game\CBuffSkill.h" />
     <ClInclude Include="src\Game\CCurrent.h" />
+    <ClInclude Include="src\Game\CDizzy.h" />
+    <ClInclude Include="src\Game\CDizzyEffect.h" />
     <ClInclude Include="src\Game\CDrain.h" />
     <ClInclude Include="src\Game\CDrainEffect.h" />
     <ClInclude Include="src\Game\CElectricShock.h" />
@@ -348,6 +353,7 @@
     <ClInclude Include="src\Game\CMagicCircle.h" />
     <ClInclude Include="src\Game\COperationIns2.h" />
     <ClInclude Include="src\Game\CPlayerDefenseUI.h" />
+    <ClInclude Include="src\Game\CPlayerHit.h" />
     <ClInclude Include="src\Game\CPlayerMaxExpUI.h" />
     <ClInclude Include="src\Game\CMushroom2.h" />
     <ClInclude Include="src\Game\CMushroom3.h" />

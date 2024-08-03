@@ -421,6 +421,7 @@ void CTurtle::UpdateDie()
 	// ステップ0 : アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
 		mStateStep++;
 		break;
 	// ステップ1 : アニメーション終了待ち
@@ -741,19 +742,19 @@ void CTurtle::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		if (mState == EState::eDefense || mState == EState::eDefenseIdle)
 		{
-			if (mState != EState::eDie)
+			ChangeState(EState::eDefenseHit);
+			if (mState == EState::eDefenseHit)
 			{
 				mpHitEffect->StartHitEffect();
 			}
-			ChangeState(EState::eDefenseHit);
 		}
 		else
 		{
-			if (mState != EState::eDie)
+			ChangeState(EState::eHit);
+			if (mState == EState::eHit)
 			{
 				mpHitEffect->StartHitEffect();
 			}
-			ChangeState(EState::eHit);
 		}
 	}
 	// HPが0以下になったら、

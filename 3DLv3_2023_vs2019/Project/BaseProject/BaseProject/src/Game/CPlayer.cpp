@@ -16,9 +16,10 @@
 #include "CBuffCircle.h"
 #include "CBuffAura.h"
 #include "CPowerUpAura.h"
+#include "CPlayerHit.h"
 #include "CGamePlayerUI.h"
-#include "CGameOverScene.h"
 #include "CLevelUpUI.h"
+#include "CGameOverScene.h"
 
 // プレイヤーのインスタンス
 CPlayer* CPlayer::spInstance = nullptr;
@@ -298,6 +299,10 @@ CPlayer::CPlayer()
 	mpLevelUpUI = new CLevelUpUI(17.0f);
 	mpLevelUpUI->Position(Position());
 	mpLevelUpUI->SetOwner(this);
+
+	mpHit = new CPlayerHit(6.0f);
+	mpHit->Position(Position());
+	mpHit->SetOwner(this);
 
 	mpSlashSE = CResourceManager::Get<CSound>("SlashSound");
 }
@@ -819,17 +824,33 @@ void CPlayer::UpdateHit()
 	mMoveSpeed.X(0.0f);
 	mMoveSpeed.Z(0.0f);
 	SetAnimationSpeed(1.0f);
-	ChangeAnimation(EAnimType::eHit);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		if (mCharaStatus.hp <= 0)
+	case 0:
+		ChangeAnimation(EAnimType::eHit);
+		mStateStep++;
+		break;
+	case 1:
+		if (mAnimationFrame >= 5.0f)
 		{
-			ChangeState(EState::eDie);
+			mpHit->StartHit();
+			mStateStep++;
 		}
-		else
+		break;
+	case 2:
+		if (IsAnimationFinished())
 		{
-			ChangeState(EState::eIdle);
+			if (mCharaStatus.hp <= 0)
+			{
+				ChangeState(EState::eDie);
+			}
+			else
+			{
+				ChangeState(EState::eIdle);
+			}
 		}
+		break;
 	}
 }
 
@@ -1433,7 +1454,7 @@ void CPlayer::Update()
 	// 現在のレベルを設定
 	mpGameUI->SetPlayerLevel(mCharaStatus.level);
 
-	CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
+	//CDebugPrint::Print(" %.1fFPS( Delta:%f)\n", Time::FPS(), Time::DeltaTime());
 }
 
 // 衝突処理

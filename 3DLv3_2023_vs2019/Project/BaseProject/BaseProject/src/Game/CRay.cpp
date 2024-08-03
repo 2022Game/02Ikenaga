@@ -39,8 +39,7 @@ CRay::CRay()
 	, mFlyingTime(0.0f)
 	, mIsGrounded(false)
 	, mMoveSpeed(CVector::zero)
-	, mStateAttackStep(0)
-	, mStateWave(0)
+	, mStateStep(0)
 	, mIsSpawnedWaveEffect(false)
 	, mElapsedWaveTime(0.0f)
 {
@@ -256,8 +255,7 @@ void CRay::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
-	mStateWave = 0;
+	mStateStep = 0;
 }
 
 // 待機状態
@@ -335,19 +333,19 @@ void CRay::UpdateAttack()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
-		mStateAttackStep++;
+		mStateStep++;
 		break;
 		// ステップ1 : 攻撃開始
 	case 1:
 		if (mAnimationFrame >= 5.0f)
 		{
 			AttackStart();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃終了
@@ -355,7 +353,7 @@ void CRay::UpdateAttack()
 		if (mAnimationFrame >= 13.0f)
 		{
 			AttackEnd();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ3 : 攻撃終了待ち
@@ -395,12 +393,22 @@ void CRay::UpdateHit()
 void CRay::UpdateDie()
 {
 	SetAnimationSpeed(0.15f);
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::RayDeath();
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::RayDeath();
+		}
+		break;
 	}
 }
 
@@ -676,11 +684,11 @@ void CRay::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
+		ChangeState(EState::eHit);
+		if (mState == EState::eHit)
 		{
 			mpHitEffect->StartHitEffect();
 		}
-		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)

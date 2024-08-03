@@ -83,7 +83,8 @@ public:
 	void Render();
 
 private:
-	int mAttackTime;   // 攻撃時間の間隔
+
+	float mAttackTime;  // 次の攻撃時間
 
 	// アニメーションの種類
 	enum class EAnimType
@@ -136,7 +137,7 @@ private:
 	};
 	EState mState;	  // チェストモンスターの状態
 
-	int mStateAttackStep;   // State内の攻撃でのステップ処理
+	int mStateStep;   // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -146,7 +147,8 @@ private:
 	bool mIsSpawnedCoinEffect;  // コイン発射
 
 	// 線分コライダー
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColLineSide;    // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;  // 線分コライダー(縦)
 
 	// キャラクターの押し戻しコライダー
 	CColliderSphere* mpColliderSphereHead;   // 頭
@@ -165,5 +167,5 @@ private:
 	CTransform* mpRideObject;
 
 	// エフェクト関連
-	CHit* mpHitEffect;          // ヒットエフェクト 
+	CHit* mpHitEffect;  // ヒットエフェクト 
 };

@@ -10,7 +10,8 @@
 // サボテンのインスタンス
 CCactus* CCactus::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.3f  // 線分コライダー
+#define ENEMY_SIDE     0.75f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    1.3f  // 線分コライダー(縦)
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED      0.6f  // 移動速度
 #define GRAVITY      0.0625f  // 重力
@@ -22,27 +23,24 @@ CCactus* CCactus::spInstance = nullptr;
 const CCactus::AnimData CCactus::ANIM_DATA[] =
 {
 	{ "",										                        true,  0.0f,   0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlant.x",	        true,  21.0f,  0.5f},  // 植物 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlantToBattle.x",	true,  21.0f,  0.3f},  // 植物2 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleBattle.x",	    true,  18.0f,  0.5f},  // 待機 18.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleNormal.x",	    true,  41.0f,  0.5f},  // 待機2 41.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack.x",	        false, 21.0f,  0.5f},  // 攻撃 21.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack2.x",	        false, 26.0f,  0.5f},  // 攻撃2 26.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusGetHit.x",	        false, 23.0f,  0.3f},  // ヒット 23.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusDie.x",	            false, 23.0f,  0.2f},  // 死ぬ 23.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusDizzy.x",          	false, 41.0f,  0.5f},  // めまい 41.0f
-	{ "Character\\Enemy\\Cactus\\animation\\CactusRun.x",	            true,  17.0f,  0.4f},  // 走る 17.0f
-	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle.x",	true,	121.0f	},	 // 始まりの待機 121.0f
-	//{ "Character\\Enemy\\Cactus\\animation\\CactusIdle2.x",	true,	46.0f	},	 // 始まりの待機2 23.0f
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlant.x",	        true,  21.0f,  0.5f},  // 植物
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdlePlantToBattle.x",	true,  21.0f,  0.3f},  // 植物2
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleBattle.x",	    true,  18.0f,  0.5f},  // 待機
+	{ "Character\\Enemy\\Cactus\\animation\\CactusIdleNormal.x",	    true,  41.0f,  0.5f},  // 待機2
+	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack.x",	        false, 21.0f,  0.5f},  // 攻撃
+	{ "Character\\Enemy\\Cactus\\animation\\CactusAttack2.x",	        false, 26.0f,  0.5f},  // 攻撃2
+	{ "Character\\Enemy\\Cactus\\animation\\CactusGetHit.x",	        false, 23.0f,  0.3f},  // ヒット
+	{ "Character\\Enemy\\Cactus\\animation\\CactusDie.x",	            false, 23.0f,  0.2f},  // 死ぬ
+	{ "Character\\Enemy\\Cactus\\animation\\CactusDizzy.x",          	false, 41.0f,  0.5f},  // めまい
+	{ "Character\\Enemy\\Cactus\\animation\\CactusRun.x",	            true,  17.0f,  0.4f},  // 走る
 };
 
 // コンストラクタ
 CCactus::CCactus()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
-	, mStateAttackStep(0)
-	, mStateAttack2Step(0)
+	, mAttackTime(0.0f)
+	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
@@ -73,14 +71,24 @@ CCactus::CCactus()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	// キャラクターの線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 17.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
 
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
@@ -274,8 +282,9 @@ CCactus::CCactus()
 // デストラクタ
 CCactus::~CCactus()
 {
-	// キャラクターの線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	// 線分コライダー
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
@@ -312,8 +321,7 @@ void CCactus::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
-	mStateAttack2Step = 0;
+	mStateStep = 0;
 }
 
 // 戦う前の待機状態
@@ -394,19 +402,19 @@ void CCactus::UpdateAttack()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
-		mStateAttackStep++;
+		mStateStep++;
 		break;
 		// ステップ1 : 攻撃開始
 	case 1:
 		if (mAnimationFrame >= 5.0f && mAnimationFrame < 15.0f)
 		{
 			AttackStart();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 左手のキャラクターの押し戻しコライダーオフ
@@ -414,7 +422,7 @@ void CCactus::UpdateAttack()
 		if (mAnimationFrame >= 11.0f)
 		{
 			mpColliderSphereLeftHand->SetEnable(false);
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ3 : 攻撃終了
@@ -422,7 +430,7 @@ void CCactus::UpdateAttack()
 		if (mAnimationFrame >= 15.0f)
 		{
 			AttackEnd();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ4 : 攻撃終了待ち＋ひび割れを辞める
@@ -452,18 +460,18 @@ void CCactus::UpdateAttack2()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttack2Step)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack2);
-		mStateAttack2Step++;
+		mStateStep++;
 		break;
 	case 1:
 		if (mAnimationFrame >= 10.0f)
 		{
 			AttackStart();
-			mStateAttack2Step++;
+			mStateStep++;
 		}
 		break;
 	case 2:
@@ -522,12 +530,22 @@ void CCactus::UpdateDie()
 {
 	mpCrack->Stop();
 	SetAnimationSpeed(0.2f);
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::CactusDeath();
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::CactusDeath();
+		}
+		break;
 	}
 }
 
@@ -645,7 +663,7 @@ void CCactus::Update()
 	{
 		if (vectorPos <= WITHIN_RANGE)
 		{
-			mAttackTime++;
+			mAttackTime += Time::DeltaTime();
 		}
 
 		if (vectorPos <= ROTATE_RANGE)
@@ -657,7 +675,7 @@ void CCactus::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime >= 3.0f)
 		{
 			// 攻撃2
 			bool Attack2 = false;
@@ -675,7 +693,7 @@ void CCactus::Update()
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -776,7 +794,8 @@ void CCactus::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine || self == mpColliderSphereRightHand)
+	else if (self == mpColLineSide || mpColLineHeight
+		|| self == mpColliderSphereRightHand)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -850,11 +869,11 @@ void CCactus::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
+		ChangeState(EState::eHit);
+		if (mState == EState::eHit)
 		{
 			mpHitEffect->StartHitEffect();
 		}
-		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -887,8 +906,8 @@ void CCactus::Death()
 CVector CCactus::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(70.0f, 270.0f));
-	pos.Z(Math::Rand(-850.0f, -700.0f));
+	pos.X(Math::Rand(50.0f, 150.0f));
+	pos.Z(Math::Rand(90.0f, 190.0f));
 
 	return CVector(pos);
 }

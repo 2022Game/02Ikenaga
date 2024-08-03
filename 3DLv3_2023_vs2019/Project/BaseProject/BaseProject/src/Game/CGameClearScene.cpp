@@ -35,14 +35,14 @@ void CGameClearScene::ClearInstance()
 
 // ƒRƒ“ƒXƒgƒ‰
 CGameClearScene::CGameClearScene()
-	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eGameClear)
+	: CTask(ETaskPriority::eUI, 1, ETaskPauseType::eGameClear)
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
 	mpBackground = new CImage
 	(
 		"UI/menu_back.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameClear,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameClear,
 		false, false
 	);
 	mpBackground->SetCenter(mpBackground->GetSize() * 0.5f);
@@ -52,7 +52,7 @@ CGameClearScene::CGameClearScene()
 	mpBackground2 = new CImage
 	(
 		"UI/menu_back.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameClear,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameClear,
 		false, false
 	);
 	mpBackground2->SetSize(1380.0f, 820.0f);

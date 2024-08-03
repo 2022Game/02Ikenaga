@@ -112,10 +112,10 @@ public:
 	void Death() override;
 
 private:
-	int mFlyingTime;        // 飛行時間
-	int mDefenseTime;       // 防御時間の間隔
-	int mAttackTime;        // 攻撃時間の間隔
-	int mFlyingAttackTime;  // 飛行時の攻撃時間の間隔
+	float mFlyingTime;      // 飛行時間
+	float mDefenseTime;     // 防御時間の間隔
+	float mAttackTime;      // 次の攻撃時間
+	float mFlyingAttackTime;// 飛行時の攻撃時間の間隔
 	float mBackStepTime;    // バックステップするまでの時間
 	bool mRoarCount;        // 雄叫びのカウント
 
@@ -198,7 +198,8 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	 // 線分コライダー
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColLineSide;    // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;  // 線分コライダー(縦)
 
 	// キャラクター押し戻しコライダー
 	CColliderCapsule* mpColSphereMouth;  // 口

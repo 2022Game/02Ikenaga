@@ -30,7 +30,7 @@ const CMushroom::AnimData CMushroom::ANIM_DATA[] =
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomAttack3.x",	        false,	26.0f,	0.5f},	// 攻撃
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomGetHit.x",	        false,	23.0f,	0.4f},	// ヒット
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDie.x",	            false,	26.0f, 0.25f},	// 死ぬ
-	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	            false,	41.0f,  0.4f},	// めまい
+	{ "Character\\Enemy\\Mushroom\\animation\\MushroomDizzy.x",	            false,	41.0f,  0.5f},	// めまい
 	{ "Character\\Enemy\\Mushroom\\animation\\MushroomRun.x",	            true,	17.0f, 	0.4f},	// 移動
 };
 
@@ -479,6 +479,7 @@ void CMushroom::UpdateDie()
 	// ステップ0 : アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
 		mStateStep++;
 		break;
 	// ステップ1 : アニメーション終了待ち
@@ -496,7 +497,7 @@ void CMushroom::UpdateDie()
 // めまい(混乱)
 void CMushroom::UpdateDizzy()
 {
-	SetAnimationSpeed(0.4f);
+	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eDizzy);
 
 	if (IsAnimationFinished())
@@ -806,11 +807,11 @@ void CMushroom::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
+		ChangeState(EState::eHit);
+		if (mState == EState::eHit)
 		{
 			mpHitEffect->StartHitEffect();
 		}
-		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)

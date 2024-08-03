@@ -16,6 +16,7 @@ class CHealCircle;
 class CBuffCircle;
 class CBuffAura;
 class CPowerUpAura;
+class CPlayerHit;
 class CGamePlayerUI;
 class CLevelUpUI;
 
@@ -281,6 +282,7 @@ private:
 	CBuffCircle* mpBuffCircle;    // バフサークル
 	CBuffAura* mpBuffAura;        // バフオーラ
 	CPowerUpAura* mpPowerUpAura;  // パワーアップオーラ
+	CPlayerHit* mpHit;            // ヒットエフェクト
 
 	// SE関連
 	CSound* mpSlashSE;            // スラッシュの効果音

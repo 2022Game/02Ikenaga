@@ -83,7 +83,9 @@ public:
 	void Render();
 
 private:
-	int mAttackTime;   // 攻撃時間の間隔
+
+	float mAttackTime;  // 次の攻撃時間
+
 	// アニメーションの種類
 	enum class EAnimType
 	{
@@ -136,8 +138,7 @@ private:
 	};				  
 	EState mState;	  // サボテンの状態
 
-	int mStateAttackStep;   // State内の攻撃でのステップ処理
-	int mStateAttack2Step;  // State内の攻撃2でのステップ処理
+	int mStateStep;   // State内のステップ処理
 
 	// 状態を切り替え
 	void ChangeState(EState state);
@@ -145,21 +146,27 @@ private:
 	CVector mMoveSpeed;	// 移動速度
 	bool mIsGrounded;	// 接地しているかどうか
 
-	CColliderLine* mpColliderLine;              // キャラクターの線分コライダー
-	CColliderSphere* mpColliderSphereHead;      // キャラクターの押し戻しコライダー(頭)
-	CColliderSphere* mpColliderSphereBody;      // キャラクターの押し戻しコライダー(体)
-	CColliderSphere* mpColliderSphereFeet;      // キャラクターの押し戻しコライダー(足元)
-	CColliderSphere* mpColliderSphereLeftHand;  // キャラクターの押し戻しコライダー(左手)
-	CColliderSphere* mpColliderSphereRightHand; // キャラクターの押し戻しコライダー(右手)
+	// 線分コライダー
+	CColliderLine* mpColLineSide;    // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;  // 線分コライダー(縦)
 
-	CColliderSphere* mpDamageColHead;           // ダメージを受けるコライダー(頭)
-	CColliderSphere* mpDamageColBody;           // ダメージを受けるコライダー(体)
-	CColliderSphere* mpDamageColFeet;           // ダメージを受けるコライダー(足元)
-	CColliderCapsule* mpDamageColLeftHand;      // ダメージを受けるコライダー(左手)
-	CColliderCapsule* mpDamageColRightHand;     // ダメージを受けるコライダー(右手)
+	 // キャラクターの押し戻しコライダー
+	CColliderSphere* mpColliderSphereHead;      // 頭
+	CColliderSphere* mpColliderSphereBody;      // 体
+	CColliderSphere* mpColliderSphereFeet;      // 足元
+	CColliderSphere* mpColliderSphereLeftHand;  // 左手
+	CColliderSphere* mpColliderSphereRightHand; // 右手
 
-	CColliderSphere* mpAttackColHead;           // ダメージを与えるコライダー(頭)
-	CColliderSphere* mpAttackColLeftHand;       // ダメージを与えるコライダー(左手)
+	// ダメージを受けるコライダー
+	CColliderSphere* mpDamageColHead;           // 頭
+	CColliderSphere* mpDamageColBody;           // 体
+	CColliderSphere* mpDamageColFeet;           // 足元
+	CColliderCapsule* mpDamageColLeftHand;      // 左手
+	CColliderCapsule* mpDamageColRightHand;     // 右手
+
+	// ダメージを与えるコライダー
+	CColliderSphere* mpAttackColHead;           // 頭
+	CColliderSphere* mpAttackColLeftHand;       // 左手
 
 	CTransform* mpRideObject;
 

@@ -14,7 +14,8 @@
 // 球体のモンスターのインスタンス
 CBeholder* CBeholder::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.5f  // 線分コライダー
+#define ENEMY_SIDE      0.8f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    0.7f  // 線分コライダー(縦)
 #define WITHIN_RANGE   40.0f  // 範囲内
 #define MOVE_SPEED     0.65f  // 移動速度
 #define MOVE_SPEED_Y   0.05f  // Yのスピード
@@ -48,8 +49,8 @@ const CBeholder::AnimData CBeholder::ANIM_DATA[] =
 CBeholder::CBeholder()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
-	, mFlyingTime(0)
+	, mAttackTime(0.0f)
+	, mFlyingTime(0.0f)
 	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
@@ -87,14 +88,25 @@ CBeholder::CBeholder()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 21.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, -0.8, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
-	mpColliderLine->Position(0.0f, 20.0f, 0.0f);
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->Position(0.0f, 22.0f, 0.0f);
 
 	// キャラクター押し戻し処理(体)
 	mpColliderSphereBody = new CColliderSphere
@@ -397,7 +409,8 @@ CBeholder::CBeholder()
 CBeholder::~CBeholder()
 {
 	// 線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereBody);
 	SAFE_DELETE(mpColliderSphereTentacle);
@@ -981,11 +994,11 @@ void CBeholder::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mFlyingTime++;
+		mFlyingTime += Time::DeltaTime();
 
-		if (vectorPos <= 120.0f)
+		if (vectorPos <= 130.0f)
 		{
-			mAttackTime++;
+			mAttackTime += Time::DeltaTime();
 		}
 
 		if (vectorPos <= ROTATE_RANGE)
@@ -997,7 +1010,7 @@ void CBeholder::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 160)
+		if (mAttackTime >= 2.0f)
 		{
 			// 攻撃2
 			bool Attack2 = false;
@@ -1034,7 +1047,7 @@ void CBeholder::Update()
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eAttack3 || mState == EState::eAttack4)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -1048,7 +1061,7 @@ void CBeholder::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime <= 400 && mFlyingTime >= 1 && Position().Y() <= 10.0f)
+		if (mFlyingTime < 4.0f && mFlyingTime >= 0.1f && Position().Y() <= 10.0f)
 		{
 			if (mState != EState::eAttack || mState != EState::eAttack2 || mState != EState::eAttack3
 				|| mState != EState::eAttack4)
@@ -1060,16 +1073,16 @@ void CBeholder::Update()
 
 	if (mState == EState::eIdle2 || mState == EState::eRun)
 	{
-		if (mFlyingTime > 400)
+		if (mFlyingTime >= 4.0f)
 		{
 			if (mState != EState::eAttack || mState != EState::eAttack2 || mState != EState::eAttack3
 				|| mState != EState::eAttack4)
 			{
 				Position(Position().X(), Position().Y() - 0.08f, Position().Z());
 			}
-			if (mFlyingTime >= 600)
+			if (mFlyingTime >= 6.0f)
 			{
-				mFlyingTime = 0;
+				mFlyingTime = 0.0f;
 			}
 		}
 	}
@@ -1130,7 +1143,7 @@ void CBeholder::Update()
 void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
 	// 衝突した自分のコライダーが攻撃判定用のコライダーであれば、
-	if (self == mpAttackColBody || self == mpAttackColTentacle || self == mpAttackColTentacle2 
+	if (self == mpAttackColBody || self == mpAttackColTentacle || self == mpAttackColTentacle2
 		|| self == mpAttackColTentacle3 || self == mpAttackColTentacle4 || self == mpAttackColTentacle5
 		|| self == mpAttackColTentacle6
 		&& mState != EState::eIdle && mState != EState::eIdle2)
@@ -1143,7 +1156,7 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(1.0f,this, chara);
+				int damage = CalcDamage(1.0f, this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -1153,7 +1166,8 @@ void CBeholder::Collision(CCollider* self, CCollider* other, const CHitInfo& hit
 			}
 		}
 	}
-	else if (self == mpColliderLine || self == mpColliderSphereBody)
+	else if (self == mpColLineSide || self == mpColLineHeight
+		|| self == mpColliderSphereBody)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -1272,11 +1286,11 @@ void CBeholder::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
+		ChangeState(EState::eHit);
+		if (mState == EState::eHit)
 		{
 			mpHitEffect->StartHitEffect();
 		}
-		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -1309,8 +1323,8 @@ void CBeholder::Death()
 CVector CBeholder::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(70.0f, 270.0f));
-	pos.Z(Math::Rand(-1150.0f, -1000.0f));
+	pos.X(Math::Rand(50.0f, 250.0f));
+	pos.Z(Math::Rand(-210.0f, -110.0f));
 
 	return CVector(pos);
 }

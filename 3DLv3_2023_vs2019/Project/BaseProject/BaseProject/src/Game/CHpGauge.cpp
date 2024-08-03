@@ -36,6 +36,7 @@ CHpGauge::CHpGauge(bool is3dGauge)
 	, mDamageValue(100)
 	, mCenterRatio(0.0f, 0.0f)
 	, mIs3dGauge(is3dGauge)
+	, mScale(1.0f)
 	, mDamageWaitTime(0.0f)
 	, mDamageElapsedTime(0.0f)
 {

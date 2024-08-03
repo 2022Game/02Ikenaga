@@ -4,6 +4,7 @@
 #include "CPlayer.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "Maths.h"
 
 // レッドスライムのインスタンス
@@ -148,6 +149,12 @@ CSlime::CSlime()
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
+
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this,nullptr,
+		CVector(0.0f,40.0f,0.0f)
+	);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
 
@@ -360,6 +367,7 @@ void CSlime::UpdateAttackWait()
 void CSlime::UpdateHit()
 {
 	SetAnimationSpeed(0.5f);
+	mpDizzyEffect->Stop();
 
 	// ステップごとに処理を分ける
 	switch (mStateStep)
@@ -374,7 +382,6 @@ void CSlime::UpdateHit()
 		if (mAnimationFrame >= 0.0f)
 		{
 			mpSlimeHitSE->Play(3.0f);
-			//mpHitEffect->StartHitEffect();
 			mIsSlimeHitSE = true;
 			mStateStep++;
 		}
@@ -405,6 +412,7 @@ void CSlime::UpdateHit()
 void CSlime::UpdateDie()
 {
 	SetAnimationSpeed(0.5f);
+	mpDizzyEffect->Stop();
 
 	// ステップごとに処理を分ける
 	switch (mStateStep)
@@ -412,6 +420,7 @@ void CSlime::UpdateDie()
 		// ステップ0 :死亡アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
 		mStateStep++;
 		break;
 		// ステップ1　: 効果音開始	
@@ -450,7 +459,6 @@ void CSlime::UpdateDizzy()
 	{
 		// ステップ0 :めまいアニメーション開始
 	case 0:
-		// めまいアニメーションを開始
 		ChangeAnimation(EAnimType::eDizzy);
 		mStateStep++;
 		break;
@@ -458,6 +466,10 @@ void CSlime::UpdateDizzy()
 	case 1:
 		if (mAnimationFrame >= 0.0f)
 		{
+			if (!mpDizzyEffect->IsDizzy())
+			{
+				mpDizzyEffect->Start();
+			}
 			mpSlimeDizzySE->Play();
 			mIsSlimeDizzySE = true;
 			mStateStep++;
@@ -467,6 +479,7 @@ void CSlime::UpdateDizzy()
 	case 2:
 		if (IsAnimationFinished())
 		{
+			mpDizzyEffect->Stop();
 			// プレイヤーの攻撃がヒットした時の待機状態へ移行
 			ChangeState(EState::eIdle3);
 			ChangeAnimation(EAnimType::eIdle4);
@@ -747,11 +760,11 @@ void CSlime::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
+		ChangeState(EState::eHit);
+		if (mState == EState::eHit)
 		{
 			mpHitEffect->StartHitEffect();
 		}
-		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)

@@ -68,8 +68,8 @@ public:
 
 private:
 
-	int mDefenseTime;  // 防御時間の間隔
-	int mAttackTime;   // 攻撃時間の間隔
+	float mDefenseTime;  // 次の防御時間
+	float mAttackTime;   // 次の攻撃時間
 
 	// 待機状態
 	void UpdateIdle();
@@ -173,7 +173,8 @@ private:
 	bool mIsGrounded;	// 接地しているかどうか
 
 	// 線分コライダー
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColLineSide;    // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;  // 線分コライダー(縦)
 
 	// キャラクター押し戻しコライダー
 	CColliderSphere* mpColliderSphereHead;   // 頭

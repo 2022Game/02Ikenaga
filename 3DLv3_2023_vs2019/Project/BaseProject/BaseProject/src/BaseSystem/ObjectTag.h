@@ -31,6 +31,7 @@ enum class ETag
 	eCurrent,         // 電流
 	eBreath,          // ブレス
 	eHit,             // ヒット
+	eDizzy,           // めまい
 
 	eCamera,          // カメラ
 	eUI,              // UI

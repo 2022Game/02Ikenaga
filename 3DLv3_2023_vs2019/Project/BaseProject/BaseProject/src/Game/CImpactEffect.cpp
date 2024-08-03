@@ -9,8 +9,6 @@
 #define FLAME_DIR_RAND 0.02f
 // 衝撃の移動速度
 #define FLAME_MOVE_SPEED 70.0f
-// 衝撃の色
-//#define FLAME_COLOR CColor(1.0f, 1.0f, 0.0f)
 
 // コンストラクタ
 CImpactEffect::CImpactEffect(CObjectBase* owner, const CMatrix* attach,
@@ -113,10 +111,6 @@ void CImpactEffect::CreateImpact()
 	CVector pos = GetThrowPos();// + CVector(0.0f, 10.0f, 0.0f);
 	// 方向を取得
 	CVector dir = GetThrowDir();// + CVector(0.0f, -1.0f, 0.0f);
-	// 方向をランダムでブラす
-	//dir.X(dir.X() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	//dir.Y(dir.Y() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
-	//dir.Z(dir.Z() + Math::Rand(-FLAME_DIR_RAND, FLAME_DIR_RAND));
 	dir.Normalize();
 	// 位置、方向、移動速度を設定
 	impact->Setup(pos, dir, FLAME_MOVE_SPEED);

@@ -10,7 +10,8 @@
 // チェストモンスターのインスタンス
 CChest* CChest::spInstance = nullptr;
 
-#define ENEMY_HEIGHT    0.3f  // 線分コライダー
+#define ENEMY_SIDE     0.75f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    1.5f  // 線分コライダー(縦)
 #define WITHIN_RANGE   30.0f  // 範囲内
 #define ATTACK_RANGE   50.0f  // 攻撃の範囲内
 #define MOVE_SPEED     0.64f  // 移動速度
@@ -23,23 +24,23 @@ CChest* CChest::spInstance = nullptr;
 const CChest::AnimData CChest::ANIM_DATA[] =
 {
 	{ "",										            true,	0.0f,	 0.0f},  // Tポーズ
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f,	 1.0f},	 // 待機 21.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	23.0f,	 0.5f},	 // 待機2 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	41.0f,	 0.5f},	 // 待機3 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	false,	25.0f,	 0.5f},	 // 攻撃 25.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	false,	23.0f,	 0.5f},	 // 攻撃2 23.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	false,	19.0f,	 0.4f},	 // ヒット 19.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    false,	29.0f,	0.25f},  // 死ぬ 29.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	false,	41.0f,	 0.5f},	 // めまい 41.0f
-	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	17.0f,	 0.4f},	 // 走る 17.0f
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle.x",	true,	21.0f,	 1.0f},	 // 待機
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle2.x",	true,	23.0f,	 0.5f},	 // 待機2
+	{ "Character\\Enemy\\Chest\\animation\\ChestIdle3.x",	true,	41.0f,	 0.5f},	 // 待機3
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack.x",	false,	25.0f,	 0.5f},	 // 攻撃
+	{ "Character\\Enemy\\Chest\\animation\\ChestAttack2.x",	false,	23.0f,	 0.5f},	 // 攻撃2
+	{ "Character\\Enemy\\Chest\\animation\\ChestGetHit.x",	false,	19.0f,	 0.4f},	 // ヒット
+	{ "Character\\Enemy\\Chest\\animation\\ChestDie.x",	    false,	29.0f,	0.25f},  // 死ぬ
+	{ "Character\\Enemy\\Chest\\animation\\ChestDizzy.x",	false,	41.0f,	 0.5f},	 // めまい
+	{ "Character\\Enemy\\Chest\\animation\\ChestRun.x",	    true,	17.0f,	 0.4f},	 // 走る
 };
 
 // コンストラクタ
 CChest::CChest()
 	: mState(EState::eIdle)
 	, mpRideObject(nullptr)
-	, mAttackTime(0)
-	, mStateAttackStep(0)
+	, mAttackTime(0.0f)
+	, mStateStep(0)
 	, mMoveSpeed(CVector::zero)
 	, mIsGrounded(false)
 {
@@ -70,13 +71,24 @@ CChest::CChest()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 20.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
 
 	// キャラクター押し戻し処理(頭)
 	mpColliderSphereHead = new CColliderSphere
@@ -221,7 +233,8 @@ CChest::CChest()
 CChest::~CChest()
 {
 	// 線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColliderSphereHead);
 	SAFE_DELETE(mpColliderSphereBody);
@@ -255,7 +268,7 @@ void CChest::ChangeState(EState state)
 {
 	if (mState == state) return;
 	mState = state;
-	mStateAttackStep = 0;
+	mStateStep = 0;
 }
 
 // 戦う前の待機状態
@@ -321,19 +334,19 @@ void CChest::UpdateAttack()
 	}
 
 	// ステップごとに処理を分ける
-	switch (mStateAttackStep)
+	switch (mStateStep)
 	{
 		// ステップ0 : 攻撃アニメーション開始
 	case 0:
 		ChangeAnimation(EAnimType::eAttack);
-		mStateAttackStep++;
+		mStateStep++;
 		break;
 		// ステップ1 : 攻撃開始
 	case 1:
 		if (mAnimationFrame >= 5.0f && mAnimationFrame < 10.0f)
 		{
 			AttackStart();
-			mStateAttackStep++;
+			mStateStep++;
 		}
 		break;
 		// ステップ2 : 攻撃終了＆プレイヤーとの距離が45.0f以上の時、コイン生成
@@ -368,12 +381,12 @@ void CChest::UpdateAttack()
 					coin->SetOwner(this);
 
 					mIsSpawnedCoinEffect = true;
-					mStateAttackStep++;
+					mStateStep++;
 				}
 			}
 			else
 			{
-				mStateAttackStep++;
+				mStateStep++;
 			}
 		}
 		break;
@@ -436,12 +449,22 @@ void CChest::UpdateHit()
 void CChest::UpdateDie()
 {
 	SetAnimationSpeed(0.25f);
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::ChestDeath();
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::ChestDeath();
+		}
+		break;
 	}
 }
 
@@ -554,7 +577,7 @@ void CChest::Update()
 	{
 		if (vectorPos <= 70.0f)
 		{
-			mAttackTime++;
+			mAttackTime += Time::DeltaTime();
 		}
 
 		if (vectorPos <= ROTATE_RANGE)
@@ -566,7 +589,7 @@ void CChest::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime >= 2.0f)
 		{
 			// 攻撃2
 			bool Attack2 = false;
@@ -584,7 +607,7 @@ void CChest::Update()
 		}
 		if (mState == EState::eAttack || mState == EState::eAttack2 || vectorPos >= WALK_RANGE)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -654,7 +677,7 @@ void CChest::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			// 既に攻撃済みのキャラでなければ
 			if (!IsAttackHitObj(chara))
 			{
-				int damage = CalcDamage(1.0f,this, chara);
+				int damage = CalcDamage(1.0f, this, chara);
 
 				// ダメージを与える
 				chara->TakeDamage(damage, this);
@@ -664,7 +687,7 @@ void CChest::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	else if (self == mpColliderLine)
+	else if (self == mpColLineSide || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -733,11 +756,11 @@ void CChest::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
+		ChangeState(EState::eHit);
+		if (mState == EState::eHit)
 		{
 			mpHitEffect->StartHitEffect();
 		}
-		ChangeState(EState::eHit);
 	}
 	// HPが0以下になったら、
 	if (mCharaStatus.hp <= 0)
@@ -770,8 +793,8 @@ void CChest::Death()
 CVector CChest::GetRandomSpawnPos()
 {
 	CVector pos = CVector::zero;
-	pos.X(Math::Rand(-200.0f, 0.0f));
-	pos.Z(Math::Rand(-950.0f, -800.0f));
+	pos.X(Math::Rand(-100.0f, 0.0f));
+	pos.Z(Math::Rand(-60.0f, 40.0f));
 
 	return CVector(pos);
 }

@@ -24,9 +24,8 @@
 // リッチのインスタンス
 CLich* CLich::spInstance = nullptr;
 
-float CLich::mElapsedTime;
-
-#define ENEMY_HEIGHT    -4.1f  // 縦の長さ
+#define ENEMY_SIDE      10.0f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    21.0f  // 線分コライダー(縦)
 #define MOVE_SPEED       0.3f  // 移動速度
 #define WALK_RANGE     300.0f  // 追跡する範囲
 #define STOP_RANGE      50.0f  // 追跡を辞める範囲
@@ -65,7 +64,8 @@ const CLich::AnimData CLich::ANIM_DATA[] =
 // コンストラクタ
 CLich::CLich()
 	: mState(EState::eIdle)
-	, mAttackTime(0)
+	, mAttackTime(0.0f)
+	, mElapsedTime(0.0f)
 	, mStateStep(0)
 	, mpRideObject(nullptr)
 	, mMoveSpeed(CVector::zero)
@@ -84,8 +84,6 @@ CLich::CLich()
 	//最初に1レベルに設定
 	ChangeLevel(1);
 
-	mElapsedTime = 0.0f;
-
 	// テーブル内のアニメーションデータを読み込み
 	int size = ARRAY_SIZE(ANIM_DATA);
 	for (int i = 0; i < size; i++)
@@ -101,13 +99,25 @@ CLich::CLich()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle);
 
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, 11.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->Position(0.0f, -10.0f, 0.0f);
 
 	// キャラクターの押し戻しコライダーを作成(体)
 	mpColCapsuleBody = new CColliderCapsule
@@ -259,7 +269,8 @@ CLich::CLich()
 CLich::~CLich()
 {
 	// 線分コライダー
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラクターの押し戻しコライダー
 	SAFE_DELETE(mpColCapsuleBody);
 	SAFE_DELETE(mpColSphereArmL);
@@ -484,12 +495,22 @@ void CLich::UpdateDie()
 	hpGauge->SetShow(false);
 
 	SetAnimationSpeed(0.2f);
-	ChangeAnimation(EAnimType::eDie);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		Kill();
-		// エネミーの死亡処理
-		CEnemy::BoxerDeath();
+	case 0:
+		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			Kill();
+			// エネミーの死亡処理
+			CEnemy::BoxerDeath();
+		}
+		break;
 	}
 }
 
@@ -761,12 +782,12 @@ void CLich::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		mAttackTime++;
-		if (mAttackTime >= 250 && mpSpawnEnemy == nullptr)
+		mAttackTime += Time::DeltaTime();
+		if (mAttackTime >= 3.0f && mpSpawnEnemy == nullptr)
 		{
 			ChangeState(EState::eSummon);
 		}
-		else if(mAttackTime >= 300 && mpSpawnEnemy != nullptr)
+		else if(mAttackTime >= 3.0f && mpSpawnEnemy != nullptr)
 		{
 			bool Attack2 = false;
 			int random = Math::Rand(0, 2);
@@ -783,7 +804,7 @@ void CLich::Update()
 
 		if (mState == EState::eAttack || mState == EState::eAttack2 || mState == EState::eSummon)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 	}
 
@@ -837,7 +858,7 @@ void CLich::Update()
 // 衝突処理
 void CLich::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 {
-	if (self == mpColliderLine)
+	if (self == mpColLineSide || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -865,13 +886,13 @@ void CLich::TakeDamage(int damage, CObjectBase* causedObj)
 	//HPからダメージを引く
 	if (mCharaStatus.hp -= damage)
 	{
-		if (mState != EState::eDie)
-		{
-			mpHitEffect->StartHitEffect();
-		}
 		if (mState != EState::eSummon)
 		{
 			ChangeState(EState::eHit);
+		}
+		if (mState == EState::eHit)
+		{
+			mpHitEffect->StartHitEffect();
 		}
 	}
 	// HPが0以下になったら、
@@ -945,7 +966,7 @@ void CLich::ChangeLevel(int level)
 // ランダムに位置を取得
 CVector CLich::GetRandomSpawnPos()
 {
-	return CVector(75.0f, 3.0f, -1350.0f);
+	return CVector(75.0f, 3.0f, -510.0f);
 }
 
 // 描画

@@ -70,8 +70,6 @@ public:
 	// 描画
 	void Render();
 
-	static float mElapsedTime;  // 経過時間
-
 private:
 	// 待機状態
 	void UpdateIdle();
@@ -115,7 +113,8 @@ private:
 
 	CEnemy* SpawnEnemy(EEnemyType type) const;
 
-	int mAttackTime;  // 攻撃時間の間隔
+	float mAttackTime;   // 次の攻撃時間
+	float mElapsedTime;  // 経過時間
 
 	// アニメーションの種類
 	enum class EAnimType
@@ -173,7 +172,8 @@ private:
 	bool mIsGrounded;    // 接地しているかどうか
 
 	// 線分コライダー
-	CColliderLine* mpColliderLine;
+	CColliderLine* mpColLineSide;    // 線分コライダー(横)
+	CColliderLine* mpColLineHeight;  // 線分コライダー(縦)
 
 	// キャラクターの押し戻しコライダー
 	CColliderCapsule* mpColCapsuleBody;  // 体

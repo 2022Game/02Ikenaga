@@ -15,14 +15,15 @@
 // ドラゴンのインスタンス
 CDragon* CDragon::spInstance = nullptr;
 
-#define ENEMY_HEIGHT   -2.9f   // 線分コライダー
-#define WITHIN_RANGE  150.0f   // 範囲内
-#define MOVE_SPEED      1.0f   // 移動速度
-#define GRAVITY      0.0625f   // 重力
-#define WALK_RANGE    500.0f   // 追跡する範囲
-#define STOP_RANGE    155.0f   // 追跡を辞める範囲
-#define ROTATE_RANGE  500.0f   // 回転する範囲
-#define THROW_INTERVAL  1.0f   // 雄叫びの発射間隔時間
+#define ENEMY_SIDE      9.0f  // 線分コライダー(横)
+#define ENEMY_HEIGHT    6.0f  // 線分コライダー(縦)
+#define WITHIN_RANGE  150.0f  // 範囲内
+#define MOVE_SPEED      1.0f  // 移動速度
+#define GRAVITY      0.0625f  // 重力
+#define WALK_RANGE    500.0f  // 追跡する範囲
+#define STOP_RANGE    155.0f  // 追跡を辞める範囲
+#define ROTATE_RANGE  500.0f  // 回転する範囲
+#define THROW_INTERVAL  1.0f  // 雄叫びの発射間隔時間
 
 // ドラゴンのアニメーションデータのテーブル
 const CDragon::AnimData CDragon::ANIM_DATA[] =
@@ -51,10 +52,10 @@ const CDragon::AnimData CDragon::ANIM_DATA[] =
 CDragon::CDragon()
     : mState(EState::eIdle3)
 	, mpRideObject(nullptr)
-	, mFlyingTime(0)
-	, mDefenseTime(0)
-	, mAttackTime(0)
-	, mFlyingAttackTime(0)
+	, mFlyingTime(0.0f)
+	, mDefenseTime(0.0f)
+	, mAttackTime(0.0f)
+	, mFlyingAttackTime(0.0f)
 	, mBackStepTime(0.0f)
 	, mRoarCount(false)
 	, mStateStep(0)
@@ -90,14 +91,25 @@ CDragon::CDragon()
 	// 最初は待機アニメーションを再生
 	ChangeAnimation(EAnimType::eIdle3);
 
-	// 線分コライダー
-	mpColliderLine = new CColliderLine
+	// 線分コライダー(横)
+	mpColLineSide = new CColliderLine
+	(
+		this, ELayer::eField,
+		CVector(0.0f, 0.0f, 0.0f),
+		CVector(0.0f, 0.0f, ENEMY_SIDE)
+	);
+	mpColLineSide->SetCollisionLayers({ ELayer::eField });
+	mpColLineSide->Position(0.0f, -20.0f, 0.0f);
+
+	// 線分コライダー(縦)
+	mpColLineHeight = new CColliderLine
 	(
 		this, ELayer::eField,
 		CVector(0.0f, 0.0f, 0.0f),
 		CVector(0.0f, ENEMY_HEIGHT, 0.0f)
 	);
-	mpColliderLine->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->SetCollisionLayers({ ELayer::eField });
+	mpColLineHeight->Position(0.0f, -44.0f, 0.0f);
 
 	// キャラクター押し戻し処理(口)
 	mpColSphereMouth = new CColliderCapsule
@@ -351,7 +363,8 @@ CDragon::CDragon()
 CDragon::~CDragon()
 {
 	// 線分コライダーを削除
-	SAFE_DELETE(mpColliderLine);
+	SAFE_DELETE(mpColLineSide);
+	SAFE_DELETE(mpColLineHeight);
 	// キャラ押し戻しコライダーを削除
 	SAFE_DELETE(mpColSphereMouth);
 	SAFE_DELETE(mpColSphereBody);
@@ -680,6 +693,10 @@ void CDragon::UpdateDie()
 	{
 	case 0:
 		ChangeAnimation(EAnimType::eDie);
+		mpHitEffect->StartHitEffect();
+		mStateStep++;
+		break;
+	case 1:
 		if (IsAnimationFinished())
 		{
 			Kill();
@@ -689,7 +706,7 @@ void CDragon::UpdateDie()
 			clear->Open();
 		}
 		break;
-	case 1:
+	case 2:
 		break;
 	}
 }
@@ -996,28 +1013,16 @@ void CDragon::Update()
 	{
 		mBackStepTime += Time::DeltaTime();
 	}
-	if (mBackStepTime >= 3)
+	if (mBackStepTime >= 2.0f)
 	{
 		mBackStepTime = 0;
-		mAttackTime = 0;
+		mAttackTime = 0.0f;
 		ChangeState(EState::eBackStep);
 	}
-
-	//if (mState != EState::eIdle3 && vectorPos > -110.0f)
-	//{
-	//	if (vectorPos <= ROTATE_RANGE)
-	//	{
-	//		// プレイヤーのいる方向へ向く
-	//		CVector dir = player->Position() - Position();
-	//		dir.Y(0.0f);
-	//		dir.Normalize();
-	//		Rotation(CQuaternion::LookRotation(dir));
-	//	}
-	//}
 	
 	if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eHit)
 	{
-		mAttackTime++;
+		mAttackTime += Time::DeltaTime();
 
 		if (vectorPos <= ROTATE_RANGE && vectorPos >= STOP_RANGE)
 		{
@@ -1028,7 +1033,7 @@ void CDragon::Update()
 			Rotation(CQuaternion::LookRotation(dir));
 		}
 
-		if (mAttackTime > 200)
+		if (mAttackTime >= 2.0f)
 		{
 			bool mAttack = false;   // 攻撃(火炎放射)
 			bool mAttack2 = false;  // 攻撃2(前に飛んで後ろに下がる)
@@ -1064,37 +1069,37 @@ void CDragon::Update()
 			|| mState == EState::eDefense || mState == EState::eFlyingIdle
 			|| mState == EState::eBackStep)
 		{
-			mAttackTime = 0;
+			mAttackTime = 0.0f;
 		}
 
-		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >= 1)
+		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >= 0.1f)
 		{
-			mFlyingTime++;
+			mFlyingTime += Time::DeltaTime();
 		}
 		if (mState == EState::eFlyingStart)
 		{
-			mFlyingTime = 0;
+			mFlyingTime = 0.0;
 		}
 	}
 
 	// 防御時間計測
 	if (mState == EState::eDefense)
 	{
-		mDefenseTime++;
+		mDefenseTime += Time::DeltaTime();
 	}
 	else
 	{
-		mDefenseTime = 0;
+		mDefenseTime = 0.0f;
 	}
 
 	if (mState != EState::eFlyingStart && mState != EState::eFlyingIdle && mState != EState::eFlyingAttack
 		&& mState != EState::eFlyingAttackWait && mState != EState::eFlyingEnd && mState != EState::eFlyForward)
 	{
-		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime == 0 && mRoarCount != true)
+		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime == 0.0f && mRoarCount != true)
 		{
 			ChangeState(EState::eRoar);
 		}
-		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >= 400)
+		if (mCharaStatus.hp <= mCharaMaxStatus.hp * 0.5 && mFlyingTime >= 4.0f)
 		{
 			ChangeState(EState::eFlyingStart);
 		}
@@ -1102,26 +1107,26 @@ void CDragon::Update()
 
 	if (mState == EState::eFlyingIdle || mState == EState::eFlyForward)
 	{
-		mFlyingTime++;
-		mFlyingAttackTime++;
+		mFlyingTime += Time::DeltaTime();
+		mFlyingAttackTime += Time::DeltaTime();
 
-		if (mFlyingAttackTime > 200)
+		if (mFlyingAttackTime >= 4.0f)
 		{
 			ChangeState(EState::eFlyingAttack);
 		}
 	}
 	if (mState == EState::eFlyingAttack || mState == EState::eFlyingEnd)
 	{
-		mFlyingAttackTime = 0;
+		mFlyingAttackTime = 0.0f;
 	}
 
-	if (mFlyingTime >= 550)
+	if (mFlyingTime >= 10.0)
 	{
 		ChangeState(EState::eFlyingEnd);
 	}
-	if (mState == EState::eFlyingEnd || mState == EState::eFlyingStart && mFlyingTime >= 400)
+	if (mState == EState::eFlyingEnd || mState == EState::eFlyingStart && mFlyingTime >= 4.0f)
 	{
-		mFlyingTime = 1;
+		mFlyingTime = 0.1f;
 	}
 
 	if (mState == EState::eRun || mState == EState::eFlyForward)
@@ -1139,7 +1144,7 @@ void CDragon::Update()
 	//CDebugPrint::Print(" 攻撃時間: %d", mAttackTime);
 	//CDebugPrint::Print(" HP: %d", mCharaStatus.hp);
 	//CDebugPrint::Print(" 距離: %f", vectorPos);
-	//CDebugPrint::Print(" 後ろ: %f", mBackStepTime);
+	//CDebugPrint::Print(" 後ろ: %f", mFlyingTime);
 
 	if (mIsSpawnedRoarEffect)
 	{
@@ -1222,7 +1227,7 @@ void CDragon::Collision(CCollider* self, CCollider* other, const CHitInfo& hit)
 			}
 		}
 	}
-	if (self == mpColliderLine)
+	if (self == mpColLineSide || self == mpColLineHeight)
 	{
 		if (other->Layer() == ELayer::eField)
 		{
@@ -1310,13 +1315,13 @@ void CDragon::TakeDamage(int damage, CObjectBase* causedObj)
 	{
 		mpFlamethrower->Stop();
 		mpFlightFlamethrower->Stop();
-		if (mState != EState::eDie)
-		{
-			mpHitEffect->StartHitEffect();
-		}
 		if (mState == EState::eIdle2 || mState == EState::eRun || mState == EState::eAttack3)
 		{
 			ChangeState(EState::eHit);
+		}
+		if (mState == EState::eHit)
+		{
+			mpHitEffect->StartHitEffect();
 		}
 	}
 	// HPが0以下になったら、

@@ -5,6 +5,7 @@
 #include "CSound.h"
 
 class CHit;
+class CDizzyEffect;
 
 /*
  レッドスライムのクラス
@@ -155,7 +156,8 @@ private:
 	CColliderSphere* mpAttackColBody;       // ダメージを与えるコライダー(体)
 	CTransform* mpRideObject;
 
-	CHit* mpHitEffect;        // ヒットエフェクト 
+	CHit* mpHitEffect;            // ヒットエフェクト 
+	CDizzyEffect* mpDizzyEffect;  // めまいのエフェクト
 
 	// サウンド関連
 	CSound* mpSlimeAttackSE;  // 攻撃の音

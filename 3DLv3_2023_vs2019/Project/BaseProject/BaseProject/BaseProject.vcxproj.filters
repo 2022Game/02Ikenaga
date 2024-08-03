@@ -254,6 +254,9 @@
     <Filter Include="ソース ファイル\Game\UI\GameUI\PlayerUI\Level">
       <UniqueIdentifier>{ebe73079-89a4-462e-bccf-31c449c24bb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\Dizzy">
+      <UniqueIdentifier>{2d331d25-f2e9-4832-a604-5a815ed36dfa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -852,6 +855,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\CLevelUpUI.cpp">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CPlayerHit.cpp">
+      <Filter>ソース ファイル\Game\Effect\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDizzy.cpp">
+      <Filter>ソース ファイル\Game\Effect\Dizzy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CDizzyEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\Dizzy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1475,6 +1487,15 @@
     </ClInclude>
     <ClInclude Include="src\Game\CLevelUpUI.h">
       <Filter>ソース ファイル\Game\UI\GameUI\PlayerUI\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CPlayerHit.h">
+      <Filter>ソース ファイル\Game\Effect\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDizzy.h">
+      <Filter>ソース ファイル\Game\Effect\Dizzy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CDizzyEffect.h">
+      <Filter>ソース ファイル\Game\Effect\Dizzy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
