@@ -3,6 +3,7 @@
 #include "CHpGauge.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "Maths.h"
 
 // マッシュルームのインスタンス
@@ -202,6 +203,13 @@ CMushroom::CMushroom()
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
 
+	// めまいエフェクト作成
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 37.0f, 0.0f)
+	);
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));
 
 	// Lv.を設定
@@ -367,7 +375,7 @@ void CMushroom::UpdateAttack2()
 		break;
 		// ステップ4 : 攻撃開始(三回目)
 	case 4:
-		if (mAnimationFrame >= 21.0f && mAnimationFrame < 25.0f)
+		if (mAnimationFrame >= 21.0f && mAnimationFrame < 24.0f)
 		{
 			AttackStart();
 			mStateStep++;
@@ -375,7 +383,7 @@ void CMushroom::UpdateAttack2()
 		break;
 		// ステップ5 : 攻撃終了
 	case 5:
-		if (mAnimationFrame >= 25.0f)
+		if (mAnimationFrame >= 24.0f)
 		{
 			ChangeState(EState::eAttackWait);
 		}
@@ -449,6 +457,8 @@ void  CMushroom::UpdateAttackWait()
 // ヒット
 void CMushroom::UpdateHit()
 {
+	mpDizzyEffect->Stop();
+
 	SetAnimationSpeed(0.4f);
 	ChangeAnimation(EAnimType::eHit);
 
@@ -473,7 +483,10 @@ void CMushroom::UpdateHit()
 // 死ぬ
 void CMushroom::UpdateDie()
 {
+	mpDizzyEffect->Stop();
+
 	SetAnimationSpeed(0.25f);
+
 	switch (mStateStep)
 	{
 	// ステップ0 : アニメーション開始
@@ -498,11 +511,24 @@ void CMushroom::UpdateDie()
 void CMushroom::UpdateDizzy()
 {
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eDizzy);
 
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		ChangeState(EState::eIdle3);
+	case 0:
+		ChangeAnimation(EAnimType::eDizzy);
+		if (!mpDizzyEffect->IsDizzy())
+		{
+			mpDizzyEffect->Start();
+		}
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			mpDizzyEffect->Stop();
+			ChangeState(EState::eIdle3);
+		}
+		break;
 	}
 }
 

@@ -787,7 +787,7 @@ void CLich::Update()
 		{
 			ChangeState(EState::eSummon);
 		}
-		else if(mAttackTime >= 3.0f && mpSpawnEnemy != nullptr)
+		else if(mAttackTime >= 8.0f && mpSpawnEnemy != nullptr)
 		{
 			bool Attack2 = false;
 			int random = Math::Rand(0, 2);

@@ -7,6 +7,7 @@
 #include "CShieldRotate2.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "Maths.h"
 
 // ボクサーのインスタンス
@@ -34,13 +35,13 @@ const CBoxer::AnimData CBoxer::ANIM_DATA[] =
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerGetHit.x",	    false,	17.0f,   0.4f},	 // ヒット
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefense.x",	    true,	21.0f,	 0.5f},	 // 防御
 	{ "Character\\Enemy\\Boxer\\animation\\BoxerDefenseHit.x",	false,	21.0f,	 0.5f},  // 防御中のヒット
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDie.x",	        false,	24.0f,	 0.2f},	 // 死ぬ 24.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerDizzy.x",	    false,	24.0f,	 0.4f},	 // めまい 24.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerJump.x",	    false,	23.0f,   0.5f},	 // ジャンプ 23.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpEnd.x",	    false,	26.0f,	 0.5f},	 // ジャンプの終了 26.0f
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerRun.x",	        true,	21.0f, 	 0.5f},	 // 走る 21.0
-	{ "Character\\Enemy\\Boxer\\animation\\BoxerSlide.x",	    false,	36.0f,   0.5f},	 // 滑る 36.0
-	//{ "Character\\Enemy\\Boxer\\animation\\BoxerDieRecover.x",	true,	48.0f	},	// 起き上がる 24.0f
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDie.x",	        false,	24.0f,	 0.2f},	 // 死ぬ
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerDizzy.x",	    false,	24.0f,	 0.4f},	 // めまい
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJump.x",	    false,	23.0f,   0.5f},	 // ジャンプ
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerJumpEnd.x",	    false,	26.0f,	 0.5f},	 // ジャンプの終了
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerRun.x",	        true,	21.0f, 	 0.5f},	 // 走る
+	{ "Character\\Enemy\\Boxer\\animation\\BoxerSlide.x",	    false,	36.0f,   0.5f},	 // 滑る
+	//{ "Character\\Enemy\\Boxer\\animation\\BoxerDieRecover.x",	true,	48.0f	},	// 起き上がる
 };
 
 // コンストラクタ
@@ -392,6 +393,13 @@ CBoxer::CBoxer()
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
 
+	// めまいエフェクト作成
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 49.0f, 0.0f)
+	);
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 37.0f, 0.0f));
 
 	// Lv.を設定
@@ -640,6 +648,7 @@ void CBoxer::UpdateAttackWait()
 // ヒット
 void CBoxer::UpdateHit()
 {
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.4f);
 	mpImpact->Stop();
 	// ヒットアニメーションを開始
@@ -707,6 +716,7 @@ void CBoxer::UpdateDefenseHit()
 // 死ぬ
 void CBoxer::UpdateDie()
 {
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.2f);
 
 	switch (mStateStep)
@@ -731,11 +741,24 @@ void CBoxer::UpdateDie()
 void CBoxer::UpdateDizzy()
 {
 	SetAnimationSpeed(0.4f);
-	ChangeAnimation(EAnimType::eDizzy);
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		ChangeState(EState::eIdle2);
+	case 0:
+		ChangeAnimation(EAnimType::eDizzy);
+		if (!mpDizzyEffect->IsDizzy())
+		{
+			mpDizzyEffect->Start();
+		}
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			mpDizzyEffect->Stop();
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			ChangeState(EState::eIdle2);
+		}
+		break;
 	}
 }
 

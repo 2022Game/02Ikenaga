@@ -19,6 +19,7 @@
 #include "CPlayerHit.h"
 #include "CGamePlayerUI.h"
 #include "CLevelUpUI.h"
+#include "CSpEffect.h"
 #include "CGameOverScene.h"
 
 // プレイヤーのインスタンス
@@ -1095,6 +1096,28 @@ void CPlayer::AutomaticRecovery()
 		if (mRecoveryCount > 400)
 		{
 			mCharaStatus.SpecialPoint++;
+
+			CVector center = Position();
+			CVector pos = CVector::zero;
+			center.Y(0.0f);
+			pos.Y(0.0f);
+
+			for (int i = 0; i < 5; i++)
+			{
+				CSpEffect* sp = new CSpEffect
+				(
+					center,
+					VectorY(),
+					10.0f,
+					30.0f
+				);
+				sp->SetColor(CColor(1.0f, 0.0f, 0.8f));
+				center.X(center.X() + Math::Rand(-10.0f, 10.0f));
+				center.Y(center.Y() + Math::Rand(0.0f, 5.0f));
+				center.Z(center.Z() + Math::Rand(-10.0f, 10.0f));
+				sp->Position(center);
+			}
+
 			mRecoveryCount = 0;
 		}
 	}
@@ -1110,6 +1133,27 @@ void CPlayer::AttackRecovery()
 	if (mCharaStatus.SpecialPoint < mCharaMaxStatus.SpecialPoint)
 	{
 		mCharaStatus.SpecialPoint++;
+
+		CVector center = Position();
+		CVector pos = CVector::zero;
+		center.Y(0.0f);
+		pos.Y(0.0f);
+
+		for (int i = 0; i < 2; i++)
+		{
+			CSpEffect* sp = new CSpEffect
+			(
+				center,
+				VectorY(),
+				10.0f,
+				30.0f
+			);
+			sp->SetColor(CColor(1.0f, 0.0f, 0.8f));
+			center.X(center.X() + Math::Rand(-10.0f, 10.0f));
+			center.Y(center.Y() + Math::Rand(0.0f, 5.0f));
+			center.Z(center.Z() + Math::Rand(-10.0f, 10.0f));
+			sp->Position(center);
+		}
 	}
 }
 

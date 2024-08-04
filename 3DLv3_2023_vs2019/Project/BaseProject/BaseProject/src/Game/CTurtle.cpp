@@ -5,6 +5,7 @@
 #include "CShieldRotate2.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "Maths.h"
 
 // 亀のインスタンス
@@ -168,6 +169,13 @@ CTurtle::CTurtle()
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
+
+	// めまいエフェクト作成
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 37.0f, 0.0f)
+	);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 32.0f, 0.0f));
 
@@ -335,6 +343,7 @@ void CTurtle::UpdateAttackWait()
 // ヒット
 void CTurtle::UpdateHit()
 {
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.5f);
 	ChangeAnimation(EAnimType::eHit);
 
@@ -415,6 +424,7 @@ void CTurtle::UpdateDefenseIdle()
 // 死ぬ
 void CTurtle::UpdateDie()
 {
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.3f);
 	switch (mStateStep)
 	{
@@ -440,11 +450,23 @@ void CTurtle::UpdateDie()
 void CTurtle::UpdateDizzy()
 {
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eDizzy);
-
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		ChangeState(EState::eIdle2);
+	case 0:
+		ChangeAnimation(EAnimType::eDizzy);
+		if (!mpDizzyEffect->IsDizzy())
+		{
+			mpDizzyEffect->Start();
+		}
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			mpDizzyEffect->Stop();
+			ChangeState(EState::eIdle2);
+		}
+		break;
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "CCrackEffect.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "Maths.h"
 
 // サボテンのインスタンス
@@ -264,6 +265,13 @@ CCactus::CCactus()
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
 
+	// めまいエフェクト作成
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 47.0f, 0.0f)
+	);
+
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 37.0f, 0.0f));
 
 	// Lv.を設定
@@ -500,6 +508,7 @@ void CCactus::UpdateAttackWait()
 void CCactus::UpdateHit()
 {
 	mpCrack->Stop();
+	mpDizzyEffect->Stop();
 	mpColliderSphereHead->SetEnable(false);
 	mpColliderSphereBody->SetEnable(false);
 	mpColliderSphereFeet->SetEnable(false);
@@ -529,6 +538,7 @@ void CCactus::UpdateHit()
 void CCactus::UpdateDie()
 {
 	mpCrack->Stop();
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.2f);
 
 	switch (mStateStep)
@@ -554,11 +564,25 @@ void CCactus::UpdateDizzy()
 {
 	mpCrack->Stop();
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eDizzy);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		ChangeState(EState::eIdle3);
+	case 0:
+		ChangeAnimation(EAnimType::eDizzy);
+		if (!mpDizzyEffect->IsDizzy())
+		{
+			mpDizzyEffect->Start();
+		}
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			mpDizzyEffect->Stop();
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			ChangeState(EState::eIdle3);
+		}
+		break;
 	}
 }
 

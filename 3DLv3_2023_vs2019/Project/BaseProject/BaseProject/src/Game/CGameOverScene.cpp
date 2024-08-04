@@ -36,14 +36,14 @@ void CGameOverScene::ClearInstance()
 
 // ƒRƒ“ƒXƒgƒ‰
 CGameOverScene::CGameOverScene()
-	: CTask(ETaskPriority::eUI, 0, ETaskPauseType::eGameOver)
+	: CTask(ETaskPriority::eUI, 1, ETaskPauseType::eGameOver)
 	, mSelectIndex(0)
 	, mIsOpened(false)
 {
 	mpBackground = new CImage
 	(
 		"UI/menu_back.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	mpBackground->SetCenter(mpBackground->GetSize() * 0.5f);
@@ -53,7 +53,7 @@ CGameOverScene::CGameOverScene()
 	mpBackground2 = new CImage
 	(
 		"UI/menu_back.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	mpBackground2->SetSize(1380.0f, 820.0f);
@@ -64,7 +64,7 @@ CGameOverScene::CGameOverScene()
 	CImage* item = new CImage
 	(
 		"UI/menu_item.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	item->SetCenter(item->GetSize() * 0.5f);
@@ -76,7 +76,7 @@ CGameOverScene::CGameOverScene()
 	CImage* item2 = new CImage
 	(
 		"UI/menu_item.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	item2->SetCenter(item2->GetSize() * 0.5f);
@@ -87,7 +87,7 @@ CGameOverScene::CGameOverScene()
 	mpSelectFrame = new CImage
 	(
 		"UI/menu_item_select.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	mpSelectFrame->SetCenter(mpSelectFrame->GetSize() * 0.5f);
@@ -102,7 +102,7 @@ CGameOverScene::CGameOverScene()
 		GAMEOVER_POS,
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
-		ETaskPriority::eUI, 0,
+		ETaskPriority::eUI, 1,
 		ETaskPauseType::eGame,
 		false, false
 	);
@@ -116,7 +116,7 @@ CGameOverScene::CGameOverScene()
 		REVIVAL_POS,
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
-		ETaskPriority::eUI, 0,
+		ETaskPriority::eUI, 1,
 		ETaskPauseType::eGame,
 		false, false
 	);
@@ -130,7 +130,7 @@ CGameOverScene::CGameOverScene()
 		TITLE_POS,
 		size,
 		CColor(1.0f, 1.0f, 1.0f),
-		ETaskPriority::eUI, 0,
+		ETaskPriority::eUI, 1,
 		ETaskPauseType::eGame,
 		false, false
 	);
@@ -141,7 +141,7 @@ CGameOverScene::CGameOverScene()
 	mpUpUI = new CImage
 	(
 		"UI/up.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	mpUpUI->SetPos(130.0f, 560.0f);
@@ -150,7 +150,7 @@ CGameOverScene::CGameOverScene()
 	mpDownUI = new CImage
 	(
 		"UI/down.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	mpDownUI->SetPos(130.0f, 590.0f);
@@ -159,7 +159,7 @@ CGameOverScene::CGameOverScene()
 	mpEnterKey = new CImage
 	(
 		"UI/Key/enter.png",
-		ETaskPriority::eUI, 0, ETaskPauseType::eGameOver,
+		ETaskPriority::eUI, 1, ETaskPauseType::eGameOver,
 		false, false
 	);
 	mpEnterKey->SetPos(1075.0f, 580.0f);

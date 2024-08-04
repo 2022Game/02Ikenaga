@@ -7,6 +7,7 @@
 class CImpactEffect;
 class CShieldRotate2;
 class CHit;
+class CDizzyEffect;
 
 /*
  ボクサー
@@ -212,4 +213,6 @@ private:
 	// エフェクト関連
 	CImpactEffect* mpImpact;  // 衝撃エフェクト
 	CHit* mpHitEffect;        // ヒットエフェクト
+	// めまいのエフェクト
+	CDizzyEffect* mpDizzyEffect;
 };

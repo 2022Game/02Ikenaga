@@ -6,6 +6,7 @@
 
 class CShieldRotate2;
 class CHit;
+class CDizzyEffect;
 
 /*
  亀
@@ -178,5 +179,8 @@ private:
 	CShieldRotate2* mpShieldRotate3;
 	CShieldRotate2* mpShieldRotate4;
 
-	CHit* mpHitEffect;  // ヒットエフェクト 
+	// ヒットエフェクト 
+	CHit* mpHitEffect;
+	// めまいのエフェクト
+	CDizzyEffect* mpDizzyEffect;
 };

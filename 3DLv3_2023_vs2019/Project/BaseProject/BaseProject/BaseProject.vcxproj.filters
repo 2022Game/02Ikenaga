@@ -257,6 +257,9 @@
     <Filter Include="ソース ファイル\Game\Effect\Dizzy">
       <UniqueIdentifier>{2d331d25-f2e9-4832-a604-5a815ed36dfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Effect\SP">
+      <UniqueIdentifier>{c929d078-9522-4783-91f8-7cb789ef53b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -864,6 +867,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\CDizzyEffect.cpp">
       <Filter>ソース ファイル\Game\Effect\Dizzy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\CSpEffect.cpp">
+      <Filter>ソース ファイル\Game\Effect\SP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1496,6 +1502,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\CDizzyEffect.h">
       <Filter>ソース ファイル\Game\Effect\Dizzy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\CSpEffect.h">
+      <Filter>ソース ファイル\Game\Effect\SP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

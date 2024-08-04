@@ -150,10 +150,11 @@ CSlime::CSlime()
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
 
+	// めまいエフェクト作成
 	mpDizzyEffect = new CDizzyEffect
 	(
 		this,nullptr,
-		CVector(0.0f,40.0f,0.0f)
+		CVector(0.0f,35.0f,0.0f)
 	);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 30.0f, 0.0f));

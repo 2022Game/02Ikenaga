@@ -6,6 +6,7 @@
 #include "CColliderCapsule.h"
 
 class CHit;
+class CDizzyEffect;
 
 /*
  チェストモンスター
@@ -22,30 +23,6 @@ public:
 	CChest();
 	// デストラクタ
 	~CChest();
-
-	// 戦う前の待機状態
-	void UpdateIdle();
-	// 戦う前の待機状態2
-	void UpdateIdle2();
-	// 待機状態3
-	void UpdateIdle3();
-
-	// 攻撃
-	void UpdateAttack();
-	// 攻撃2
-	void UpdateAttack2();
-	// 攻撃終了待ち
-	void UpdateAttackWait();
-
-	// ヒット
-	void UpdateHit();
-	// 死ぬ時
-	void UpdateDie();
-	// めまい(混乱)
-	void UpdateDizzy();
-
-	// 移動
-	void UpdateRun();
 
 	// 更新処理
 	void Update();
@@ -83,6 +60,30 @@ public:
 	void Render();
 
 private:
+
+	// 戦う前の待機状態
+	void UpdateIdle();
+	// 戦う前の待機状態2
+	void UpdateIdle2();
+	// 待機状態3
+	void UpdateIdle3();
+
+	// 攻撃
+	void UpdateAttack();
+	// 攻撃2
+	void UpdateAttack2();
+	// 攻撃終了待ち
+	void UpdateAttackWait();
+
+	// ヒット
+	void UpdateHit();
+	// 死ぬ時
+	void UpdateDie();
+	// めまい(混乱)
+	void UpdateDizzy();
+
+	// 移動
+	void UpdateRun();
 
 	float mAttackTime;  // 次の攻撃時間
 
@@ -168,4 +169,6 @@ private:
 
 	// エフェクト関連
 	CHit* mpHitEffect;  // ヒットエフェクト 
+	// めまいのエフェクト
+	CDizzyEffect* mpDizzyEffect;
 };

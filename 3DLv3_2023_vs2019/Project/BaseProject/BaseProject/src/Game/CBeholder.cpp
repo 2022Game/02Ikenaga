@@ -9,6 +9,7 @@
 #include "CTornado.h"
 #include "CCurrent.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "CGameEnemyUI.h"
 
 // 球体のモンスターのインスタンス
@@ -390,6 +391,13 @@ CBeholder::CBeholder()
 	mpHitEffect->SetOwner(this);
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
+
+	// めまいエフェクト作成
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 48.0f, 0.0f)
+	);
 
 	mpGameUI->SetUIoffSetPos(CVector(0.0f, 38.0f, 0.0f));
 	// Lv.を設定
@@ -818,6 +826,7 @@ void CBeholder::UpdateHit()
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
+	mpDizzyEffect->Stop();
 
 	switch (mStateStep)
 	{
@@ -855,6 +864,7 @@ void CBeholder::UpdateDie()
 	mpElectricShock->Stop();
 	mpLightningBall->Stop();
 	mpHomingBall->Stop();
+	mpDizzyEffect->Stop();
 
 	switch (mStateStep)
 	{
@@ -887,11 +897,24 @@ void CBeholder::UpdateDizzy()
 	mpHomingBall->Stop();
 
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eDizzy);
 
-	if (IsAnimationFinished())
+	switch (mStateStep)
 	{
-		ChangeState(EState::eIdle2);
+	case 0:
+		ChangeAnimation(EAnimType::eDizzy);
+		if (!mpDizzyEffect->IsDizzy())
+		{
+			mpDizzyEffect->Start();
+		}
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			mpDizzyEffect->Stop();
+			ChangeState(EState::eIdle2);
+		}
+		break;
 	}
 }
 

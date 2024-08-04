@@ -7,6 +7,7 @@
 #include "CColliderCapsule.h"
 
 class CHit;
+class CDizzyEffect;
 
 /*
  マッシュルームクラス
@@ -168,5 +169,8 @@ private:
 	CColliderSphere* mpAttackColRoot;       // 根
 	CTransform* mpRideObject;
 
-	CHit* mpHitEffect;  // ヒットエフェクト 
+	// ヒットエフェクト 
+	CHit* mpHitEffect;
+	// めまいエフェクト
+	CDizzyEffect* mpDizzyEffect;
 };

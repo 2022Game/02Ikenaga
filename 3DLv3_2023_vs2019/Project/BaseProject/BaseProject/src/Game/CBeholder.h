@@ -9,6 +9,7 @@ class CElectricShockEffect;
 class CHomingBallEffect;
 class CCurrent;
 class CHit;
+class CDizzyEffect;
 class CGameEnemyUI;
 
 /*
@@ -211,4 +212,6 @@ private:
 
 	// ヒットエフェクト
 	CHit* mpHitEffect;
+	// めまいのエフェクト
+	CDizzyEffect* mpDizzyEffect;
 };

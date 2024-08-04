@@ -9,6 +9,7 @@ enum class ETag
 	eField,	          // フィールドを構成するオブジェクト
 	eSky,             // 空
 	eExp,             // 経験値
+	eSp,              // SP
 	eRideableObject,  // 乗ることができるオブジェクト
 	ePortionRed,	  // アイテムの攻撃力アップ
 	ePortionGreen,    // アイテムの回復

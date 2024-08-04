@@ -5,6 +5,7 @@
 #include "CCoin.h"
 #include "CGameEnemyUI.h"
 #include "CHit.h"
+#include "CDizzyEffect.h"
 #include "Maths.h"
 
 // チェストモンスターのインスタンス
@@ -217,7 +218,14 @@ CChest::CChest()
 	mpHitEffect->Position(Position());
 	mpHitEffect->SetShow(false);
 
-	mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
+	// めまいエフェクト作成
+	mpDizzyEffect = new CDizzyEffect
+	(
+		this, nullptr,
+		CVector(0.0f, 57.0f, 0.0f)
+	);
+
+	mpGameUI->SetUIoffSetPos(CVector(0.0f, 45.0f, 0.0f));
 
 	// Lv.を設定
 	mpGameUI->SetLv();
@@ -423,6 +431,7 @@ void CChest::UpdateAttackWait()
 // ヒット
 void CChest::UpdateHit()
 {
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.4f);
 	// ヒットアニメーションを開始
 	ChangeAnimation(EAnimType::eHit);
@@ -448,6 +457,7 @@ void CChest::UpdateHit()
 // 死ぬ
 void CChest::UpdateDie()
 {
+	mpDizzyEffect->Stop();
 	SetAnimationSpeed(0.25f);
 
 	switch (mStateStep)
@@ -472,11 +482,25 @@ void CChest::UpdateDie()
 void CChest::UpdateDizzy()
 {
 	SetAnimationSpeed(0.5f);
-	ChangeAnimation(EAnimType::eDizzy);
-	if (IsAnimationFinished())
+
+	switch (mStateStep)
 	{
-		// プレイヤーの攻撃がヒットした時の待機状態へ移行
-		ChangeState(EState::eIdle2);
+	case 0:
+		ChangeAnimation(EAnimType::eDizzy);
+		if (!mpDizzyEffect->IsDizzy())
+		{
+			mpDizzyEffect->Start();
+		}
+		mStateStep++;
+		break;
+	case 1:
+		if (IsAnimationFinished())
+		{
+			mpDizzyEffect->Stop();
+			// プレイヤーの攻撃がヒットした時の待機状態へ移行
+			ChangeState(EState::eIdle2);
+		}
+		break;
 	}
 }
 
@@ -655,7 +679,7 @@ void CChest::Update()
 	}
 	else
 	{
-		mpGameUI->SetUIoffSetPos(CVector(0.0f, 40.0f, 0.0f));
+		mpGameUI->SetUIoffSetPos(CVector(0.0f, 45.0f, 0.0f));
 		// 名前を設定
 		std::string name = " 箱モン";
 		mpGameUI->SetEnemyName(name);
